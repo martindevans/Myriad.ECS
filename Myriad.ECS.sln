@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myriad.ECS", "Myriad.ECS\Myriad.ECS.csproj", "{03873B51-357C-42B8-8BC4-BFF922572F74}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myriad.ECS.Tests", "Myriad.ECS.Tests\Myriad.ECS.Tests.csproj", "{6DD3CD1E-78C3-4A77-9652-75C8C136D788}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myriad.ParallelTasks", "Myriad.ParallelTasks\Myriad.ParallelTasks.csproj", "{B9684FB0-F22F-4A96-8CAE-298CEAF6C9EE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myriad.ParallelTasks.Tests", "Myriad.ParallelTasks.Tests\Myriad.ParallelTasks.Tests.csproj", "{077060FD-74ED-4BE3-A04A-E40FEA060D4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myriad.ECS.SourceGeneration", "Myriad.ECS.SourceGeneration\Myriad.ECS.SourceGeneration.csproj", "{7F118CA9-2918-4199-96C8-FD49FC314A3D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{03873B51-357C-42B8-8BC4-BFF922572F74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03873B51-357C-42B8-8BC4-BFF922572F74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03873B51-357C-42B8-8BC4-BFF922572F74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03873B51-357C-42B8-8BC4-BFF922572F74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DD3CD1E-78C3-4A77-9652-75C8C136D788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DD3CD1E-78C3-4A77-9652-75C8C136D788}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DD3CD1E-78C3-4A77-9652-75C8C136D788}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DD3CD1E-78C3-4A77-9652-75C8C136D788}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9684FB0-F22F-4A96-8CAE-298CEAF6C9EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9684FB0-F22F-4A96-8CAE-298CEAF6C9EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9684FB0-F22F-4A96-8CAE-298CEAF6C9EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9684FB0-F22F-4A96-8CAE-298CEAF6C9EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{077060FD-74ED-4BE3-A04A-E40FEA060D4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{077060FD-74ED-4BE3-A04A-E40FEA060D4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{077060FD-74ED-4BE3-A04A-E40FEA060D4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{077060FD-74ED-4BE3-A04A-E40FEA060D4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F118CA9-2918-4199-96C8-FD49FC314A3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F118CA9-2918-4199-96C8-FD49FC314A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F118CA9-2918-4199-96C8-FD49FC314A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F118CA9-2918-4199-96C8-FD49FC314A3D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3300C5B4-B7D6-496F-AF45-F509160B60E0}
+	EndGlobalSection
+EndGlobal

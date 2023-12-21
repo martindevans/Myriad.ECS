@@ -1,0 +1,25 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+namespace Myriad.ECS.Queries.Filters;
+
+public interface IQueryFilter
+{
+	void ConfigureQueryBuilder(QueryBuilder q);
+}
+
+<# for (var i = 1; i < 9; i++)
+{
+#>
+public interface IQueryFilter<<#= string.Join(", ", Enumerable.Range(0, i).Select(i => "T" + i)) #>>
+    : IQueryFilter
+{
+	bool Filter(Entity e, <#= string.Join(", ", Enumerable.Range(0, i).Select(i => $"in T{i} t{i}")) #>);
+}
+
+<#
+}
+#>

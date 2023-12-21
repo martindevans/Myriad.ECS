@@ -1,0 +1,116 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Queries\Attributes\AllAttribute - Copy.cs" />
+    <Compile Remove="Queries\Attributes\AtLeastOneOfAttribute - Copy.cs" />
+    <Compile Remove="Queries\Filters\NoneAttribute.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Myriad.ParallelTasks\Myriad.ParallelTasks.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+    <Folder Include="Systems\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Queries\Attributes\ExactlyOneOfAttribute.cs">
+      <DependentUpon>ExactlyOneOfAttribute.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </None>
+    <None Include="Queries\Attributes\AtLeastOneOfAttribute.cs">
+      <DependentUpon>AtLeastOneOfAttribute.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </None>
+    <None Include="Queries\Attributes\NoneAttribute.cs">
+      <DependentUpon>NoneAttribute.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </None>
+    <None Include="Queries\Attributes\AllAttribute.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AllAttribute.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Queries\Attributes\AllAttribute.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AllAttribute.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Queries\Attributes\AtLeastOneOfAttribute.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AtLeastOneOfAttribute.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Queries\Attributes\ExactlyOneOfAttribute.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ExactlyOneOfAttribute.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Queries\Attributes\NoneAttribute.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>NoneAttribute.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Queries\Filters\IQueryFilters.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IQueryFilters.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Queries\Filters\QueryFilter.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QueryFilter.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Queries\IQuery.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IQuery.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Queries\Attributes\ExactlyOneOfAttribute.tt">
+      <LastGenOutput>ExactlyOneOfAttribute.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Queries\Attributes\AtLeastOneOfAttribute.tt">
+      <LastGenOutput>AtLeastOneOfAttribute.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Queries\Attributes\NoneAttribute.tt">
+      <LastGenOutput>NoneAttribute.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Queries\Attributes\AllAttribute.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AllAttribute.cs</LastGenOutput>
+    </None>
+    <None Update="Queries\Filters\IQueryFilters.tt">
+      <LastGenOutput>IQueryFilters.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Queries\IQuery.tt">
+      <LastGenOutput>IQuery.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+  </ItemGroup>
+
+</Project>
