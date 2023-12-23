@@ -1,5 +1,4 @@
-﻿
-namespace Myriad.ECS.Queries;
+﻿namespace Myriad.ECS.Queries;
 
 public interface IQuery;
 

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Frozen;
-using Myriad.ECS.Queries.Filters;
 using Myriad.ECS.Registry;
 using System.Runtime.CompilerServices;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Queries.Predicates;
+using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Queries;
 
@@ -13,7 +14,7 @@ public sealed class QueryBuilder
     private readonly IDSet<ComponentRegistry, IComponent, ComponentID> _atLeastOne;
     private readonly IDSet<ComponentRegistry, IComponent, ComponentID> _exactlyOne;
 
-    private readonly IDSet<FilterRegistry, IQueryFilter, FilterID> _filters;
+    private readonly IDSet<PredicateRegistry, IQueryPredicate, FilterID> _filterIn;
 
     public QueryBuilder()
     {
@@ -22,7 +23,7 @@ public sealed class QueryBuilder
         _atLeastOne = new(ContainsComponent, 2);
         _exactlyOne = new(ContainsComponent, 3);
 
-        _filters = new IDSet<FilterRegistry, IQueryFilter, FilterID>(ContainsFilter, 4);
+        _filterIn = new IDSet<PredicateRegistry, IQueryPredicate, FilterID>(ContainsFilter, 4);
     }
 
     public QueryDescription Build(World world)
@@ -33,7 +34,7 @@ public sealed class QueryBuilder
             _exclude.Items.ToFrozenSet(),
             _atLeastOne.Items.ToFrozenSet(),
             _exactlyOne.Items.ToFrozenSet(),
-            _filters.Items.ToFrozenSet()
+            _filterIn.Items.ToFrozenSet()
         );
     }
 
@@ -51,7 +52,7 @@ public sealed class QueryBuilder
 
     private void ContainsFilter(FilterID id, int index, string caller)
     {
-        if (index != _filters.Index && _filters.Contains(id))
+        if (index != _filterIn.Index && _filterIn.Contains(id))
             throw new InvalidOperationException($"Cannot '{caller}' - filter is already included");
     }
 
@@ -160,24 +161,24 @@ public sealed class QueryBuilder
     #endregion
 
     #region filters
-    public QueryBuilder Filter<T>()
-        where T : struct, IQueryFilter
+    public QueryBuilder FilterIn<T>()
+        where T : struct, IQueryPredicate
     {
-        if (_filters.Add<T>())
+        if (_filterIn.Add<T>())
             default(T).ConfigureQueryBuilder(this);
 
         return this;
     }
 
-    public bool IsFilter(Type type)
+    public bool IsFilterIn(Type type)
     {
-        return _filters.Contains(type);
+        return _filterIn.Contains(type);
     }
 
-    public bool IsFilter<T>()
-        where T : IQueryFilter
+    public bool IsFilterIn<T>()
+        where T : IQueryPredicate
     {
-        return _filters.Contains<T>();
+        return _filterIn.Contains<T>();
     }
     #endregion
 

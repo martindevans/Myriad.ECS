@@ -27,9 +27,4 @@ public static class Pool<T>
         if (_items.Count < MAX)
             _items.Add(item);
     }
-
-    public static void Clear()
-    {
-        _items?.Clear();
-    }
 }

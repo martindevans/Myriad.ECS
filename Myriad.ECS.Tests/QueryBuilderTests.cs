@@ -15,13 +15,19 @@ public class QueryBuilderTests
     public void CreateInclude()
     {
         var q = new QueryBuilder()
-           .Include<ComponentFloat>();
+           .Include<ComponentFloat>()
+           .Include<ComponentFloat>()
+           .Include(typeof(ComponentFloat));
 
         Assert.IsTrue(q.IsIncluded<ComponentFloat>());
+        Assert.IsTrue(q.IsIncluded(typeof(ComponentFloat)));
         Assert.IsFalse(q.IsIncluded<ComponentInt32>());
+        Assert.IsFalse(q.IsIncluded(typeof(ComponentInt32)));
 
         Assert.IsFalse(q.IsExcluded<ComponentInt32>());
+        Assert.IsFalse(q.IsIncluded(typeof(ComponentInt32)));
         Assert.IsFalse(q.IsExcluded<ComponentFloat>());
+        Assert.IsFalse(q.IsExcluded(typeof(ComponentFloat)));
     }
 
     [TestMethod]
@@ -40,12 +46,27 @@ public class QueryBuilderTests
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
+            q.Exclude(typeof(ComponentFloat));
+        });
+
+        Assert.ThrowsException<InvalidOperationException>(() =>
+        {
             q.ExactlyOneOf<ComponentFloat>();
         });
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
+            q.ExactlyOneOf(typeof(ComponentFloat));
+        });
+
+        Assert.ThrowsException<InvalidOperationException>(() =>
+        {
             q.AtLeastOneOf<ComponentFloat>();
+        });
+
+        Assert.ThrowsException<InvalidOperationException>(() =>
+        {
+            q.AtLeastOneOf(typeof(ComponentFloat));
         });
     }
 
@@ -66,10 +87,10 @@ public class QueryBuilderTests
     public void ExcludeDuplicateThrows()
     {
         var q = new QueryBuilder()
-               .Exclude<ComponentFloat>()
-               .Exclude<ComponentInt16>()
-               .Exclude<ComponentInt32>()
-               .Exclude<ComponentFloat>();
+           .Exclude(typeof(ComponentFloat))
+           .Exclude<ComponentInt16>()
+           .Exclude<ComponentInt32>()
+           .Exclude<ComponentFloat>();
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
@@ -91,13 +112,18 @@ public class QueryBuilderTests
     public void CreateAtLeastOneOf()
     {
         var q = new QueryBuilder()
-           .AtLeastOneOf<ComponentFloat>();
+           .AtLeastOneOf<ComponentFloat>()
+           .AtLeastOneOf(typeof(ComponentFloat));
 
         Assert.IsTrue(q.IsAtLeastOneOf<ComponentFloat>());
+        Assert.IsTrue(q.IsAtLeastOneOf(typeof(ComponentFloat)));
         Assert.IsFalse(q.IsAtLeastOneOf<ComponentInt32>());
+        Assert.IsFalse(q.IsAtLeastOneOf(typeof(ComponentInt32)));
 
         Assert.IsFalse(q.IsIncluded<ComponentInt32>());
+        Assert.IsFalse(q.IsIncluded(typeof(ComponentInt32)));
         Assert.IsFalse(q.IsIncluded<ComponentFloat>());
+        Assert.IsFalse(q.IsIncluded(typeof(ComponentFloat)));
     }
 
     [TestMethod]
@@ -129,13 +155,18 @@ public class QueryBuilderTests
     public void CreateExactyOneOf()
     {
         var q = new QueryBuilder()
-           .ExactlyOneOf<ComponentFloat>();
+           .ExactlyOneOf<ComponentFloat>()
+           .ExactlyOneOf(typeof(ComponentFloat));
 
         Assert.IsTrue(q.IsExactlyOneOf<ComponentFloat>());
+        Assert.IsTrue(q.IsExactlyOneOf(typeof(ComponentFloat)));
         Assert.IsFalse(q.IsExactlyOneOf<ComponentInt32>());
+        Assert.IsFalse(q.IsExactlyOneOf(typeof(ComponentInt32)));
 
         Assert.IsFalse(q.IsIncluded<ComponentInt32>());
+        Assert.IsFalse(q.IsIncluded(typeof(ComponentInt32)));
         Assert.IsFalse(q.IsIncluded<ComponentFloat>());
+        Assert.IsFalse(q.IsIncluded(typeof(ComponentFloat)));
     }
 
     [TestMethod]
@@ -168,16 +199,16 @@ public class QueryBuilderTests
     {
         var q = new QueryBuilder()
             .Include<ComponentInt32>()
-            .Filter<FilterPositiveFloat>();
+            .FilterIn<PredicatePositiveFloat>();
 
         // Because the "FilterPositiveFloat" filter requires the "ComponentFloat" it should now be implicitly included
         Assert.IsTrue(q.IsIncluded<ComponentFloat>());
 
-        Assert.IsTrue(q.IsFilter<FilterPositiveFloat>());
-        Assert.IsTrue(q.IsFilter(typeof(FilterPositiveFloat)));
-        Assert.IsTrue(!q.IsFilter(typeof(FilterNegativeFloat)));
+        Assert.IsTrue(q.IsFilterIn<PredicatePositiveFloat>());
+        Assert.IsTrue(q.IsFilterIn(typeof(PredicatePositiveFloat)));
+        Assert.IsTrue(!q.IsFilterIn(typeof(PredicateNegativeFloat)));
 
         // Adding it again is fine
-        q.Filter<FilterPositiveFloat>();
+        q.FilterIn<PredicatePositiveFloat>();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Frozen;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Queries;
 
@@ -72,9 +73,8 @@ public sealed class QueryDescription
                 copy.Add(m);
             }
 
-            // If the copy is null that means no new archetypes were found, update the cache with a new watermark
-            if (copy == null)
-                _result = new MatchResult(_world.Archetypes.Count, _result.Value.Archetypes);
+            // Store a new cache item with the updated watermark and a new list (if we found anything)
+            _result = new MatchResult(_world.Archetypes.Count, copy ?? _result.Value.Archetypes);
         }
 
         return _result.Value.Archetypes;

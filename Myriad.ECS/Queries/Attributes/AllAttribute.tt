@@ -6,12 +6,20 @@
 <#@ output extension=".cs" #>
 namespace Myriad.ECS.Queries.Attributes;
 
+internal interface IAllAttribute
+{
+    IReadOnlyList<Type> Types { get; }
+}
+
 <# for (var i = 1; i < 10; i++)
 {
 #>
 [AttributeUsage(AttributeTargets.Struct, AllowMultiple = true)]
-public sealed class All<<#= string.Join(",", Enumerable.Range(0, i).Select(i => "T" + i)) #>>
-    : Attribute;
+public sealed class All<<#= string.Join(", ", Enumerable.Range(0, i).Select(i => "T" + i)) #>>
+    : Attribute, IAllAttribute
+{
+    IReadOnlyList<Type> IAllAttribute.Types => new[] { <#= string.Join(", ", Enumerable.Range(0, i).Select(i => $"typeof(T{i})")) #> };
+}
 
 <#
 }

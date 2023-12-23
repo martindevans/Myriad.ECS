@@ -1,4 +1,5 @@
-﻿using Myriad.ParallelTasks;
+﻿using Myriad.ECS.Worlds;
+using Myriad.ParallelTasks;
 
 namespace Myriad.ECS;
 
@@ -28,6 +29,11 @@ public sealed class CommandBuffer(World World)
     }
 
     public void Delete(Entity entity)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Delete(BufferedEntity entity)
     {
         throw new NotImplementedException();
     }

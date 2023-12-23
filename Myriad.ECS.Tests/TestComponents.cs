@@ -1,5 +1,5 @@
 ﻿using Myriad.ECS.Queries;
-using Myriad.ECS.Queries.Filters;
+using Myriad.ECS.Queries.Predicates;
 
 namespace Myriad.ECS.Tests;
 
@@ -9,10 +9,10 @@ public record struct ComponentFloat(float Value) : IComponent;
 public record struct ComponentInt32(int Value) : IComponent;
 public record struct ComponentInt64(long Value) : IComponent;
 
-public readonly struct FilterPositiveFloat
-    : IQueryFilter<ComponentFloat>
+public readonly struct PredicatePositiveFloat
+    : IQueryPredicate<ComponentFloat>
 {
-    public readonly bool Filter(Entity e, in ComponentFloat t0)
+    public bool Execute(Entity e, in ComponentFloat t0)
     {
         return t0.Value > 0;
     }
@@ -23,10 +23,10 @@ public readonly struct FilterPositiveFloat
     }
 }
 
-public readonly struct FilterNegativeFloat
-    : IQueryFilter<ComponentFloat>
+public readonly struct PredicateNegativeFloat
+    : IQueryPredicate<ComponentFloat>
 {
-    public readonly bool Filter(Entity e, in ComponentFloat t0)
+    public bool Execute(Entity e, in ComponentFloat t0)
     {
         return t0.Value < 0;
     }

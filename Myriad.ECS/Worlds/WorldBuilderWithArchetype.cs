@@ -1,0 +1,2041 @@
+﻿using Myriad.ECS.Allocations;
+using Myriad.ECS.IDs;
+using Myriad.ECS.Registry;
+
+namespace Myriad.ECS.Worlds;
+
+public sealed partial class WorldBuilder
+{
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0>()
+        where T0 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1>()
+        where T0 : IComponent
+        where T1 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+        where T17 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        if (!set.Add(ComponentRegistry.Get<T17>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+        where T17 : IComponent
+        where T18 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        if (!set.Add(ComponentRegistry.Get<T17>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        if (!set.Add(ComponentRegistry.Get<T18>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+        where T17 : IComponent
+        where T18 : IComponent
+        where T19 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        if (!set.Add(ComponentRegistry.Get<T17>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        if (!set.Add(ComponentRegistry.Get<T18>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        if (!set.Add(ComponentRegistry.Get<T19>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+        where T17 : IComponent
+        where T18 : IComponent
+        where T19 : IComponent
+        where T20 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        if (!set.Add(ComponentRegistry.Get<T17>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        if (!set.Add(ComponentRegistry.Get<T18>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        if (!set.Add(ComponentRegistry.Get<T19>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        if (!set.Add(ComponentRegistry.Get<T20>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+        where T17 : IComponent
+        where T18 : IComponent
+        where T19 : IComponent
+        where T20 : IComponent
+        where T21 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        if (!set.Add(ComponentRegistry.Get<T17>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        if (!set.Add(ComponentRegistry.Get<T18>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        if (!set.Add(ComponentRegistry.Get<T19>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        if (!set.Add(ComponentRegistry.Get<T20>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        if (!set.Add(ComponentRegistry.Get<T21>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+        where T17 : IComponent
+        where T18 : IComponent
+        where T19 : IComponent
+        where T20 : IComponent
+        where T21 : IComponent
+        where T22 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        if (!set.Add(ComponentRegistry.Get<T17>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        if (!set.Add(ComponentRegistry.Get<T18>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        if (!set.Add(ComponentRegistry.Get<T19>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        if (!set.Add(ComponentRegistry.Get<T20>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        if (!set.Add(ComponentRegistry.Get<T21>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        if (!set.Add(ComponentRegistry.Get<T22>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+        where T17 : IComponent
+        where T18 : IComponent
+        where T19 : IComponent
+        where T20 : IComponent
+        where T21 : IComponent
+        where T22 : IComponent
+        where T23 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        if (!set.Add(ComponentRegistry.Get<T17>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        if (!set.Add(ComponentRegistry.Get<T18>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        if (!set.Add(ComponentRegistry.Get<T19>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        if (!set.Add(ComponentRegistry.Get<T20>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        if (!set.Add(ComponentRegistry.Get<T21>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        if (!set.Add(ComponentRegistry.Get<T22>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        if (!set.Add(ComponentRegistry.Get<T23>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+        where T17 : IComponent
+        where T18 : IComponent
+        where T19 : IComponent
+        where T20 : IComponent
+        where T21 : IComponent
+        where T22 : IComponent
+        where T23 : IComponent
+        where T24 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        if (!set.Add(ComponentRegistry.Get<T17>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        if (!set.Add(ComponentRegistry.Get<T18>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        if (!set.Add(ComponentRegistry.Get<T19>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        if (!set.Add(ComponentRegistry.Get<T20>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        if (!set.Add(ComponentRegistry.Get<T21>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        if (!set.Add(ComponentRegistry.Get<T22>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        if (!set.Add(ComponentRegistry.Get<T23>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        if (!set.Add(ComponentRegistry.Get<T24>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+        where T17 : IComponent
+        where T18 : IComponent
+        where T19 : IComponent
+        where T20 : IComponent
+        where T21 : IComponent
+        where T22 : IComponent
+        where T23 : IComponent
+        where T24 : IComponent
+        where T25 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        if (!set.Add(ComponentRegistry.Get<T17>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        if (!set.Add(ComponentRegistry.Get<T18>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        if (!set.Add(ComponentRegistry.Get<T19>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        if (!set.Add(ComponentRegistry.Get<T20>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        if (!set.Add(ComponentRegistry.Get<T21>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        if (!set.Add(ComponentRegistry.Get<T22>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        if (!set.Add(ComponentRegistry.Get<T23>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        if (!set.Add(ComponentRegistry.Get<T24>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+        if (!set.Add(ComponentRegistry.Get<T25>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T25).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+        where T17 : IComponent
+        where T18 : IComponent
+        where T19 : IComponent
+        where T20 : IComponent
+        where T21 : IComponent
+        where T22 : IComponent
+        where T23 : IComponent
+        where T24 : IComponent
+        where T25 : IComponent
+        where T26 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        if (!set.Add(ComponentRegistry.Get<T17>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        if (!set.Add(ComponentRegistry.Get<T18>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        if (!set.Add(ComponentRegistry.Get<T19>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        if (!set.Add(ComponentRegistry.Get<T20>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        if (!set.Add(ComponentRegistry.Get<T21>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        if (!set.Add(ComponentRegistry.Get<T22>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        if (!set.Add(ComponentRegistry.Get<T23>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        if (!set.Add(ComponentRegistry.Get<T24>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+        if (!set.Add(ComponentRegistry.Get<T25>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T25).Name}");
+        if (!set.Add(ComponentRegistry.Get<T26>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T26).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+        where T17 : IComponent
+        where T18 : IComponent
+        where T19 : IComponent
+        where T20 : IComponent
+        where T21 : IComponent
+        where T22 : IComponent
+        where T23 : IComponent
+        where T24 : IComponent
+        where T25 : IComponent
+        where T26 : IComponent
+        where T27 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        if (!set.Add(ComponentRegistry.Get<T17>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        if (!set.Add(ComponentRegistry.Get<T18>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        if (!set.Add(ComponentRegistry.Get<T19>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        if (!set.Add(ComponentRegistry.Get<T20>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        if (!set.Add(ComponentRegistry.Get<T21>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        if (!set.Add(ComponentRegistry.Get<T22>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        if (!set.Add(ComponentRegistry.Get<T23>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        if (!set.Add(ComponentRegistry.Get<T24>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+        if (!set.Add(ComponentRegistry.Get<T25>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T25).Name}");
+        if (!set.Add(ComponentRegistry.Get<T26>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T26).Name}");
+        if (!set.Add(ComponentRegistry.Get<T27>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T27).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+        where T17 : IComponent
+        where T18 : IComponent
+        where T19 : IComponent
+        where T20 : IComponent
+        where T21 : IComponent
+        where T22 : IComponent
+        where T23 : IComponent
+        where T24 : IComponent
+        where T25 : IComponent
+        where T26 : IComponent
+        where T27 : IComponent
+        where T28 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        if (!set.Add(ComponentRegistry.Get<T17>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        if (!set.Add(ComponentRegistry.Get<T18>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        if (!set.Add(ComponentRegistry.Get<T19>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        if (!set.Add(ComponentRegistry.Get<T20>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        if (!set.Add(ComponentRegistry.Get<T21>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        if (!set.Add(ComponentRegistry.Get<T22>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        if (!set.Add(ComponentRegistry.Get<T23>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        if (!set.Add(ComponentRegistry.Get<T24>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+        if (!set.Add(ComponentRegistry.Get<T25>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T25).Name}");
+        if (!set.Add(ComponentRegistry.Get<T26>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T26).Name}");
+        if (!set.Add(ComponentRegistry.Get<T27>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T27).Name}");
+        if (!set.Add(ComponentRegistry.Get<T28>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T28).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+        where T17 : IComponent
+        where T18 : IComponent
+        where T19 : IComponent
+        where T20 : IComponent
+        where T21 : IComponent
+        where T22 : IComponent
+        where T23 : IComponent
+        where T24 : IComponent
+        where T25 : IComponent
+        where T26 : IComponent
+        where T27 : IComponent
+        where T28 : IComponent
+        where T29 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        if (!set.Add(ComponentRegistry.Get<T17>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        if (!set.Add(ComponentRegistry.Get<T18>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        if (!set.Add(ComponentRegistry.Get<T19>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        if (!set.Add(ComponentRegistry.Get<T20>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        if (!set.Add(ComponentRegistry.Get<T21>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        if (!set.Add(ComponentRegistry.Get<T22>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        if (!set.Add(ComponentRegistry.Get<T23>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        if (!set.Add(ComponentRegistry.Get<T24>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+        if (!set.Add(ComponentRegistry.Get<T25>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T25).Name}");
+        if (!set.Add(ComponentRegistry.Get<T26>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T26).Name}");
+        if (!set.Add(ComponentRegistry.Get<T27>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T27).Name}");
+        if (!set.Add(ComponentRegistry.Get<T28>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T28).Name}");
+        if (!set.Add(ComponentRegistry.Get<T29>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T29).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+        where T17 : IComponent
+        where T18 : IComponent
+        where T19 : IComponent
+        where T20 : IComponent
+        where T21 : IComponent
+        where T22 : IComponent
+        where T23 : IComponent
+        where T24 : IComponent
+        where T25 : IComponent
+        where T26 : IComponent
+        where T27 : IComponent
+        where T28 : IComponent
+        where T29 : IComponent
+        where T30 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        if (!set.Add(ComponentRegistry.Get<T17>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        if (!set.Add(ComponentRegistry.Get<T18>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        if (!set.Add(ComponentRegistry.Get<T19>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        if (!set.Add(ComponentRegistry.Get<T20>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        if (!set.Add(ComponentRegistry.Get<T21>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        if (!set.Add(ComponentRegistry.Get<T22>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        if (!set.Add(ComponentRegistry.Get<T23>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        if (!set.Add(ComponentRegistry.Get<T24>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+        if (!set.Add(ComponentRegistry.Get<T25>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T25).Name}");
+        if (!set.Add(ComponentRegistry.Get<T26>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T26).Name}");
+        if (!set.Add(ComponentRegistry.Get<T27>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T27).Name}");
+        if (!set.Add(ComponentRegistry.Get<T28>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T28).Name}");
+        if (!set.Add(ComponentRegistry.Get<T29>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T29).Name}");
+        if (!set.Add(ComponentRegistry.Get<T30>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T30).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+        where T16 : IComponent
+        where T17 : IComponent
+        where T18 : IComponent
+        where T19 : IComponent
+        where T20 : IComponent
+        where T21 : IComponent
+        where T22 : IComponent
+        where T23 : IComponent
+        where T24 : IComponent
+        where T25 : IComponent
+        where T26 : IComponent
+        where T27 : IComponent
+        where T28 : IComponent
+        where T29 : IComponent
+        where T30 : IComponent
+        where T31 : IComponent
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+        if (!set.Add(ComponentRegistry.Get<T0>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        if (!set.Add(ComponentRegistry.Get<T1>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        if (!set.Add(ComponentRegistry.Get<T2>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        if (!set.Add(ComponentRegistry.Get<T3>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        if (!set.Add(ComponentRegistry.Get<T4>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        if (!set.Add(ComponentRegistry.Get<T5>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        if (!set.Add(ComponentRegistry.Get<T6>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        if (!set.Add(ComponentRegistry.Get<T7>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        if (!set.Add(ComponentRegistry.Get<T8>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        if (!set.Add(ComponentRegistry.Get<T9>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        if (!set.Add(ComponentRegistry.Get<T10>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        if (!set.Add(ComponentRegistry.Get<T11>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        if (!set.Add(ComponentRegistry.Get<T12>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        if (!set.Add(ComponentRegistry.Get<T13>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        if (!set.Add(ComponentRegistry.Get<T14>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        if (!set.Add(ComponentRegistry.Get<T15>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        if (!set.Add(ComponentRegistry.Get<T16>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        if (!set.Add(ComponentRegistry.Get<T17>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        if (!set.Add(ComponentRegistry.Get<T18>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        if (!set.Add(ComponentRegistry.Get<T19>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        if (!set.Add(ComponentRegistry.Get<T20>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        if (!set.Add(ComponentRegistry.Get<T21>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        if (!set.Add(ComponentRegistry.Get<T22>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        if (!set.Add(ComponentRegistry.Get<T23>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        if (!set.Add(ComponentRegistry.Get<T24>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+        if (!set.Add(ComponentRegistry.Get<T25>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T25).Name}");
+        if (!set.Add(ComponentRegistry.Get<T26>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T26).Name}");
+        if (!set.Add(ComponentRegistry.Get<T27>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T27).Name}");
+        if (!set.Add(ComponentRegistry.Get<T28>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T28).Name}");
+        if (!set.Add(ComponentRegistry.Get<T29>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T29).Name}");
+        if (!set.Add(ComponentRegistry.Get<T30>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T30).Name}");
+        if (!set.Add(ComponentRegistry.Get<T31>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(T31).Name}");
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+}

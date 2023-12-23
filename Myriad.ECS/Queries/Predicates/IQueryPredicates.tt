@@ -4,9 +4,9 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
-namespace Myriad.ECS.Queries.Filters;
+namespace Myriad.ECS.Queries.Predicates;
 
-public interface IQueryFilter
+public interface IQueryPredicate
 {
 	void ConfigureQueryBuilder(QueryBuilder q);
 }
@@ -14,10 +14,10 @@ public interface IQueryFilter
 <# for (var i = 1; i < 9; i++)
 {
 #>
-public interface IQueryFilter<<#= string.Join(", ", Enumerable.Range(0, i).Select(i => "T" + i)) #>>
-    : IQueryFilter
+public interface IQueryPredicate<<#= string.Join(", ", Enumerable.Range(0, i).Select(i => "T" + i)) #>>
+    : IQueryPredicate
 {
-	bool Filter(Entity e, <#= string.Join(", ", Enumerable.Range(0, i).Select(i => $"in T{i} t{i}")) #>);
+	bool Execute(Entity e, <#= string.Join(", ", Enumerable.Range(0, i).Select(i => $"ref readonly T{i} t{i}")) #>);
 }
 
 <#

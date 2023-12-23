@@ -5,7 +5,7 @@ namespace Myriad.ECS;
 
 public sealed class Archetype
 {
-    public HashSet<ComponentID> Components { get; set; }
+    public IReadOnlySet<ComponentID> Components { get; set; }
 
     //internal IReadOnlySet<ComponentID> Components
     //{

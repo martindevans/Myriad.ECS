@@ -1,0 +1,44 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using Myriad.ECS.Allocations;
+using Myriad.ECS.IDs;
+using Myriad.ECS.Registry;
+
+namespace Myriad.ECS.Worlds;
+
+public sealed partial class WorldBuilder
+{
+<# for (var i = 1; i <= 32; i++)
+{
+#>
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype<<#= string.Join(", ", Enumerable.Range(0, i).Select(i => "T" + i)) #>>()
+        <#= string.Join("\r\n        ", Enumerable.Range(0, i).Select(i => $"where T{i} : IComponent")) #>
+    {
+        var set = Pool<HashSet<ComponentID>>.Get();
+
+<# for (var j = 0; j < i; j++)
+{
+#>
+        if (!set.Add(ComponentRegistry.Get<<#= $"T{j}" #>>()))
+            throw new ArgumentException($"Duplicate component type: {typeof(<#= $"T{j}" #>).Name}");
+<#
+}
+#>
+
+        AddArchetype(set);
+
+        return this;
+    }
+
+<#
+}
+#>
+}

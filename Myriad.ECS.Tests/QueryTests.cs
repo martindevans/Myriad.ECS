@@ -1,5 +1,7 @@
-﻿using Myriad.ECS.Queries;
+﻿using Myriad.ECS.IDs;
+using Myriad.ECS.Queries;
 using Myriad.ECS.Registry;
+using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Tests;
 
@@ -9,16 +11,9 @@ public class QueryTests
     [TestMethod]
     public void IncludeMatchNone()
     {
-        var w = new World()
-        {
-            _archetypes =
-            [
-                new Archetype
-                {
-                    Components = [ComponentRegistry.Get<ComponentInt32>()]
-                },
-            ]
-        };
+        var w = new WorldBuilder()
+               .WithArchetype<ComponentInt32>()
+               .Build();
 
         var qb = new QueryBuilder()
            .Include<ComponentFloat>();
@@ -32,16 +27,30 @@ public class QueryTests
     }
 
     [TestMethod]
+    public void IncludeMatchNoneNonGeneric()
+    {
+        var w = new WorldBuilder()
+           .WithArchetype<ComponentInt32>()
+           .Build();
+
+        var qb = new QueryBuilder()
+           .Include(typeof(ComponentFloat));
+
+        var q = qb.Build(w);
+
+        var a = q.GetArchetypes();
+
+        Assert.IsNotNull(a);
+        Assert.AreEqual(0, a.Count);
+    }
+
+    [TestMethod]
     public void IncludeMatchOne()
     {
-        var w = new World()
-        {
-            _archetypes =
-            [
-                new Archetype { Components = [ComponentRegistry.Get<ComponentInt32>()] },
-                new Archetype { Components = [ComponentRegistry.Get<ComponentFloat>()] },
-            ]
-        };
+        var w = new WorldBuilder()
+           .WithArchetype<ComponentInt32>()
+           .WithArchetype<ComponentFloat>()
+           .Build();
 
         var qb = new QueryBuilder()
            .Include<ComponentFloat>();
@@ -57,18 +66,42 @@ public class QueryTests
     }
 
     [TestMethod]
+    public void IncludeMatchCaching()
+    {
+        var w = new WorldBuilder()
+           .WithArchetype<ComponentInt32>()
+           .WithArchetype<ComponentFloat>()
+           .Build();
+
+        var qb = new QueryBuilder()
+           .Include<ComponentFloat>();
+        var q = qb.Build(w);
+
+        // Match once, check it matches one archetype
+        var a = q.GetArchetypes();
+        Assert.IsNotNull(a);
+        Assert.AreEqual(1, a.Count);
+        Assert.IsNull(a.Single().AtLeastOne);
+        Assert.IsNull(a.Single().ExactlyOne);
+
+        // Add an archetype to the world
+        w._archetypes.Add(new Archetype { Components = new HashSet<ComponentID> { ComponentRegistry.Get<ComponentInt32>(), ComponentRegistry.Get<ComponentFloat>() } });
+
+        var b = q.GetArchetypes();
+        Assert.IsNotNull(b);
+        Assert.AreEqual(2, b.Count);
+        Assert.IsTrue(a.All(x => x.Archetype.Components.Contains(ComponentRegistry.Get<ComponentFloat>())));
+    }
+
+    [TestMethod]
     public void IncludeMatchMultiple()
     {
-        var w = new World()
-        {
-            _archetypes =
-            [
-                new Archetype { Components = [ComponentRegistry.Get<ComponentInt32>()] },
-                new Archetype { Components = [ComponentRegistry.Get<ComponentFloat>()] },
-                new Archetype { Components = [ComponentRegistry.Get<ComponentFloat>(), ComponentRegistry.Get<ComponentInt32>()] },
-            ]
-        };
-
+        var w = new WorldBuilder()
+           .WithArchetype<ComponentInt32>()
+           .WithArchetype<ComponentFloat>()
+           .WithArchetype<ComponentFloat, ComponentInt32>()
+           .Build();
+        
         var qb = new QueryBuilder()
            .Include<ComponentFloat>();
 
@@ -85,15 +118,11 @@ public class QueryTests
     [TestMethod]
     public void IncludeExclude()
     {
-        var w = new World()
-        {
-            _archetypes =
-            [
-                new Archetype { Components = [ComponentRegistry.Get<ComponentInt32>()] },
-                new Archetype { Components = [ComponentRegistry.Get<ComponentFloat>()] },
-                new Archetype { Components = [ComponentRegistry.Get<ComponentFloat>(), ComponentRegistry.Get<ComponentInt32>()] },
-            ]
-        };
+        var w = new WorldBuilder()
+           .WithArchetype<ComponentInt32>()
+           .WithArchetype<ComponentFloat>()
+           .WithArchetype<ComponentFloat, ComponentInt32>()
+           .Build();
 
         var qb = new QueryBuilder()
             .Include<ComponentFloat>()
@@ -116,16 +145,12 @@ public class QueryTests
     [TestMethod]
     public void ExactlyOne()
     {
-        var w = new World()
-        {
-            _archetypes =
-            [
-                new Archetype { Components = [ComponentRegistry.Get<ComponentInt32>()] },
-                new Archetype { Components = [ComponentRegistry.Get<ComponentFloat>()] },
-                new Archetype { Components = [ComponentRegistry.Get<ComponentFloat>(), ComponentRegistry.Get<ComponentInt32>()] },
-                new Archetype { Components = [ComponentRegistry.Get<ComponentInt16>()] },
-            ]
-        };
+        var w = new WorldBuilder()
+           .WithArchetype<ComponentInt16>()
+           .WithArchetype<ComponentInt32>()
+           .WithArchetype<ComponentFloat>()
+           .WithArchetype<ComponentFloat, ComponentInt32>()
+           .Build();
 
         var qb = new QueryBuilder()
                 .ExactlyOneOf<ComponentFloat>()
@@ -150,20 +175,16 @@ public class QueryTests
     [TestMethod]
     public void AtLeastOne()
     {
-        var w = new World()
-        {
-            _archetypes =
-            [
-                new Archetype { Components = [ComponentRegistry.Get<ComponentInt32>()] },
-                new Archetype { Components = [ComponentRegistry.Get<ComponentFloat>()] },
-                new Archetype { Components = [ComponentRegistry.Get<ComponentFloat>(), ComponentRegistry.Get<ComponentInt32>()] },
-                new Archetype { Components = [ComponentRegistry.Get<ComponentInt16>(), ComponentRegistry.Get<ComponentInt64>()] },
-            ]
-        };
+        var w = new WorldBuilder()
+           .WithArchetype<ComponentInt32>()
+           .WithArchetype<ComponentFloat>()
+           .WithArchetype<ComponentFloat, ComponentInt32>()
+           .WithArchetype<ComponentInt16, ComponentInt64>()
+           .Build();
 
         var qb = new QueryBuilder()
-                .AtLeastOneOf<ComponentFloat>()
-                .AtLeastOneOf<ComponentInt32>();
+            .AtLeastOneOf<ComponentFloat>()
+            .AtLeastOneOf<ComponentInt32>();
 
         var q = qb.Build(w);
 

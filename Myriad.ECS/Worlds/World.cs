@@ -1,4 +1,4 @@
-﻿namespace Myriad.ECS;
+﻿namespace Myriad.ECS.Worlds;
 
 public sealed partial class World
 {

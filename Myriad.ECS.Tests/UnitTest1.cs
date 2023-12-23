@@ -1,8 +1,9 @@
 using System.Reflection;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Queries.Attributes;
-using Myriad.ECS.Queries.Filters;
+using Myriad.ECS.Queries.Predicates;
 using Myriad.ECS.Registry;
+using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Tests;
 
@@ -66,9 +67,9 @@ public readonly partial struct MultiplyAdd(float factor)
 }
 
 public readonly partial struct FloatValueGreaterThanIntValue
-    : IQueryFilter<ComponentFloat, ComponentInt32>
+    : IQueryPredicate<ComponentFloat, ComponentInt32>
 {
-    public bool Filter(Entity e, in ComponentFloat f, in ComponentInt32 i)
+    public bool Execute(Entity e, ref readonly ComponentFloat f, ref readonly ComponentInt32 i)
     {
         return f.Value > i.Value;
     }
