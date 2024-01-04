@@ -2,8 +2,15 @@
 
 public struct Future<T>
 {
+    private readonly T _result;
+
+    public Future(T result)
+    {
+        _result = result;
+    }
+
     public T Block()
     {
-        throw new NotImplementedException();
+        return _result;
     }
 }

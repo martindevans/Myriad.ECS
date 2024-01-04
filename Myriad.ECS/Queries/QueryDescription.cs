@@ -2,6 +2,7 @@
 using Myriad.ECS.Allocations;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
+using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Queries;
 
@@ -125,6 +126,7 @@ public sealed class QueryDescription
         }
         else
         {
+            set.Clear();
             Pool<HashSet<ComponentID>>.Return(set);
             set = null;
         }

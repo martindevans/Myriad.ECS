@@ -1,6 +1,7 @@
 ﻿using Myriad.ParallelTasks.Locks;
 using System.Reflection;
 using Myriad.ECS.IDs;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Myriad.ECS.Registry;
 
@@ -98,6 +99,21 @@ public abstract class BaseRegistry<TBase, TID>
         }
     }
 
+    /// <summary>
+    /// Get the type for a given ID
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public static Type Get(TID id)
+    {
+        using (var locker = _lock.EnterReadLock())
+        {
+            if (!locker.Value.TryGet(id, out var type))
+                throw new InvalidOperationException("Unknown component ID");
+            return type;
+        }
+    }
+
     private static void TypeCheck(Type type)
     {
         if (!type.IsAssignableTo(typeof(TBase)))
@@ -106,6 +122,7 @@ public abstract class BaseRegistry<TBase, TID>
 
     private class State
     {
+        private readonly Dictionary<TID, Type> TypeLookup = [];
         private readonly Dictionary<Type, TID> IDLookup = [];
         private TID _nextId = TID.First();
 
@@ -117,6 +134,9 @@ public abstract class BaseRegistry<TBase, TID>
                 _nextId = TID.Next(_nextId);
 
                 IDLookup[type] = id;
+                TypeLookup[id] = type;
+
+                ArrayFactory.Prepare(type);
             }
 
             return id;
@@ -125,6 +145,11 @@ public abstract class BaseRegistry<TBase, TID>
         public bool TryGet(Type type, out TID id)
         {
             return IDLookup.TryGetValue(type, out id);
+        }
+
+        public bool TryGet(TID id, [MaybeNullWhen(false)] out Type type)
+        {
+            return TypeLookup.TryGetValue(id, out type);
         }
     }
 }

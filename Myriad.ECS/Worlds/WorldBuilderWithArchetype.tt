@@ -4,11 +4,11 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
-using Myriad.ECS.Allocations;
 using Myriad.ECS.IDs;
-using Myriad.ECS.Registry;
 
 namespace Myriad.ECS.Worlds;
+
+/* dotcover disable */
 
 public sealed partial class WorldBuilder
 {
@@ -22,12 +22,12 @@ public sealed partial class WorldBuilder
     public WorldBuilder WithArchetype<<#= string.Join(", ", Enumerable.Range(0, i).Select(i => "T" + i)) #>>()
         <#= string.Join("\r\n        ", Enumerable.Range(0, i).Select(i => $"where T{i} : IComponent")) #>
     {
-        var set = Pool<HashSet<ComponentID>>.Get();
+        var set = new HashSet<ComponentID>(<#= i #>);
 
 <# for (var j = 0; j < i; j++)
 {
 #>
-        if (!set.Add(ComponentRegistry.Get<<#= $"T{j}" #>>()))
+        if (!set.Add(ComponentID<<#= $"T{j}" #>>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(<#= $"T{j}" #>).Name}");
 <#
 }

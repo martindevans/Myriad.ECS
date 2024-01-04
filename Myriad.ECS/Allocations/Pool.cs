@@ -1,5 +1,11 @@
-﻿namespace Myriad.ECS.Allocations;
+﻿using System.Collections;
 
+namespace Myriad.ECS.Allocations;
+
+/// <summary>
+/// Thread safe global pool.
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public static class Pool<T>
     where T : class, new()
 {
@@ -19,6 +25,11 @@ public static class Pool<T>
         return item;
     }
 
+    public static Rental Rent()
+    {
+        return new Rental(Get());
+    }
+
     public static void Return(T item)
     {
         // Initialize item. This can't be done in the field initializer for a threadstatic field!
@@ -26,5 +37,16 @@ public static class Pool<T>
 
         if (_items.Count < MAX)
             _items.Add(item);
+    }
+
+    public readonly struct Rental(T value)
+        : IDisposable
+    {
+        public T Value { get; } = value;
+
+        public void Dispose()
+        {
+            Pool<T>.Return(Value);
+        }
     }
 }

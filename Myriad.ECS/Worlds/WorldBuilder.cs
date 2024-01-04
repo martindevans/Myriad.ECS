@@ -1,45 +1,52 @@
-﻿using Myriad.ECS.Allocations;
+﻿using System.Collections.Frozen;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Registry;
+using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Worlds;
 
 public sealed partial class WorldBuilder
 {
-    private readonly List<IReadOnlySet<ComponentID>> _archetypes = [ ];
+    private readonly List<FrozenSet<ComponentID>> _archetypes = [ ];
 
-    public WorldBuilder()
-    {
-
-    }
-
-    private bool AddArchetype(HashSet<ComponentID> ids)
+    private bool AddArchetype(IReadOnlySet<ComponentID> ids)
     {
         foreach (var archetype in _archetypes)
-        {
             if (archetype.SetEquals(ids))
-            {
-                Pool<HashSet<ComponentID>>.Return(ids);
                 return false;
-            }
-        }
 
-        _archetypes.Add(ids);
+        _archetypes.Add(ids.ToFrozenSet());
         return true;
+    }
+
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public WorldBuilder WithArchetype(params Type[] types)
+    {
+        var set = new HashSet<ComponentID>(types.Length);
+
+        foreach (var type in types)
+            if (!set.Add(ComponentRegistry.Get(type)))
+                throw new ArgumentException($"Duplicate component type: {type.Name}");
+
+        AddArchetype(set.ToFrozenSet());
+
+        return this;
     }
 
     public World Build()
     {
-        var w = new World()
-        {
-            _archetypes = new List<Archetype>()
-        };
+        var w = new World();
 
-        foreach (var archetype in _archetypes)
+        foreach (var components in _archetypes)
         {
-            w._archetypes.Add(new Archetype
-            {
-                Components = archetype,
-            });
+            var h = new ArchetypeHash();
+            foreach (var componentId in components)
+                h = h.Toggle(componentId);
+
+            w.GetOrCreateArchetype(components, h);
         }
 
         return w;

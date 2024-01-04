@@ -1,7 +1,26 @@
-﻿namespace Myriad.ECS;
+﻿using Myriad.ECS.Worlds;
 
-public record struct Entity
+namespace Myriad.ECS;
+
+public readonly record struct Entity
 {
-    internal int ID;
-    internal int Version;
+    internal readonly int ID;
+    internal readonly uint Version;
+
+    internal Entity(int id, uint version)
+    {
+        ID = id;
+        Version = version;
+    }
+
+    public bool IsAlive(World world)
+    {
+        return ID != 0
+            && world.GetVersion(ID) == Version;
+    }
+
+    public override string ToString()
+    {
+        return $"Entity({ID},{Version})";
+    }
 }

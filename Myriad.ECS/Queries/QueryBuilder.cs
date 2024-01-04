@@ -7,6 +7,9 @@ using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Queries;
 
+/// <summary>
+/// Build a new <see cref="QueryDescription"/> object
+/// </summary>
 public sealed class QueryBuilder
 {
     private readonly IDSet<ComponentRegistry, IComponent, ComponentID> _include;
@@ -26,6 +29,11 @@ public sealed class QueryBuilder
         _filterIn = new IDSet<PredicateRegistry, IQueryPredicate, FilterID>(ContainsFilter, 4);
     }
 
+    /// <summary>
+    /// Build a <see cref="QueryDescription"/> from the current state of this builder
+    /// </summary>
+    /// <param name="world"></param>
+    /// <returns></returns>
     public QueryDescription Build(World world)
     {
         return new QueryDescription(
@@ -57,6 +65,11 @@ public sealed class QueryBuilder
     }
 
     #region include
+    /// <summary>
+    /// The given component must exist for an entity to be matched by this query
+    /// </summary>
+    /// <typeparam name="T">The component type</typeparam>
+    /// <returns>this builder</returns>
     public QueryBuilder Include<T>()
         where T : IComponent
     {
@@ -64,17 +77,32 @@ public sealed class QueryBuilder
         return this;
     }
 
+    /// <summary>
+    /// The given component must exist for an entity to be matched by this query
+    /// </summary>
+    /// <param name="type">The component type</param>
+    /// <returns>this builder</returns>
     public QueryBuilder Include(Type type)
     {
         _include.Add(type);
         return this;
     }
 
+    /// <summary>
+    /// Check if the given component type has been marked as "Include"
+    /// </summary>
+    /// <param name="type">The component type</param>
+    /// <returns>true, if the component is included, otherwise false</returns>
     public bool IsIncluded(Type type)
     {
         return _include.Contains(type);
     }
 
+    /// <summary>
+    /// Check if the given component type has been marked as "Include"
+    /// </summary>
+    /// <typeparam name="T">The component type</typeparam>
+    /// <returns>true, if the component is included, otherwise false</returns>
     public bool IsIncluded<T>()
         where T : IComponent
     {

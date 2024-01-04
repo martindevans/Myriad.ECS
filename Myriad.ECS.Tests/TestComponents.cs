@@ -3,16 +3,16 @@ using Myriad.ECS.Queries.Predicates;
 
 namespace Myriad.ECS.Tests;
 
-public record struct ComponentByte(byte Value) : IComponent;
-public record struct ComponentInt16(short Value) : IComponent;
-public record struct ComponentFloat(float Value) : IComponent;
-public record struct ComponentInt32(int Value) : IComponent;
-public record struct ComponentInt64(long Value) : IComponent;
+public partial record struct ComponentByte(byte Value) : IComponent;
+public partial record struct ComponentInt16(short Value) : IComponent;
+public partial record struct ComponentFloat(float Value) : IComponent;
+public partial record struct ComponentInt32(int Value) : IComponent;
+public partial record struct ComponentInt64(long Value) : IComponent;
 
 public readonly struct PredicatePositiveFloat
     : IQueryPredicate<ComponentFloat>
 {
-    public bool Execute(Entity e, in ComponentFloat t0)
+    public bool Execute(Entity e, ref readonly ComponentFloat t0)
     {
         return t0.Value > 0;
     }
@@ -26,7 +26,7 @@ public readonly struct PredicatePositiveFloat
 public readonly struct PredicateNegativeFloat
     : IQueryPredicate<ComponentFloat>
 {
-    public bool Execute(Entity e, in ComponentFloat t0)
+    public bool Execute(Entity e, ref readonly ComponentFloat t0)
     {
         return t0.Value < 0;
     }

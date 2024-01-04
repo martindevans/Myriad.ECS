@@ -12,7 +12,7 @@ public readonly record struct FilterID
 
     public static FilterID First()
     {
-        return new FilterID(0);
+        return new FilterID(1);
     }
 
     public static FilterID Next(FilterID value)

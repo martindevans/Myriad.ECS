@@ -1,4 +1,5 @@
 using System.Reflection;
+using Myriad.ECS.Command;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Queries.Attributes;
 using Myriad.ECS.Queries.Predicates;
@@ -19,21 +20,19 @@ public class UnitTest1
     [TestMethod]
     public void TestMethod1()
     {
-        return;
-        //todo: TestMethod1
-
         // Create a world
-        var world = new World();
+        var world = new WorldBuilder().Build();
 
-        // Create 2 entities with a command buffer and delete one before it's even created
+        // Create 2 entities with a command buffer
         var cmd = new CommandBuffer(world);
         var be1 = cmd.Create()
                      .Set(new ComponentFloat(123))
                      .Set(new ComponentInt32(456));
         var be2 = cmd.Create()
                      .Set(new ComponentFloat(0))
-                     .Set(new ComponentInt32(1))
-                     .Delete();
+                     .Set(new ComponentInt32(1));
+
+        return;
 
         // Play that buffer back
         var future = cmd.Playback();
