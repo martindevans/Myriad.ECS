@@ -17,6 +17,8 @@ public sealed class CommandBuffer(World World)
     private readonly HashSet<Entity> _modified = [ ];
     private readonly List<Entity> _deletes = [ ];
 
+    private readonly HashSet<ComponentID> _tempNewArchetypeComponents = [ ];
+
     public Future<Resolver> Playback()
     {
         // Create a "resolver" that can be used to resolve entity IDs
@@ -63,17 +65,14 @@ public sealed class CommandBuffer(World World)
         // Structural changes (add/remove components)
         if (_modified.Count > 0)
         {
-            // Borrow a set to use for holding component IDs
-            var newArchetypeSet = Pool<HashSet<ComponentID>>.Get();
-
             // Calculate the new archetype for the entity
             foreach (var entity in _modified)
             {
                 var currentArchetype = World.GetArchetype(entity);
 
                 // Set all of the current archetype components
-                newArchetypeSet.Clear();
-                newArchetypeSet.UnionWith(currentArchetype.Components);
+                _tempNewArchetypeComponents.Clear();
+                _tempNewArchetypeComponents.UnionWith(currentArchetype.Components);
                 var moveRequired = false;
 
                 // Calculate the hash and component set of the new archetype
@@ -82,10 +81,9 @@ public sealed class CommandBuffer(World World)
                 {
                     foreach (var set in sets)
                     {
-                        if (!newArchetypeSet.Contains(set.ID))
+                        if (_tempNewArchetypeComponents.Add(set.ID))
                         {
                             hash = hash.Toggle(set.ID);
-                            newArchetypeSet.Add(set.ID);
                             moveRequired = true;
                         }
                     }
@@ -94,10 +92,9 @@ public sealed class CommandBuffer(World World)
                 {
                     foreach (var remove in removes)
                     {
-                        if (currentArchetype.Components.Contains(remove))
+                        if (_tempNewArchetypeComponents.Remove(remove))
                         {
                             hash = hash.Toggle(remove);
-                            newArchetypeSet.Remove(remove);
                             moveRequired = true;
                         }
                     }
@@ -110,7 +107,7 @@ public sealed class CommandBuffer(World World)
                 if (moveRequired)
                 {
                     // Get the new archetype we're moving to
-                    var newArchetype = World.GetOrCreateArchetype(newArchetypeSet, hash);
+                    var newArchetype = World.GetOrCreateArchetype(_tempNewArchetypeComponents, hash);
 
                     // Migrate the entity across
                     row = World.MigrateEntity(entity, newArchetype);
@@ -138,6 +135,7 @@ public sealed class CommandBuffer(World World)
         _modified.Clear();
         _entitySets.Clear();
         _removes.Clear();
+        _tempNewArchetypeComponents.Clear();
 
         // Update the version of this buffer, invalidating all buffered entities for further modification
         unchecked { _version++; }
@@ -159,12 +157,7 @@ public sealed class CommandBuffer(World World)
         where T : IComponent
     {
         if (!_bufferedSets.TryGetValue(id, out var set))
-        {
-            set = Pool<HashSet<BaseComponentSetter>>.Get();
-            set.Clear();
-
-            _bufferedSets.Add(id, set);
-        }
+            throw new InvalidOperationException("Unknown entity ID in SetBuffered");
 
         // Add a setter to the list
         var setter = GenericComponentSetter<T>.Get(value);
