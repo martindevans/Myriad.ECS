@@ -12,8 +12,8 @@ public sealed class CommandBuffer(World World)
     private uint _nextBufferedEntityId;
 
     private readonly Dictionary<uint, HashSet<BaseComponentSetter>> _bufferedSets = [];
-    private readonly Dictionary<Entity, List<BaseComponentSetter>> _entitySets = [];
-    private readonly Dictionary<Entity, List<BaseComponentRemove>> _removes = [];
+    private readonly Dictionary<Entity, HashSet<BaseComponentSetter>> _entitySets = [];
+    private readonly Dictionary<Entity, HashSet<ComponentID>> _removes = [];
     private readonly HashSet<Entity> _modified = [ ];
     private readonly List<Entity> _deletes = [ ];
 
@@ -52,11 +52,13 @@ public sealed class CommandBuffer(World World)
                 components.Clear();
                 Pool<HashSet<BaseComponentSetter>>.Return(components);
             }
+            _bufferedSets.Clear();
         }
 
         // Delete entities
         foreach (var delete in _deletes)
             World.DeleteImmediate(delete);
+        _deletes.Clear();
 
         // Structural changes (add/remove components)
         if (_modified.Count > 0)
@@ -92,12 +94,15 @@ public sealed class CommandBuffer(World World)
                 {
                     foreach (var remove in removes)
                     {
-                        if (currentArchetype.Components.Contains(remove.ID))
+                        if (currentArchetype.Components.Contains(remove))
                         {
-                            hash = hash.Toggle(remove.ID);
+                            hash = hash.Toggle(remove);
+                            newArchetypeSet.Remove(remove);
                             moveRequired = true;
                         }
                     }
+                    removes.Clear();
+                    Pool<HashSet<ComponentID>>.Return(removes);
                 }
 
                 // Get a row handle for the entity, moving it to a new archetype first if necessary
@@ -107,7 +112,8 @@ public sealed class CommandBuffer(World World)
                     // Get the new archetype we're moving to
                     var newArchetype = World.GetOrCreateArchetype(newArchetypeSet, hash);
 
-                    throw new NotImplementedException("move from old to new, get new row");
+                    // Migrate the entity across
+                    row = World.MigrateEntity(entity, newArchetype);
                 }
                 else
                 {
@@ -125,17 +131,13 @@ public sealed class CommandBuffer(World World)
 
                     // Recycle
                     sets.Clear();
-                    Pool<List<BaseComponentSetter>>.Return(sets);
+                    Pool<HashSet<BaseComponentSetter>>.Return(sets);
                 }
             }
         }
-
-        // Cleanup
-        foreach (var (_, list) in _removes)
-        {
-            list.Clear();
-            Pool<List<BaseComponentRemove>>.Return(list);
-        }
+        _modified.Clear();
+        _entitySets.Clear();
+        _removes.Clear();
 
         // Update the version of this buffer, invalidating all buffered entities for further modification
         unchecked { _version++; }
@@ -189,17 +191,19 @@ public sealed class CommandBuffer(World World)
     public void Set<T>(Entity entity, T value)
         where T : IComponent
     {
-        if (!_entitySets.TryGetValue(entity, out var list))
+        if (!_entitySets.TryGetValue(entity, out var set))
         {
-            list = Pool<List<BaseComponentSetter>>.Get();
-            list.Clear();
+            set = Pool<HashSet<BaseComponentSetter>>.Get();
+            set.Clear();
 
-            _entitySets.Add(entity, list);
+            _entitySets.Add(entity, set);
         }
 
-        // Add a setter to the list
+        // Add a setter to the set. First remove it, since equality for setters is purely based on the
+        // component ID this will remove any earlier setters for the same ID and replace it with this one.
         var setter = GenericComponentSetter<T>.Get(value);
-        list.Add(setter);
+        set.Remove(setter);
+        set.Add(setter);
 
         _modified.Add(entity);
     }
@@ -215,14 +219,14 @@ public sealed class CommandBuffer(World World)
         // Get a list of "remove" operations for this entity
         if (!_removes.TryGetValue(entity, out var list))
         {
-            list = Pool<List<BaseComponentRemove>>.Get();
+            list = Pool<HashSet<ComponentID>>.Get();
             list.Clear();
 
             _removes.Add(entity, list);
         }
 
         // Add a remover to the list
-        list.Add(GenericComponentRemove<T>.Instance);
+        list.Add(ComponentID<T>.ID);
 
         _modified.Add(entity);
     }

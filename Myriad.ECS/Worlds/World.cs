@@ -1,4 +1,5 @@
 ﻿using System.Collections.Frozen;
+using System.Runtime.InteropServices;
 using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Archetypes;
@@ -34,12 +35,10 @@ public sealed partial class World
         entityInfo.Version++;
 
         // Notify archetype this entity is dead
-        entityInfo.Archetype.RemoveEntity(delete, entityInfo.ChunkIndex);
+        entityInfo.Chunk.Archetype.RemoveEntity(delete, entityInfo);
 
         // Store this ID for re-use later
         _deadEntities.Add(delete);
-
-
     }
 
     internal Archetype GetArchetype(Entity entity)
@@ -51,7 +50,7 @@ public sealed partial class World
         if (info.Version != entity.Version)
             throw new ArgumentException("Entity is not alive", nameof(entity));
 
-        return info.Archetype;
+        return info.Chunk.Archetype;
     }
 
     /// <summary>
@@ -102,17 +101,22 @@ public sealed partial class World
         return GetOrCreateArchetype(components, hash);
     }
 
+    internal Row MigrateEntity(Entity entity, Archetype to)
+    {
+        ref var info = ref GetEntityInfo(entity);
+        return info.Chunk.Archetype.MigrateTo(entity, ref info, to);
+    }
+
     internal (Entity entity, Row slot) CreateEntity(IReadOnlySet<ComponentID> components)
     {
         // Find an ID to use for this new entity
         ref var entityInfo = ref AllocateEntity(out var entity);
 
         // Find the archetype for this entity
-        entityInfo.Archetype = GetOrCreateArchetype(components, out _);
+        var archetype = GetOrCreateArchetype(components, out _);
 
         // Add this entity to the archetype
-        var row = entityInfo.Archetype.AddEntity(entity);
-        entityInfo.ChunkIndex = row.ChunkIndex;
+        var row = archetype.AddEntity(entity, ref entityInfo);
 
         // Job done!
         return (entity, row);
@@ -171,7 +175,7 @@ public sealed partial class World
         // Get the entityinfo for this entity
         ref var entityInfo = ref _entities.GetMutable(entity.ID);
 
-        return ref entityInfo.Archetype.GetChunk(entityInfo.ChunkIndex).GetMutable<T>(entity);
+        return ref entityInfo.Chunk.GetMutable<T>(entity);
     }
 
     public bool HasComponent<T>(Entity entity)
@@ -181,25 +185,26 @@ public sealed partial class World
             throw new ArgumentException("entity is not alive", nameof(entity));
 
         // Get the entityinfo for this entity
-        ref var entityInfo = ref _entities.GetMutable(entity.ID);
+        var entityInfo = _entities.GetImmutable(entity.ID);
 
         // Check if this archetype contains the component
-        return entityInfo.Archetype.Components.Contains(ComponentID<T>.ID);
+        return entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID);
     }
 
     internal Row GetRow(Entity entity)
     {
         var info = GetEntityInfo(entity);
-
-        return info.Archetype.GetRow(entity, info.ChunkIndex);
+        return info.Chunk.GetRow(entity, info);
     }
 
-    internal EntityInfo GetEntityInfo(Entity entity)
+    internal ref EntityInfo GetEntityInfo(Entity entity)
     {
         if (!entity.IsAlive(this))
             throw new ArgumentException("entity is not alive", nameof(entity));
 
         // Get the entityinfo for this entity
-        return _entities.GetMutable(entity.ID);
+        return ref _entities.GetMutable(entity.ID);
     }
+
+    
 }

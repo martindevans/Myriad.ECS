@@ -1,8 +1,6 @@
 ﻿using Myriad.ECS.Command;
 using Myriad.ECS.IDs;
-using Myriad.ECS.Registry;
 using Myriad.ECS.Worlds;
-using static Myriad.ECS.Command.CommandBuffer;
 
 namespace Myriad.ECS.Tests;
 
@@ -135,7 +133,7 @@ public class CommandBufferTests
         buffer.Playback();
 
         Assert.AreEqual(123, world.GetComponentRef<ComponentFloat>(entity).Value);
-        Assert.IsFalse(world.HasComponent<ComponentFloat>(entity));
+        Assert.IsFalse(world.HasComponent<ComponentInt16>(entity));
     }
 
     [TestMethod]

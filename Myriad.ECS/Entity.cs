@@ -21,6 +21,6 @@ public readonly record struct Entity
 
     public override string ToString()
     {
-        return $"Entity({ID},{Version})";
+        return $"Entity({ID}v{Version})";
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Worlds.Archetypes;
+using Myriad.ECS.Worlds.Chunks;
 
 namespace Myriad.ECS.Worlds;
 
@@ -10,14 +11,9 @@ internal struct EntityInfo
     public uint Version;
 
     /// <summary>
-    /// The archetype which contains this entity
+    /// The chunk in the archetype which contains this entity
     /// </summary>
-    public Archetype Archetype;
-
-    /// <summary>
-    /// The chunk index in the archetype which contains this entity
-    /// </summary>
-    public int ChunkIndex;
+    public Chunk Chunk;
 
     /// <summary>
     /// The row in the chunk which contains this entity

@@ -21,6 +21,11 @@ public readonly record struct ComponentID
     {
         return new ComponentID(checked(value.Value + 1));
     }
+
+    public override string ToString()
+    {
+        return $"{ComponentRegistry.Get(this).Name} ({Value})";
+    }
 }
 
 internal static class ComponentID<T>

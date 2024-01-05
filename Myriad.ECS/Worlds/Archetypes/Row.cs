@@ -2,19 +2,11 @@
 
 namespace Myriad.ECS.Worlds.Archetypes;
 
-internal readonly struct Row(Entity entity, int index, Chunk chunk, int chunkIndex)
+internal readonly record struct Row(Entity Entity, int RowIndex, Chunk Chunk)
 {
-    public int ChunkIndex { get; } = chunkIndex;
-
     public ref T GetMutable<T>()
         where T : IComponent
     {
-        return ref chunk.GetMutable<T>(entity, index);
-    }
-
-    public ref readonly T GetImmutable<T>()
-        where T : IComponent
-    {
-        return ref chunk.GetImmutable<T>(entity, index);
+        return ref Chunk.GetMutable<T>(Entity, RowIndex);
     }
 }

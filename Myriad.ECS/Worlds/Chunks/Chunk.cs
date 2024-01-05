@@ -6,22 +6,34 @@ namespace Myriad.ECS.Worlds.Chunks;
 
 public sealed class Chunk
 {
+    public Archetype Archetype { get; }
+
+    private readonly World _world;
     private readonly int _chunkIndex;
 
     // Map from component ID (index) to index in chunk
     private readonly int[] _componentIndexLookup;
+
+    /// <summary>
+    /// Map from index to component ID
+    /// </summary>
+    private readonly IReadOnlyList<ComponentID> _componentIdLookup;
     
     private int _entityCount;
 
-    private readonly Dictionary<Entity, int> _indexLookup = new();
     private readonly Entity[] _entities;
     private readonly Array[] _components;
 
-    internal Chunk(int size, int[] componentIndexLookup, IReadOnlyList<Type> componentTypes, int componentCount, int chunkIndex)
+    public int EntityCount => _entityCount;
+
+    internal Chunk(World world, Archetype archetype, int size, int[] componentIndexLookup, IReadOnlyList<Type> componentTypes, IReadOnlyList<ComponentID> ids, int componentCount, int chunkIndex)
     {
+        _world = world;
+        Archetype = archetype;
         _componentIndexLookup = componentIndexLookup;
         _chunkIndex = chunkIndex;
         _entities = new Entity[size];
+        _componentIdLookup = ids;
 
         _components = new Array[componentCount];
         for (var i = 0; i < _components.Length; i++)
@@ -41,28 +53,15 @@ public sealed class Chunk
         return ref typedArray[rowIndex];
     }
 
-    public ref readonly T GetImmutable<T>(Entity entity, int chunkIndex)
-        where T : IComponent
-    {
-        return ref GetMutable<T>(entity, chunkIndex);
-    }
-
     public ref T GetMutable<T>(Entity entity)
         where T : IComponent
     {
-        var index = _indexLookup[entity];
+        var index = _world.GetEntityInfo(entity).RowIndex;
         return ref GetMutable<T>(entity, index);
-    }
-
-    public ref readonly T GetImmutable<T>(Entity entity)
-        where T : IComponent
-    {
-        var index = _indexLookup[entity];
-        return ref GetImmutable<T>(entity, index);
     }
     #endregion
 
-    internal Row? TryAddEntity(Entity entity)
+    internal Row? TryAddEntity(Entity entity, ref EntityInfo info)
     {
         if (_entityCount == _entities.Length)
             return null;
@@ -72,22 +71,25 @@ public sealed class Chunk
 
         // Occupy this row
         _entities[index] = entity;
-        _indexLookup.Add(entity, index);
-        return new Row(entity, index, this, _chunkIndex);
+
+        // Update global entity info to refer to this location
+        info.RowIndex = index;
+        info.Chunk = this;
+
+        return new Row(entity, index, this);
     }
 
-    internal Row GetRow(Entity entity)
+    internal Row GetRow(Entity entity, EntityInfo info)
     {
-        if (!_indexLookup.TryGetValue(entity, out var index))
+        if (!ReferenceEquals(info.Chunk, this))
             throw new ArgumentException("entity is not in this chunk", nameof(entity));
 
-        return new Row(entity, index, this, _chunkIndex);
+        return new Row(entity, info.RowIndex, this);
     }
 
-    public bool RemoveEntity(Entity entity)
+    internal bool RemoveEntity(Entity entity, EntityInfo info)
     {
-        if (!_indexLookup.Remove(entity, out var index))
-            return false;
+        var index = info.RowIndex;
 
         // No work to do if there are no entites
         _entityCount -= 1;
@@ -100,11 +102,12 @@ public sealed class Chunk
         // Swap the top entity into place
         var lastEntity = _entities[_entityCount];
         var lastEntityIndex = _entityCount;
+        ref var lastInfo = ref _world.GetEntityInfo(lastEntity);
         _entities[index] = lastEntity;
         _entities[lastEntityIndex] = default;
-        _indexLookup[lastEntity] = index;
+        lastInfo.RowIndex = index;
 
-        // Copy components into place
+        // Copy top entity components into place
         foreach (var component in _components)
         {
             Array.Copy(component, lastEntityIndex, component, index, 1);
@@ -112,5 +115,44 @@ public sealed class Chunk
         }
 
         return true;
+    }
+
+    internal Row MigrateTo(Entity entity, ref EntityInfo info, Archetype to)
+    {
+        // Copy current entity info so we can use it later
+        var oldInfo = info;
+
+        // Get a reference to the row currently storing this entity
+        var srcRow = GetRow(entity, info);
+
+        // Move the entity to the new archetype
+        var destRow = to.AddEntity(entity, ref info);
+        var destChunk = destRow.Chunk;
+
+        // Copy across everything that exists in the destination archetype
+        for (var i = 0; i < _components.Length; i++)
+        {
+            var id = _componentIdLookup[i].Value;
+
+            // Check if the component is out of range (in which case it's not in the dest)
+            if (id >= destChunk._componentIndexLookup.Length)
+                continue;
+
+            // Check if it's explicitly -1 (in which case it's not in the dest)
+            if (destChunk._componentIndexLookup[id] == -1)
+                continue;
+
+            // Get the two arrays
+            var srcArr = _components[i];
+            var destArr = destChunk._components[destChunk._componentIndexLookup[id]];
+
+            // Copy!
+            Array.Copy(srcArr, srcRow.RowIndex, destArr, destRow.RowIndex, 1);
+        }
+
+        // Remove the entity from this chunk (using the old saved info)
+        RemoveEntity(entity, oldInfo);
+
+        return destRow;
     }
 }

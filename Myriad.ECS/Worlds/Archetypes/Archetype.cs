@@ -10,6 +10,7 @@ public sealed class Archetype
     private const int CHUNK_SIZE = 1024;
 
     private readonly World _world;
+
     public FrozenSet<ComponentID> Components { get; }
     internal ArchetypeHash Hash { get; }
 
@@ -28,6 +29,7 @@ public sealed class Archetype
     /// </summary>
     private readonly List<Chunk> _chunksWithSpace = [ ];
 
+    private readonly ComponentID[] _componentIDs;
     private readonly Type[] _componentTypes;
 
     public Archetype(World world, FrozenSet<ComponentID> components)
@@ -35,9 +37,12 @@ public sealed class Archetype
         _world = world;
         Components = components;
 
+        // Create arrays to fills in below
+        _componentTypes = new Type[components.Count];
+        _componentIDs = new ComponentID[components.Count];
+
         // Calculate archetype hash and also keep track of the max component ID ever seen
         var maxComponentId = int.MinValue;
-        _componentTypes = new Type[components.Count];
         foreach (var component in components)
         {
             Hash = Hash.Toggle(component);
@@ -52,17 +57,20 @@ public sealed class Archetype
         foreach (var component in components)
         {
             _componentTypes[idx] = ComponentRegistry.Get(component);
-            _componentIndexLookup[component.Value] = idx++;
+            _componentIndexLookup[component.Value] = idx;
+            _componentIDs[idx] = component;
+
+            idx++;
         }
     }
 
-    internal Row AddEntity(Entity entity)
+    internal Row AddEntity(Entity entity, ref EntityInfo info)
     {
         // Iterate over all candidate chunks, searching for one with space for an entity.
         // Remove any from the list that turn out not to have space
         for (var i = _chunksWithSpace.Count - 1; i >= 0; i--)
         {
-            var row = _chunksWithSpace[i].TryAddEntity(entity);
+            var row = _chunksWithSpace[i].TryAddEntity(entity, ref info);
             if (row != null)
                 return row.Value;
 
@@ -70,26 +78,34 @@ public sealed class Archetype
         }
 
         // Create a new chunk
-        var chunk = new Chunk(CHUNK_SIZE, _componentIndexLookup, _componentTypes, Components.Count, _chunks.Count);
+        var chunk = new Chunk(_world, this, CHUNK_SIZE, _componentIndexLookup, _componentTypes, _componentIDs, Components.Count, _chunks.Count);
         _chunks.Add(chunk);
         _chunksWithSpace.Add(chunk);
 
-        return chunk.TryAddEntity(entity)!.Value;
+        return chunk.TryAddEntity(entity, ref info)!.Value;
     }
 
-    internal void RemoveEntity(Entity entity, int chunkIndex)
+    internal void RemoveEntity(Entity entity, EntityInfo info)
     {
-        if (!_chunks[chunkIndex].RemoveEntity(entity))
+        var chunk = info.Chunk;
+
+        if (!chunk.RemoveEntity(entity, info))
             throw new NotImplementedException("entity was not in expected chunk");
+
+        // If the chunk was previously full and now isn't, add it to the set of chunks with space
+        if (chunk.EntityCount == CHUNK_SIZE - 1)
+            _chunksWithSpace.Add(chunk);
     }
 
-    internal Chunk GetChunk(int chunkIndex)
+    internal Row MigrateTo(Entity entity, ref EntityInfo info, Archetype to)
     {
-        return _chunks[chunkIndex];
-    }
+        var chunk = info.Chunk;
+        var row = chunk.MigrateTo(entity, ref info, to);
 
-    internal Row GetRow(Entity entity, int chunkIndex)
-    {
-        return _chunks[chunkIndex].GetRow(entity);
+        // If the chunk was previously full and now isn't, add it to the set of chunks with space
+        if (chunk.EntityCount == CHUNK_SIZE - 1)
+            _chunksWithSpace.Add(chunk);
+
+        return row;
     }
 }
