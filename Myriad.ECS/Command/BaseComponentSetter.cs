@@ -19,35 +19,23 @@ internal sealed class GenericComponentSetter<T>
 {
     internal override ComponentID ID { get; } = ComponentID<T>.ID;
 
-    public T? Value { get; private set; }
+    private T? _value;
 
     public static GenericComponentSetter<T> Get(T value)
     {
         var pooled = Pool<GenericComponentSetter<T>>.Get();
-        pooled.Value = value;
+        pooled._value = value;
         return pooled;
     }
 
     public override void ReturnToPool()
     {
-        Value = default;
+        _value = default;
         Pool<GenericComponentSetter<T>>.Return(this);
     }
 
     public override void Write(Row row)
     {
-        row.GetMutable<T>() = Value!;
-    }
-
-    public override bool Equals(object? obj)
-    {
-        if (obj is GenericComponentSetter<T>)
-            return true;
-        return false;
-    }
-
-    public override int GetHashCode()
-    {
-        return ID.GetHashCode();
+        row.GetMutable<T>() = _value!;
     }
 }

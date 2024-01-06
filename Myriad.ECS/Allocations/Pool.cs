@@ -50,3 +50,15 @@ public static class Pool<T>
         }
     }
 }
+
+/// <summary>
+/// Thread safe global pool.
+/// </summary>
+public static class Pool
+{
+    public static void Return<T>(T item)
+        where T : class, new()
+    {
+        Pool<T>.Return(item);
+    }
+}

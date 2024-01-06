@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.Allocations;
+﻿using System.Diagnostics;
+using Myriad.ECS.Allocations;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Worlds.Archetypes;
@@ -11,13 +12,13 @@ public sealed class CommandBuffer(World World)
     private uint _version;
     private uint _nextBufferedEntityId;
 
-    private readonly Dictionary<uint, HashSet<BaseComponentSetter>> _bufferedSets = [];
-    private readonly Dictionary<Entity, HashSet<BaseComponentSetter>> _entitySets = [];
+    private readonly Dictionary<uint, Dictionary<ComponentID, BaseComponentSetter>> _bufferedSets = [];
+    private readonly Dictionary<Entity, Dictionary<ComponentID, BaseComponentSetter>> _entitySets = [];
     private readonly Dictionary<Entity, HashSet<ComponentID>> _removes = [];
     private readonly HashSet<Entity> _modified = [ ];
     private readonly List<Entity> _deletes = [ ];
 
-    private readonly HashSet<ComponentID> _tempNewArchetypeComponents = [ ];
+    private readonly HashSet<ComponentID> _tempComponentIdSet = [ ];
 
     public Future<Resolver> Playback()
     {
@@ -25,37 +26,34 @@ public sealed class CommandBuffer(World World)
         var resolver = Pool<Resolver>.Get();
         resolver.Configure(this);
 
-        // Create buffered entities. First borrow a set to re-use for all operations.
-        using (var compList = Pool<HashSet<ComponentID>>.Rent())
+        // Create buffered entities.
+        _tempComponentIdSet.Clear();
+        foreach (var (bufEntId, components) in _bufferedSets)
         {
-            compList.Value.Clear();
+            // Build a set of components on this new entity
+            _tempComponentIdSet.Clear();
+            foreach (var compId in components.Keys)
+                _tempComponentIdSet.Add(compId);
 
-            foreach (var (id, components) in _bufferedSets)
+            // Allocate an entity for it
+            var (entity, slot) = World.CreateEntity(_tempComponentIdSet);
+
+            // Store the new ID in the resolver so it can be retrieved later
+            resolver.Lookup.Add(bufEntId, entity);
+
+            // Write the components into the entity
+            foreach (var setter in components.Values)
             {
-                // Build a set of components on this new entity
-                compList.Value.Clear();
-                foreach (var setter in components)
-                    compList.Value.Add(setter.ID);
-
-                // Allocate an entity for it
-                var (entity, slot) = World.CreateEntity(compList.Value);
-
-                // Store the new ID in the resolver so it can be retrieved later
-                resolver.Lookup.Add(id, entity);
-
-                // Write the components into the entity
-                foreach (var setter in components)
-                {
-                    setter.Write(slot);
-                    setter.ReturnToPool();
-                }
-
-                // Recycle
-                components.Clear();
-                Pool<HashSet<BaseComponentSetter>>.Return(components);
+                setter.Write(slot);
+                setter.ReturnToPool();
             }
-            _bufferedSets.Clear();
+
+            // Recycle
+            components.Clear();
+            Pool.Return(components);
         }
+        _bufferedSets.Clear();
+        _tempComponentIdSet.Clear();
 
         // Delete entities
         foreach (var delete in _deletes)
@@ -71,19 +69,19 @@ public sealed class CommandBuffer(World World)
                 var currentArchetype = World.GetArchetype(entity);
 
                 // Set all of the current archetype components
-                _tempNewArchetypeComponents.Clear();
-                _tempNewArchetypeComponents.UnionWith(currentArchetype.Components);
+                _tempComponentIdSet.Clear();
+                _tempComponentIdSet.UnionWith(currentArchetype.Components);
                 var moveRequired = false;
 
                 // Calculate the hash and component set of the new archetype
                 var hash = currentArchetype.Hash;
                 if (_entitySets.TryGetValue(entity, out var sets))
                 {
-                    foreach (var set in sets)
+                    foreach (var (id, _) in sets)
                     {
-                        if (_tempNewArchetypeComponents.Add(set.ID))
+                        if (_tempComponentIdSet.Add(id))
                         {
-                            hash = hash.Toggle(set.ID);
+                            hash = hash.Toggle(id);
                             moveRequired = true;
                         }
                     }
@@ -92,7 +90,7 @@ public sealed class CommandBuffer(World World)
                 {
                     foreach (var remove in removes)
                     {
-                        if (_tempNewArchetypeComponents.Remove(remove))
+                        if (_tempComponentIdSet.Remove(remove))
                         {
                             hash = hash.Toggle(remove);
                             moveRequired = true;
@@ -107,7 +105,7 @@ public sealed class CommandBuffer(World World)
                 if (moveRequired)
                 {
                     // Get the new archetype we're moving to
-                    var newArchetype = World.GetOrCreateArchetype(_tempNewArchetypeComponents, hash);
+                    var newArchetype = World.GetOrCreateArchetype(_tempComponentIdSet, hash);
 
                     // Migrate the entity across
                     row = World.MigrateEntity(entity, newArchetype);
@@ -120,7 +118,7 @@ public sealed class CommandBuffer(World World)
                 // Run all setters
                 if (sets != null)
                 {
-                    foreach (var set in sets)
+                    foreach (var (_, set) in sets)
                     {
                         set.Write(row);
                         set.ReturnToPool();
@@ -128,14 +126,14 @@ public sealed class CommandBuffer(World World)
 
                     // Recycle
                     sets.Clear();
-                    Pool<HashSet<BaseComponentSetter>>.Return(sets);
+                    Pool.Return(sets);
                 }
             }
         }
         _modified.Clear();
         _entitySets.Clear();
         _removes.Clear();
-        _tempNewArchetypeComponents.Clear();
+        _tempComponentIdSet.Clear();
 
         // Update the version of this buffer, invalidating all buffered entities for further modification
         unchecked { _version++; }
@@ -145,7 +143,7 @@ public sealed class CommandBuffer(World World)
 
     public BufferedEntity Create()
     {
-        var set = Pool<HashSet<BaseComponentSetter>>.Get();
+        var set = Pool<Dictionary<ComponentID, BaseComponentSetter>>.Get();
         set.Clear();
 
         var id = checked(_nextBufferedEntityId++);
@@ -156,23 +154,19 @@ public sealed class CommandBuffer(World World)
     private void SetBuffered<T>(uint id, T value, bool allowDuplicates = false)
         where T : IComponent
     {
-        if (!_bufferedSets.TryGetValue(id, out var set))
-            throw new InvalidOperationException("Unknown entity ID in SetBuffered");
+        Debug.Assert(_bufferedSets.TryGetValue(id, out var set), "Unknown entity ID in SetBuffered");
 
         // Add a setter to the list
         var setter = GenericComponentSetter<T>.Get(value);
 
-        if (!set.Add(setter))
+        if (set.Remove(setter.ID, out var prevSetter))
         {
-
-            if (allowDuplicates)
-            {
-                set.Remove(setter);
-                set.Add(setter);
-            }
-            else
+            if (!allowDuplicates)
                 throw new InvalidOperationException("Cannot set the same component twice onto a buffered entity");
+            prevSetter.ReturnToPool();
         }
+
+        set.Add(setter.ID, setter);
     }
 
     /// <summary>
@@ -186,19 +180,23 @@ public sealed class CommandBuffer(World World)
     {
         if (!_entitySets.TryGetValue(entity, out var set))
         {
-            set = Pool<HashSet<BaseComponentSetter>>.Get();
+            set = Pool<Dictionary<ComponentID, BaseComponentSetter>>.Get();
             set.Clear();
 
             _entitySets.Add(entity, set);
         }
 
-        // Add a setter to the set. First remove it, since equality for setters is purely based on the
-        // component ID this will remove any earlier setters for the same ID and replace it with this one.
+        // Create a setter and store it in the dictionary (recycling the old one, if it's there)
         var setter = GenericComponentSetter<T>.Get(value);
-        set.Remove(setter);
-        set.Add(setter);
+        if (set.Remove(setter.ID, out var old))
+            old.ReturnToPool();
+        set[setter.ID] = setter;
 
-        _modified.Add(entity);
+        // Mark this as modified. If already modified it's possible there's an earlier remove.
+        // Get rid of that.
+        if (!_modified.Add(entity))
+            if (_removes.TryGetValue(entity, out var removes))
+                removes.Remove(setter.ID);
     }
 
     /// <summary>
@@ -219,9 +217,15 @@ public sealed class CommandBuffer(World World)
         }
 
         // Add a remover to the list
-        list.Add(ComponentID<T>.ID);
+        var id = ComponentID<T>.ID;
+        list.Add(id);
 
-        _modified.Add(entity);
+        // Add this entity to the modified set. If it was already there it's possible that
+        // there were some _sets_ for this component. Remove them.
+        if (!_modified.Add(entity))
+            if (_entitySets.TryGetValue(entity, out var sets))
+                if (sets.Remove(id, out var setter))
+                    setter.ReturnToPool();
     }
 
     /// <summary>
@@ -238,19 +242,19 @@ public sealed class CommandBuffer(World World)
     public readonly record struct BufferedEntity
     {
         private readonly uint _id;
-        private readonly uint _version;
+        internal readonly uint Version;
         private readonly CommandBuffer _buffer;
 
         public BufferedEntity(uint id, CommandBuffer buffer)
         {
             _id = id;
             _buffer = buffer;
-            _version = buffer._version;
+            Version = buffer._version;
         }
 
         private void Check()
         {
-            if (_version != _buffer._version)
+            if (Version != _buffer._version)
                 throw new InvalidOperationException("Cannot use `BufferedEntity` after CommandBuffer has been played");
         }
 
@@ -269,7 +273,7 @@ public sealed class CommandBuffer(World World)
         /// <returns></returns>
         public Entity Resolve(Resolver resolver)
         {
-            if (resolver.Lookup == null)
+            if (resolver.Parent == null)
                 throw new ObjectDisposedException("Resolver has already been disposed");
             if (resolver.Parent != _buffer)
                 throw new InvalidOperationException("Cannot use a resolver from one CommandBuffer with BufferedEntity from another");
@@ -286,11 +290,13 @@ public sealed class CommandBuffer(World World)
     {
         internal Dictionary<uint, Entity> Lookup { get; } = [];
         internal CommandBuffer? Parent { get; private set; }
+        internal uint _version;
 
         internal void Configure(CommandBuffer parent)
         {
             Lookup.Clear();
             Parent = parent;
+            _version = parent._version;
         }
 
         public void Dispose()
@@ -302,6 +308,9 @@ public sealed class CommandBuffer(World World)
 
         public Entity Resolve(BufferedEntity bufferedEntity)
         {
+            if (_version != bufferedEntity.Version)
+                throw new InvalidOperationException("Cannot use a resolver from one CommandBuffer with BufferedEntity from another generation of the same buffer");
+
             return bufferedEntity.Resolve(this);
         }
     }
