@@ -35,7 +35,7 @@ public sealed partial class World
         entityInfo.Version++;
 
         // Notify archetype this entity is dead
-        entityInfo.Chunk.Archetype.RemoveEntity(delete, entityInfo);
+        entityInfo.Chunk.Archetype.RemoveEntity(entityInfo);
 
         // Store this ID for re-use later
         _deadEntities.Add(delete);

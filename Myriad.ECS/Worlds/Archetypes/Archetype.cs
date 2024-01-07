@@ -9,7 +9,7 @@ public sealed class Archetype
 {
     private const int CHUNK_SIZE = 1024;
 
-    private readonly World _world;
+    public World World { get; }
 
     public FrozenSet<ComponentID> Components { get; }
     internal ArchetypeHash Hash { get; }
@@ -34,7 +34,7 @@ public sealed class Archetype
 
     public Archetype(World world, FrozenSet<ComponentID> components)
     {
-        _world = world;
+        World = world;
         Components = components;
 
         // Create arrays to fills in below
@@ -64,32 +64,46 @@ public sealed class Archetype
         }
     }
 
+    /// <summary>
+    /// Find a chunk with space and add the given entity to it.
+    /// </summary>
+    /// <param name="entity">Entity to add to a chunk</param>
+    /// <param name="info">Info will be mutated to point to the new location</param>
+    /// <returns></returns>
     internal Row AddEntity(Entity entity, ref EntityInfo info)
     {
         // Iterate over all candidate chunks, searching for one with space for an entity.
         // Remove any from the list that turn out not to have space
         for (var i = _chunksWithSpace.Count - 1; i >= 0; i--)
         {
+            var chunk = _chunksWithSpace[i];
+
+            // Try to add this entity to the chunk
             var row = _chunksWithSpace[i].TryAddEntity(entity, ref info);
+
+            // Remove this chunk if it is full
+            if (row == null || chunk.EntityCount == CHUNK_SIZE)
+                _chunksWithSpace.RemoveAt(i);
+
+            // Return the row if one was assigned
             if (row != null)
                 return row.Value;
-
-            _chunksWithSpace.RemoveAt(i);
         }
 
-        // Create a new chunk
-        var chunk = new Chunk(_world, this, CHUNK_SIZE, _componentIndexLookup, _componentTypes, _componentIDs, Components.Count, _chunks.Count);
-        _chunks.Add(chunk);
-        _chunksWithSpace.Add(chunk);
+        // No space in any chunks, create a new chunk
+        var newChunk = new Chunk(this, CHUNK_SIZE, _componentIndexLookup, _componentTypes, _componentIDs);
+        _chunks.Add(newChunk);
+        _chunksWithSpace.Add(newChunk);
 
-        return chunk.TryAddEntity(entity, ref info)!.Value;
+        // The chunk obviously has space, so this cannot fail!
+        return newChunk.TryAddEntity(entity, ref info)!.Value;
     }
 
-    internal void RemoveEntity(Entity entity, EntityInfo info)
+    internal void RemoveEntity(EntityInfo info)
     {
         var chunk = info.Chunk;
 
-        if (!chunk.RemoveEntity(entity, info))
+        if (!chunk.RemoveEntity(info))
             throw new NotImplementedException("entity was not in expected chunk");
 
         // If the chunk was previously full and now isn't, add it to the set of chunks with space

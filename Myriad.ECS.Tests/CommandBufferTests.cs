@@ -32,6 +32,89 @@ public class CommandBufferTests
     }
 
     [TestMethod]
+    public void CreateManyEntities()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        // Create lots of entities
+        var buffered = new List<CommandBuffer.BufferedEntity>();
+        for (var i = 0; i < 5000; i++)
+            buffered.Add(buffer.Create().Set(new ComponentInt32(i)));
+
+        // Execute buffer
+        using var resolver = buffer.Playback().Block();
+
+        // Resolve results
+        var entities = new List<Entity>();
+        foreach (var b in buffered)
+            entities.Add(resolver.Resolve(b));
+
+        for (var i = 0; i < entities.Count; i++)
+        {
+            var entity = entities[i];
+            Assert.IsTrue(entity.IsAlive(world));
+            Assert.AreEqual(1, world.Archetypes.Count);
+            Assert.AreEqual(1, world.Archetypes.Single().Components.Count);
+            Assert.AreEqual(i, world.GetComponentRef<ComponentInt32>(entity).Value);
+        }
+    }
+
+    [TestMethod]
+    public void ChurnManyEntities()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        var rng = new Random(46576);
+
+        // keep track ofevery single entity ever created
+        var alive = new List<Entity>();
+        var dead = new List<Entity>();
+
+        // Do lots of rounds of creation and destruction
+        for (var i = 0; i < 2; i++)
+        {
+            // Create lots of entities
+            var buffered = new List<CommandBuffer.BufferedEntity>();
+            for (var j = 0; j < 5000; j++)
+                buffered.Add(buffer.Create().Set(new ComponentInt32(j)));
+
+            // Destroy some random entities
+            for (var j = 0; j < 1000; j++)
+            {
+                if (alive.Count == 0)
+                    break;
+                var idx = rng.Next(0, alive.Count);
+                var ent = alive[idx];
+                Assert.IsTrue(ent.IsAlive(world));
+                buffer.Delete(ent);
+                alive.RemoveAt(idx);
+                dead.Add(ent);
+            }
+
+            // Execute
+            var resolver = buffer.Playback().Block();
+
+            // Resolve results
+            foreach (var b in buffered)
+                alive.Add(resolver.Resolve(b));
+
+            // Check all the entities
+            for (var j = 0; j < alive.Count; j++)
+            {
+                var entity = alive[j];
+                Assert.IsTrue(entity.IsAlive(world));
+            }
+            for (var j = 0; j < dead.Count; j++)
+            {
+                var entity = dead[j];
+                Assert.IsTrue(!entity.IsAlive(world));
+            }
+        }
+    }
+
+    [TestMethod]
     public void CreateEntityLateResolveThrows()
     {
         var world = new WorldBuilder().Build();

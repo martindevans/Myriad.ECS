@@ -6,10 +6,10 @@ namespace Myriad.ECS.Worlds.Chunks;
 
 public sealed class Chunk
 {
+    /// <summary>
+    /// The archetype which contains this chunk
+    /// </summary>
     public Archetype Archetype { get; }
-
-    private readonly World _world;
-    private readonly int _chunkIndex;
 
     // Map from component ID (index) to index in chunk
     private readonly int[] _componentIndexLookup;
@@ -26,16 +26,14 @@ public sealed class Chunk
 
     public int EntityCount => _entityCount;
 
-    internal Chunk(World world, Archetype archetype, int size, int[] componentIndexLookup, IReadOnlyList<Type> componentTypes, IReadOnlyList<ComponentID> ids, int componentCount, int chunkIndex)
+    internal Chunk(Archetype archetype, int size, int[] componentIndexLookup, IReadOnlyList<Type> componentTypes, IReadOnlyList<ComponentID> ids)
     {
-        _world = world;
         Archetype = archetype;
         _componentIndexLookup = componentIndexLookup;
-        _chunkIndex = chunkIndex;
         _entities = new Entity[size];
         _componentIdLookup = ids;
 
-        _components = new Array[componentCount];
+        _components = new Array[componentTypes.Count];
         for (var i = 0; i < _components.Length; i++)
             _components[i] = ArrayFactory.Create(componentTypes[i], size);
     }
@@ -56,7 +54,7 @@ public sealed class Chunk
     public ref T GetMutable<T>(Entity entity)
         where T : IComponent
     {
-        var index = _world.GetEntityInfo(entity).RowIndex;
+        var index = Archetype.World.GetEntityInfo(entity).RowIndex;
         return ref GetMutable<T>(entity, index);
     }
     #endregion
@@ -87,7 +85,7 @@ public sealed class Chunk
         return new Row(entity, info.RowIndex, this);
     }
 
-    internal bool RemoveEntity(Entity entity, EntityInfo info)
+    internal bool RemoveEntity(EntityInfo info)
     {
         var index = info.RowIndex;
 
@@ -99,19 +97,23 @@ public sealed class Chunk
             return true;
         }
 
-        // Swap the top entity into place
-        var lastEntity = _entities[_entityCount];
-        var lastEntityIndex = _entityCount;
-        ref var lastInfo = ref _world.GetEntityInfo(lastEntity);
-        _entities[index] = lastEntity;
-        _entities[lastEntityIndex] = default;
-        lastInfo.RowIndex = index;
-
-        // Copy top entity components into place
-        foreach (var component in _components)
+        // If we did not just delete the top entity into place then swap the top
+        // entity down into this slot to keep the chunk continuous.
+        if (index != _entityCount)
         {
-            Array.Copy(component, lastEntityIndex, component, index, 1);
-            Array.Clear(component, lastEntityIndex, 1);
+            var lastEntity = _entities[_entityCount];
+            var lastEntityIndex = _entityCount;
+            ref var lastInfo = ref Archetype.World.GetEntityInfo(lastEntity);
+            _entities[index] = lastEntity;
+            _entities[lastEntityIndex] = default;
+            lastInfo.RowIndex = index;
+
+            // Copy top entity components into place
+            foreach (var component in _components)
+            {
+                Array.Copy(component, lastEntityIndex, component, index, 1);
+                Array.Clear(component, lastEntityIndex, 1);
+            }
         }
 
         return true;
@@ -151,7 +153,7 @@ public sealed class Chunk
         }
 
         // Remove the entity from this chunk (using the old saved info)
-        RemoveEntity(entity, oldInfo);
+        RemoveEntity(oldInfo);
 
         return destRow;
     }

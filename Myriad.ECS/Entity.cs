@@ -1,7 +1,9 @@
-﻿using Myriad.ECS.Worlds;
+﻿using System.Diagnostics;
+using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS;
 
+[DebuggerDisplay("{ID}v{Version}")]
 public readonly record struct Entity
 {
     internal readonly int ID;
@@ -17,10 +19,5 @@ public readonly record struct Entity
     {
         return ID != 0
             && world.GetVersion(ID) == Version;
-    }
-
-    public override string ToString()
-    {
-        return $"Entity({ID}v{Version})";
     }
 }
