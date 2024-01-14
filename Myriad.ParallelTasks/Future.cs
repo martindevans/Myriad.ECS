@@ -1,16 +1,12 @@
 ﻿namespace Myriad.ParallelTasks;
 
-public struct Future<T>
+public struct Future
 {
-    private readonly T _result;
-
-    public Future(T result)
+    public Future()
     {
-        _result = result;
     }
 
-    public T Block()
+    public void Block()
     {
-        return _result;
     }
 }

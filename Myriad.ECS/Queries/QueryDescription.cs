@@ -1,4 +1,5 @@
 ﻿using System.Collections.Frozen;
+using System.Text;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
@@ -17,8 +18,10 @@ public sealed class QueryDescription
     private readonly FrozenSet<ComponentID> _exactlyOne;
 
     // filters
+    //todo: query filtering
     private readonly FrozenSet<FilterID> _filters;
 
+    // Cache of result from last time TryMatch was called
     private MatchResult? _result;
 
     public QueryDescription(World world, FrozenSet<ComponentID> include, FrozenSet<ComponentID> exclude, FrozenSet<ComponentID> atLeastOne, FrozenSet<ComponentID> exactlyOne, FrozenSet<FilterID> filters)
@@ -152,7 +155,7 @@ public sealed class QueryDescription
             return ArchetypeWatermark < world.Archetypes.Count;
         }
     }
-    
+
     /// <summary>
     /// An archetype which matches this query
     /// </summary>

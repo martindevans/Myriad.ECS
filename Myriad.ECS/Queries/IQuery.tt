@@ -4,54 +4,102 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
+using Myriad.ECS.Worlds;
+using Myriad.ParallelTasks;
+using System.Runtime.CompilerServices;
 
 namespace Myriad.ECS.Queries;
 
-public interface IQuery;
+public interface IQuery
+{
+    public static abstract QueryBuilder QueryBuilder { get; }
 
-<# for (var i = 0; i < 9; i++)
+	public Future Execute(QueryDescription query, World world);
+}
+
+<# for (var i = 1; i < 9; i++)
 {
-	for (var j = 0; j < 9; j++)
-	{
-		if (i + j == 0)
-			continue;
 #>
-public interface <#= Name(i, j) #><<#= string.Join(", ", Enumerable.Range(0, i + j).Select(x => "T" + x)) #>>
+public interface <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x)) #>>
     : IQuery
+    where <#= Constraints(i) #>
 {
-	void Execute(Entity e, <#= Refs(0, i, j > 0) #><#= Ins(i, j) #>);
+    void Execute(Entity e, <#= Refs(0, i) #>);
+
+	Future IQuery.Execute(QueryDescription query, World world)
+    {
+        foreach (var archetypeMatch in query.GetArchetypes())
+        {
+            foreach (var chunk in archetypeMatch.Archetype)
+            {
+                var entities = chunk.Entities;
+
+<# for (var j = 0; j < i; j++)
+{
+#>
+                var t<#= j #>span = chunk.GetMutable<T<#= j #>>();
+                ref var t<#= j #> = ref t<#= j #>span[0];
+
+<#
+}
+#>
+                for (var i = 0; i < entities.Length; i++)
+                {
+                    Execute(entities[i], <#= CallParameters(i) #>);
+
+<# for (var j = 0; j < i; j++)
+{
+#>
+                    Unsafe.Add(ref t<#= j #>, 1);
+<#
+}
+#>
+                }
+            }
+        }
+
+        return new Future();
+    }
 }
 
 <#
-	}
 }
 #>
 
 
 <#+ 
-	static string Name(int mutable, int @readonly)
+	static string Name(int parameters)
 	{
-		return "IQuery" + new string('W', mutable) + new string('R', @readonly);
+		return "IQuery" + parameters;
 	}
 
-	static string Refs(int start, int count, bool comma)
+	static string Refs(int start, int count)
 	{
 		var str = string.Join(
 			", ",
 			Enumerable.Range(start, count).Select(x => $"ref T{x} t{x}")
 		);
 
-		if (count > 0 && comma)
-			str += ", ";
-
 		return str;
 	}
 
-	static string Ins(int start, int count)
-	{
-		return string.Join(
-			", ",
-			Enumerable.Range(start, count).Select(x => $"in T{x} t{x}")
+    static string Constraints(int count)
+    {
+        var str = string.Join(
+			"\r\n    where ",
+			Enumerable.Range(0, count).Select(x => $"T{x} : IComponent")
 		);
-	}
+
+		return str;
+    }
+
+    static string CallParameters(int count)
+    {
+        var str = string.Join(
+			", ",
+			Enumerable.Range(0, count).Select(x => $"ref t{x}")
+		);
+
+		return str;
+    }
 #>

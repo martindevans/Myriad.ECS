@@ -38,11 +38,11 @@ public sealed class QueryBuilder
     {
         return new QueryDescription(
             world,
-            _include.Items.ToFrozenSet(),
-            _exclude.Items.ToFrozenSet(),
-            _atLeastOne.Items.ToFrozenSet(),
-            _exactlyOne.Items.ToFrozenSet(),
-            _filterIn.Items.ToFrozenSet()
+            _include.ToFrozenSet(),
+            _exclude.ToFrozenSet(),
+            _atLeastOne.ToFrozenSet(),
+            _exactlyOne.ToFrozenSet(),
+            _filterIn.ToFrozenSet()
         );
     }
 
@@ -210,27 +210,35 @@ public sealed class QueryBuilder
     }
     #endregion
 
-    private class IDSet<TR, TB, TID>
+    private class IDSet<TR, TB, TID>(Action<TID, int, string> check, int Index)
         where TR : BaseRegistry<TB, TID>
         where TID : struct, IIDNumber<TID>
     {
-        public int Index { get; }
+        public int Index { get; } = Index;
 
-        private readonly Action<TID, int, string> _check;
         private readonly HashSet<TID> _items = [];
 
-        public IReadOnlySet<TID> Items => _items;
+        private FrozenSet<TID>? _frozenCache;
 
-        public IDSet(Action<TID, int, string> check, int Index)
+        public FrozenSet<TID> ToFrozenSet()
         {
-            this.Index = Index;
-            _check = check;
+            if (_frozenCache != null)
+                return _frozenCache;
+
+            _frozenCache = _items.ToFrozenSet();
+            return _frozenCache;
         }
 
         private bool Add(TID id, string caller)
         {
-            _check(id, Index, caller);
-            return _items.Add(id);
+            check(id, Index, caller);
+            if (_items.Add(id))
+            {
+                _frozenCache = null;
+                return true;
+            }
+
+            return false;
         }
 
         public bool Add(Type type, [CallerMemberName] string caller = "")

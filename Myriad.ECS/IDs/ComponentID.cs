@@ -1,11 +1,14 @@
-﻿using Myriad.ECS.Registry;
+﻿using System.Diagnostics;
+using Myriad.ECS.Registry;
 
 namespace Myriad.ECS.IDs;
 
+[DebuggerDisplay("{Type} ({Value})")]
 public readonly record struct ComponentID
     : IIDNumber<ComponentID>
 {
     public int Value { get; }
+    public Type Type => ComponentRegistry.Get(this);
 
     private ComponentID(int value)
     {
@@ -20,11 +23,6 @@ public readonly record struct ComponentID
     public static ComponentID Next(ComponentID value)
     {
         return new ComponentID(checked(value.Value + 1));
-    }
-
-    public override string ToString()
-    {
-        return $"{ComponentRegistry.Get(this).Name} ({Value})";
     }
 }
 

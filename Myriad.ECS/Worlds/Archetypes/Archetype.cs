@@ -1,11 +1,12 @@
-﻿using System.Collections.Frozen;
+﻿using System.Collections;
+using System.Collections.Frozen;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Registry;
 using Myriad.ECS.Worlds.Chunks;
 
 namespace Myriad.ECS.Worlds.Archetypes;
 
-public sealed class Archetype
+public sealed partial class Archetype
 {
     private const int CHUNK_SIZE = 1024;
 
@@ -23,6 +24,11 @@ public sealed class Archetype
     /// All chunks in this archetype
     /// </summary>
     private readonly List<Chunk> _chunks = [ ];
+
+    /// <summary>
+    /// Get an enumerator over all chunks
+    /// </summary>
+    internal List<Chunk>.Enumerator Chunks => _chunks.GetEnumerator();
 
     /// <summary>
     /// A list of chunks which might have space to put an entity in
@@ -121,5 +127,10 @@ public sealed class Archetype
             _chunksWithSpace.Add(chunk);
 
         return row;
+    }
+
+    public List<Chunk>.Enumerator GetEnumerator()
+    {
+        return _chunks.GetEnumerator();
     }
 }

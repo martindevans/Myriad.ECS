@@ -1,6 +1,6 @@
-﻿using Myriad.ECS.Worlds.Archetypes;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Worlds.Chunks;
 
@@ -18,13 +18,19 @@ public sealed class Chunk
     /// Map from index to component ID
     /// </summary>
     private readonly IReadOnlyList<ComponentID> _componentIdLookup;
-    
-    private int _entityCount;
 
     private readonly Entity[] _entities;
     private readonly Array[] _components;
 
-    public int EntityCount => _entityCount;
+    /// <summary>
+    /// Get the number of entities currently in this chunk
+    /// </summary>
+    public int EntityCount { get; private set; }
+
+    /// <summary>
+    /// Get all of the entities in this chunk
+    /// </summary>
+    public ReadOnlySpan<Entity> Entities => _entities.AsSpan(0, EntityCount);
 
     internal Chunk(Archetype archetype, int size, int[] componentIndexLookup, IReadOnlyList<Type> componentTypes, IReadOnlyList<ComponentID> ids)
     {
@@ -39,33 +45,47 @@ public sealed class Chunk
     }
 
     #region get component
-    public ref T GetMutable<T>(Entity entity, int rowIndex)
-        where T : IComponent
-    {
-        if (_entities[rowIndex] != entity)
-            throw new InvalidOperationException("Mismatched entities in chunk");
-
-        var component = ComponentID<T>.ID;
-        var componentArray = _components[_componentIndexLookup[component.Value]];
-        var typedArray = Unsafe.As<T[]>(componentArray);
-        return ref typedArray[rowIndex];
-    }
-
     public ref T GetMutable<T>(Entity entity)
         where T : IComponent
     {
         var index = Archetype.World.GetEntityInfo(entity).RowIndex;
         return ref GetMutable<T>(entity, index);
     }
+
+    public ref T GetMutable<T>(Entity entity, int rowIndex)
+        where T : IComponent
+    {
+        if (_entities[rowIndex] != entity)
+            throw new InvalidOperationException("Mismatched entities in chunk");
+        return ref GetMutable<T>()[rowIndex];
+    }
+
+    internal Span<T> GetMutable<T>()
+        where T : IComponent
+    {
+        var component = ComponentID<T>.ID;
+        var componentArray = _components[_componentIndexLookup[component.Value]];
+        var typedArray = Unsafe.As<T[]>(componentArray);
+        return typedArray.AsSpan(0, EntityCount);
+    }
     #endregion
 
+    internal Row GetRow(Entity entity, EntityInfo info)
+    {
+        if (!ReferenceEquals(info.Chunk, this))
+            throw new ArgumentException("entity is not in this chunk", nameof(entity));
+
+        return new Row(entity, info.RowIndex, this);
+    }
+
+    #region add/remove entity
     internal Row? TryAddEntity(Entity entity, ref EntityInfo info)
     {
-        if (_entityCount == _entities.Length)
+        if (EntityCount == _entities.Length)
             return null;
 
         // Use the next free slot
-        var index = _entityCount++;
+        var index = EntityCount++;
 
         // Occupy this row
         _entities[index] = entity;
@@ -77,21 +97,13 @@ public sealed class Chunk
         return new Row(entity, index, this);
     }
 
-    internal Row GetRow(Entity entity, EntityInfo info)
-    {
-        if (!ReferenceEquals(info.Chunk, this))
-            throw new ArgumentException("entity is not in this chunk", nameof(entity));
-
-        return new Row(entity, info.RowIndex, this);
-    }
-
     internal bool RemoveEntity(EntityInfo info)
     {
         var index = info.RowIndex;
 
         // No work to do if there are no entites
-        _entityCount -= 1;
-        if (_entityCount == 0)
+        EntityCount -= 1;
+        if (EntityCount == 0)
         {
             _entities[index] = default;
             return true;
@@ -99,10 +111,10 @@ public sealed class Chunk
 
         // If we did not just delete the top entity into place then swap the top
         // entity down into this slot to keep the chunk continuous.
-        if (index != _entityCount)
+        if (index != EntityCount)
         {
-            var lastEntity = _entities[_entityCount];
-            var lastEntityIndex = _entityCount;
+            var lastEntity = _entities[EntityCount];
+            var lastEntityIndex = EntityCount;
             ref var lastInfo = ref Archetype.World.GetEntityInfo(lastEntity);
             _entities[index] = lastEntity;
             _entities[lastEntityIndex] = default;
@@ -157,4 +169,5 @@ public sealed class Chunk
 
         return destRow;
     }
+    #endregion
 }

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Frozen;
-using System.Runtime.InteropServices;
 using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds.Archetypes;
+using Myriad.ParallelTasks;
 
 namespace Myriad.ECS.Worlds;
 
@@ -151,7 +152,38 @@ public sealed partial class World
         }
     }
 
+    #region query execution
+    public Future Execute<TQ>(QueryDescription query, TQ action)
+        where TQ : IQuery
+    {
+        return action.Execute(query, this);
+    }
 
+    //public Future Execute<TQ, T0, T1>(QueryDescription query, TQ action)
+    //    where TQ : IQueryWR<T0, T1>
+    //    where T0 : IComponent
+    //    where T1 : IComponent
+    //{
+    //    var archetypes = query.GetArchetypes();
+
+    //    foreach (var match in archetypes)
+    //    {
+    //        foreach (var chunk in match.Archetype)
+    //        {
+    //            var entities = chunk.Entities;
+    //            var t0 = chunk.GetMutable<T0>();
+    //            var t1 = chunk.GetMutable<T1>();
+
+    //            for (var i = 0; i < entities.Length; i++)
+    //            {
+    //                action.Execute(entities[i], ref t0[i], in t1[i]);
+    //            }
+    //        }
+    //    }
+
+    //    return new Future();
+    //}
+    #endregion
 
 
 
@@ -205,6 +237,4 @@ public sealed partial class World
         // Get the entityinfo for this entity
         return ref _entities.GetMutable(entity.ID);
     }
-
-    
 }

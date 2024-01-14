@@ -30,9 +30,8 @@ public class UnitTest1
                      .Set(new ComponentInt32(456));
         var be2 = cmd.Create()
                      .Set(new ComponentFloat(0))
-                     .Set(new ComponentInt32(1));
-
-        return;
+                     .Set(new ComponentInt32(1))
+                     .Set(new ComponentByte(255));
 
         // Play that buffer back
         var future = cmd.Playback();
@@ -42,12 +41,37 @@ public class UnitTest1
         var e1 = be1.Resolve(resolver);
         Assert.IsNotNull(e1);
         var e2 = be2.Resolve(resolver);
-        Assert.IsNull(e2);
+        Assert.IsNotNull(e2);
 
-        // Queue up a query
-        //todo:var query = world.Query(new MultiplyAdd(4));
+        // Run query
+        var queryDesc = MultiplyAdd.QueryBuilder.Build(world);
+        var queryResult = world.Execute(queryDesc, new MultiplyAdd(4));
+        queryResult.Block();
+    }
 
-        //todo:query.Block();
+    [TestMethod]
+    public void CodeGen()
+    {
+        foreach (var item in Combinations(32))
+        {
+
+        }
+    }
+
+    struct MethodParts
+    {
+        public string GenericTypesList;
+    }
+
+    IEnumerable<MethodParts> Combinations(int count)
+    {
+        for (var i = 0; i < count; i++)
+        {
+            yield return new MethodParts
+            {
+                GenericTypesList = string.Join(", ", Enumerable.Range(0, i).Select(i => "T" + i))
+            };
+        }
     }
 }
 
@@ -57,12 +81,19 @@ public class UnitTest1
 [AtLeastOneOf<ComponentFloat, ComponentInt16>]
 [Filter<FloatValueGreaterThanIntValue>]
 public readonly partial struct MultiplyAdd(float factor)
-    : IQueryWR<ComponentFloat, ComponentInt32>
+    : IQuery2<ComponentFloat, ComponentInt32>
 {
-    public void Execute(Entity e, ref ComponentFloat f, in ComponentInt32 i)
+    public void Execute(Entity e, ref ComponentFloat f, ref ComponentInt32 i)
     {
         f.Value += i.Value * factor;
     }
+
+    //todo: auto generate this from attributes?
+    public static QueryBuilder QueryBuilder { get; } = new QueryBuilder()
+        .Include<ComponentFloat>()
+        .Include<ComponentInt32>()
+        .Exclude<ComponentByte>()
+        .FilterIn<FloatValueGreaterThanIntValue>();
 }
 
 public readonly partial struct FloatValueGreaterThanIntValue

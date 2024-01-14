@@ -73,7 +73,7 @@ public class CommandBufferTests
         var dead = new List<Entity>();
 
         // Do lots of rounds of creation and destruction
-        for (var i = 0; i < 2; i++)
+        for (var i = 0; i < 20; i++)
         {
             // Create lots of entities
             var buffered = new List<CommandBuffer.BufferedEntity>();

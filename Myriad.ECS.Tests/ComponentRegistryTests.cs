@@ -28,6 +28,8 @@ public class ComponentRegistryTests
         };
 
         Assert.AreEqual(4, ids.Distinct().Count());
+
+        Assert.AreEqual(typeof(ComponentInt16), ComponentID<ComponentInt16>.ID.Type);
     }
 
     [TestMethod]
