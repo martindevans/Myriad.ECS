@@ -1,10 +1,8 @@
 ﻿using System.Collections.Frozen;
 using Myriad.ECS.Collections;
-using Myriad.ECS.Execution;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds.Archetypes;
-using Myriad.ParallelTasks;
 
 namespace Myriad.ECS.Worlds;
 
@@ -155,17 +153,16 @@ public sealed partial class World
 
     #region query execution
     /// <summary>
-    /// Schedule a query to be executed
+    /// Execute a query
     /// </summary>
     /// <typeparam name="TQ"></typeparam>
     /// <param name="query"></param>
     /// <param name="action"></param>
-    /// <param name="schedule"></param>
     /// <returns></returns>
-    public Future Schedule<TQ>(QueryDescription query, TQ action, ExecutionSchedule schedule)
+    public int Execute<TQ>(QueryDescription query, TQ action)
         where TQ : IQuery
     {
-        return action.Schedule(query, this, schedule);
+        return action.Execute(query, this);
     }
     #endregion
 

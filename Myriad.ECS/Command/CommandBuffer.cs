@@ -1,10 +1,8 @@
 ﻿using System.Diagnostics;
 using Myriad.ECS.Allocations;
-using Myriad.ECS.Execution;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Worlds.Archetypes;
-using Myriad.ParallelTasks;
 
 namespace Myriad.ECS.Command;
 
@@ -21,13 +19,8 @@ public sealed class CommandBuffer(World World)
 
     private readonly HashSet<ComponentID> _tempComponentIdSet = [ ];
 
-    public Future<Resolver> Playback(ExecutionSchedule schedule)
+    public Resolver Playback()
     {
-        // Build the job for this command buffer. For now just take write access on everything,
-        // this could be made for fine grained!
-        var builder = schedule.CreateJob();
-        builder.WithWriteAll();
-
         // Create a "resolver" that can be used to resolve entity IDs
         var resolver = Pool<Resolver>.Get();
         resolver.Configure(this);
@@ -145,7 +138,7 @@ public sealed class CommandBuffer(World World)
         unchecked { _version++; }
 
         // Return the resolver
-        return builder.Build(resolver);
+        return resolver;
     }
 
     public BufferedEntity Create()
@@ -297,7 +290,7 @@ public sealed class CommandBuffer(World World)
     {
         internal Dictionary<uint, Entity> Lookup { get; } = [];
         internal CommandBuffer? Parent { get; private set; }
-        internal uint _version;
+        private uint _version;
 
         internal void Configure(CommandBuffer parent)
         {

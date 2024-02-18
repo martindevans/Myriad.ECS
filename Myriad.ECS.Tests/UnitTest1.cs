@@ -1,6 +1,5 @@
 using System.Reflection;
 using Myriad.ECS.Command;
-using Myriad.ECS.Execution;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Queries.Attributes;
 using Myriad.ECS.Registry;
@@ -22,7 +21,6 @@ public class UnitTest1
     {
         // Create a world
         var world = new WorldBuilder().Build();
-        var schedule = ExecutionSchedule.Create();
 
         // Create 2 entities with a command buffer
         var cmd = new CommandBuffer(world);
@@ -35,10 +33,9 @@ public class UnitTest1
                      .Set(new ComponentByte(255));
 
         // Play that buffer back
-        var future = cmd.Playback(schedule);
+        using var resolver = cmd.Playback();
 
         // Resolve the IDs of the entities
-        using var resolver = future.Block();
         var e1 = be1.Resolve(resolver);
         Assert.IsNotNull(e1);
         var e2 = be2.Resolve(resolver);
@@ -46,8 +43,7 @@ public class UnitTest1
 
         // Run query
         var queryDesc = MultiplyAdd.QueryBuilder.Build(world);
-        var queryResult = world.Schedule(queryDesc, new MultiplyAdd(4), schedule);
-        queryResult.Block();
+        var queryResult = world.Execute(queryDesc, new MultiplyAdd(4));
     }
 }
 

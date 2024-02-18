@@ -58,7 +58,7 @@ public class AddFilterConfigureMethod
         return true;
     }
 
-    private static StructDeclarationSyntax GetSemanticTargetForGeneration(GeneratorSyntaxContext context, CancellationToken ct)
+    private static StructDeclarationSyntax? GetSemanticTargetForGeneration(GeneratorSyntaxContext context, CancellationToken ct)
     {
         var candidate = (StructDeclarationSyntax)context.Node;
 

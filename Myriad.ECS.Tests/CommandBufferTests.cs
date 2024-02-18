@@ -1,5 +1,4 @@
 ﻿using Myriad.ECS.Command;
-using Myriad.ECS.Execution;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 
@@ -21,11 +20,10 @@ public class CommandBufferTests
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         var eb = buffer.Create();
 
-        using var resolver = buffer.Playback(schedule).Block();
+        using var resolver = buffer.Playback();
         var entity = resolver.Resolve(eb);
 
         Assert.IsTrue(entity.IsAlive(world));
@@ -38,7 +36,6 @@ public class CommandBufferTests
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         // Create lots of entities
         var buffered = new List<CommandBuffer.BufferedEntity>();
@@ -46,7 +43,7 @@ public class CommandBufferTests
             buffered.Add(buffer.Create().Set(new ComponentInt32(i)));
 
         // Execute buffer
-        using var resolver = buffer.Playback(schedule).Block();
+        using var resolver = buffer.Playback();
 
         // Resolve results
         var entities = new List<Entity>();
@@ -68,7 +65,6 @@ public class CommandBufferTests
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         var rng = new Random(46576);
 
@@ -98,7 +94,7 @@ public class CommandBufferTests
             }
 
             // Execute
-            var resolver = buffer.Playback(schedule).Block();
+            var resolver = buffer.Playback();
 
             // Resolve results
             foreach (var b in buffered)
@@ -123,11 +119,10 @@ public class CommandBufferTests
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         var eb = buffer.Create();
 
-        var resolver = buffer.Playback(schedule).Block();
+        var resolver = buffer.Playback();
         resolver.Dispose();
 
         Assert.ThrowsException<ObjectDisposedException>(() =>
@@ -142,14 +137,13 @@ public class CommandBufferTests
         var world = new WorldBuilder().Build();
         var buffer1 = new CommandBuffer(world);
         var buffer2 = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         // Create the entity
         var eb1 = buffer1.Create();
-        buffer1.Playback(schedule).Block();
+        buffer1.Playback();
 
         // Also run the other buffer to get another resolver
-        var resolver2 = buffer2.Playback(schedule).Block();
+        var resolver2 = buffer2.Playback();
 
         // Resolve the entity ID using the wrong resolver
         Assert.ThrowsException<InvalidOperationException>(() =>
@@ -163,14 +157,13 @@ public class CommandBufferTests
     {
         var world = new WorldBuilder().Build();
         var buffer1 = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         // Create the entity
         var eb1 = buffer1.Create();
-        buffer1.Playback(schedule).Block();
+        buffer1.Playback();
 
         // Re-use that buffer
-        var resolver2 = buffer1.Playback(schedule).Block();
+        var resolver2 = buffer1.Playback();
 
         // Resolve the entity ID using the wrong resolver
         Assert.ThrowsException<InvalidOperationException>(() =>
@@ -184,11 +177,10 @@ public class CommandBufferTests
     {
         var world = new WorldBuilder().Build();
         var buffer1 = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         // Create the entity
         var eb1 = buffer1.Create();
-        buffer1.Playback(schedule).Block();
+        buffer1.Playback();
 
         // Try to modify the buffered entity
         Assert.ThrowsException<InvalidOperationException>(() =>
@@ -202,13 +194,12 @@ public class CommandBufferTests
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         var eb = buffer
             .Create()
             .Set(new ComponentFloat(17));
 
-        var resolver = buffer.Playback(schedule).Block();
+        var resolver = buffer.Playback();
         var entity = resolver.Resolve(eb);
 
         Assert.IsTrue(entity.IsAlive(world));
@@ -250,7 +241,6 @@ public class CommandBufferTests
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         var buffered = new[]
         {
@@ -259,7 +249,7 @@ public class CommandBufferTests
             buffer.Create().Set(new ComponentFloat(3))
         };
 
-        using var resolver = buffer.Playback(schedule).Block();
+        using var resolver = buffer.Playback();
 
         var entities = new[]
         {
@@ -272,7 +262,7 @@ public class CommandBufferTests
             Assert.IsTrue(entity.IsAlive(world));
 
         buffer.Delete(entities[1]);
-        buffer.Playback(schedule).Block();
+        buffer.Playback();
 
         Assert.IsTrue(entities[0].IsAlive(world));
         Assert.IsFalse(entities[1].IsAlive(world));
@@ -287,19 +277,18 @@ public class CommandBufferTests
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         // Create an entity with 2 components
         var eb = buffer
                 .Create()
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
-        using var resolver = buffer.Playback(schedule).Block();
+        using var resolver = buffer.Playback();
         var entity = resolver.Resolve(eb);
 
         // Remove a component
         buffer.Remove<ComponentInt16>(entity);
-        buffer.Playback(schedule).Block();
+        buffer.Playback();
 
         Assert.AreEqual(123, world.GetComponentRef<ComponentFloat>(entity).Value);
         Assert.IsFalse(world.HasComponent<ComponentInt16>(entity));
@@ -310,19 +299,18 @@ public class CommandBufferTests
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         // Create an entity with 2 components
         var eb = buffer
                 .Create()
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
-        using var resolver = buffer.Playback(schedule).Block();
+        using var resolver = buffer.Playback();
         var entity = resolver.Resolve(eb);
 
         // Add a third
         buffer.Set(entity, new ComponentInt32(789));
-        buffer.Playback(schedule).Block();
+        buffer.Playback();
 
         // Check they are all present
         Assert.IsTrue(world.HasComponent<ComponentFloat>(entity));
@@ -335,19 +323,18 @@ public class CommandBufferTests
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         // Create an entity with 2 components
         var eb = buffer
                 .Create()
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
-        using var resolver = buffer.Playback(schedule).Block();
+        using var resolver = buffer.Playback();
         var entity = resolver.Resolve(eb);
 
         // Overwrite one
         buffer.Set(entity, new ComponentInt16(789));
-        buffer.Playback(schedule).Block();
+        buffer.Playback();
 
         // Check the value has changed
         Assert.IsTrue(world.HasComponent<ComponentFloat>(entity));
@@ -360,20 +347,19 @@ public class CommandBufferTests
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         // Create an entity with 2 components
         var eb = buffer
                 .Create()
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
-        using var resolver = buffer.Playback(schedule).Block();
+        using var resolver = buffer.Playback();
         var entity = resolver.Resolve(eb);
 
         // Overwrite one, twice
         buffer.Set(entity, new ComponentInt16(789));
         buffer.Set(entity, new ComponentInt16(987));
-        buffer.Playback(schedule).Block();
+        buffer.Playback();
 
         // Check the value has changed
         Assert.IsTrue(world.HasComponent<ComponentFloat>(entity));
@@ -386,14 +372,13 @@ public class CommandBufferTests
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         // Create an entity with 2 components
         var eb = buffer
                 .Create()
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
-        using var resolver = buffer.Playback(schedule).Block();
+        using var resolver = buffer.Playback();
         var entity = resolver.Resolve(eb);
 
         // Overwrite one
@@ -402,7 +387,7 @@ public class CommandBufferTests
         // Then remove it
         buffer.Remove<ComponentInt16>(entity);
 
-        buffer.Playback(schedule).Block();
+        buffer.Playback();
 
         // Check the value is gone
         Assert.IsTrue(world.HasComponent<ComponentFloat>(entity));
@@ -414,20 +399,19 @@ public class CommandBufferTests
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         // Create an entity with 2 components
         var eb = buffer
                 .Create()
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
-        using var resolver = buffer.Playback(schedule).Block();
+        using var resolver = buffer.Playback();
         var entity = resolver.Resolve(eb);
 
         // Remove a component
         buffer.Remove<ComponentInt32>(entity);
 
-        buffer.Playback(schedule).Block();
+        buffer.Playback();
 
         // Check entity is unchanged
         Assert.IsTrue(world.HasComponent<ComponentFloat>(entity));
@@ -440,14 +424,13 @@ public class CommandBufferTests
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
-        var schedule = ExecutionSchedule.Create();
 
         // Create an entity with 2 components
         var eb = buffer
                 .Create()
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
-        using var resolver = buffer.Playback(schedule).Block();
+        using var resolver = buffer.Playback();
         var entity = resolver.Resolve(eb);
 
         // Remove a component
@@ -456,7 +439,7 @@ public class CommandBufferTests
         // Then set the same component!
         buffer.Set(entity, new ComponentInt16(789));
 
-        buffer.Playback(schedule).Block();
+        buffer.Playback();
 
         // Check entity structure is unchanged
         Assert.IsTrue(world.HasComponent<ComponentFloat>(entity));

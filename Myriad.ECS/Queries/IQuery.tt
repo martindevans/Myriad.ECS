@@ -8,8 +8,6 @@
 	const int PARAM_COUNT = 9;
 #>
 using Myriad.ECS.Worlds;
-using Myriad.ECS.Execution;
-using Myriad.ParallelTasks;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -21,7 +19,7 @@ public interface IQuery
 {
 	public static abstract QueryBuilder QueryBuilder { get; }
 
-	public Future Schedule(QueryDescription query, World world, ExecutionSchedule schedule);
+	public int Execute(QueryDescription query, World world);
 }
 
 <# for (var i = 0; i <= PARAM_COUNT; i++)
@@ -38,12 +36,13 @@ public interface <#= Name(i, j) #><<#= string.Join(", ", Enumerable.Range(0, sum
 {
 	void Execute(Entity e, <#= Refs(0, i, j > 0) #><#= Ins(i, j) #>);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -66,19 +65,23 @@ public interface <#= Name(i, j) #><<#= string.Join(", ", Enumerable.Range(0, sum
 }
 #>
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
 <# for (var k = 0; k < sumij; k++)
 {
@@ -90,12 +93,13 @@ public interface <#= Name(i, j) #><<#= string.Join(", ", Enumerable.Range(0, sum
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], <#= CallParameters(sumij, i, j) #>);
                 }
             }
         }
 
-        return context.Finalize();
+		return count;
     }
 }
 

@@ -1,6 +1,4 @@
 ﻿using Myriad.ECS.Worlds;
-using Myriad.ECS.Execution;
-using Myriad.ParallelTasks;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -12,7 +10,7 @@ public interface IQuery
 {
 	public static abstract QueryBuilder QueryBuilder { get; }
 
-	public Future Schedule(QueryDescription query, World world, ExecutionSchedule schedule);
+	public int Execute(QueryDescription query, World world);
 }
 
 public interface IQueryR<T0>
@@ -21,12 +19,13 @@ public interface IQueryR<T0>
 {
 	void Execute(Entity e, in T0 t0);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -36,30 +35,35 @@ public interface IQueryR<T0>
 
             context = context.WithReadAccess<T0>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], in t0[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -70,12 +74,13 @@ public interface IQueryRR<T0, T1>
 {
 	void Execute(Entity e, in T0 t0, in T1 t1);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -86,31 +91,36 @@ public interface IQueryRR<T0, T1>
             context = context.WithReadAccess<T0>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T1>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], in t0[i], in t1[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -122,12 +132,13 @@ public interface IQueryRRR<T0, T1, T2>
 {
 	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -139,19 +150,23 @@ public interface IQueryRRR<T0, T1, T2>
             context = context.WithReadAccess<T1>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T2>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -159,12 +174,13 @@ public interface IQueryRRR<T0, T1, T2>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], in t0[i], in t1[i], in t2[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -177,12 +193,13 @@ public interface IQueryRRRR<T0, T1, T2, T3>
 {
 	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -195,19 +212,23 @@ public interface IQueryRRRR<T0, T1, T2, T3>
             context = context.WithReadAccess<T2>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T3>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -216,12 +237,13 @@ public interface IQueryRRRR<T0, T1, T2, T3>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -235,12 +257,13 @@ public interface IQueryRRRRR<T0, T1, T2, T3, T4>
 {
 	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -254,19 +277,23 @@ public interface IQueryRRRRR<T0, T1, T2, T3, T4>
             context = context.WithReadAccess<T3>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T4>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -276,12 +303,13 @@ public interface IQueryRRRRR<T0, T1, T2, T3, T4>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -296,12 +324,13 @@ public interface IQueryRRRRRR<T0, T1, T2, T3, T4, T5>
 {
 	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -316,19 +345,23 @@ public interface IQueryRRRRRR<T0, T1, T2, T3, T4, T5>
             context = context.WithReadAccess<T4>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T5>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -339,12 +372,13 @@ public interface IQueryRRRRRR<T0, T1, T2, T3, T4, T5>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -360,12 +394,13 @@ public interface IQueryRRRRRRR<T0, T1, T2, T3, T4, T5, T6>
 {
 	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -381,19 +416,23 @@ public interface IQueryRRRRRRR<T0, T1, T2, T3, T4, T5, T6>
             context = context.WithReadAccess<T5>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T6>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -405,12 +444,13 @@ public interface IQueryRRRRRRR<T0, T1, T2, T3, T4, T5, T6>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -427,12 +467,13 @@ public interface IQueryRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 {
 	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -449,19 +490,23 @@ public interface IQueryRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
             context = context.WithReadAccess<T6>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -474,12 +519,13 @@ public interface IQueryRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -497,12 +543,13 @@ public interface IQueryRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 {
 	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -520,19 +567,23 @@ public interface IQueryRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -546,12 +597,13 @@ public interface IQueryRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -561,12 +613,13 @@ public interface IQueryW<T0>
 {
 	void Execute(Entity e, ref T0 t0);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -576,30 +629,35 @@ public interface IQueryW<T0>
 
             context = context.WithWriteAccess<T0>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -610,12 +668,13 @@ public interface IQueryWR<T0, T1>
 {
 	void Execute(Entity e, ref T0 t0, in T1 t1);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -626,31 +685,36 @@ public interface IQueryWR<T0, T1>
             context = context.WithWriteAccess<T0>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T1>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], in t1[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -662,12 +726,13 @@ public interface IQueryWRR<T0, T1, T2>
 {
 	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -679,19 +744,23 @@ public interface IQueryWRR<T0, T1, T2>
             context = context.WithReadAccess<T1>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T2>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -699,12 +768,13 @@ public interface IQueryWRR<T0, T1, T2>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], in t1[i], in t2[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -717,12 +787,13 @@ public interface IQueryWRRR<T0, T1, T2, T3>
 {
 	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -735,19 +806,23 @@ public interface IQueryWRRR<T0, T1, T2, T3>
             context = context.WithReadAccess<T2>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T3>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -756,12 +831,13 @@ public interface IQueryWRRR<T0, T1, T2, T3>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -775,12 +851,13 @@ public interface IQueryWRRRR<T0, T1, T2, T3, T4>
 {
 	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -794,19 +871,23 @@ public interface IQueryWRRRR<T0, T1, T2, T3, T4>
             context = context.WithReadAccess<T3>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T4>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -816,12 +897,13 @@ public interface IQueryWRRRR<T0, T1, T2, T3, T4>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -836,12 +918,13 @@ public interface IQueryWRRRRR<T0, T1, T2, T3, T4, T5>
 {
 	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -856,19 +939,23 @@ public interface IQueryWRRRRR<T0, T1, T2, T3, T4, T5>
             context = context.WithReadAccess<T4>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T5>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -879,12 +966,13 @@ public interface IQueryWRRRRR<T0, T1, T2, T3, T4, T5>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -900,12 +988,13 @@ public interface IQueryWRRRRRR<T0, T1, T2, T3, T4, T5, T6>
 {
 	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -921,19 +1010,23 @@ public interface IQueryWRRRRRR<T0, T1, T2, T3, T4, T5, T6>
             context = context.WithReadAccess<T5>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T6>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -945,12 +1038,13 @@ public interface IQueryWRRRRRR<T0, T1, T2, T3, T4, T5, T6>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -967,12 +1061,13 @@ public interface IQueryWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 {
 	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -989,19 +1084,23 @@ public interface IQueryWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
             context = context.WithReadAccess<T6>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -1014,12 +1113,13 @@ public interface IQueryWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1037,12 +1137,13 @@ public interface IQueryWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 {
 	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -1060,19 +1161,23 @@ public interface IQueryWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -1086,12 +1191,13 @@ public interface IQueryWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1110,12 +1216,13 @@ public interface IQueryWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 {
 	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -1134,19 +1241,23 @@ public interface IQueryWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -1161,12 +1272,13 @@ public interface IQueryWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1177,12 +1289,13 @@ public interface IQueryWW<T0, T1>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -1193,31 +1306,36 @@ public interface IQueryWW<T0, T1>
             context = context.WithWriteAccess<T0>(archetypeMatch.Archetype);
             context = context.WithWriteAccess<T1>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1229,12 +1347,13 @@ public interface IQueryWWR<T0, T1, T2>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -1246,19 +1365,23 @@ public interface IQueryWWR<T0, T1, T2>
             context = context.WithWriteAccess<T1>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T2>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -1266,12 +1389,13 @@ public interface IQueryWWR<T0, T1, T2>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], in t2[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1284,12 +1408,13 @@ public interface IQueryWWRR<T0, T1, T2, T3>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -1302,19 +1427,23 @@ public interface IQueryWWRR<T0, T1, T2, T3>
             context = context.WithReadAccess<T2>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T3>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -1323,12 +1452,13 @@ public interface IQueryWWRR<T0, T1, T2, T3>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1342,12 +1472,13 @@ public interface IQueryWWRRR<T0, T1, T2, T3, T4>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -1361,19 +1492,23 @@ public interface IQueryWWRRR<T0, T1, T2, T3, T4>
             context = context.WithReadAccess<T3>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T4>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -1383,12 +1518,13 @@ public interface IQueryWWRRR<T0, T1, T2, T3, T4>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1403,12 +1539,13 @@ public interface IQueryWWRRRR<T0, T1, T2, T3, T4, T5>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -1423,19 +1560,23 @@ public interface IQueryWWRRRR<T0, T1, T2, T3, T4, T5>
             context = context.WithReadAccess<T4>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T5>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -1446,12 +1587,13 @@ public interface IQueryWWRRRR<T0, T1, T2, T3, T4, T5>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1467,12 +1609,13 @@ public interface IQueryWWRRRRR<T0, T1, T2, T3, T4, T5, T6>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -1488,19 +1631,23 @@ public interface IQueryWWRRRRR<T0, T1, T2, T3, T4, T5, T6>
             context = context.WithReadAccess<T5>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T6>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -1512,12 +1659,13 @@ public interface IQueryWWRRRRR<T0, T1, T2, T3, T4, T5, T6>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1534,12 +1682,13 @@ public interface IQueryWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -1556,19 +1705,23 @@ public interface IQueryWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
             context = context.WithReadAccess<T6>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -1581,12 +1734,13 @@ public interface IQueryWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1604,12 +1758,13 @@ public interface IQueryWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -1627,19 +1782,23 @@ public interface IQueryWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -1653,12 +1812,13 @@ public interface IQueryWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1677,12 +1837,13 @@ public interface IQueryWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -1701,19 +1862,23 @@ public interface IQueryWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -1728,12 +1893,13 @@ public interface IQueryWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1753,12 +1919,13 @@ public interface IQueryWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -1778,19 +1945,23 @@ public interface IQueryWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T10>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -1806,12 +1977,13 @@ public interface IQueryWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1823,12 +1995,13 @@ public interface IQueryWWW<T0, T1, T2>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -1840,19 +2013,23 @@ public interface IQueryWWW<T0, T1, T2>
             context = context.WithWriteAccess<T1>(archetypeMatch.Archetype);
             context = context.WithWriteAccess<T2>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -1860,12 +2037,13 @@ public interface IQueryWWW<T0, T1, T2>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1878,12 +2056,13 @@ public interface IQueryWWWR<T0, T1, T2, T3>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -1896,19 +2075,23 @@ public interface IQueryWWWR<T0, T1, T2, T3>
             context = context.WithWriteAccess<T2>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T3>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -1917,12 +2100,13 @@ public interface IQueryWWWR<T0, T1, T2, T3>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1936,12 +2120,13 @@ public interface IQueryWWWRR<T0, T1, T2, T3, T4>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -1955,19 +2140,23 @@ public interface IQueryWWWRR<T0, T1, T2, T3, T4>
             context = context.WithReadAccess<T3>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T4>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -1977,12 +2166,13 @@ public interface IQueryWWWRR<T0, T1, T2, T3, T4>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -1997,12 +2187,13 @@ public interface IQueryWWWRRR<T0, T1, T2, T3, T4, T5>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -2017,19 +2208,23 @@ public interface IQueryWWWRRR<T0, T1, T2, T3, T4, T5>
             context = context.WithReadAccess<T4>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T5>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -2040,12 +2235,13 @@ public interface IQueryWWWRRR<T0, T1, T2, T3, T4, T5>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -2061,12 +2257,13 @@ public interface IQueryWWWRRRR<T0, T1, T2, T3, T4, T5, T6>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -2082,19 +2279,23 @@ public interface IQueryWWWRRRR<T0, T1, T2, T3, T4, T5, T6>
             context = context.WithReadAccess<T5>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T6>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -2106,12 +2307,13 @@ public interface IQueryWWWRRRR<T0, T1, T2, T3, T4, T5, T6>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -2128,12 +2330,13 @@ public interface IQueryWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -2150,19 +2353,23 @@ public interface IQueryWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
             context = context.WithReadAccess<T6>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -2175,12 +2382,13 @@ public interface IQueryWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -2198,12 +2406,13 @@ public interface IQueryWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -2221,19 +2430,23 @@ public interface IQueryWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -2247,12 +2460,13 @@ public interface IQueryWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -2271,12 +2485,13 @@ public interface IQueryWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -2295,19 +2510,23 @@ public interface IQueryWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -2322,12 +2541,13 @@ public interface IQueryWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -2347,12 +2567,13 @@ public interface IQueryWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -2372,19 +2593,23 @@ public interface IQueryWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T10>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -2400,12 +2625,13 @@ public interface IQueryWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -2426,12 +2652,13 @@ public interface IQueryWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -2452,19 +2679,23 @@ public interface IQueryWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
             context = context.WithReadAccess<T10>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T11>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -2481,12 +2712,13 @@ public interface IQueryWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -2499,12 +2731,13 @@ public interface IQueryWWWW<T0, T1, T2, T3>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -2517,19 +2750,23 @@ public interface IQueryWWWW<T0, T1, T2, T3>
             context = context.WithWriteAccess<T2>(archetypeMatch.Archetype);
             context = context.WithWriteAccess<T3>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -2538,12 +2775,13 @@ public interface IQueryWWWW<T0, T1, T2, T3>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -2557,12 +2795,13 @@ public interface IQueryWWWWR<T0, T1, T2, T3, T4>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -2576,19 +2815,23 @@ public interface IQueryWWWWR<T0, T1, T2, T3, T4>
             context = context.WithWriteAccess<T3>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T4>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -2598,12 +2841,13 @@ public interface IQueryWWWWR<T0, T1, T2, T3, T4>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -2618,12 +2862,13 @@ public interface IQueryWWWWRR<T0, T1, T2, T3, T4, T5>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -2638,19 +2883,23 @@ public interface IQueryWWWWRR<T0, T1, T2, T3, T4, T5>
             context = context.WithReadAccess<T4>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T5>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -2661,12 +2910,13 @@ public interface IQueryWWWWRR<T0, T1, T2, T3, T4, T5>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -2682,12 +2932,13 @@ public interface IQueryWWWWRRR<T0, T1, T2, T3, T4, T5, T6>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -2703,19 +2954,23 @@ public interface IQueryWWWWRRR<T0, T1, T2, T3, T4, T5, T6>
             context = context.WithReadAccess<T5>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T6>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -2727,12 +2982,13 @@ public interface IQueryWWWWRRR<T0, T1, T2, T3, T4, T5, T6>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -2749,12 +3005,13 @@ public interface IQueryWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -2771,19 +3028,23 @@ public interface IQueryWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
             context = context.WithReadAccess<T6>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -2796,12 +3057,13 @@ public interface IQueryWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -2819,12 +3081,13 @@ public interface IQueryWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -2842,19 +3105,23 @@ public interface IQueryWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -2868,12 +3135,13 @@ public interface IQueryWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -2892,12 +3160,13 @@ public interface IQueryWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -2916,19 +3185,23 @@ public interface IQueryWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -2943,12 +3216,13 @@ public interface IQueryWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -2968,12 +3242,13 @@ public interface IQueryWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -2993,19 +3268,23 @@ public interface IQueryWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T10>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -3021,12 +3300,13 @@ public interface IQueryWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -3047,12 +3327,13 @@ public interface IQueryWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -3073,19 +3354,23 @@ public interface IQueryWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
             context = context.WithReadAccess<T10>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T11>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -3102,12 +3387,13 @@ public interface IQueryWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -3129,12 +3415,13 @@ public interface IQueryWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -3156,19 +3443,23 @@ public interface IQueryWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
             context = context.WithReadAccess<T11>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T12>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -3186,12 +3477,13 @@ public interface IQueryWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -3205,12 +3497,13 @@ public interface IQueryWWWWW<T0, T1, T2, T3, T4>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -3224,19 +3517,23 @@ public interface IQueryWWWWW<T0, T1, T2, T3, T4>
             context = context.WithWriteAccess<T3>(archetypeMatch.Archetype);
             context = context.WithWriteAccess<T4>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -3246,12 +3543,13 @@ public interface IQueryWWWWW<T0, T1, T2, T3, T4>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -3266,12 +3564,13 @@ public interface IQueryWWWWWR<T0, T1, T2, T3, T4, T5>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -3286,19 +3585,23 @@ public interface IQueryWWWWWR<T0, T1, T2, T3, T4, T5>
             context = context.WithWriteAccess<T4>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T5>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -3309,12 +3612,13 @@ public interface IQueryWWWWWR<T0, T1, T2, T3, T4, T5>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -3330,12 +3634,13 @@ public interface IQueryWWWWWRR<T0, T1, T2, T3, T4, T5, T6>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -3351,19 +3656,23 @@ public interface IQueryWWWWWRR<T0, T1, T2, T3, T4, T5, T6>
             context = context.WithReadAccess<T5>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T6>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -3375,12 +3684,13 @@ public interface IQueryWWWWWRR<T0, T1, T2, T3, T4, T5, T6>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -3397,12 +3707,13 @@ public interface IQueryWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -3419,19 +3730,23 @@ public interface IQueryWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7>
             context = context.WithReadAccess<T6>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -3444,12 +3759,13 @@ public interface IQueryWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -3467,12 +3783,13 @@ public interface IQueryWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -3490,19 +3807,23 @@ public interface IQueryWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -3516,12 +3837,13 @@ public interface IQueryWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -3540,12 +3862,13 @@ public interface IQueryWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -3564,19 +3887,23 @@ public interface IQueryWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -3591,12 +3918,13 @@ public interface IQueryWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -3616,12 +3944,13 @@ public interface IQueryWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -3641,19 +3970,23 @@ public interface IQueryWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T10>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -3669,12 +4002,13 @@ public interface IQueryWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -3695,12 +4029,13 @@ public interface IQueryWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -3721,19 +4056,23 @@ public interface IQueryWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
             context = context.WithReadAccess<T10>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T11>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -3750,12 +4089,13 @@ public interface IQueryWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -3777,12 +4117,13 @@ public interface IQueryWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -3804,19 +4145,23 @@ public interface IQueryWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
             context = context.WithReadAccess<T11>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T12>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -3834,12 +4179,13 @@ public interface IQueryWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -3862,12 +4208,13 @@ public interface IQueryWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -3890,19 +4237,23 @@ public interface IQueryWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
             context = context.WithReadAccess<T12>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T13>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -3921,12 +4272,13 @@ public interface IQueryWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -3941,12 +4293,13 @@ public interface IQueryWWWWWW<T0, T1, T2, T3, T4, T5>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -3961,19 +4314,23 @@ public interface IQueryWWWWWW<T0, T1, T2, T3, T4, T5>
             context = context.WithWriteAccess<T4>(archetypeMatch.Archetype);
             context = context.WithWriteAccess<T5>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -3984,12 +4341,13 @@ public interface IQueryWWWWWW<T0, T1, T2, T3, T4, T5>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -4005,12 +4363,13 @@ public interface IQueryWWWWWWR<T0, T1, T2, T3, T4, T5, T6>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -4026,19 +4385,23 @@ public interface IQueryWWWWWWR<T0, T1, T2, T3, T4, T5, T6>
             context = context.WithWriteAccess<T5>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T6>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -4050,12 +4413,13 @@ public interface IQueryWWWWWWR<T0, T1, T2, T3, T4, T5, T6>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -4072,12 +4436,13 @@ public interface IQueryWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -4094,19 +4459,23 @@ public interface IQueryWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7>
             context = context.WithReadAccess<T6>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -4119,12 +4488,13 @@ public interface IQueryWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -4142,12 +4512,13 @@ public interface IQueryWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -4165,19 +4536,23 @@ public interface IQueryWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -4191,12 +4566,13 @@ public interface IQueryWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -4215,12 +4591,13 @@ public interface IQueryWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -4239,19 +4616,23 @@ public interface IQueryWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -4266,12 +4647,13 @@ public interface IQueryWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -4291,12 +4673,13 @@ public interface IQueryWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -4316,19 +4699,23 @@ public interface IQueryWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T10>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -4344,12 +4731,13 @@ public interface IQueryWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -4370,12 +4758,13 @@ public interface IQueryWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -4396,19 +4785,23 @@ public interface IQueryWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
             context = context.WithReadAccess<T10>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T11>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -4425,12 +4818,13 @@ public interface IQueryWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -4452,12 +4846,13 @@ public interface IQueryWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -4479,19 +4874,23 @@ public interface IQueryWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
             context = context.WithReadAccess<T11>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T12>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -4509,12 +4908,13 @@ public interface IQueryWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -4537,12 +4937,13 @@ public interface IQueryWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -4565,19 +4966,23 @@ public interface IQueryWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
             context = context.WithReadAccess<T12>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T13>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -4596,12 +5001,13 @@ public interface IQueryWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -4625,12 +5031,13 @@ public interface IQueryWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -4654,19 +5061,23 @@ public interface IQueryWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
             context = context.WithReadAccess<T13>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T14>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -4686,12 +5097,13 @@ public interface IQueryWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -4707,12 +5119,13 @@ public interface IQueryWWWWWWW<T0, T1, T2, T3, T4, T5, T6>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -4728,19 +5141,23 @@ public interface IQueryWWWWWWW<T0, T1, T2, T3, T4, T5, T6>
             context = context.WithWriteAccess<T5>(archetypeMatch.Archetype);
             context = context.WithWriteAccess<T6>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -4752,12 +5169,13 @@ public interface IQueryWWWWWWW<T0, T1, T2, T3, T4, T5, T6>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -4774,12 +5192,13 @@ public interface IQueryWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -4796,19 +5215,23 @@ public interface IQueryWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7>
             context = context.WithWriteAccess<T6>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -4821,12 +5244,13 @@ public interface IQueryWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -4844,12 +5268,13 @@ public interface IQueryWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -4867,19 +5292,23 @@ public interface IQueryWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
             context = context.WithReadAccess<T7>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -4893,12 +5322,13 @@ public interface IQueryWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -4917,12 +5347,13 @@ public interface IQueryWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -4941,19 +5372,23 @@ public interface IQueryWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -4968,12 +5403,13 @@ public interface IQueryWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -4993,12 +5429,13 @@ public interface IQueryWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -5018,19 +5455,23 @@ public interface IQueryWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T10>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -5046,12 +5487,13 @@ public interface IQueryWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -5072,12 +5514,13 @@ public interface IQueryWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -5098,19 +5541,23 @@ public interface IQueryWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
             context = context.WithReadAccess<T10>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T11>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -5127,12 +5574,13 @@ public interface IQueryWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -5154,12 +5602,13 @@ public interface IQueryWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -5181,19 +5630,23 @@ public interface IQueryWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
             context = context.WithReadAccess<T11>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T12>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -5211,12 +5664,13 @@ public interface IQueryWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -5239,12 +5693,13 @@ public interface IQueryWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -5267,19 +5722,23 @@ public interface IQueryWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
             context = context.WithReadAccess<T12>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T13>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -5298,12 +5757,13 @@ public interface IQueryWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -5327,12 +5787,13 @@ public interface IQueryWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -5356,19 +5817,23 @@ public interface IQueryWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
             context = context.WithReadAccess<T13>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T14>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -5388,12 +5853,13 @@ public interface IQueryWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -5418,12 +5884,13 @@ public interface IQueryWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -5448,19 +5915,23 @@ public interface IQueryWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
             context = context.WithReadAccess<T14>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T15>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -5481,12 +5952,13 @@ public interface IQueryWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -5503,12 +5975,13 @@ public interface IQueryWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -5525,19 +5998,23 @@ public interface IQueryWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7>
             context = context.WithWriteAccess<T6>(archetypeMatch.Archetype);
             context = context.WithWriteAccess<T7>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -5550,12 +6027,13 @@ public interface IQueryWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -5573,12 +6051,13 @@ public interface IQueryWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -5596,19 +6075,23 @@ public interface IQueryWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
             context = context.WithWriteAccess<T7>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -5622,12 +6105,13 @@ public interface IQueryWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -5646,12 +6130,13 @@ public interface IQueryWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -5670,19 +6155,23 @@ public interface IQueryWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
             context = context.WithReadAccess<T8>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -5697,12 +6186,13 @@ public interface IQueryWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -5722,12 +6212,13 @@ public interface IQueryWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -5747,19 +6238,23 @@ public interface IQueryWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T10>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -5775,12 +6270,13 @@ public interface IQueryWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -5801,12 +6297,13 @@ public interface IQueryWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -5827,19 +6324,23 @@ public interface IQueryWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
             context = context.WithReadAccess<T10>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T11>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -5856,12 +6357,13 @@ public interface IQueryWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -5883,12 +6385,13 @@ public interface IQueryWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -5910,19 +6413,23 @@ public interface IQueryWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
             context = context.WithReadAccess<T11>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T12>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -5940,12 +6447,13 @@ public interface IQueryWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -5968,12 +6476,13 @@ public interface IQueryWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -5996,19 +6505,23 @@ public interface IQueryWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
             context = context.WithReadAccess<T12>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T13>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -6027,12 +6540,13 @@ public interface IQueryWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -6056,12 +6570,13 @@ public interface IQueryWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -6085,19 +6600,23 @@ public interface IQueryWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
             context = context.WithReadAccess<T13>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T14>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -6117,12 +6636,13 @@ public interface IQueryWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -6147,12 +6667,13 @@ public interface IQueryWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -6177,19 +6698,23 @@ public interface IQueryWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
             context = context.WithReadAccess<T14>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T15>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -6210,12 +6735,13 @@ public interface IQueryWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -6241,12 +6767,13 @@ public interface IQueryWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15, in T16 t16);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -6272,19 +6799,23 @@ public interface IQueryWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
             context = context.WithReadAccess<T15>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T16>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -6306,12 +6837,13 @@ public interface IQueryWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i], in t16[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -6329,12 +6861,13 @@ public interface IQueryWWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -6352,19 +6885,23 @@ public interface IQueryWWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7, T8>
             context = context.WithWriteAccess<T7>(archetypeMatch.Archetype);
             context = context.WithWriteAccess<T8>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -6378,12 +6915,13 @@ public interface IQueryWWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -6402,12 +6940,13 @@ public interface IQueryWWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -6426,19 +6965,23 @@ public interface IQueryWWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
             context = context.WithWriteAccess<T8>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -6453,12 +6996,13 @@ public interface IQueryWWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -6478,12 +7022,13 @@ public interface IQueryWWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -6503,19 +7048,23 @@ public interface IQueryWWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
             context = context.WithReadAccess<T9>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T10>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -6531,12 +7080,13 @@ public interface IQueryWWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -6557,12 +7107,13 @@ public interface IQueryWWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -6583,19 +7134,23 @@ public interface IQueryWWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
             context = context.WithReadAccess<T10>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T11>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -6612,12 +7167,13 @@ public interface IQueryWWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -6639,12 +7195,13 @@ public interface IQueryWWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -6666,19 +7223,23 @@ public interface IQueryWWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
             context = context.WithReadAccess<T11>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T12>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -6696,12 +7257,13 @@ public interface IQueryWWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -6724,12 +7286,13 @@ public interface IQueryWWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -6752,19 +7315,23 @@ public interface IQueryWWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
             context = context.WithReadAccess<T12>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T13>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -6783,12 +7350,13 @@ public interface IQueryWWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -6812,12 +7380,13 @@ public interface IQueryWWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -6841,19 +7410,23 @@ public interface IQueryWWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
             context = context.WithReadAccess<T13>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T14>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -6873,12 +7446,13 @@ public interface IQueryWWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -6903,12 +7477,13 @@ public interface IQueryWWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -6933,19 +7508,23 @@ public interface IQueryWWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
             context = context.WithReadAccess<T14>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T15>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -6966,12 +7545,13 @@ public interface IQueryWWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -6997,12 +7577,13 @@ public interface IQueryWWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15, in T16 t16);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -7028,19 +7609,23 @@ public interface IQueryWWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
             context = context.WithReadAccess<T15>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T16>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -7062,12 +7647,13 @@ public interface IQueryWWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i], in t16[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
@@ -7094,12 +7680,13 @@ public interface IQueryWWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9
 {
 	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15, in T16 t16, in T17 t17);
 
-    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    int IQuery.Execute(QueryDescription query, World world)
     {
-	    // Build an execution schedule for this work, declaring what resources it reads and writes
+		var archetypes = query.GetArchetypes();
+
+	    /* // Build an execution schedule for this work, declaring what resources it reads and writes
         var context = schedule.CreateJob();
 
-		var archetypes = query.GetArchetypes();
 		for (var a = 0; a < archetypes.Count; a++)
         {
 			var archetypeMatch = archetypes[a];
@@ -7126,19 +7713,23 @@ public interface IQueryWWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9
             context = context.WithReadAccess<T16>(archetypeMatch.Archetype);
             context = context.WithReadAccess<T17>(archetypeMatch.Archetype);
         }
+		*/
 
+		var count = 0;
         for (var a = 0; a < archetypes.Count; a++)
         {
-			var archetypeMatch = archetypes[a];
-
-            if (archetypeMatch.Archetype.EntityCount == 0)
+			var archetype = archetypes[a].Archetype;
+            if (archetype.EntityCount == 0)
                 continue;
 
-			var chunks = archetypeMatch.Archetype.Chunks;
+			var chunks = archetype.Chunks;
             for (var c = chunks.Count - 1; c >= 0; c--)
             {
 				var chunk = chunks[c];
+
                 var entities = chunk.Entities;
+				if (entities.Length == 0)
+				    continue;
 
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
@@ -7161,12 +7752,13 @@ public interface IQueryWWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9
 
 				for (var i = entities.Length - 1; i >= 0; i--)
                 {
+					count++;
                     Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i], in t16[i], in t17[i]);
                 }
             }
         }
 
-        return context.Build();
+		return count;
     }
 }
 
