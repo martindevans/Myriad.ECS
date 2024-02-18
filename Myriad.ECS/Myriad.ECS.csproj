@@ -9,7 +9,6 @@
   <ItemGroup>
     <Compile Remove="Queries\Attributes\AllAttribute - Copy.cs" />
     <Compile Remove="Queries\Attributes\AtLeastOneOfAttribute - Copy.cs" />
-    <Compile Remove="Queries\Predicates\NoneAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -82,11 +81,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>NoneAttribute.tt</DependentUpon>
     </Compile>
-    <Compile Update="Queries\Predicates\IQueryPredicates.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>IQueryPredicates.tt</DependentUpon>
-    </Compile>
     <Compile Update="Queries\Filters\QueryFilter.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -119,10 +113,6 @@
     <None Update="Queries\Attributes\AllAttribute.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AllAttribute.cs</LastGenOutput>
-    </None>
-    <None Update="Queries\Predicates\IQueryPredicates.tt">
-      <LastGenOutput>IQueryPredicates.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="Queries\IQuery.tt">
       <LastGenOutput>IQuery.cs</LastGenOutput>

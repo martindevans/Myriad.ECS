@@ -18,6 +18,6 @@ internal readonly record struct Row
     public ref T GetMutable<T>()
         where T : IComponent
     {
-        return ref Chunk.GetMutable<T>(Entity, RowIndex);
+        return ref Chunk.GetRef<T>(Entity, RowIndex);
     }
 }

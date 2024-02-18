@@ -1,5 +1,4 @@
 ﻿using System.Collections.Frozen;
-using System.Text;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
@@ -7,32 +6,18 @@ using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Queries;
 
-public sealed class QueryDescription
+public sealed class QueryDescription(World world, FrozenSet<ComponentID> include, FrozenSet<ComponentID> exclude, FrozenSet<ComponentID> atLeastOne, FrozenSet<ComponentID> exactlyOne)
 {
-    private readonly World _world;
+    private readonly World _world = world;
 
     // Components
-    private readonly FrozenSet<ComponentID> _include;
-    private readonly FrozenSet<ComponentID> _exclude;
-    private readonly FrozenSet<ComponentID> _atLeastOne;
-    private readonly FrozenSet<ComponentID> _exactlyOne;
-
-    // filters
-    //todo: query filtering
-    private readonly FrozenSet<FilterID> _filters;
+    private readonly FrozenSet<ComponentID> _include = include;
+    private readonly FrozenSet<ComponentID> _exclude = exclude;
+    private readonly FrozenSet<ComponentID> _atLeastOne = atLeastOne;
+    private readonly FrozenSet<ComponentID> _exactlyOne = exactlyOne;
 
     // Cache of result from last time TryMatch was called
     private MatchResult? _result;
-
-    public QueryDescription(World world, FrozenSet<ComponentID> include, FrozenSet<ComponentID> exclude, FrozenSet<ComponentID> atLeastOne, FrozenSet<ComponentID> exactlyOne, FrozenSet<FilterID> filters)
-    {
-        _world = world;
-        _include = include;
-        _exclude = exclude;
-        _atLeastOne = atLeastOne;
-        _exactlyOne = exactlyOne;
-        _filters = filters;
-    }
 
     #region match
     /// <summary>

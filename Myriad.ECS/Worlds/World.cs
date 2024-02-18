@@ -1,5 +1,6 @@
 ﻿using System.Collections.Frozen;
 using Myriad.ECS.Collections;
+using Myriad.ECS.Execution;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds.Archetypes;
@@ -77,7 +78,7 @@ public sealed partial class World
         // Check all archetypes
         foreach (var archetype in _archetypes)
         {
-            // Fast approcimate check (false positives possible, false negatives not)
+            // Fast approximate check (false positives possible, false negatives not)
             if (archetype.Hash != hash)
                 continue;
 
@@ -153,48 +154,20 @@ public sealed partial class World
     }
 
     #region query execution
-    public Future Execute<TQ>(QueryDescription query, TQ action)
+    /// <summary>
+    /// Schedule a query to be executed
+    /// </summary>
+    /// <typeparam name="TQ"></typeparam>
+    /// <param name="query"></param>
+    /// <param name="action"></param>
+    /// <param name="schedule"></param>
+    /// <returns></returns>
+    public Future Schedule<TQ>(QueryDescription query, TQ action, ExecutionSchedule schedule)
         where TQ : IQuery
     {
-        return action.Execute(query, this);
+        return action.Schedule(query, this, schedule);
     }
-
-    //public Future Execute<TQ, T0, T1>(QueryDescription query, TQ action)
-    //    where TQ : IQueryWR<T0, T1>
-    //    where T0 : IComponent
-    //    where T1 : IComponent
-    //{
-    //    var archetypes = query.GetArchetypes();
-
-    //    foreach (var match in archetypes)
-    //    {
-    //        foreach (var chunk in match.Archetype)
-    //        {
-    //            var entities = chunk.Entities;
-    //            var t0 = chunk.GetMutable<T0>();
-    //            var t1 = chunk.GetMutable<T1>();
-
-    //            for (var i = 0; i < entities.Length; i++)
-    //            {
-    //                action.Execute(entities[i], ref t0[i], in t1[i]);
-    //            }
-    //        }
-    //    }
-
-    //    return new Future();
-    //}
     #endregion
-
-
-
-    //public Future<Empty> Query<TQ>(TQ query)
-    //    where TQ : struct, IQuery
-    //{
-
-    //}
-
-    //todo: use source generation to generate a special extension method for every single query.
-
 
 
     //todo: temp API?
@@ -207,11 +180,16 @@ public sealed partial class World
         // Get the entityinfo for this entity
         ref var entityInfo = ref _entities.GetMutable(entity.ID);
 
-        return ref entityInfo.Chunk.GetMutable<T>(entity);
+        return ref entityInfo.Chunk.GetRef<T>(entity);
     }
 
     public bool HasComponent<T>(Entity entity)
         where T : IComponent
+    {
+        return GetComponentSet(entity).Contains(ComponentID<T>.ID);
+    }
+
+    public FrozenSet<ComponentID> GetComponentSet(Entity entity)
     {
         if (!entity.IsAlive(this))
             throw new ArgumentException("entity is not alive", nameof(entity));
@@ -219,8 +197,8 @@ public sealed partial class World
         // Get the entityinfo for this entity
         var entityInfo = _entities.GetImmutable(entity.ID);
 
-        // Check if this archetype contains the component
-        return entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID);
+        // Get the set of component for this archetype
+        return entityInfo.Chunk.Archetype.Components;
     }
 
     internal Row GetRow(Entity entity)

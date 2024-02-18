@@ -1,8 +1,8 @@
 using System.Reflection;
 using Myriad.ECS.Command;
+using Myriad.ECS.Execution;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Queries.Attributes;
-using Myriad.ECS.Queries.Predicates;
 using Myriad.ECS.Registry;
 using Myriad.ECS.Worlds;
 
@@ -22,6 +22,7 @@ public class UnitTest1
     {
         // Create a world
         var world = new WorldBuilder().Build();
+        var schedule = ExecutionSchedule.Create();
 
         // Create 2 entities with a command buffer
         var cmd = new CommandBuffer(world);
@@ -34,7 +35,7 @@ public class UnitTest1
                      .Set(new ComponentByte(255));
 
         // Play that buffer back
-        var future = cmd.Playback();
+        var future = cmd.Playback(schedule);
 
         // Resolve the IDs of the entities
         using var resolver = future.Block();
@@ -45,33 +46,8 @@ public class UnitTest1
 
         // Run query
         var queryDesc = MultiplyAdd.QueryBuilder.Build(world);
-        var queryResult = world.Execute(queryDesc, new MultiplyAdd(4));
+        var queryResult = world.Schedule(queryDesc, new MultiplyAdd(4), schedule);
         queryResult.Block();
-    }
-
-    [TestMethod]
-    public void CodeGen()
-    {
-        foreach (var item in Combinations(32))
-        {
-
-        }
-    }
-
-    struct MethodParts
-    {
-        public string GenericTypesList;
-    }
-
-    IEnumerable<MethodParts> Combinations(int count)
-    {
-        for (var i = 0; i < count; i++)
-        {
-            yield return new MethodParts
-            {
-                GenericTypesList = string.Join(", ", Enumerable.Range(0, i).Select(i => "T" + i))
-            };
-        }
     }
 }
 
@@ -79,11 +55,10 @@ public class UnitTest1
 [None<ComponentByte>]
 [ExactlyOneOf<ComponentFloat, ComponentInt16>]
 [AtLeastOneOf<ComponentFloat, ComponentInt16>]
-[Filter<FloatValueGreaterThanIntValue>]
 public readonly partial struct MultiplyAdd(float factor)
-    : IQuery2<ComponentFloat, ComponentInt32>
+    : IQueryWR<ComponentFloat, ComponentInt32>
 {
-    public void Execute(Entity e, ref ComponentFloat f, ref ComponentInt32 i)
+    public void Execute(Entity e, ref ComponentFloat f, in ComponentInt32 i)
     {
         f.Value += i.Value * factor;
     }
@@ -92,21 +67,5 @@ public readonly partial struct MultiplyAdd(float factor)
     public static QueryBuilder QueryBuilder { get; } = new QueryBuilder()
         .Include<ComponentFloat>()
         .Include<ComponentInt32>()
-        .Exclude<ComponentByte>()
-        .FilterIn<FloatValueGreaterThanIntValue>();
-}
-
-public readonly partial struct FloatValueGreaterThanIntValue
-    : IQueryPredicate<ComponentFloat, ComponentInt32>
-{
-    public bool Execute(Entity e, ref readonly ComponentFloat f, ref readonly ComponentInt32 i)
-    {
-        return f.Value > i.Value;
-    }
-
-    public void ConfigureQueryBuilder(QueryBuilder q)
-    {
-        q.Include<ComponentFloat>();
-        q.Include<ComponentInt32>();
-    }
+        .Exclude<ComponentByte>();
 }

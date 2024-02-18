@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Myriad.ECS.Allocations;
+using Myriad.ECS.Execution;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Worlds.Archetypes;
@@ -20,8 +21,13 @@ public sealed class CommandBuffer(World World)
 
     private readonly HashSet<ComponentID> _tempComponentIdSet = [ ];
 
-    public Future<Resolver> Playback()
+    public Future<Resolver> Playback(ExecutionSchedule schedule)
     {
+        // Build the job for this command buffer. For now just take write access on everything,
+        // this could be made for fine grained!
+        var builder = schedule.CreateJob();
+        builder.WithWriteAll();
+
         // Create a "resolver" that can be used to resolve entity IDs
         var resolver = Pool<Resolver>.Get();
         resolver.Configure(this);
@@ -138,7 +144,8 @@ public sealed class CommandBuffer(World World)
         // Update the version of this buffer, invalidating all buffered entities for further modification
         unchecked { _version++; }
 
-        return new Future<Resolver>(resolver);
+        // Return the resolver
+        return builder.Build(resolver);
     }
 
     public BufferedEntity Create()
@@ -283,7 +290,7 @@ public sealed class CommandBuffer(World World)
     }
 
     /// <summary>
-    /// Provides a way to resolve created entities. Must be disposed before the command buffer can be used again
+    /// Provides a way to resolve created entities. Must be disposed once finished with!
     /// </summary>
     public sealed class Resolver
         : IDisposable

@@ -8,7 +8,7 @@ public class QueryBuilderTests
     [TestMethod]
     public void CreateEmpty()
     {
-        var q = new QueryBuilder();
+        Assert.IsNotNull(new QueryBuilder());
     }
 
     [TestMethod]
@@ -192,23 +192,5 @@ public class QueryBuilderTests
         {
             q.Exclude<ComponentFloat>();
         });
-    }
-
-    [TestMethod]
-    public void CreateWithFilter()
-    {
-        var q = new QueryBuilder()
-            .Include<ComponentInt32>()
-            .FilterIn<PredicatePositiveFloat>();
-
-        // Because the "FilterPositiveFloat" filter requires the "ComponentFloat" it should now be implicitly included
-        Assert.IsTrue(q.IsIncluded<ComponentFloat>());
-
-        Assert.IsTrue(q.IsFilterIn<PredicatePositiveFloat>());
-        Assert.IsTrue(q.IsFilterIn(typeof(PredicatePositiveFloat)));
-        Assert.IsTrue(!q.IsFilterIn(typeof(PredicateNegativeFloat)));
-
-        // Adding it again is fine
-        q.FilterIn<PredicatePositiveFloat>();
     }
 }

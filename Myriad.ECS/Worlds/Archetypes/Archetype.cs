@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Frozen;
+﻿using System.Collections.Frozen;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Registry;
 using Myriad.ECS.Worlds.Chunks;
@@ -8,7 +7,15 @@ namespace Myriad.ECS.Worlds.Archetypes;
 
 public sealed partial class Archetype
 {
+    /// <summary>
+    /// Number of entities in a single chunk
+    /// </summary>
     private const int CHUNK_SIZE = 1024;
+
+    /// <summary>
+    /// How many empty chunks to keep as spares
+    /// </summary>
+    private const int CHUNK_HOT_SPARES = 4;
 
     public World World { get; }
 
@@ -26,17 +33,19 @@ public sealed partial class Archetype
     private readonly List<Chunk> _chunks = [ ];
 
     /// <summary>
-    /// Get an enumerator over all chunks
-    /// </summary>
-    internal List<Chunk>.Enumerator Chunks => _chunks.GetEnumerator();
-
-    /// <summary>
     /// A list of chunks which might have space to put an entity in
     /// </summary>
     private readonly List<Chunk> _chunksWithSpace = [ ];
 
+    /// <summary>
+    /// A list of empty chunks that have been removed from this archetype
+    /// </summary>
+    private readonly Stack<Chunk> _spareChunks = new(CHUNK_HOT_SPARES);
+
     private readonly ComponentID[] _componentIDs;
     private readonly Type[] _componentTypes;
+
+    public int EntityCount { get; private set; }
 
     public Archetype(World world, FrozenSet<ComponentID> components)
     {
@@ -97,9 +106,12 @@ public sealed partial class Archetype
         }
 
         // No space in any chunks, create a new chunk
-        var newChunk = new Chunk(this, CHUNK_SIZE, _componentIndexLookup, _componentTypes, _componentIDs);
+        var newChunk = _spareChunks.Count > 0 ? _spareChunks.Pop() : new Chunk(this, CHUNK_SIZE, _componentIndexLookup, _componentTypes, _componentIDs);
         _chunks.Add(newChunk);
         _chunksWithSpace.Add(newChunk);
+
+        // Increase archetype entity count
+        EntityCount++;
 
         // The chunk obviously has space, so this cannot fail!
         return newChunk.TryAddEntity(entity, ref info)!.Value;
@@ -112,9 +124,11 @@ public sealed partial class Archetype
         if (!chunk.RemoveEntity(info))
             throw new NotImplementedException("entity was not in expected chunk");
 
-        // If the chunk was previously full and now isn't, add it to the set of chunks with space
-        if (chunk.EntityCount == CHUNK_SIZE - 1)
-            _chunksWithSpace.Add(chunk);
+        // Decrease archetype entity count
+        EntityCount--;
+
+        // Execute handler for when an entity is removed from a chunk
+        HandleChunkEntityRemoved(chunk);
     }
 
     internal Row MigrateTo(Entity entity, ref EntityInfo info, Archetype to)
@@ -122,15 +136,35 @@ public sealed partial class Archetype
         var chunk = info.Chunk;
         var row = chunk.MigrateTo(entity, ref info, to);
 
-        // If the chunk was previously full and now isn't, add it to the set of chunks with space
-        if (chunk.EntityCount == CHUNK_SIZE - 1)
-            _chunksWithSpace.Add(chunk);
+        // Decrease archetype entity count
+        EntityCount--;
+
+        // Execute handler for when an entity is removed from a chunk
+        HandleChunkEntityRemoved(chunk);
 
         return row;
     }
 
-    public List<Chunk>.Enumerator GetEnumerator()
+    private void HandleChunkEntityRemoved(Chunk chunk)
     {
-        return _chunks.GetEnumerator();
+        switch (chunk.EntityCount)
+        {
+            // If the chunk is empty remove it from this archetype entirely
+            case 0:
+            {
+                _chunksWithSpace.Remove(chunk);
+                _chunks.Remove(chunk);
+                if (_spareChunks.Count < 4)
+                    _spareChunks.Push(chunk);
+                break;
+            }
+
+            // If the chunk was previously full and now isn't, add it to the set of chunks with space
+            case CHUNK_SIZE - 1:
+                _chunksWithSpace.Add(chunk);
+                break;
+        }
     }
+
+    internal IReadOnlyList<Chunk> Chunks => _chunks;
 }

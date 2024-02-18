@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using Myriad.ECS.Allocations;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Archetypes;
 
@@ -45,22 +46,22 @@ public sealed class Chunk
     }
 
     #region get component
-    public ref T GetMutable<T>(Entity entity)
+    public ref T GetRef<T>(Entity entity)
         where T : IComponent
     {
         var index = Archetype.World.GetEntityInfo(entity).RowIndex;
-        return ref GetMutable<T>(entity, index);
+        return ref GetRef<T>(entity, index);
     }
 
-    public ref T GetMutable<T>(Entity entity, int rowIndex)
+    internal ref T GetRef<T>(Entity entity, int rowIndex)
         where T : IComponent
     {
         if (_entities[rowIndex] != entity)
             throw new InvalidOperationException("Mismatched entities in chunk");
-        return ref GetMutable<T>()[rowIndex];
+        return ref GetSpan<T>()[rowIndex];
     }
 
-    internal Span<T> GetMutable<T>()
+    internal Span<T> GetSpan<T>()
         where T : IComponent
     {
         var component = ComponentID<T>.ID;

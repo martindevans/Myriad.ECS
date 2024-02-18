@@ -6,8 +6,8 @@ namespace Myriad.ECS;
 [DebuggerDisplay("{ID}v{Version}")]
 public readonly record struct Entity
 {
-    internal readonly int ID;
-    internal readonly uint Version;
+    public readonly int ID;
+    public readonly uint Version;
 
     internal Entity(int id, uint version)
     {

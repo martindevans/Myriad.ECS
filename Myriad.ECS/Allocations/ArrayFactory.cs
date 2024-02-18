@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using JetBrains.Annotations;
 
-namespace Myriad.ECS;
+namespace Myriad.ECS.Allocations;
 
 internal static class ArrayFactory
 {
@@ -28,7 +28,7 @@ internal static class ArrayFactory
     /// </summary>
     public static void Prepare(Type type)
     {
-        typeof(ArrayFactory).GetMethod("Prepare", BindingFlags.Public | BindingFlags.Static, [ ])!
+        typeof(ArrayFactory).GetMethod("Prepare", BindingFlags.Public | BindingFlags.Static, [])!
                             .MakeGenericMethod(type)
                             .Invoke(null, null);
     }

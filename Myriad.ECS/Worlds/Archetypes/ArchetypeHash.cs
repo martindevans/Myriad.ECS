@@ -1,5 +1,4 @@
-﻿using System.Collections.Frozen;
-using Myriad.ECS.IDs;
+﻿using Myriad.ECS.IDs;
 
 namespace Myriad.ECS.Worlds.Archetypes;
 

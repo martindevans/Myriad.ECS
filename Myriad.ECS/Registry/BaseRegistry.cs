@@ -2,6 +2,7 @@
 using System.Reflection;
 using Myriad.ECS.IDs;
 using System.Diagnostics.CodeAnalysis;
+using Myriad.ECS.Allocations;
 
 namespace Myriad.ECS.Registry;
 

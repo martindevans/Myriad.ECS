@@ -4,86 +4,109 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
+<#
+	const int PARAM_COUNT = 9;
+#>
 using Myriad.ECS.Worlds;
+using Myriad.ECS.Execution;
 using Myriad.ParallelTasks;
-using System.Runtime.CompilerServices;
+
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedParameter.Global
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace Myriad.ECS.Queries;
 
 public interface IQuery
 {
-    public static abstract QueryBuilder QueryBuilder { get; }
+	public static abstract QueryBuilder QueryBuilder { get; }
 
-	public Future Execute(QueryDescription query, World world);
+	public Future Schedule(QueryDescription query, World world, ExecutionSchedule schedule);
 }
 
-<# for (var i = 1; i < 9; i++)
+<# for (var i = 0; i <= PARAM_COUNT; i++)
+{
+	for (var j = 0; j <= PARAM_COUNT; j++)
+	{
+		if (i + j == 0)
+			continue;
+		var sumij = i + j;
+#>
+public interface <#= Name(i, j) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+    : IQuery
+    where <#= Constraints(sumij) #>
+{
+	void Execute(Entity e, <#= Refs(0, i, j > 0) #><#= Ins(i, j) #>);
+
+    Future IQuery.Schedule(QueryDescription query, World world, ExecutionSchedule schedule)
+    {
+	    // Build an execution schedule for this work, declaring what resources it reads and writes
+        var context = schedule.CreateJob();
+
+		var archetypes = query.GetArchetypes();
+		for (var a = 0; a < archetypes.Count; a++)
+        {
+			var archetypeMatch = archetypes[a];
+
+            if (archetypeMatch.Archetype.EntityCount == 0)
+                continue;
+
+<# for (var k = 0; k < i; k++)
 {
 #>
-public interface <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x)) #>>
-    : IQuery
-    where <#= Constraints(i) #>
+            context = context.WithWriteAccess<T<#= k #>>(archetypeMatch.Archetype);
+<#
+}
+#>
+<# for (var k = 0; k < j; k++)
 {
-    void Execute(Entity e, <#= Refs(0, i) #>);
+#>
+            context = context.WithReadAccess<T<#= k+i #>>(archetypeMatch.Archetype);
+<#
+}
+#>
+        }
 
-	Future IQuery.Execute(QueryDescription query, World world)
-    {
-        foreach (var archetypeMatch in query.GetArchetypes())
+        for (var a = 0; a < archetypes.Count; a++)
         {
-            foreach (var chunk in archetypeMatch.Archetype)
+			var archetypeMatch = archetypes[a];
+
+            if (archetypeMatch.Archetype.EntityCount == 0)
+                continue;
+
+			var chunks = archetypeMatch.Archetype.Chunks;
+            for (var c = chunks.Count - 1; c >= 0; c--)
             {
+				var chunk = chunks[c];
                 var entities = chunk.Entities;
 
-<# for (var j = 0; j < i; j++)
+<# for (var k = 0; k < sumij; k++)
 {
 #>
-                var t<#= j #>span = chunk.GetMutable<T<#= j #>>();
-                ref var t<#= j #> = ref t<#= j #>span[0];
-
+                var t<#= k #> = chunk.GetSpan<T<#= k #>>();
 <#
 }
 #>
-                for (var i = 0; i < entities.Length; i++)
+
+				for (var i = entities.Length - 1; i >= 0; i--)
                 {
-                    Execute(entities[i], <#= CallParameters(i) #>);
-
-<# for (var j = 0; j < i; j++)
-{
-#>
-                    Unsafe.Add(ref t<#= j #>, 1);
-<#
-}
-#>
+                    Execute(entities[i], <#= CallParameters(sumij, i, j) #>);
                 }
             }
         }
 
-        return new Future();
+        return context.Finalize();
     }
 }
 
 <#
+	}
 }
 #>
 
 
 <#+ 
-	static string Name(int parameters)
-	{
-		return "IQuery" + parameters;
-	}
-
-	static string Refs(int start, int count)
-	{
-		var str = string.Join(
-			", ",
-			Enumerable.Range(start, count).Select(x => $"ref T{x} t{x}")
-		);
-
-		return str;
-	}
-
-    static string Constraints(int count)
+	static string Constraints(int count)
     {
         var str = string.Join(
 			"\r\n    where ",
@@ -93,13 +116,44 @@ public interface <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, i).Sel
 		return str;
     }
 
-    static string CallParameters(int count)
-    {
-        var str = string.Join(
+	static string Mod(int index, int mutable, int @readonly)
+	{
+		return index < mutable ? "ref" : "in";
+	}
+
+	static string Name(int mutable, int @readonly)
+	{
+		return "IQuery" + new string('W', mutable) + new string('R', @readonly);
+	}
+
+	static string Refs(int start, int count, bool comma)
+	{
+		var str = string.Join(
 			", ",
-			Enumerable.Range(0, count).Select(x => $"ref t{x}")
+			Enumerable.Range(start, count).Select(x => $"ref T{x} t{x}")
 		);
 
+		if (count > 0 && comma)
+			str += ", ";
+
 		return str;
+	}
+
+	static string Ins(int start, int count)
+	{
+		return string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"in T{x} t{x}")
+		);
+	}
+
+    static string CallParameters(int count, int mutable, int @readonly)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(0, count).Select(x => $"{Mod(x, mutable, @readonly)} t{x}[i]")
+        );
+
+        return str;
     }
 #>
