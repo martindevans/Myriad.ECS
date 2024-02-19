@@ -15,7 +15,7 @@ using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Queries;
 
-public interface IChunkQuery
+public interface IQuery
 {
 	public static abstract QueryBuilder QueryBuilder { get; }
 
@@ -36,7 +36,7 @@ public interface <#= Name(i, j) #><<#= string.Join(", ", Enumerable.Range(0, sum
     : IQuery
     where <#= Constraints(sumij) #>
 {
-	void Execute(Entity e, <#= Refs(0, i, j > 0) #><#= Ins(i, j) #>);
+	void Execute(ReadOnlySpan<Entity> e, <#= Refs(0, i, j > 0) #><#= Ins(i, j) #>);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -58,6 +58,8 @@ public interface <#= Name(i, j) #><<#= string.Join(", ", Enumerable.Range(0, sum
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
 <# for (var k = 0; k < sumij; k++)
 {
 #>
@@ -66,10 +68,7 @@ public interface <#= Name(i, j) #><<#= string.Join(", ", Enumerable.Range(0, sum
 }
 #>
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], <#= CallParameters(sumij, i, j) #>);
+                Execute(entities, <#= CallParameters(sumij, i, j) #>);
             }
         }
 
@@ -95,6 +94,8 @@ public interface <#= Name(i, j) #><<#= string.Join(", ", Enumerable.Range(0, sum
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
 <# for (var k = 0; k < sumij; k++)
 {
 #>
@@ -103,10 +104,7 @@ public interface <#= Name(i, j) #><<#= string.Join(", ", Enumerable.Range(0, sum
 }
 #>
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], <#= CallParameters(sumij, i, j) #>);
+                Execute(entities, <#= CallParameters(sumij, i, j) #>);
             });
         }
 
@@ -138,14 +136,14 @@ public interface <#= Name(i, j) #><<#= string.Join(", ", Enumerable.Range(0, sum
 
 	static string Name(int mutable, int @readonly)
 	{
-		return "IQuery" + new string('W', mutable) + new string('R', @readonly);
+		return "IChunkQuery" + new string('W', mutable) + new string('R', @readonly);
 	}
 
 	static string Refs(int start, int count, bool comma)
 	{
 		var str = string.Join(
 			", ",
-			Enumerable.Range(start, count).Select(x => $"ref T{x} t{x}")
+			Enumerable.Range(start, count).Select(x => $"Span<T{x}> t{x}")
 		);
 
 		if (count > 0 && comma)
@@ -158,7 +156,7 @@ public interface <#= Name(i, j) #><<#= string.Join(", ", Enumerable.Range(0, sum
 	{
 		return string.Join(
 			", ",
-			Enumerable.Range(start, count).Select(x => $"in T{x} t{x}")
+			Enumerable.Range(start, count).Select(x => $"ReadOnlySpan<T{x}> t{x}")
 		);
 	}
 
@@ -166,7 +164,7 @@ public interface <#= Name(i, j) #><<#= string.Join(", ", Enumerable.Range(0, sum
     {
         var str = string.Join(
             ", ",
-            Enumerable.Range(0, count).Select(x => $"{Mod(x, mutable, @readonly)} t{x}[i]")
+            Enumerable.Range(0, count).Select(x => $"t{x}")
         );
 
         return str;

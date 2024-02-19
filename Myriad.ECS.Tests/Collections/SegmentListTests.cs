@@ -20,11 +20,11 @@ public class SegmentListTests
 
         // Write index to each slot
         for (var i = 0; i < list.SegmentCapacity; i++)
-            list.GetMutable(i) = i;
+            list[i] = i;
 
         // Read index from each slot
         for (var i = 0; i < list.SegmentCapacity; i++)
-            Assert.AreEqual(i, list.GetImmutable(i));
+            Assert.AreEqual(i, list[i]);
     }
 
     [TestMethod]
@@ -32,8 +32,8 @@ public class SegmentListTests
     {
         var list = new SegmentedList<int>(16);
 
-        Assert.ThrowsException<IndexOutOfRangeException>(() => { list.GetMutable(-1); });
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => { list.GetMutable(16); });
+        Assert.ThrowsException<IndexOutOfRangeException>(() => { _ = list[-1]; });
+        Assert.ThrowsException<ArgumentOutOfRangeException>(() => { _ = list[16]; });
     }
 
     [TestMethod]
@@ -43,16 +43,16 @@ public class SegmentListTests
 
         Assert.AreEqual(16, list.SegmentCapacity);
         Assert.AreEqual(16, list.TotalCapacity);
-        Assert.AreEqual(0, list.GetImmutable(15));
+        Assert.AreEqual(0, list[15]);
 
         list.Grow();
         Assert.AreEqual(16, list.SegmentCapacity);
         Assert.AreEqual(32, list.TotalCapacity);
-        Assert.AreEqual(0, list.GetImmutable(31));
+        Assert.AreEqual(0, list[31]);
 
         list.Grow();
         Assert.AreEqual(16, list.SegmentCapacity);
         Assert.AreEqual(48, list.TotalCapacity);
-        Assert.AreEqual(0, list.GetImmutable(47));
+        Assert.AreEqual(0, list[47]);
     }
 }

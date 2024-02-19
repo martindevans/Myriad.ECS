@@ -29,21 +29,13 @@ internal class SegmentedList<TItem>
     /// </summary>
     /// <param name="index"></param>
     /// <returns></returns>
-    public ref TItem GetMutable(int index)
+    public ref TItem this[int index]
     {
-        var (rowIndex, segment) = GetSegment(index);
-        return ref segment[rowIndex];
-    }
-
-    /// <summary>
-    /// Get the item with the given index (immutable)
-    /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
-    public ref readonly TItem GetImmutable(int index)
-    {
-        var (rowIndex, segment) = GetSegment(index);
-        return ref segment[rowIndex];
+        get
+        {
+            var (rowIndex, segment) = GetSegment(index);
+            return ref segment[rowIndex];
+        }
     }
 
     /// <summary>

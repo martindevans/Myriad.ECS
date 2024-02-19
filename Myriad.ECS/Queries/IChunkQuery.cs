@@ -6,7 +6,7 @@
 
 namespace Myriad.ECS.Queries;
 
-public interface IChunkQuery
+public interface IQuery
 {
 	public static abstract QueryBuilder QueryBuilder { get; }
 
@@ -15,11 +15,11 @@ public interface IChunkQuery
 	public int ExecuteParallel(QueryDescription query, World world);
 }
 
-public interface IQueryR<T0>
+public interface IChunkQueryR<T0>
     : IQuery
     where T0 : IComponent
 {
-	void Execute(Entity e, in T0 t0);
+	void Execute(ReadOnlySpan<Entity> e, ReadOnlySpan<T0> t0);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -41,12 +41,11 @@ public interface IQueryR<T0>
 				if (entities.Length == 0)
 				    continue;
 
-                var t0 = chunk.GetSpan<T0>();
-
                 count += entities.Length;
 
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i]);
+                var t0 = chunk.GetSpan<T0>();
+
+                Execute(entities, t0);
             }
         }
 
@@ -72,12 +71,11 @@ public interface IQueryR<T0>
 				if (entities.Length == 0)
 				    return;
 
-                var t0 = chunk.GetSpan<T0>();
-
                 Interlocked.Add(ref count, entities.Length);
 
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i]);
+                var t0 = chunk.GetSpan<T0>();
+
+                Execute(entities, t0);
             });
         }
 
@@ -85,12 +83,12 @@ public interface IQueryR<T0>
     }
 }
 
-public interface IQueryRR<T0, T1>
+public interface IChunkQueryRR<T0, T1>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1);
+	void Execute(ReadOnlySpan<Entity> e, ReadOnlySpan<T0> t0, ReadOnlySpan<T1> t1);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -112,13 +110,12 @@ public interface IQueryRR<T0, T1>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i]);
+                Execute(entities, t0, t1);
             }
         }
 
@@ -144,13 +141,12 @@ public interface IQueryRR<T0, T1>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i]);
+                Execute(entities, t0, t1);
             });
         }
 
@@ -158,13 +154,13 @@ public interface IQueryRR<T0, T1>
     }
 }
 
-public interface IQueryRRR<T0, T1, T2>
+public interface IChunkQueryRRR<T0, T1, T2>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
     where T2 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2);
+	void Execute(ReadOnlySpan<Entity> e, ReadOnlySpan<T0> t0, ReadOnlySpan<T1> t1, ReadOnlySpan<T2> t2);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -186,14 +182,13 @@ public interface IQueryRRR<T0, T1, T2>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i]);
+                Execute(entities, t0, t1, t2);
             }
         }
 
@@ -219,14 +214,13 @@ public interface IQueryRRR<T0, T1, T2>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i]);
+                Execute(entities, t0, t1, t2);
             });
         }
 
@@ -234,14 +228,14 @@ public interface IQueryRRR<T0, T1, T2>
     }
 }
 
-public interface IQueryRRRR<T0, T1, T2, T3>
+public interface IChunkQueryRRRR<T0, T1, T2, T3>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
     where T2 : IComponent
     where T3 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3);
+	void Execute(ReadOnlySpan<Entity> e, ReadOnlySpan<T0> t0, ReadOnlySpan<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -263,15 +257,14 @@ public interface IQueryRRRR<T0, T1, T2, T3>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i]);
+                Execute(entities, t0, t1, t2, t3);
             }
         }
 
@@ -297,15 +290,14 @@ public interface IQueryRRRR<T0, T1, T2, T3>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i]);
+                Execute(entities, t0, t1, t2, t3);
             });
         }
 
@@ -313,7 +305,7 @@ public interface IQueryRRRR<T0, T1, T2, T3>
     }
 }
 
-public interface IQueryRRRRR<T0, T1, T2, T3, T4>
+public interface IChunkQueryRRRRR<T0, T1, T2, T3, T4>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -321,7 +313,7 @@ public interface IQueryRRRRR<T0, T1, T2, T3, T4>
     where T3 : IComponent
     where T4 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4);
+	void Execute(ReadOnlySpan<Entity> e, ReadOnlySpan<T0> t0, ReadOnlySpan<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -343,16 +335,15 @@ public interface IQueryRRRRR<T0, T1, T2, T3, T4>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
                 var t4 = chunk.GetSpan<T4>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i]);
+                Execute(entities, t0, t1, t2, t3, t4);
             }
         }
 
@@ -378,16 +369,15 @@ public interface IQueryRRRRR<T0, T1, T2, T3, T4>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
                 var t4 = chunk.GetSpan<T4>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i]);
+                Execute(entities, t0, t1, t2, t3, t4);
             });
         }
 
@@ -395,7 +385,7 @@ public interface IQueryRRRRR<T0, T1, T2, T3, T4>
     }
 }
 
-public interface IQueryRRRRRR<T0, T1, T2, T3, T4, T5>
+public interface IChunkQueryRRRRRR<T0, T1, T2, T3, T4, T5>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -404,7 +394,7 @@ public interface IQueryRRRRRR<T0, T1, T2, T3, T4, T5>
     where T4 : IComponent
     where T5 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5);
+	void Execute(ReadOnlySpan<Entity> e, ReadOnlySpan<T0> t0, ReadOnlySpan<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -426,6 +416,8 @@ public interface IQueryRRRRRR<T0, T1, T2, T3, T4, T5>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -433,10 +425,7 @@ public interface IQueryRRRRRR<T0, T1, T2, T3, T4, T5>
                 var t4 = chunk.GetSpan<T4>();
                 var t5 = chunk.GetSpan<T5>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5);
             }
         }
 
@@ -462,6 +451,8 @@ public interface IQueryRRRRRR<T0, T1, T2, T3, T4, T5>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -469,10 +460,7 @@ public interface IQueryRRRRRR<T0, T1, T2, T3, T4, T5>
                 var t4 = chunk.GetSpan<T4>();
                 var t5 = chunk.GetSpan<T5>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5);
             });
         }
 
@@ -480,7 +468,7 @@ public interface IQueryRRRRRR<T0, T1, T2, T3, T4, T5>
     }
 }
 
-public interface IQueryRRRRRRR<T0, T1, T2, T3, T4, T5, T6>
+public interface IChunkQueryRRRRRRR<T0, T1, T2, T3, T4, T5, T6>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -490,7 +478,7 @@ public interface IQueryRRRRRRR<T0, T1, T2, T3, T4, T5, T6>
     where T5 : IComponent
     where T6 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6);
+	void Execute(ReadOnlySpan<Entity> e, ReadOnlySpan<T0> t0, ReadOnlySpan<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -512,6 +500,8 @@ public interface IQueryRRRRRRR<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -520,10 +510,7 @@ public interface IQueryRRRRRRR<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             }
         }
 
@@ -549,6 +536,8 @@ public interface IQueryRRRRRRR<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -557,10 +546,7 @@ public interface IQueryRRRRRRR<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             });
         }
 
@@ -568,7 +554,7 @@ public interface IQueryRRRRRRR<T0, T1, T2, T3, T4, T5, T6>
     }
 }
 
-public interface IQueryRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
+public interface IChunkQueryRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -579,7 +565,7 @@ public interface IQueryRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7);
+	void Execute(ReadOnlySpan<Entity> e, ReadOnlySpan<T0> t0, ReadOnlySpan<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -601,6 +587,8 @@ public interface IQueryRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -610,10 +598,7 @@ public interface IQueryRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             }
         }
 
@@ -639,6 +624,8 @@ public interface IQueryRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -648,10 +635,7 @@ public interface IQueryRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             });
         }
 
@@ -659,7 +643,7 @@ public interface IQueryRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     }
 }
 
-public interface IQueryRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+public interface IChunkQueryRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -671,7 +655,7 @@ public interface IQueryRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
+	void Execute(ReadOnlySpan<Entity> e, ReadOnlySpan<T0> t0, ReadOnlySpan<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -693,6 +677,8 @@ public interface IQueryRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -703,10 +689,7 @@ public interface IQueryRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             }
         }
 
@@ -732,6 +715,8 @@ public interface IQueryRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -742,10 +727,7 @@ public interface IQueryRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             });
         }
 
@@ -753,11 +735,11 @@ public interface IQueryRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     }
 }
 
-public interface IQueryW<T0>
+public interface IChunkQueryW<T0>
     : IQuery
     where T0 : IComponent
 {
-	void Execute(Entity e, ref T0 t0);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -779,12 +761,11 @@ public interface IQueryW<T0>
 				if (entities.Length == 0)
 				    continue;
 
-                var t0 = chunk.GetSpan<T0>();
-
                 count += entities.Length;
 
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i]);
+                var t0 = chunk.GetSpan<T0>();
+
+                Execute(entities, t0);
             }
         }
 
@@ -810,12 +791,11 @@ public interface IQueryW<T0>
 				if (entities.Length == 0)
 				    return;
 
-                var t0 = chunk.GetSpan<T0>();
-
                 Interlocked.Add(ref count, entities.Length);
 
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i]);
+                var t0 = chunk.GetSpan<T0>();
+
+                Execute(entities, t0);
             });
         }
 
@@ -823,12 +803,12 @@ public interface IQueryW<T0>
     }
 }
 
-public interface IQueryWR<T0, T1>
+public interface IChunkQueryWR<T0, T1>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, ReadOnlySpan<T1> t1);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -850,13 +830,12 @@ public interface IQueryWR<T0, T1>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i]);
+                Execute(entities, t0, t1);
             }
         }
 
@@ -882,13 +861,12 @@ public interface IQueryWR<T0, T1>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i]);
+                Execute(entities, t0, t1);
             });
         }
 
@@ -896,13 +874,13 @@ public interface IQueryWR<T0, T1>
     }
 }
 
-public interface IQueryWRR<T0, T1, T2>
+public interface IChunkQueryWRR<T0, T1, T2>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
     where T2 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, ReadOnlySpan<T1> t1, ReadOnlySpan<T2> t2);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -924,14 +902,13 @@ public interface IQueryWRR<T0, T1, T2>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i]);
+                Execute(entities, t0, t1, t2);
             }
         }
 
@@ -957,14 +934,13 @@ public interface IQueryWRR<T0, T1, T2>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i]);
+                Execute(entities, t0, t1, t2);
             });
         }
 
@@ -972,14 +948,14 @@ public interface IQueryWRR<T0, T1, T2>
     }
 }
 
-public interface IQueryWRRR<T0, T1, T2, T3>
+public interface IChunkQueryWRRR<T0, T1, T2, T3>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
     where T2 : IComponent
     where T3 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, ReadOnlySpan<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1001,15 +977,14 @@ public interface IQueryWRRR<T0, T1, T2, T3>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i]);
+                Execute(entities, t0, t1, t2, t3);
             }
         }
 
@@ -1035,15 +1010,14 @@ public interface IQueryWRRR<T0, T1, T2, T3>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i]);
+                Execute(entities, t0, t1, t2, t3);
             });
         }
 
@@ -1051,7 +1025,7 @@ public interface IQueryWRRR<T0, T1, T2, T3>
     }
 }
 
-public interface IQueryWRRRR<T0, T1, T2, T3, T4>
+public interface IChunkQueryWRRRR<T0, T1, T2, T3, T4>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -1059,7 +1033,7 @@ public interface IQueryWRRRR<T0, T1, T2, T3, T4>
     where T3 : IComponent
     where T4 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, ReadOnlySpan<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1081,16 +1055,15 @@ public interface IQueryWRRRR<T0, T1, T2, T3, T4>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
                 var t4 = chunk.GetSpan<T4>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i]);
+                Execute(entities, t0, t1, t2, t3, t4);
             }
         }
 
@@ -1116,16 +1089,15 @@ public interface IQueryWRRRR<T0, T1, T2, T3, T4>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
                 var t4 = chunk.GetSpan<T4>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i]);
+                Execute(entities, t0, t1, t2, t3, t4);
             });
         }
 
@@ -1133,7 +1105,7 @@ public interface IQueryWRRRR<T0, T1, T2, T3, T4>
     }
 }
 
-public interface IQueryWRRRRR<T0, T1, T2, T3, T4, T5>
+public interface IChunkQueryWRRRRR<T0, T1, T2, T3, T4, T5>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -1142,7 +1114,7 @@ public interface IQueryWRRRRR<T0, T1, T2, T3, T4, T5>
     where T4 : IComponent
     where T5 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, ReadOnlySpan<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1164,6 +1136,8 @@ public interface IQueryWRRRRR<T0, T1, T2, T3, T4, T5>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -1171,10 +1145,7 @@ public interface IQueryWRRRRR<T0, T1, T2, T3, T4, T5>
                 var t4 = chunk.GetSpan<T4>();
                 var t5 = chunk.GetSpan<T5>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5);
             }
         }
 
@@ -1200,6 +1171,8 @@ public interface IQueryWRRRRR<T0, T1, T2, T3, T4, T5>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -1207,10 +1180,7 @@ public interface IQueryWRRRRR<T0, T1, T2, T3, T4, T5>
                 var t4 = chunk.GetSpan<T4>();
                 var t5 = chunk.GetSpan<T5>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5);
             });
         }
 
@@ -1218,7 +1188,7 @@ public interface IQueryWRRRRR<T0, T1, T2, T3, T4, T5>
     }
 }
 
-public interface IQueryWRRRRRR<T0, T1, T2, T3, T4, T5, T6>
+public interface IChunkQueryWRRRRRR<T0, T1, T2, T3, T4, T5, T6>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -1228,7 +1198,7 @@ public interface IQueryWRRRRRR<T0, T1, T2, T3, T4, T5, T6>
     where T5 : IComponent
     where T6 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, ReadOnlySpan<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1250,6 +1220,8 @@ public interface IQueryWRRRRRR<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -1258,10 +1230,7 @@ public interface IQueryWRRRRRR<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             }
         }
 
@@ -1287,6 +1256,8 @@ public interface IQueryWRRRRRR<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -1295,10 +1266,7 @@ public interface IQueryWRRRRRR<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             });
         }
 
@@ -1306,7 +1274,7 @@ public interface IQueryWRRRRRR<T0, T1, T2, T3, T4, T5, T6>
     }
 }
 
-public interface IQueryWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
+public interface IChunkQueryWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -1317,7 +1285,7 @@ public interface IQueryWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, ReadOnlySpan<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1339,6 +1307,8 @@ public interface IQueryWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -1348,10 +1318,7 @@ public interface IQueryWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             }
         }
 
@@ -1377,6 +1344,8 @@ public interface IQueryWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -1386,10 +1355,7 @@ public interface IQueryWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             });
         }
 
@@ -1397,7 +1363,7 @@ public interface IQueryWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     }
 }
 
-public interface IQueryWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+public interface IChunkQueryWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -1409,7 +1375,7 @@ public interface IQueryWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, ReadOnlySpan<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1431,6 +1397,8 @@ public interface IQueryWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -1441,10 +1409,7 @@ public interface IQueryWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             }
         }
 
@@ -1470,6 +1435,8 @@ public interface IQueryWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -1480,10 +1447,7 @@ public interface IQueryWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             });
         }
 
@@ -1491,7 +1455,7 @@ public interface IQueryWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     }
 }
 
-public interface IQueryWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+public interface IChunkQueryWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -1504,7 +1468,7 @@ public interface IQueryWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, ReadOnlySpan<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1526,6 +1490,8 @@ public interface IQueryWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -1537,10 +1503,7 @@ public interface IQueryWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             }
         }
 
@@ -1566,6 +1529,8 @@ public interface IQueryWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -1577,10 +1542,7 @@ public interface IQueryWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             });
         }
 
@@ -1588,12 +1550,12 @@ public interface IQueryWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     }
 }
 
-public interface IQueryWW<T0, T1>
+public interface IChunkQueryWW<T0, T1>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1615,13 +1577,12 @@ public interface IQueryWW<T0, T1>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i]);
+                Execute(entities, t0, t1);
             }
         }
 
@@ -1647,13 +1608,12 @@ public interface IQueryWW<T0, T1>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i]);
+                Execute(entities, t0, t1);
             });
         }
 
@@ -1661,13 +1621,13 @@ public interface IQueryWW<T0, T1>
     }
 }
 
-public interface IQueryWWR<T0, T1, T2>
+public interface IChunkQueryWWR<T0, T1, T2>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
     where T2 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, ReadOnlySpan<T2> t2);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1689,14 +1649,13 @@ public interface IQueryWWR<T0, T1, T2>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i]);
+                Execute(entities, t0, t1, t2);
             }
         }
 
@@ -1722,14 +1681,13 @@ public interface IQueryWWR<T0, T1, T2>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i]);
+                Execute(entities, t0, t1, t2);
             });
         }
 
@@ -1737,14 +1695,14 @@ public interface IQueryWWR<T0, T1, T2>
     }
 }
 
-public interface IQueryWWRR<T0, T1, T2, T3>
+public interface IChunkQueryWWRR<T0, T1, T2, T3>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
     where T2 : IComponent
     where T3 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1766,15 +1724,14 @@ public interface IQueryWWRR<T0, T1, T2, T3>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i]);
+                Execute(entities, t0, t1, t2, t3);
             }
         }
 
@@ -1800,15 +1757,14 @@ public interface IQueryWWRR<T0, T1, T2, T3>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i]);
+                Execute(entities, t0, t1, t2, t3);
             });
         }
 
@@ -1816,7 +1772,7 @@ public interface IQueryWWRR<T0, T1, T2, T3>
     }
 }
 
-public interface IQueryWWRRR<T0, T1, T2, T3, T4>
+public interface IChunkQueryWWRRR<T0, T1, T2, T3, T4>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -1824,7 +1780,7 @@ public interface IQueryWWRRR<T0, T1, T2, T3, T4>
     where T3 : IComponent
     where T4 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1846,16 +1802,15 @@ public interface IQueryWWRRR<T0, T1, T2, T3, T4>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
                 var t4 = chunk.GetSpan<T4>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i]);
+                Execute(entities, t0, t1, t2, t3, t4);
             }
         }
 
@@ -1881,16 +1836,15 @@ public interface IQueryWWRRR<T0, T1, T2, T3, T4>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
                 var t4 = chunk.GetSpan<T4>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i]);
+                Execute(entities, t0, t1, t2, t3, t4);
             });
         }
 
@@ -1898,7 +1852,7 @@ public interface IQueryWWRRR<T0, T1, T2, T3, T4>
     }
 }
 
-public interface IQueryWWRRRR<T0, T1, T2, T3, T4, T5>
+public interface IChunkQueryWWRRRR<T0, T1, T2, T3, T4, T5>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -1907,7 +1861,7 @@ public interface IQueryWWRRRR<T0, T1, T2, T3, T4, T5>
     where T4 : IComponent
     where T5 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1929,6 +1883,8 @@ public interface IQueryWWRRRR<T0, T1, T2, T3, T4, T5>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -1936,10 +1892,7 @@ public interface IQueryWWRRRR<T0, T1, T2, T3, T4, T5>
                 var t4 = chunk.GetSpan<T4>();
                 var t5 = chunk.GetSpan<T5>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5);
             }
         }
 
@@ -1965,6 +1918,8 @@ public interface IQueryWWRRRR<T0, T1, T2, T3, T4, T5>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -1972,10 +1927,7 @@ public interface IQueryWWRRRR<T0, T1, T2, T3, T4, T5>
                 var t4 = chunk.GetSpan<T4>();
                 var t5 = chunk.GetSpan<T5>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5);
             });
         }
 
@@ -1983,7 +1935,7 @@ public interface IQueryWWRRRR<T0, T1, T2, T3, T4, T5>
     }
 }
 
-public interface IQueryWWRRRRR<T0, T1, T2, T3, T4, T5, T6>
+public interface IChunkQueryWWRRRRR<T0, T1, T2, T3, T4, T5, T6>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -1993,7 +1945,7 @@ public interface IQueryWWRRRRR<T0, T1, T2, T3, T4, T5, T6>
     where T5 : IComponent
     where T6 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2015,6 +1967,8 @@ public interface IQueryWWRRRRR<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2023,10 +1977,7 @@ public interface IQueryWWRRRRR<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             }
         }
 
@@ -2052,6 +2003,8 @@ public interface IQueryWWRRRRR<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2060,10 +2013,7 @@ public interface IQueryWWRRRRR<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             });
         }
 
@@ -2071,7 +2021,7 @@ public interface IQueryWWRRRRR<T0, T1, T2, T3, T4, T5, T6>
     }
 }
 
-public interface IQueryWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
+public interface IChunkQueryWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -2082,7 +2032,7 @@ public interface IQueryWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2104,6 +2054,8 @@ public interface IQueryWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2113,10 +2065,7 @@ public interface IQueryWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             }
         }
 
@@ -2142,6 +2091,8 @@ public interface IQueryWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2151,10 +2102,7 @@ public interface IQueryWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             });
         }
 
@@ -2162,7 +2110,7 @@ public interface IQueryWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     }
 }
 
-public interface IQueryWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+public interface IChunkQueryWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -2174,7 +2122,7 @@ public interface IQueryWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2196,6 +2144,8 @@ public interface IQueryWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2206,10 +2156,7 @@ public interface IQueryWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             }
         }
 
@@ -2235,6 +2182,8 @@ public interface IQueryWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2245,10 +2194,7 @@ public interface IQueryWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             });
         }
 
@@ -2256,7 +2202,7 @@ public interface IQueryWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     }
 }
 
-public interface IQueryWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+public interface IChunkQueryWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -2269,7 +2215,7 @@ public interface IQueryWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2291,6 +2237,8 @@ public interface IQueryWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2302,10 +2250,7 @@ public interface IQueryWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             }
         }
 
@@ -2331,6 +2276,8 @@ public interface IQueryWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2342,10 +2289,7 @@ public interface IQueryWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             });
         }
 
@@ -2353,7 +2297,7 @@ public interface IQueryWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     }
 }
 
-public interface IQueryWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+public interface IChunkQueryWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -2367,7 +2311,7 @@ public interface IQueryWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, ReadOnlySpan<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2389,6 +2333,8 @@ public interface IQueryWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2401,10 +2347,7 @@ public interface IQueryWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             }
         }
 
@@ -2430,6 +2373,8 @@ public interface IQueryWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2442,10 +2387,7 @@ public interface IQueryWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             });
         }
 
@@ -2453,13 +2395,13 @@ public interface IQueryWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     }
 }
 
-public interface IQueryWWW<T0, T1, T2>
+public interface IChunkQueryWWW<T0, T1, T2>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
     where T2 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2481,14 +2423,13 @@ public interface IQueryWWW<T0, T1, T2>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
+                Execute(entities, t0, t1, t2);
             }
         }
 
@@ -2514,14 +2455,13 @@ public interface IQueryWWW<T0, T1, T2>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
+                Execute(entities, t0, t1, t2);
             });
         }
 
@@ -2529,14 +2469,14 @@ public interface IQueryWWW<T0, T1, T2>
     }
 }
 
-public interface IQueryWWWR<T0, T1, T2, T3>
+public interface IChunkQueryWWWR<T0, T1, T2, T3>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
     where T2 : IComponent
     where T3 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, ReadOnlySpan<T3> t3);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2558,15 +2498,14 @@ public interface IQueryWWWR<T0, T1, T2, T3>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i]);
+                Execute(entities, t0, t1, t2, t3);
             }
         }
 
@@ -2592,15 +2531,14 @@ public interface IQueryWWWR<T0, T1, T2, T3>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i]);
+                Execute(entities, t0, t1, t2, t3);
             });
         }
 
@@ -2608,7 +2546,7 @@ public interface IQueryWWWR<T0, T1, T2, T3>
     }
 }
 
-public interface IQueryWWWRR<T0, T1, T2, T3, T4>
+public interface IChunkQueryWWWRR<T0, T1, T2, T3, T4>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -2616,7 +2554,7 @@ public interface IQueryWWWRR<T0, T1, T2, T3, T4>
     where T3 : IComponent
     where T4 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2638,16 +2576,15 @@ public interface IQueryWWWRR<T0, T1, T2, T3, T4>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
                 var t4 = chunk.GetSpan<T4>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i]);
+                Execute(entities, t0, t1, t2, t3, t4);
             }
         }
 
@@ -2673,16 +2610,15 @@ public interface IQueryWWWRR<T0, T1, T2, T3, T4>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
                 var t4 = chunk.GetSpan<T4>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i]);
+                Execute(entities, t0, t1, t2, t3, t4);
             });
         }
 
@@ -2690,7 +2626,7 @@ public interface IQueryWWWRR<T0, T1, T2, T3, T4>
     }
 }
 
-public interface IQueryWWWRRR<T0, T1, T2, T3, T4, T5>
+public interface IChunkQueryWWWRRR<T0, T1, T2, T3, T4, T5>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -2699,7 +2635,7 @@ public interface IQueryWWWRRR<T0, T1, T2, T3, T4, T5>
     where T4 : IComponent
     where T5 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2721,6 +2657,8 @@ public interface IQueryWWWRRR<T0, T1, T2, T3, T4, T5>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2728,10 +2666,7 @@ public interface IQueryWWWRRR<T0, T1, T2, T3, T4, T5>
                 var t4 = chunk.GetSpan<T4>();
                 var t5 = chunk.GetSpan<T5>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5);
             }
         }
 
@@ -2757,6 +2692,8 @@ public interface IQueryWWWRRR<T0, T1, T2, T3, T4, T5>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2764,10 +2701,7 @@ public interface IQueryWWWRRR<T0, T1, T2, T3, T4, T5>
                 var t4 = chunk.GetSpan<T4>();
                 var t5 = chunk.GetSpan<T5>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5);
             });
         }
 
@@ -2775,7 +2709,7 @@ public interface IQueryWWWRRR<T0, T1, T2, T3, T4, T5>
     }
 }
 
-public interface IQueryWWWRRRR<T0, T1, T2, T3, T4, T5, T6>
+public interface IChunkQueryWWWRRRR<T0, T1, T2, T3, T4, T5, T6>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -2785,7 +2719,7 @@ public interface IQueryWWWRRRR<T0, T1, T2, T3, T4, T5, T6>
     where T5 : IComponent
     where T6 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2807,6 +2741,8 @@ public interface IQueryWWWRRRR<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2815,10 +2751,7 @@ public interface IQueryWWWRRRR<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             }
         }
 
@@ -2844,6 +2777,8 @@ public interface IQueryWWWRRRR<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2852,10 +2787,7 @@ public interface IQueryWWWRRRR<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             });
         }
 
@@ -2863,7 +2795,7 @@ public interface IQueryWWWRRRR<T0, T1, T2, T3, T4, T5, T6>
     }
 }
 
-public interface IQueryWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
+public interface IChunkQueryWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -2874,7 +2806,7 @@ public interface IQueryWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2896,6 +2828,8 @@ public interface IQueryWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2905,10 +2839,7 @@ public interface IQueryWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             }
         }
 
@@ -2934,6 +2865,8 @@ public interface IQueryWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2943,10 +2876,7 @@ public interface IQueryWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             });
         }
 
@@ -2954,7 +2884,7 @@ public interface IQueryWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     }
 }
 
-public interface IQueryWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+public interface IChunkQueryWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -2966,7 +2896,7 @@ public interface IQueryWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2988,6 +2918,8 @@ public interface IQueryWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -2998,10 +2930,7 @@ public interface IQueryWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             }
         }
 
@@ -3027,6 +2956,8 @@ public interface IQueryWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3037,10 +2968,7 @@ public interface IQueryWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             });
         }
 
@@ -3048,7 +2976,7 @@ public interface IQueryWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     }
 }
 
-public interface IQueryWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+public interface IChunkQueryWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -3061,7 +2989,7 @@ public interface IQueryWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3083,6 +3011,8 @@ public interface IQueryWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3094,10 +3024,7 @@ public interface IQueryWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             }
         }
 
@@ -3123,6 +3050,8 @@ public interface IQueryWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3134,10 +3063,7 @@ public interface IQueryWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             });
         }
 
@@ -3145,7 +3071,7 @@ public interface IQueryWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     }
 }
 
-public interface IQueryWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+public interface IChunkQueryWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -3159,7 +3085,7 @@ public interface IQueryWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3181,6 +3107,8 @@ public interface IQueryWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3193,10 +3121,7 @@ public interface IQueryWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             }
         }
 
@@ -3222,6 +3147,8 @@ public interface IQueryWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3234,10 +3161,7 @@ public interface IQueryWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             });
         }
 
@@ -3245,7 +3169,7 @@ public interface IQueryWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     }
 }
 
-public interface IQueryWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+public interface IChunkQueryWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -3260,7 +3184,7 @@ public interface IQueryWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     where T10 : IComponent
     where T11 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, ReadOnlySpan<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3282,6 +3206,8 @@ public interface IQueryWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3295,10 +3221,7 @@ public interface IQueryWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 var t10 = chunk.GetSpan<T10>();
                 var t11 = chunk.GetSpan<T11>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
             }
         }
 
@@ -3324,6 +3247,8 @@ public interface IQueryWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3337,10 +3262,7 @@ public interface IQueryWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 var t10 = chunk.GetSpan<T10>();
                 var t11 = chunk.GetSpan<T11>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
             });
         }
 
@@ -3348,14 +3270,14 @@ public interface IQueryWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
 }
 
-public interface IQueryWWWW<T0, T1, T2, T3>
+public interface IChunkQueryWWWW<T0, T1, T2, T3>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
     where T2 : IComponent
     where T3 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3377,15 +3299,14 @@ public interface IQueryWWWW<T0, T1, T2, T3>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
+                Execute(entities, t0, t1, t2, t3);
             }
         }
 
@@ -3411,15 +3332,14 @@ public interface IQueryWWWW<T0, T1, T2, T3>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
+                Execute(entities, t0, t1, t2, t3);
             });
         }
 
@@ -3427,7 +3347,7 @@ public interface IQueryWWWW<T0, T1, T2, T3>
     }
 }
 
-public interface IQueryWWWWR<T0, T1, T2, T3, T4>
+public interface IChunkQueryWWWWR<T0, T1, T2, T3, T4>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -3435,7 +3355,7 @@ public interface IQueryWWWWR<T0, T1, T2, T3, T4>
     where T3 : IComponent
     where T4 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, ReadOnlySpan<T4> t4);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3457,16 +3377,15 @@ public interface IQueryWWWWR<T0, T1, T2, T3, T4>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
                 var t4 = chunk.GetSpan<T4>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i]);
+                Execute(entities, t0, t1, t2, t3, t4);
             }
         }
 
@@ -3492,16 +3411,15 @@ public interface IQueryWWWWR<T0, T1, T2, T3, T4>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
                 var t4 = chunk.GetSpan<T4>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i]);
+                Execute(entities, t0, t1, t2, t3, t4);
             });
         }
 
@@ -3509,7 +3427,7 @@ public interface IQueryWWWWR<T0, T1, T2, T3, T4>
     }
 }
 
-public interface IQueryWWWWRR<T0, T1, T2, T3, T4, T5>
+public interface IChunkQueryWWWWRR<T0, T1, T2, T3, T4, T5>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -3518,7 +3436,7 @@ public interface IQueryWWWWRR<T0, T1, T2, T3, T4, T5>
     where T4 : IComponent
     where T5 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3540,6 +3458,8 @@ public interface IQueryWWWWRR<T0, T1, T2, T3, T4, T5>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3547,10 +3467,7 @@ public interface IQueryWWWWRR<T0, T1, T2, T3, T4, T5>
                 var t4 = chunk.GetSpan<T4>();
                 var t5 = chunk.GetSpan<T5>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5);
             }
         }
 
@@ -3576,6 +3493,8 @@ public interface IQueryWWWWRR<T0, T1, T2, T3, T4, T5>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3583,10 +3502,7 @@ public interface IQueryWWWWRR<T0, T1, T2, T3, T4, T5>
                 var t4 = chunk.GetSpan<T4>();
                 var t5 = chunk.GetSpan<T5>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5);
             });
         }
 
@@ -3594,7 +3510,7 @@ public interface IQueryWWWWRR<T0, T1, T2, T3, T4, T5>
     }
 }
 
-public interface IQueryWWWWRRR<T0, T1, T2, T3, T4, T5, T6>
+public interface IChunkQueryWWWWRRR<T0, T1, T2, T3, T4, T5, T6>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -3604,7 +3520,7 @@ public interface IQueryWWWWRRR<T0, T1, T2, T3, T4, T5, T6>
     where T5 : IComponent
     where T6 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3626,6 +3542,8 @@ public interface IQueryWWWWRRR<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3634,10 +3552,7 @@ public interface IQueryWWWWRRR<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             }
         }
 
@@ -3663,6 +3578,8 @@ public interface IQueryWWWWRRR<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3671,10 +3588,7 @@ public interface IQueryWWWWRRR<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             });
         }
 
@@ -3682,7 +3596,7 @@ public interface IQueryWWWWRRR<T0, T1, T2, T3, T4, T5, T6>
     }
 }
 
-public interface IQueryWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
+public interface IChunkQueryWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -3693,7 +3607,7 @@ public interface IQueryWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3715,6 +3629,8 @@ public interface IQueryWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3724,10 +3640,7 @@ public interface IQueryWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             }
         }
 
@@ -3753,6 +3666,8 @@ public interface IQueryWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3762,10 +3677,7 @@ public interface IQueryWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             });
         }
 
@@ -3773,7 +3685,7 @@ public interface IQueryWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     }
 }
 
-public interface IQueryWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+public interface IChunkQueryWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -3785,7 +3697,7 @@ public interface IQueryWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3807,6 +3719,8 @@ public interface IQueryWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3817,10 +3731,7 @@ public interface IQueryWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             }
         }
 
@@ -3846,6 +3757,8 @@ public interface IQueryWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3856,10 +3769,7 @@ public interface IQueryWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             });
         }
 
@@ -3867,7 +3777,7 @@ public interface IQueryWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     }
 }
 
-public interface IQueryWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+public interface IChunkQueryWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -3880,7 +3790,7 @@ public interface IQueryWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3902,6 +3812,8 @@ public interface IQueryWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3913,10 +3825,7 @@ public interface IQueryWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             }
         }
 
@@ -3942,6 +3851,8 @@ public interface IQueryWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -3953,10 +3864,7 @@ public interface IQueryWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             });
         }
 
@@ -3964,7 +3872,7 @@ public interface IQueryWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     }
 }
 
-public interface IQueryWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+public interface IChunkQueryWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -3978,7 +3886,7 @@ public interface IQueryWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4000,6 +3908,8 @@ public interface IQueryWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4012,10 +3922,7 @@ public interface IQueryWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             }
         }
 
@@ -4041,6 +3948,8 @@ public interface IQueryWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4053,10 +3962,7 @@ public interface IQueryWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             });
         }
 
@@ -4064,7 +3970,7 @@ public interface IQueryWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     }
 }
 
-public interface IQueryWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+public interface IChunkQueryWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -4079,7 +3985,7 @@ public interface IQueryWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     where T10 : IComponent
     where T11 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4101,6 +4007,8 @@ public interface IQueryWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4114,10 +4022,7 @@ public interface IQueryWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 var t10 = chunk.GetSpan<T10>();
                 var t11 = chunk.GetSpan<T11>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
             }
         }
 
@@ -4143,6 +4048,8 @@ public interface IQueryWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4156,10 +4063,7 @@ public interface IQueryWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 var t10 = chunk.GetSpan<T10>();
                 var t11 = chunk.GetSpan<T11>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
             });
         }
 
@@ -4167,7 +4071,7 @@ public interface IQueryWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
 }
 
-public interface IQueryWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+public interface IChunkQueryWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -4183,7 +4087,7 @@ public interface IQueryWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     where T11 : IComponent
     where T12 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, ReadOnlySpan<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4205,6 +4109,8 @@ public interface IQueryWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4219,10 +4125,7 @@ public interface IQueryWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 var t11 = chunk.GetSpan<T11>();
                 var t12 = chunk.GetSpan<T12>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
             }
         }
 
@@ -4248,6 +4151,8 @@ public interface IQueryWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4262,10 +4167,7 @@ public interface IQueryWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 var t11 = chunk.GetSpan<T11>();
                 var t12 = chunk.GetSpan<T12>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
             });
         }
 
@@ -4273,7 +4175,7 @@ public interface IQueryWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     }
 }
 
-public interface IQueryWWWWW<T0, T1, T2, T3, T4>
+public interface IChunkQueryWWWWW<T0, T1, T2, T3, T4>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -4281,7 +4183,7 @@ public interface IQueryWWWWW<T0, T1, T2, T3, T4>
     where T3 : IComponent
     where T4 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4303,16 +4205,15 @@ public interface IQueryWWWWW<T0, T1, T2, T3, T4>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
                 var t4 = chunk.GetSpan<T4>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
+                Execute(entities, t0, t1, t2, t3, t4);
             }
         }
 
@@ -4338,16 +4239,15 @@ public interface IQueryWWWWW<T0, T1, T2, T3, T4>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
                 var t3 = chunk.GetSpan<T3>();
                 var t4 = chunk.GetSpan<T4>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
+                Execute(entities, t0, t1, t2, t3, t4);
             });
         }
 
@@ -4355,7 +4255,7 @@ public interface IQueryWWWWW<T0, T1, T2, T3, T4>
     }
 }
 
-public interface IQueryWWWWWR<T0, T1, T2, T3, T4, T5>
+public interface IChunkQueryWWWWWR<T0, T1, T2, T3, T4, T5>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -4364,7 +4264,7 @@ public interface IQueryWWWWWR<T0, T1, T2, T3, T4, T5>
     where T4 : IComponent
     where T5 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, ReadOnlySpan<T5> t5);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4386,6 +4286,8 @@ public interface IQueryWWWWWR<T0, T1, T2, T3, T4, T5>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4393,10 +4295,7 @@ public interface IQueryWWWWWR<T0, T1, T2, T3, T4, T5>
                 var t4 = chunk.GetSpan<T4>();
                 var t5 = chunk.GetSpan<T5>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5);
             }
         }
 
@@ -4422,6 +4321,8 @@ public interface IQueryWWWWWR<T0, T1, T2, T3, T4, T5>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4429,10 +4330,7 @@ public interface IQueryWWWWWR<T0, T1, T2, T3, T4, T5>
                 var t4 = chunk.GetSpan<T4>();
                 var t5 = chunk.GetSpan<T5>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5);
             });
         }
 
@@ -4440,7 +4338,7 @@ public interface IQueryWWWWWR<T0, T1, T2, T3, T4, T5>
     }
 }
 
-public interface IQueryWWWWWRR<T0, T1, T2, T3, T4, T5, T6>
+public interface IChunkQueryWWWWWRR<T0, T1, T2, T3, T4, T5, T6>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -4450,7 +4348,7 @@ public interface IQueryWWWWWRR<T0, T1, T2, T3, T4, T5, T6>
     where T5 : IComponent
     where T6 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4472,6 +4370,8 @@ public interface IQueryWWWWWRR<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4480,10 +4380,7 @@ public interface IQueryWWWWWRR<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             }
         }
 
@@ -4509,6 +4406,8 @@ public interface IQueryWWWWWRR<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4517,10 +4416,7 @@ public interface IQueryWWWWWRR<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             });
         }
 
@@ -4528,7 +4424,7 @@ public interface IQueryWWWWWRR<T0, T1, T2, T3, T4, T5, T6>
     }
 }
 
-public interface IQueryWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7>
+public interface IChunkQueryWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -4539,7 +4435,7 @@ public interface IQueryWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4561,6 +4457,8 @@ public interface IQueryWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4570,10 +4468,7 @@ public interface IQueryWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             }
         }
 
@@ -4599,6 +4494,8 @@ public interface IQueryWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4608,10 +4505,7 @@ public interface IQueryWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             });
         }
 
@@ -4619,7 +4513,7 @@ public interface IQueryWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     }
 }
 
-public interface IQueryWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+public interface IChunkQueryWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -4631,7 +4525,7 @@ public interface IQueryWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4653,6 +4547,8 @@ public interface IQueryWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4663,10 +4559,7 @@ public interface IQueryWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             }
         }
 
@@ -4692,6 +4585,8 @@ public interface IQueryWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4702,10 +4597,7 @@ public interface IQueryWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             });
         }
 
@@ -4713,7 +4605,7 @@ public interface IQueryWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     }
 }
 
-public interface IQueryWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+public interface IChunkQueryWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -4726,7 +4618,7 @@ public interface IQueryWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4748,6 +4640,8 @@ public interface IQueryWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4759,10 +4653,7 @@ public interface IQueryWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             }
         }
 
@@ -4788,6 +4679,8 @@ public interface IQueryWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4799,10 +4692,7 @@ public interface IQueryWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             });
         }
 
@@ -4810,7 +4700,7 @@ public interface IQueryWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     }
 }
 
-public interface IQueryWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+public interface IChunkQueryWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -4824,7 +4714,7 @@ public interface IQueryWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4846,6 +4736,8 @@ public interface IQueryWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4858,10 +4750,7 @@ public interface IQueryWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             }
         }
 
@@ -4887,6 +4776,8 @@ public interface IQueryWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4899,10 +4790,7 @@ public interface IQueryWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             });
         }
 
@@ -4910,7 +4798,7 @@ public interface IQueryWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     }
 }
 
-public interface IQueryWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+public interface IChunkQueryWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -4925,7 +4813,7 @@ public interface IQueryWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     where T10 : IComponent
     where T11 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4947,6 +4835,8 @@ public interface IQueryWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -4960,10 +4850,7 @@ public interface IQueryWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 var t10 = chunk.GetSpan<T10>();
                 var t11 = chunk.GetSpan<T11>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
             }
         }
 
@@ -4989,6 +4876,8 @@ public interface IQueryWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5002,10 +4891,7 @@ public interface IQueryWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 var t10 = chunk.GetSpan<T10>();
                 var t11 = chunk.GetSpan<T11>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
             });
         }
 
@@ -5013,7 +4899,7 @@ public interface IQueryWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
 }
 
-public interface IQueryWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+public interface IChunkQueryWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -5029,7 +4915,7 @@ public interface IQueryWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     where T11 : IComponent
     where T12 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5051,6 +4937,8 @@ public interface IQueryWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5065,10 +4953,7 @@ public interface IQueryWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 var t11 = chunk.GetSpan<T11>();
                 var t12 = chunk.GetSpan<T12>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
             }
         }
 
@@ -5094,6 +4979,8 @@ public interface IQueryWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5108,10 +4995,7 @@ public interface IQueryWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 var t11 = chunk.GetSpan<T11>();
                 var t12 = chunk.GetSpan<T12>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
             });
         }
 
@@ -5119,7 +5003,7 @@ public interface IQueryWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     }
 }
 
-public interface IQueryWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+public interface IChunkQueryWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -5136,7 +5020,7 @@ public interface IQueryWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
     where T12 : IComponent
     where T13 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, ReadOnlySpan<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12, ReadOnlySpan<T13> t13);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5158,6 +5042,8 @@ public interface IQueryWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5173,10 +5059,7 @@ public interface IQueryWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 var t12 = chunk.GetSpan<T12>();
                 var t13 = chunk.GetSpan<T13>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
             }
         }
 
@@ -5202,6 +5085,8 @@ public interface IQueryWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5217,10 +5102,7 @@ public interface IQueryWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 var t12 = chunk.GetSpan<T12>();
                 var t13 = chunk.GetSpan<T13>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
             });
         }
 
@@ -5228,7 +5110,7 @@ public interface IQueryWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
     }
 }
 
-public interface IQueryWWWWWW<T0, T1, T2, T3, T4, T5>
+public interface IChunkQueryWWWWWW<T0, T1, T2, T3, T4, T5>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -5237,7 +5119,7 @@ public interface IQueryWWWWWW<T0, T1, T2, T3, T4, T5>
     where T4 : IComponent
     where T5 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5259,6 +5141,8 @@ public interface IQueryWWWWWW<T0, T1, T2, T3, T4, T5>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5266,10 +5150,7 @@ public interface IQueryWWWWWW<T0, T1, T2, T3, T4, T5>
                 var t4 = chunk.GetSpan<T4>();
                 var t5 = chunk.GetSpan<T5>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5);
             }
         }
 
@@ -5295,6 +5176,8 @@ public interface IQueryWWWWWW<T0, T1, T2, T3, T4, T5>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5302,10 +5185,7 @@ public interface IQueryWWWWWW<T0, T1, T2, T3, T4, T5>
                 var t4 = chunk.GetSpan<T4>();
                 var t5 = chunk.GetSpan<T5>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5);
             });
         }
 
@@ -5313,7 +5193,7 @@ public interface IQueryWWWWWW<T0, T1, T2, T3, T4, T5>
     }
 }
 
-public interface IQueryWWWWWWR<T0, T1, T2, T3, T4, T5, T6>
+public interface IChunkQueryWWWWWWR<T0, T1, T2, T3, T4, T5, T6>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -5323,7 +5203,7 @@ public interface IQueryWWWWWWR<T0, T1, T2, T3, T4, T5, T6>
     where T5 : IComponent
     where T6 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, ReadOnlySpan<T6> t6);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5345,6 +5225,8 @@ public interface IQueryWWWWWWR<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5353,10 +5235,7 @@ public interface IQueryWWWWWWR<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             }
         }
 
@@ -5382,6 +5261,8 @@ public interface IQueryWWWWWWR<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5390,10 +5271,7 @@ public interface IQueryWWWWWWR<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             });
         }
 
@@ -5401,7 +5279,7 @@ public interface IQueryWWWWWWR<T0, T1, T2, T3, T4, T5, T6>
     }
 }
 
-public interface IQueryWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7>
+public interface IChunkQueryWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -5412,7 +5290,7 @@ public interface IQueryWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5434,6 +5312,8 @@ public interface IQueryWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5443,10 +5323,7 @@ public interface IQueryWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             }
         }
 
@@ -5472,6 +5349,8 @@ public interface IQueryWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5481,10 +5360,7 @@ public interface IQueryWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             });
         }
 
@@ -5492,7 +5368,7 @@ public interface IQueryWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7>
     }
 }
 
-public interface IQueryWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+public interface IChunkQueryWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -5504,7 +5380,7 @@ public interface IQueryWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5526,6 +5402,8 @@ public interface IQueryWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5536,10 +5414,7 @@ public interface IQueryWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             }
         }
 
@@ -5565,6 +5440,8 @@ public interface IQueryWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5575,10 +5452,7 @@ public interface IQueryWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             });
         }
 
@@ -5586,7 +5460,7 @@ public interface IQueryWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     }
 }
 
-public interface IQueryWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+public interface IChunkQueryWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -5599,7 +5473,7 @@ public interface IQueryWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5621,6 +5495,8 @@ public interface IQueryWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5632,10 +5508,7 @@ public interface IQueryWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             }
         }
 
@@ -5661,6 +5534,8 @@ public interface IQueryWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5672,10 +5547,7 @@ public interface IQueryWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             });
         }
 
@@ -5683,7 +5555,7 @@ public interface IQueryWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     }
 }
 
-public interface IQueryWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+public interface IChunkQueryWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -5697,7 +5569,7 @@ public interface IQueryWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5719,6 +5591,8 @@ public interface IQueryWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5731,10 +5605,7 @@ public interface IQueryWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             }
         }
 
@@ -5760,6 +5631,8 @@ public interface IQueryWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5772,10 +5645,7 @@ public interface IQueryWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             });
         }
 
@@ -5783,7 +5653,7 @@ public interface IQueryWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     }
 }
 
-public interface IQueryWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+public interface IChunkQueryWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -5798,7 +5668,7 @@ public interface IQueryWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     where T10 : IComponent
     where T11 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5820,6 +5690,8 @@ public interface IQueryWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5833,10 +5705,7 @@ public interface IQueryWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 var t10 = chunk.GetSpan<T10>();
                 var t11 = chunk.GetSpan<T11>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
             }
         }
 
@@ -5862,6 +5731,8 @@ public interface IQueryWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5875,10 +5746,7 @@ public interface IQueryWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 var t10 = chunk.GetSpan<T10>();
                 var t11 = chunk.GetSpan<T11>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
             });
         }
 
@@ -5886,7 +5754,7 @@ public interface IQueryWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
 }
 
-public interface IQueryWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+public interface IChunkQueryWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -5902,7 +5770,7 @@ public interface IQueryWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     where T11 : IComponent
     where T12 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5924,6 +5792,8 @@ public interface IQueryWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5938,10 +5808,7 @@ public interface IQueryWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 var t11 = chunk.GetSpan<T11>();
                 var t12 = chunk.GetSpan<T12>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
             }
         }
 
@@ -5967,6 +5834,8 @@ public interface IQueryWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -5981,10 +5850,7 @@ public interface IQueryWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 var t11 = chunk.GetSpan<T11>();
                 var t12 = chunk.GetSpan<T12>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
             });
         }
 
@@ -5992,7 +5858,7 @@ public interface IQueryWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     }
 }
 
-public interface IQueryWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+public interface IChunkQueryWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -6009,7 +5875,7 @@ public interface IQueryWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
     where T12 : IComponent
     where T13 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12, ReadOnlySpan<T13> t13);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6031,6 +5897,8 @@ public interface IQueryWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6046,10 +5914,7 @@ public interface IQueryWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 var t12 = chunk.GetSpan<T12>();
                 var t13 = chunk.GetSpan<T13>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
             }
         }
 
@@ -6075,6 +5940,8 @@ public interface IQueryWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6090,10 +5957,7 @@ public interface IQueryWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 var t12 = chunk.GetSpan<T12>();
                 var t13 = chunk.GetSpan<T13>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
             });
         }
 
@@ -6101,7 +5965,7 @@ public interface IQueryWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
     }
 }
 
-public interface IQueryWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+public interface IChunkQueryWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -6119,7 +5983,7 @@ public interface IQueryWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
     where T13 : IComponent
     where T14 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, ReadOnlySpan<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12, ReadOnlySpan<T13> t13, ReadOnlySpan<T14> t14);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6141,6 +6005,8 @@ public interface IQueryWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6157,10 +6023,7 @@ public interface IQueryWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 var t13 = chunk.GetSpan<T13>();
                 var t14 = chunk.GetSpan<T14>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
             }
         }
 
@@ -6186,6 +6049,8 @@ public interface IQueryWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6202,10 +6067,7 @@ public interface IQueryWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 var t13 = chunk.GetSpan<T13>();
                 var t14 = chunk.GetSpan<T14>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
             });
         }
 
@@ -6213,7 +6075,7 @@ public interface IQueryWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
     }
 }
 
-public interface IQueryWWWWWWW<T0, T1, T2, T3, T4, T5, T6>
+public interface IChunkQueryWWWWWWW<T0, T1, T2, T3, T4, T5, T6>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -6223,7 +6085,7 @@ public interface IQueryWWWWWWW<T0, T1, T2, T3, T4, T5, T6>
     where T5 : IComponent
     where T6 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6245,6 +6107,8 @@ public interface IQueryWWWWWWW<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6253,10 +6117,7 @@ public interface IQueryWWWWWWW<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             }
         }
 
@@ -6282,6 +6143,8 @@ public interface IQueryWWWWWWW<T0, T1, T2, T3, T4, T5, T6>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6290,10 +6153,7 @@ public interface IQueryWWWWWWW<T0, T1, T2, T3, T4, T5, T6>
                 var t5 = chunk.GetSpan<T5>();
                 var t6 = chunk.GetSpan<T6>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6);
             });
         }
 
@@ -6301,7 +6161,7 @@ public interface IQueryWWWWWWW<T0, T1, T2, T3, T4, T5, T6>
     }
 }
 
-public interface IQueryWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7>
+public interface IChunkQueryWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -6312,7 +6172,7 @@ public interface IQueryWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, ReadOnlySpan<T7> t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6334,6 +6194,8 @@ public interface IQueryWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6343,10 +6205,7 @@ public interface IQueryWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             }
         }
 
@@ -6372,6 +6231,8 @@ public interface IQueryWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6381,10 +6242,7 @@ public interface IQueryWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             });
         }
 
@@ -6392,7 +6250,7 @@ public interface IQueryWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7>
     }
 }
 
-public interface IQueryWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+public interface IChunkQueryWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -6404,7 +6262,7 @@ public interface IQueryWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6426,6 +6284,8 @@ public interface IQueryWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6436,10 +6296,7 @@ public interface IQueryWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             }
         }
 
@@ -6465,6 +6322,8 @@ public interface IQueryWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6475,10 +6334,7 @@ public interface IQueryWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             });
         }
 
@@ -6486,7 +6342,7 @@ public interface IQueryWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     }
 }
 
-public interface IQueryWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+public interface IChunkQueryWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -6499,7 +6355,7 @@ public interface IQueryWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6521,6 +6377,8 @@ public interface IQueryWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6532,10 +6390,7 @@ public interface IQueryWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             }
         }
 
@@ -6561,6 +6416,8 @@ public interface IQueryWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6572,10 +6429,7 @@ public interface IQueryWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             });
         }
 
@@ -6583,7 +6437,7 @@ public interface IQueryWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     }
 }
 
-public interface IQueryWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+public interface IChunkQueryWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -6597,7 +6451,7 @@ public interface IQueryWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6619,6 +6473,8 @@ public interface IQueryWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6631,10 +6487,7 @@ public interface IQueryWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             }
         }
 
@@ -6660,6 +6513,8 @@ public interface IQueryWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6672,10 +6527,7 @@ public interface IQueryWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             });
         }
 
@@ -6683,7 +6535,7 @@ public interface IQueryWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     }
 }
 
-public interface IQueryWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+public interface IChunkQueryWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -6698,7 +6550,7 @@ public interface IQueryWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     where T10 : IComponent
     where T11 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6720,6 +6572,8 @@ public interface IQueryWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6733,10 +6587,7 @@ public interface IQueryWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 var t10 = chunk.GetSpan<T10>();
                 var t11 = chunk.GetSpan<T11>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
             }
         }
 
@@ -6762,6 +6613,8 @@ public interface IQueryWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6775,10 +6628,7 @@ public interface IQueryWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 var t10 = chunk.GetSpan<T10>();
                 var t11 = chunk.GetSpan<T11>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
             });
         }
 
@@ -6786,7 +6636,7 @@ public interface IQueryWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
 }
 
-public interface IQueryWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+public interface IChunkQueryWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -6802,7 +6652,7 @@ public interface IQueryWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     where T11 : IComponent
     where T12 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6824,6 +6674,8 @@ public interface IQueryWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6838,10 +6690,7 @@ public interface IQueryWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 var t11 = chunk.GetSpan<T11>();
                 var t12 = chunk.GetSpan<T12>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
             }
         }
 
@@ -6867,6 +6716,8 @@ public interface IQueryWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6881,10 +6732,7 @@ public interface IQueryWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 var t11 = chunk.GetSpan<T11>();
                 var t12 = chunk.GetSpan<T12>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
             });
         }
 
@@ -6892,7 +6740,7 @@ public interface IQueryWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     }
 }
 
-public interface IQueryWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+public interface IChunkQueryWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -6909,7 +6757,7 @@ public interface IQueryWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
     where T12 : IComponent
     where T13 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12, ReadOnlySpan<T13> t13);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6931,6 +6779,8 @@ public interface IQueryWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6946,10 +6796,7 @@ public interface IQueryWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 var t12 = chunk.GetSpan<T12>();
                 var t13 = chunk.GetSpan<T13>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
             }
         }
 
@@ -6975,6 +6822,8 @@ public interface IQueryWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -6990,10 +6839,7 @@ public interface IQueryWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 var t12 = chunk.GetSpan<T12>();
                 var t13 = chunk.GetSpan<T13>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
             });
         }
 
@@ -7001,7 +6847,7 @@ public interface IQueryWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
     }
 }
 
-public interface IQueryWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+public interface IChunkQueryWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -7019,7 +6865,7 @@ public interface IQueryWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
     where T13 : IComponent
     where T14 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12, ReadOnlySpan<T13> t13, ReadOnlySpan<T14> t14);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7041,6 +6887,8 @@ public interface IQueryWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7057,10 +6905,7 @@ public interface IQueryWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 var t13 = chunk.GetSpan<T13>();
                 var t14 = chunk.GetSpan<T14>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
             }
         }
 
@@ -7086,6 +6931,8 @@ public interface IQueryWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7102,10 +6949,7 @@ public interface IQueryWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 var t13 = chunk.GetSpan<T13>();
                 var t14 = chunk.GetSpan<T14>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
             });
         }
 
@@ -7113,7 +6957,7 @@ public interface IQueryWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
     }
 }
 
-public interface IQueryWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+public interface IChunkQueryWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -7132,7 +6976,7 @@ public interface IQueryWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
     where T14 : IComponent
     where T15 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, ReadOnlySpan<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12, ReadOnlySpan<T13> t13, ReadOnlySpan<T14> t14, ReadOnlySpan<T15> t15);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7154,6 +6998,8 @@ public interface IQueryWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7171,10 +7017,7 @@ public interface IQueryWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
                 var t14 = chunk.GetSpan<T14>();
                 var t15 = chunk.GetSpan<T15>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15);
             }
         }
 
@@ -7200,6 +7043,8 @@ public interface IQueryWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7217,10 +7062,7 @@ public interface IQueryWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
                 var t14 = chunk.GetSpan<T14>();
                 var t15 = chunk.GetSpan<T15>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15);
             });
         }
 
@@ -7228,7 +7070,7 @@ public interface IQueryWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
     }
 }
 
-public interface IQueryWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7>
+public interface IChunkQueryWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -7239,7 +7081,7 @@ public interface IQueryWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7261,6 +7103,8 @@ public interface IQueryWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7270,10 +7114,7 @@ public interface IQueryWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             }
         }
 
@@ -7299,6 +7140,8 @@ public interface IQueryWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7308,10 +7151,7 @@ public interface IQueryWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7>
                 var t6 = chunk.GetSpan<T6>();
                 var t7 = chunk.GetSpan<T7>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
             });
         }
 
@@ -7319,7 +7159,7 @@ public interface IQueryWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7>
     }
 }
 
-public interface IQueryWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+public interface IChunkQueryWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -7331,7 +7171,7 @@ public interface IQueryWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, ReadOnlySpan<T8> t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7353,6 +7193,8 @@ public interface IQueryWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7363,10 +7205,7 @@ public interface IQueryWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             }
         }
 
@@ -7392,6 +7231,8 @@ public interface IQueryWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7402,10 +7243,7 @@ public interface IQueryWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             });
         }
 
@@ -7413,7 +7251,7 @@ public interface IQueryWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     }
 }
 
-public interface IQueryWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+public interface IChunkQueryWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -7426,7 +7264,7 @@ public interface IQueryWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7448,6 +7286,8 @@ public interface IQueryWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7459,10 +7299,7 @@ public interface IQueryWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             }
         }
 
@@ -7488,6 +7325,8 @@ public interface IQueryWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7499,10 +7338,7 @@ public interface IQueryWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             });
         }
 
@@ -7510,7 +7346,7 @@ public interface IQueryWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     }
 }
 
-public interface IQueryWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+public interface IChunkQueryWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -7524,7 +7360,7 @@ public interface IQueryWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7546,6 +7382,8 @@ public interface IQueryWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7558,10 +7396,7 @@ public interface IQueryWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             }
         }
 
@@ -7587,6 +7422,8 @@ public interface IQueryWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7599,10 +7436,7 @@ public interface IQueryWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             });
         }
 
@@ -7610,7 +7444,7 @@ public interface IQueryWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     }
 }
 
-public interface IQueryWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+public interface IChunkQueryWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -7625,7 +7459,7 @@ public interface IQueryWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     where T10 : IComponent
     where T11 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7647,6 +7481,8 @@ public interface IQueryWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7660,10 +7496,7 @@ public interface IQueryWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 var t10 = chunk.GetSpan<T10>();
                 var t11 = chunk.GetSpan<T11>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
             }
         }
 
@@ -7689,6 +7522,8 @@ public interface IQueryWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7702,10 +7537,7 @@ public interface IQueryWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 var t10 = chunk.GetSpan<T10>();
                 var t11 = chunk.GetSpan<T11>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
             });
         }
 
@@ -7713,7 +7545,7 @@ public interface IQueryWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
 }
 
-public interface IQueryWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+public interface IChunkQueryWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -7729,7 +7561,7 @@ public interface IQueryWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     where T11 : IComponent
     where T12 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7751,6 +7583,8 @@ public interface IQueryWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7765,10 +7599,7 @@ public interface IQueryWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 var t11 = chunk.GetSpan<T11>();
                 var t12 = chunk.GetSpan<T12>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
             }
         }
 
@@ -7794,6 +7625,8 @@ public interface IQueryWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7808,10 +7641,7 @@ public interface IQueryWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 var t11 = chunk.GetSpan<T11>();
                 var t12 = chunk.GetSpan<T12>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
             });
         }
 
@@ -7819,7 +7649,7 @@ public interface IQueryWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     }
 }
 
-public interface IQueryWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+public interface IChunkQueryWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -7836,7 +7666,7 @@ public interface IQueryWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
     where T12 : IComponent
     where T13 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12, ReadOnlySpan<T13> t13);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7858,6 +7688,8 @@ public interface IQueryWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7873,10 +7705,7 @@ public interface IQueryWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 var t12 = chunk.GetSpan<T12>();
                 var t13 = chunk.GetSpan<T13>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
             }
         }
 
@@ -7902,6 +7731,8 @@ public interface IQueryWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7917,10 +7748,7 @@ public interface IQueryWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 var t12 = chunk.GetSpan<T12>();
                 var t13 = chunk.GetSpan<T13>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
             });
         }
 
@@ -7928,7 +7756,7 @@ public interface IQueryWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
     }
 }
 
-public interface IQueryWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+public interface IChunkQueryWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -7946,7 +7774,7 @@ public interface IQueryWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
     where T13 : IComponent
     where T14 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12, ReadOnlySpan<T13> t13, ReadOnlySpan<T14> t14);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7968,6 +7796,8 @@ public interface IQueryWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -7984,10 +7814,7 @@ public interface IQueryWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 var t13 = chunk.GetSpan<T13>();
                 var t14 = chunk.GetSpan<T14>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
             }
         }
 
@@ -8013,6 +7840,8 @@ public interface IQueryWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8029,10 +7858,7 @@ public interface IQueryWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 var t13 = chunk.GetSpan<T13>();
                 var t14 = chunk.GetSpan<T14>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
             });
         }
 
@@ -8040,7 +7866,7 @@ public interface IQueryWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
     }
 }
 
-public interface IQueryWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+public interface IChunkQueryWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -8059,7 +7885,7 @@ public interface IQueryWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
     where T14 : IComponent
     where T15 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12, ReadOnlySpan<T13> t13, ReadOnlySpan<T14> t14, ReadOnlySpan<T15> t15);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8081,6 +7907,8 @@ public interface IQueryWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8098,10 +7926,7 @@ public interface IQueryWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
                 var t14 = chunk.GetSpan<T14>();
                 var t15 = chunk.GetSpan<T15>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15);
             }
         }
 
@@ -8127,6 +7952,8 @@ public interface IQueryWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8144,10 +7971,7 @@ public interface IQueryWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
                 var t14 = chunk.GetSpan<T14>();
                 var t15 = chunk.GetSpan<T15>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15);
             });
         }
 
@@ -8155,7 +7979,7 @@ public interface IQueryWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
     }
 }
 
-public interface IQueryWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>
+public interface IChunkQueryWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -8175,7 +7999,7 @@ public interface IQueryWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
     where T15 : IComponent
     where T16 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15, in T16 t16);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, ReadOnlySpan<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12, ReadOnlySpan<T13> t13, ReadOnlySpan<T14> t14, ReadOnlySpan<T15> t15, ReadOnlySpan<T16> t16);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8197,6 +8021,8 @@ public interface IQueryWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8215,10 +8041,7 @@ public interface IQueryWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
                 var t15 = chunk.GetSpan<T15>();
                 var t16 = chunk.GetSpan<T16>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i], in t16[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16);
             }
         }
 
@@ -8244,6 +8067,8 @@ public interface IQueryWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8262,10 +8087,7 @@ public interface IQueryWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
                 var t15 = chunk.GetSpan<T15>();
                 var t16 = chunk.GetSpan<T16>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i], in t16[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16);
             });
         }
 
@@ -8273,7 +8095,7 @@ public interface IQueryWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
     }
 }
 
-public interface IQueryWWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+public interface IChunkQueryWWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -8285,7 +8107,7 @@ public interface IQueryWWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8307,6 +8129,8 @@ public interface IQueryWWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8317,10 +8141,7 @@ public interface IQueryWWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             }
         }
 
@@ -8346,6 +8167,8 @@ public interface IQueryWWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8356,10 +8179,7 @@ public interface IQueryWWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 var t7 = chunk.GetSpan<T7>();
                 var t8 = chunk.GetSpan<T8>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
             });
         }
 
@@ -8367,7 +8187,7 @@ public interface IQueryWWWWWWWWW<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     }
 }
 
-public interface IQueryWWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+public interface IChunkQueryWWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -8380,7 +8200,7 @@ public interface IQueryWWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, ReadOnlySpan<T9> t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8402,6 +8222,8 @@ public interface IQueryWWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8413,10 +8235,7 @@ public interface IQueryWWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             }
         }
 
@@ -8442,6 +8261,8 @@ public interface IQueryWWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8453,10 +8274,7 @@ public interface IQueryWWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 var t8 = chunk.GetSpan<T8>();
                 var t9 = chunk.GetSpan<T9>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
             });
         }
 
@@ -8464,7 +8282,7 @@ public interface IQueryWWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     }
 }
 
-public interface IQueryWWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+public interface IChunkQueryWWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -8478,7 +8296,7 @@ public interface IQueryWWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8500,6 +8318,8 @@ public interface IQueryWWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8512,10 +8332,7 @@ public interface IQueryWWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             }
         }
 
@@ -8541,6 +8358,8 @@ public interface IQueryWWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8553,10 +8372,7 @@ public interface IQueryWWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 var t9 = chunk.GetSpan<T9>();
                 var t10 = chunk.GetSpan<T10>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
             });
         }
 
@@ -8564,7 +8380,7 @@ public interface IQueryWWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     }
 }
 
-public interface IQueryWWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+public interface IChunkQueryWWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -8579,7 +8395,7 @@ public interface IQueryWWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     where T10 : IComponent
     where T11 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8601,6 +8417,8 @@ public interface IQueryWWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8614,10 +8432,7 @@ public interface IQueryWWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 var t10 = chunk.GetSpan<T10>();
                 var t11 = chunk.GetSpan<T11>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
             }
         }
 
@@ -8643,6 +8458,8 @@ public interface IQueryWWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8656,10 +8473,7 @@ public interface IQueryWWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 var t10 = chunk.GetSpan<T10>();
                 var t11 = chunk.GetSpan<T11>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
             });
         }
 
@@ -8667,7 +8481,7 @@ public interface IQueryWWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
 }
 
-public interface IQueryWWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+public interface IChunkQueryWWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -8683,7 +8497,7 @@ public interface IQueryWWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     where T11 : IComponent
     where T12 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8705,6 +8519,8 @@ public interface IQueryWWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8719,10 +8535,7 @@ public interface IQueryWWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 var t11 = chunk.GetSpan<T11>();
                 var t12 = chunk.GetSpan<T12>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
             }
         }
 
@@ -8748,6 +8561,8 @@ public interface IQueryWWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8762,10 +8577,7 @@ public interface IQueryWWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 var t11 = chunk.GetSpan<T11>();
                 var t12 = chunk.GetSpan<T12>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
             });
         }
 
@@ -8773,7 +8585,7 @@ public interface IQueryWWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     }
 }
 
-public interface IQueryWWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+public interface IChunkQueryWWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -8790,7 +8602,7 @@ public interface IQueryWWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
     where T12 : IComponent
     where T13 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12, ReadOnlySpan<T13> t13);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8812,6 +8624,8 @@ public interface IQueryWWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8827,10 +8641,7 @@ public interface IQueryWWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 var t12 = chunk.GetSpan<T12>();
                 var t13 = chunk.GetSpan<T13>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
             }
         }
 
@@ -8856,6 +8667,8 @@ public interface IQueryWWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8871,10 +8684,7 @@ public interface IQueryWWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 var t12 = chunk.GetSpan<T12>();
                 var t13 = chunk.GetSpan<T13>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
             });
         }
 
@@ -8882,7 +8692,7 @@ public interface IQueryWWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
     }
 }
 
-public interface IQueryWWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+public interface IChunkQueryWWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -8900,7 +8710,7 @@ public interface IQueryWWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
     where T13 : IComponent
     where T14 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12, ReadOnlySpan<T13> t13, ReadOnlySpan<T14> t14);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8922,6 +8732,8 @@ public interface IQueryWWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8938,10 +8750,7 @@ public interface IQueryWWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 var t13 = chunk.GetSpan<T13>();
                 var t14 = chunk.GetSpan<T14>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
             }
         }
 
@@ -8967,6 +8776,8 @@ public interface IQueryWWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -8983,10 +8794,7 @@ public interface IQueryWWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 var t13 = chunk.GetSpan<T13>();
                 var t14 = chunk.GetSpan<T14>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
             });
         }
 
@@ -8994,7 +8802,7 @@ public interface IQueryWWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
     }
 }
 
-public interface IQueryWWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+public interface IChunkQueryWWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -9013,7 +8821,7 @@ public interface IQueryWWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
     where T14 : IComponent
     where T15 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12, ReadOnlySpan<T13> t13, ReadOnlySpan<T14> t14, ReadOnlySpan<T15> t15);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -9035,6 +8843,8 @@ public interface IQueryWWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -9052,10 +8862,7 @@ public interface IQueryWWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
                 var t14 = chunk.GetSpan<T14>();
                 var t15 = chunk.GetSpan<T15>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15);
             }
         }
 
@@ -9081,6 +8888,8 @@ public interface IQueryWWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -9098,10 +8907,7 @@ public interface IQueryWWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
                 var t14 = chunk.GetSpan<T14>();
                 var t15 = chunk.GetSpan<T15>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15);
             });
         }
 
@@ -9109,7 +8915,7 @@ public interface IQueryWWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
     }
 }
 
-public interface IQueryWWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>
+public interface IChunkQueryWWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -9129,7 +8935,7 @@ public interface IQueryWWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
     where T15 : IComponent
     where T16 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15, in T16 t16);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12, ReadOnlySpan<T13> t13, ReadOnlySpan<T14> t14, ReadOnlySpan<T15> t15, ReadOnlySpan<T16> t16);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -9151,6 +8957,8 @@ public interface IQueryWWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -9169,10 +8977,7 @@ public interface IQueryWWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
                 var t15 = chunk.GetSpan<T15>();
                 var t16 = chunk.GetSpan<T16>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i], in t16[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16);
             }
         }
 
@@ -9198,6 +9003,8 @@ public interface IQueryWWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -9216,10 +9023,7 @@ public interface IQueryWWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
                 var t15 = chunk.GetSpan<T15>();
                 var t16 = chunk.GetSpan<T16>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i], in t16[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16);
             });
         }
 
@@ -9227,7 +9031,7 @@ public interface IQueryWWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
     }
 }
 
-public interface IQueryWWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>
+public interface IChunkQueryWWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>
     : IQuery
     where T0 : IComponent
     where T1 : IComponent
@@ -9248,7 +9052,7 @@ public interface IQueryWWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9
     where T16 : IComponent
     where T17 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15, in T16 t16, in T17 t17);
+	void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, ReadOnlySpan<T9> t9, ReadOnlySpan<T10> t10, ReadOnlySpan<T11> t11, ReadOnlySpan<T12> t12, ReadOnlySpan<T13> t13, ReadOnlySpan<T14> t14, ReadOnlySpan<T15> t15, ReadOnlySpan<T16> t16, ReadOnlySpan<T17> t17);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -9270,6 +9074,8 @@ public interface IQueryWWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9
 				if (entities.Length == 0)
 				    continue;
 
+                count += entities.Length;
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -9289,10 +9095,7 @@ public interface IQueryWWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9
                 var t16 = chunk.GetSpan<T16>();
                 var t17 = chunk.GetSpan<T17>();
 
-                count += entities.Length;
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i], in t16[i], in t17[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17);
             }
         }
 
@@ -9318,6 +9121,8 @@ public interface IQueryWWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9
 				if (entities.Length == 0)
 				    return;
 
+                Interlocked.Add(ref count, entities.Length);
+
                 var t0 = chunk.GetSpan<T0>();
                 var t1 = chunk.GetSpan<T1>();
                 var t2 = chunk.GetSpan<T2>();
@@ -9337,10 +9142,7 @@ public interface IQueryWWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9
                 var t16 = chunk.GetSpan<T16>();
                 var t17 = chunk.GetSpan<T17>();
 
-                Interlocked.Add(ref count, entities.Length);
-
-				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i], in t16[i], in t17[i]);
+                Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17);
             });
         }
 

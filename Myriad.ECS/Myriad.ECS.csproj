@@ -56,6 +56,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Queries\IChunkQuery.cs">
+      <DependentUpon>IChunkQuery.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Worlds\WorldBuilderWithArchetype.cs">
       <DependentUpon>WorldBuilderWithArchetype.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -94,6 +99,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Queries\IChunkQuery.tt">
+      <LastGenOutput>IChunkQuery.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
     <None Update="Worlds\WorldBuilderWithArchetype.tt">
       <LastGenOutput>WorldBuilderWithArchetype.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
