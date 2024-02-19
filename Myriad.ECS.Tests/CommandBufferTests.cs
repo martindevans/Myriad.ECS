@@ -77,7 +77,7 @@ public class CommandBufferTests
         {
             // Create lots of entities
             var buffered = new List<CommandBuffer.BufferedEntity>();
-            for (var j = 0; j < 5000; j++)
+            for (var j = 0; j < 10000; j++)
                 buffered.Add(buffer.Create().Set(new ComponentInt32(j)));
 
             // Destroy some random entities

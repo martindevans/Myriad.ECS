@@ -119,16 +119,13 @@ public sealed partial class Archetype
 
     internal void RemoveEntity(EntityInfo info)
     {
-        var chunk = info.Chunk;
-
-        if (!chunk.RemoveEntity(info))
-            throw new NotImplementedException("entity was not in expected chunk");
+        info.Chunk.RemoveEntity(info);
 
         // Decrease archetype entity count
         EntityCount--;
 
         // Execute handler for when an entity is removed from a chunk
-        HandleChunkEntityRemoved(chunk);
+        HandleChunkEntityRemoved(info.Chunk);
     }
 
     internal Row MigrateTo(Entity entity, ref EntityInfo info, Archetype to)

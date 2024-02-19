@@ -98,16 +98,16 @@ public sealed class Chunk
         return new Row(entity, index, this);
     }
 
-    internal bool RemoveEntity(EntityInfo info)
+    internal void RemoveEntity(EntityInfo info)
     {
         var index = info.RowIndex;
 
-        // No work to do if there are no entites
+        // No work to do if there are no other entites
         EntityCount -= 1;
         if (EntityCount == 0)
         {
             _entities[index] = default;
-            return true;
+            return;
         }
 
         // If we did not just delete the top entity into place then swap the top
@@ -128,8 +128,6 @@ public sealed class Chunk
                 Array.Clear(component, lastEntityIndex, 1);
             }
         }
-
-        return true;
     }
 
     internal Row MigrateTo(Entity entity, ref EntityInfo info, Archetype to)
