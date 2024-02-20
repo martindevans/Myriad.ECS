@@ -24,22 +24,18 @@ public class EntityChurnBenchmark
     [Benchmark]
     public void Churn()
     {
-        // keep track ofevery single entity ever created
+        // keep track of every single entity currently alive
         var alive = new List<Entity>();
 
         // Do lots of rounds of creation and destruction
         for (var i = 0; i < 500000; i++)
         {
-            // Create lots of entities
+            // Create some entities
             for (var j = 0; j < 100; j++)
                 _buffered.Add(_buffer.Create().Set(new ComponentInt32(j)));
 
-            // Destroy some random entities
-            for (var j = 0; j < alive.Count; j++)
-            {
-                var ent = alive[j];
-                _buffer.Delete(ent);
-            }
+            // Destroy all previously created entities
+            _buffer.Delete(alive);
             alive.Clear();
 
             // Execute
@@ -47,8 +43,7 @@ public class EntityChurnBenchmark
 
             // Resolve results
             foreach (var b in _buffered)
-                if (_rng.NextSingle() > 0.25f)
-                    alive.Add(resolver.Resolve(b));
+                alive.Add(resolver.Resolve(b));
             _buffered.Clear();
         }
     }

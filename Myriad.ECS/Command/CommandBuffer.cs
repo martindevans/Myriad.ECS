@@ -1,5 +1,6 @@
 ﻿using Myriad.ECS.Allocations;
 using Myriad.ECS.Collections;
+using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Worlds.Archetypes;
@@ -27,11 +28,11 @@ public sealed class CommandBuffer(World World)
 
         // Create buffered entities.
         _tempComponentIdSet.Clear();
-        foreach (var (bufEntId, components) in _bufferedSets)
+        foreach (var (bufEntId, components) in _bufferedSets.Enumerable())
         {
             // Build a set of components on this new entity
             _tempComponentIdSet.Clear();
-            foreach (var compId in components.Keys)
+            foreach (var (compId, _) in components.Enumerable())
                 _tempComponentIdSet.Add(compId);
 
             // Allocate an entity for it
@@ -41,7 +42,7 @@ public sealed class CommandBuffer(World World)
             resolver.Lookup.Add(bufEntId, entity);
 
             // Write the components into the entity
-            foreach (var setter in components.Values)
+            foreach (var (_, setter) in components.Enumerable())
             {
                 setter.Write(slot);
                 setter.ReturnToPool();
@@ -76,7 +77,7 @@ public sealed class CommandBuffer(World World)
                 var hash = currentArchetype.Hash;
                 if (_entitySets.TryGetValue(entity, out var sets))
                 {
-                    foreach (var (id, _) in sets)
+                    foreach (var (id, _) in sets.Enumerable())
                     {
                         if (_tempComponentIdSet.Add(id))
                         {
@@ -117,7 +118,7 @@ public sealed class CommandBuffer(World World)
                 // Run all setters
                 if (sets != null)
                 {
-                    foreach (var (_, set) in sets)
+                    foreach (var (_, set) in sets.Enumerable())
                     {
                         set.Write(row);
                         set.ReturnToPool();
@@ -239,6 +240,21 @@ public sealed class CommandBuffer(World World)
         _deletes.Add(entity);
         _entitySets.Remove(entity);
         _removes.Remove(entity);
+    }
+
+    /// <summary>
+    /// Bulk delete entities
+    /// </summary>
+    /// <param name="entities"></param>
+    public void Delete(List<Entity> entities)
+    {
+        _deletes.AddRange(entities);
+
+        foreach (var entity in entities)
+        {
+            _entitySets.Remove(entity);
+            _removes.Remove(entity);
+        }
     }
 
     public readonly record struct BufferedEntity
