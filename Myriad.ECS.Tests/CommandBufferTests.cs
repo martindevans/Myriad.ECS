@@ -111,6 +111,10 @@ public class CommandBufferTests
                 var entity = dead[j];
                 Assert.IsTrue(!entity.IsAlive(world));
             }
+
+            // Check archetypes
+            Assert.AreEqual(1, world.Archetypes.Count);
+            Assert.AreEqual(alive.Count, world.Archetypes.Single().EntityCount);
         }
     }
 
@@ -361,7 +365,7 @@ public class CommandBufferTests
         buffer.Set(entity, new ComponentInt16(987));
         buffer.Playback();
 
-        // Check the value has changed
+        // Check the value has changed to the latest value
         Assert.IsTrue(world.HasComponent<ComponentFloat>(entity));
         Assert.IsTrue(world.HasComponent<ComponentInt16>(entity));
         Assert.AreEqual(987, world.GetComponentRef<ComponentInt16>(entity).Value);

@@ -5,6 +5,7 @@ namespace Myriad.ECS;
 
 [DebuggerDisplay("{ID}v{Version}")]
 public readonly record struct Entity
+    : IComparable<Entity>
 {
     public readonly int ID;
     public readonly uint Version;
@@ -19,5 +20,14 @@ public readonly record struct Entity
     {
         return ID != 0
             && world.GetVersion(ID) == Version;
+    }
+
+    public int CompareTo(Entity other)
+    {
+        var idc = ID.CompareTo(other.ID);
+        if (idc != 0)
+            return idc;
+
+        return Version.CompareTo(other.Version);
     }
 }

@@ -6,7 +6,7 @@
 
 namespace Myriad.ECS.Queries;
 
-public interface IChunkQuery
+public interface IQuery
 {
 	public static abstract QueryBuilder QueryBuilder { get; }
 

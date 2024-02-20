@@ -1,20 +1,26 @@
-﻿using System.Collections.Frozen;
-using Myriad.ECS.Allocations;
+﻿using Myriad.ECS.Allocations;
+using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Queries;
 
-public sealed class QueryDescription(World world, FrozenSet<ComponentID> include, FrozenSet<ComponentID> exclude, FrozenSet<ComponentID> atLeastOne, FrozenSet<ComponentID> exactlyOne)
+public sealed class QueryDescription(
+    World world,
+    FrozenOrderedListSet<ComponentID> include,
+    FrozenOrderedListSet<ComponentID> exclude,
+    FrozenOrderedListSet<ComponentID> atLeastOne,
+    FrozenOrderedListSet<ComponentID> exactlyOne
+)
 {
     private readonly World _world = world;
 
     // Components
-    private readonly FrozenSet<ComponentID> _include = include;
-    private readonly FrozenSet<ComponentID> _exclude = exclude;
-    private readonly FrozenSet<ComponentID> _atLeastOne = atLeastOne;
-    private readonly FrozenSet<ComponentID> _exactlyOne = exactlyOne;
+    private readonly FrozenOrderedListSet<ComponentID> _include = include;
+    private readonly FrozenOrderedListSet<ComponentID> _exclude = exclude;
+    private readonly FrozenOrderedListSet<ComponentID> _atLeastOne = atLeastOne;
+    private readonly FrozenOrderedListSet<ComponentID> _exactlyOne = exactlyOne;
 
     // Cache of result from last time TryMatch was called
     private MatchResult? _result;

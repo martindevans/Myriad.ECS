@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System.Diagnostics.CodeAnalysis;
+
+// ReSharper disable StaticMemberInGenericType
 
 namespace Myriad.ECS.Allocations;
 
@@ -9,16 +11,35 @@ namespace Myriad.ECS.Allocations;
 public static class Pool<T>
     where T : class, new()
 {
-    private const int MAX = 64;
+    [ThreadStatic] private static int _maxSize;
+    [ThreadStatic] private static int _pressure;
     [ThreadStatic] private static List<T>? _items;
+
+    [MemberNotNull(nameof(_items))]
+    private static void Init()
+    {
+        // Initialize item. This can't be done in the field initializer for a threadstatic field!
+        if (_items == null)
+        {
+            _items = [];
+            _maxSize = 1024;
+        }
+    }
 
     public static T Get()
     {
-        // Initialize item. This can't be done in the field initializer for a threadstatic field!
-        _items ??= [];
+        Init();
 
         if (_items.Count == 0)
+        {
+            // Every allocation significantly increases pressure
+            _pressure += 8;
             return new();
+        }
+
+        // Every hit of the pool slightly reduces pressure
+        if (_pressure > 0)
+            _pressure--;
 
         var item = _items[^1];
         _items.RemoveAt(_items.Count - 1);
@@ -32,10 +53,15 @@ public static class Pool<T>
 
     public static void Return(T item)
     {
-        // Initialize item. This can't be done in the field initializer for a threadstatic field!
-        _items ??= [];
+        Init();
 
-        if (_items.Count < MAX)
+        if (_pressure > _maxSize)
+        {
+            _maxSize *= 2;
+            _pressure = 0;
+        }
+
+        if (_items.Count < _maxSize)
             _items.Add(item);
     }
 
@@ -46,7 +72,7 @@ public static class Pool<T>
 
         public void Dispose()
         {
-            Pool<T>.Return(Value);
+            Return(Value);
         }
     }
 }

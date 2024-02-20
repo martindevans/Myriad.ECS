@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Myriad.ParallelTasks\Myriad.ParallelTasks.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Extensions\" />
     <Folder Include="Systems\" />
   </ItemGroup>

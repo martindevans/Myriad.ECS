@@ -1,4 +1,5 @@
 ﻿using System.Collections.Frozen;
+using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Registry;
@@ -84,7 +85,7 @@ public class QueryTests
         Assert.IsNull(a.Single().ExactlyOne);
 
         // Add an archetype to the world
-        var c = new HashSet<ComponentID> { ComponentRegistry.Get<ComponentInt32>(), ComponentRegistry.Get<ComponentFloat>() }.ToFrozenSet();
+        var c = new OrderedListSet<ComponentID>(new HashSet<ComponentID> { ComponentRegistry.Get<ComponentInt32>(), ComponentRegistry.Get<ComponentFloat>() });
         w.GetOrCreateArchetype(c, ArchetypeHash.Create(c));
 
         var b = q.GetArchetypes();

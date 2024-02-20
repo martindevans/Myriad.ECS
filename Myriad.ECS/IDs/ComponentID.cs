@@ -24,6 +24,11 @@ public readonly record struct ComponentID
     {
         return new ComponentID(checked(value.Value + 1));
     }
+
+    public int CompareTo(ComponentID other)
+    {
+        return Value.CompareTo(other.Value);
+    }
 }
 
 internal static class ComponentID<T>

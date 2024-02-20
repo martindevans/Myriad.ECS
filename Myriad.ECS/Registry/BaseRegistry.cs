@@ -1,5 +1,4 @@
-﻿using Myriad.ParallelTasks.Locks;
-using System.Reflection;
+﻿using System.Reflection;
 using Myriad.ECS.IDs;
 using System.Diagnostics.CodeAnalysis;
 using Myriad.ECS.Allocations;
@@ -12,7 +11,7 @@ namespace Myriad.ECS.Registry;
 public abstract class BaseRegistry<TBase, TID>
     where TID : struct, IIDNumber<TID>
 {
-    private static readonly RWLock<State> _lock = new(new State());
+    private static readonly Locks.RWLock<State> _lock = new(new State());
 
     /// <summary>
     /// Register all TBase in the given assembly

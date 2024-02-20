@@ -15,15 +15,6 @@ using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Queries;
 
-public interface IQuery
-{
-	public static abstract QueryBuilder QueryBuilder { get; }
-
-	public int Execute(QueryDescription query, World world);
-
-	public int ExecuteParallel(QueryDescription query, World world);
-}
-
 <# for (var i = 0; i <= PARAM_COUNT; i++)
 {
 	for (var j = 0; j <= PARAM_COUNT; j++)

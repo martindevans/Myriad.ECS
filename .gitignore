@@ -6,7 +6,5 @@
 /Myriad.ECS.SourceGeneration/bin
 /Myriad.ECS.Tests/obj
 /Myriad.ECS.Tests/bin
-/Myriad.ParallelTasks/obj
-/Myriad.ParallelTasks/bin
-/Myriad.ParallelTasks.Tests/obj
-/Myriad.ParallelTasks.Tests/bin
+/Benchmarks/obj
+/Benchmarks/bin

@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using Myriad.ECS.Allocations;
+﻿using Myriad.ECS.Allocations;
+using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Worlds.Archetypes;
@@ -11,13 +11,13 @@ public sealed class CommandBuffer(World World)
     private uint _version;
     private uint _nextBufferedEntityId;
 
-    private readonly Dictionary<uint, Dictionary<ComponentID, BaseComponentSetter>> _bufferedSets = [];
-    private readonly Dictionary<Entity, Dictionary<ComponentID, BaseComponentSetter>> _entitySets = [];
-    private readonly Dictionary<Entity, HashSet<ComponentID>> _removes = [];
-    private readonly HashSet<Entity> _modified = [ ];
+    private readonly SortedList<uint, SortedList<ComponentID, BaseComponentSetter>> _bufferedSets = [];
+    private readonly SortedList<Entity, SortedList<ComponentID, BaseComponentSetter>> _entitySets = [];
+    private readonly SortedList<Entity, OrderedListSet<ComponentID>> _removes = [];
+    private readonly OrderedListSet<Entity> _modified = [ ];
     private readonly List<Entity> _deletes = [ ];
 
-    private readonly HashSet<ComponentID> _tempComponentIdSet = [ ];
+    private readonly OrderedListSet<ComponentID> _tempComponentIdSet = [ ];
 
     public Resolver Playback()
     {
@@ -96,7 +96,7 @@ public sealed class CommandBuffer(World World)
                         }
                     }
                     removes.Clear();
-                    Pool<HashSet<ComponentID>>.Return(removes);
+                    Pool<OrderedListSet<ComponentID>>.Return(removes);
                 }
 
                 // Get a row handle for the entity, moving it to a new archetype first if necessary
@@ -143,7 +143,7 @@ public sealed class CommandBuffer(World World)
 
     public BufferedEntity Create()
     {
-        var set = Pool<Dictionary<ComponentID, BaseComponentSetter>>.Get();
+        var set = Pool<SortedList<ComponentID, BaseComponentSetter>>.Get();
         set.Clear();
 
         var id = checked(_nextBufferedEntityId++);
@@ -154,17 +154,19 @@ public sealed class CommandBuffer(World World)
     private void SetBuffered<T>(uint id, T value, bool allowDuplicates = false)
         where T : IComponent
     {
-        Debug.Assert(_bufferedSets.TryGetValue(id, out var set), "Unknown entity ID in SetBuffered");
+        if (!_bufferedSets.TryGetValue(id, out var set))
+            throw new InvalidOperationException("Unknown entity ID in SetBuffered");
 
-        // Add a setter to the list
-        var setter = GenericComponentSetter<T>.Get(value);
-
-        if (set.Remove(setter.ID, out var prevSetter))
+        // Remove previous setter, if this was one
+        if (set.Remove(ComponentID<T>.ID, out var prevSetter))
         {
             if (!allowDuplicates)
                 throw new InvalidOperationException("Cannot set the same component twice onto a buffered entity");
             prevSetter.ReturnToPool();
         }
+
+        // Add a setter to the list
+        var setter = GenericComponentSetter<T>.Get(value);
 
         set.Add(setter.ID, setter);
     }
@@ -180,20 +182,20 @@ public sealed class CommandBuffer(World World)
     {
         if (!_entitySets.TryGetValue(entity, out var set))
         {
-            set = Pool<Dictionary<ComponentID, BaseComponentSetter>>.Get();
+            set = Pool<SortedList<ComponentID, BaseComponentSetter>>.Get();
             set.Clear();
 
             _entitySets.Add(entity, set);
         }
 
-        // Create a setter and store it in the dictionary (recycling the old one, if it's there)
+        // Create a setter and store it in the list (recycling the old one, if it's there)
         var setter = GenericComponentSetter<T>.Get(value);
         if (set.Remove(setter.ID, out var old))
             old.ReturnToPool();
-        set[setter.ID] = setter;
+        set.Add(setter.ID, setter);
 
-        // Mark this as modified. If already modified it's possible there's an earlier remove.
-        // Get rid of that.
+        // Mark this as modified. If already modified it's possible there's an earlier remove operation for this
+        // component, which now needs to be removed.
         if (!_modified.Add(entity))
             if (_removes.TryGetValue(entity, out var removes))
                 removes.Remove(setter.ID);
@@ -208,17 +210,17 @@ public sealed class CommandBuffer(World World)
         where T : IComponent
     {
         // Get a list of "remove" operations for this entity
-        if (!_removes.TryGetValue(entity, out var list))
+        if (!_removes.TryGetValue(entity, out var set))
         {
-            list = Pool<HashSet<ComponentID>>.Get();
-            list.Clear();
+            set = Pool<OrderedListSet<ComponentID>>.Get();
+            set.Clear();
 
-            _removes.Add(entity, list);
+            _removes.Add(entity, set);
         }
 
         // Add a remover to the list
         var id = ComponentID<T>.ID;
-        list.Add(id);
+        set.Add(id);
 
         // Add this entity to the modified set. If it was already there it's possible that
         // there were some _sets_ for this component. Remove them.
@@ -288,7 +290,7 @@ public sealed class CommandBuffer(World World)
     public sealed class Resolver
         : IDisposable
     {
-        internal Dictionary<uint, Entity> Lookup { get; } = [];
+        internal SortedList<uint, Entity> Lookup { get; } = [];
         internal CommandBuffer? Parent { get; private set; }
         private uint _version;
 
@@ -304,6 +306,8 @@ public sealed class CommandBuffer(World World)
             ObjectDisposedException.ThrowIf(Parent == null, typeof(Resolver));
             Parent = null;
             Lookup.Clear();
+
+            Pool<Resolver>.Return(this);
         }
 
         public Entity Resolve(BufferedEntity bufferedEntity)

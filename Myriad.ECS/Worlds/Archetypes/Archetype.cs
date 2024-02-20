@@ -1,4 +1,4 @@
-﻿using System.Collections.Frozen;
+﻿using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Registry;
 using Myriad.ECS.Worlds.Chunks;
@@ -17,9 +17,24 @@ public sealed partial class Archetype
     /// </summary>
     private const int CHUNK_HOT_SPARES = 4;
 
+    /// <summary>
+    /// The world which this archetype belongs to
+    /// </summary>
     public World World { get; }
 
-    public FrozenSet<ComponentID> Components { get; }
+    /// <summary>
+    /// The components of entities in this archetype
+    /// </summary>
+    private readonly OrderedListSet<ComponentID> _components;
+
+    /// <summary>
+    /// The components of entities in this archetype
+    /// </summary>
+    public IReadOnlySet<ComponentID> Components => _components;
+
+    /// <summary>
+    /// The hash of all components IDs in this archetype
+    /// </summary>
     internal ArchetypeHash Hash { get; }
 
     /// <summary>
@@ -47,10 +62,10 @@ public sealed partial class Archetype
 
     public int EntityCount { get; private set; }
 
-    public Archetype(World world, FrozenSet<ComponentID> components)
+    internal Archetype(World world, OrderedListSet<ComponentID> components)
     {
         World = world;
-        Components = components;
+        _components = components;
 
         // Create arrays to fills in below
         _componentTypes = new Type[components.Count];
@@ -87,22 +102,19 @@ public sealed partial class Archetype
     /// <returns></returns>
     internal Row AddEntity(Entity entity, ref EntityInfo info)
     {
+        // Increase archetype entity count
+        EntityCount++;
+
         // Iterate over all candidate chunks, searching for one with space for an entity.
         // Remove any from the list that turn out not to have space
         for (var i = _chunksWithSpace.Count - 1; i >= 0; i--)
         {
             var chunk = _chunksWithSpace[i];
 
-            // Try to add this entity to the chunk
-            var row = _chunksWithSpace[i].TryAddEntity(entity, ref info);
-
-            // Remove this chunk if it is full
-            if (row == null || chunk.EntityCount == CHUNK_SIZE)
+            if (chunk.EntityCount >= CHUNK_SIZE)
                 _chunksWithSpace.RemoveAt(i);
-
-            // Return the row if one was assigned
-            if (row != null)
-                return row.Value;
+            else
+                return _chunksWithSpace[i].AddEntity(entity, ref info);
         }
 
         // No space in any chunks, create a new chunk
@@ -110,11 +122,8 @@ public sealed partial class Archetype
         _chunks.Add(newChunk);
         _chunksWithSpace.Add(newChunk);
 
-        // Increase archetype entity count
-        EntityCount++;
-
         // The chunk obviously has space, so this cannot fail!
-        return newChunk.TryAddEntity(entity, ref info)!.Value;
+        return newChunk.AddEntity(entity, ref info);
     }
 
     internal void RemoveEntity(EntityInfo info)
@@ -164,4 +173,9 @@ public sealed partial class Archetype
     }
 
     internal IReadOnlyList<Chunk> Chunks => _chunks;
+
+    internal bool SetEquals(OrderedListSet<ComponentID> query)
+    {
+        return _components.SetEquals(query);
+    }
 }

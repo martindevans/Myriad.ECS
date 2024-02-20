@@ -1,4 +1,4 @@
-﻿namespace Myriad.ParallelTasks.Locks;
+﻿namespace Myriad.ECS.Locks;
 
 public class RWLock<T>(T value)
     where T : class

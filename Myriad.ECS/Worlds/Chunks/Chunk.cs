@@ -80,10 +80,10 @@ public sealed class Chunk
     }
 
     #region add/remove entity
-    internal Row? TryAddEntity(Entity entity, ref EntityInfo info)
+    internal Row AddEntity(Entity entity, ref EntityInfo info)
     {
         if (EntityCount == _entities.Length)
-            return null;
+            throw new InvalidOperationException("Cannot add entity to full chunk");
 
         // Use the next free slot
         var index = EntityCount++;

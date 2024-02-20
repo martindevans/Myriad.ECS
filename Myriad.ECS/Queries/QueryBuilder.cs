@@ -3,6 +3,7 @@ using Myriad.ECS.Registry;
 using System.Runtime.CompilerServices;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
+using Myriad.ECS.Collections;
 
 namespace Myriad.ECS.Queries;
 
@@ -184,14 +185,14 @@ public sealed class QueryBuilder
 
         private readonly HashSet<TID> _items = [];
 
-        private FrozenSet<TID>? _frozenCache;
+        private FrozenOrderedListSet<TID>? _frozenCache;
 
-        public FrozenSet<TID> ToFrozenSet()
+        public FrozenOrderedListSet<TID> ToFrozenSet()
         {
             if (_frozenCache != null)
                 return _frozenCache;
 
-            _frozenCache = _items.ToFrozenSet();
+            _frozenCache = new FrozenOrderedListSet<TID>(_items);
             return _frozenCache;
         }
 

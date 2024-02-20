@@ -1,4 +1,4 @@
-﻿using System.Collections.Frozen;
+﻿using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Registry;
 using Myriad.ECS.Worlds.Archetypes;
@@ -7,7 +7,7 @@ namespace Myriad.ECS.Worlds;
 
 public sealed partial class WorldBuilder
 {
-    private readonly List<FrozenSet<ComponentID>> _archetypes = [ ];
+    private readonly List<OrderedListSet<ComponentID>> _archetypes = [ ];
 
     private bool AddArchetype(IReadOnlySet<ComponentID> ids)
     {
@@ -15,7 +15,7 @@ public sealed partial class WorldBuilder
             if (archetype.SetEquals(ids))
                 return false;
 
-        _archetypes.Add(ids.ToFrozenSet());
+        _archetypes.Add(new OrderedListSet<ComponentID>(ids));
         return true;
     }
 
@@ -31,7 +31,7 @@ public sealed partial class WorldBuilder
             if (!set.Add(ComponentRegistry.Get(type)))
                 throw new ArgumentException($"Duplicate component type: {type.Name}");
 
-        AddArchetype(set.ToFrozenSet());
+        AddArchetype(set);
 
         return this;
     }

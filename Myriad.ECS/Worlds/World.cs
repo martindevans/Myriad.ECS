@@ -1,5 +1,4 @@
-﻿using System.Collections.Frozen;
-using Myriad.ECS.Collections;
+﻿using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds.Archetypes;
@@ -8,7 +7,8 @@ namespace Myriad.ECS.Worlds;
 
 public sealed partial class World
 {
-    private readonly List<Archetype> _archetypes = [ ];
+    private readonly List<Archetype> _archetypes = [];
+    private readonly Dictionary<ArchetypeHash, List<Archetype>> _archetypesByHash = [ ];
 
     // Keep track of dead entities so their ID can be re-used
     private readonly List<Entity> _deadEntities = [ ];
@@ -57,10 +57,10 @@ public sealed partial class World
     /// Get the current version for a given entity ID
     /// </summary>
     /// <param name="entityId"></param>
-    /// <returns></returns>
+    /// <returns>The entity ID, or zero if the entity does not exist</returns>
     internal uint GetVersion(int entityId)
     {
-        if (entityId < 0 || entityId >= _entities.TotalCapacity)
+        if (entityId <= 0 || entityId >= _entities.TotalCapacity)
             return 0;
         return _entities[entityId].Version;
     }
@@ -71,33 +71,37 @@ public sealed partial class World
     /// <param name="components"></param>
     /// <param name="hash"></param>
     /// <returns></returns>
-    internal Archetype GetOrCreateArchetype(IReadOnlySet<ComponentID> components, ArchetypeHash hash)
+    internal Archetype GetOrCreateArchetype(OrderedListSet<ComponentID> components, ArchetypeHash hash)
     {
-        // Check all archetypes
-        foreach (var archetype in _archetypes)
+        // Get all archetypes with this hash
+        if (_archetypesByHash.TryGetValue(hash, out var candidates))
         {
-            // Fast approximate check (false positives possible, false negatives not)
-            if (archetype.Hash != hash)
-                continue;
-
-            // Full/slow check
-            if (archetype.Components.SetEquals(components))
-                return archetype;
+            // Check if any of the candidates are the one we need
+            foreach (var archetype in candidates)
+                if (archetype.SetEquals(components))
+                    return archetype;
+        }
+        else
+        {
+            // Create a new list, we're about to add an archetype to it
+            candidates = [ ];
+            _archetypesByHash.Add(hash, candidates);
         }
 
-        // No luck, create a new archetype
-        var a = new Archetype(this, components.ToFrozenSet());
+        // Create the new archetype
+        var a = new Archetype(this, new OrderedListSet<ComponentID>(components));
+
+        // Add it to the relevant lists
         _archetypes.Add(a);
+        candidates.Add(a);
+
         return a;
     }
 
-    private Archetype GetOrCreateArchetype<TSet>(TSet components)
-        where TSet : IReadOnlySet<ComponentID>
+    private Archetype GetOrCreateArchetype(OrderedListSet<ComponentID> components)
     {
         // Build archetype hash to accelerate querying
-        var hash = new ArchetypeHash();
-        foreach (var component in components)
-            hash = hash.Toggle(component);
+        var hash = ArchetypeHash.Create(components);
 
         return GetOrCreateArchetype(components, hash);
     }
@@ -108,8 +112,7 @@ public sealed partial class World
         return info.Chunk.Archetype.MigrateTo(entity, ref info, to);
     }
 
-    internal (Entity entity, Row slot) CreateEntity<TSet>(TSet components)
-        where TSet : IReadOnlySet<ComponentID>
+    internal (Entity entity, Row slot) CreateEntity(OrderedListSet<ComponentID> components)
     {
         // Find an ID to use for this new entity
         ref var entityInfo = ref AllocateEntity(out var entity);
@@ -166,6 +169,19 @@ public sealed partial class World
     {
         return action.Execute(query, this);
     }
+
+    /// <summary>
+    /// Execute a query
+    /// </summary>
+    /// <typeparam name="TQ"></typeparam>
+    /// <param name="query"></param>
+    /// <param name="action"></param>
+    /// <returns></returns>
+    public int ExecuteParallel<TQ>(QueryDescription query, TQ action)
+        where TQ : IQuery
+    {
+        return action.ExecuteParallel(query, this);
+    }
     #endregion
 
 
@@ -188,7 +204,7 @@ public sealed partial class World
         return GetComponentSet(entity).Contains(ComponentID<T>.ID);
     }
 
-    public FrozenSet<ComponentID> GetComponentSet(Entity entity)
+    private IReadOnlySet<ComponentID> GetComponentSet(Entity entity)
     {
         if (!entity.IsAlive(this))
             throw new ArgumentException("entity is not alive", nameof(entity));

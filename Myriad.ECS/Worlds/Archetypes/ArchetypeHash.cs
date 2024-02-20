@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.IDs;
+﻿using Myriad.ECS.Collections;
+using Myriad.ECS.IDs;
 
 namespace Myriad.ECS.Worlds.Archetypes;
 
@@ -16,14 +17,22 @@ internal readonly record struct ArchetypeHash
     /// <param name="component"></param>
     public ArchetypeHash Toggle(ComponentID component)
     {
+        return new ArchetypeHash
+        {
+            Value = Toggle(Value, component),
+        };
+    }
+
+    private static long Toggle(long value, ComponentID component)
+    {
         unchecked
         {
             // Add a (non prime) value then multiply component by a large prime.
             // This should spread the bits around through the hash space.
-            var v = ((long)component.Value + 79528) * 337_190_719_854_678_689;
+            var v = ((long)component.Value + 79_528) * 337_190_719_854_678_689;
 
             // xor this value to add it to the set
-            return new ArchetypeHash { Value = Value ^ v };
+            return value ^ v;
         }
     }
 
@@ -33,11 +42,20 @@ internal readonly record struct ArchetypeHash
     }
 
     public static ArchetypeHash Create<T>(T componentIds)
-        where T : IEnumerable<ComponentID>
+        where T : class, IEnumerable<ComponentID>
     {
         var h = new ArchetypeHash();
         foreach (var componentId in componentIds)
             h = h.Toggle(componentId);
         return h;
+    }
+
+    internal static ArchetypeHash Create(OrderedListSet<ComponentID> componentIds)
+    {
+        long l = 0;
+        foreach (var componentId in componentIds)
+            l = Toggle(l, componentId);
+
+        return new ArchetypeHash { Value = l };
     }
 }

@@ -6,15 +6,6 @@
 
 namespace Myriad.ECS.Queries;
 
-public interface IQuery
-{
-	public static abstract QueryBuilder QueryBuilder { get; }
-
-	public int Execute(QueryDescription query, World world);
-
-	public int ExecuteParallel(QueryDescription query, World world);
-}
-
 public interface IChunkQueryR<T0>
     : IQuery
     where T0 : IComponent
