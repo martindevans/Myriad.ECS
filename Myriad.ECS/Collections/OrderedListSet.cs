@@ -26,7 +26,7 @@ public class OrderedListSet<TItem>
 
     public OrderedListSet(OrderedListSet<TItem> items)
     {
-        _items = items._items.ToList();
+        _items = [..items._items];
     }
     #endregion
 

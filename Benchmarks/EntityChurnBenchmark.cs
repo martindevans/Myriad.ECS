@@ -11,7 +11,6 @@ public class EntityChurnBenchmark
 {
     private World _world = null!;
     private CommandBuffer _buffer = null!;
-    private readonly Random _rng = new(46576);
     private readonly List<CommandBuffer.BufferedEntity> _buffered = [ ];
 
     [GlobalSetup]

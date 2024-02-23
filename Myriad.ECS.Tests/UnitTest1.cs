@@ -54,7 +54,7 @@ public class UnitTest1
 public readonly partial struct MultiplyAdd(float factor)
     : IQueryWR<ComponentFloat, ComponentInt32>
 {
-    public void Execute(Entity e, ref ComponentFloat f, in ComponentInt32 i)
+    public void Execute(Entity e, ref ComponentFloat f, ref readonly ComponentInt32 i)
     {
         f.Value += i.Value * factor;
     }

@@ -1,5 +1,7 @@
-﻿using Myriad.ECS.Collections;
+﻿using System.Runtime.InteropServices;
+using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
+using Standart.Hash.xxHash;
 
 namespace Myriad.ECS.Worlds.Archetypes;
 
@@ -25,13 +27,13 @@ internal readonly record struct ArchetypeHash
 
     private static long Toggle(long value, ComponentID component)
     {
-        unchecked
+        unsafe
         {
-            // Add a (non prime) value then multiply component by a large prime.
-            // This should spread the bits around through the hash space.
-            var v = ((long)component.Value + 79_528) * 337_190_719_854_678_689;
+            // Hash compoent value to smear bits across 64 bit hash space
+            var cv = component.Value;
+            var v = unchecked((long)xxHash64.ComputeHash(new Span<byte>(&cv, 4), 4));
 
-            // xor this value to add it to the set
+            // xor this value to tiggle it in the set
             return value ^ v;
         }
     }

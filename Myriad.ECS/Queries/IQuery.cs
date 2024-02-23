@@ -8,8 +8,6 @@ namespace Myriad.ECS.Queries;
 
 public interface IQuery
 {
-	public static abstract QueryBuilder QueryBuilder { get; }
-
 	public int Execute(QueryDescription query, World world);
 
 	public int ExecuteParallel(QueryDescription query, World world);
@@ -19,7 +17,7 @@ public interface IQueryR<T0>
     : IQuery
     where T0 : IComponent
 {
-	void Execute(Entity e, in T0 t0);
+	void Execute(Entity e, ref readonly T0 t0);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -46,7 +44,7 @@ public interface IQueryR<T0>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i]);
+                    Execute(entities[i], ref t0[i]);
             }
         }
 
@@ -77,7 +75,7 @@ public interface IQueryR<T0>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i]);
+                    Execute(entities[i], ref t0[i]);
             });
         }
 
@@ -90,7 +88,7 @@ public interface IQueryRR<T0, T1>
     where T0 : IComponent
     where T1 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1);
+	void Execute(Entity e, ref readonly T0 t0, ref readonly T1 t1);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -118,7 +116,7 @@ public interface IQueryRR<T0, T1>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i]);
             }
         }
 
@@ -150,7 +148,7 @@ public interface IQueryRR<T0, T1>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i]);
             });
         }
 
@@ -164,7 +162,7 @@ public interface IQueryRRR<T0, T1, T2>
     where T1 : IComponent
     where T2 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2);
+	void Execute(Entity e, ref readonly T0 t0, ref readonly T1 t1, ref readonly T2 t2);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -193,7 +191,7 @@ public interface IQueryRRR<T0, T1, T2>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
             }
         }
 
@@ -226,7 +224,7 @@ public interface IQueryRRR<T0, T1, T2>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
             });
         }
 
@@ -241,7 +239,7 @@ public interface IQueryRRRR<T0, T1, T2, T3>
     where T2 : IComponent
     where T3 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3);
+	void Execute(Entity e, ref readonly T0 t0, ref readonly T1 t1, ref readonly T2 t2, ref readonly T3 t3);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -271,7 +269,7 @@ public interface IQueryRRRR<T0, T1, T2, T3>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
             }
         }
 
@@ -305,7 +303,7 @@ public interface IQueryRRRR<T0, T1, T2, T3>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
             });
         }
 
@@ -321,7 +319,7 @@ public interface IQueryRRRRR<T0, T1, T2, T3, T4>
     where T3 : IComponent
     where T4 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4);
+	void Execute(Entity e, ref readonly T0 t0, ref readonly T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -352,7 +350,7 @@ public interface IQueryRRRRR<T0, T1, T2, T3, T4>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
             }
         }
 
@@ -387,7 +385,7 @@ public interface IQueryRRRRR<T0, T1, T2, T3, T4>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
             });
         }
 
@@ -404,7 +402,7 @@ public interface IQueryRRRRRR<T0, T1, T2, T3, T4, T5>
     where T4 : IComponent
     where T5 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5);
+	void Execute(Entity e, ref readonly T0 t0, ref readonly T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -436,7 +434,7 @@ public interface IQueryRRRRRR<T0, T1, T2, T3, T4, T5>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
             }
         }
 
@@ -472,7 +470,7 @@ public interface IQueryRRRRRR<T0, T1, T2, T3, T4, T5>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
             });
         }
 
@@ -490,7 +488,7 @@ public interface IQueryRRRRRRR<T0, T1, T2, T3, T4, T5, T6>
     where T5 : IComponent
     where T6 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6);
+	void Execute(Entity e, ref readonly T0 t0, ref readonly T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -523,7 +521,7 @@ public interface IQueryRRRRRRR<T0, T1, T2, T3, T4, T5, T6>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
             }
         }
 
@@ -560,7 +558,7 @@ public interface IQueryRRRRRRR<T0, T1, T2, T3, T4, T5, T6>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
             });
         }
 
@@ -579,7 +577,7 @@ public interface IQueryRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7);
+	void Execute(Entity e, ref readonly T0 t0, ref readonly T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -613,7 +611,7 @@ public interface IQueryRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             }
         }
 
@@ -651,7 +649,7 @@ public interface IQueryRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             });
         }
 
@@ -671,7 +669,7 @@ public interface IQueryRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, in T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
+	void Execute(Entity e, ref readonly T0 t0, ref readonly T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -706,7 +704,7 @@ public interface IQueryRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             }
         }
 
@@ -745,7 +743,7 @@ public interface IQueryRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], in t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             });
         }
 
@@ -828,7 +826,7 @@ public interface IQueryWR<T0, T1>
     where T0 : IComponent
     where T1 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1);
+	void Execute(Entity e, ref T0 t0, ref readonly T1 t1);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -856,7 +854,7 @@ public interface IQueryWR<T0, T1>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i]);
             }
         }
 
@@ -888,7 +886,7 @@ public interface IQueryWR<T0, T1>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i]);
             });
         }
 
@@ -902,7 +900,7 @@ public interface IQueryWRR<T0, T1, T2>
     where T1 : IComponent
     where T2 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2);
+	void Execute(Entity e, ref T0 t0, ref readonly T1 t1, ref readonly T2 t2);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -931,7 +929,7 @@ public interface IQueryWRR<T0, T1, T2>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
             }
         }
 
@@ -964,7 +962,7 @@ public interface IQueryWRR<T0, T1, T2>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
             });
         }
 
@@ -979,7 +977,7 @@ public interface IQueryWRRR<T0, T1, T2, T3>
     where T2 : IComponent
     where T3 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3);
+	void Execute(Entity e, ref T0 t0, ref readonly T1 t1, ref readonly T2 t2, ref readonly T3 t3);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1009,7 +1007,7 @@ public interface IQueryWRRR<T0, T1, T2, T3>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
             }
         }
 
@@ -1043,7 +1041,7 @@ public interface IQueryWRRR<T0, T1, T2, T3>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
             });
         }
 
@@ -1059,7 +1057,7 @@ public interface IQueryWRRRR<T0, T1, T2, T3, T4>
     where T3 : IComponent
     where T4 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4);
+	void Execute(Entity e, ref T0 t0, ref readonly T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1090,7 +1088,7 @@ public interface IQueryWRRRR<T0, T1, T2, T3, T4>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
             }
         }
 
@@ -1125,7 +1123,7 @@ public interface IQueryWRRRR<T0, T1, T2, T3, T4>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
             });
         }
 
@@ -1142,7 +1140,7 @@ public interface IQueryWRRRRR<T0, T1, T2, T3, T4, T5>
     where T4 : IComponent
     where T5 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5);
+	void Execute(Entity e, ref T0 t0, ref readonly T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1174,7 +1172,7 @@ public interface IQueryWRRRRR<T0, T1, T2, T3, T4, T5>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
             }
         }
 
@@ -1210,7 +1208,7 @@ public interface IQueryWRRRRR<T0, T1, T2, T3, T4, T5>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
             });
         }
 
@@ -1228,7 +1226,7 @@ public interface IQueryWRRRRRR<T0, T1, T2, T3, T4, T5, T6>
     where T5 : IComponent
     where T6 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6);
+	void Execute(Entity e, ref T0 t0, ref readonly T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1261,7 +1259,7 @@ public interface IQueryWRRRRRR<T0, T1, T2, T3, T4, T5, T6>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
             }
         }
 
@@ -1298,7 +1296,7 @@ public interface IQueryWRRRRRR<T0, T1, T2, T3, T4, T5, T6>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
             });
         }
 
@@ -1317,7 +1315,7 @@ public interface IQueryWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7);
+	void Execute(Entity e, ref T0 t0, ref readonly T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1351,7 +1349,7 @@ public interface IQueryWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             }
         }
 
@@ -1389,7 +1387,7 @@ public interface IQueryWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             });
         }
 
@@ -1409,7 +1407,7 @@ public interface IQueryWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
+	void Execute(Entity e, ref T0 t0, ref readonly T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1444,7 +1442,7 @@ public interface IQueryWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             }
         }
 
@@ -1483,7 +1481,7 @@ public interface IQueryWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             });
         }
 
@@ -1504,7 +1502,7 @@ public interface IQueryWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, in T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
+	void Execute(Entity e, ref T0 t0, ref readonly T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1540,7 +1538,7 @@ public interface IQueryWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             }
         }
 
@@ -1580,7 +1578,7 @@ public interface IQueryWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], in t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             });
         }
 
@@ -1667,7 +1665,7 @@ public interface IQueryWWR<T0, T1, T2>
     where T1 : IComponent
     where T2 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref readonly T2 t2);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1696,7 +1694,7 @@ public interface IQueryWWR<T0, T1, T2>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
             }
         }
 
@@ -1729,7 +1727,7 @@ public interface IQueryWWR<T0, T1, T2>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
             });
         }
 
@@ -1744,7 +1742,7 @@ public interface IQueryWWRR<T0, T1, T2, T3>
     where T2 : IComponent
     where T3 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref readonly T2 t2, ref readonly T3 t3);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1774,7 +1772,7 @@ public interface IQueryWWRR<T0, T1, T2, T3>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
             }
         }
 
@@ -1808,7 +1806,7 @@ public interface IQueryWWRR<T0, T1, T2, T3>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
             });
         }
 
@@ -1824,7 +1822,7 @@ public interface IQueryWWRRR<T0, T1, T2, T3, T4>
     where T3 : IComponent
     where T4 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1855,7 +1853,7 @@ public interface IQueryWWRRR<T0, T1, T2, T3, T4>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
             }
         }
 
@@ -1890,7 +1888,7 @@ public interface IQueryWWRRR<T0, T1, T2, T3, T4>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
             });
         }
 
@@ -1907,7 +1905,7 @@ public interface IQueryWWRRRR<T0, T1, T2, T3, T4, T5>
     where T4 : IComponent
     where T5 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -1939,7 +1937,7 @@ public interface IQueryWWRRRR<T0, T1, T2, T3, T4, T5>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
             }
         }
 
@@ -1975,7 +1973,7 @@ public interface IQueryWWRRRR<T0, T1, T2, T3, T4, T5>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
             });
         }
 
@@ -1993,7 +1991,7 @@ public interface IQueryWWRRRRR<T0, T1, T2, T3, T4, T5, T6>
     where T5 : IComponent
     where T6 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2026,7 +2024,7 @@ public interface IQueryWWRRRRR<T0, T1, T2, T3, T4, T5, T6>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
             }
         }
 
@@ -2063,7 +2061,7 @@ public interface IQueryWWRRRRR<T0, T1, T2, T3, T4, T5, T6>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
             });
         }
 
@@ -2082,7 +2080,7 @@ public interface IQueryWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2116,7 +2114,7 @@ public interface IQueryWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             }
         }
 
@@ -2154,7 +2152,7 @@ public interface IQueryWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             });
         }
 
@@ -2174,7 +2172,7 @@ public interface IQueryWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2209,7 +2207,7 @@ public interface IQueryWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             }
         }
 
@@ -2248,7 +2246,7 @@ public interface IQueryWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             });
         }
 
@@ -2269,7 +2267,7 @@ public interface IQueryWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2305,7 +2303,7 @@ public interface IQueryWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             }
         }
 
@@ -2345,7 +2343,7 @@ public interface IQueryWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             });
         }
 
@@ -2367,7 +2365,7 @@ public interface IQueryWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, in T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref readonly T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2404,7 +2402,7 @@ public interface IQueryWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             }
         }
 
@@ -2445,7 +2443,7 @@ public interface IQueryWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], in t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             });
         }
 
@@ -2536,7 +2534,7 @@ public interface IQueryWWWR<T0, T1, T2, T3>
     where T2 : IComponent
     where T3 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref readonly T3 t3);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2566,7 +2564,7 @@ public interface IQueryWWWR<T0, T1, T2, T3>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
             }
         }
 
@@ -2600,7 +2598,7 @@ public interface IQueryWWWR<T0, T1, T2, T3>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
             });
         }
 
@@ -2616,7 +2614,7 @@ public interface IQueryWWWRR<T0, T1, T2, T3, T4>
     where T3 : IComponent
     where T4 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref readonly T3 t3, ref readonly T4 t4);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2647,7 +2645,7 @@ public interface IQueryWWWRR<T0, T1, T2, T3, T4>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
             }
         }
 
@@ -2682,7 +2680,7 @@ public interface IQueryWWWRR<T0, T1, T2, T3, T4>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
             });
         }
 
@@ -2699,7 +2697,7 @@ public interface IQueryWWWRRR<T0, T1, T2, T3, T4, T5>
     where T4 : IComponent
     where T5 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2731,7 +2729,7 @@ public interface IQueryWWWRRR<T0, T1, T2, T3, T4, T5>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
             }
         }
 
@@ -2767,7 +2765,7 @@ public interface IQueryWWWRRR<T0, T1, T2, T3, T4, T5>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
             });
         }
 
@@ -2785,7 +2783,7 @@ public interface IQueryWWWRRRR<T0, T1, T2, T3, T4, T5, T6>
     where T5 : IComponent
     where T6 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2818,7 +2816,7 @@ public interface IQueryWWWRRRR<T0, T1, T2, T3, T4, T5, T6>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
             }
         }
 
@@ -2855,7 +2853,7 @@ public interface IQueryWWWRRRR<T0, T1, T2, T3, T4, T5, T6>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
             });
         }
 
@@ -2874,7 +2872,7 @@ public interface IQueryWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -2908,7 +2906,7 @@ public interface IQueryWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             }
         }
 
@@ -2946,7 +2944,7 @@ public interface IQueryWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             });
         }
 
@@ -2966,7 +2964,7 @@ public interface IQueryWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3001,7 +2999,7 @@ public interface IQueryWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             }
         }
 
@@ -3040,7 +3038,7 @@ public interface IQueryWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             });
         }
 
@@ -3061,7 +3059,7 @@ public interface IQueryWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3097,7 +3095,7 @@ public interface IQueryWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             }
         }
 
@@ -3137,7 +3135,7 @@ public interface IQueryWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             });
         }
 
@@ -3159,7 +3157,7 @@ public interface IQueryWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3196,7 +3194,7 @@ public interface IQueryWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             }
         }
 
@@ -3237,7 +3235,7 @@ public interface IQueryWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             });
         }
 
@@ -3260,7 +3258,7 @@ public interface IQueryWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     where T10 : IComponent
     where T11 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, in T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref readonly T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3298,7 +3296,7 @@ public interface IQueryWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
             }
         }
 
@@ -3340,7 +3338,7 @@ public interface IQueryWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], in t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
             });
         }
 
@@ -3435,7 +3433,7 @@ public interface IQueryWWWWR<T0, T1, T2, T3, T4>
     where T3 : IComponent
     where T4 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref readonly T4 t4);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3466,7 +3464,7 @@ public interface IQueryWWWWR<T0, T1, T2, T3, T4>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
             }
         }
 
@@ -3501,7 +3499,7 @@ public interface IQueryWWWWR<T0, T1, T2, T3, T4>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
             });
         }
 
@@ -3518,7 +3516,7 @@ public interface IQueryWWWWRR<T0, T1, T2, T3, T4, T5>
     where T4 : IComponent
     where T5 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref readonly T4 t4, ref readonly T5 t5);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3550,7 +3548,7 @@ public interface IQueryWWWWRR<T0, T1, T2, T3, T4, T5>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
             }
         }
 
@@ -3586,7 +3584,7 @@ public interface IQueryWWWWRR<T0, T1, T2, T3, T4, T5>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
             });
         }
 
@@ -3604,7 +3602,7 @@ public interface IQueryWWWWRRR<T0, T1, T2, T3, T4, T5, T6>
     where T5 : IComponent
     where T6 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3637,7 +3635,7 @@ public interface IQueryWWWWRRR<T0, T1, T2, T3, T4, T5, T6>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
             }
         }
 
@@ -3674,7 +3672,7 @@ public interface IQueryWWWWRRR<T0, T1, T2, T3, T4, T5, T6>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
             });
         }
 
@@ -3693,7 +3691,7 @@ public interface IQueryWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3727,7 +3725,7 @@ public interface IQueryWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             }
         }
 
@@ -3765,7 +3763,7 @@ public interface IQueryWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             });
         }
 
@@ -3785,7 +3783,7 @@ public interface IQueryWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3820,7 +3818,7 @@ public interface IQueryWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             }
         }
 
@@ -3859,7 +3857,7 @@ public interface IQueryWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             });
         }
 
@@ -3880,7 +3878,7 @@ public interface IQueryWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -3916,7 +3914,7 @@ public interface IQueryWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             }
         }
 
@@ -3956,7 +3954,7 @@ public interface IQueryWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             });
         }
 
@@ -3978,7 +3976,7 @@ public interface IQueryWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4015,7 +4013,7 @@ public interface IQueryWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             }
         }
 
@@ -4056,7 +4054,7 @@ public interface IQueryWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             });
         }
 
@@ -4079,7 +4077,7 @@ public interface IQueryWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     where T10 : IComponent
     where T11 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4117,7 +4115,7 @@ public interface IQueryWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
             }
         }
 
@@ -4159,7 +4157,7 @@ public interface IQueryWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
             });
         }
 
@@ -4183,7 +4181,7 @@ public interface IQueryWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     where T11 : IComponent
     where T12 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, in T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref readonly T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4222,7 +4220,7 @@ public interface IQueryWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
             }
         }
 
@@ -4265,7 +4263,7 @@ public interface IQueryWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], in t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
             });
         }
 
@@ -4364,7 +4362,7 @@ public interface IQueryWWWWWR<T0, T1, T2, T3, T4, T5>
     where T4 : IComponent
     where T5 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref readonly T5 t5);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4396,7 +4394,7 @@ public interface IQueryWWWWWR<T0, T1, T2, T3, T4, T5>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
             }
         }
 
@@ -4432,7 +4430,7 @@ public interface IQueryWWWWWR<T0, T1, T2, T3, T4, T5>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
             });
         }
 
@@ -4450,7 +4448,7 @@ public interface IQueryWWWWWRR<T0, T1, T2, T3, T4, T5, T6>
     where T5 : IComponent
     where T6 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref readonly T5 t5, ref readonly T6 t6);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4483,7 +4481,7 @@ public interface IQueryWWWWWRR<T0, T1, T2, T3, T4, T5, T6>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
             }
         }
 
@@ -4520,7 +4518,7 @@ public interface IQueryWWWWWRR<T0, T1, T2, T3, T4, T5, T6>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
             });
         }
 
@@ -4539,7 +4537,7 @@ public interface IQueryWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4573,7 +4571,7 @@ public interface IQueryWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             }
         }
 
@@ -4611,7 +4609,7 @@ public interface IQueryWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             });
         }
 
@@ -4631,7 +4629,7 @@ public interface IQueryWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4666,7 +4664,7 @@ public interface IQueryWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             }
         }
 
@@ -4705,7 +4703,7 @@ public interface IQueryWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             });
         }
 
@@ -4726,7 +4724,7 @@ public interface IQueryWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4762,7 +4760,7 @@ public interface IQueryWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             }
         }
 
@@ -4802,7 +4800,7 @@ public interface IQueryWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             });
         }
 
@@ -4824,7 +4822,7 @@ public interface IQueryWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4861,7 +4859,7 @@ public interface IQueryWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             }
         }
 
@@ -4902,7 +4900,7 @@ public interface IQueryWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             });
         }
 
@@ -4925,7 +4923,7 @@ public interface IQueryWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     where T10 : IComponent
     where T11 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -4963,7 +4961,7 @@ public interface IQueryWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
             }
         }
 
@@ -5005,7 +5003,7 @@ public interface IQueryWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
             });
         }
 
@@ -5029,7 +5027,7 @@ public interface IQueryWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     where T11 : IComponent
     where T12 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5068,7 +5066,7 @@ public interface IQueryWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
             }
         }
 
@@ -5111,7 +5109,7 @@ public interface IQueryWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
             });
         }
 
@@ -5136,7 +5134,7 @@ public interface IQueryWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
     where T12 : IComponent
     where T13 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, in T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref readonly T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12, ref readonly T13 t13);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5176,7 +5174,7 @@ public interface IQueryWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i]);
             }
         }
 
@@ -5220,7 +5218,7 @@ public interface IQueryWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], in t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i]);
             });
         }
 
@@ -5323,7 +5321,7 @@ public interface IQueryWWWWWWR<T0, T1, T2, T3, T4, T5, T6>
     where T5 : IComponent
     where T6 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref readonly T6 t6);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5356,7 +5354,7 @@ public interface IQueryWWWWWWR<T0, T1, T2, T3, T4, T5, T6>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
             }
         }
 
@@ -5393,7 +5391,7 @@ public interface IQueryWWWWWWR<T0, T1, T2, T3, T4, T5, T6>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
             });
         }
 
@@ -5412,7 +5410,7 @@ public interface IQueryWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref readonly T6 t6, ref readonly T7 t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5446,7 +5444,7 @@ public interface IQueryWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             }
         }
 
@@ -5484,7 +5482,7 @@ public interface IQueryWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             });
         }
 
@@ -5504,7 +5502,7 @@ public interface IQueryWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5539,7 +5537,7 @@ public interface IQueryWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             }
         }
 
@@ -5578,7 +5576,7 @@ public interface IQueryWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             });
         }
 
@@ -5599,7 +5597,7 @@ public interface IQueryWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5635,7 +5633,7 @@ public interface IQueryWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             }
         }
 
@@ -5675,7 +5673,7 @@ public interface IQueryWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             });
         }
 
@@ -5697,7 +5695,7 @@ public interface IQueryWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5734,7 +5732,7 @@ public interface IQueryWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             }
         }
 
@@ -5775,7 +5773,7 @@ public interface IQueryWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             });
         }
 
@@ -5798,7 +5796,7 @@ public interface IQueryWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     where T10 : IComponent
     where T11 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5836,7 +5834,7 @@ public interface IQueryWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
             }
         }
 
@@ -5878,7 +5876,7 @@ public interface IQueryWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
             });
         }
 
@@ -5902,7 +5900,7 @@ public interface IQueryWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     where T11 : IComponent
     where T12 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -5941,7 +5939,7 @@ public interface IQueryWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
             }
         }
 
@@ -5984,7 +5982,7 @@ public interface IQueryWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
             });
         }
 
@@ -6009,7 +6007,7 @@ public interface IQueryWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
     where T12 : IComponent
     where T13 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12, ref readonly T13 t13);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6049,7 +6047,7 @@ public interface IQueryWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i]);
             }
         }
 
@@ -6093,7 +6091,7 @@ public interface IQueryWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i]);
             });
         }
 
@@ -6119,7 +6117,7 @@ public interface IQueryWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
     where T13 : IComponent
     where T14 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, in T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref readonly T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12, ref readonly T13 t13, ref readonly T14 t14);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6160,7 +6158,7 @@ public interface IQueryWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i]);
             }
         }
 
@@ -6205,7 +6203,7 @@ public interface IQueryWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], in t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i]);
             });
         }
 
@@ -6312,7 +6310,7 @@ public interface IQueryWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7>
     where T6 : IComponent
     where T7 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref readonly T7 t7);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6346,7 +6344,7 @@ public interface IQueryWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             }
         }
 
@@ -6384,7 +6382,7 @@ public interface IQueryWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
             });
         }
 
@@ -6404,7 +6402,7 @@ public interface IQueryWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref readonly T7 t7, ref readonly T8 t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6439,7 +6437,7 @@ public interface IQueryWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             }
         }
 
@@ -6478,7 +6476,7 @@ public interface IQueryWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             });
         }
 
@@ -6499,7 +6497,7 @@ public interface IQueryWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6535,7 +6533,7 @@ public interface IQueryWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             }
         }
 
@@ -6575,7 +6573,7 @@ public interface IQueryWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             });
         }
 
@@ -6597,7 +6595,7 @@ public interface IQueryWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6634,7 +6632,7 @@ public interface IQueryWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             }
         }
 
@@ -6675,7 +6673,7 @@ public interface IQueryWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             });
         }
 
@@ -6698,7 +6696,7 @@ public interface IQueryWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     where T10 : IComponent
     where T11 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6736,7 +6734,7 @@ public interface IQueryWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
             }
         }
 
@@ -6778,7 +6776,7 @@ public interface IQueryWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
             });
         }
 
@@ -6802,7 +6800,7 @@ public interface IQueryWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     where T11 : IComponent
     where T12 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6841,7 +6839,7 @@ public interface IQueryWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
             }
         }
 
@@ -6884,7 +6882,7 @@ public interface IQueryWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
             });
         }
 
@@ -6909,7 +6907,7 @@ public interface IQueryWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
     where T12 : IComponent
     where T13 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12, ref readonly T13 t13);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -6949,7 +6947,7 @@ public interface IQueryWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i]);
             }
         }
 
@@ -6993,7 +6991,7 @@ public interface IQueryWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i]);
             });
         }
 
@@ -7019,7 +7017,7 @@ public interface IQueryWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
     where T13 : IComponent
     where T14 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12, ref readonly T13 t13, ref readonly T14 t14);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7060,7 +7058,7 @@ public interface IQueryWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i]);
             }
         }
 
@@ -7105,7 +7103,7 @@ public interface IQueryWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i]);
             });
         }
 
@@ -7132,7 +7130,7 @@ public interface IQueryWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
     where T14 : IComponent
     where T15 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, in T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref readonly T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12, ref readonly T13 t13, ref readonly T14 t14, ref readonly T15 t15);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7174,7 +7172,7 @@ public interface IQueryWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i]);
             }
         }
 
@@ -7220,7 +7218,7 @@ public interface IQueryWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], in t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i]);
             });
         }
 
@@ -7331,7 +7329,7 @@ public interface IQueryWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     where T7 : IComponent
     where T8 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref readonly T8 t8);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7366,7 +7364,7 @@ public interface IQueryWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             }
         }
 
@@ -7405,7 +7403,7 @@ public interface IQueryWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
             });
         }
 
@@ -7426,7 +7424,7 @@ public interface IQueryWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref readonly T8 t8, ref readonly T9 t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7462,7 +7460,7 @@ public interface IQueryWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             }
         }
 
@@ -7502,7 +7500,7 @@ public interface IQueryWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             });
         }
 
@@ -7524,7 +7522,7 @@ public interface IQueryWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7561,7 +7559,7 @@ public interface IQueryWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             }
         }
 
@@ -7602,7 +7600,7 @@ public interface IQueryWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             });
         }
 
@@ -7625,7 +7623,7 @@ public interface IQueryWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     where T10 : IComponent
     where T11 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7663,7 +7661,7 @@ public interface IQueryWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
             }
         }
 
@@ -7705,7 +7703,7 @@ public interface IQueryWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
             });
         }
 
@@ -7729,7 +7727,7 @@ public interface IQueryWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     where T11 : IComponent
     where T12 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7768,7 +7766,7 @@ public interface IQueryWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
             }
         }
 
@@ -7811,7 +7809,7 @@ public interface IQueryWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
             });
         }
 
@@ -7836,7 +7834,7 @@ public interface IQueryWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
     where T12 : IComponent
     where T13 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12, ref readonly T13 t13);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7876,7 +7874,7 @@ public interface IQueryWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i]);
             }
         }
 
@@ -7920,7 +7918,7 @@ public interface IQueryWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i]);
             });
         }
 
@@ -7946,7 +7944,7 @@ public interface IQueryWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
     where T13 : IComponent
     where T14 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12, ref readonly T13 t13, ref readonly T14 t14);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -7987,7 +7985,7 @@ public interface IQueryWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i]);
             }
         }
 
@@ -8032,7 +8030,7 @@ public interface IQueryWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i]);
             });
         }
 
@@ -8059,7 +8057,7 @@ public interface IQueryWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
     where T14 : IComponent
     where T15 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12, ref readonly T13 t13, ref readonly T14 t14, ref readonly T15 t15);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8101,7 +8099,7 @@ public interface IQueryWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i]);
             }
         }
 
@@ -8147,7 +8145,7 @@ public interface IQueryWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i]);
             });
         }
 
@@ -8175,7 +8173,7 @@ public interface IQueryWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
     where T15 : IComponent
     where T16 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, in T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15, in T16 t16);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref readonly T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12, ref readonly T13 t13, ref readonly T14 t14, ref readonly T15 t15, ref readonly T16 t16);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8218,7 +8216,7 @@ public interface IQueryWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i], in t16[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i], ref t16[i]);
             }
         }
 
@@ -8265,7 +8263,7 @@ public interface IQueryWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], in t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i], in t16[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i], ref t16[i]);
             });
         }
 
@@ -8380,7 +8378,7 @@ public interface IQueryWWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     where T8 : IComponent
     where T9 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref readonly T9 t9);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8416,7 +8414,7 @@ public interface IQueryWWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             }
         }
 
@@ -8456,7 +8454,7 @@ public interface IQueryWWWWWWWWWR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
             });
         }
 
@@ -8478,7 +8476,7 @@ public interface IQueryWWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     where T9 : IComponent
     where T10 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref readonly T9 t9, ref readonly T10 t10);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8515,7 +8513,7 @@ public interface IQueryWWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             }
         }
 
@@ -8556,7 +8554,7 @@ public interface IQueryWWWWWWWWWRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
             });
         }
 
@@ -8579,7 +8577,7 @@ public interface IQueryWWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     where T10 : IComponent
     where T11 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8617,7 +8615,7 @@ public interface IQueryWWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
             }
         }
 
@@ -8659,7 +8657,7 @@ public interface IQueryWWWWWWWWWRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
             });
         }
 
@@ -8683,7 +8681,7 @@ public interface IQueryWWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     where T11 : IComponent
     where T12 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8722,7 +8720,7 @@ public interface IQueryWWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
             }
         }
 
@@ -8765,7 +8763,7 @@ public interface IQueryWWWWWWWWWRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
             });
         }
 
@@ -8790,7 +8788,7 @@ public interface IQueryWWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
     where T12 : IComponent
     where T13 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12, ref readonly T13 t13);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8830,7 +8828,7 @@ public interface IQueryWWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i]);
             }
         }
 
@@ -8874,7 +8872,7 @@ public interface IQueryWWWWWWWWWRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i]);
             });
         }
 
@@ -8900,7 +8898,7 @@ public interface IQueryWWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
     where T13 : IComponent
     where T14 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12, ref readonly T13 t13, ref readonly T14 t14);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -8941,7 +8939,7 @@ public interface IQueryWWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i]);
             }
         }
 
@@ -8986,7 +8984,7 @@ public interface IQueryWWWWWWWWWRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i]);
             });
         }
 
@@ -9013,7 +9011,7 @@ public interface IQueryWWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
     where T14 : IComponent
     where T15 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12, ref readonly T13 t13, ref readonly T14 t14, ref readonly T15 t15);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -9055,7 +9053,7 @@ public interface IQueryWWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i]);
             }
         }
 
@@ -9101,7 +9099,7 @@ public interface IQueryWWWWWWWWWRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i]);
             });
         }
 
@@ -9129,7 +9127,7 @@ public interface IQueryWWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
     where T15 : IComponent
     where T16 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15, in T16 t16);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12, ref readonly T13 t13, ref readonly T14 t14, ref readonly T15 t15, ref readonly T16 t16);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -9172,7 +9170,7 @@ public interface IQueryWWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i], in t16[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i], ref t16[i]);
             }
         }
 
@@ -9219,7 +9217,7 @@ public interface IQueryWWWWWWWWWRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9,
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i], in t16[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i], ref t16[i]);
             });
         }
 
@@ -9248,7 +9246,7 @@ public interface IQueryWWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9
     where T16 : IComponent
     where T17 : IComponent
 {
-	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, in T9 t9, in T10 t10, in T11 t11, in T12 t12, in T13 t13, in T14 t14, in T15 t15, in T16 t16, in T17 t17);
+	void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref readonly T9 t9, ref readonly T10 t10, ref readonly T11 t11, ref readonly T12 t12, ref readonly T13 t13, ref readonly T14 t14, ref readonly T15 t15, ref readonly T16 t16, ref readonly T17 t17);
 
     int IQuery.Execute(QueryDescription query, World world)
     {
@@ -9292,7 +9290,7 @@ public interface IQueryWWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9
                 count += entities.Length;
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i], in t16[i], in t17[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i], ref t16[i], ref t17[i]);
             }
         }
 
@@ -9340,7 +9338,7 @@ public interface IQueryWWWWWWWWWRRRRRRRRR<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9
                 Interlocked.Add(ref count, entities.Length);
 
 				for (var i = entities.Length - 1; i >= 0; i--)
-                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], in t9[i], in t10[i], in t11[i], in t12[i], in t13[i], in t14[i], in t15[i], in t16[i], in t17[i]);
+                    Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i], ref t16[i], ref t17[i]);
             });
         }
 

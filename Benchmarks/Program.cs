@@ -1,9 +1,9 @@
 ﻿using BenchmarkDotNet.Running;
 using Benchmarks;
 
-//var summary = BenchmarkRunner.Run<EntityChurnBenchmark>();
+//var summary = BenchmarkRunner.Run<QueryBenchmark>();
+//return;
 
-
-var b = new EntityChurnBenchmark();
+var b = new QueryBenchmark();
 b.Setup();
-b.Churn();
+b.Query();
