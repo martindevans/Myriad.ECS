@@ -3,7 +3,7 @@
 namespace Myriad.ECS.Collections;
 
 /// <summary>
-/// A set built out of an ordered list. This allowed allocation free numeration of the set.
+/// A set built out of an ordered list. This allows allocation free enumeration of the set.
 /// </summary>
 /// <typeparam name="TItem"></typeparam>
 public class OrderedListSet<TItem>
@@ -18,6 +18,7 @@ public class OrderedListSet<TItem>
     {
     }
 
+    // ReSharper disable once ParameterTypeCanBeEnumerable.Local (Justification: the fact this is a set is important, it means there are definitely no duplicates)
     public OrderedListSet(IReadOnlySet<TItem> items)
     {
         _items.AddRange(items);
@@ -30,6 +31,7 @@ public class OrderedListSet<TItem>
     }
     #endregion
 
+    #region mutate
     public bool Add(TItem item)
     {
         var index = _items.BinarySearch(item);
@@ -69,6 +71,7 @@ public class OrderedListSet<TItem>
     {
         _items.Clear();
     }
+    #endregion
 
     #region GetEnumerator
     public List<TItem>.Enumerator GetEnumerator()
@@ -78,19 +81,20 @@ public class OrderedListSet<TItem>
 
     IEnumerator<TItem> IEnumerable<TItem>.GetEnumerator()
     {
+        // ReSharper disable once HeapView.BoxingAllocation
         return _items.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
+        // ReSharper disable once HeapView.BoxingAllocation
         return GetEnumerator();
     }
     #endregion
 
     public bool Contains(TItem item)
     {
-        var index = _items.BinarySearch(item);
-        return index >= 0;
+        return _items.BinarySearch(item) >= 0;
     }
 
     public bool IsProperSubsetOf(IEnumerable<TItem> other)
@@ -108,16 +112,40 @@ public class OrderedListSet<TItem>
         throw new NotImplementedException();
     }
 
+    #region IsSupersetOf
     public bool IsSupersetOf(IEnumerable<TItem> other)
     {
+        if (other.TryGetNonEnumeratedCount(out var otherCount) && otherCount > Count)
+            return false;
+
         foreach (var item in other)
             if (_items.BinarySearch(item) < 0)
                 return false;
+
         return true;
     }
 
+    public bool IsSupersetOf(OrderedListSet<TItem> other)
+    {
+        if (other.Count > Count)
+            return false;
+
+        foreach (var item in other._items)
+            if (_items.BinarySearch(item) < 0)
+                return false;
+
+        return true;
+    }
+    #endregion
+
+    #region Overlaps
     public bool Overlaps(IEnumerable<TItem> other)
     {
+        if (Count == 0)
+            return false;
+        if (other.TryGetNonEnumeratedCount(out var count) && count == 0)
+            return false;
+
         foreach (var item in other)
             if (Contains(item))
                 return true;
@@ -125,20 +153,31 @@ public class OrderedListSet<TItem>
         return false;
     }
 
-    public bool Overlaps<TList>(TList other)
-        where TList : IEnumerable<TItem>
+    public bool Overlaps(OrderedListSet<TItem> other)
     {
-        foreach (var item in other)
+        if (Count == 0)
+            return false;
+        if (other.Count == 0)
+            return false;
+
+        foreach (var item in other._items)
             if (Contains(item))
                 return true;
 
         return false;
     }
+    #endregion
 
+    #region SetEquals
     public bool SetEquals(IEnumerable<TItem> other)
     {
+        // Try to get the count, if possible. This allows a possible early exit without any work.
+        if (other.TryGetNonEnumeratedCount(out var count))
+            if (Count != count)
+                return false;
+
         // Ensure every item in other is in set
-        var count = 0;
+        count = 0;
         foreach (var item in other)
         {
             count++;
@@ -164,4 +203,5 @@ public class OrderedListSet<TItem>
 
         return true;
     }
+    #endregion
 }

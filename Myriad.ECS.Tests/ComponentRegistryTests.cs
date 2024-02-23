@@ -43,4 +43,15 @@ public class ComponentRegistryTests
 
         Assert.AreEqual(id, id2);
     }
+
+    [TestMethod]
+    public void ThrowsForUnknownId()
+    {
+        ComponentRegistry.Register(Assembly.GetExecutingAssembly());
+
+        Assert.ThrowsException<InvalidOperationException>(() =>
+        {
+            ComponentRegistry.Get(default(ComponentID));
+        });
+    }
 }

@@ -43,15 +43,6 @@ internal readonly record struct ArchetypeHash
         return $"0x{Value:X16}";
     }
 
-    public static ArchetypeHash Create<T>(T componentIds)
-        where T : class, IEnumerable<ComponentID>
-    {
-        var h = new ArchetypeHash();
-        foreach (var componentId in componentIds)
-            h = h.Toggle(componentId);
-        return h;
-    }
-
     internal static ArchetypeHash Create(OrderedListSet<ComponentID> componentIds)
     {
         long l = 0;

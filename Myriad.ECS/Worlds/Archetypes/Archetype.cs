@@ -25,12 +25,7 @@ public sealed partial class Archetype
     /// <summary>
     /// The components of entities in this archetype
     /// </summary>
-    private readonly OrderedListSet<ComponentID> _components;
-
-    /// <summary>
-    /// The components of entities in this archetype
-    /// </summary>
-    public IReadOnlySet<ComponentID> Components => _components;
+    public FrozenOrderedListSet<ComponentID> Components { get; }
 
     /// <summary>
     /// The hash of all components IDs in this archetype
@@ -62,10 +57,10 @@ public sealed partial class Archetype
 
     public int EntityCount { get; private set; }
 
-    internal Archetype(World world, OrderedListSet<ComponentID> components)
+    internal Archetype(World world, FrozenOrderedListSet<ComponentID> components)
     {
         World = world;
-        _components = components;
+        Components = components;
 
         // Create arrays to fills in below
         _componentTypes = new Type[components.Count];
@@ -176,6 +171,6 @@ public sealed partial class Archetype
 
     internal bool SetEquals(OrderedListSet<ComponentID> query)
     {
-        return _components.SetEquals(query);
+        return Components.SetEquals(query);
     }
 }

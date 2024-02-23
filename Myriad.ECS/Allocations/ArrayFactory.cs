@@ -14,13 +14,10 @@ internal static class ArrayFactory
     [UsedImplicitly]
     public static void Prepare<T>()
     {
-        if (_factories == null)
-            _factories = [];
+        _factories ??= [ ];
 
-        if (_factories.ContainsKey(typeof(T)))
-            return;
-
-        _factories.Add(typeof(T), Create<T>);
+        if (!_factories.ContainsKey(typeof(T)))
+            _factories.Add(typeof(T), Create<T>);
     }
 
     /// <summary>

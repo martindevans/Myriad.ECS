@@ -4,13 +4,20 @@ namespace Myriad.ECS.Extensions;
 
 internal static class SortedListExtensions
 {
+    /// <summary>
+    /// Get an enumerable struct wrapper around a SortedList
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
+    /// <param name="list"></param>
+    /// <returns></returns>
     public static SortedListEnumerable<TKey, TValue> Enumerable<TKey, TValue>(this SortedList<TKey, TValue> list)
         where TKey : notnull
     {
         return new SortedListEnumerable<TKey, TValue>(list);
     }
 
-    public static KeyValueEnumerator<TKey, TValue> Enumerate<TKey, TValue>(this SortedList<TKey, TValue> list)
+    private static KeyValueEnumerator<TKey, TValue> Enumerate<TKey, TValue>(this SortedList<TKey, TValue> list)
         where TKey : notnull
     {
         return new KeyValueEnumerator<TKey, TValue>(list);
@@ -44,9 +51,10 @@ internal static class SortedListExtensions
 
         public readonly (TKey, TValue) Current => (list.GetKeyAtIndex(_index), list.GetValueAtIndex(_index));
 
-        object IEnumerator.Current => Current;
+        // ReSharper disable once HeapView.BoxingAllocation
+        readonly object IEnumerator.Current => Current;
 
-        public void Dispose()
+        public readonly void Dispose()
         {
         }
     }

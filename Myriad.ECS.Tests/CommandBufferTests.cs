@@ -277,6 +277,41 @@ public class CommandBufferTests
     }
 
     [TestMethod]
+    public void DeleteEntities()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        var buffered = new[]
+        {
+            buffer.Create().Set(new ComponentFloat(1)),
+            buffer.Create().Set(new ComponentFloat(2)),
+            buffer.Create().Set(new ComponentFloat(3))
+        };
+
+        using var resolver = buffer.Playback();
+
+        var entities = new[]
+        {
+            resolver.Resolve(buffered[0]),
+            resolver.Resolve(buffered[1]),
+            resolver.Resolve(buffered[2])
+        };
+
+        foreach (var entity in entities)
+            Assert.IsTrue(entity.IsAlive(world));
+
+        buffer.Delete([entities[0], entities[1]]);
+        buffer.Playback();
+
+        Assert.IsFalse(entities[0].IsAlive(world));
+        Assert.IsFalse(entities[1].IsAlive(world));
+        Assert.IsTrue(entities[2].IsAlive(world));
+
+        Assert.AreEqual(3, world.GetComponentRef<ComponentFloat>(entities[2]).Value);
+    }
+
+    [TestMethod]
     public void RemoveFromEntity()
     {
         var world = new WorldBuilder().Build();

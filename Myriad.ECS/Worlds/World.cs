@@ -89,7 +89,7 @@ public sealed partial class World
         }
 
         // Create the new archetype
-        var a = new Archetype(this, new OrderedListSet<ComponentID>(components));
+        var a = new Archetype(this, new FrozenOrderedListSet<ComponentID>(components));
 
         // Add it to the relevant lists
         _archetypes.Add(a);
@@ -204,7 +204,7 @@ public sealed partial class World
         return GetComponentSet(entity).Contains(ComponentID<T>.ID);
     }
 
-    private IReadOnlySet<ComponentID> GetComponentSet(Entity entity)
+    private FrozenOrderedListSet<ComponentID> GetComponentSet(Entity entity)
     {
         if (!entity.IsAlive(this))
             throw new ArgumentException("entity is not alive", nameof(entity));
