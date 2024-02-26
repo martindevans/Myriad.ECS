@@ -134,4 +134,139 @@ public class OrderedListSetTests
             yield return 2;
         }
     }
+
+    [TestMethod]
+    public void IsSuperset()
+    {
+        var a = new OrderedListSet<int> { 1, 2, 3 };
+        var b = new OrderedListSet<int> { 2, 3 };
+
+        Assert.IsTrue(a.IsSupersetOf(b));
+        Assert.IsFalse(b.IsSupersetOf(a));
+    }
+
+    [TestMethod]
+    public void IsSuperset_EnumerableTrue()
+    {
+        var a = new OrderedListSet<int> { 1, 2, 3 };
+        var b = Items();
+
+        Assert.IsTrue(a.IsSupersetOf(b));
+
+        static IEnumerable<int> Items()
+        {
+            yield return 1;
+            yield return 2;
+        }
+    }
+
+    [TestMethod]
+    public void IsSuperset_EnumerableFalse()
+    {
+        var a = new OrderedListSet<int> { 1, 2, 3 };
+        var b = Items();
+
+        Assert.IsFalse(a.IsSupersetOf(b));
+
+        static IEnumerable<int> Items()
+        {
+            yield return 1;
+            yield return 2;
+            yield return 3;
+            yield return 4;
+        }
+    }
+
+    [TestMethod]
+    public void IsSuperset_ArrayFalse()
+    {
+        var a = new OrderedListSet<int> { 1, 2, 3 };
+        var b = new[] { 1, 2, 3, 4 };
+
+        Assert.IsFalse(a.IsSupersetOf(b));
+    }
+
+    [TestMethod]
+    public void Overlaps_True()
+    {
+        var a = new OrderedListSet<int> { 1, 2, 3 };
+        var b = new OrderedListSet<int> { 2, 3 };
+
+        Assert.IsTrue(a.Overlaps(b));
+        Assert.IsTrue(b.Overlaps(a));
+    }
+
+    [TestMethod]
+    public void Overlaps_True_Enumerable()
+    {
+        var a = new OrderedListSet<int> { 1, 2, 3 };
+        var b = Items();
+
+        Assert.IsTrue(a.Overlaps(b));
+
+        static IEnumerable<int> Items()
+        {
+            yield return 2;
+            yield return 3;
+        }
+    }
+
+    [TestMethod]
+    public void Overlaps_False()
+    {
+        var a = new OrderedListSet<int> { 1, 2, 3 };
+        var b = new OrderedListSet<int> { 4, 5 };
+
+        Assert.IsFalse(a.Overlaps(b));
+        Assert.IsFalse(b.Overlaps(a));
+    }
+
+    [TestMethod]
+    public void Overlaps_False_Enumerable()
+    {
+        var a = new OrderedListSet<int> { 1, 2, 3 };
+        var b = Items();
+
+        Assert.IsFalse(a.Overlaps(b));
+
+        static IEnumerable<int> Items()
+        {
+            yield return 4;
+            yield return 5;
+        }
+    }
+
+    [TestMethod]
+    public void Overlaps_False_Empty()
+    {
+        var a = new OrderedListSet<int> { 1, 2, 3 };
+        var b = new OrderedListSet<int> { };
+
+        Assert.IsFalse(a.Overlaps(b));
+        Assert.IsFalse(b.Overlaps(a));
+    }
+
+    [TestMethod]
+    public void Overlaps_False_Empty_Array()
+    {
+        var a = new OrderedListSet<int> { 1, 2, 3 };
+        var b = Array.Empty<int>();
+
+        Assert.IsFalse(a.Overlaps(b));
+    }
+
+    [TestMethod]
+    public void Overlaps_False_EmptySet()
+    {
+        var a = new OrderedListSet<int>();
+        var b = Items();
+
+        Assert.IsFalse(a.Overlaps(b));
+
+        static IEnumerable<int> Items()
+        {
+            yield return 1;
+            yield return 2;
+        }
+    }
 }

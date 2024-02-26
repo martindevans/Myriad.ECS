@@ -5,7 +5,7 @@ using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Worlds.Chunks;
 
-public sealed class Chunk
+internal sealed class Chunk
 {
     /// <summary>
     /// The archetype which contains this chunk

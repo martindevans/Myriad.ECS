@@ -67,6 +67,18 @@ public class QueryBenchmark
         _world.Execute(_query, new ChunkQueryAction());
     }
 
+    [Benchmark]
+    public void ParallelQuery()
+    {
+        _world.ExecuteParallel(_query, new QueryAction());
+    }
+
+    [Benchmark]
+    public void ParallelChunkQuery()
+    {
+        _world.ExecuteParallel(_query, new ChunkQueryAction());
+    }
+
     private struct QueryAction
         : IQueryWR<Position, Velocity>
     {
