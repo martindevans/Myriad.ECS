@@ -5,6 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Myriad.ECS</Title>
+    <Authors>Martin Evans</Authors>
   </PropertyGroup>
 
   <ItemGroup>
