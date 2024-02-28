@@ -64,8 +64,13 @@ internal sealed class Chunk
     internal Span<T> GetSpan<T>()
         where T : IComponent
     {
-        var component = ComponentID<T>.ID;
-        var componentArray = _components[_componentIndexLookup[component.Value]];
+        return GetSpan<T>(ComponentID<T>.ID);
+    }
+
+    internal Span<T> GetSpan<T>(ComponentID id)
+        where T : IComponent
+    {
+        var componentArray = _components[_componentIndexLookup[id.Value]];
         var typedArray = Unsafe.As<T[]>(componentArray);
         return typedArray.AsSpan(0, EntityCount);
     }

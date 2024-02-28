@@ -7,113 +7,147 @@
 <#
 	const int PARAM_COUNT = 9;
 #>
-using Myriad.ECS.Worlds;
+using Myriad.ECS.Queries;
+using Myriad.ECS.IDs;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
 // ReSharper disable LoopCanBeConvertedToQuery
+#pragma warning disable CA1822 // Mark members as static
 
-namespace Myriad.ECS.Queries;
-
-<# for (var i = 0; i <= PARAM_COUNT; i++)
+<# for (var i = 1; i <= PARAM_COUNT; i++)
 {
-	for (var j = 0; j <= PARAM_COUNT; j++)
+	var sumij = i;
+#>
+namespace Myriad.ECS.Queries
+{
+	public interface <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+		where <#= Constraints(sumij, 8) #>
 	{
-		if (i + j == 0)
-			continue;
-		var sumij = i + j;
-#>
-public interface <#= Name(i, j) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
-    : IQuery
-    where <#= Constraints(sumij) #>
-{
-	void Execute(ReadOnlySpan<Entity> e, <#= Refs(0, i, j > 0) #><#= Ins(i, j) #>);
-
-    int IQuery.Execute(QueryDescription query, World world)
-    {
-		var archetypes = query.GetArchetypes();
-
-		var count = 0;
-        for (var a = 0; a < archetypes.Count; a++)
-        {
-			var archetype = archetypes[a].Archetype;
-            if (archetype.EntityCount == 0)
-                continue;
-
-			var chunks = archetype.Chunks;
-            for (var c = chunks.Count - 1; c >= 0; c--)
-            {
-				var chunk = chunks[c];
-
-                var entities = chunk.Entities;
-				if (entities.Length == 0)
-				    continue;
-
-                count += entities.Length;
-
-<# for (var k = 0; k < sumij; k++)
-{
-#>
-                var t<#= k #> = chunk.GetSpan<T<#= k #>>();
-<#
-}
-#>
-
-                Execute(entities, <#= CallParameters(sumij, i, j) #>);
-            }
-        }
-
-		return count;
-    }
-
-	int IQuery.ExecuteParallel(QueryDescription query, World world)
-    {
-		var archetypes = query.GetArchetypes();
-
-		var count = 0;
-        for (var a = 0; a < archetypes.Count; a++)
-        {
-			var archetype = archetypes[a].Archetype;
-            if (archetype.EntityCount == 0)
-                continue;
-
-			Parallel.For(0, archetype.Chunks.Count, c =>
-            {
-				var chunk = archetype.Chunks[c];
-
-                var entities = chunk.Entities;
-				if (entities.Length == 0)
-				    return;
-
-                Interlocked.Add(ref count, entities.Length);
-
-<# for (var k = 0; k < sumij; k++)
-{
-#>
-                var t<#= k #> = chunk.GetSpan<T<#= k #>>();
-<#
-}
-#>
-
-                Execute(entities, <#= CallParameters(sumij, i, j) #>);
-            });
-        }
-
-		return count;
-    }
-}
-
-<#
+		public void Execute(ReadOnlySpan<Entity> e, <#= Refs(0, i) #>);
 	}
+}
+
+namespace Myriad.ECS.Worlds
+{
+	public partial class World
+	{
+		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
+			TQ q,
+			QueryDescription query
+		)
+			where <#= Constraints(sumij, 12) #>
+			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+		{
+			var archetypes = query.GetArchetypes();
+			if (archetypes.Count == 0)
+				return 0;
+
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+		    var c<#= k #> = ComponentID<T<#= k #>>.ID;
+<#
+}
+#>
+
+			var count = 0;
+			foreach (var archetypeMatch in archetypes)
+			{
+			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
+
+				var chunks = archetype.Chunks;
+				for (var c = chunks.Count - 1; c >= 0; c--)
+				{
+					var chunk = chunks[c];
+
+					var entities = chunk.Entities;
+					if (entities.Length == 0)
+						continue;
+
+					count += entities.Length;
+
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+					var t<#= k #> = chunk.GetSpan<T<#= k #>>(c<#= k #>);
+<#
+}
+#>
+
+					q.Execute(entities, <#= CallParameters(sumij) #>);
+				}
+			}
+
+			return count;
+		}
+
+		public int ExecuteChunkParallel<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
+			TQ q,
+			QueryDescription query
+		)
+			where <#= Constraints(sumij, 12) #>
+			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+		{
+			var archetypes = query.GetArchetypes();
+			if (archetypes.Count == 0)
+				return 0;
+
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+		    var c<#= k #> = ComponentID<T<#= k #>>.ID;
+<#
+}
+#>
+
+			var count = 0;
+			foreach (var archetypeMatch in archetypes)
+			{
+				var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
+
+				Parallel.For(0, archetype.Chunks.Count, c =>
+				{
+					var chunk = archetype.Chunks[c];
+
+					var entities = chunk.Entities;
+					if (entities.Length == 0)
+						return;
+
+					Interlocked.Add(ref count, entities.Length);
+
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+					var t<#= k #> = chunk.GetSpan<T<#= k #>>(c<#= k #>);
+<#
+}
+#>
+
+					q.Execute(entities, <#= CallParameters(sumij) #>);
+				});
+			}
+
+			return count;
+		}
+	}
+}
+
+<#
 }
 #>
 
 
 <#+ 
-	static string Constraints(int count)
+	static string Constraints(int count, int spaces = 4)
     {
+        var prefix = new string(' ', spaces);
         var str = string.Join(
-			"\r\n    where ",
+			$"\r\n{prefix}where ",
 			Enumerable.Range(0, count).Select(x => $"T{x} : IComponent")
 		);
 
@@ -125,33 +159,22 @@ public interface <#= Name(i, j) #><<#= string.Join(", ", Enumerable.Range(0, sum
 		return index < mutable ? "ref" : "in";
 	}
 
-	static string Name(int mutable, int @readonly)
+	static string Name(int mutable)
 	{
-		return "IChunkQuery" + new string('W', mutable) + new string('R', @readonly);
+		return "IChunkQuery" + mutable;
 	}
 
-	static string Refs(int start, int count, bool comma)
+	static string Refs(int start, int count)
 	{
 		var str = string.Join(
 			", ",
 			Enumerable.Range(start, count).Select(x => $"Span<T{x}> t{x}")
 		);
 
-		if (count > 0 && comma)
-			str += ", ";
-
 		return str;
 	}
 
-	static string Ins(int start, int count)
-	{
-		return string.Join(
-			", ",
-			Enumerable.Range(start, count).Select(x => $"ReadOnlySpan<T{x}> t{x}")
-		);
-	}
-
-    static string CallParameters(int count, int mutable, int @readonly)
+    static string CallParameters(int count)
     {
         var str = string.Join(
             ", ",

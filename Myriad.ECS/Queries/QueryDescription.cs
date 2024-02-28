@@ -30,7 +30,7 @@ public sealed class QueryDescription(
     /// Get all archetypes which match this query
     /// </summary>
     /// <returns></returns>
-    public IReadOnlyList<ArchetypeMatch> GetArchetypes()
+    public FrozenOrderedListSet<ArchetypeMatch> GetArchetypes()
     {
         // If this query has never been evaluated before do it now
         if (_result == null)
@@ -42,7 +42,7 @@ public sealed class QueryDescription(
                     matches.Add(m);
 
             // Store result for next time
-            _result = new MatchResult(_world.Archetypes.Count, matches);
+            _result = new MatchResult(_world.Archetypes.Count, new FrozenOrderedListSet<ArchetypeMatch>(matches));
 
             // Return matches
             return _result.Value.Archetypes;
@@ -51,8 +51,8 @@ public sealed class QueryDescription(
         // If the number of archetypes has changed since last time regenerate the cache
         if (_result.Value.IsStale(_world))
         {
-            // Lazy copy of the list, in case there are no matches
-            var copy = (List<ArchetypeMatch>?)null;
+            // Lazy copy of the match set, in case there are no matches
+            var copy = (OrderedListSet<ArchetypeMatch>?)null;
 
             // Check every new archetype
             for (var i = _result.Value.ArchetypeWatermark; i < _world.Archetypes.Count; i++)
@@ -61,15 +61,23 @@ public sealed class QueryDescription(
                 if (m == null)
                     continue;
 
-                // Lazy copy the list now that we know we need it
-                copy ??= [.. _result.Value.Archetypes];
+                // Lazy copy the set now that we know we need it
+                copy ??= new OrderedListSet<ArchetypeMatch>(_result.Value.Archetypes);
 
                 // Add the match
                 copy.Add(m);
             }
 
-            // Store a new cache item with the updated watermark and a new list (if we found anything)
-            _result = new MatchResult(_world.Archetypes.Count, copy ?? _result.Value.Archetypes);
+            if (copy == null)
+            {
+                // Copy is null, that means nothing new was found, just use the old result with the new watermark
+                _result = new MatchResult(_world.Archetypes.Count, _result.Value.Archetypes);
+            }
+            else
+            {
+                // Create a new match result
+                _result = new MatchResult(_world.Archetypes.Count, new FrozenOrderedListSet<ArchetypeMatch>(copy));
+            }
         }
 
         return _result.Value.Archetypes;
@@ -125,16 +133,18 @@ public sealed class QueryDescription(
             set = null;
         }
 
-        return new ArchetypeMatch(archetype, set, exactlyOne);
+        var atLeastOne = set == null ? null : new FrozenOrderedListSet<ComponentID>(set);
+
+        return new ArchetypeMatch(archetype, atLeastOne, exactlyOne);
     }
     #endregion
 
-    private readonly struct MatchResult(int watermark, IReadOnlyList<ArchetypeMatch> archetypes)
+    private readonly struct MatchResult(int watermark, FrozenOrderedListSet<ArchetypeMatch> archetypes)
     {
         /// <summary>
         /// The archetypes matching this query
         /// </summary>
-        public IReadOnlyList<ArchetypeMatch> Archetypes { get; } = archetypes;
+        public FrozenOrderedListSet<ArchetypeMatch> Archetypes { get; } = archetypes;
 
         /// <summary>
         /// The number of archetypes in the world when this cache was created
@@ -153,5 +163,17 @@ public sealed class QueryDescription(
     /// <param name="Archetype">The archetype</param>
     /// <param name="AtLeastOne">All of the "at least one" components present (if there are any in this query)</param>
     /// <param name="ExactlyOne">The "exactly one" component present (if there is one in this query)</param>
-    public record ArchetypeMatch(Archetype Archetype, IReadOnlySet<ComponentID>? AtLeastOne, ComponentID? ExactlyOne);
+    public record ArchetypeMatch(Archetype Archetype, FrozenOrderedListSet<ComponentID>? AtLeastOne, ComponentID? ExactlyOne)
+        : IComparable<ArchetypeMatch>
+    {
+        public int CompareTo(ArchetypeMatch? other)
+        {
+            if (ReferenceEquals(this, other))
+                return 0;
+            if (other == null)
+                return 1;
+
+            return Archetype.Hash.CompareTo(other.Archetype.Hash);
+        }
+    }
 }

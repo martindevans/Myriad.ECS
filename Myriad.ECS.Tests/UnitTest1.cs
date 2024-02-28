@@ -43,7 +43,11 @@ public class UnitTest1
 
         // Run query
         var queryDesc = MultiplyAdd.QueryBuilder.Build(world);
-        var queryResult = world.Execute(queryDesc, new MultiplyAdd(4));
+        var queryResult = world.Execute<MultiplyAdd, ComponentFloat, ComponentInt32>(new MultiplyAdd(4), queryDesc);
+
+        // Query enumerable style
+        foreach (var values in world.Query<ComponentFloat, ComponentInt32>(queryDesc))
+            values.Item0.Value += values.Item1.Value * 4;
     }
 }
 
@@ -52,9 +56,9 @@ public class UnitTest1
 [ExactlyOneOf<ComponentFloat, ComponentInt16>]
 [AtLeastOneOf<ComponentFloat, ComponentInt16>]
 public readonly partial struct MultiplyAdd(float factor)
-    : IQueryWR<ComponentFloat, ComponentInt32>
+    : IQuery2<ComponentFloat, ComponentInt32>
 {
-    public void Execute(Entity e, ref ComponentFloat f, ref readonly ComponentInt32 i)
+    public void Execute(Entity e, ref ComponentFloat f, ref ComponentInt32 i)
     {
         f.Value += i.Value * factor;
     }

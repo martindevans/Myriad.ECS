@@ -8,3 +8,5 @@
 /Myriad.ECS.Tests/bin
 /Benchmarks/obj
 /Benchmarks/bin
+
+NBodyIntegrator

@@ -18,6 +18,12 @@ public class OrderedListSet<TItem>
     {
     }
 
+    // ReSharper disable once ParameterTypeCanBeEnumerable.Local
+    public OrderedListSet(List<TItem> items)
+    {
+        _items = [..items];
+    }
+
     // ReSharper disable once ParameterTypeCanBeEnumerable.Local (Justification: the fact this is a set is important, it means there are definitely no duplicates)
     public OrderedListSet(IReadOnlySet<TItem> items)
     {

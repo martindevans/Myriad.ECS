@@ -1,5 +1,4 @@
-﻿using System.Collections.Frozen;
-using Myriad.ECS.Collections;
+﻿using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Registry;

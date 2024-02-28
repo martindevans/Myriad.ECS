@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using Myriad.ECS.Collections;
+﻿using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Standart.Hash.xxHash;
 
@@ -10,6 +9,7 @@ namespace Myriad.ECS.Worlds.Archetypes;
 /// Components can be "toggled" to update the hash to a new value for an archetype with/without those components.
 /// </summary>
 internal readonly record struct ArchetypeHash
+    : IComparable<ArchetypeHash>
 {
     public long Value { get; private init; }
 
@@ -50,5 +50,10 @@ internal readonly record struct ArchetypeHash
             l = Toggle(l, componentId);
 
         return new ArchetypeHash { Value = l };
+    }
+
+    public int CompareTo(ArchetypeHash other)
+    {
+        return Value.CompareTo(other.Value);
     }
 }

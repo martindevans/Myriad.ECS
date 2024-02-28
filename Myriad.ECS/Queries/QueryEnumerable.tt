@@ -1,0 +1,291 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+	const int PARAM_COUNT = 9;
+#>
+using Myriad.ECS.Queries;
+using Myriad.ECS.IDs;
+using Myriad.ECS.Collections;
+using Myriad.ECS.Worlds.Chunks;
+
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedParameter.Global
+// ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable CheckNamespace
+// ReSharper disable ArrangeAccessorOwnerBody
+#pragma warning disable CA1822 // Mark members as static
+
+namespace Myriad.ECS.Worlds;
+
+public ref struct Ref<T>
+{
+	public ref T Item;
+
+	public static implicit operator ref T(Ref<T> input)
+	{
+		return ref input.Value;
+	}
+}
+
+<# for (var i = 1; i <= PARAM_COUNT; i++)
+{
+	var tparams = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
+	var refparams = string.Join(", ", Enumerable.Range(0, i).Select(x => "ref T" + x));
+
+	var refparamstup = refparams;
+	if (i > 1)
+	{
+		refparamstup = "RefTuple" + i + "<" + tparams + ">";
+	}
+#>	
+public partial class World
+{
+	public readonly ref struct RefTuple<#= i #><<#= tparams #>>
+	{
+		public readonly Entity Entity;
+
+<# for (var k = 0; k < i; k++)
+{
+#>
+	    public readonly ref T<#= k #> Item<#= k #>;
+<#
+}
+#>
+
+		internal RefTuple<#= i #>(Entity entity, <#= string.Join(", ", Enumerable.Range(0, i).Select(x => "ref T" + x + " item" + x)) #>)
+		{
+			Entity = entity;
+<# for (var k = 0; k < i; k++)
+{
+#>
+			Item<#= k #> = ref item<#= k #>;
+<#
+}
+#>
+		}
+
+		public void Deconstruct(out Entity entity, <#= string.Join(", ", Enumerable.Range(0, i).Select(x => "out Ref<T" + x + "> item" + x)) #>)
+		{
+			entity = Entity;
+<# for (var k = 0; k < i; k++)
+{
+#>
+			item<#= k #> = new Ref<T<#= k #>> { Item = ref Item<#= k #> };
+<#
+}
+#>
+		}
+	}
+
+	public readonly struct QueryResultEnumerable<#= i #><<#= tparams #>>
+		where <#= Constraints(i, 8) #>
+	{
+		private readonly QueryDescription _query;
+
+		internal QueryResultEnumerable<#= i #>(QueryDescription query)
+		{
+			_query = query;
+		}
+
+		public QueryResultEnumerator<#= i #><<#= tparams #>> GetEnumerator()
+		{
+			return new QueryResultEnumerator<#= i #><<#= tparams #>>(
+				_query.GetArchetypes()
+			);
+		}
+	}
+
+	public ref struct QueryResultEnumerator<#= i #><<#= tparams #>>
+		where <#= Constraints(i, 8) #>
+	{
+<# for (var k = 0; k < i; k++)
+{
+#>
+	    private static readonly ComponentID C<#= k #> = ComponentID<T<#= k #>>.ID;
+<#
+}
+#>
+		private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
+		private List<Chunk>.Enumerator _chunksEnumerator;
+		private int _entityIndex = -1;
+		private bool _initialized = false;
+
+		private ReadOnlySpan<Entity> SpanEntities = default;
+<# for (var k = 0; k < i; k++)
+{
+#>
+	    private Span<T<#= k #>> Span<#= k #> = default;
+<#
+}
+#>
+
+		internal QueryResultEnumerator<#= i #>(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
+		{
+			_archetypesEnumerator = archetypes.GetEnumerator();
+		}
+
+		public <#= refparamstup #> Current
+		{
+			get
+			{
+<# 
+if (i == 1)
+{
+#>
+				return ref Span0[_entityIndex];
+<#
+}
+else
+{
+#>
+				return new <#= refparamstup #>(
+					SpanEntities[_entityIndex],
+<#
+	for (var k = 0; k < i; k++)
+	{
+#>
+					ref Span<#= k #>[_entityIndex]<#= k < i - 1 ? "," : "" #>
+<#
+	}
+#>
+				);
+<#
+}
+#>			
+			}
+		}
+
+		private void GetChunkSpans()
+		{
+			var chunk = _chunksEnumerator.Current;
+
+			SpanEntities = chunk.Entities;
+<# for (var k = 0; k < i; k++)
+{
+#>
+			Span<#= k #> = chunk.GetSpan<<#= "T" + k #>>(C<#= k #>);
+<#
+}
+#>
+		}
+
+		private bool NextArchetype()
+		{
+			while (true)
+			{
+				// If there are no archetypes exit with false
+				if (!_archetypesEnumerator.MoveNext())
+					return false;
+
+				// Try to move to the next (first) chunk of this archetype. Might fail if there
+				// are no chunks in this archetype.
+				_chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
+				if (NextChunk())
+					break;
+			}
+
+			return true;
+		}
+
+		private bool NextChunk()
+		{
+			if (!_chunksEnumerator.MoveNext())
+				return false;
+
+			GetChunkSpans();
+			_entityIndex = 0;
+			return true;
+		}
+
+		public bool MoveNext()
+		{
+			_entityIndex++;
+			if (_entityIndex < SpanEntities.Length)
+				return true;
+
+			if (!_initialized)
+			{
+				_initialized = true;
+
+				if (!NextArchetype())
+					return false;
+				return true;
+			}
+
+			if (!NextChunk())
+				if (!NextArchetype())
+					return false;
+
+			return true;
+		}
+
+		// ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
+		public void Dispose()
+		{
+			_archetypesEnumerator.Dispose();
+			_chunksEnumerator.Dispose();
+		}
+	}
+
+	public QueryResultEnumerable<#= i #><<#= tparams #>> Query<<#= string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x)) #>>(QueryDescription query)
+		where <#= Constraints(i, 8) #>
+	{
+		return new QueryResultEnumerable<#= i #><<#= tparams #>>(
+			query
+		);
+	}
+}
+<#
+}
+#>
+
+
+<#+ 
+	static string Constraints(int count, int spaces = 4)
+    {
+		var prefix = new string(' ', spaces);
+        var str = string.Join(
+			$"\r\n{prefix}where ",
+			Enumerable.Range(0, count).Select(x => $"T{x} : IComponent")
+		);
+
+		return str;
+    }
+
+	static string Name(int mutable)
+	{
+		return "IQuery" + mutable;
+	}
+
+	static string Refs(int start, int count)
+	{
+		var str = string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"ref T{x} t{x}")
+		);
+
+		return str;
+	}
+
+	static string Ins(int start, int count)
+	{
+		return string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"ref readonly T{x} t{x}")
+		);
+	}
+
+    static string CallParameters(int count)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(0, count).Select(x => $"ref t{x}[i]")
+        );
+
+        return str;
+    }
+#>

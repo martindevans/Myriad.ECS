@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myriad.ECS.Tests", "Myriad.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myriad.ECS.SourceGeneration", "Myriad.ECS.SourceGeneration\Myriad.ECS.SourceGeneration.csproj", "{7F118CA9-2918-4199-96C8-FD49FC314A3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{680E8964-CA4A-4640-9A83-CCB38C32E028}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{680E8964-CA4A-4640-9A83-CCB38C32E028}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBodyIntegrator", "NBodyIntegrator\NBodyIntegrator.csproj", "{90BEC8BE-67A3-484D-9CFF-91D3199D48DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{680E8964-CA4A-4640-9A83-CCB38C32E028}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{680E8964-CA4A-4640-9A83-CCB38C32E028}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{680E8964-CA4A-4640-9A83-CCB38C32E028}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90BEC8BE-67A3-484D-9CFF-91D3199D48DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90BEC8BE-67A3-484D-9CFF-91D3199D48DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90BEC8BE-67A3-484D-9CFF-91D3199D48DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90BEC8BE-67A3-484D-9CFF-91D3199D48DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

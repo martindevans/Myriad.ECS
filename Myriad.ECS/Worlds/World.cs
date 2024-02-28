@@ -156,33 +156,33 @@ public sealed partial class World
         }
     }
 
-    #region query execution
-    /// <summary>
-    /// Execute a query
-    /// </summary>
-    /// <typeparam name="TQ"></typeparam>
-    /// <param name="query"></param>
-    /// <param name="action"></param>
-    /// <returns></returns>
-    public int Execute<TQ>(QueryDescription query, TQ action)
-        where TQ : IQuery
-    {
-        return action.Execute(query, this);
-    }
+    //#region query execution
+    ///// <summary>
+    ///// Execute a query
+    ///// </summary>
+    ///// <typeparam name="TQ"></typeparam>
+    ///// <param name="query"></param>
+    ///// <param name="action"></param>
+    ///// <returns></returns>
+    //public int Execute<TQ>(QueryDescription query, TQ action)
+    //    where TQ : IQuery
+    //{
+    //    return action.Execute(query, this);
+    //}
 
-    /// <summary>
-    /// Execute a query
-    /// </summary>
-    /// <typeparam name="TQ"></typeparam>
-    /// <param name="query"></param>
-    /// <param name="action"></param>
-    /// <returns></returns>
-    public int ExecuteParallel<TQ>(QueryDescription query, TQ action)
-        where TQ : IQuery
-    {
-        return action.ExecuteParallel(query, this);
-    }
-    #endregion
+    ///// <summary>
+    ///// Execute a query
+    ///// </summary>
+    ///// <typeparam name="TQ"></typeparam>
+    ///// <param name="query"></param>
+    ///// <param name="action"></param>
+    ///// <returns></returns>
+    //public int ExecuteParallel<TQ>(QueryDescription query, TQ action)
+    //    where TQ : IQuery
+    //{
+    //    return action.ExecuteParallel(query, this);
+    //}
+    //#endregion
 
 
     //todo: temp API?

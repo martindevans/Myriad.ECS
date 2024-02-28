@@ -10,9 +10,10 @@ using Myriad.ECS.Worlds;
 namespace Benchmarks;
 
 [MemoryDiagnoser]
+[ShortRunJob]
 public class QueryBenchmark
 {
-    [Params(10_000, 100_000, 1_000_000), UsedImplicitly]
+    [Params(100_000, 1_000_000, 10_000_000), UsedImplicitly]
     public int EntityCount = 1_000_000;
 
     private World _world = null!;
@@ -42,7 +43,7 @@ public class QueryBenchmark
         entity.Set(new Position(new Vector2(random.NextSingle(), random.NextSingle())));
         entity.Set(new Velocity(new Vector2(random.NextSingle(), random.NextSingle())));
 
-        for (var i = 0; i < 5; i++)
+        for (var i = 0; i < 10; i++)
         {
             switch (random.Next(0, 5))
             {
@@ -58,40 +59,47 @@ public class QueryBenchmark
     [Benchmark]
     public void Query()
     {
-        _world.Execute(_query, new QueryAction());
+        _world.Execute<QueryAction, Position, Velocity>(new QueryAction(), _query);
     }
 
     [Benchmark]
     public void ChunkQuery()
     {
-        _world.Execute(_query, new ChunkQueryAction());
+        _world.ExecuteChunk<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
     }
 
     [Benchmark]
     public void ParallelQuery()
     {
-        _world.ExecuteParallel(_query, new QueryAction());
+        _world.ExecuteParallel<QueryAction, Position, Velocity>(new QueryAction(), _query);
     }
 
     [Benchmark]
     public void ParallelChunkQuery()
     {
-        _world.ExecuteParallel(_query, new ChunkQueryAction());
+        _world.ExecuteChunkParallel<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
+    }
+
+    [Benchmark]
+    public void QueryEnumerable()
+    {
+        foreach (var item in _world.Query<Position, Velocity>(_query))
+            item.Item0.Value += item.Item1.Value;
     }
 
     private struct QueryAction
-        : IQueryWR<Position, Velocity>
+        : IQuery2<Position, Velocity>
     {
-        public readonly void Execute(Entity e, ref Position pos, ref readonly Velocity vel)
+        public readonly void Execute(Entity e, ref Position pos, ref Velocity vel)
         {
             pos.Value += vel.Value;
         }
     }
 
     private struct ChunkQueryAction
-        : IChunkQueryWR<Position, Velocity>
+        : IChunkQuery2<Position, Velocity>
     {
-        public readonly void Execute(ReadOnlySpan<Entity> e, Span<Position> pos, ReadOnlySpan<Velocity> vel)
+        public readonly void Execute(ReadOnlySpan<Entity> e, Span<Position> pos, Span<Velocity> vel)
         {
             for (var i = 0; i < pos.Length; i++)
             {

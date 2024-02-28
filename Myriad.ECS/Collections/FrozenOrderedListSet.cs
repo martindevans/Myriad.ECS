@@ -15,12 +15,22 @@ public class FrozenOrderedListSet<TItem>
         _items = [ ];
     }
 
+    public FrozenOrderedListSet(List<TItem> items)
+    {
+        _items = new OrderedListSet<TItem>(items);
+    }
+
     public FrozenOrderedListSet(IReadOnlySet<TItem> items)
     {
         _items = new OrderedListSet<TItem>(items);
     }
 
     public FrozenOrderedListSet(OrderedListSet<TItem> items)
+    {
+        _items = new OrderedListSet<TItem>(items);
+    }
+
+    public FrozenOrderedListSet(FrozenOrderedListSet<TItem> items)
     {
         _items = new OrderedListSet<TItem>(items);
     }
