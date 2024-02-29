@@ -1,7 +1,6 @@
 using System.Reflection;
 using Myriad.ECS.Command;
 using Myriad.ECS.Queries;
-using Myriad.ECS.Queries.Attributes;
 using Myriad.ECS.Registry;
 using Myriad.ECS.Worlds;
 
@@ -51,10 +50,6 @@ public class UnitTest1
     }
 }
 
-[All<ComponentFloat, ComponentInt32>]
-[None<ComponentByte>]
-[ExactlyOneOf<ComponentFloat, ComponentInt16>]
-[AtLeastOneOf<ComponentFloat, ComponentInt16>]
 public readonly partial struct MultiplyAdd(float factor)
     : IQuery2<ComponentFloat, ComponentInt32>
 {

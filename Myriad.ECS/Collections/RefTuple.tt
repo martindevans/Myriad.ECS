@@ -1,0 +1,120 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+	const int PARAM_COUNT = 16;
+#>
+
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedParameter.Global
+// ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable CheckNamespace
+// ReSharper disable ArrangeAccessorOwnerBody
+
+namespace Myriad.ECS.Queries;
+
+public ref struct Ref<T>
+{
+	public ref T Item;
+}
+<# for (var i = 1; i <= PARAM_COUNT; i++)
+{
+	var tparams = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
+	var refparams = string.Join(", ", Enumerable.Range(0, i).Select(x => "ref T" + x));
+
+	var refparamstup = refparams;
+	if (i > 1)
+	{
+		refparamstup = "RefTuple" + i + "<" + tparams + ">";
+	}
+#>
+
+public readonly ref struct RefTuple<#= i #><<#= tparams #>>
+{
+	public readonly Entity Entity;
+
+<# for (var k = 0; k < i; k++)
+{
+#>
+	public readonly ref T<#= k #> Item<#= k #>;
+<#
+}
+#>
+
+	internal RefTuple<#= i #>(Entity entity, <#= string.Join(", ", Enumerable.Range(0, i).Select(x => "ref T" + x + " item" + x)) #>)
+	{
+		Entity = entity;
+<# for (var k = 0; k < i; k++)
+{
+#>
+		Item<#= k #> = ref item<#= k #>;
+<#
+}
+#>
+	}
+
+	public void Deconstruct(out Entity entity, <#= string.Join(", ", Enumerable.Range(0, i).Select(x => "out Ref<T" + x + "> item" + x)) #>)
+	{
+		entity = Entity;
+<# for (var k = 0; k < i; k++)
+{
+#>
+		item<#= k #> = new Ref<T<#= k #>> { Item = ref Item<#= k #> };
+<#
+}
+#>
+	}
+}
+<#
+}
+#>
+
+
+<#+ 
+	static string Constraints(int count, int spaces = 4)
+    {
+		var prefix = new string(' ', spaces);
+        var str = string.Join(
+			$"\r\n{prefix}where ",
+			Enumerable.Range(0, count).Select(x => $"T{x} : IComponent")
+		);
+
+		return str;
+    }
+
+	static string Name(int mutable)
+	{
+		return "IQuery" + mutable;
+	}
+
+	static string Refs(int start, int count)
+	{
+		var str = string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"ref T{x} t{x}")
+		);
+
+		return str;
+	}
+
+	static string Ins(int start, int count)
+	{
+		return string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"ref readonly T{x} t{x}")
+		);
+	}
+
+    static string CallParameters(int count)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(0, count).Select(x => $"ref t{x}[i]")
+        );
+
+        return str;
+    }
+#>

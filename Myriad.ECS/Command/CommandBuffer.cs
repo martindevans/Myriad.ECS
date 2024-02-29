@@ -20,6 +20,7 @@ public sealed class CommandBuffer(World World)
 
     private readonly OrderedListSet<ComponentID> _tempComponentIdSet = [ ];
 
+    #region playback
     public Resolver Playback()
     {
         // Create a "resolver" that can be used to resolve entity IDs
@@ -27,33 +28,7 @@ public sealed class CommandBuffer(World World)
         resolver.Configure(this);
 
         // Create buffered entities.
-        _tempComponentIdSet.Clear();
-        foreach (var (bufEntId, components) in _bufferedSets.Enumerable())
-        {
-            // Build a set of components on this new entity
-            _tempComponentIdSet.Clear();
-            foreach (var (compId, _) in components.Enumerable())
-                _tempComponentIdSet.Add(compId);
-
-            // Allocate an entity for it
-            var (entity, slot) = World.CreateEntity(_tempComponentIdSet);
-
-            // Store the new ID in the resolver so it can be retrieved later
-            resolver.Lookup.Add(bufEntId, entity);
-
-            // Write the components into the entity
-            foreach (var (_, setter) in components.Enumerable())
-            {
-                setter.Write(slot);
-                setter.ReturnToPool();
-            }
-
-            // Recycle
-            components.Clear();
-            Pool.Return(components);
-        }
-        _bufferedSets.Clear();
-        _tempComponentIdSet.Clear();
+        CreateBufferedEntities(resolver);
 
         // Delete entities
         foreach (var delete in _deletes)
@@ -141,6 +116,38 @@ public sealed class CommandBuffer(World World)
         // Return the resolver
         return resolver;
     }
+
+    private void CreateBufferedEntities(Resolver resolver)
+    {
+        _tempComponentIdSet.Clear();
+        foreach (var (bufEntId, components) in _bufferedSets.Enumerable())
+        {
+            // Build a set of components on this new entity
+            _tempComponentIdSet.Clear();
+            foreach (var (compId, _) in components.Enumerable())
+                _tempComponentIdSet.Add(compId);
+
+            // Allocate an entity for it
+            var (entity, slot) = World.CreateEntity(_tempComponentIdSet);
+
+            // Store the new ID in the resolver so it can be retrieved later
+            resolver.Lookup.Add(bufEntId, entity);
+
+            // Write the components into the entity
+            foreach (var (_, setter) in components.Enumerable())
+            {
+                setter.Write(slot);
+                setter.ReturnToPool();
+            }
+
+            // Recycle
+            components.Clear();
+            Pool.Return(components);
+        }
+        _bufferedSets.Clear();
+        _tempComponentIdSet.Clear();
+    }
+    #endregion
 
     public BufferedEntity Create()
     {

@@ -34,6 +34,8 @@ public class QueryBenchmark
             .Include<Position>()
             .Include<Velocity>()
             .Build(_world);
+
+        Console.WriteLine("Setup Complete");
     }
 
     private static void AddEntity(CommandBuffer buffer, Random random)

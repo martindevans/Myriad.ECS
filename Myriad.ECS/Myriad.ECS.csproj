@@ -11,35 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Queries\Attributes\AllAttribute - Copy.cs" />
-    <Compile Remove="Queries\Attributes\AtLeastOneOfAttribute - Copy.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Systems\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Queries\Attributes\ExactlyOneOfAttribute.cs">
-      <DependentUpon>ExactlyOneOfAttribute.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </None>
-    <None Include="Queries\Attributes\AtLeastOneOfAttribute.cs">
-      <DependentUpon>AtLeastOneOfAttribute.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </None>
-    <None Include="Queries\Attributes\NoneAttribute.cs">
-      <DependentUpon>NoneAttribute.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </None>
-    <None Include="Queries\Attributes\AllAttribute.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>AllAttribute.tt</DependentUpon>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -56,6 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Collections\RefTuple.cs">
+      <DependentUpon>RefTuple.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Queries\IChunkQuery.cs">
       <DependentUpon>IChunkQuery.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -71,26 +48,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="Queries\Attributes\AllAttribute.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>AllAttribute.tt</DependentUpon>
-    </Compile>
-    <Compile Update="Queries\Attributes\AtLeastOneOfAttribute.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>AtLeastOneOfAttribute.tt</DependentUpon>
-    </Compile>
-    <Compile Update="Queries\Attributes\ExactlyOneOfAttribute.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ExactlyOneOfAttribute.tt</DependentUpon>
-    </Compile>
-    <Compile Update="Queries\Attributes\NoneAttribute.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>NoneAttribute.tt</DependentUpon>
-    </Compile>
     <Compile Update="Queries\Filters\QueryFilter.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -104,6 +61,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Collections\RefTuple.tt">
+      <LastGenOutput>RefTuple.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
     <None Update="Queries\IChunkQuery.tt">
       <LastGenOutput>IChunkQuery.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -115,22 +76,6 @@
     <None Update="Worlds\WorldBuilderWithArchetype.tt">
       <LastGenOutput>WorldBuilderWithArchetype.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Queries\Attributes\ExactlyOneOfAttribute.tt">
-      <LastGenOutput>ExactlyOneOfAttribute.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Queries\Attributes\AtLeastOneOfAttribute.tt">
-      <LastGenOutput>AtLeastOneOfAttribute.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Queries\Attributes\NoneAttribute.tt">
-      <LastGenOutput>NoneAttribute.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Queries\Attributes\AllAttribute.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>AllAttribute.cs</LastGenOutput>
     </None>
     <None Update="Queries\IQuery.tt">
       <LastGenOutput>IQuery.cs</LastGenOutput>
