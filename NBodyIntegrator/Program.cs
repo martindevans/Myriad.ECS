@@ -5,6 +5,7 @@ using Myriad.ECS.Worlds;
 using NBodyIntegrator;
 using NBodyIntegrator.Integrator.NBodies;
 using NBodyIntegrator.Units;
+using Spectre.Console;
 using Unity.Mathematics;
 
 const double EARTH_RADIUS = 6_371_000; // m
@@ -23,7 +24,7 @@ setup.Create()
 
 // Create satellites at random altitudes, with the correct velocity for a circular orbit at that altitude
 var rng = new Random(214);
-for (var i = 0; i < 4096; i++)
+for (var i = 0; i < 1024; i++)
 {
     var altitude = rng.NextDouble() * 35_786_000;
     var speed = Math.Sqrt((G * EARTH_MASS) / (EARTH_RADIUS + altitude));
@@ -33,7 +34,7 @@ for (var i = 0; i < 4096; i++)
     var velocity = new double3(outward.Perpendicular()) * speed;
 
     // Initialize a circular buffer to hold orbit data
-    const int size = 131072;
+    const int size = 86_400;
     var bufferAccess = new DynamicCircularBuffer();
     var idx = bufferAccess.TryAdd(size)!.Value;
 
@@ -59,16 +60,53 @@ for (var i = 0; i < 4096; i++)
 
 using var resolver = setup.Playback();
 
-var systems = new List<ISystem>()
-{
-    new RailTrimmer(world)
-};
+var systems = new SystemGroup(
+    "main",
+    new RailTrimmer(world),
+    new RailIntegrator(world)
+);
+systems.Init();
 
 // Advance sim
-var gt = new GameTime(1);
-for (var i = 0; i < 1000000; i++)
-{
-    foreach (var system in systems)
-        system.Update(gt);
-    gt.Tick();
-}
+const long ticks = 10_000;
+var tickMin = TimeSpan.MaxValue;
+var tickTotal = TimeSpan.Zero;
+var tickMax = TimeSpan.MinValue;
+var gt = new GameTime(1 / 60f);
+var maxMem = 0L;
+
+AnsiConsole
+   .Progress()
+   .Start(ctx =>
+   {
+        var task = ctx.AddTask("Running");
+        task.MaxValue = ticks;
+
+        for (var i = 0; i < ticks; i++)
+        {
+            systems.BeforeUpdate(gt);
+            systems.Update(gt);
+            systems.AfterUpdate(gt);
+            gt.Tick();
+
+            if (systems.ExecutionTime < tickMin)
+                tickMin = systems.ExecutionTime;
+            tickTotal += systems.ExecutionTime;
+            if (systems.ExecutionTime > tickMax)
+                tickMax = systems.ExecutionTime;
+
+            if (i % 1000 == 7)
+                maxMem = Math.Max(maxMem, GC.GetTotalMemory(false));
+
+            task.Increment(1);
+        }
+   });
+
+Console.WriteLine($"# {ticks:N0} Ticks");
+Console.WriteLine($" - Total: {tickTotal.TotalMicroseconds}us");
+Console.WriteLine($" - Min:   {tickMin.TotalMicroseconds}us");
+Console.WriteLine($" - Avg:   {tickTotal.TotalMicroseconds / ticks}us");
+Console.WriteLine($" - Max:   {tickMax.TotalMicroseconds}us");
+Console.WriteLine();
+Console.WriteLine("# Memory");
+Console.WriteLine($" - Max: {maxMem:N0}");

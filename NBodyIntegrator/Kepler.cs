@@ -127,7 +127,7 @@ public readonly struct KeplerOrbit
     #endregion
 }
 
-public struct GravityMass(double Value) : IComponent;
+public record struct GravityMass(double Value) : IComponent;
 
 public struct FixedBody
     : IComponent

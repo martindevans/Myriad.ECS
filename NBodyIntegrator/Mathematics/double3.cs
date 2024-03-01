@@ -620,6 +620,21 @@ namespace Unity.Mathematics
             }
         }
 
+        public double LengthSquared()
+        {
+            return x * x
+                 + y * y
+                 + z * z;
+        }
+
+        public double3 Abs()
+        {
+            return new double3(
+                Math.Abs(x),
+                Math.Abs(y),
+                Math.Abs(z)
+            );
+        }
     }
 
     public static partial class math

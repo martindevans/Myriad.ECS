@@ -39,6 +39,8 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
@@ -49,8 +51,6 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
-	
-					count += entities.Length;
 
 					for (var i = entities.Length - 1; i >= 0; i--)
 						q.Execute(entities[i], ref t0[i]);
@@ -80,21 +80,22 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
-				Parallel.For(0, archetype.Chunks.Count, c =>
-				{
-					var chunk = archetype.Chunks[c];
+				count += archetype.EntityCount;
 
-					var entities = chunk.Entities;
-					if (entities.Length == 0)
-						return;
+				for (var c = 0; c < archetype.Chunks.Count; c++)
+                {
+                    var chunk = archetype.Chunks[c];
+					if (chunk.EntityCount == 0)
+						continue;
 
-					var t0 = chunk.GetSpan<T0>(c0);
-	
-					Interlocked.Add(ref count, entities.Length);
+					var t0 = chunk.GetComponentArray<T0>(c0);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
+                    Parallel.For(0, chunk.EntityCount, i =>
+                    {
+						var entities = chunk.Entities;
 						q.Execute(entities[i], ref t0[i]);
-				});
+					});
+				}
 			}
 
 			return count;
@@ -137,6 +138,8 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
@@ -148,8 +151,6 @@ namespace Myriad.ECS.Worlds
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					var t1 = chunk.GetSpan<T1>(c1);
-	
-					count += entities.Length;
 
 					for (var i = entities.Length - 1; i >= 0; i--)
 						q.Execute(entities[i], ref t0[i], ref t1[i]);
@@ -181,22 +182,23 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
-				Parallel.For(0, archetype.Chunks.Count, c =>
-				{
-					var chunk = archetype.Chunks[c];
+				count += archetype.EntityCount;
 
-					var entities = chunk.Entities;
-					if (entities.Length == 0)
-						return;
+				for (var c = 0; c < archetype.Chunks.Count; c++)
+                {
+                    var chunk = archetype.Chunks[c];
+					if (chunk.EntityCount == 0)
+						continue;
 
-					var t0 = chunk.GetSpan<T0>(c0);
-					var t1 = chunk.GetSpan<T1>(c1);
-	
-					Interlocked.Add(ref count, entities.Length);
+					var t0 = chunk.GetComponentArray<T0>(c0);
+					var t1 = chunk.GetComponentArray<T1>(c1);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
+                    Parallel.For(0, chunk.EntityCount, i =>
+                    {
+						var entities = chunk.Entities;
 						q.Execute(entities[i], ref t0[i], ref t1[i]);
-				});
+					});
+				}
 			}
 
 			return count;
@@ -242,6 +244,8 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
@@ -254,8 +258,6 @@ namespace Myriad.ECS.Worlds
 					var t0 = chunk.GetSpan<T0>(c0);
 					var t1 = chunk.GetSpan<T1>(c1);
 					var t2 = chunk.GetSpan<T2>(c2);
-	
-					count += entities.Length;
 
 					for (var i = entities.Length - 1; i >= 0; i--)
 						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
@@ -289,23 +291,24 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
-				Parallel.For(0, archetype.Chunks.Count, c =>
-				{
-					var chunk = archetype.Chunks[c];
+				count += archetype.EntityCount;
 
-					var entities = chunk.Entities;
-					if (entities.Length == 0)
-						return;
+				for (var c = 0; c < archetype.Chunks.Count; c++)
+                {
+                    var chunk = archetype.Chunks[c];
+					if (chunk.EntityCount == 0)
+						continue;
 
-					var t0 = chunk.GetSpan<T0>(c0);
-					var t1 = chunk.GetSpan<T1>(c1);
-					var t2 = chunk.GetSpan<T2>(c2);
-	
-					Interlocked.Add(ref count, entities.Length);
+					var t0 = chunk.GetComponentArray<T0>(c0);
+					var t1 = chunk.GetComponentArray<T1>(c1);
+					var t2 = chunk.GetComponentArray<T2>(c2);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
+                    Parallel.For(0, chunk.EntityCount, i =>
+                    {
+						var entities = chunk.Entities;
 						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
-				});
+					});
+				}
 			}
 
 			return count;
@@ -354,6 +357,8 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
@@ -367,8 +372,6 @@ namespace Myriad.ECS.Worlds
 					var t1 = chunk.GetSpan<T1>(c1);
 					var t2 = chunk.GetSpan<T2>(c2);
 					var t3 = chunk.GetSpan<T3>(c3);
-	
-					count += entities.Length;
 
 					for (var i = entities.Length - 1; i >= 0; i--)
 						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
@@ -404,24 +407,25 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
-				Parallel.For(0, archetype.Chunks.Count, c =>
-				{
-					var chunk = archetype.Chunks[c];
+				count += archetype.EntityCount;
 
-					var entities = chunk.Entities;
-					if (entities.Length == 0)
-						return;
+				for (var c = 0; c < archetype.Chunks.Count; c++)
+                {
+                    var chunk = archetype.Chunks[c];
+					if (chunk.EntityCount == 0)
+						continue;
 
-					var t0 = chunk.GetSpan<T0>(c0);
-					var t1 = chunk.GetSpan<T1>(c1);
-					var t2 = chunk.GetSpan<T2>(c2);
-					var t3 = chunk.GetSpan<T3>(c3);
-	
-					Interlocked.Add(ref count, entities.Length);
+					var t0 = chunk.GetComponentArray<T0>(c0);
+					var t1 = chunk.GetComponentArray<T1>(c1);
+					var t2 = chunk.GetComponentArray<T2>(c2);
+					var t3 = chunk.GetComponentArray<T3>(c3);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
+                    Parallel.For(0, chunk.EntityCount, i =>
+                    {
+						var entities = chunk.Entities;
 						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
-				});
+					});
+				}
 			}
 
 			return count;
@@ -473,6 +477,8 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
@@ -487,8 +493,6 @@ namespace Myriad.ECS.Worlds
 					var t2 = chunk.GetSpan<T2>(c2);
 					var t3 = chunk.GetSpan<T3>(c3);
 					var t4 = chunk.GetSpan<T4>(c4);
-	
-					count += entities.Length;
 
 					for (var i = entities.Length - 1; i >= 0; i--)
 						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
@@ -526,25 +530,26 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
-				Parallel.For(0, archetype.Chunks.Count, c =>
-				{
-					var chunk = archetype.Chunks[c];
+				count += archetype.EntityCount;
 
-					var entities = chunk.Entities;
-					if (entities.Length == 0)
-						return;
+				for (var c = 0; c < archetype.Chunks.Count; c++)
+                {
+                    var chunk = archetype.Chunks[c];
+					if (chunk.EntityCount == 0)
+						continue;
 
-					var t0 = chunk.GetSpan<T0>(c0);
-					var t1 = chunk.GetSpan<T1>(c1);
-					var t2 = chunk.GetSpan<T2>(c2);
-					var t3 = chunk.GetSpan<T3>(c3);
-					var t4 = chunk.GetSpan<T4>(c4);
-	
-					Interlocked.Add(ref count, entities.Length);
+					var t0 = chunk.GetComponentArray<T0>(c0);
+					var t1 = chunk.GetComponentArray<T1>(c1);
+					var t2 = chunk.GetComponentArray<T2>(c2);
+					var t3 = chunk.GetComponentArray<T3>(c3);
+					var t4 = chunk.GetComponentArray<T4>(c4);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
+                    Parallel.For(0, chunk.EntityCount, i =>
+                    {
+						var entities = chunk.Entities;
 						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
-				});
+					});
+				}
 			}
 
 			return count;
@@ -599,6 +604,8 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
@@ -614,8 +621,6 @@ namespace Myriad.ECS.Worlds
 					var t3 = chunk.GetSpan<T3>(c3);
 					var t4 = chunk.GetSpan<T4>(c4);
 					var t5 = chunk.GetSpan<T5>(c5);
-	
-					count += entities.Length;
 
 					for (var i = entities.Length - 1; i >= 0; i--)
 						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
@@ -655,26 +660,27 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
-				Parallel.For(0, archetype.Chunks.Count, c =>
-				{
-					var chunk = archetype.Chunks[c];
+				count += archetype.EntityCount;
 
-					var entities = chunk.Entities;
-					if (entities.Length == 0)
-						return;
+				for (var c = 0; c < archetype.Chunks.Count; c++)
+                {
+                    var chunk = archetype.Chunks[c];
+					if (chunk.EntityCount == 0)
+						continue;
 
-					var t0 = chunk.GetSpan<T0>(c0);
-					var t1 = chunk.GetSpan<T1>(c1);
-					var t2 = chunk.GetSpan<T2>(c2);
-					var t3 = chunk.GetSpan<T3>(c3);
-					var t4 = chunk.GetSpan<T4>(c4);
-					var t5 = chunk.GetSpan<T5>(c5);
-	
-					Interlocked.Add(ref count, entities.Length);
+					var t0 = chunk.GetComponentArray<T0>(c0);
+					var t1 = chunk.GetComponentArray<T1>(c1);
+					var t2 = chunk.GetComponentArray<T2>(c2);
+					var t3 = chunk.GetComponentArray<T3>(c3);
+					var t4 = chunk.GetComponentArray<T4>(c4);
+					var t5 = chunk.GetComponentArray<T5>(c5);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
+                    Parallel.For(0, chunk.EntityCount, i =>
+                    {
+						var entities = chunk.Entities;
 						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
-				});
+					});
+				}
 			}
 
 			return count;
@@ -732,6 +738,8 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
@@ -748,8 +756,6 @@ namespace Myriad.ECS.Worlds
 					var t4 = chunk.GetSpan<T4>(c4);
 					var t5 = chunk.GetSpan<T5>(c5);
 					var t6 = chunk.GetSpan<T6>(c6);
-	
-					count += entities.Length;
 
 					for (var i = entities.Length - 1; i >= 0; i--)
 						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
@@ -791,27 +797,28 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
-				Parallel.For(0, archetype.Chunks.Count, c =>
-				{
-					var chunk = archetype.Chunks[c];
+				count += archetype.EntityCount;
 
-					var entities = chunk.Entities;
-					if (entities.Length == 0)
-						return;
+				for (var c = 0; c < archetype.Chunks.Count; c++)
+                {
+                    var chunk = archetype.Chunks[c];
+					if (chunk.EntityCount == 0)
+						continue;
 
-					var t0 = chunk.GetSpan<T0>(c0);
-					var t1 = chunk.GetSpan<T1>(c1);
-					var t2 = chunk.GetSpan<T2>(c2);
-					var t3 = chunk.GetSpan<T3>(c3);
-					var t4 = chunk.GetSpan<T4>(c4);
-					var t5 = chunk.GetSpan<T5>(c5);
-					var t6 = chunk.GetSpan<T6>(c6);
-	
-					Interlocked.Add(ref count, entities.Length);
+					var t0 = chunk.GetComponentArray<T0>(c0);
+					var t1 = chunk.GetComponentArray<T1>(c1);
+					var t2 = chunk.GetComponentArray<T2>(c2);
+					var t3 = chunk.GetComponentArray<T3>(c3);
+					var t4 = chunk.GetComponentArray<T4>(c4);
+					var t5 = chunk.GetComponentArray<T5>(c5);
+					var t6 = chunk.GetComponentArray<T6>(c6);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
+                    Parallel.For(0, chunk.EntityCount, i =>
+                    {
+						var entities = chunk.Entities;
 						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
-				});
+					});
+				}
 			}
 
 			return count;
@@ -872,6 +879,8 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
@@ -889,8 +898,6 @@ namespace Myriad.ECS.Worlds
 					var t5 = chunk.GetSpan<T5>(c5);
 					var t6 = chunk.GetSpan<T6>(c6);
 					var t7 = chunk.GetSpan<T7>(c7);
-	
-					count += entities.Length;
 
 					for (var i = entities.Length - 1; i >= 0; i--)
 						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
@@ -934,28 +941,29 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
-				Parallel.For(0, archetype.Chunks.Count, c =>
-				{
-					var chunk = archetype.Chunks[c];
+				count += archetype.EntityCount;
 
-					var entities = chunk.Entities;
-					if (entities.Length == 0)
-						return;
+				for (var c = 0; c < archetype.Chunks.Count; c++)
+                {
+                    var chunk = archetype.Chunks[c];
+					if (chunk.EntityCount == 0)
+						continue;
 
-					var t0 = chunk.GetSpan<T0>(c0);
-					var t1 = chunk.GetSpan<T1>(c1);
-					var t2 = chunk.GetSpan<T2>(c2);
-					var t3 = chunk.GetSpan<T3>(c3);
-					var t4 = chunk.GetSpan<T4>(c4);
-					var t5 = chunk.GetSpan<T5>(c5);
-					var t6 = chunk.GetSpan<T6>(c6);
-					var t7 = chunk.GetSpan<T7>(c7);
-	
-					Interlocked.Add(ref count, entities.Length);
+					var t0 = chunk.GetComponentArray<T0>(c0);
+					var t1 = chunk.GetComponentArray<T1>(c1);
+					var t2 = chunk.GetComponentArray<T2>(c2);
+					var t3 = chunk.GetComponentArray<T3>(c3);
+					var t4 = chunk.GetComponentArray<T4>(c4);
+					var t5 = chunk.GetComponentArray<T5>(c5);
+					var t6 = chunk.GetComponentArray<T6>(c6);
+					var t7 = chunk.GetComponentArray<T7>(c7);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
+                    Parallel.For(0, chunk.EntityCount, i =>
+                    {
+						var entities = chunk.Entities;
 						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
-				});
+					});
+				}
 			}
 
 			return count;
@@ -1019,6 +1027,8 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
@@ -1037,8 +1047,6 @@ namespace Myriad.ECS.Worlds
 					var t6 = chunk.GetSpan<T6>(c6);
 					var t7 = chunk.GetSpan<T7>(c7);
 					var t8 = chunk.GetSpan<T8>(c8);
-	
-					count += entities.Length;
 
 					for (var i = entities.Length - 1; i >= 0; i--)
 						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
@@ -1084,29 +1092,30 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
-				Parallel.For(0, archetype.Chunks.Count, c =>
-				{
-					var chunk = archetype.Chunks[c];
+				count += archetype.EntityCount;
 
-					var entities = chunk.Entities;
-					if (entities.Length == 0)
-						return;
+				for (var c = 0; c < archetype.Chunks.Count; c++)
+                {
+                    var chunk = archetype.Chunks[c];
+					if (chunk.EntityCount == 0)
+						continue;
 
-					var t0 = chunk.GetSpan<T0>(c0);
-					var t1 = chunk.GetSpan<T1>(c1);
-					var t2 = chunk.GetSpan<T2>(c2);
-					var t3 = chunk.GetSpan<T3>(c3);
-					var t4 = chunk.GetSpan<T4>(c4);
-					var t5 = chunk.GetSpan<T5>(c5);
-					var t6 = chunk.GetSpan<T6>(c6);
-					var t7 = chunk.GetSpan<T7>(c7);
-					var t8 = chunk.GetSpan<T8>(c8);
-	
-					Interlocked.Add(ref count, entities.Length);
+					var t0 = chunk.GetComponentArray<T0>(c0);
+					var t1 = chunk.GetComponentArray<T1>(c1);
+					var t2 = chunk.GetComponentArray<T2>(c2);
+					var t3 = chunk.GetComponentArray<T3>(c3);
+					var t4 = chunk.GetComponentArray<T4>(c4);
+					var t5 = chunk.GetComponentArray<T5>(c5);
+					var t6 = chunk.GetComponentArray<T6>(c6);
+					var t7 = chunk.GetComponentArray<T7>(c7);
+					var t8 = chunk.GetComponentArray<T8>(c8);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
+                    Parallel.For(0, chunk.EntityCount, i =>
+                    {
+						var entities = chunk.Entities;
 						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
-				});
+					});
+				}
 			}
 
 			return count;

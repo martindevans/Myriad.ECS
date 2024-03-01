@@ -74,6 +74,20 @@ internal sealed class Chunk
         var typedArray = Unsafe.As<T[]>(componentArray);
         return typedArray.AsSpan(0, EntityCount);
     }
+
+    internal T[] GetComponentArray<T>()
+        where T : IComponent
+    {
+        return GetComponentArray<T>(ComponentID<T>.ID);
+    }
+
+    internal T[] GetComponentArray<T>(ComponentID id)
+        where T : IComponent
+    {
+        var componentArray = _components[_componentIndexLookup[id.Value]];
+        var typedArray = Unsafe.As<T[]>(componentArray);
+        return typedArray;
+    }
     #endregion
 
     internal Row GetRow(Entity entity, EntityInfo info)

@@ -51,7 +51,7 @@ public class RWLock<T>(T value)
             Value = value;
         }
 
-        public WriteLockHandle EnterWriteLock()
+        public WriteLockHandle UpgradeToWriteLock()
         {
             _lock.EnterWriteLock();
             return new WriteLockHandle(_lock, Value);

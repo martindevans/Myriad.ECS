@@ -13,6 +13,24 @@ public enum NBodyPrecision
     VeryHigh = 2
 }
 
+public static class NBodyPrecisionExtensions
+{
+    private static double Epsilon(this NBodyPrecision precision, double baseEpsilon)
+    {
+        var factor = precision switch
+        {
+            NBodyPrecision.VeryLow => 4,
+            NBodyPrecision.Low => 2,
+            NBodyPrecision.Medium => 1,
+            NBodyPrecision.High => 0.5,
+            NBodyPrecision.VeryHigh => 0.25,
+            _ => 1,
+        };
+
+        return baseEpsilon * factor;
+    }
+}
+
 public struct NBody
     : IComponent
 {

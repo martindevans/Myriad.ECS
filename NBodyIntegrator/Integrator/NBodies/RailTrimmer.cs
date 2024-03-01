@@ -5,13 +5,19 @@ using Myriad.ECS.Worlds;
 
 namespace NBodyIntegrator.Integrator.NBodies;
 
-public class RailTrimmer(World world)
+public sealed class RailTrimmer(World world)
     : ISystem
 {
+    public bool Enabled { get; set; } = true;
+
     private readonly QueryDescription _trimQuery = new QueryBuilder()
         .Include<NBody>()
         .Include<EntityArray<NBody.Timestamp>>()
         .Build(world);
+
+    public void Init()
+    {
+    }
 
     public void Update(GameTime time)
     {
@@ -60,5 +66,9 @@ public class RailTrimmer(World world)
                     return;
             }
         }
+    }
+
+    public void Dispose()
+    {
     }
 }

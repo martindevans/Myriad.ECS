@@ -294,6 +294,11 @@ public struct Metre3
         Value = value;
     }
 
+    public readonly override string ToString()
+    {
+        return $"{Value}m";
+    }
+
     public static Metre3 operator +(Metre3 a, Metre3 b) => new(a.Value + b.Value);
     public static Metre3 operator -(Metre3 a, Metre3 b) => new(a.Value - b.Value);
     public static Metre3 operator *(Metre3 a, double b) => new(a.Value * b);
@@ -353,6 +358,11 @@ public struct KiloMetre3
         Value = value;
     }
 
+    public readonly override string ToString()
+    {
+        return $"{Value}km";
+    }
+
     public static Metre3 operator +(KiloMetre3 a, KiloMetre3 b) => new(a.Value + b.Value);
     public static Metre3 operator -(KiloMetre3 a, KiloMetre3 b) => new(a.Value - b.Value);
     public static Metre3 operator *(KiloMetre3 a, double b) => new(a.Value * b);
@@ -410,6 +420,11 @@ public struct MegaMetre3
     public MegaMetre3(double3 value)
     {
         Value = value;
+    }
+
+    public readonly override string ToString()
+    {
+        return $"{Value}Mm";
     }
 
     public static MegaMetre3 operator +(MegaMetre3 a, MegaMetre3 b) => new(a.Value + b.Value);
@@ -475,6 +490,11 @@ public struct AstronomicalUnit3
         Value = value;
     }
 
+    public readonly override string ToString()
+    {
+        return $"{Value}au";
+    }
+
     public static explicit operator Metre3(AstronomicalUnit3 au)
     {
         return new Metre3(au.Value * 1000149597870700);
@@ -529,6 +549,11 @@ public struct SceneUnit3
     public SceneUnit3(double3 value)
     {
         Value = value;
+    }
+
+    public readonly override string ToString()
+    {
+        return $"{Value}scene_units";
     }
 
     public static explicit operator SceneUnit3(Metre3 metres)

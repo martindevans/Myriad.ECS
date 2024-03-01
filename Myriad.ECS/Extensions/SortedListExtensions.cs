@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace Myriad.ECS.Extensions;
+﻿namespace Myriad.ECS.Extensions;
 
 internal static class SortedListExtensions
 {
@@ -33,7 +31,6 @@ internal static class SortedListExtensions
     }
 
     internal struct KeyValueEnumerator<TKey, TValue>(SortedList<TKey, TValue> list)
-        : IEnumerator<(TKey, TValue)>
         where TKey : notnull
     {
         private int _index = -1;
@@ -44,18 +41,6 @@ internal static class SortedListExtensions
             return _index < list.Count;
         }
 
-        public void Reset()
-        {
-            _index = 0;
-        }
-
         public readonly (TKey, TValue) Current => (list.GetKeyAtIndex(_index), list.GetValueAtIndex(_index));
-
-        // ReSharper disable once HeapView.BoxingAllocation
-        readonly object IEnumerator.Current => Current;
-
-        public readonly void Dispose()
-        {
-        }
     }
 }

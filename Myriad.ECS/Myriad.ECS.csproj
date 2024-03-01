@@ -11,10 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Systems\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
     <PackageReference Include="JetBrains.dotCover.MSBuild" Version="1.0.5-alpha">
       <PrivateAssets>all</PrivateAssets>
