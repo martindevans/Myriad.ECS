@@ -68,7 +68,7 @@ var systems = new SystemGroup(
 systems.Init();
 
 // Advance sim
-const long ticks = 10_000;
+const long ticks = 100_000;
 var tickMin = TimeSpan.MaxValue;
 var tickTotal = TimeSpan.Zero;
 var tickMax = TimeSpan.MinValue;

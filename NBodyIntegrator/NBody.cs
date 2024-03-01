@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Runtime.InteropServices;
 using Myriad.ECS;
 using NBodyIntegrator.Units;
 
@@ -31,6 +32,7 @@ public static class NBodyPrecisionExtensions
     }
 }
 
+[StructLayout(LayoutKind.Sequential, Size = 64)]
 public struct NBody
     : IComponent
 {

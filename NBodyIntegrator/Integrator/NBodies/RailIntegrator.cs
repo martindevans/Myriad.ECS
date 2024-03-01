@@ -70,9 +70,10 @@ public sealed class RailIntegrator(World world)
 
     public void Update(GameTime time)
     {
-        world.Execute<Integrate, NBody, EntityArray<NBody.Position>, EntityArray<NBody.Velocity>, EntityArray<NBody.Timestamp>>(
+        world.ExecuteParallel<Integrate, NBody, EntityArray<NBody.Position>, EntityArray<NBody.Velocity>, EntityArray<NBody.Timestamp>>(
             new Integrate(_keplerMasses),
-            _nbodyQuery
+            _nbodyQuery,
+            batchSize: 16
         );
     }
 

@@ -62,7 +62,8 @@ namespace Myriad.ECS.Worlds
 
 		public int ExecuteParallel<TQ, T0>(
 			TQ q,
-			QueryDescription query
+			QueryDescription query,
+			int batchSize = 16
 		)
 			where T0 : IComponent
 			where TQ : IQuery1<T0>
@@ -88,12 +89,20 @@ namespace Myriad.ECS.Worlds
 					if (chunk.EntityCount == 0)
 						continue;
 
+					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+
 					var t0 = chunk.GetComponentArray<T0>(c0);
 
-                    Parallel.For(0, chunk.EntityCount, i =>
+                    ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
-						var entities = chunk.Entities;
-						q.Execute(entities[i], ref t0[i]);
+						var start = b * batchSize;
+						var end = Math.Min(start + batchSize, chunk.EntityCount);
+
+						for (var i = start; i < end; i++)
+						{
+							var entities = chunk.Entities;
+							q.Execute(entities[i], ref t0[i]);
+						}
 					});
 				}
 			}
@@ -162,7 +171,8 @@ namespace Myriad.ECS.Worlds
 
 		public int ExecuteParallel<TQ, T0, T1>(
 			TQ q,
-			QueryDescription query
+			QueryDescription query,
+			int batchSize = 16
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -190,13 +200,21 @@ namespace Myriad.ECS.Worlds
 					if (chunk.EntityCount == 0)
 						continue;
 
+					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
 
-                    Parallel.For(0, chunk.EntityCount, i =>
+                    ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
-						var entities = chunk.Entities;
-						q.Execute(entities[i], ref t0[i], ref t1[i]);
+						var start = b * batchSize;
+						var end = Math.Min(start + batchSize, chunk.EntityCount);
+
+						for (var i = start; i < end; i++)
+						{
+							var entities = chunk.Entities;
+							q.Execute(entities[i], ref t0[i], ref t1[i]);
+						}
 					});
 				}
 			}
@@ -269,7 +287,8 @@ namespace Myriad.ECS.Worlds
 
 		public int ExecuteParallel<TQ, T0, T1, T2>(
 			TQ q,
-			QueryDescription query
+			QueryDescription query,
+			int batchSize = 16
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -299,14 +318,22 @@ namespace Myriad.ECS.Worlds
 					if (chunk.EntityCount == 0)
 						continue;
 
+					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
 					var t2 = chunk.GetComponentArray<T2>(c2);
 
-                    Parallel.For(0, chunk.EntityCount, i =>
+                    ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
-						var entities = chunk.Entities;
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
+						var start = b * batchSize;
+						var end = Math.Min(start + batchSize, chunk.EntityCount);
+
+						for (var i = start; i < end; i++)
+						{
+							var entities = chunk.Entities;
+							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
+						}
 					});
 				}
 			}
@@ -383,7 +410,8 @@ namespace Myriad.ECS.Worlds
 
 		public int ExecuteParallel<TQ, T0, T1, T2, T3>(
 			TQ q,
-			QueryDescription query
+			QueryDescription query,
+			int batchSize = 16
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -415,16 +443,19 @@ namespace Myriad.ECS.Worlds
 					if (chunk.EntityCount == 0)
 						continue;
 
+					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
 					var t2 = chunk.GetComponentArray<T2>(c2);
 					var t3 = chunk.GetComponentArray<T3>(c3);
 
-                    Parallel.For(0, chunk.EntityCount, i =>
+                    ParallelTasks.Parallel.For(0, chunk.EntityCount, i =>
                     {
 						var entities = chunk.Entities;
 						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
-					});
+
+					}, batchSize);
 				}
 			}
 
@@ -504,7 +535,8 @@ namespace Myriad.ECS.Worlds
 
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
-			QueryDescription query
+			QueryDescription query,
+			int batchSize = 16
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -538,16 +570,24 @@ namespace Myriad.ECS.Worlds
 					if (chunk.EntityCount == 0)
 						continue;
 
+					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
 					var t2 = chunk.GetComponentArray<T2>(c2);
 					var t3 = chunk.GetComponentArray<T3>(c3);
 					var t4 = chunk.GetComponentArray<T4>(c4);
 
-                    Parallel.For(0, chunk.EntityCount, i =>
+                    ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
-						var entities = chunk.Entities;
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
+						var start = b * batchSize;
+						var end = Math.Min(start + batchSize, chunk.EntityCount);
+
+						for (var i = start; i < end; i++)
+						{
+							var entities = chunk.Entities;
+							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
+						}
 					});
 				}
 			}
@@ -632,7 +672,8 @@ namespace Myriad.ECS.Worlds
 
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
-			QueryDescription query
+			QueryDescription query,
+			int batchSize = 16
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -668,6 +709,8 @@ namespace Myriad.ECS.Worlds
 					if (chunk.EntityCount == 0)
 						continue;
 
+					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
 					var t2 = chunk.GetComponentArray<T2>(c2);
@@ -675,10 +718,16 @@ namespace Myriad.ECS.Worlds
 					var t4 = chunk.GetComponentArray<T4>(c4);
 					var t5 = chunk.GetComponentArray<T5>(c5);
 
-                    Parallel.For(0, chunk.EntityCount, i =>
+                    ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
-						var entities = chunk.Entities;
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
+						var start = b * batchSize;
+						var end = Math.Min(start + batchSize, chunk.EntityCount);
+
+						for (var i = start; i < end; i++)
+						{
+							var entities = chunk.Entities;
+							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
+						}
 					});
 				}
 			}
@@ -767,7 +816,8 @@ namespace Myriad.ECS.Worlds
 
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
-			QueryDescription query
+			QueryDescription query,
+			int batchSize = 16
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -805,6 +855,8 @@ namespace Myriad.ECS.Worlds
 					if (chunk.EntityCount == 0)
 						continue;
 
+					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
 					var t2 = chunk.GetComponentArray<T2>(c2);
@@ -813,10 +865,16 @@ namespace Myriad.ECS.Worlds
 					var t5 = chunk.GetComponentArray<T5>(c5);
 					var t6 = chunk.GetComponentArray<T6>(c6);
 
-                    Parallel.For(0, chunk.EntityCount, i =>
+                    ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
-						var entities = chunk.Entities;
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
+						var start = b * batchSize;
+						var end = Math.Min(start + batchSize, chunk.EntityCount);
+
+						for (var i = start; i < end; i++)
+						{
+							var entities = chunk.Entities;
+							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
+						}
 					});
 				}
 			}
@@ -909,7 +967,8 @@ namespace Myriad.ECS.Worlds
 
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
-			QueryDescription query
+			QueryDescription query,
+			int batchSize = 16
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -949,6 +1008,8 @@ namespace Myriad.ECS.Worlds
 					if (chunk.EntityCount == 0)
 						continue;
 
+					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
 					var t2 = chunk.GetComponentArray<T2>(c2);
@@ -958,10 +1019,16 @@ namespace Myriad.ECS.Worlds
 					var t6 = chunk.GetComponentArray<T6>(c6);
 					var t7 = chunk.GetComponentArray<T7>(c7);
 
-                    Parallel.For(0, chunk.EntityCount, i =>
+                    ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
-						var entities = chunk.Entities;
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
+						var start = b * batchSize;
+						var end = Math.Min(start + batchSize, chunk.EntityCount);
+
+						for (var i = start; i < end; i++)
+						{
+							var entities = chunk.Entities;
+							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
+						}
 					});
 				}
 			}
@@ -1058,7 +1125,8 @@ namespace Myriad.ECS.Worlds
 
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
-			QueryDescription query
+			QueryDescription query,
+			int batchSize = 16
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1100,6 +1168,8 @@ namespace Myriad.ECS.Worlds
 					if (chunk.EntityCount == 0)
 						continue;
 
+					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
 					var t2 = chunk.GetComponentArray<T2>(c2);
@@ -1110,10 +1180,16 @@ namespace Myriad.ECS.Worlds
 					var t7 = chunk.GetComponentArray<T7>(c7);
 					var t8 = chunk.GetComponentArray<T8>(c8);
 
-                    Parallel.For(0, chunk.EntityCount, i =>
+                    ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
-						var entities = chunk.Entities;
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
+						var start = b * batchSize;
+						var end = Math.Min(start + batchSize, chunk.EntityCount);
+
+						for (var i = start; i < end; i++)
+						{
+							var entities = chunk.Entities;
+							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
+						}
 					});
 				}
 			}

@@ -87,7 +87,8 @@ namespace Myriad.ECS.Worlds
 
 		public int ExecuteParallel<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
 			TQ q,
-			QueryDescription query
+			QueryDescription query,
+			int batchSize = 16
 		)
 			where <#= Constraints(sumij, 12) #>
 			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
@@ -119,6 +120,8 @@ namespace Myriad.ECS.Worlds
 					if (chunk.EntityCount == 0)
 						continue;
 
+					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+
 <# for (var k = 0; k < sumij; k++)
 {
 #>
@@ -127,10 +130,16 @@ namespace Myriad.ECS.Worlds
 }
 #>
 
-                    Parallel.For(0, chunk.EntityCount, i =>
+                    ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
-						var entities = chunk.Entities;
-						q.Execute(entities[i], <#= CallParameters(sumij) #>);
+						var start = b * batchSize;
+						var end = Math.Min(start + batchSize, chunk.EntityCount);
+
+						for (var i = start; i < end; i++)
+						{
+							var entities = chunk.Entities;
+							q.Execute(entities[i], <#= CallParameters(sumij) #>);
+						}
 					});
 				}
 			}
