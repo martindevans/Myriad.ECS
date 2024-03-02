@@ -33,6 +33,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Components\Sharding.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Sharding.tt</DependentUpon>
+    </Compile>
     <Compile Update="Queries\IChunkQuery.cs">
       <DependentUpon>IChunkQuery.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -63,6 +68,10 @@
   <ItemGroup>
     <None Update="Collections\RefTuple.tt">
       <LastGenOutput>RefTuple.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Components\Sharding.tt">
+      <LastGenOutput>Sharding.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="Queries\IChunkQuery.tt">

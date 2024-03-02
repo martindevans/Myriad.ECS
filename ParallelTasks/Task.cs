@@ -3,11 +3,11 @@
 /// <summary>
 /// A struct which represents a single execution of an IWork instance.
 /// </summary>
-public struct Task
+public readonly struct Task
 {
     private readonly bool valid;
-    internal WorkItem Item { get; private set; }
-    internal int ID { get; private set; }
+    internal WorkItem Item { get; }
+    internal int ID { get; }
 
     /// <summary>
     /// Gets a value which indicates if this task has completed.

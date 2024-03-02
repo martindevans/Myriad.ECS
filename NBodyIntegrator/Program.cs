@@ -24,7 +24,7 @@ setup.Create()
 
 // Create satellites at random altitudes, with the correct velocity for a circular orbit at that altitude
 var rng = new Random(214);
-for (var i = 0; i < 1024; i++)
+for (var i = 0; i < 128; i++)
 {
     var altitude = rng.NextDouble() * 35_786_000;
     var speed = Math.Sqrt((G * EARTH_MASS) / (EARTH_RADIUS + altitude));
@@ -78,9 +78,12 @@ var maxMem = 0L;
 AnsiConsole
    .Progress()
    .Start(ctx =>
-   {
+    {
         var task = ctx.AddTask("Running");
         task.MaxValue = ticks;
+
+        using var writer = File.CreateText("data_dump.csv");
+        writer.WriteLine("entity,timestamp,posx,posy,posz");
 
         for (var i = 0; i < ticks; i++)
         {
@@ -99,8 +102,10 @@ AnsiConsole
                 maxMem = Math.Max(maxMem, GC.GetTotalMemory(false));
 
             task.Increment(1);
+
+            WriteCsv(writer);
         }
-   });
+    });
 
 Console.WriteLine($"# {ticks:N0} Ticks");
 Console.WriteLine($" - Total: {tickTotal.TotalMicroseconds}us");
@@ -110,3 +115,20 @@ Console.WriteLine($" - Max:   {tickMax.TotalMicroseconds}us");
 Console.WriteLine();
 Console.WriteLine("# Memory");
 Console.WriteLine($" - Max: {maxMem:N0}");
+
+void WriteCsv(TextWriter writer)
+{
+    foreach (var (e, n, p, t) in world.Query<NBody, EntityArray<NBody.Position>, EntityArray<NBody.Timestamp>>())
+    {
+        if (n.Item.RailPoints.Count == 0)
+            continue;
+        if (n.Item.RailPoints.IsFull(p.Item.Length))
+            continue;
+
+        var index = n.Item.RailPoints.IndexAt(p.Item.Length, n.Item.RailPoints.Count - 1)!.Value;
+        var pos = p.Item.Array[index].Value;
+        var time = t.Item.Array[index].Value;
+
+        writer.WriteLine($"{e.ID},{time:F2},{pos.Value.x:F3},{pos.Value.y:F3},{pos.Value.z:F3}");
+    }
+}

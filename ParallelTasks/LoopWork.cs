@@ -3,8 +3,6 @@
 internal class ForLoopWork
     : IWork
 {
-    private static readonly Pool<ForLoopWork> _pool = new();
-
     private Action<int>? _action;
 
     private int _length;
@@ -41,20 +39,18 @@ internal class ForLoopWork
 
     public static ForLoopWork Get()
     {
-        return _pool.Get();
+        return Pool<ForLoopWork>.Instance.Get();
     }
 
     public void Return()
     {
-        _pool.Return(this);
+        Pool<ForLoopWork>.Instance.Return(this);
     }
 }
 
 internal class ForEachLoopWork<T>
     : IWork
 {
-    private static readonly Pool<ForEachLoopWork<T>> _pool = Pool<ForEachLoopWork<T>>.Instance;
-
     private Action<T>? _action;
     private IEnumerator<T>? _enumerator;
 
@@ -93,11 +89,11 @@ internal class ForEachLoopWork<T>
 
     public static ForEachLoopWork<T> Get()
     {
-        return _pool.Get();
+        return Pool<ForEachLoopWork<T>>.Instance.Get();
     }
 
     public void Return()
     {
-        _pool.Return(this);
+        Pool<ForEachLoopWork<T>>.Instance.Return(this);
     }
 }

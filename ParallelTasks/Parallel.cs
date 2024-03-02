@@ -5,8 +5,6 @@
 /// </summary>
 public static class Parallel
 {
-    private static readonly WorkOptions DefaultOptions = new() { MaximumThreads = 1 };
-
     /// <summary>
     /// Gets the work scheduler.
     /// </summary>
@@ -71,7 +69,7 @@ public static class Parallel
     /// <returns>A future which represults one execution of the function.</returns>
     public static Future<T> Start<T>(Func<T> function)
     {
-        return Start(function, DefaultOptions);
+        return Start(function, new WorkOptions());
     }
 
     /// <summary>
@@ -134,7 +132,7 @@ public static class Parallel
     {
         var work = ActionWork.GetInstance();
         work.Action = action2;
-        work.Options = DefaultOptions;
+        work.Options = new WorkOptions();
         var task = Start(work);
         action1();
         task.Wait();
@@ -153,7 +151,7 @@ public static class Parallel
         {
             var work = ActionWork.GetInstance();
             work.Action = actions[i];
-            work.Options = DefaultOptions;
+            work.Options = new WorkOptions();
             tasks.Add(Start(work));
         }
 

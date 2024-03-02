@@ -1,0 +1,71 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+	const int SHARD_COUNT = 16;
+#>
+using Myriad.ECS.Command;
+
+namespace Myriad.ECS.Components;
+
+public static class Extensions
+{
+	public static CommandBuffer.BufferedEntity AddSharding(this CommandBuffer.BufferedEntity buffered, int index)
+	{
+		switch (index % <#= SHARD_COUNT #>)
+		{
+<# for (var i = 0; i < SHARD_COUNT; i++)
+{
+#>
+			case <#= i #>:
+				return buffered.Set(new Shard<#= i #>(), true);
+<#
+}
+#>
+
+			default:
+				throw new InvalidOperationException("Cannot add shard > <#= SHARD_COUNT #>");
+		}
+	}
+
+	public static void AddSharding(this CommandBuffer buffer, Entity entity, int index)
+	{
+		switch (index % <#= SHARD_COUNT #>)
+		{
+<# for (var i = 0; i < SHARD_COUNT; i++)
+{
+#>
+			case <#= i #>:
+				buffer.Set(entity, new Shard<#= i #>());
+				break;
+<#
+}
+#>
+
+			default:
+				throw new InvalidOperationException("Cannot add shard > <#= SHARD_COUNT #>");
+		}
+	}
+
+	public static void RemoveSharding(this CommandBuffer buffer, Entity entity)
+	{
+<# for (var i = 0; i < SHARD_COUNT; i++)
+{
+#>
+		buffer.Remove<Shard<#= i #>>(entity);
+<#
+}
+#>
+	}
+}
+
+<# for (var i = 0; i < SHARD_COUNT; i++)
+{
+#>
+internal record struct Shard<#= i #> : IComponent;
+<#
+}
+#>

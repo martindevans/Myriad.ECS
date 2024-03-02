@@ -5,7 +5,7 @@ namespace ParallelTasks;
 internal class Worker
 {
     private readonly Thread _thread;
-    private readonly ConcurrentBag<Task> _tasks = new();
+    private readonly ConcurrentBag<Task> _tasks = [ ];
     private readonly WorkStealingScheduler _scheduler;
 
     public AutoResetEvent Gate { get; } = new AutoResetEvent(false);
@@ -53,6 +53,8 @@ internal class Worker
             else
                 FindWork();
         }
+
+        // ReSharper disable once FunctionNeverReturns
     }
 
     private void FindWork()
@@ -62,10 +64,7 @@ internal class Worker
         do
         {
             if (_scheduler.TryGetTask(out task))
-            {
-                foundWork = true;
                 break;
-            }
 
             var replicable = WorkItem.Replicable;
             if (replicable.HasValue)
