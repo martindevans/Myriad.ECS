@@ -21,11 +21,13 @@ namespace Myriad.ECS.Worlds
 	{
 		public int Execute<TQ, T0>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
 			where TQ : IQuery1<T0>
 		{
+			query ??= GetCachedQuery<T0>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -127,12 +129,14 @@ namespace Myriad.ECS.Worlds
 	{
 		public int Execute<TQ, T0, T1>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
 			where TQ : IQuery2<T0, T1>
 		{
+			query ??= GetCachedQuery<T0, T1>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -240,13 +244,15 @@ namespace Myriad.ECS.Worlds
 	{
 		public int Execute<TQ, T0, T1, T2>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
 			where TQ : IQuery3<T0, T1, T2>
 		{
+			query ??= GetCachedQuery<T0, T1, T2>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -360,7 +366,7 @@ namespace Myriad.ECS.Worlds
 	{
 		public int Execute<TQ, T0, T1, T2, T3>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -368,6 +374,8 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
 			where TQ : IQuery4<T0, T1, T2, T3>
 		{
+			query ??= GetCachedQuery<T0, T1, T2, T3>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -450,12 +458,17 @@ namespace Myriad.ECS.Worlds
 					var t2 = chunk.GetComponentArray<T2>(c2);
 					var t3 = chunk.GetComponentArray<T3>(c3);
 
-                    ParallelTasks.Parallel.For(0, chunk.EntityCount, i =>
+                    ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
-						var entities = chunk.Entities;
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
+						var start = b * batchSize;
+						var end = Math.Min(start + batchSize, chunk.EntityCount);
 
-					}, batchSize);
+						for (var i = start; i < end; i++)
+						{
+							var entities = chunk.Entities;
+							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
+						}
+					});
 				}
 			}
 
@@ -482,7 +495,7 @@ namespace Myriad.ECS.Worlds
 	{
 		public int Execute<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -491,6 +504,8 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
 			where TQ : IQuery5<T0, T1, T2, T3, T4>
 		{
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -616,7 +631,7 @@ namespace Myriad.ECS.Worlds
 	{
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -626,6 +641,8 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
 			where TQ : IQuery6<T0, T1, T2, T3, T4, T5>
 		{
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -757,7 +774,7 @@ namespace Myriad.ECS.Worlds
 	{
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -768,6 +785,8 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
 			where TQ : IQuery7<T0, T1, T2, T3, T4, T5, T6>
 		{
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -905,7 +924,7 @@ namespace Myriad.ECS.Worlds
 	{
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -917,6 +936,8 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
 			where TQ : IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -1060,7 +1081,7 @@ namespace Myriad.ECS.Worlds
 	{
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1073,6 +1094,8 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
 			where TQ : IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;

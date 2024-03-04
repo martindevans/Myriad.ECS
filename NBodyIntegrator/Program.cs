@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using Myriad.ECS.Command;
+﻿using Myriad.ECS.Command;
 using Myriad.ECS.Systems;
 using Myriad.ECS.Worlds;
 using NBodyIntegrator;
@@ -45,7 +44,7 @@ setup.Create()
 
 
 // Create satellites at random altitudes, with the correct velocity for a circular orbit at that altitude
-const int count = 0;
+const int count = 2;
 for (var i = 0; i < count; i++)
 {
     var altitude = ((float)i / count) * 35_786_000;
@@ -86,7 +85,7 @@ for (var i = 0; i < count; i++)
 CreateNBody(
     setup,
     new Metre3(140218493, -5186504, -346837760) + new Metre3(0, 1737000, 0),
-    new Metre3(0, 0, 4000),
+    new Metre3(2000, 0, 0),
     NBodyPrecision.Medium
 );
 
@@ -142,7 +141,8 @@ AnsiConsole
 
             task.Increment(1);
 
-            WriteCsv(writer, gt.Time);
+            if (i % 4 == 1)
+                WriteCsv(writer, gt.Time);
         }
     });
 
@@ -168,49 +168,34 @@ static CommandBuffer.BufferedEntity CreateNBody(CommandBuffer buffer, Metre3 pos
     // Create entity
     var entity = buffer
         .Create()
-        .Set(new NBody { DeltaTime = 1, MaximumTimeLength = 2419200, RailTimestep = 1, RailPoints = bufferAccess, IntegratorPrecision = precision })
+        .Set(new NBody { DeltaTime = 1, MaximumTimeLength = 2419200, RailTimestep = 1, IntegratorPrecision = precision })
         .Set(new WorldPosition(position));
 
     // Create buffers to hold orbit data
-    entity.Set(new EntityArray<NBody.Position>(new NBody.Position[railSize])
-    {
-        Array =
-        {
-            [idx] = new NBody.Position(position.Value.x, position.Value.y, position.Value.z),
-        },
-    });
+    var pos = new PagedRail<NBody.Position>();
+    pos.Add(new NBody.Position(position.Value.x, position.Value.y, position.Value.z));
+    entity.Set(pos);
 
-    entity.Set(new EntityArray<NBody.Velocity>(new NBody.Velocity[railSize])
-    {
-        Array =
-        {
-            [idx] = new NBody.Velocity(velocity.Value.x, velocity.Value.y, velocity.Value.z),
-        },
-    });
+    var vel = new PagedRail<NBody.Velocity>();
+    vel.Add(new NBody.Velocity(velocity.Value.x, velocity.Value.y, velocity.Value.z));
+    entity.Set(vel);
 
-    entity.Set(new EntityArray<NBody.Timestamp>(new NBody.Timestamp[railSize])
-    {
-        Array =
-        {
-            [idx] = new NBody.Timestamp(0),
-        },
-    });
+    var time = new PagedRail<NBody.Timestamp>();
+    time.Add(new NBody.Timestamp(0));
+    entity.Set(time);
 
     return entity;
 }
 
 void WriteCsv(TextWriter writer, double gameTime)
 {
-    foreach (var (e, n, p, t) in world.Query<NBody, EntityArray<NBody.Position>, EntityArray<NBody.Timestamp>>())
+    foreach (var (e, n, p, t) in world.Query<NBody, PagedRail<NBody.Position>, PagedRail<NBody.Timestamp>>())
     {
-        if (n.Item.RailPoints.Count == 0)
-            continue;
-        if (n.Item.RailPoints.IsFull())
+        if (p.Item.Count == 0)
             continue;
 
-        var index = n.Item.RailPoints.IndexAt(n.Item.RailPoints.Count - 1)!.Value;
-        var pos = p.Item.Array[index].Value;
-        var time = t.Item.Array[index].Value;
+        var pos = p.Item.Last().Value;
+        var time = t.Item.Last().Value;
 
         writer.WriteLine($"{e.ID},\"n\",{time:F2},{pos.Value.x:F3},{pos.Value.y:F3},{pos.Value.z:F3}");
     }

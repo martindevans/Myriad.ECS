@@ -43,6 +43,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Queries\CachedQueries.cs">
+      <DependentUpon>CachedQueries.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Queries\QueryEnumerable.cs">
       <DependentUpon>QueryEnumerable.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -76,6 +81,10 @@
     </None>
     <None Update="Queries\IChunkQuery.tt">
       <LastGenOutput>IChunkQuery.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Queries\CachedQueries.tt">
+      <LastGenOutput>CachedQueries.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="Queries\QueryEnumerable.tt">

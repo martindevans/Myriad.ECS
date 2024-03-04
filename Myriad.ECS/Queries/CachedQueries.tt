@@ -1,0 +1,144 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+    const int PARAM_COUNT = 9;
+#>
+using Myriad.ECS.Queries;
+using Myriad.ECS.IDs;
+
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedParameter.Global
+// ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable CheckNamespace
+// ReSharper disable ArrangeAccessorOwnerBody
+<# for (var i = 1; i <= PARAM_COUNT; i++)
+{
+    var tparams = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
+    if (i > 0)
+        tparams = $"<{tparams}>";
+
+    var refparams = string.Join(", ", Enumerable.Range(0, i).Select(x => "ref T" + x));
+
+    var refparamstup = refparams;
+    if (i == 0)
+    {
+        refparamstup = "Entity";
+    }
+    else
+    {
+        refparamstup = "RefTuple" + i + tparams;
+    }
+#>
+
+namespace Myriad.ECS.Worlds
+{
+    public partial class World
+    {
+        private readonly List<(ComponentID[], QueryDescription)> _queryCache<#= i #> = [ ];
+
+        internal QueryDescription GetCachedQuery<#= tparams #>()
+            <#= Constraints(i, 12) #>
+        {
+            // Find query that matches these types
+            var query = default(QueryDescription);
+            foreach (var item in _queryCache<#= i #>)
+            {
+<# for (var k = 0; k < i; k++)
+{
+#>
+                if (!item.Item1.Contains(ComponentID<<#= "T" + k #>>.ID))
+                    continue;
+<#
+}
+#>
+
+                query = item.Item2;
+                break;
+            }
+
+            // Didn't find one, create it now and store it in the cache
+            if (query == null)
+            {
+                query = new QueryBuilder()
+<# for (var k = 0; k < i; k++)
+{
+#>
+                    .Include<<#= "T" + k #>>()
+<#
+}
+#>
+                    .Build(this);
+
+                _queryCache<#= i #>.Add(([
+<# for (var k = 0; k < i; k++)
+{
+#>
+                    ComponentID<<#= "T" + k #>>.ID,
+<#
+}
+#>
+                ], query));
+            }
+
+            return query;
+        }
+    }
+}
+
+<#
+}
+#>
+
+
+<#+ 
+    static string Constraints(int count, int spaces = 4)
+    {
+        if (count == 0)
+            return "";
+
+        var prefix = new string(' ', spaces);
+        var str = "where " + string.Join(
+            $"\r\n{prefix}where ",
+            Enumerable.Range(0, count).Select(x => $"T{x} : IComponent")
+        );
+
+        return str;
+    }
+
+    static string Name(int mutable)
+    {
+        return "IQuery" + mutable;
+    }
+
+    static string Refs(int start, int count)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(start, count).Select(x => $"ref T{x} t{x}")
+        );
+
+        return str;
+    }
+
+    static string Ins(int start, int count)
+    {
+        return string.Join(
+            ", ",
+            Enumerable.Range(start, count).Select(x => $"ref readonly T{x} t{x}")
+        );
+    }
+
+    static string CallParameters(int count)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(0, count).Select(x => $"ref t{x}[i]")
+        );
+
+        return str;
+    }
+#>

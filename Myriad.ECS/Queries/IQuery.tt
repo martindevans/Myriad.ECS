@@ -34,11 +34,13 @@ namespace Myriad.ECS.Worlds
 	{
 		public int Execute<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where <#= Constraints(sumij, 12) #>
 			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
+			query ??= GetCachedQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;

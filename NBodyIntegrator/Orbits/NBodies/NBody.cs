@@ -56,12 +56,6 @@ public struct NBody
     /// </summary>
     public NBodyPrecision IntegratorPrecision;
 
-    /// <summary>
-    /// Data is stored in three dynamic buffers. This same "RailPoint" circular buffer
-    /// manages all three of them, so they remain perfectly in sync.
-    /// </summary>
-    public CircularBufferIndexer RailPoints;
-
     public struct Timestamp(double value)
     {
         public double Value = value;

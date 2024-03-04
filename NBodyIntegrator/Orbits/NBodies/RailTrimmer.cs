@@ -8,12 +8,9 @@ namespace NBodyIntegrator.Orbits.NBodies;
 public sealed class RailTrimmer(World world)
     : ISystem
 {
-    public bool Enabled { get; set; } = true;
+    private const int MAX_ITERS = 64;
 
-    private readonly QueryDescription _trimQuery = new QueryBuilder()
-        .Include<NBody>()
-        .Include<EntityArray<NBody.Timestamp>>()
-        .Build(world);
+    public bool Enabled { get; set; } = true;
 
     public void Init()
     {
@@ -21,49 +18,40 @@ public sealed class RailTrimmer(World world)
 
     public void Update(GameTime time)
     {
-        world.Execute<TrimRails, NBody, EntityArray<NBody.Timestamp>>(new TrimRails(time.Time), _trimQuery);
+        world.Execute<TrimRails, NBody, PagedRail<NBody.Position>, PagedRail<NBody.Velocity>, PagedRail<NBody.Timestamp>>(new TrimRails(time.Time));
     }
 
     private readonly struct TrimRails(double CurrentTime)
-        : IQuery2<NBody, EntityArray<NBody.Timestamp>>
+        : IQuery4<NBody, PagedRail<NBody.Position>, PagedRail<NBody.Velocity>, PagedRail<NBody.Timestamp>>
     {
         public void Execute(
             Entity entity,
             ref NBody nbody,
-            ref EntityArray<NBody.Timestamp> rawTimes
+            ref PagedRail<NBody.Position> positions,
+            ref PagedRail<NBody.Velocity> velocities,
+            ref PagedRail<NBody.Timestamp> times
         )
         {
-            // Remove useless data from start of rail
-            TrimRail(ref nbody.RailPoints, ref rawTimes);
-        }
+            if (positions.Count != velocities.Count)
+                throw new InvalidOperationException("Position/Velocity count mismatch");
+            if (positions.Count != times.Count)
+                throw new InvalidOperationException("Position/Velocity count mismatch");
 
-        /// <summary>
-        /// Trim down rail so that it has just one point before "CurrentTime"
-        /// </summary>
-        private void TrimRail(ref CircularBufferIndexer circular, ref EntityArray<NBody.Timestamp> time)
-        {
-            while (circular.Count > 2)
+            // Keep removing frames while:
+            // - Iteration limit
+            // - More than 2
+            // - First two are both before now
+            for (var i = 0; i < MAX_ITERS && times.Count > 2; i++)
             {
-                // Get the first two timestamps
-                var ai = circular.IndexAt(0);
-                if (!ai.HasValue)
-                    return;
-                var bi = circular.IndexAt(1);
-                if (!bi.HasValue)
+                var a = times.First();
+                var b = times.Second();
+
+                if (a.Value >= CurrentTime || b.Value >= CurrentTime)
                     return;
 
-                // we know neither are null now
-                var a = time.Array[ai.Value].Value;
-                var b = time.Array[bi.Value].Value;
-
-                // If they are _both_ before the current time remove the first one
-                if (a < CurrentTime && b < CurrentTime)
-                {
-                    if (!circular.TryRemove().HasValue)
-                        return;
-                }
-                else
-                    return;
+                positions.RemoveFirst();
+                velocities.RemoveFirst();
+                times.RemoveFirst();
             }
         }
     }

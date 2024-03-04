@@ -14,9 +14,9 @@ public sealed class RailIntegrator(World world)
 {
     private readonly QueryDescription _nbodyQuery = new QueryBuilder()
         .Include<NBody>()
-        .Include<EntityArray<NBody.Position>>()
-        .Include<EntityArray<NBody.Velocity>>()
-        .Include<EntityArray<NBody.Timestamp>>()
+        .Include<PagedRail<NBody.Position>>()
+        .Include<PagedRail<NBody.Velocity>>()
+        .Include<PagedRail<NBody.Timestamp>>()
         .Build(world);
 
     private KeplerObject[] _keplerMasses = [];
@@ -30,7 +30,7 @@ public sealed class RailIntegrator(World world)
 
     public void Update(GameTime time)
     {
-        world.ExecuteParallel<Integrate, NBody, EntityArray<NBody.Position>, EntityArray<NBody.Velocity>, EntityArray<NBody.Timestamp>>(
+        world.ExecuteParallel<Integrate, NBody, PagedRail<NBody.Position>, PagedRail<NBody.Velocity>, PagedRail<NBody.Timestamp>>(
             new Integrate(_keplerMasses),
             _nbodyQuery,
             batchSize: 16
@@ -42,56 +42,24 @@ public sealed class RailIntegrator(World world)
     }
 
     private readonly struct Integrate(KeplerObject[] keplerMasses)
-        : IQuery4<NBody, EntityArray<NBody.Position>, EntityArray<NBody.Velocity>, EntityArray<NBody.Timestamp>>
+        : IQuery4<NBody, PagedRail<NBody.Position>, PagedRail<NBody.Velocity>, PagedRail<NBody.Timestamp>>
     {
-        public void Execute(Entity e, ref NBody nbody, ref EntityArray<NBody.Position> positions, ref EntityArray<NBody.Velocity> velocities, ref EntityArray<NBody.Timestamp> times)
+        public void Execute(Entity e, ref NBody nbody, ref PagedRail<NBody.Position> positions, ref PagedRail<NBody.Velocity> velocities, ref PagedRail<NBody.Timestamp> times)
         {
-            // Get the index of the first and last points in the rail
-            var firstIndex = nbody.RailPoints.IndexAt(0)!.Value;
-            var lastIndex = nbody.RailPoints.IndexAt(nbody.RailPoints.Count - 1)!.Value;
+            if (positions.Count != velocities.Count)
+                throw new InvalidOperationException("Position/Velocity count mismatch");
+            if (positions.Count != times.Count)
+                throw new InvalidOperationException("Position/Velocity count mismatch");
 
             // If we've hit the length target there's no point integrating anything
-            if (firstIndex != lastIndex)
+            if (times.Count > 2)
             {
-                var a = times.Array[firstIndex];
-                var b = times.Array[lastIndex];
-                var totalTimeLength = b.Value - a.Value;
+                var a = times.First().Value;
+                var b = times.Last().Value;
+                var totalTimeLength = b - a;
 
                 if (totalTimeLength > nbody.MaximumTimeLength)
                     return;
-            }
-
-            // If the rail is full it needs to be grown
-            if (nbody.RailPoints.IsFull())
-            {
-                // Create a new circular indexer twice the size
-                var cbold = nbody.RailPoints;
-                nbody.RailPoints = new CircularBufferIndexer(cbold.Count * 2);
-
-                // Get copies to the old arrays
-                var pold = positions.Array;
-                var vold = velocities.Array;
-                var told = times.Array;
-
-                // Create new arrays
-                positions = new EntityArray<NBody.Position>(new NBody.Position[nbody.RailPoints.Capacity]);
-                velocities = new EntityArray<NBody.Velocity>(new NBody.Velocity[nbody.RailPoints.Capacity]);
-                times = new EntityArray<NBody.Timestamp>(new NBody.Timestamp[nbody.RailPoints.Capacity]);
-
-                // Copy datapoints
-                for (var i = 0; i < cbold.Count; i++)
-                {
-                    var iold = cbold.IndexAt(i)!.Value;
-                    var inew = nbody.RailPoints.TryAdd()!.Value;
-
-                    positions.Array[inew] = pold[iold];
-                    velocities.Array[inew] = vold[iold];
-                    times.Array[inew] = told[iold];
-                }
-
-                // Reculate first and last index
-                firstIndex = nbody.RailPoints.IndexAt(0)!.Value;
-                lastIndex = nbody.RailPoints.IndexAt(nbody.RailPoints.Count - 1)!.Value;
             }
 
             // Choose an integrator
@@ -104,9 +72,9 @@ public sealed class RailIntegrator(World world)
             var q = new AccelerationQuery(keplerMasses);
 
             // Get the index of the final point in the rail and copy out data
-            var pos = positions.Array[lastIndex].Value;
-            var vel = velocities.Array[lastIndex].Value;
-            var tim = times.Array[lastIndex].Value;
+            var pos = positions.Last().Value;
+            var vel = velocities.Last().Value;
+            var tim = times.Last().Value;
             var dt = nbody.DeltaTime;
 
             // Do lots of integration steps, however many is required for 1 second of time to pass (with a cap of max steps, just in case)
@@ -118,10 +86,9 @@ public sealed class RailIntegrator(World world)
             }
 
             // Store results
-            var index = nbody.RailPoints.TryAdd()!.Value;
-            positions.Array[index] = pos;
-            velocities.Array[index] = vel;
-            times.Array[index] = tim;
+            positions.Add(pos);
+            velocities.Add(vel);
+            times.Add(tim);
             nbody.DeltaTime = dt;
         }
     }

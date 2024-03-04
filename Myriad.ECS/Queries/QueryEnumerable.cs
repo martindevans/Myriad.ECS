@@ -46,7 +46,7 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public Entity Current
+        public readonly Entity Current
         {
             get
             {
@@ -125,42 +125,9 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        private readonly List<(ComponentID[], QueryDescription)> _queryCache0 = [ ];
-
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable0 Query(QueryDescription query)
             
         {
-            return new QueryResultEnumerable0(
-                query
-            );
-        }
-
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
-        public QueryResultEnumerable0 Query()
-            
-        {
-            // Find query that matches these types
-            var query = default(QueryDescription);
-            foreach (var item in _queryCache0)
-            {
-
-                query = item.Item2;
-                break;
-            }
-
-            // Didn't find one, create it now and store it in the cache
-            if (query == null)
-            {
-                query = new QueryBuilder()
-                    .Build(this);
-
-                _queryCache0.Add(([
-                ], query));
-            }
-
             return new QueryResultEnumerable0(
                 query
             );
@@ -206,7 +173,7 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public RefTuple1<T0> Current
+        public readonly RefTuple1<T0> Current
         {
             get
             {
@@ -289,10 +256,6 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        private readonly List<(ComponentID[], QueryDescription)> _queryCache1 = [ ];
-
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable1<T0> Query<T0>(QueryDescription query)
             where T0 : IComponent
         {
@@ -301,38 +264,17 @@ namespace Myriad.ECS.Worlds
             );
         }
 
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable1<T0> Query<T0>()
             where T0 : IComponent
         {
             // Find query that matches these types
-            var query = default(QueryDescription);
-            foreach (var item in _queryCache1)
-            {
-                if (!item.Item1.Contains(ComponentID<T0>.ID))
-                    continue;
-
-                query = item.Item2;
-                break;
-            }
-
-            // Didn't find one, create it now and store it in the cache
-            if (query == null)
-            {
-                query = new QueryBuilder()
-                    .Include<T0>()
-                    .Build(this);
-
-                _queryCache1.Add(([
-                    ComponentID<T0>.ID,
-                ], query));
-            }
+            var query = GetCachedQuery<T0>();
 
             return new QueryResultEnumerable1<T0>(
                 query
             );
         }
+
     }
 }
 
@@ -378,7 +320,7 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public RefTuple2<T0, T1> Current
+        public readonly RefTuple2<T0, T1> Current
         {
             get
             {
@@ -463,10 +405,6 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        private readonly List<(ComponentID[], QueryDescription)> _queryCache2 = [ ];
-
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable2<T0, T1> Query<T0, T1>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent
@@ -476,43 +414,18 @@ namespace Myriad.ECS.Worlds
             );
         }
 
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable2<T0, T1> Query<T0, T1>()
             where T0 : IComponent
             where T1 : IComponent
         {
             // Find query that matches these types
-            var query = default(QueryDescription);
-            foreach (var item in _queryCache2)
-            {
-                if (!item.Item1.Contains(ComponentID<T0>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T1>.ID))
-                    continue;
-
-                query = item.Item2;
-                break;
-            }
-
-            // Didn't find one, create it now and store it in the cache
-            if (query == null)
-            {
-                query = new QueryBuilder()
-                    .Include<T0>()
-                    .Include<T1>()
-                    .Build(this);
-
-                _queryCache2.Add(([
-                    ComponentID<T0>.ID,
-                    ComponentID<T1>.ID,
-                ], query));
-            }
+            var query = GetCachedQuery<T0, T1>();
 
             return new QueryResultEnumerable2<T0, T1>(
                 query
             );
         }
+
     }
 }
 
@@ -562,7 +475,7 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public RefTuple3<T0, T1, T2> Current
+        public readonly RefTuple3<T0, T1, T2> Current
         {
             get
             {
@@ -649,10 +562,6 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        private readonly List<(ComponentID[], QueryDescription)> _queryCache3 = [ ];
-
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable3<T0, T1, T2> Query<T0, T1, T2>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent
@@ -663,48 +572,19 @@ namespace Myriad.ECS.Worlds
             );
         }
 
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable3<T0, T1, T2> Query<T0, T1, T2>()
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
         {
             // Find query that matches these types
-            var query = default(QueryDescription);
-            foreach (var item in _queryCache3)
-            {
-                if (!item.Item1.Contains(ComponentID<T0>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T1>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T2>.ID))
-                    continue;
-
-                query = item.Item2;
-                break;
-            }
-
-            // Didn't find one, create it now and store it in the cache
-            if (query == null)
-            {
-                query = new QueryBuilder()
-                    .Include<T0>()
-                    .Include<T1>()
-                    .Include<T2>()
-                    .Build(this);
-
-                _queryCache3.Add(([
-                    ComponentID<T0>.ID,
-                    ComponentID<T1>.ID,
-                    ComponentID<T2>.ID,
-                ], query));
-            }
+            var query = GetCachedQuery<T0, T1, T2>();
 
             return new QueryResultEnumerable3<T0, T1, T2>(
                 query
             );
         }
+
     }
 }
 
@@ -758,7 +638,7 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public RefTuple4<T0, T1, T2, T3> Current
+        public readonly RefTuple4<T0, T1, T2, T3> Current
         {
             get
             {
@@ -847,10 +727,6 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        private readonly List<(ComponentID[], QueryDescription)> _queryCache4 = [ ];
-
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable4<T0, T1, T2, T3> Query<T0, T1, T2, T3>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent
@@ -862,8 +738,6 @@ namespace Myriad.ECS.Worlds
             );
         }
 
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable4<T0, T1, T2, T3> Query<T0, T1, T2, T3>()
             where T0 : IComponent
             where T1 : IComponent
@@ -871,44 +745,13 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
         {
             // Find query that matches these types
-            var query = default(QueryDescription);
-            foreach (var item in _queryCache4)
-            {
-                if (!item.Item1.Contains(ComponentID<T0>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T1>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T2>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T3>.ID))
-                    continue;
-
-                query = item.Item2;
-                break;
-            }
-
-            // Didn't find one, create it now and store it in the cache
-            if (query == null)
-            {
-                query = new QueryBuilder()
-                    .Include<T0>()
-                    .Include<T1>()
-                    .Include<T2>()
-                    .Include<T3>()
-                    .Build(this);
-
-                _queryCache4.Add(([
-                    ComponentID<T0>.ID,
-                    ComponentID<T1>.ID,
-                    ComponentID<T2>.ID,
-                    ComponentID<T3>.ID,
-                ], query));
-            }
+            var query = GetCachedQuery<T0, T1, T2, T3>();
 
             return new QueryResultEnumerable4<T0, T1, T2, T3>(
                 query
             );
         }
+
     }
 }
 
@@ -966,7 +809,7 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public RefTuple5<T0, T1, T2, T3, T4> Current
+        public readonly RefTuple5<T0, T1, T2, T3, T4> Current
         {
             get
             {
@@ -1057,10 +900,6 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        private readonly List<(ComponentID[], QueryDescription)> _queryCache5 = [ ];
-
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable5<T0, T1, T2, T3, T4> Query<T0, T1, T2, T3, T4>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent
@@ -1073,8 +912,6 @@ namespace Myriad.ECS.Worlds
             );
         }
 
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable5<T0, T1, T2, T3, T4> Query<T0, T1, T2, T3, T4>()
             where T0 : IComponent
             where T1 : IComponent
@@ -1083,48 +920,13 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
         {
             // Find query that matches these types
-            var query = default(QueryDescription);
-            foreach (var item in _queryCache5)
-            {
-                if (!item.Item1.Contains(ComponentID<T0>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T1>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T2>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T3>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T4>.ID))
-                    continue;
-
-                query = item.Item2;
-                break;
-            }
-
-            // Didn't find one, create it now and store it in the cache
-            if (query == null)
-            {
-                query = new QueryBuilder()
-                    .Include<T0>()
-                    .Include<T1>()
-                    .Include<T2>()
-                    .Include<T3>()
-                    .Include<T4>()
-                    .Build(this);
-
-                _queryCache5.Add(([
-                    ComponentID<T0>.ID,
-                    ComponentID<T1>.ID,
-                    ComponentID<T2>.ID,
-                    ComponentID<T3>.ID,
-                    ComponentID<T4>.ID,
-                ], query));
-            }
+            var query = GetCachedQuery<T0, T1, T2, T3, T4>();
 
             return new QueryResultEnumerable5<T0, T1, T2, T3, T4>(
                 query
             );
         }
+
     }
 }
 
@@ -1186,7 +988,7 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public RefTuple6<T0, T1, T2, T3, T4, T5> Current
+        public readonly RefTuple6<T0, T1, T2, T3, T4, T5> Current
         {
             get
             {
@@ -1279,10 +1081,6 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        private readonly List<(ComponentID[], QueryDescription)> _queryCache6 = [ ];
-
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable6<T0, T1, T2, T3, T4, T5> Query<T0, T1, T2, T3, T4, T5>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent
@@ -1296,8 +1094,6 @@ namespace Myriad.ECS.Worlds
             );
         }
 
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable6<T0, T1, T2, T3, T4, T5> Query<T0, T1, T2, T3, T4, T5>()
             where T0 : IComponent
             where T1 : IComponent
@@ -1307,52 +1103,13 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
         {
             // Find query that matches these types
-            var query = default(QueryDescription);
-            foreach (var item in _queryCache6)
-            {
-                if (!item.Item1.Contains(ComponentID<T0>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T1>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T2>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T3>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T4>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T5>.ID))
-                    continue;
-
-                query = item.Item2;
-                break;
-            }
-
-            // Didn't find one, create it now and store it in the cache
-            if (query == null)
-            {
-                query = new QueryBuilder()
-                    .Include<T0>()
-                    .Include<T1>()
-                    .Include<T2>()
-                    .Include<T3>()
-                    .Include<T4>()
-                    .Include<T5>()
-                    .Build(this);
-
-                _queryCache6.Add(([
-                    ComponentID<T0>.ID,
-                    ComponentID<T1>.ID,
-                    ComponentID<T2>.ID,
-                    ComponentID<T3>.ID,
-                    ComponentID<T4>.ID,
-                    ComponentID<T5>.ID,
-                ], query));
-            }
+            var query = GetCachedQuery<T0, T1, T2, T3, T4, T5>();
 
             return new QueryResultEnumerable6<T0, T1, T2, T3, T4, T5>(
                 query
             );
         }
+
     }
 }
 
@@ -1418,7 +1175,7 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public RefTuple7<T0, T1, T2, T3, T4, T5, T6> Current
+        public readonly RefTuple7<T0, T1, T2, T3, T4, T5, T6> Current
         {
             get
             {
@@ -1513,10 +1270,6 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        private readonly List<(ComponentID[], QueryDescription)> _queryCache7 = [ ];
-
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable7<T0, T1, T2, T3, T4, T5, T6> Query<T0, T1, T2, T3, T4, T5, T6>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent
@@ -1531,8 +1284,6 @@ namespace Myriad.ECS.Worlds
             );
         }
 
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable7<T0, T1, T2, T3, T4, T5, T6> Query<T0, T1, T2, T3, T4, T5, T6>()
             where T0 : IComponent
             where T1 : IComponent
@@ -1543,56 +1294,13 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
         {
             // Find query that matches these types
-            var query = default(QueryDescription);
-            foreach (var item in _queryCache7)
-            {
-                if (!item.Item1.Contains(ComponentID<T0>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T1>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T2>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T3>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T4>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T5>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T6>.ID))
-                    continue;
-
-                query = item.Item2;
-                break;
-            }
-
-            // Didn't find one, create it now and store it in the cache
-            if (query == null)
-            {
-                query = new QueryBuilder()
-                    .Include<T0>()
-                    .Include<T1>()
-                    .Include<T2>()
-                    .Include<T3>()
-                    .Include<T4>()
-                    .Include<T5>()
-                    .Include<T6>()
-                    .Build(this);
-
-                _queryCache7.Add(([
-                    ComponentID<T0>.ID,
-                    ComponentID<T1>.ID,
-                    ComponentID<T2>.ID,
-                    ComponentID<T3>.ID,
-                    ComponentID<T4>.ID,
-                    ComponentID<T5>.ID,
-                    ComponentID<T6>.ID,
-                ], query));
-            }
+            var query = GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
 
             return new QueryResultEnumerable7<T0, T1, T2, T3, T4, T5, T6>(
                 query
             );
         }
+
     }
 }
 
@@ -1662,7 +1370,7 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public RefTuple8<T0, T1, T2, T3, T4, T5, T6, T7> Current
+        public readonly RefTuple8<T0, T1, T2, T3, T4, T5, T6, T7> Current
         {
             get
             {
@@ -1759,10 +1467,6 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        private readonly List<(ComponentID[], QueryDescription)> _queryCache8 = [ ];
-
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable8<T0, T1, T2, T3, T4, T5, T6, T7> Query<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent
@@ -1778,8 +1482,6 @@ namespace Myriad.ECS.Worlds
             );
         }
 
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable8<T0, T1, T2, T3, T4, T5, T6, T7> Query<T0, T1, T2, T3, T4, T5, T6, T7>()
             where T0 : IComponent
             where T1 : IComponent
@@ -1791,60 +1493,13 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
         {
             // Find query that matches these types
-            var query = default(QueryDescription);
-            foreach (var item in _queryCache8)
-            {
-                if (!item.Item1.Contains(ComponentID<T0>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T1>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T2>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T3>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T4>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T5>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T6>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T7>.ID))
-                    continue;
-
-                query = item.Item2;
-                break;
-            }
-
-            // Didn't find one, create it now and store it in the cache
-            if (query == null)
-            {
-                query = new QueryBuilder()
-                    .Include<T0>()
-                    .Include<T1>()
-                    .Include<T2>()
-                    .Include<T3>()
-                    .Include<T4>()
-                    .Include<T5>()
-                    .Include<T6>()
-                    .Include<T7>()
-                    .Build(this);
-
-                _queryCache8.Add(([
-                    ComponentID<T0>.ID,
-                    ComponentID<T1>.ID,
-                    ComponentID<T2>.ID,
-                    ComponentID<T3>.ID,
-                    ComponentID<T4>.ID,
-                    ComponentID<T5>.ID,
-                    ComponentID<T6>.ID,
-                    ComponentID<T7>.ID,
-                ], query));
-            }
+            var query = GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
 
             return new QueryResultEnumerable8<T0, T1, T2, T3, T4, T5, T6, T7>(
                 query
             );
         }
+
     }
 }
 
@@ -1918,7 +1573,7 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public RefTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8> Current
+        public readonly RefTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8> Current
         {
             get
             {
@@ -2017,10 +1672,6 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        private readonly List<(ComponentID[], QueryDescription)> _queryCache9 = [ ];
-
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable9<T0, T1, T2, T3, T4, T5, T6, T7, T8> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent
@@ -2037,8 +1688,6 @@ namespace Myriad.ECS.Worlds
             );
         }
 
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable9<T0, T1, T2, T3, T4, T5, T6, T7, T8> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
             where T0 : IComponent
             where T1 : IComponent
@@ -2051,64 +1700,13 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
         {
             // Find query that matches these types
-            var query = default(QueryDescription);
-            foreach (var item in _queryCache9)
-            {
-                if (!item.Item1.Contains(ComponentID<T0>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T1>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T2>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T3>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T4>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T5>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T6>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T7>.ID))
-                    continue;
-                if (!item.Item1.Contains(ComponentID<T8>.ID))
-                    continue;
-
-                query = item.Item2;
-                break;
-            }
-
-            // Didn't find one, create it now and store it in the cache
-            if (query == null)
-            {
-                query = new QueryBuilder()
-                    .Include<T0>()
-                    .Include<T1>()
-                    .Include<T2>()
-                    .Include<T3>()
-                    .Include<T4>()
-                    .Include<T5>()
-                    .Include<T6>()
-                    .Include<T7>()
-                    .Include<T8>()
-                    .Build(this);
-
-                _queryCache9.Add(([
-                    ComponentID<T0>.ID,
-                    ComponentID<T1>.ID,
-                    ComponentID<T2>.ID,
-                    ComponentID<T3>.ID,
-                    ComponentID<T4>.ID,
-                    ComponentID<T5>.ID,
-                    ComponentID<T6>.ID,
-                    ComponentID<T7>.ID,
-                    ComponentID<T8>.ID,
-                ], query));
-            }
+            var query = GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
 
             return new QueryResultEnumerable9<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
                 query
             );
         }
+
     }
 }
 

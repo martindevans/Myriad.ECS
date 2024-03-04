@@ -87,7 +87,7 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public <#= refparamstup #> Current
+        public readonly <#= refparamstup #> Current
         {
             get
             {
@@ -195,10 +195,6 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        private readonly List<(ComponentID[], QueryDescription)> _queryCache<#= i #> = [ ];
-
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable<#= i #><#= tparams #> Query<#= tparams #>(QueryDescription query)
             <#= Constraints(i, 12) #>
         {
@@ -206,57 +202,25 @@ namespace Myriad.ECS.Worlds
                 query
             );
         }
+<#
+if (i > 0)
+{
+#>
 
-        [System.Diagnostics.Contracts.Pure]
-        [JetBrains.Annotations.Pure]
         public QueryResultEnumerable<#= i #><#= tparams #> Query<#= tparams #>()
             <#= Constraints(i, 12) #>
         {
             // Find query that matches these types
-            var query = default(QueryDescription);
-            foreach (var item in _queryCache<#= i #>)
-            {
-<# for (var k = 0; k < i; k++)
-{
-#>
-                if (!item.Item1.Contains(ComponentID<<#= "T" + k #>>.ID))
-                    continue;
-<#
-}
-#>
-
-                query = item.Item2;
-                break;
-            }
-
-            // Didn't find one, create it now and store it in the cache
-            if (query == null)
-            {
-                query = new QueryBuilder()
-<# for (var k = 0; k < i; k++)
-{
-#>
-                    .Include<<#= "T" + k #>>()
-<#
-}
-#>
-                    .Build(this);
-
-                _queryCache<#= i #>.Add(([
-<# for (var k = 0; k < i; k++)
-{
-#>
-                    ComponentID<<#= "T" + k #>>.ID,
-<#
-}
-#>
-                ], query));
-            }
+            var query = GetCachedQuery<#= tparams #>();
 
             return new QueryResultEnumerable<#= i #><#= tparams #>(
                 query
             );
         }
+
+<#
+}
+#>
     }
 }
 
