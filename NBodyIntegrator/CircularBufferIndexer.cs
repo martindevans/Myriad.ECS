@@ -3,8 +3,13 @@
 /// <summary>
 /// Manages a circular buffer of buffer elements
 /// </summary>
-public struct DynamicCircularBuffer
+public struct CircularBufferIndexer(int bufferLength)
 {
+    /// <summary>
+    /// Total capacity of this indexer
+    /// </summary>
+    public int Capacity { get; } = bufferLength;
+
     /// <summary>
     /// Number of items in the circular buffer
     /// </summary>
@@ -25,23 +30,23 @@ public struct DynamicCircularBuffer
     /// </summary>
     public uint Epoch { get; private set; }
 
-    public bool IsFull(int bufferLength)
+    public readonly bool IsFull()
     {
-        return bufferLength == Count;
+        return Capacity == Count;
     }
 
     /// <summary>
     /// Return the index to assign a new item to the buffer
     /// </summary>
     /// <returns>The index to write data into, or null if there is no space in the buffer</returns>
-    public int? TryAdd(int bufferLength)
+    public int? TryAdd()
     {
-        if (IsFull(bufferLength))
+        if (IsFull())
             return null;
 
         // Insert the new item
         var idx = End;
-        End = (End + 1) % bufferLength;
+        End = (End + 1) % Capacity;
         Count++;
 
         unchecked
@@ -55,15 +60,14 @@ public struct DynamicCircularBuffer
     /// <summary>
     /// Remove the item from the start of the buffer and return the index of the item just returned
     /// </summary>
-    /// <param name="bufferLength"></param>
     /// <returns></returns>
-    public int? TryRemove(int bufferLength)
+    public int? TryRemove()
     {
         if (Count == 0)
             return default;
 
         var idx = Start;
-        Start = (Start + 1) % bufferLength;
+        Start = (Start + 1) % Capacity;
         Count--;
 
         unchecked
@@ -77,16 +81,15 @@ public struct DynamicCircularBuffer
     /// <summary>
     /// Get the index of the item at a given circular index
     /// </summary>
-    /// <param name="bufferLength"></param>
     /// <param name="index"></param>
     /// <returns></returns>
-    public readonly int? IndexAt(int bufferLength, int index)
+    public readonly int? IndexAt(int index)
     {
         if (index < 0)
             return default;
         if (index >= Count)
             return default;
 
-        return (Start + index) % bufferLength;
+        return (Start + index) % Capacity;
     }
 }

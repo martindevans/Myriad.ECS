@@ -3,12 +3,12 @@ using Unity.Mathematics;
 
 namespace NBodyIntegrator.Mathematics;
 
-public struct QuaternionDouble
+public readonly struct QuaternionDouble
 {
-    public double X;
-    public double Y;
-    public double Z;
-    public double W;
+    public readonly double X;
+    public readonly double Y;
+    public readonly double Z;
+    public readonly double W;
 
     public QuaternionDouble(Quaternion q)
     {
@@ -18,15 +18,22 @@ public struct QuaternionDouble
         W = q.W;
     }
 
-    public static double3 operator *(QuaternionDouble q, double3 v)
+    public static double3 operator *(QuaternionDouble rotation, double3 value)
     {
-        // https://gamedev.stackexchange.com/a/50545/1687
+        var xyz = new double3(rotation.X, rotation.Y, rotation.Z);
+        var xyz2 = xyz + xyz;
 
-        var u = new double3(q.X, q.Y, q.Z);
-        var s = q.W;
+        var w2 = rotation.W * xyz2;
+        var x2 = rotation.X * xyz2;
 
-        return 2 * math.dot(u, v) * u
-             + (s * s - math.dot(u, u)) * v
-             + 2 * s * math.cross(u, v);
+        var yy2 = rotation.Y * xyz2.y;
+        var yz2 = rotation.Y * xyz2.z;
+        var zz2 = rotation.Z * xyz2.z;
+
+        return new double3(
+            value.x * (1.0f - yy2 - zz2) + value.y * (x2.y - w2.z) + value.z * (x2.z + w2.y),
+            value.x * (x2.y + w2.z) + value.y * (1.0f - x2.x - zz2) + value.z * (yz2 - w2.x),
+            value.x * (x2.z - w2.y) + value.y * (yz2 + w2.x) + value.z * (1.0f - x2.x - yy2)
+        );
     }
 }

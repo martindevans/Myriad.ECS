@@ -1,6 +1,6 @@
 ﻿using NBodyIntegrator.Units;
 
-namespace NBodyIntegrator.Integrator.NBodies.Integrators;
+namespace NBodyIntegrator.Orbits.NBodies.Integrators;
 
 public interface IAccelerationQuery
 {

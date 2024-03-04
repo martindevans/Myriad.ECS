@@ -1,6 +1,6 @@
 ﻿using NBodyIntegrator.Units;
 
-namespace NBodyIntegrator.Integrator.NBodies.Integrators
+namespace NBodyIntegrator.Orbits.NBodies.Integrators
 {
     /// <summary>
     /// https://en.wikipedia.org/wiki/Leapfrog_integration#4th_order_Yoshida_integrator

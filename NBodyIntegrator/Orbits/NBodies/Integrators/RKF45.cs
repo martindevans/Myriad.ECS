@@ -2,7 +2,7 @@
 using NBodyIntegrator.Units;
 using Unity.Mathematics;
 
-namespace NBodyIntegrator.Integrator.NBodies.Integrators
+namespace NBodyIntegrator.Orbits.NBodies.Integrators
 {
     /// <summary>
     /// https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta%E2%80%93Fehlberg_method

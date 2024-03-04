@@ -4,7 +4,7 @@ using NBodyIntegrator.Mathematics;
 using NBodyIntegrator.Units;
 using static Unity.Mathematics.math;
 
-namespace NBodyIntegrator;
+namespace NBodyIntegrator.Orbits.Kepler;
 
 public readonly struct KeplerOrbit
     : IComponent, IEquatable<KeplerOrbit>
@@ -74,6 +74,7 @@ public readonly struct KeplerOrbit
         );
 
         var pos = new QuaternionDouble(_quaternion) * posInPlane;
+
         return new Metre3(pos.xzy);
     }
 
@@ -132,29 +133,4 @@ public record struct GravityMass(double Value) : IComponent;
 public struct FixedBody
     : IComponent
 {
-}
-
-/// <summary>
-/// Indicates that this entity (which has no mass) is a child of another entity in the kepler orbital system
-/// </summary>
-public struct KeplerChildNoMass
-{
-    public Entity Value;
-}
-
-/// <summary>
-/// Indicates that this entity (which has mass) is a child of another entity in the kepler orbital system
-/// </summary>
-public struct KeplerChildWithMass
-{
-    public Entity Value;
-}
-
-/// <summary>
-/// Indicates that this entity is attached to a kepler orbit at a constant true anomaly
-/// </summary>
-public struct KeplerFixedTrueAnomaly
-    : IComponent
-{
-    public double TrueAnomaly;
 }

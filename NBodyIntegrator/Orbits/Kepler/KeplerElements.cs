@@ -1,6 +1,6 @@
 ﻿using NBodyIntegrator.Units;
 
-namespace NBodyIntegrator;
+namespace NBodyIntegrator.Orbits.Kepler;
 
 public struct KeplerElements
     : IEquatable<KeplerElements>

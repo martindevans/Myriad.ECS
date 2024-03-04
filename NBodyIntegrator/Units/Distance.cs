@@ -2,15 +2,10 @@
 
 namespace NBodyIntegrator.Units;
 
-public struct Metre
+public struct Metre(double value)
     : IEquatable<Metre>
 {
-    public double Value;
-
-    public Metre(double value)
-    {
-        Value = value;
-    }
+    public double Value = value;
 
     public static explicit operator MegaMetre(Metre metres)
     {
@@ -55,15 +50,10 @@ public struct Metre
     #endregion
 }
 
-public struct KiloMetre
+public struct KiloMetre(double value)
     : IEquatable<KiloMetre>
 {
-    public double Value;
-
-    public KiloMetre(double value)
-    {
-        Value = value;
-    }
+    public double Value = value;
 
     public static explicit operator Metre(KiloMetre km)
     {
@@ -113,15 +103,10 @@ public struct KiloMetre
     #endregion
 }
 
-public struct MegaMetre
+public struct MegaMetre(double value)
     : IEquatable<MegaMetre>
 {
-    public double Value;
-
-    public MegaMetre(double value)
-    {
-        Value = value;
-    }
+    public double Value = value;
 
     public static explicit operator Metre(MegaMetre mm)
     {
@@ -166,15 +151,10 @@ public struct MegaMetre
     #endregion
 }
 
-public struct AstronomicalUnit
+public struct AstronomicalUnit(double value)
     : IEquatable<AstronomicalUnit>
 {
-    public double Value;
-
-    public AstronomicalUnit(double value)
-    {
-        Value = value;
-    }
+    public double Value = value;
 
     public static explicit operator Metre(AstronomicalUnit au)
     {
@@ -222,18 +202,13 @@ public struct AstronomicalUnit
 /// <summary>
 /// Distance unit in the scene. 1 unit is 1000 kilometres
 /// </summary>
-public struct SceneUnit
+public struct SceneUnit(double value)
     : IEquatable<SceneUnit>
 {
     public const double MetersPerUnit = 1000000;
     public const double KilometersPerUnit = MetersPerUnit / 1000;
 
-    public double Value;
-
-    public SceneUnit(double value)
-    {
-        Value = value;
-    }
+    public double Value = value;
 
     public static explicit operator SceneUnit(KiloMetre km)
     {

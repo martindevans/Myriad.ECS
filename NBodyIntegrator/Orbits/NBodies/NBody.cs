@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using Myriad.ECS;
 using NBodyIntegrator.Units;
 
-namespace NBodyIntegrator;
+namespace NBodyIntegrator.Orbits.NBodies;
 
 public enum NBodyPrecision
 {
@@ -16,7 +16,7 @@ public enum NBodyPrecision
 
 public static class NBodyPrecisionExtensions
 {
-    private static double Epsilon(this NBodyPrecision precision, double baseEpsilon)
+    public static double Epsilon(this NBodyPrecision precision, double baseEpsilon)
     {
         var factor = precision switch
         {
@@ -42,6 +42,16 @@ public struct NBody
     public double DeltaTime;
 
     /// <summary>
+    /// Maximum length this rail may be (measured as time from start to end)
+    /// </summary>
+    public double MaximumTimeLength;
+
+    /// <summary>
+    /// Amount of time to integrate between points on the rail
+    /// </summary>
+    public double RailTimestep;
+
+    /// <summary>
     /// Set how precise the orbital integrator is.
     /// </summary>
     public NBodyPrecision IntegratorPrecision;
@@ -50,50 +60,35 @@ public struct NBody
     /// Data is stored in three dynamic buffers. This same "RailPoint" circular buffer
     /// manages all three of them, so they remain perfectly in sync.
     /// </summary>
-    public DynamicCircularBuffer RailPoints;
+    public CircularBufferIndexer RailPoints;
 
-    public struct Timestamp
+    public struct Timestamp(double value)
     {
-        public double Value;
-
-        public Timestamp(double value)
-        {
-            Value = value;
-        }
+        public double Value = value;
 
         public static implicit operator double(Timestamp self) => self.Value;
         public static implicit operator Timestamp(double self) => new() { Value = self };
 
-        public override string ToString() => Value.ToString(CultureInfo.InvariantCulture);
+        public readonly override string ToString() => Value.ToString(CultureInfo.InvariantCulture);
     }
 
-    public struct Position
+    public struct Position(double x, double y, double z)
     {
-        public Metre3 Value;
-
-        public Position(double x, double y, double z)
-        {
-            Value = new Metre3(x, y, z);
-        }
+        public Metre3 Value = new(x, y, z);
 
         public static implicit operator Metre3(Position self) => self.Value;
         public static implicit operator Position(Metre3 self) => new() { Value = self };
 
-        public override string ToString() => Value.ToString();
+        public readonly override string ToString() => Value.ToString();
     }
 
-    public struct Velocity
+    public struct Velocity(double x, double y, double z)
     {
-        public Metre3 Value;
-
-        public Velocity(double x, double y, double z)
-        {
-            Value = new Metre3(x, y, z);
-        }
+        public Metre3 Value = new(x, y, z);
 
         public static implicit operator Metre3(Velocity self) => self.Value;
         public static implicit operator Velocity(Metre3 self) => new() { Value = self };
 
-        public override string ToString() => Value.ToString();
+        public readonly override string ToString() => Value.ToString();
     }
 }

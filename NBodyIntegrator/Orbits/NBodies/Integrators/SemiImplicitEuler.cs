@@ -1,12 +1,8 @@
 ﻿using NBodyIntegrator.Units;
 
-namespace NBodyIntegrator.Integrator.NBodies.Integrators
+namespace NBodyIntegrator.Orbits.NBodies.Integrators
 {
-    /// <summary>
-    /// Simple euler integrator. Extremely bad quality, do not use.
-    /// </summary>
-    /// <typeparam name="TQuery"></typeparam>
-    public readonly struct Euler<TQuery>
+    public readonly struct SemiImplicitEuler<TQuery>
         where TQuery : struct, IAccelerationQuery
     {
         public void Integrate(ref Metre3 position, ref Metre3 velocity, ref double timestamp, ref double dt, ref TQuery accel)
@@ -16,8 +12,8 @@ namespace NBodyIntegrator.Integrator.NBodies.Integrators
             var x0 = position;
             var v0 = velocity;
 
-            var x1 = x0 + v0 * dt;
             var v1 = v0 + accel.Acceleration(position, timestamp) * dt;
+            var x1 = x0 + v1 * dt;
 
             position = x1;
             velocity = v1;

@@ -3,7 +3,7 @@ using Myriad.ECS.Queries;
 using Myriad.ECS.Systems;
 using Myriad.ECS.Worlds;
 
-namespace NBodyIntegrator.Integrator.NBodies;
+namespace NBodyIntegrator.Orbits.NBodies;
 
 public sealed class RailTrimmer(World world)
     : ISystem
@@ -40,15 +40,15 @@ public sealed class RailTrimmer(World world)
         /// <summary>
         /// Trim down rail so that it has just one point before "CurrentTime"
         /// </summary>
-        private void TrimRail(ref DynamicCircularBuffer circular, ref EntityArray<NBody.Timestamp> time)
+        private void TrimRail(ref CircularBufferIndexer circular, ref EntityArray<NBody.Timestamp> time)
         {
             while (circular.Count > 2)
             {
                 // Get the first two timestamps
-                var ai = circular.IndexAt(time.Length, 0);
+                var ai = circular.IndexAt(0);
                 if (!ai.HasValue)
                     return;
-                var bi = circular.IndexAt(time.Length, 1);
+                var bi = circular.IndexAt(1);
                 if (!bi.HasValue)
                     return;
 
@@ -59,7 +59,7 @@ public sealed class RailTrimmer(World world)
                 // If they are _both_ before the current time remove the first one
                 if (a < CurrentTime && b < CurrentTime)
                 {
-                    if (!circular.TryRemove(time.Length).HasValue)
+                    if (!circular.TryRemove().HasValue)
                         return;
                 }
                 else

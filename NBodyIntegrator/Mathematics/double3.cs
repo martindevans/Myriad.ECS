@@ -627,6 +627,11 @@ namespace Unity.Mathematics
                  + z * z;
         }
 
+        public double Length()
+        {
+            return Math.Sqrt(LengthSquared());
+        }
+
         public double3 Abs()
         {
             return new double3(

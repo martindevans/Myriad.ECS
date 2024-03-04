@@ -2,7 +2,7 @@
 using NBodyIntegrator.Units;
 using Unity.Mathematics;
 
-namespace NBodyIntegrator.Integrator.NBodies.Integrators
+namespace NBodyIntegrator.Orbits.NBodies.Integrators
 {
     /// <summary>
     /// https://gafferongames.com/post/integration_basics/
