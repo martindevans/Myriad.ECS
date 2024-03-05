@@ -26,8 +26,10 @@ public static class Extensions
 }
 #>
 
+/* dotcover disable */
 			default:
 				throw new InvalidOperationException("Cannot add shard > <#= SHARD_COUNT #>");
+/* dotcover enable */
 		}
 	}
 
@@ -45,8 +47,10 @@ public static class Extensions
 }
 #>
 
+/* dotcover disable */
 			default:
 				throw new InvalidOperationException("Cannot add shard > <#= SHARD_COUNT #>");
+/* dotcover enable */
 		}
 	}
 

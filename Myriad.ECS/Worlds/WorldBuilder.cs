@@ -11,9 +11,8 @@ public sealed partial class WorldBuilder
 
     private bool AddArchetype(IReadOnlySet<ComponentID> ids)
     {
-        foreach (var archetype in _archetypes)
-            if (archetype.SetEquals(ids))
-                return false;
+        if (_archetypes.Any(a => a.SetEquals(ids)))
+            return false;
 
         _archetypes.Add(new OrderedListSet<ComponentID>(ids));
         return true;

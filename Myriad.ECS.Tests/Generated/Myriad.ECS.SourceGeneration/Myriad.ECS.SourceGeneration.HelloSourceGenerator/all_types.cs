@@ -4,6 +4,7 @@
 // global::Myriad.ECS.Tests.Collections.SegmentListTests
 // global::Myriad.ECS.Tests.CommandBufferTests
 // global::Myriad.ECS.Tests.ComponentRegistryTests
+// global::Myriad.ECS.Tests.Components.ShardingTests
 // global::Myriad.ECS.Tests.EntityTests
 // global::Myriad.ECS.Tests.QueryBuilderTests
 // global::Myriad.ECS.Tests.QueryEnumerableTests

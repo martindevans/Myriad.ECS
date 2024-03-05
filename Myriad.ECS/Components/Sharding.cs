@@ -41,8 +41,10 @@ public static class Extensions
 			case 15:
 				return buffered.Set(new Shard15(), true);
 
+/* dotcover disable */
 			default:
 				throw new InvalidOperationException("Cannot add shard > 16");
+/* dotcover enable */
 		}
 	}
 
@@ -99,8 +101,10 @@ public static class Extensions
 				buffer.Set(entity, new Shard15());
 				break;
 
+/* dotcover disable */
 			default:
 				throw new InvalidOperationException("Cannot add shard > 16");
+/* dotcover enable */
 		}
 	}
 
