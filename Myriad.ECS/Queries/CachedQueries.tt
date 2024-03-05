@@ -15,6 +15,11 @@ using Myriad.ECS.IDs;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable CheckNamespace
 // ReSharper disable ArrangeAccessorOwnerBody
+
+namespace Myriad.ECS.Worlds;
+
+public partial class World
+{
 <# for (var i = 1; i <= PARAM_COUNT; i++)
 {
     var tparams = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
@@ -33,65 +38,61 @@ using Myriad.ECS.IDs;
         refparamstup = "RefTuple" + i + tparams;
     }
 #>
+    private readonly List<(ComponentID[], QueryDescription)> _queryCache<#= i #> = [ ];
 
-namespace Myriad.ECS.Worlds
-{
-    public partial class World
+    /// <summary>
+    /// Get a query that finds entities which include all of the given types. This query
+    /// will be shared with other requests for the same set of types.
+    /// </summary>
+    /// <returns>A query that finds entities which include all of the given types</returns>
+    private QueryDescription GetCachedQuery<#= tparams #>()
+        <#= Constraints(i, 12) #>
     {
-        private readonly List<(ComponentID[], QueryDescription)> _queryCache<#= i #> = [ ];
-
-        internal QueryDescription GetCachedQuery<#= tparams #>()
-            <#= Constraints(i, 12) #>
+        // Find query that matches these types
+        foreach (var (c, q) in _queryCache<#= i #>)
         {
-            // Find query that matches these types
-            var query = default(QueryDescription);
-            foreach (var item in _queryCache<#= i #>)
-            {
 <# for (var k = 0; k < i; k++)
 {
 #>
-                if (!item.Item1.Contains(ComponentID<<#= "T" + k #>>.ID))
-                    continue;
+            if (!c.Contains(ComponentID<<#= "T" + k #>>.ID))
+                continue;
 <#
 }
 #>
 
-                query = item.Item2;
-                break;
-            }
-
-            // Didn't find one, create it now and store it in the cache
-            if (query == null)
-            {
-                query = new QueryBuilder()
-<# for (var k = 0; k < i; k++)
-{
-#>
-                    .Include<<#= "T" + k #>>()
-<#
-}
-#>
-                    .Build(this);
-
-                _queryCache<#= i #>.Add(([
-<# for (var k = 0; k < i; k++)
-{
-#>
-                    ComponentID<<#= "T" + k #>>.ID,
-<#
-}
-#>
-                ], query));
-            }
-
-            return query;
+            return q;
         }
-    }
+
+        // Didn't find one, create it now
+        var query = new QueryBuilder()
+<# for (var k = 0; k < i; k++)
+{
+#>
+            .Include<<#= "T" + k #>>()
+<#
 }
+#>
+            .Build(this);
+
+        // Store it in the cache for next time
+        _queryCache<#= i #>.Add(([
+<# for (var k = 0; k < i; k++)
+{
+#>
+            ComponentID<<#= "T" + k #>>.ID,
+<#
+}
+#>
+        ], query));
+
+        return query;
+    }
 
 <#
 }
 #>
+
+}
 
 
 <#+ 

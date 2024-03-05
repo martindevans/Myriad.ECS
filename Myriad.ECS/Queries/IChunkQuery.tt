@@ -32,13 +32,29 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+        /// <typeparam name="T<#= k #>"></typeparam>
+<#
+}
+#>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where <#= Constraints(sumij, 12) #>
 			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
+			query ??= GetCachedQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;

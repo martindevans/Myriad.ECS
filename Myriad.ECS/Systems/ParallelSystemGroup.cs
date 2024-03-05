@@ -15,6 +15,11 @@ public sealed class ParallelSystemGroup
     private readonly ISystem[] _systems;
     private readonly ISystemAfter[] _afterSystems;
 
+    private GameTime? _gameTime;
+    private readonly Action<ISystemBefore> _beforeUpdate;
+    private readonly Action<ISystem> _update;
+    private readonly Action<ISystemAfter> _afterUpdate;
+
     public ParallelSystemGroup(string name, params ISystem[] systems)
     {
         Name = name;
@@ -22,6 +27,24 @@ public sealed class ParallelSystemGroup
         _beforeSystems = systems.OfType<ISystemBefore>().ToArray();
         _systems = systems;
         _afterSystems = systems.OfType<ISystemAfter>().ToArray();
+
+        // Create delegates now, capturing "this". This avoids creating ne delegates every frame.
+        _gameTime = null;
+        _beforeUpdate = system =>
+        {
+            if (system.Enabled)
+                system.BeforeUpdate(_gameTime!);
+        };
+        _update = system =>
+        {
+            if (system.Enabled)
+                system.Update(_gameTime!);
+        };
+        _afterUpdate = system =>
+        {
+            if (system.Enabled)
+                system.Update(_gameTime!);
+        };
     }
 
     public void Init()
@@ -40,11 +63,9 @@ public sealed class ParallelSystemGroup
             {
                 if (_beforeSystems.Length > 0 && AnyEnabled(_afterSystems))
                 {
-                    Parallel.ForEach(_beforeSystems, system =>
-                    {
-                        if (system.Enabled)
-                            system.BeforeUpdate(time);
-                    });
+                    _gameTime = time;
+                    Parallel.ForEach(_beforeSystems, _beforeUpdate);
+                    _gameTime = null;
                 }
             }
             _timer.Stop();
@@ -59,11 +80,9 @@ public sealed class ParallelSystemGroup
             {
                 if (AnyEnabled(_afterSystems))
                 {
-                    Parallel.ForEach(_systems, system =>
-                    {
-                        if (system.Enabled)
-                            system.Update(time);
-                    });
+                    _gameTime = time;
+                    Parallel.ForEach(_systems, _update);
+                    _gameTime = null;
                 }
             }
             _timer.Stop();
@@ -78,10 +97,9 @@ public sealed class ParallelSystemGroup
             {
                 if (_afterSystems.Length > 0 && AnyEnabled(_afterSystems))
                 {
-                    Parallel.ForEach(_afterSystems, system =>
-                    {
-                        if (system.Enabled) system.AfterUpdate(time);
-                    });
+                    _gameTime = time;
+                    Parallel.ForEach(_afterSystems, _afterUpdate);
+                    _gameTime = null;
                 }
             }
             _timer.Stop();

@@ -5,6 +5,9 @@
     &lt;TestId&gt;MSTest::6DD3CD1E-78C3-4A77-9652-75C8C136D788::net8.0::Myriad.ECS.Tests.UnitTest1.TestMethod1&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8cf5683a_002D8a18_002D4ef8_002D9b98_002Def4a7cf19489/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;Myriad.ECS.Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="C:\Users\Martin\Documents\dotnet\Myriad.ECS\Myriad.ECS.Tests" Presentation="&amp;lt;Myriad.ECS.Tests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b21b242e_002D60ee_002D4fb0_002Db64f_002De8c566f7e5cb/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;Myriad.ECS.Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="C:\Users\Martin\Documents\dotnet\Myriad.ECS\Myriad.ParallelTasks.Tests" Presentation="&amp;lt;Myriad.ParallelTasks.Tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>

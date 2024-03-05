@@ -19,13 +19,23 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0"></typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
 			where TQ : IChunkQuery1<T0>
 		{
+			query ??= GetCachedQuery<T0>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -114,14 +124,25 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0"></typeparam>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
 			where TQ : IChunkQuery2<T0, T1>
 		{
+			query ??= GetCachedQuery<T0, T1>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -216,15 +237,27 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0"></typeparam>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
 			where TQ : IChunkQuery3<T0, T1, T2>
 		{
+			query ??= GetCachedQuery<T0, T1, T2>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -325,9 +358,20 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0"></typeparam>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -335,6 +379,8 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
 			where TQ : IChunkQuery4<T0, T1, T2, T3>
 		{
+			query ??= GetCachedQuery<T0, T1, T2, T3>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -441,9 +487,21 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0"></typeparam>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="T4"></typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -452,6 +510,8 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
 			where TQ : IChunkQuery5<T0, T1, T2, T3, T4>
 		{
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -564,9 +624,22 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0"></typeparam>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="T4"></typeparam>
+        /// <typeparam name="T5"></typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -576,6 +649,8 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
 			where TQ : IChunkQuery6<T0, T1, T2, T3, T4, T5>
 		{
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -694,9 +769,23 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0"></typeparam>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="T4"></typeparam>
+        /// <typeparam name="T5"></typeparam>
+        /// <typeparam name="T6"></typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -707,6 +796,8 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
 			where TQ : IChunkQuery7<T0, T1, T2, T3, T4, T5, T6>
 		{
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -831,9 +922,24 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0"></typeparam>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="T4"></typeparam>
+        /// <typeparam name="T5"></typeparam>
+        /// <typeparam name="T6"></typeparam>
+        /// <typeparam name="T7"></typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -845,6 +951,8 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
 			where TQ : IChunkQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
@@ -975,9 +1083,25 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0"></typeparam>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="T4"></typeparam>
+        /// <typeparam name="T5"></typeparam>
+        /// <typeparam name="T6"></typeparam>
+        /// <typeparam name="T7"></typeparam>
+        /// <typeparam name="T8"></typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
-			QueryDescription query
+			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -990,6 +1114,8 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
 			where TQ : IChunkQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
+
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;

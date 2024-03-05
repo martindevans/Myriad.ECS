@@ -85,7 +85,7 @@ for (var i = 0; i < count; i++)
 CreateNBody(
     setup,
     new Metre3(140218493, -5186504, -346837760) + new Metre3(0, 1737000, 0),
-    new Metre3(2000, 0, 0),
+    new Metre3(2300, 0, 0),
     NBodyPrecision.Medium
 );
 
@@ -106,7 +106,7 @@ var systems = new SystemGroup(
 systems.Init();
 
 // Advance sim
-const long ticks = 500_000;
+const long ticks = 100_000;
 var tickMin = TimeSpan.MaxValue;
 var tickTotal = TimeSpan.Zero;
 var tickMax = TimeSpan.MinValue;
@@ -189,6 +189,8 @@ static CommandBuffer.BufferedEntity CreateNBody(CommandBuffer buffer, Metre3 pos
 
 void WriteCsv(TextWriter writer, double gameTime)
 {
+    double maxt = 0;
+
     foreach (var (e, n, p, t) in world.Query<NBody, PagedRail<NBody.Position>, PagedRail<NBody.Timestamp>>())
     {
         if (p.Item.Count == 0)
@@ -196,12 +198,14 @@ void WriteCsv(TextWriter writer, double gameTime)
 
         var pos = p.Item.Last().Value;
         var time = t.Item.Last().Value;
+        maxt = Math.Max(maxt, time);
 
         writer.WriteLine($"{e.ID},\"n\",{time:F2},{pos.Value.x:F3},{pos.Value.y:F3},{pos.Value.z:F3}");
     }
 
-    foreach (var (e, _, w) in world.Query<KeplerOrbit, WorldPosition>())
+    foreach (var (e, k, w) in world.Query<KeplerOrbit, WorldPosition>())
     {
-        writer.WriteLine($"{e.ID},\"k\",{gameTime:F2},{w.Item.Value.Value.x:F3},{w.Item.Value.Value.y:F3},{w.Item.Value.Value.z:F3}");
+        var pos = k.Item.PositionAtTime(maxt);
+        writer.WriteLine($"{e.ID},\"k\",{maxt:F2},{pos.Value.x:F3},{pos.Value.y:F3},{pos.Value.z:F3}");
     }
 }
