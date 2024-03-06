@@ -4,10 +4,10 @@
 /// A task struct which can return a result.
 /// </summary>
 /// <typeparam name="T">The type of result this future calculates.</typeparam>
-public struct Future<T>
+public readonly struct Future<T>
 {
-    private Task _task;
-    private FutureWork<T>? _work;
+    private readonly Task _task;
+    private readonly FutureWork<T>? _work;
     private readonly int _id;
 
     /// <summary>
@@ -40,7 +40,6 @@ public struct Future<T>
         _task.Wait();
         var result = _work.Result!;
         _work.ReturnToPool();
-        _work = null;
 
         return result;
     }
@@ -67,10 +66,12 @@ internal class FutureWork<T>
 
     public void ReturnToPool()
     {
-        if (ID < int.MaxValue)
-        {
-            ID++;
+        // Always increment ID, to invalidate any references to this work item
+        ID++;
 
+        // Only add it to the pool if it's not near overflowing
+        if (ID < int.MaxValue - 10)
+        {
             Function = null;
             Result = default;
 

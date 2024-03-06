@@ -6,6 +6,7 @@
 public readonly struct Task
 {
     private readonly bool valid;
+
     internal WorkItem Item { get; }
     internal int ID { get; }
 

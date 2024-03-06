@@ -13,6 +13,10 @@ internal class Pool<T>
 
     private readonly ConcurrentBag<T> _bag = [];
 
+    private Pool()
+    {
+    }
+
     /// <summary>
     /// Gets an instance from the pool.
     /// </summary>

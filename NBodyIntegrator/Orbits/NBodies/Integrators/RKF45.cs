@@ -83,8 +83,8 @@ namespace NBodyIntegrator.Orbits.NBodies.Integrators
 
             var initial = new State
             {
-                x = position.Value,
-                v = velocity.Value,
+                X = position.Value,
+                V = velocity.Value,
             };
 
             // Calculate factors
@@ -97,8 +97,8 @@ namespace NBodyIntegrator.Orbits.NBodies.Integrators
 
             // Calculate final result
             var final = initial + CH1 * k1 + CH2 * k2 + CH3 * k3 + CH4 * k4 + CH5 * k5 + CH6 * k6;
-            position = new Metre3(final.x);
-            velocity = new Metre3(final.v);
+            position = new Metre3(final.X);
+            velocity = new Metre3(final.V);
             timestamp += dt;
 
             // Calculate truncation error
@@ -112,63 +112,77 @@ namespace NBodyIntegrator.Orbits.NBodies.Integrators
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static double Error(in Derivative k1, in Derivative k2, in Derivative k3, in Derivative k4, in Derivative k5, in Derivative k6)
         {
-            var err = CT1 * k1 + CT2 * k2 + CT3 * k3 + CT4 * k4 + CT5 * k5 + CT6 * k6;
-            err.dx = err.dx.Abs();
-            err.dv = err.dv.Abs();
-            return Math.Sqrt(err.dx.LengthSquared() + err.dv.LengthSquared());
+            var err = CT1 * k1
+                    + CT2 * k2
+                    + CT3 * k3
+                    + CT4 * k4
+                    + CT5 * k5
+                    + CT6 * k6;
+
+            return err.Length();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static Derivative F<TQuery>(double t, double dt, State state, ref TQuery accel)
+        private static Derivative F<TQuery>(double t, double dt, in State state, ref TQuery accel)
             where TQuery : struct, IAccelerationQuery
         {
-            Derivative output;
-            output.dx = state.v;
-            output.dv = accel.Acceleration(new Metre3(state.x), t + dt).Value;
+            Derivative output = new(
+                Dx: state.V,
+                Dv: accel.Acceleration(new Metre3(state.X), t + dt).Value
+            );
             return output;
         }
 
-        private struct State
+        private readonly record struct State(double3 X, double3 V)
         {
-            public double3 x;
-            public double3 v;
-
-            public static State operator +(State a, Derivative b)
+            public static State operator +(in State a, in Derivative b)
             {
                 return new State
                 {
-                    x = a.x + b.dx,
-                    v = a.v + b.dv
+                    X = a.X + b.Dx,
+                    V = a.V + b.Dv
                 };
             }
         }
 
-        private struct Derivative
+        private readonly record struct Derivative(double3 Dx, double3 Dv)
         {
-            public double3 dx;
-            public double3 dv;
-
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static Derivative operator *(in Derivative a, double b)
             {
                 return b * a;
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static Derivative operator *(double a, in Derivative b)
             {
                 return new Derivative
-                {
-                    dx = b.dx * a,
-                    dv = b.dv * a
-                };
+                (
+                    b.Dx * a,
+                    b.Dv * a
+                );
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static Derivative operator +(in Derivative a, in Derivative b)
             {
                 return new Derivative
-                {
-                    dx = a.dx + b.dx,
-                    dv = a.dv + b.dv,
-                };
+                (
+                    a.Dx + b.Dx,
+                    a.Dv + b.Dv
+                );
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Derivative Abs()
+            {
+                return new Derivative(Dx.Abs(), Dv.Abs());
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public double Length()
+            {
+                return Math.Sqrt(Dx.LengthSquared() + Dv.LengthSquared());
             }
         }
     }

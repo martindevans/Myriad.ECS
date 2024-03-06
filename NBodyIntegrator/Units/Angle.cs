@@ -3,21 +3,21 @@
 namespace NBodyIntegrator.Units;
 
 [Serializable]
-public struct Radians
+public struct Radians(double value)
     : IEquatable<Radians>
 {
-    public double Value;
+    public double Value = value;
 
-    public Radians(double value)
-    {
-        Value = value;
-    }
-
-    public static explicit operator Degrees(Radians d)
+    public static explicit operator Degrees(Radians r)
     {
         const double ConvertToDegrees = 360 / Math.Tau;
 
-        return new Degrees(d.Value * ConvertToDegrees);
+        return new Degrees(r.Value * ConvertToDegrees);
+    }
+
+    public static explicit operator double(Radians r)
+    {
+        return r.Value;
     }
 
     public readonly override string ToString()
@@ -54,21 +54,21 @@ public struct Radians
 }
 
 [Serializable]
-public struct Degrees
+public struct Degrees(double value)
     : IEquatable<Degrees>
 {
-    public double Value;
-
-    public Degrees(double value)
-    {
-        Value = value;
-    }
+    public double Value = value;
 
     public static explicit operator Radians(Degrees d)
     {
         const double ConvertToRadians = Math.Tau / 360;
 
         return new Radians(d.Value * ConvertToRadians);
+    }
+
+    public static explicit operator double(Degrees d)
+    {
+        return d.Value;
     }
 
     public readonly override string ToString()

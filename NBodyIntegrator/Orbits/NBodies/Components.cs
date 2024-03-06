@@ -1,7 +1,8 @@
 ﻿using System.Globalization;
-using System.Runtime.InteropServices;
+using System.Numerics;
 using Myriad.ECS;
 using NBodyIntegrator.Units;
+using Unity.Mathematics;
 
 namespace NBodyIntegrator.Orbits.NBodies;
 
@@ -32,7 +33,9 @@ public static class NBodyPrecisionExtensions
     }
 }
 
-[StructLayout(LayoutKind.Sequential, Size = 64)]
+/// <summary>
+/// Core component for NBody integrated items
+/// </summary>
 public struct NBody
     : IComponent
 {
@@ -44,12 +47,12 @@ public struct NBody
     /// <summary>
     /// Maximum length this rail may be (measured as time from start to end)
     /// </summary>
-    public double MaximumTimeLength;
+    public Seconds MaximumTimeLength;
 
     /// <summary>
     /// Amount of time to integrate between points on the rail
     /// </summary>
-    public double RailTimestep;
+    public Seconds RailTimestep;
 
     /// <summary>
     /// Set how precise the orbital integrator is.
@@ -84,5 +87,29 @@ public struct NBody
         public static implicit operator Velocity(Metre3 self) => new() { Value = self };
 
         public readonly override string ToString() => Value.ToString();
+    }
+}
+
+public record struct Mass(double Value) : IComponent;
+
+/// <summary>
+/// List of upcoming burns, in time order
+/// </summary>
+/// <param name="Burns"></param>
+public record struct EngineBurnSchedule(List<EngineBurn> Burns) : IComponent;
+
+/// <summary>
+/// An engine burn, applying force for some amount of time
+/// </summary>
+/// <param name="Start">Start timestamp</param>
+/// <param name="End">End timestamp</param>
+/// <param name="Force">Amount of force applies</param>
+/// <param name="MassPerSecond">Amount of mass consumed per second</param>
+public readonly record struct EngineBurn(Seconds Start, Seconds End, double Force, double MassPerSecond, double3 Direction)
+    : IComparable<EngineBurn>
+{
+    public int CompareTo(EngineBurn other)
+    {
+        return Start.Value.CompareTo(other.Start.Value);
     }
 }

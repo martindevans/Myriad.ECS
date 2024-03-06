@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ParallelTasks;
 
@@ -16,6 +17,7 @@ internal class WorkItem
     private static readonly object replicablesLock = new();
     private static Task? topReplicable;
 
+    [DisallowNull]
     internal static Task? Replicable
     {
         get
@@ -98,20 +100,20 @@ internal class WorkItem
     }
 
     private List<Exception>? exceptionBuffer;
-    private readonly ManualResetEvent _resetEvent;
+    private readonly ManualResetEvent _resetEvent = new(true);
     private volatile int runCount;
     private volatile int executing;
     private volatile int waitCount;
     private readonly object _executionLock = new();
 
-    private static readonly Pool<WorkItem> _idleWorkItems = new();
+    private static readonly Pool<WorkItem> _idleWorkItems = Pool<WorkItem>.Instance;
     private static readonly ConcurrentDictionary<Thread, Stack<Task>> _runningTasks = new();
 
 
     public int RunCount => runCount;
 
-    public ConcurrentDictionary<int, Exception[]> Exceptions { get; }
-    public IWork Work { get; private set; }
+    public ConcurrentDictionary<int, Exception[]> Exceptions { get; } = new();
+    public IWork? Work { get; private set; }
 
     public static Task? CurrentTask
     {
@@ -124,12 +126,6 @@ internal class WorkItem
             }
             return null;
         }
-    }
-
-    public WorkItem()
-    {
-        _resetEvent = new ManualResetEvent(true);
-        Exceptions = new ConcurrentDictionary<int, Exception[]>();
     }
 
     public Task PrepareStart(IWork work)
@@ -208,7 +204,7 @@ internal class WorkItem
 
     }
 
-    public void Requeue()
+    private void Requeue()
     {
         // requeue the WorkItem for reuse, but only if the runCount hasnt reached the maximum value
         // dont requeue if an exception has been caught, to stop potential memory leaks.

@@ -3,7 +3,7 @@
 internal class ActionWork
     : IWork
 {
-    private static readonly Pool<ActionWork> instances = new();
+    private static readonly Pool<ActionWork> instances = Pool<ActionWork>.Instance;
 
     public Action? Action { get; set; }
     public WorkOptions Options { get; set; }

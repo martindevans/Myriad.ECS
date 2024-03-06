@@ -1,4 +1,6 @@
-﻿using Myriad.ECS.Command;
+﻿using System.Numerics;
+using Humanizer;
+using Myriad.ECS.Command;
 using Myriad.ECS.Systems;
 using Myriad.ECS.Worlds;
 using NBodyIntegrator;
@@ -57,11 +59,12 @@ for (var i = 0; i < count; i++)
         setup,
         new Metre3(position),
         new Metre3(velocity),
-        NBodyPrecision.Medium
+        NBodyPrecision.Medium,
+        null
     );
 }
 
-//// Elliptical
+// Elliptical
 //CreateNBody(
 //    setup,
 //    (Metre3)new MegaMetre3(14, -8, 370.3164),
@@ -76,18 +79,26 @@ for (var i = 0; i < count; i++)
 //);
 
 // lunar orbiter
-//CreateNBody(
-//    setup,
-//    new Metre3(384748000, 0, 0) + new Metre3(5000, 5000, 5000),
-//    new Metre3(0, 0, -1000),
-//    NBodyPrecision.Medium
-//);
 CreateNBody(
     setup,
-    new Metre3(140218493, -5186504, -346837760) + new Metre3(0, 1737000, 0),
-    new Metre3(2300, 0, 0),
-    NBodyPrecision.Medium
+    new Metre3(384748000, 0, 0) + new Metre3(5000, 5000, 5000),
+    new Metre3(0, 0, -1000),
+    NBodyPrecision.Medium,
+    null
 );
+
+// slightly randomised lunar orbiters
+var rng = new Random();
+for (var i = 0; i < 10; i++)
+{
+    CreateNBody(
+        setup,
+        new Metre3(15422465, -13228745, 373592928) + new Metre3(1737000, 0, 0),
+        new Metre3(0, 2000, 0),
+        NBodyPrecision.Medium,
+        rng
+    );
+}
 
 using var resolver = setup.Playback();
 
@@ -106,7 +117,7 @@ var systems = new SystemGroup(
 systems.Init();
 
 // Advance sim
-const long ticks = 100_000;
+const long ticks = 50_000;
 var tickMin = TimeSpan.MaxValue;
 var tickTotal = TimeSpan.Zero;
 var tickMax = TimeSpan.MinValue;
@@ -137,38 +148,52 @@ AnsiConsole
                 tickMax = systems.ExecutionTime;
 
             if (i % 1000 == 7)
+            {
                 maxMem = Math.Max(maxMem, GC.GetTotalMemory(false));
+            }
 
             task.Increment(1);
 
             if (i % 4 == 1)
-                WriteCsv(writer, gt.Time);
+                WriteCsv(writer);
         }
     });
 
 // General stats
 Console.WriteLine($"# {ticks:N0} Ticks");
-Console.WriteLine($" - Total: {tickTotal.TotalMicroseconds}us");
-Console.WriteLine($" - Min:   {tickMin.TotalMicroseconds}us");
-Console.WriteLine($" - Avg:   {tickTotal.TotalMicroseconds / ticks}us");
-Console.WriteLine($" - Max:   {tickMax.TotalMicroseconds}us");
+Console.WriteLine($" - Total:   {tickTotal.TotalMilliseconds}ms");
+Console.WriteLine($" - Min:     {tickMin.TotalMicroseconds}us");
+Console.WriteLine($" - Avg:     {tickTotal.TotalMicroseconds / ticks}us");
+Console.WriteLine($" - Max:     {tickMax.TotalMicroseconds}us");
 Console.WriteLine();
 Console.WriteLine("# Memory");
-Console.WriteLine($" - Max: {maxMem:N0}");
+Console.WriteLine($" - Max Bytes: {maxMem.Bytes().Humanize()}");
+
+// Orbit stats
+var maxt = double.MinValue;
+var mint = double.MaxValue;
+var counter = 0;
+foreach (var (_, t) in world.Query<PagedRail<NBody.Timestamp>>())
+{
+    maxt = Math.Max(maxt, t.Item.Last().Value);
+    mint = Math.Min(mint, t.Item.Last().Value);
+    counter++;
+}
+
+Console.WriteLine();
+Console.WriteLine("# Orbits");
+Console.WriteLine($" - Total Bodies: {counter}");
+Console.WriteLine($" - Longest:      {maxt.Seconds().Humanize(3)}");
+Console.WriteLine($" - Shortest:     {mint.Seconds().Humanize(3)}");
 
 return;
 
-static CommandBuffer.BufferedEntity CreateNBody(CommandBuffer buffer, Metre3 position, Metre3 velocity, NBodyPrecision precision)
+static void CreateNBody(CommandBuffer buffer, Metre3 position, Metre3 velocity, NBodyPrecision precision, Random? rng)
 {
-    // Initialize a circular buffer to hold orbit data
-    const int railSize = 3600;
-    var bufferAccess = new CircularBufferIndexer(railSize);
-    var idx = bufferAccess.TryAdd()!.Value;
-
     // Create entity
     var entity = buffer
         .Create()
-        .Set(new NBody { DeltaTime = 1, MaximumTimeLength = 2419200, RailTimestep = 1, IntegratorPrecision = precision })
+        .Set(new NBody { DeltaTime = 1, MaximumTimeLength = new Seconds(2419200), RailTimestep = new Seconds(1), IntegratorPrecision = precision })
         .Set(new WorldPosition(position));
 
     // Create buffers to hold orbit data
@@ -184,14 +209,45 @@ static CommandBuffer.BufferedEntity CreateNBody(CommandBuffer buffer, Metre3 pos
     time.Add(new NBody.Timestamp(0));
     entity.Set(time);
 
-    return entity;
+    // Starship mass
+    entity.Set(new Mass(1_300_000));
+
+    var schedule = new List<EngineBurn>();
+    entity.Set(new EngineBurnSchedule(schedule));
+
+    if (rng != null)
+    {
+        // schedule burn 1 week into flight
+        var start = 604800;
+
+        // Burn for 2 minutes
+        var end = start + 120;
+
+        // 2.64MN is a raptor 3 engine
+        var force = 2_640_000;
+
+        // 650kg/s fuel consumption
+        var fuelConsumption = 650;
+
+        // Any random dir
+        var dir = Vector3.Normalize(new Vector3(rng.NextSingle() * 2 - 1, rng.NextSingle() * 2 - 1, rng.NextSingle() * 2 - 1));
+
+        // schedule it!
+        schedule.Add(new EngineBurn(
+            new Seconds(start),
+            new Seconds(end),
+            force,
+            fuelConsumption,
+            new double3(dir)
+        ));
+    }
 }
 
-void WriteCsv(TextWriter writer, double gameTime)
+void WriteCsv(TextWriter writer)
 {
     double maxt = 0;
 
-    foreach (var (e, n, p, t) in world.Query<NBody, PagedRail<NBody.Position>, PagedRail<NBody.Timestamp>>())
+    foreach (var (e, _, p, t) in world.Query<NBody, PagedRail<NBody.Position>, PagedRail<NBody.Timestamp>>())
     {
         if (p.Item.Count == 0)
             continue;
@@ -203,7 +259,7 @@ void WriteCsv(TextWriter writer, double gameTime)
         writer.WriteLine($"{e.ID},\"n\",{time:F2},{pos.Value.x:F3},{pos.Value.y:F3},{pos.Value.z:F3}");
     }
 
-    foreach (var (e, k, w) in world.Query<KeplerOrbit, WorldPosition>())
+    foreach (var (e, k, _) in world.Query<KeplerOrbit, WorldPosition>())
     {
         var pos = k.Item.PositionAtTime(maxt);
         writer.WriteLine($"{e.ID},\"k\",{maxt:F2},{pos.Value.x:F3},{pos.Value.y:F3},{pos.Value.z:F3}");

@@ -30,9 +30,9 @@ public readonly struct KeplerOrbit
         _sqrtOnePlusEcc = Math.Sqrt(1 + Elements.Eccentricity);
         _oneMinusEccSqr = 1 - Math.Pow(Elements.Eccentricity, 2);
 
-        _quaternion = Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), (float)Elements.LongitudeOfAscendingNode.Value)
-                    * Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0), (float)Elements.Inclination.Value)
-                    * Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), (float)Elements.ArgumentOfPeriapsis.Value);
+        _quaternion = Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), (float)(Radians)Elements.LongitudeOfAscendingNode)
+                    * Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0), (float)(Radians)Elements.Inclination)
+                    * Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), (float)(Radians)Elements.ArgumentOfPeriapsis);
     }
 
     public Metre3 PositionAtTime(double epoch)

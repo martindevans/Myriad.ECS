@@ -620,19 +620,20 @@ namespace Unity.Mathematics
             }
         }
 
-        public double LengthSquared()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly double LengthSquared()
         {
             return x * x
                  + y * y
                  + z * z;
         }
 
-        public double Length()
+        public readonly double Length()
         {
             return Math.Sqrt(LengthSquared());
         }
 
-        public double3 Abs()
+        public readonly double3 Abs()
         {
             return new double3(
                 Math.Abs(x),
@@ -690,5 +691,9 @@ namespace Unity.Mathematics
         public static double3 double3(float v) { return new double3(v); }
 
 
+        public static double3 normalize(double3 double3)
+        {
+            return double3 / double3.Length();
+        }
     }
 }
