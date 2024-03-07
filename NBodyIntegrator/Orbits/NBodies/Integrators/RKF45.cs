@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
+using NBodyIntegrator.Mathematics;
 using NBodyIntegrator.Units;
-using Unity.Mathematics;
 
 namespace NBodyIntegrator.Orbits.NBodies.Integrators
 {
@@ -60,7 +60,7 @@ namespace NBodyIntegrator.Orbits.NBodies.Integrators
         #endregion
 
         public const double DefaultMinDt = 0.1;
-        public const double DefaultMaxDt = 600;
+        public const double DefaultMaxDt = 900;
         public const double DefaultEpsilon = 0.00125;
 
         private readonly double? _epsilon;

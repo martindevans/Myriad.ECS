@@ -1,4 +1,4 @@
-﻿using Unity.Mathematics;
+﻿using NBodyIntegrator.Mathematics;
 
 namespace NBodyIntegrator.Units;
 

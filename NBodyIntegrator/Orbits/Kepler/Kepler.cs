@@ -2,7 +2,6 @@
 using Myriad.ECS;
 using NBodyIntegrator.Mathematics;
 using NBodyIntegrator.Units;
-using static Unity.Mathematics.math;
 
 namespace NBodyIntegrator.Orbits.Kepler;
 
@@ -44,13 +43,13 @@ public readonly struct KeplerOrbit
 
         // Mean Anomaly compute
         var meanMotion = _meanMotion;
-        var meanAnomaly = math.fmod(epoch * meanMotion + m0, TwoPi);
+        var meanAnomaly = (epoch * meanMotion + m0) % TwoPi;
 
         // Mean anomaly to Eccentric
         var En = MeanToEccentric(meanAnomaly, ecc);
 
         // Eccentric anomaly to True anomaly
-        math.sincos(En / 2, out var sinEn2, out var cosEn2);
+        var (sinEn2, cosEn2) = Math.SinCos(En / 2);
         var trueAnomaly = 2 * Math.Atan2(_sqrtOnePlusEcc * sinEn2, _sqrtOneMinusEcc * cosEn2);
 
         // Calculate actual position
@@ -63,11 +62,11 @@ public readonly struct KeplerOrbit
         var sma = Elements.SemiMajorAxis.Value;
 
         // Distance from parent body
-        math.sincos(trueAnomaly, out var sta, out var cta);
+        var (sta, cta) = Math.SinCos(trueAnomaly);
         var dist = sma * (_oneMinusEccSqr / (1 + ecc * cta));
 
         // Plane changes
-        var posInPlane = double3(
+        var posInPlane = new double3(
             -sta * dist,
             cta * dist,
             0.0
@@ -78,15 +77,15 @@ public readonly struct KeplerOrbit
         return new Metre3(pos.xzy);
     }
 
-    private static double MeanToEccentric(double mean, double ecc, int iters = 20)
+    private static double MeanToEccentric(double mean, double ecc, int maxIters = 20)
     {
         // Starting value
         var En = ecc < 0.8 ? mean : Math.PI;
 
         // Newton to find eccentric anomaly (En)
-        for (var i = 0; i < iters; ++i)
+        for (var i = 0; i < maxIters; ++i)
         {
-            math.sincos(En, out var sinEn, out var cosEn);
+            var (sinEn, cosEn) = Math.SinCos(En);
 
             var a = En;
             var b = En - (En - ecc * sinEn - mean) / (1 - ecc * cosEn);
@@ -130,7 +129,4 @@ public readonly struct KeplerOrbit
 
 public record struct GravityMass(double Value) : IComponent;
 
-public struct FixedBody
-    : IComponent
-{
-}
+public struct FixedBody : IComponent;

@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using Unity.Mathematics;
 
 namespace NBodyIntegrator.Mathematics;
 

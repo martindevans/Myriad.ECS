@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
+using NBodyIntegrator.Mathematics;
 using NBodyIntegrator.Units;
-using Unity.Mathematics;
 
 namespace NBodyIntegrator.Orbits.NBodies.Integrators
 {

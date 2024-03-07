@@ -69,7 +69,7 @@ public class PagedRail<TData>
 
     private class Page
     {
-        public const int PageSize = 128;
+        private const int PageSize = 1024;
 
         private readonly TData[] _data = new TData[PageSize];
 
@@ -136,6 +136,45 @@ public class PagedRail<TData>
                 throw new InvalidOperationException("Cannot get first from empty page");
 
             return _data[_end - 1];
+        }
+
+        public TData this[int index]
+        {
+            get
+            {
+                index -= _first;
+
+                if (index < 0 || index >= _count)
+                    throw new IndexOutOfRangeException();
+                return _data[index];
+            }
+        }
+
+        public ReadOnlySpan<TData> GetSpan()
+        {
+            return _data.AsSpan(_first, _count);
+        }
+    }
+
+    public PageSpanEnumerator GetEnumerator()
+    {
+        return new PageSpanEnumerator(this);
+    }
+
+    public struct PageSpanEnumerator(PagedRail<TData> pagedRail)
+    {
+        private int _page = -1;
+
+        public readonly ReadOnlySpan<TData> Current => pagedRail._pages[_page].GetSpan();
+
+        public bool MoveNext()
+        {
+            _page++;
+
+            if (_page >= pagedRail._pages.Count)
+                return false;
+
+            return true;
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Unity.Mathematics;
-
-namespace NBodyIntegrator.Units;
+﻿namespace NBodyIntegrator.Units;
 
 [Serializable]
 public struct Radians(double value)

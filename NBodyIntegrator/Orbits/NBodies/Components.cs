@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using System.Numerics;
 using Myriad.ECS;
+using NBodyIntegrator.Mathematics;
 using NBodyIntegrator.Units;
-using Unity.Mathematics;
 
 namespace NBodyIntegrator.Orbits.NBodies;
 

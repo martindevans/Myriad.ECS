@@ -2,10 +2,10 @@
 using Myriad.ECS.Queries;
 using Myriad.ECS.Systems;
 using Myriad.ECS.Worlds;
+using NBodyIntegrator.Mathematics;
 using NBodyIntegrator.Orbits.Kepler;
 using NBodyIntegrator.Orbits.NBodies.Integrators;
 using NBodyIntegrator.Units;
-using Unity.Mathematics;
 
 namespace NBodyIntegrator.Orbits.NBodies;
 
@@ -107,7 +107,7 @@ public sealed class RailIntegrator(World world)
             {
                 // if the burn is i the future then there's no current active burn
                 if (burn.Start.Value > time)
-                    return double3.zero;
+                    return double3.Zero;
 
                 // If the burn is in the past subtract off all of the mass consumed
                 if (burn.End.Value < time)
@@ -124,7 +124,7 @@ public sealed class RailIntegrator(World world)
                 }
             }
 
-            return double3.zero;
+            return double3.Zero;
         }
 
         private double3 CalculateMassAcceleration(double timestamp, Metre3 position)
@@ -154,7 +154,7 @@ public sealed class RailIntegrator(World world)
             // Add a small constant value to distance calculation. This solves the
             // problem of infinite force at zero distance and introduces only a very small error.
             const double close = 1;
-            var accel = double3.zero;
+            var accel = double3.Zero;
             for (var i = 0; i < masses.Length; i++)
             {
                 var (p, m) = masses[i];
