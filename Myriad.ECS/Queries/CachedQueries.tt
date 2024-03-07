@@ -9,6 +9,8 @@
 #>
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
+using Standart.Hash.xxHash;
+using System.Runtime.InteropServices;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -38,7 +40,11 @@ public partial class World
         refparamstup = "RefTuple" + i + tparams;
     }
 #>
-    private readonly List<(ComponentID[], QueryDescription)> _queryCache<#= i #> = [ ];
+    // Cache of all queries with <#= i #> included components. Tuple elements are:
+    // - hash of sorted component IDs
+    // - sorted array of component IDs
+    // - the query itself
+    private readonly List<(uint, int[], QueryDescription)> _queryCache<#= i #> = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -48,17 +54,37 @@ public partial class World
     private QueryDescription GetCachedQuery<#= tparams #>()
         <#= Constraints(i, 12) #>
     {
-        // Find query that matches these types
-        foreach (var (c, q) in _queryCache<#= i #>)
-        {
+        // Accumulate all components in ascending order
+        Span<int> orderedComponents = [
 <# for (var k = 0; k < i; k++)
 {
 #>
-            if (!c.Contains(ComponentID<<#= "T" + k #>>.ID))
-                continue;
+            ComponentID<<#= "T" + k #>>.ID.Value,
 <#
 }
 #>
+        ];
+<# if (i > 1)
+{
+#>
+        orderedComponents.Sort();
+<#
+}
+#>
+
+        // Calculate hash of components, for fast rejection
+        var hash = xxHash32.ComputeHash(MemoryMarshal.Cast<int, byte>(orderedComponents), 42);
+
+        // Find query that matches these types
+        foreach (var (h, c, q) in _queryCache<#= i #>)
+        {
+            // Early exit on hash check.
+            if (h != hash)
+                continue;
+
+            // Since the sequences are sorted by component ID these should be identical
+            if (!orderedComponents.SequenceEqual(c))
+                continue;
 
             return q;
         }
@@ -74,16 +100,8 @@ public partial class World
 #>
             .Build(this);
 
-        // Store it in the cache for next time
-        _queryCache<#= i #>.Add(([
-<# for (var k = 0; k < i; k++)
-{
-#>
-            ComponentID<<#= "T" + k #>>.ID,
-<#
-}
-#>
-        ], query));
+        // Add query to the cache
+        _queryCache<#= i #>.Add((hash, orderedComponents.ToArray(), query));
 
         return query;
     }

@@ -1,5 +1,7 @@
 ﻿using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
+using Standart.Hash.xxHash;
+using System.Runtime.InteropServices;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -11,7 +13,11 @@ namespace Myriad.ECS.Worlds;
 
 public partial class World
 {
-    private readonly List<(ComponentID[], QueryDescription)> _queryCache1 = [ ];
+    // Cache of all queries with 1 included components. Tuple elements are:
+    // - hash of sorted component IDs
+    // - sorted array of component IDs
+    // - the query itself
+    private readonly List<(uint, int[], QueryDescription)> _queryCache1 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -21,10 +27,23 @@ public partial class World
     private QueryDescription GetCachedQuery<T0>()
         where T0 : IComponent
     {
+        // Accumulate all components in ascending order
+        Span<int> orderedComponents = [
+            ComponentID<T0>.ID.Value,
+        ];
+
+        // Calculate hash of components, for fast rejection
+        var hash = xxHash32.ComputeHash(MemoryMarshal.Cast<int, byte>(orderedComponents), 42);
+
         // Find query that matches these types
-        foreach (var (c, q) in _queryCache1)
+        foreach (var (h, c, q) in _queryCache1)
         {
-            if (!c.Contains(ComponentID<T0>.ID))
+            // Early exit on hash check.
+            if (h != hash)
+                continue;
+
+            // Since the sequences are sorted by component ID these should be identical
+            if (!orderedComponents.SequenceEqual(c))
                 continue;
 
             return q;
@@ -35,15 +54,17 @@ public partial class World
             .Include<T0>()
             .Build(this);
 
-        // Store it in the cache for next time
-        _queryCache1.Add(([
-            ComponentID<T0>.ID,
-        ], query));
+        // Add query to the cache
+        _queryCache1.Add((hash, orderedComponents.ToArray(), query));
 
         return query;
     }
 
-    private readonly List<(ComponentID[], QueryDescription)> _queryCache2 = [ ];
+    // Cache of all queries with 2 included components. Tuple elements are:
+    // - hash of sorted component IDs
+    // - sorted array of component IDs
+    // - the query itself
+    private readonly List<(uint, int[], QueryDescription)> _queryCache2 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -54,12 +75,25 @@ public partial class World
         where T0 : IComponent
             where T1 : IComponent
     {
+        // Accumulate all components in ascending order
+        Span<int> orderedComponents = [
+            ComponentID<T0>.ID.Value,
+            ComponentID<T1>.ID.Value,
+        ];
+        orderedComponents.Sort();
+
+        // Calculate hash of components, for fast rejection
+        var hash = xxHash32.ComputeHash(MemoryMarshal.Cast<int, byte>(orderedComponents), 42);
+
         // Find query that matches these types
-        foreach (var (c, q) in _queryCache2)
+        foreach (var (h, c, q) in _queryCache2)
         {
-            if (!c.Contains(ComponentID<T0>.ID))
+            // Early exit on hash check.
+            if (h != hash)
                 continue;
-            if (!c.Contains(ComponentID<T1>.ID))
+
+            // Since the sequences are sorted by component ID these should be identical
+            if (!orderedComponents.SequenceEqual(c))
                 continue;
 
             return q;
@@ -71,16 +105,17 @@ public partial class World
             .Include<T1>()
             .Build(this);
 
-        // Store it in the cache for next time
-        _queryCache2.Add(([
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-        ], query));
+        // Add query to the cache
+        _queryCache2.Add((hash, orderedComponents.ToArray(), query));
 
         return query;
     }
 
-    private readonly List<(ComponentID[], QueryDescription)> _queryCache3 = [ ];
+    // Cache of all queries with 3 included components. Tuple elements are:
+    // - hash of sorted component IDs
+    // - sorted array of component IDs
+    // - the query itself
+    private readonly List<(uint, int[], QueryDescription)> _queryCache3 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -92,14 +127,26 @@ public partial class World
             where T1 : IComponent
             where T2 : IComponent
     {
+        // Accumulate all components in ascending order
+        Span<int> orderedComponents = [
+            ComponentID<T0>.ID.Value,
+            ComponentID<T1>.ID.Value,
+            ComponentID<T2>.ID.Value,
+        ];
+        orderedComponents.Sort();
+
+        // Calculate hash of components, for fast rejection
+        var hash = xxHash32.ComputeHash(MemoryMarshal.Cast<int, byte>(orderedComponents), 42);
+
         // Find query that matches these types
-        foreach (var (c, q) in _queryCache3)
+        foreach (var (h, c, q) in _queryCache3)
         {
-            if (!c.Contains(ComponentID<T0>.ID))
+            // Early exit on hash check.
+            if (h != hash)
                 continue;
-            if (!c.Contains(ComponentID<T1>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T2>.ID))
+
+            // Since the sequences are sorted by component ID these should be identical
+            if (!orderedComponents.SequenceEqual(c))
                 continue;
 
             return q;
@@ -112,17 +159,17 @@ public partial class World
             .Include<T2>()
             .Build(this);
 
-        // Store it in the cache for next time
-        _queryCache3.Add(([
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-        ], query));
+        // Add query to the cache
+        _queryCache3.Add((hash, orderedComponents.ToArray(), query));
 
         return query;
     }
 
-    private readonly List<(ComponentID[], QueryDescription)> _queryCache4 = [ ];
+    // Cache of all queries with 4 included components. Tuple elements are:
+    // - hash of sorted component IDs
+    // - sorted array of component IDs
+    // - the query itself
+    private readonly List<(uint, int[], QueryDescription)> _queryCache4 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -135,16 +182,27 @@ public partial class World
             where T2 : IComponent
             where T3 : IComponent
     {
+        // Accumulate all components in ascending order
+        Span<int> orderedComponents = [
+            ComponentID<T0>.ID.Value,
+            ComponentID<T1>.ID.Value,
+            ComponentID<T2>.ID.Value,
+            ComponentID<T3>.ID.Value,
+        ];
+        orderedComponents.Sort();
+
+        // Calculate hash of components, for fast rejection
+        var hash = xxHash32.ComputeHash(MemoryMarshal.Cast<int, byte>(orderedComponents), 42);
+
         // Find query that matches these types
-        foreach (var (c, q) in _queryCache4)
+        foreach (var (h, c, q) in _queryCache4)
         {
-            if (!c.Contains(ComponentID<T0>.ID))
+            // Early exit on hash check.
+            if (h != hash)
                 continue;
-            if (!c.Contains(ComponentID<T1>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T2>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T3>.ID))
+
+            // Since the sequences are sorted by component ID these should be identical
+            if (!orderedComponents.SequenceEqual(c))
                 continue;
 
             return q;
@@ -158,18 +216,17 @@ public partial class World
             .Include<T3>()
             .Build(this);
 
-        // Store it in the cache for next time
-        _queryCache4.Add(([
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-        ], query));
+        // Add query to the cache
+        _queryCache4.Add((hash, orderedComponents.ToArray(), query));
 
         return query;
     }
 
-    private readonly List<(ComponentID[], QueryDescription)> _queryCache5 = [ ];
+    // Cache of all queries with 5 included components. Tuple elements are:
+    // - hash of sorted component IDs
+    // - sorted array of component IDs
+    // - the query itself
+    private readonly List<(uint, int[], QueryDescription)> _queryCache5 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -183,18 +240,28 @@ public partial class World
             where T3 : IComponent
             where T4 : IComponent
     {
+        // Accumulate all components in ascending order
+        Span<int> orderedComponents = [
+            ComponentID<T0>.ID.Value,
+            ComponentID<T1>.ID.Value,
+            ComponentID<T2>.ID.Value,
+            ComponentID<T3>.ID.Value,
+            ComponentID<T4>.ID.Value,
+        ];
+        orderedComponents.Sort();
+
+        // Calculate hash of components, for fast rejection
+        var hash = xxHash32.ComputeHash(MemoryMarshal.Cast<int, byte>(orderedComponents), 42);
+
         // Find query that matches these types
-        foreach (var (c, q) in _queryCache5)
+        foreach (var (h, c, q) in _queryCache5)
         {
-            if (!c.Contains(ComponentID<T0>.ID))
+            // Early exit on hash check.
+            if (h != hash)
                 continue;
-            if (!c.Contains(ComponentID<T1>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T2>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T3>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T4>.ID))
+
+            // Since the sequences are sorted by component ID these should be identical
+            if (!orderedComponents.SequenceEqual(c))
                 continue;
 
             return q;
@@ -209,19 +276,17 @@ public partial class World
             .Include<T4>()
             .Build(this);
 
-        // Store it in the cache for next time
-        _queryCache5.Add(([
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-        ], query));
+        // Add query to the cache
+        _queryCache5.Add((hash, orderedComponents.ToArray(), query));
 
         return query;
     }
 
-    private readonly List<(ComponentID[], QueryDescription)> _queryCache6 = [ ];
+    // Cache of all queries with 6 included components. Tuple elements are:
+    // - hash of sorted component IDs
+    // - sorted array of component IDs
+    // - the query itself
+    private readonly List<(uint, int[], QueryDescription)> _queryCache6 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -236,20 +301,29 @@ public partial class World
             where T4 : IComponent
             where T5 : IComponent
     {
+        // Accumulate all components in ascending order
+        Span<int> orderedComponents = [
+            ComponentID<T0>.ID.Value,
+            ComponentID<T1>.ID.Value,
+            ComponentID<T2>.ID.Value,
+            ComponentID<T3>.ID.Value,
+            ComponentID<T4>.ID.Value,
+            ComponentID<T5>.ID.Value,
+        ];
+        orderedComponents.Sort();
+
+        // Calculate hash of components, for fast rejection
+        var hash = xxHash32.ComputeHash(MemoryMarshal.Cast<int, byte>(orderedComponents), 42);
+
         // Find query that matches these types
-        foreach (var (c, q) in _queryCache6)
+        foreach (var (h, c, q) in _queryCache6)
         {
-            if (!c.Contains(ComponentID<T0>.ID))
+            // Early exit on hash check.
+            if (h != hash)
                 continue;
-            if (!c.Contains(ComponentID<T1>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T2>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T3>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T4>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T5>.ID))
+
+            // Since the sequences are sorted by component ID these should be identical
+            if (!orderedComponents.SequenceEqual(c))
                 continue;
 
             return q;
@@ -265,20 +339,17 @@ public partial class World
             .Include<T5>()
             .Build(this);
 
-        // Store it in the cache for next time
-        _queryCache6.Add(([
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-            ComponentID<T5>.ID,
-        ], query));
+        // Add query to the cache
+        _queryCache6.Add((hash, orderedComponents.ToArray(), query));
 
         return query;
     }
 
-    private readonly List<(ComponentID[], QueryDescription)> _queryCache7 = [ ];
+    // Cache of all queries with 7 included components. Tuple elements are:
+    // - hash of sorted component IDs
+    // - sorted array of component IDs
+    // - the query itself
+    private readonly List<(uint, int[], QueryDescription)> _queryCache7 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -294,22 +365,30 @@ public partial class World
             where T5 : IComponent
             where T6 : IComponent
     {
+        // Accumulate all components in ascending order
+        Span<int> orderedComponents = [
+            ComponentID<T0>.ID.Value,
+            ComponentID<T1>.ID.Value,
+            ComponentID<T2>.ID.Value,
+            ComponentID<T3>.ID.Value,
+            ComponentID<T4>.ID.Value,
+            ComponentID<T5>.ID.Value,
+            ComponentID<T6>.ID.Value,
+        ];
+        orderedComponents.Sort();
+
+        // Calculate hash of components, for fast rejection
+        var hash = xxHash32.ComputeHash(MemoryMarshal.Cast<int, byte>(orderedComponents), 42);
+
         // Find query that matches these types
-        foreach (var (c, q) in _queryCache7)
+        foreach (var (h, c, q) in _queryCache7)
         {
-            if (!c.Contains(ComponentID<T0>.ID))
+            // Early exit on hash check.
+            if (h != hash)
                 continue;
-            if (!c.Contains(ComponentID<T1>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T2>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T3>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T4>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T5>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T6>.ID))
+
+            // Since the sequences are sorted by component ID these should be identical
+            if (!orderedComponents.SequenceEqual(c))
                 continue;
 
             return q;
@@ -326,21 +405,17 @@ public partial class World
             .Include<T6>()
             .Build(this);
 
-        // Store it in the cache for next time
-        _queryCache7.Add(([
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-            ComponentID<T5>.ID,
-            ComponentID<T6>.ID,
-        ], query));
+        // Add query to the cache
+        _queryCache7.Add((hash, orderedComponents.ToArray(), query));
 
         return query;
     }
 
-    private readonly List<(ComponentID[], QueryDescription)> _queryCache8 = [ ];
+    // Cache of all queries with 8 included components. Tuple elements are:
+    // - hash of sorted component IDs
+    // - sorted array of component IDs
+    // - the query itself
+    private readonly List<(uint, int[], QueryDescription)> _queryCache8 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -357,24 +432,31 @@ public partial class World
             where T6 : IComponent
             where T7 : IComponent
     {
+        // Accumulate all components in ascending order
+        Span<int> orderedComponents = [
+            ComponentID<T0>.ID.Value,
+            ComponentID<T1>.ID.Value,
+            ComponentID<T2>.ID.Value,
+            ComponentID<T3>.ID.Value,
+            ComponentID<T4>.ID.Value,
+            ComponentID<T5>.ID.Value,
+            ComponentID<T6>.ID.Value,
+            ComponentID<T7>.ID.Value,
+        ];
+        orderedComponents.Sort();
+
+        // Calculate hash of components, for fast rejection
+        var hash = xxHash32.ComputeHash(MemoryMarshal.Cast<int, byte>(orderedComponents), 42);
+
         // Find query that matches these types
-        foreach (var (c, q) in _queryCache8)
+        foreach (var (h, c, q) in _queryCache8)
         {
-            if (!c.Contains(ComponentID<T0>.ID))
+            // Early exit on hash check.
+            if (h != hash)
                 continue;
-            if (!c.Contains(ComponentID<T1>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T2>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T3>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T4>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T5>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T6>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T7>.ID))
+
+            // Since the sequences are sorted by component ID these should be identical
+            if (!orderedComponents.SequenceEqual(c))
                 continue;
 
             return q;
@@ -392,22 +474,17 @@ public partial class World
             .Include<T7>()
             .Build(this);
 
-        // Store it in the cache for next time
-        _queryCache8.Add(([
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-            ComponentID<T5>.ID,
-            ComponentID<T6>.ID,
-            ComponentID<T7>.ID,
-        ], query));
+        // Add query to the cache
+        _queryCache8.Add((hash, orderedComponents.ToArray(), query));
 
         return query;
     }
 
-    private readonly List<(ComponentID[], QueryDescription)> _queryCache9 = [ ];
+    // Cache of all queries with 9 included components. Tuple elements are:
+    // - hash of sorted component IDs
+    // - sorted array of component IDs
+    // - the query itself
+    private readonly List<(uint, int[], QueryDescription)> _queryCache9 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -425,26 +502,32 @@ public partial class World
             where T7 : IComponent
             where T8 : IComponent
     {
+        // Accumulate all components in ascending order
+        Span<int> orderedComponents = [
+            ComponentID<T0>.ID.Value,
+            ComponentID<T1>.ID.Value,
+            ComponentID<T2>.ID.Value,
+            ComponentID<T3>.ID.Value,
+            ComponentID<T4>.ID.Value,
+            ComponentID<T5>.ID.Value,
+            ComponentID<T6>.ID.Value,
+            ComponentID<T7>.ID.Value,
+            ComponentID<T8>.ID.Value,
+        ];
+        orderedComponents.Sort();
+
+        // Calculate hash of components, for fast rejection
+        var hash = xxHash32.ComputeHash(MemoryMarshal.Cast<int, byte>(orderedComponents), 42);
+
         // Find query that matches these types
-        foreach (var (c, q) in _queryCache9)
+        foreach (var (h, c, q) in _queryCache9)
         {
-            if (!c.Contains(ComponentID<T0>.ID))
+            // Early exit on hash check.
+            if (h != hash)
                 continue;
-            if (!c.Contains(ComponentID<T1>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T2>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T3>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T4>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T5>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T6>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T7>.ID))
-                continue;
-            if (!c.Contains(ComponentID<T8>.ID))
+
+            // Since the sequences are sorted by component ID these should be identical
+            if (!orderedComponents.SequenceEqual(c))
                 continue;
 
             return q;
@@ -463,18 +546,8 @@ public partial class World
             .Include<T8>()
             .Build(this);
 
-        // Store it in the cache for next time
-        _queryCache9.Add(([
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-            ComponentID<T5>.ID,
-            ComponentID<T6>.ID,
-            ComponentID<T7>.ID,
-            ComponentID<T8>.ID,
-        ], query));
+        // Add query to the cache
+        _queryCache9.Add((hash, orderedComponents.ToArray(), query));
 
         return query;
     }
