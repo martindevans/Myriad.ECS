@@ -77,9 +77,13 @@ namespace NBodyIntegrator.Orbits.NBodies.Integrators
         public void Integrate<TQuery>(ref Metre3 position, ref Metre3 velocity, ref double timestamp, ref double dt, ref TQuery accel)
             where TQuery : struct, IAccelerationQuery
         {
+            // If these fields were not initialised in the constructor, set them now
             var epsilon = _epsilon ?? DefaultEpsilon;
             var minDt = _minDt ?? DefaultMinDt;
             var maxDt = _maxDt ?? DefaultMaxDt;
+
+            // Ensure initial timestep is in valid range
+            dt = Math.Clamp(dt, minDt, maxDt);
 
             var initial = new State
             {

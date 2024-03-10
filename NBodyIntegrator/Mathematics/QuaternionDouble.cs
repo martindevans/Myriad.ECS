@@ -25,14 +25,14 @@ public readonly struct QuaternionDouble
         var w2 = rotation.W * xyz2;
         var x2 = rotation.X * xyz2;
 
-        var yy2 = rotation.Y * xyz2.y;
-        var yz2 = rotation.Y * xyz2.z;
-        var zz2 = rotation.Z * xyz2.z;
+        var yy2 = rotation.Y * xyz2.Y;
+        var yz2 = rotation.Y * xyz2.Z;
+        var zz2 = rotation.Z * xyz2.Z;
 
         return new double3(
-            value.x * (1.0f - yy2 - zz2) + value.y * (x2.y - w2.z) + value.z * (x2.z + w2.y),
-            value.x * (x2.y + w2.z) + value.y * (1.0f - x2.x - zz2) + value.z * (yz2 - w2.x),
-            value.x * (x2.z - w2.y) + value.y * (yz2 + w2.x) + value.z * (1.0f - x2.x - yy2)
+            value.X * (1.0f - yy2 - zz2) + value.Y * (x2.Y - w2.Z) + value.Z * (x2.Z + w2.Y),
+            value.X * (x2.Y + w2.Z) + value.Y * (1.0f - x2.X - zz2) + value.Z * (yz2 - w2.X),
+            value.X * (x2.Z - w2.Y) + value.Y * (yz2 + w2.X) + value.Z * (1.0f - x2.X - yy2)
         );
     }
 }

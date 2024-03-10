@@ -32,16 +32,16 @@ public sealed class RailTrimmer(World world)
             ref PagedRail<NBody.Timestamp> times
         )
         {
-            if (positions.Count != velocities.Count)
+            if (positions.ItemCount != velocities.ItemCount)
                 throw new InvalidOperationException("Position/Velocity count mismatch");
-            if (positions.Count != times.Count)
+            if (positions.ItemCount != times.ItemCount)
                 throw new InvalidOperationException("Position/Velocity count mismatch");
 
             // Keep removing frames while:
             // - Iteration limit
             // - More than 2
             // - First two are both before now
-            for (var i = 0; i < MAX_ITERS && times.Count > 2; i++)
+            for (var i = 0; i < MAX_ITERS && times.ItemCount > 2; i++)
             {
                 var a = times.First();
                 var b = times.Second();

@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Numerics;
 using Myriad.ECS;
 using NBodyIntegrator.Mathematics;
 using NBodyIntegrator.Units;
@@ -87,6 +86,27 @@ public struct NBody
         public static implicit operator Velocity(Metre3 self) => new() { Value = self };
 
         public readonly override string ToString() => Value.ToString();
+    }
+
+    /// <summary>
+    /// Rewind the rails to the given timestamp
+    /// </summary>
+    /// <param name="timestamp"></param>
+    /// <param name="positions"></param>
+    /// <param name="velocities"></param>
+    /// <param name="times"></param>
+    public void Invalidate(double timestamp, PagedRail<Position> positions, PagedRail<Velocity> velocities, PagedRail<Timestamp> times)
+    {
+        // Set DT to 0, integrator will correct this to the min bound.
+        DeltaTime = 0;
+
+        // Count how many timestamps are less than the given value
+        var keep = times.CountUntilFalse(timestamp, (a, b) => a.Value < b);
+
+        // Trim all three rails to this length
+        positions.Keep(keep);
+        velocities.Keep(keep);
+        times.Keep(keep);
     }
 }
 

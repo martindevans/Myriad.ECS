@@ -12,6 +12,8 @@ namespace NBodyIntegrator.Orbits.NBodies;
 public sealed class RailIntegrator(World world)
     : ISystem
 {
+    private const int MaxWork = 64;
+
     private KeplerObject[] _keplerMasses = [];
 
     public bool Enabled { get; set; } = true;
@@ -25,7 +27,7 @@ public sealed class RailIntegrator(World world)
     {
         world.ExecuteParallel<Integrate, NBody, PagedRail<NBody.Position>, PagedRail<NBody.Velocity>, PagedRail<NBody.Timestamp>, EngineBurnSchedule, Mass>(
             new Integrate(_keplerMasses),
-            batchSize: 16
+            batchSize: 8
         );
     }
 
@@ -41,13 +43,13 @@ public sealed class RailIntegrator(World world)
             ref NBody nbody, ref PagedRail<NBody.Position> positions, ref PagedRail<NBody.Velocity> velocities, ref PagedRail<NBody.Timestamp> times,
             ref EngineBurnSchedule schedule, ref Mass mass)
         {
-            if (positions.Count != velocities.Count)
+            if (positions.ItemCount != velocities.ItemCount)
                 throw new InvalidOperationException("Position/Velocity count mismatch");
-            if (positions.Count != times.Count)
+            if (positions.ItemCount != times.ItemCount)
                 throw new InvalidOperationException("Position/Velocity count mismatch");
 
-            // If we've hit the length target there's no point integrating anything
-            if (times.Count > 2)
+            // Check if we've hit the target time length of the rail
+            if (times.ItemCount > 2)
             {
                 var a = times.First().Value;
                 var b = times.Last().Value;
@@ -60,7 +62,7 @@ public sealed class RailIntegrator(World world)
             // Choose an integrator
             var integrator = new RKF45(nbody.IntegratorPrecision.Epsilon(RKF45.DefaultEpsilon), RKF45.DefaultMinDt, RKF45.DefaultMaxDt);
 
-            var q = new AccelerationQuery(keplerMasses, mass.Value, schedule);
+            var query = new AccelerationQuery(keplerMasses, mass.Value, schedule);
 
             // Get the index of the final point in the rail and copy out data
             var pos = positions.Last().Value;
@@ -68,19 +70,25 @@ public sealed class RailIntegrator(World world)
             var tim = times.Last().Value;
             var dt = nbody.DeltaTime;
 
-            // Do lots of integration steps, however many is required for 1 second of time to pass (with a cap of max steps, just in case)
-            var totalIntegratedTime = 0.0;
-            for (var i = 0; i < 64 && totalIntegratedTime < nbody.RailTimestep.Value; i++)
+            // Integrate a load of steps forward
+            var totalWork = MaxWork;
+            while (totalWork > 0)
             {
-                integrator.Integrate(ref pos, ref vel, ref tim, ref dt, ref q);
-                totalIntegratedTime += dt;
-            }
+                // Keep doing steps until at least 1 second has passed (capped at MaxWork)
+                var totalIntegratedTime = 0.0;
+                for (var i = 0; i < MaxWork && totalIntegratedTime < nbody.RailTimestep.Value; i++)
+                {
+                    integrator.Integrate(ref pos, ref vel, ref tim, ref dt, ref query);
+                    totalIntegratedTime += dt;
+                    totalWork--;
+                }
 
-            // Store results
-            positions.Add(pos);
-            velocities.Add(vel);
-            times.Add(tim);
-            nbody.DeltaTime = dt;
+                // Store results
+                positions.Add(pos);
+                velocities.Add(vel);
+                times.Add(tim);
+                nbody.DeltaTime = dt;
+            }
         }
     }
 
@@ -105,18 +113,17 @@ public sealed class RailIntegrator(World world)
             var mass = startMass;
             foreach (var burn in schedule.Burns)
             {
-                // if the burn is i the future then there's no current active burn
+                // if the burn is in the future then there's no current active burn
                 if (burn.Start.Value > time)
                     return double3.Zero;
 
-                // If the burn is in the past subtract off all of the mass consumed
+                // If the burn is in the past subtract off all of the mass consumed by that burn
                 if (burn.End.Value < time)
                 {
                     mass -= burn.MassPerSecond * (burn.End.Value - burn.Start.Value);
                 }
                 else
                 {
-
                     // Burn is currently active
                     mass -= (time - burn.Start.Value) * burn.MassPerSecond;
 

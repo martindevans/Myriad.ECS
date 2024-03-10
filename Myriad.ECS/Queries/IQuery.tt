@@ -134,7 +134,8 @@ namespace Myriad.ECS.Worlds
 }
 #>
 
-                    ParallelTasks.Parallel.For(0, numBatches, b =>
+					System.Threading.Tasks.Parallel.For(0, numBatches, b =>
+                    //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, chunk.EntityCount);

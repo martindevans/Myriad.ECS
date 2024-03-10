@@ -11,10 +11,20 @@ namespace NBodyIntegrator.Orbits.NBodies;
 public class PagedRail<TData>
     : IComponent
 {
+    public const int PageSize = 1024;
+
     private readonly LocalPool<Page> _pool = new(2);
     private readonly List<Page> _pages = [ ];
 
-    public int Count { get; private set; }
+    /// <summary>
+    /// Total count of items in the rail
+    /// </summary>
+    public int ItemCount { get; private set; }
+
+    /// <summary>
+    /// Incremented every time a page is added
+    /// </summary>
+    public ulong PageEpoch { get; private set; }
 
     public void Add(TData item)
     {
@@ -22,12 +32,13 @@ public class PagedRail<TData>
         {
             var p = _pool.Get();
             p.Clear();
+            p.ID = PageEpoch++;
             _pages.Add(p);
         }
 
         _pages[^1].Add(item);
 
-        Count++;
+        ItemCount++;
     }
 
     public void RemoveFirst()
@@ -44,46 +55,44 @@ public class PagedRail<TData>
             _pool.Return(p);
         }
 
-        Count--;
+        ItemCount--;
     }
 
     public TData First()
     {
-        return _pages[0].First();
+        return _pages[0][0];
     }
 
     public TData Second()
     {
         var p0 = _pages[0];
         if (p0.Count > 1)
-            return p0.Second();
+            return p0[1];
 
         var p1 = _pages[1];
-        return p1.First();
+        return p1[0];
     }
 
     public TData Last()
     {
-        return _pages[^1].Last();
+        return _pages[^1][^1];
     }
 
     private class Page
     {
-        private const int PageSize = 1024;
-
         private readonly TData[] _data = new TData[PageSize];
 
         private int _first;
         private int _end;
-        private int _count;
 
-        public int Count => _count;
+        public int Count { get; private set; }
+        public ulong ID { get; set; }
 
         public void Clear()
         {
             _first = 0;
             _end = 0;
-            _count = 0;
+            Count = 0;
         }
 
         public bool IsCursorAtEnd()
@@ -93,7 +102,7 @@ public class PagedRail<TData>
 
         public bool IsEmpty()
         {
-            return _count == 0;
+            return Count == 0;
         }
 
         public void Add(TData item)
@@ -102,7 +111,7 @@ public class PagedRail<TData>
                 throw new InvalidOperationException("Cannot add to full page");
 
             _data[_end++] = item;
-            _count++;
+            Count++;
         }
 
         public void RemoveFirst()
@@ -111,48 +120,33 @@ public class PagedRail<TData>
                 throw new InvalidOperationException("Cannot remove from empty page");
 
             _first++;
-            _count--;
-        }
-
-        public TData First()
-        {
-            if (IsEmpty())
-                throw new InvalidOperationException("Cannot get first from empty page");
-
-            return _data[_first];
-        }
-
-        public TData Second()
-        {
-            if (Count < 2)
-                throw new InvalidOperationException("Cannot get second from page with less than 2 items");
-
-            return _data[_first + 1];
-        }
-
-        public TData Last()
-        {
-            if (IsEmpty())
-                throw new InvalidOperationException("Cannot get first from empty page");
-
-            return _data[_end - 1];
+            Count--;
         }
 
         public TData this[int index]
         {
             get
             {
-                index -= _first;
-
-                if (index < 0 || index >= _count)
+                if (index < 0 || index >= Count)
                     throw new IndexOutOfRangeException();
-                return _data[index];
+                return _data[index + _first];
             }
         }
 
         public ReadOnlySpan<TData> GetSpan()
         {
-            return _data.AsSpan(_first, _count);
+            return _data.AsSpan(_first, Count);
+        }
+
+        public void Keep(int keep)
+        {
+            if (keep > Count)
+                throw new ArgumentOutOfRangeException(nameof(keep), "Cannot keep more items than count");
+            if (_first + keep > _data.Length)
+                throw new ArgumentOutOfRangeException(nameof(keep), "Cannot keep more items than data page size");
+
+            Count = keep;
+            _end = _first + keep;
         }
     }
 
@@ -176,5 +170,72 @@ public class PagedRail<TData>
 
             return true;
         }
+    }
+
+    /// <summary>
+    /// Keep counting until the predicate returns false
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="value"></param>
+    /// <param name="predicate"></param>
+    /// <returns></returns>
+    public int CountUntilFalse<T>(T value, Func<TData, T, bool> predicate)
+    {
+        var counter = 0;
+        foreach (var page in _pages)
+        {
+            foreach (var item in page.GetSpan())
+            {
+                if (predicate(item, value))
+                    counter++;
+                else
+                    return counter;
+            }
+        }
+
+        return counter;
+    }
+
+    /// <summary>
+    /// Keep this many data points (discard all others)
+    /// </summary>
+    /// <param name="keep"></param>
+    public void Keep(int keep)
+    {
+        if (keep > ItemCount)
+            throw new ArgumentOutOfRangeException(nameof(keep), "Cannot keep more items than there are");
+
+        var discard = 0;
+        var sum = 0;
+        for (var i = 0; i < _pages.Count; i++)
+        {
+            if (_pages[i].Count + sum <= keep)
+            {
+                // We haven't yet counted up enough items to exceed the "keep" counter, just add to the sum
+                sum += _pages[i].Count;
+            }
+            else
+            {
+                // This page needs trimming, and every page after it needs discarding
+                discard = _pages.Count - i - 1;
+                _pages[i].Keep(keep - sum);
+                break;
+            }
+        }
+
+        // Remove however many pages need discarding
+        while (discard > 0)
+        {
+            var last = _pages[^1];
+            _pages.RemoveAt(_pages.Count - 1);
+
+            last.Clear();
+            _pool.Return(last);
+
+            discard--;
+        }
+
+        // Update final item count
+        ItemCount = keep;
     }
 }

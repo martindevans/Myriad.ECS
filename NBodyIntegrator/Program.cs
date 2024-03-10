@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using Humanizer;
+using Myriad.ECS;
 using Myriad.ECS.Command;
 using Myriad.ECS.Systems;
 using Myriad.ECS.Worlds;
@@ -79,7 +80,7 @@ for (var i = 0; i < count; i++)
 //);
 
 // lunar orbiter
-CreateNBody(
+var bnb = CreateNBody(
     setup,
     new Metre3(384748000, 0, 0) + new Metre3(5000, 5000, 5000),
     new Metre3(0, 0, -1000),
@@ -101,6 +102,7 @@ for (var i = 0; i < 10; i++)
 }
 
 using var resolver = setup.Playback();
+var nb = bnb.Resolve(resolver);
 
 var systems = new SystemGroup(
     "main",
@@ -110,7 +112,7 @@ var systems = new SystemGroup(
     ),
     new SystemGroup(
         "nbody",
-        //new RailTrimmer(world),
+        new RailTrimmer(world),
         new RailIntegrator(world)
     )
 );
@@ -152,6 +154,17 @@ AnsiConsole
             if (i % 1000 == 7)
                 maxMem = Math.Max(maxMem, GC.GetTotalMemory(false));
 
+            // Partway through sim invalidate one of the rails
+            if (i == 5000)
+            {
+                world.GetComponentRef<NBody>(nb).Invalidate(
+                    1814400, // 3 weeks
+                    world.GetComponentRef<PagedRail<NBody.Position>>(nb),
+                    world.GetComponentRef<PagedRail<NBody.Velocity>>(nb),
+                    world.GetComponentRef<PagedRail<NBody.Timestamp>>(nb)
+                );
+            }
+
             task.Increment(1);
         }
 
@@ -188,7 +201,7 @@ Console.WriteLine($" - Shortest:     {mint.Seconds().Humanize(3)}");
 
 return;
 
-static void CreateNBody(CommandBuffer buffer, Metre3 position, Metre3 velocity, NBodyPrecision precision, Random? rng)
+static CommandBuffer.BufferedEntity CreateNBody(CommandBuffer buffer, Metre3 position, Metre3 velocity, NBodyPrecision precision, Random? rng)
 {
     // Create entity
     var entity = buffer
@@ -198,11 +211,11 @@ static void CreateNBody(CommandBuffer buffer, Metre3 position, Metre3 velocity, 
 
     // Create buffers to hold orbit data
     var pos = new PagedRail<NBody.Position>();
-    pos.Add(new NBody.Position(position.Value.x, position.Value.y, position.Value.z));
+    pos.Add(new NBody.Position(position.Value.X, position.Value.Y, position.Value.Z));
     entity.Set(pos);
 
     var vel = new PagedRail<NBody.Velocity>();
-    vel.Add(new NBody.Velocity(velocity.Value.x, velocity.Value.y, velocity.Value.z));
+    vel.Add(new NBody.Velocity(velocity.Value.X, velocity.Value.Y, velocity.Value.Z));
     entity.Set(vel);
 
     var time = new PagedRail<NBody.Timestamp>();
@@ -241,6 +254,8 @@ static void CreateNBody(CommandBuffer buffer, Metre3 position, Metre3 velocity, 
             new double3(dir)
         ));
     }
+
+    return entity;
 }
 
 static void WriteCsv(TextWriter writer, World world)
@@ -250,7 +265,7 @@ static void WriteCsv(TextWriter writer, World world)
     // Write out entire rail
     foreach (var (e, p, t) in world.Query<PagedRail<NBody.Position>, PagedRail<NBody.Timestamp>>())
     {
-        if (p.Item.Count == 0)
+        if (p.Item.ItemCount == 0)
             continue;
 
         maxt = Math.Max(maxt, t.Item.Last().Value);
@@ -271,7 +286,7 @@ static void WriteCsv(TextWriter writer, World world)
             for (var i = 0; i < positions.Length; i++)
             {
                 var pos = positions[i].Value;
-                writer.WriteLine($"{e.ID},\"n\",{times[i].Value:F2},{pos.Value.x:F3},{pos.Value.y:F3},{pos.Value.z:F3}");
+                writer.WriteLine($"{e.ID},\"n\",{times[i].Value:F2},{pos.Value.X:F3},{pos.Value.Y:F3},{pos.Value.Z:F3}");
                 maxt = Math.Max(maxt, times[i].Value);
             }
         }
@@ -283,7 +298,7 @@ static void WriteCsv(TextWriter writer, World world)
         for (var i = 0; i < maxt; i += 3600)
         {
             var pos = k.Item.PositionAtTime(i);
-            writer.WriteLine($"{e.ID},\"k\",{i:F2},{pos.Value.x:F3},{pos.Value.y:F3},{pos.Value.z:F3}");
+            writer.WriteLine($"{e.ID},\"k\",{i:F2},{pos.Value.X:F3},{pos.Value.Y:F3},{pos.Value.Z:F3}");
         }
     }
 }
@@ -293,7 +308,7 @@ static void WriteBinary(BinaryWriter writer, World world)
     // Write out entire rail
     foreach (var (_, p, t) in world.Query<PagedRail<NBody.Position>, PagedRail<NBody.Timestamp>>())
     {
-        if (p.Item.Count == 0)
+        if (p.Item.ItemCount == 0)
             continue;
 
         var positionSpans = p.Item.GetEnumerator();
@@ -311,9 +326,9 @@ static void WriteBinary(BinaryWriter writer, World world)
 
             // Write out a "keyframe" at the start
             writer.Write(positions.Length);
-            writer.Write(positions[0].Value.Value.x);
-            writer.Write(positions[0].Value.Value.y);
-            writer.Write(positions[0].Value.Value.z);
+            writer.Write(positions[0].Value.Value.X);
+            writer.Write(positions[0].Value.Value.Y);
+            writer.Write(positions[0].Value.Value.Z);
             writer.Write(times[0].Value);
 
             // Keep track of the sum from the keyframe to the latest frame

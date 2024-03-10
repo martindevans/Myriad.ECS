@@ -97,7 +97,8 @@ namespace Myriad.ECS.Worlds
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 
-                    ParallelTasks.Parallel.For(0, numBatches, b =>
+					System.Threading.Tasks.Parallel.For(0, numBatches, b =>
+                    //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, chunk.EntityCount);
@@ -213,7 +214,8 @@ namespace Myriad.ECS.Worlds
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
 
-                    ParallelTasks.Parallel.For(0, numBatches, b =>
+					System.Threading.Tasks.Parallel.For(0, numBatches, b =>
+                    //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, chunk.EntityCount);
@@ -336,7 +338,8 @@ namespace Myriad.ECS.Worlds
 					var t1 = chunk.GetComponentArray<T1>(c1);
 					var t2 = chunk.GetComponentArray<T2>(c2);
 
-                    ParallelTasks.Parallel.For(0, numBatches, b =>
+					System.Threading.Tasks.Parallel.For(0, numBatches, b =>
+                    //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, chunk.EntityCount);
@@ -466,7 +469,8 @@ namespace Myriad.ECS.Worlds
 					var t2 = chunk.GetComponentArray<T2>(c2);
 					var t3 = chunk.GetComponentArray<T3>(c3);
 
-                    ParallelTasks.Parallel.For(0, numBatches, b =>
+					System.Threading.Tasks.Parallel.For(0, numBatches, b =>
+                    //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, chunk.EntityCount);
@@ -603,7 +607,8 @@ namespace Myriad.ECS.Worlds
 					var t3 = chunk.GetComponentArray<T3>(c3);
 					var t4 = chunk.GetComponentArray<T4>(c4);
 
-                    ParallelTasks.Parallel.For(0, numBatches, b =>
+					System.Threading.Tasks.Parallel.For(0, numBatches, b =>
+                    //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, chunk.EntityCount);
@@ -747,7 +752,8 @@ namespace Myriad.ECS.Worlds
 					var t4 = chunk.GetComponentArray<T4>(c4);
 					var t5 = chunk.GetComponentArray<T5>(c5);
 
-                    ParallelTasks.Parallel.For(0, numBatches, b =>
+					System.Threading.Tasks.Parallel.For(0, numBatches, b =>
+                    //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, chunk.EntityCount);
@@ -898,7 +904,8 @@ namespace Myriad.ECS.Worlds
 					var t5 = chunk.GetComponentArray<T5>(c5);
 					var t6 = chunk.GetComponentArray<T6>(c6);
 
-                    ParallelTasks.Parallel.For(0, numBatches, b =>
+					System.Threading.Tasks.Parallel.For(0, numBatches, b =>
+                    //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, chunk.EntityCount);
@@ -1056,7 +1063,8 @@ namespace Myriad.ECS.Worlds
 					var t6 = chunk.GetComponentArray<T6>(c6);
 					var t7 = chunk.GetComponentArray<T7>(c7);
 
-                    ParallelTasks.Parallel.For(0, numBatches, b =>
+					System.Threading.Tasks.Parallel.For(0, numBatches, b =>
+                    //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, chunk.EntityCount);
@@ -1221,7 +1229,8 @@ namespace Myriad.ECS.Worlds
 					var t7 = chunk.GetComponentArray<T7>(c7);
 					var t8 = chunk.GetComponentArray<T8>(c8);
 
-                    ParallelTasks.Parallel.For(0, numBatches, b =>
+					System.Threading.Tasks.Parallel.For(0, numBatches, b =>
+                    //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, chunk.EntityCount);

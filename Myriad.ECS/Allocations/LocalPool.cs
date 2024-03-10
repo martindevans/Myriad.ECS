@@ -47,6 +47,5 @@ public readonly struct LocalPool<T>
         _items.Clear();
 
         Pool<List<T>>.Return(_items);
-
     }
 }
