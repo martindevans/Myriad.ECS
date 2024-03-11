@@ -89,7 +89,7 @@ var bnb = CreateNBody(
 
 // slightly randomised lunar orbiters
 var rng = new Random();
-for (var i = 0; i < 10; i++)
+for (var i = 0; i < 44; i++)
 {
     CreateNBody(
         setup,
@@ -132,11 +132,6 @@ AnsiConsole
         var task = ctx.AddTask("Running");
         task.MaxValue = ticks;
 
-        using var csvWriter = File.CreateText("data_dump.csv");
-        csvWriter.WriteLine("entity,type,timestamp,posx,posy,posz");
-
-        using var binWriter = new BinaryWriter(File.Create("data_dump.bin"));
-
         for (var i = 0; i < ticks; i++)
         {
             systems.BeforeUpdate(gt);
@@ -153,21 +148,24 @@ AnsiConsole
             if (i % 1000 == 7)
                 maxMem = Math.Max(maxMem, GC.GetTotalMemory(false));
 
-            // Partway through sim invalidate one of the rails
-            if (i == 5000)
-            {
-                world.GetComponentRef<NBody>(nb).Invalidate(
-                    1814400, // 3 weeks
-                    world.GetComponentRef<PagedRail>(nb)
-                );
-            }
+            //// Partway through sim invalidate one of the rails
+            //if (i == 5000)
+            //{
+            //    world.GetComponentRef<NBody>(nb).Invalidate(
+            //        1814400, // 3 weeks
+            //        world.GetComponentRef<PagedRail>(nb)
+            //    );
+            //}
 
             task.Increment(1);
         }
-
-        WriteCsv(csvWriter, world);
-        WriteBinary(binWriter, world);
     });
+
+using var csvWriter = File.CreateText("data_dump.csv");
+csvWriter.WriteLine("entity,type,timestamp,posx,posy,posz");
+using var binWriter = new BinaryWriter(File.Create("data_dump.bin"));
+WriteCsv(csvWriter, world);
+WriteBinary(binWriter, world);
 
 // General stats
 Console.WriteLine($"# {ticks:N0} Ticks");
@@ -208,7 +206,19 @@ static CommandBuffer.BufferedEntity CreateNBody(CommandBuffer buffer, Metre3 pos
         .Set(new WorldPosition(position));
 
     // Create buffers to hold orbit data
-    var rail = new PagedRail(position, velocity, 0);
+    var rail = new PagedRail
+    {
+        Epoch = 1,
+        Pages = []
+    };
+
+    var page = new OrbitRailPage();
+    page.Init(1, 0);
+    page.GetSpanPositions()[0] = position;
+    page.GetSpanVelocities()[0] = velocity;
+    page.GetSpanTimes()[0] = 0;
+    rail.Pages.Add(page);
+
     entity.Set(rail);
 
     // Starship mass
@@ -249,102 +259,96 @@ static CommandBuffer.BufferedEntity CreateNBody(CommandBuffer buffer, Metre3 pos
 
 static void WriteCsv(TextWriter writer, World world)
 {
-    //double maxt = 0;
+    double maxt = 0;
 
-    //// Write out entire rail
-    //foreach (var (e, r) in world.Query<PagedRail>())
-    //{
-    //    if (r.Item.ItemCount == 0)
-    //        continue;
+    // Write out entire rail
+    foreach (var (e, r) in world.Query<PagedRail>())
+    {
+        maxt = Math.Max(maxt, r.Item.LastState().time);
 
-    //    maxt = Math.Max(maxt, t.Item.Last().Value);
+        foreach (var page in r.Item.Pages)
+        {
+            var positions = page.GetSpanPositions();
+            var times = page.GetSpanTimes();
 
-    //    var positionSpans = p.Item.GetEnumerator();
-    //    var timeSpans = t.Item.GetEnumerator();
+            for (var i = 0; i < positions.Length; i++)
+            {
+                var pos = positions[i].Value;
+                writer.WriteLine($"{e.ID},\"n\",{times[i]:F2},{pos.X:F3},{pos.Y:F3},{pos.Z:F3}");
+            }
+        }
+    }
 
-    //    while (true)
-    //    {
-    //        if (!positionSpans.MoveNext() || !timeSpans.MoveNext())
-    //            break;
-
-    //        var positions = positionSpans.Current;
-    //        var times = timeSpans.Current;
-    //        if (positions.Length != times.Length)
-    //            throw new InvalidOperationException("page length mismatch");
-
-    //        for (var i = 0; i < positions.Length; i++)
-    //        {
-    //            var pos = positions[i].Value;
-    //            writer.WriteLine($"{e.ID},\"n\",{times[i].Value:F2},{pos.Value.X:F3},{pos.Value.Y:F3},{pos.Value.Z:F3}");
-    //            maxt = Math.Max(maxt, times[i].Value);
-    //        }
-    //    }
-    //}
-
-    //// Write out kepler positions at hourly intervals
-    //foreach (var (e, k, _) in world.Query<KeplerOrbit, WorldPosition>())
-    //{
-    //    for (var i = 0; i < maxt; i += 3600)
-    //    {
-    //        var pos = k.Item.PositionAtTime(i);
-    //        writer.WriteLine($"{e.ID},\"k\",{i:F2},{pos.Value.X:F3},{pos.Value.Y:F3},{pos.Value.Z:F3}");
-    //    }
-    //}
+    // Write out kepler positions at hourly intervals
+    foreach (var (e, k, _) in world.Query<KeplerOrbit, WorldPosition>())
+    {
+        for (var i = 0; i < maxt; i += 3600)
+        {
+            var pos = k.Item.PositionAtTime(i);
+            writer.WriteLine($"{e.ID},\"k\",{i:F2},{pos.Value.X:F3},{pos.Value.Y:F3},{pos.Value.Z:F3}");
+        }
+    }
 }
 
 static void WriteBinary(BinaryWriter writer, World world)
 {
-    //// Write out entire rail
-    //foreach (var (_, p, t) in world.Query<PagedRail<NBody.Position>, PagedRail<NBody.Timestamp>>())
-    //{
-    //    if (p.Item.ItemCount == 0)
-    //        continue;
+    var packetCount = 0;
 
-    //    var positionSpans = p.Item.GetEnumerator();
-    //    var timeSpans = t.Item.GetEnumerator();
+    // Write out entire rail
+    foreach (var (e, r) in world.Query<PagedRail>())
+    {
+        foreach (var page in r.Item.Pages)
+        {
+            packetCount++;
 
-    //    while (true)
-    //    {
-    //        if (!positionSpans.MoveNext() || !timeSpans.MoveNext())
-    //            break;
+            var positions = page.GetSpanPositions();
+            var times = page.GetSpanTimes();
 
-    //        var positions = positionSpans.Current;
-    //        var times = timeSpans.Current;
-    //        if (positions.Length != times.Length)
-    //            throw new InvalidOperationException("page length mismatch");
+            // packet header:
+            writer.Write((ushort)0); // protocol version
+            writer.Write((ushort)0); // packet type
 
-    //        // Write out a "keyframe" at the start
-    //        writer.Write(positions.Length);
-    //        writer.Write(positions[0].Value.Value.X);
-    //        writer.Write(positions[0].Value.Value.Y);
-    //        writer.Write(positions[0].Value.Value.Z);
-    //        writer.Write(times[0].Value);
+            // Entity ID
+            writer.Write(e.ID);
+            writer.Write(e.Version);
 
-    //        // Keep track of the sum from the keyframe to the latest frame
-    //        var estimatePos = positions[0].Value.Value;
-    //        var estimateTime = times[0].Value;
+            // Write out a "keyframe" at the start
+            writer.Write(checked((ushort)positions.Length));
+            writer.Write(positions[0].Value.X);
+            writer.Write(positions[0].Value.Y);
+            writer.Write(positions[0].Value.Z);
+            writer.Write(times[0]);
 
-    //        for (var i = 1; i < positions.Length; i++)
-    //        {
-    //            var pos = positions[i].Value.Value;
-    //            var time = times[i].Value;
+            // Keep track of the sum from the keyframe to the latest frame
+            var estimatePos = positions[0].Value;
+            var estimateTime = times[0];
 
-    //            // Calculate delta from last estimated frame
-    //            var deltaPos = (Vector3)(pos - estimatePos);
-    //            var deltaTime = (Half)(time - estimateTime);
+            // Write out all the individual datapoints as a delta from the last predicted point
+            for (var i = 1; i < positions.Length; i++)
+            {
+                var pos = positions[i].Value;
+                var time = times[i];
 
-    //            // Write single precision position
-    //            writer.Write(deltaPos.X);
-    //            writer.Write(deltaPos.Y);
-    //            writer.Write(deltaPos.Z);
+                // Calculate delta from last estimated frame
+                var deltaPos = (Vector3)(pos - estimatePos);
+                var deltaTime = (Half)(time - estimateTime);
 
-    //            // Write half precision time
-    //            writer.Write(deltaTime);
+                // Write single precision position
+                writer.Write(deltaPos.X);
+                writer.Write(deltaPos.Y);
+                writer.Write(deltaPos.Z);
 
-    //            // Update cumulative estimate
-    //            estimatePos += (double3)deltaPos;
-    //            estimateTime += (float)deltaTime;
-    //        }
-    //    }
-    //}
+                // Write half precision time
+                writer.Write(deltaTime);
+
+                // Update cumulative estimate
+                estimatePos += (double3)deltaPos;
+                estimateTime += (float)deltaTime;
+            }
+        }
+    }
+
+    var per = (int)Math.Round(writer.BaseStream.Length / (float)packetCount);
+    writer.Flush();
+    AnsiConsole.WriteLine($"{packetCount} packets in {writer.BaseStream.Length.Bytes().Humanize()}. {per.Bytes()} average");
 }

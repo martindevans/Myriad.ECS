@@ -133,6 +133,7 @@ namespace NBodyIntegrator.Orbits.NBodies.Integrators
 
         private readonly record struct State(double3 X, double3 V)
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static State operator +(in State a, in Derivative b)
             {
                 return new State
@@ -169,12 +170,6 @@ namespace NBodyIntegrator.Orbits.NBodies.Integrators
                     a.Dx + b.Dx,
                     a.Dv + b.Dv
                 );
-            }
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Derivative Abs()
-            {
-                return new Derivative(Dx.Abs(), Dv.Abs());
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

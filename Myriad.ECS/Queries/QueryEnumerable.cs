@@ -125,6 +125,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+
         public QueryResultEnumerable0 Query(QueryDescription query)
             
         {
@@ -256,6 +257,19 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        public int Count<T0>(QueryDescription? query = null)
+            where T0 : IComponent
+        {
+            // Find query that matches these types
+            query ??= GetCachedQuery<T0>();
+
+            var count = 0;
+            foreach (var item in query.GetArchetypes())
+                count += item.Archetype.EntityCount;
+
+            return count;
+        }
+
         public QueryResultEnumerable1<T0> Query<T0>(QueryDescription query)
             where T0 : IComponent
         {
@@ -405,6 +419,20 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        public int Count<T0, T1>(QueryDescription? query = null)
+            where T0 : IComponent
+            where T1 : IComponent
+        {
+            // Find query that matches these types
+            query ??= GetCachedQuery<T0, T1>();
+
+            var count = 0;
+            foreach (var item in query.GetArchetypes())
+                count += item.Archetype.EntityCount;
+
+            return count;
+        }
+
         public QueryResultEnumerable2<T0, T1> Query<T0, T1>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent
@@ -562,6 +590,21 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        public int Count<T0, T1, T2>(QueryDescription? query = null)
+            where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+        {
+            // Find query that matches these types
+            query ??= GetCachedQuery<T0, T1, T2>();
+
+            var count = 0;
+            foreach (var item in query.GetArchetypes())
+                count += item.Archetype.EntityCount;
+
+            return count;
+        }
+
         public QueryResultEnumerable3<T0, T1, T2> Query<T0, T1, T2>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent
@@ -727,6 +770,22 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        public int Count<T0, T1, T2, T3>(QueryDescription? query = null)
+            where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+        {
+            // Find query that matches these types
+            query ??= GetCachedQuery<T0, T1, T2, T3>();
+
+            var count = 0;
+            foreach (var item in query.GetArchetypes())
+                count += item.Archetype.EntityCount;
+
+            return count;
+        }
+
         public QueryResultEnumerable4<T0, T1, T2, T3> Query<T0, T1, T2, T3>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent
@@ -900,6 +959,23 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        public int Count<T0, T1, T2, T3, T4>(QueryDescription? query = null)
+            where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+        {
+            // Find query that matches these types
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4>();
+
+            var count = 0;
+            foreach (var item in query.GetArchetypes())
+                count += item.Archetype.EntityCount;
+
+            return count;
+        }
+
         public QueryResultEnumerable5<T0, T1, T2, T3, T4> Query<T0, T1, T2, T3, T4>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent
@@ -1081,6 +1157,24 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        public int Count<T0, T1, T2, T3, T4, T5>(QueryDescription? query = null)
+            where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+        {
+            // Find query that matches these types
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5>();
+
+            var count = 0;
+            foreach (var item in query.GetArchetypes())
+                count += item.Archetype.EntityCount;
+
+            return count;
+        }
+
         public QueryResultEnumerable6<T0, T1, T2, T3, T4, T5> Query<T0, T1, T2, T3, T4, T5>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent
@@ -1270,6 +1364,25 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        public int Count<T0, T1, T2, T3, T4, T5, T6>(QueryDescription? query = null)
+            where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+        {
+            // Find query that matches these types
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
+
+            var count = 0;
+            foreach (var item in query.GetArchetypes())
+                count += item.Archetype.EntityCount;
+
+            return count;
+        }
+
         public QueryResultEnumerable7<T0, T1, T2, T3, T4, T5, T6> Query<T0, T1, T2, T3, T4, T5, T6>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent
@@ -1467,6 +1580,26 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        public int Count<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDescription? query = null)
+            where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+        {
+            // Find query that matches these types
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
+
+            var count = 0;
+            foreach (var item in query.GetArchetypes())
+                count += item.Archetype.EntityCount;
+
+            return count;
+        }
+
         public QueryResultEnumerable8<T0, T1, T2, T3, T4, T5, T6, T7> Query<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent
@@ -1672,6 +1805,27 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDescription? query = null)
+            where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+        {
+            // Find query that matches these types
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
+
+            var count = 0;
+            foreach (var item in query.GetArchetypes())
+                count += item.Archetype.EntityCount;
+
+            return count;
+        }
+
         public QueryResultEnumerable9<T0, T1, T2, T3, T4, T5, T6, T7, T8> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDescription query)
             where T0 : IComponent
             where T1 : IComponent

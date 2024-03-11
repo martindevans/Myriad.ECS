@@ -195,6 +195,26 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+<#
+if (i > 0)
+{
+#>
+        public int Count<#= tparams #>(QueryDescription? query = null)
+            <#= Constraints(i, 12) #>
+        {
+            // Find query that matches these types
+            query ??= GetCachedQuery<#= tparams #>();
+
+            var count = 0;
+            foreach (var item in query.GetArchetypes())
+                count += item.Archetype.EntityCount;
+
+            return count;
+        }
+<#
+}
+#>
+
         public QueryResultEnumerable<#= i #><#= tparams #> Query<#= tparams #>(QueryDescription query)
             <#= Constraints(i, 12) #>
         {

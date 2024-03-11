@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS;
+using Myriad.ECS.Allocations;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Systems;
 using Myriad.ECS.Worlds;
@@ -12,7 +13,7 @@ namespace NBodyIntegrator.Orbits.NBodies;
 public sealed class RailIntegrator(World world)
     : BaseSystem, ISystemInit
 {
-    private const int MaxWork = 8;
+    private const int MaxWorkPerPoint = 8;
 
     private KeplerObject[] _keplerMasses = [];
 
@@ -47,26 +48,33 @@ public sealed class RailIntegrator(World world)
             var (pos, vel, tim) = rail.LastState();
             var dt = nbody.DeltaTime;
 
-            // Get somewhere to store results
-            var output = rail.AddPage();
+            // Allocate a new page and add it to the rail
+            var output = Pool<OrbitRailPage>.Get();
+            output.Init(OrbitRailPage.PageSize, rail.Epoch++);
+            rail.Pages.Add(output);
+
+            // Get the spans to write data into
+            var positions = output.GetSpanPositions();
+            var velocities = output.GetSpanVelocities();
+            var timestamps = output.GetSpanTimes();
 
             // Now integrate enough steps to fill the new page
             var query = new AccelerationQuery(keplerMasses, mass.Value, schedule);
-            for (var i = 0; i < output.Timestamps.Length; i++)
+            for (var i = 0; i < timestamps.Length; i++)
             {
                 // Keep track of how much total time has been integrated, only store points
                 // in the output span once it exceeds 1 second (or a work limit is reached).
                 var timeAccumulator = 0.0;
-                for (var s = 0; s < MaxWork && timeAccumulator < 1; s++)
+                for (var s = 0; s < MaxWorkPerPoint && timeAccumulator < 1; s++)
                 {
                     integrator.Integrate(ref pos, ref vel, ref tim, ref dt, ref query);
                     timeAccumulator += dt;
                 }
-                
+
                 // Store a single data point
-                output.Positions[i] = pos;
-                output.Velocities[i] = vel;
-                output.Timestamps[i] = tim;
+                positions[i] = pos;
+                velocities[i] = vel;
+                timestamps[i] = tim;
             }
 
             // Store the final timestep

@@ -51,20 +51,6 @@ public struct NBody
     /// Set how precise the orbital integrator is.
     /// </summary>
     public NBodyPrecision IntegratorPrecision;
-
-    /// <summary>
-    /// Rewind the rails to the given timestamp
-    /// </summary>
-    /// <param name="timestamp"></param>
-    /// <param name="rail"></param>
-    public void Invalidate(double timestamp, PagedRail rail)
-    {
-        // Set DT to 0, integrator will correct this to the min bound.
-        DeltaTime = 0;
-
-        // Trim out data from rails
-        rail.KeepBefore(timestamp);
-    }
 }
 
 public record struct Mass(double Value) : IComponent;
