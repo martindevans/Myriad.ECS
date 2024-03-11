@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Myriad.ECS;
+﻿using Myriad.ECS;
 using NBodyIntegrator.Mathematics;
 using NBodyIntegrator.Units;
 
@@ -49,64 +48,22 @@ public struct NBody
     public Seconds MaximumTimeLength;
 
     /// <summary>
-    /// Amount of time to integrate between points on the rail
-    /// </summary>
-    public Seconds RailTimestep;
-
-    /// <summary>
     /// Set how precise the orbital integrator is.
     /// </summary>
     public NBodyPrecision IntegratorPrecision;
-
-    public struct Timestamp(double value)
-    {
-        public double Value = value;
-
-        public static implicit operator double(Timestamp self) => self.Value;
-        public static implicit operator Timestamp(double self) => new() { Value = self };
-
-        public readonly override string ToString() => Value.ToString(CultureInfo.InvariantCulture);
-    }
-
-    public struct Position(double x, double y, double z)
-    {
-        public Metre3 Value = new(x, y, z);
-
-        public static implicit operator Metre3(Position self) => self.Value;
-        public static implicit operator Position(Metre3 self) => new() { Value = self };
-
-        public readonly override string ToString() => Value.ToString();
-    }
-
-    public struct Velocity(double x, double y, double z)
-    {
-        public Metre3 Value = new(x, y, z);
-
-        public static implicit operator Metre3(Velocity self) => self.Value;
-        public static implicit operator Velocity(Metre3 self) => new() { Value = self };
-
-        public readonly override string ToString() => Value.ToString();
-    }
 
     /// <summary>
     /// Rewind the rails to the given timestamp
     /// </summary>
     /// <param name="timestamp"></param>
-    /// <param name="positions"></param>
-    /// <param name="velocities"></param>
-    /// <param name="times"></param>
-    public void Invalidate(double timestamp, PagedRail<Position> positions, PagedRail<Velocity> velocities, PagedRail<Timestamp> times)
+    /// <param name="rail"></param>
+    public void Invalidate(double timestamp, PagedRail rail)
     {
         // Set DT to 0, integrator will correct this to the min bound.
         DeltaTime = 0;
 
-        // Count how many timestamps are less than the given value
-        var keep = times.CountUntilFalse(timestamp, (a, b) => a.Value < b);
-
-        // Trim all three rails to this length
-        positions.Keep(keep);
-        velocities.Keep(keep);
-        times.Keep(keep);
+        // Trim out data from rails
+        rail.KeepBefore(timestamp);
     }
 }
 

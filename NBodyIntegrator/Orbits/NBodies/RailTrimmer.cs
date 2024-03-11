@@ -1,62 +1,20 @@
-﻿using Myriad.ECS;
-using Myriad.ECS.Queries;
-using Myriad.ECS.Systems;
+﻿using Myriad.ECS.Systems;
 using Myriad.ECS.Worlds;
 
 namespace NBodyIntegrator.Orbits.NBodies;
 
 public sealed class RailTrimmer(World world)
-    : ISystem
+    : BaseSystem
 {
     private const int MAX_ITERS = 64;
 
-    public bool Enabled { get; set; } = true;
-
-    public void Init()
+    public override void Update(GameTime time)
     {
-    }
+        var now = time.Time;
 
-    public void Update(GameTime time)
-    {
-        world.Execute<TrimRails, NBody, PagedRail<NBody.Position>, PagedRail<NBody.Velocity>, PagedRail<NBody.Timestamp>>(new TrimRails(time.Time));
-    }
-
-    private readonly struct TrimRails(double CurrentTime)
-        : IQuery4<NBody, PagedRail<NBody.Position>, PagedRail<NBody.Velocity>, PagedRail<NBody.Timestamp>>
-    {
-        public void Execute(
-            Entity entity,
-            ref NBody nbody,
-            ref PagedRail<NBody.Position> positions,
-            ref PagedRail<NBody.Velocity> velocities,
-            ref PagedRail<NBody.Timestamp> times
-        )
-        {
-            if (positions.ItemCount != velocities.ItemCount)
-                throw new InvalidOperationException("Position/Velocity count mismatch");
-            if (positions.ItemCount != times.ItemCount)
-                throw new InvalidOperationException("Position/Velocity count mismatch");
-
-            // Keep removing frames while:
-            // - Iteration limit
-            // - More than 2
-            // - First two are both before now
-            for (var i = 0; i < MAX_ITERS && times.ItemCount > 2; i++)
-            {
-                var a = times.First();
-                var b = times.Second();
-
-                if (a.Value >= CurrentTime || b.Value >= CurrentTime)
-                    return;
-
-                positions.RemoveFirst();
-                velocities.RemoveFirst();
-                times.RemoveFirst();
-            }
-        }
-    }
-
-    public void Dispose()
-    {
+        foreach (var (_, rail) in world.Query<PagedRail>())
+            for (var i = 0; i < MAX_ITERS; i++)
+                if (!rail.Item.TryTrimStart(now))
+                    break;
     }
 }

@@ -10,85 +10,67 @@ using NBodyIntegrator.Units;
 namespace NBodyIntegrator.Orbits.NBodies;
 
 public sealed class RailIntegrator(World world)
-    : ISystem
+    : BaseSystem, ISystemInit
 {
-    private const int MaxWork = 64;
+    private const int MaxWork = 8;
 
     private KeplerObject[] _keplerMasses = [];
-
-    public bool Enabled { get; set; } = true;
 
     public void Init()
     {
         _keplerMasses = KeplerWorldPosition.FindKeplerBodies(world);
     }
 
-    public void Update(GameTime time)
+    public override void Update(GameTime time)
     {
-        world.ExecuteParallel<Integrate, NBody, PagedRail<NBody.Position>, PagedRail<NBody.Velocity>, PagedRail<NBody.Timestamp>, EngineBurnSchedule, Mass>(
-            new Integrate(_keplerMasses),
-            batchSize: 8
+        world.Execute<Integrate, NBody, PagedRail, EngineBurnSchedule, Mass>(
+            new Integrate(_keplerMasses)
         );
     }
 
-    public void Dispose()
-    {
-    }
-
     private readonly struct Integrate(KeplerObject[] keplerMasses)
-        : IQuery6<NBody, PagedRail<NBody.Position>, PagedRail<NBody.Velocity>, PagedRail<NBody.Timestamp>, EngineBurnSchedule, Mass>
+        : IQuery4<NBody, PagedRail, EngineBurnSchedule, Mass>
     {
         public void Execute(
             Entity e,
-            ref NBody nbody, ref PagedRail<NBody.Position> positions, ref PagedRail<NBody.Velocity> velocities, ref PagedRail<NBody.Timestamp> times,
+            ref NBody nbody, ref PagedRail rail, 
             ref EngineBurnSchedule schedule, ref Mass mass)
         {
-            if (positions.ItemCount != velocities.ItemCount)
-                throw new InvalidOperationException("Position/Velocity count mismatch");
-            if (positions.ItemCount != times.ItemCount)
-                throw new InvalidOperationException("Position/Velocity count mismatch");
-
             // Check if we've hit the target time length of the rail
-            if (times.ItemCount > 2)
-            {
-                var a = times.First().Value;
-                var b = times.Last().Value;
-                var totalTimeLength = b - a;
-
-                if (totalTimeLength > nbody.MaximumTimeLength.Value)
-                    return;
-            }
+            if (rail.Duration.Value >= nbody.MaximumTimeLength.Value)
+                return;
 
             // Choose an integrator
-            var integrator = new RKF45(nbody.IntegratorPrecision.Epsilon(RKF45.DefaultEpsilon), RKF45.DefaultMinDt, RKF45.DefaultMaxDt);
-
-            var query = new AccelerationQuery(keplerMasses, mass.Value, schedule);
+            var integrator = new RKF45(nbody.IntegratorPrecision.Epsilon(RKF45.DefaultEpsilon));
 
             // Get the index of the final point in the rail and copy out data
-            var pos = positions.Last().Value;
-            var vel = velocities.Last().Value;
-            var tim = times.Last().Value;
+            var (pos, vel, tim) = rail.LastState();
             var dt = nbody.DeltaTime;
 
-            // Integrate a load of steps forward
-            var totalWork = MaxWork;
-            while (totalWork > 0)
+            // Get somewhere to store results
+            var output = rail.AddPage();
+
+            // Now integrate enough steps to fill the new page
+            var query = new AccelerationQuery(keplerMasses, mass.Value, schedule);
+            for (var i = 0; i < output.Timestamps.Length; i++)
             {
-                // Keep doing steps until at least 1 second has passed (capped at MaxWork)
-                var totalIntegratedTime = 0.0;
-                for (var i = 0; i < MaxWork && totalIntegratedTime < nbody.RailTimestep.Value; i++)
+                // Keep track of how much total time has been integrated, only store points
+                // in the output span once it exceeds 1 second (or a work limit is reached).
+                var timeAccumulator = 0.0;
+                for (var s = 0; s < MaxWork && timeAccumulator < 1; s++)
                 {
                     integrator.Integrate(ref pos, ref vel, ref tim, ref dt, ref query);
-                    totalIntegratedTime += dt;
-                    totalWork--;
+                    timeAccumulator += dt;
                 }
-
-                // Store results
-                positions.Add(pos);
-                velocities.Add(vel);
-                times.Add(tim);
-                nbody.DeltaTime = dt;
+                
+                // Store a single data point
+                output.Positions[i] = pos;
+                output.Velocities[i] = vel;
+                output.Timestamps[i] = tim;
             }
+
+            // Store the final timestep
+            nbody.DeltaTime = dt;
         }
     }
 

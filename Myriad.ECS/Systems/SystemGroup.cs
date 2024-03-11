@@ -26,7 +26,7 @@ public sealed class SystemGroup
 
     public void Init()
     {
-        foreach (var system in _systems)
+        foreach (var system in _systems.OfType<ISystemInit>())
             system.Init();
     }
 
@@ -78,7 +78,7 @@ public sealed class SystemGroup
 
     public void Dispose()
     {
-        foreach (var system in _systems)
+        foreach (var system in _systems.OfType<IDisposable>())
             system.Dispose();
     }
 }

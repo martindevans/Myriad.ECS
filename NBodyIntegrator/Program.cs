@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
 using Humanizer;
-using Myriad.ECS;
 using Myriad.ECS.Command;
 using Myriad.ECS.Systems;
 using Myriad.ECS.Worlds;
@@ -119,7 +118,7 @@ var systems = new SystemGroup(
 systems.Init();
 
 // Advance sim
-const long ticks = 50_000;
+const long ticks = 100_000;
 var tickMin = TimeSpan.MaxValue;
 var tickTotal = TimeSpan.Zero;
 var tickMax = TimeSpan.MinValue;
@@ -159,9 +158,7 @@ AnsiConsole
             {
                 world.GetComponentRef<NBody>(nb).Invalidate(
                     1814400, // 3 weeks
-                    world.GetComponentRef<PagedRail<NBody.Position>>(nb),
-                    world.GetComponentRef<PagedRail<NBody.Velocity>>(nb),
-                    world.GetComponentRef<PagedRail<NBody.Timestamp>>(nb)
+                    world.GetComponentRef<PagedRail>(nb)
                 );
             }
 
@@ -186,10 +183,11 @@ Console.WriteLine($" - Max Bytes: {maxMem.Bytes().Humanize()}");
 var maxt = double.MinValue;
 var mint = double.MaxValue;
 var counter = 0;
-foreach (var (_, t) in world.Query<PagedRail<NBody.Timestamp>>())
+foreach (var (_, r) in world.Query<PagedRail>())
 {
-    maxt = Math.Max(maxt, t.Item.Last().Value);
-    mint = Math.Min(mint, t.Item.Last().Value);
+    var lastTime = r.Item.LastState().time;
+    maxt = Math.Max(maxt, lastTime);
+    mint = Math.Min(mint, lastTime);
     counter++;
 }
 
@@ -206,21 +204,12 @@ static CommandBuffer.BufferedEntity CreateNBody(CommandBuffer buffer, Metre3 pos
     // Create entity
     var entity = buffer
         .Create()
-        .Set(new NBody { DeltaTime = 1, MaximumTimeLength = new Seconds(2419200), RailTimestep = new Seconds(1), IntegratorPrecision = precision })
+        .Set(new NBody { DeltaTime = 0, MaximumTimeLength = new Seconds(2419200), IntegratorPrecision = precision })
         .Set(new WorldPosition(position));
 
     // Create buffers to hold orbit data
-    var pos = new PagedRail<NBody.Position>();
-    pos.Add(new NBody.Position(position.Value.X, position.Value.Y, position.Value.Z));
-    entity.Set(pos);
-
-    var vel = new PagedRail<NBody.Velocity>();
-    vel.Add(new NBody.Velocity(velocity.Value.X, velocity.Value.Y, velocity.Value.Z));
-    entity.Set(vel);
-
-    var time = new PagedRail<NBody.Timestamp>();
-    time.Add(new NBody.Timestamp(0));
-    entity.Set(time);
+    var rail = new PagedRail(position, velocity, 0);
+    entity.Set(rail);
 
     // Starship mass
     entity.Set(new Mass(1_300_000));
@@ -260,102 +249,102 @@ static CommandBuffer.BufferedEntity CreateNBody(CommandBuffer buffer, Metre3 pos
 
 static void WriteCsv(TextWriter writer, World world)
 {
-    double maxt = 0;
+    //double maxt = 0;
 
-    // Write out entire rail
-    foreach (var (e, p, t) in world.Query<PagedRail<NBody.Position>, PagedRail<NBody.Timestamp>>())
-    {
-        if (p.Item.ItemCount == 0)
-            continue;
+    //// Write out entire rail
+    //foreach (var (e, r) in world.Query<PagedRail>())
+    //{
+    //    if (r.Item.ItemCount == 0)
+    //        continue;
 
-        maxt = Math.Max(maxt, t.Item.Last().Value);
+    //    maxt = Math.Max(maxt, t.Item.Last().Value);
 
-        var positionSpans = p.Item.GetEnumerator();
-        var timeSpans = t.Item.GetEnumerator();
+    //    var positionSpans = p.Item.GetEnumerator();
+    //    var timeSpans = t.Item.GetEnumerator();
 
-        while (true)
-        {
-            if (!positionSpans.MoveNext() || !timeSpans.MoveNext())
-                break;
+    //    while (true)
+    //    {
+    //        if (!positionSpans.MoveNext() || !timeSpans.MoveNext())
+    //            break;
 
-            var positions = positionSpans.Current;
-            var times = timeSpans.Current;
-            if (positions.Length != times.Length)
-                throw new InvalidOperationException("page length mismatch");
+    //        var positions = positionSpans.Current;
+    //        var times = timeSpans.Current;
+    //        if (positions.Length != times.Length)
+    //            throw new InvalidOperationException("page length mismatch");
 
-            for (var i = 0; i < positions.Length; i++)
-            {
-                var pos = positions[i].Value;
-                writer.WriteLine($"{e.ID},\"n\",{times[i].Value:F2},{pos.Value.X:F3},{pos.Value.Y:F3},{pos.Value.Z:F3}");
-                maxt = Math.Max(maxt, times[i].Value);
-            }
-        }
-    }
+    //        for (var i = 0; i < positions.Length; i++)
+    //        {
+    //            var pos = positions[i].Value;
+    //            writer.WriteLine($"{e.ID},\"n\",{times[i].Value:F2},{pos.Value.X:F3},{pos.Value.Y:F3},{pos.Value.Z:F3}");
+    //            maxt = Math.Max(maxt, times[i].Value);
+    //        }
+    //    }
+    //}
 
-    // Write out kepler positions at hourly intervals
-    foreach (var (e, k, _) in world.Query<KeplerOrbit, WorldPosition>())
-    {
-        for (var i = 0; i < maxt; i += 3600)
-        {
-            var pos = k.Item.PositionAtTime(i);
-            writer.WriteLine($"{e.ID},\"k\",{i:F2},{pos.Value.X:F3},{pos.Value.Y:F3},{pos.Value.Z:F3}");
-        }
-    }
+    //// Write out kepler positions at hourly intervals
+    //foreach (var (e, k, _) in world.Query<KeplerOrbit, WorldPosition>())
+    //{
+    //    for (var i = 0; i < maxt; i += 3600)
+    //    {
+    //        var pos = k.Item.PositionAtTime(i);
+    //        writer.WriteLine($"{e.ID},\"k\",{i:F2},{pos.Value.X:F3},{pos.Value.Y:F3},{pos.Value.Z:F3}");
+    //    }
+    //}
 }
 
 static void WriteBinary(BinaryWriter writer, World world)
 {
-    // Write out entire rail
-    foreach (var (_, p, t) in world.Query<PagedRail<NBody.Position>, PagedRail<NBody.Timestamp>>())
-    {
-        if (p.Item.ItemCount == 0)
-            continue;
+    //// Write out entire rail
+    //foreach (var (_, p, t) in world.Query<PagedRail<NBody.Position>, PagedRail<NBody.Timestamp>>())
+    //{
+    //    if (p.Item.ItemCount == 0)
+    //        continue;
 
-        var positionSpans = p.Item.GetEnumerator();
-        var timeSpans = t.Item.GetEnumerator();
+    //    var positionSpans = p.Item.GetEnumerator();
+    //    var timeSpans = t.Item.GetEnumerator();
 
-        while (true)
-        {
-            if (!positionSpans.MoveNext() || !timeSpans.MoveNext())
-                break;
+    //    while (true)
+    //    {
+    //        if (!positionSpans.MoveNext() || !timeSpans.MoveNext())
+    //            break;
 
-            var positions = positionSpans.Current;
-            var times = timeSpans.Current;
-            if (positions.Length != times.Length)
-                throw new InvalidOperationException("page length mismatch");
+    //        var positions = positionSpans.Current;
+    //        var times = timeSpans.Current;
+    //        if (positions.Length != times.Length)
+    //            throw new InvalidOperationException("page length mismatch");
 
-            // Write out a "keyframe" at the start
-            writer.Write(positions.Length);
-            writer.Write(positions[0].Value.Value.X);
-            writer.Write(positions[0].Value.Value.Y);
-            writer.Write(positions[0].Value.Value.Z);
-            writer.Write(times[0].Value);
+    //        // Write out a "keyframe" at the start
+    //        writer.Write(positions.Length);
+    //        writer.Write(positions[0].Value.Value.X);
+    //        writer.Write(positions[0].Value.Value.Y);
+    //        writer.Write(positions[0].Value.Value.Z);
+    //        writer.Write(times[0].Value);
 
-            // Keep track of the sum from the keyframe to the latest frame
-            var estimatePos = positions[0].Value.Value;
-            var estimateTime = times[0].Value;
+    //        // Keep track of the sum from the keyframe to the latest frame
+    //        var estimatePos = positions[0].Value.Value;
+    //        var estimateTime = times[0].Value;
 
-            for (var i = 1; i < positions.Length; i++)
-            {
-                var pos = positions[i].Value.Value;
-                var time = times[i].Value;
+    //        for (var i = 1; i < positions.Length; i++)
+    //        {
+    //            var pos = positions[i].Value.Value;
+    //            var time = times[i].Value;
 
-                // Calculate delta from last estimated frame
-                var deltaPos = (Vector3)(pos - estimatePos);
-                var deltaTime = (Half)(time - estimateTime);
+    //            // Calculate delta from last estimated frame
+    //            var deltaPos = (Vector3)(pos - estimatePos);
+    //            var deltaTime = (Half)(time - estimateTime);
 
-                // Write single precision position
-                writer.Write(deltaPos.X);
-                writer.Write(deltaPos.Y);
-                writer.Write(deltaPos.Z);
+    //            // Write single precision position
+    //            writer.Write(deltaPos.X);
+    //            writer.Write(deltaPos.Y);
+    //            writer.Write(deltaPos.Z);
 
-                // Write half precision time
-                writer.Write(deltaTime);
+    //            // Write half precision time
+    //            writer.Write(deltaTime);
 
-                // Update cumulative estimate
-                estimatePos += (double3)deltaPos;
-                estimateTime += (float)deltaTime;
-            }
-        }
-    }
+    //            // Update cumulative estimate
+    //            estimatePos += (double3)deltaPos;
+    //            estimateTime += (float)deltaTime;
+    //        }
+    //    }
+    //}
 }

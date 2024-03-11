@@ -11,18 +11,16 @@ namespace NBodyIntegrator.Orbits.Kepler;
 /// </summary>
 /// <param name="world"></param>
 public sealed class KeplerWorldPosition(World world)
-    : ISystem
+    : BaseSystem, ISystemInit
 {
     private KeplerObject[] _keplerMasses = [];
-
-    public bool Enabled { get; set; } = true;
 
     public void Init()
     {
         _keplerMasses = FindKeplerBodies(world);
     }
 
-    public void Update(GameTime time)
+    public override void Update(GameTime time)
     {
         // calculate the position of every kepler body
         Span<Metre3> positions = stackalloc Metre3[_keplerMasses.Length];
@@ -45,10 +43,6 @@ public sealed class KeplerWorldPosition(World world)
         // Write that data back to the ECS
         for (var i = 0; i < _keplerMasses.Length; i++)
             world.GetComponentRef<WorldPosition>(_keplerMasses[i].Self).Value = positions[i];
-    }
-
-    public void Dispose()
-    {
     }
 
     public static KeplerObject[] FindKeplerBodies(World world)

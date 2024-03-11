@@ -59,19 +59,15 @@ namespace NBodyIntegrator.Orbits.NBodies.Integrators
         private const double B65 = 5 / 144D;
         #endregion
 
-        public const double DefaultMinDt = 0.1;
-        public const double DefaultMaxDt = 900;
+        public const double MinDt = 0.1;
+        public const double MaxDt = 900;
         public const double DefaultEpsilon = 0.00125;
 
         private readonly double? _epsilon;
-        private readonly double? _minDt;
-        private readonly double? _maxDt;
 
-        public RKF45(double epsilon, double minDt, double maxDt)
+        public RKF45(double epsilon)
         {
             _epsilon = epsilon;
-            _minDt = minDt;
-            _maxDt = maxDt;
         }
 
         public void Integrate<TQuery>(ref Metre3 position, ref Metre3 velocity, ref double timestamp, ref double dt, ref TQuery accel)
@@ -79,11 +75,9 @@ namespace NBodyIntegrator.Orbits.NBodies.Integrators
         {
             // If these fields were not initialised in the constructor, set them now
             var epsilon = _epsilon ?? DefaultEpsilon;
-            var minDt = _minDt ?? DefaultMinDt;
-            var maxDt = _maxDt ?? DefaultMaxDt;
 
             // Ensure initial timestep is in valid range
-            dt = Math.Clamp(dt, minDt, maxDt);
+            dt = Math.Clamp(dt, MinDt, MaxDt);
 
             var initial = new State
             {
@@ -110,7 +104,7 @@ namespace NBodyIntegrator.Orbits.NBodies.Integrators
 
             // Update timestep
             var hnew = 0.9 * dt * Math.Pow(epsilon / error, 0.2);
-            dt = Math.Clamp(hnew, minDt, maxDt);
+            dt = Math.Clamp(hnew, MinDt, MaxDt);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

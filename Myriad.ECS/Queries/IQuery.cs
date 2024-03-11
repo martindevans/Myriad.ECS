@@ -90,10 +90,12 @@ namespace Myriad.ECS.Worlds
 				for (var c = 0; c < archetype.Chunks.Count; c++)
                 {
                     var chunk = archetype.Chunks[c];
-					if (chunk.EntityCount == 0)
+
+					var entityCount = chunk.EntityCount;
+					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 
@@ -101,7 +103,7 @@ namespace Myriad.ECS.Worlds
                     //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
-						var end = Math.Min(start + batchSize, chunk.EntityCount);
+						var end = Math.Min(start + batchSize, entityCount);
 
 						for (var i = start; i < end; i++)
 						{
@@ -206,10 +208,12 @@ namespace Myriad.ECS.Worlds
 				for (var c = 0; c < archetype.Chunks.Count; c++)
                 {
                     var chunk = archetype.Chunks[c];
-					if (chunk.EntityCount == 0)
+
+					var entityCount = chunk.EntityCount;
+					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -218,7 +222,7 @@ namespace Myriad.ECS.Worlds
                     //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
-						var end = Math.Min(start + batchSize, chunk.EntityCount);
+						var end = Math.Min(start + batchSize, entityCount);
 
 						for (var i = start; i < end; i++)
 						{
@@ -329,10 +333,12 @@ namespace Myriad.ECS.Worlds
 				for (var c = 0; c < archetype.Chunks.Count; c++)
                 {
                     var chunk = archetype.Chunks[c];
-					if (chunk.EntityCount == 0)
+
+					var entityCount = chunk.EntityCount;
+					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -342,7 +348,7 @@ namespace Myriad.ECS.Worlds
                     //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
-						var end = Math.Min(start + batchSize, chunk.EntityCount);
+						var end = Math.Min(start + batchSize, entityCount);
 
 						for (var i = start; i < end; i++)
 						{
@@ -459,10 +465,12 @@ namespace Myriad.ECS.Worlds
 				for (var c = 0; c < archetype.Chunks.Count; c++)
                 {
                     var chunk = archetype.Chunks[c];
-					if (chunk.EntityCount == 0)
+
+					var entityCount = chunk.EntityCount;
+					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -473,7 +481,7 @@ namespace Myriad.ECS.Worlds
                     //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
-						var end = Math.Min(start + batchSize, chunk.EntityCount);
+						var end = Math.Min(start + batchSize, entityCount);
 
 						for (var i = start; i < end; i++)
 						{
@@ -596,10 +604,12 @@ namespace Myriad.ECS.Worlds
 				for (var c = 0; c < archetype.Chunks.Count; c++)
                 {
                     var chunk = archetype.Chunks[c];
-					if (chunk.EntityCount == 0)
+
+					var entityCount = chunk.EntityCount;
+					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -611,7 +621,7 @@ namespace Myriad.ECS.Worlds
                     //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
-						var end = Math.Min(start + batchSize, chunk.EntityCount);
+						var end = Math.Min(start + batchSize, entityCount);
 
 						for (var i = start; i < end; i++)
 						{
@@ -740,10 +750,12 @@ namespace Myriad.ECS.Worlds
 				for (var c = 0; c < archetype.Chunks.Count; c++)
                 {
                     var chunk = archetype.Chunks[c];
-					if (chunk.EntityCount == 0)
+
+					var entityCount = chunk.EntityCount;
+					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -756,7 +768,7 @@ namespace Myriad.ECS.Worlds
                     //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
-						var end = Math.Min(start + batchSize, chunk.EntityCount);
+						var end = Math.Min(start + batchSize, entityCount);
 
 						for (var i = start; i < end; i++)
 						{
@@ -891,10 +903,12 @@ namespace Myriad.ECS.Worlds
 				for (var c = 0; c < archetype.Chunks.Count; c++)
                 {
                     var chunk = archetype.Chunks[c];
-					if (chunk.EntityCount == 0)
+
+					var entityCount = chunk.EntityCount;
+					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -908,7 +922,7 @@ namespace Myriad.ECS.Worlds
                     //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
-						var end = Math.Min(start + batchSize, chunk.EntityCount);
+						var end = Math.Min(start + batchSize, entityCount);
 
 						for (var i = start; i < end; i++)
 						{
@@ -1049,10 +1063,12 @@ namespace Myriad.ECS.Worlds
 				for (var c = 0; c < archetype.Chunks.Count; c++)
                 {
                     var chunk = archetype.Chunks[c];
-					if (chunk.EntityCount == 0)
+
+					var entityCount = chunk.EntityCount;
+					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -1067,7 +1083,7 @@ namespace Myriad.ECS.Worlds
                     //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
-						var end = Math.Min(start + batchSize, chunk.EntityCount);
+						var end = Math.Min(start + batchSize, entityCount);
 
 						for (var i = start; i < end; i++)
 						{
@@ -1214,10 +1230,12 @@ namespace Myriad.ECS.Worlds
 				for (var c = 0; c < archetype.Chunks.Count; c++)
                 {
                     var chunk = archetype.Chunks[c];
-					if (chunk.EntityCount == 0)
+
+					var entityCount = chunk.EntityCount;
+					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(chunk.EntityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -1233,7 +1251,7 @@ namespace Myriad.ECS.Worlds
                     //ParallelTasks.Parallel.For(0, numBatches, b =>
                     {
 						var start = b * batchSize;
-						var end = Math.Min(start + batchSize, chunk.EntityCount);
+						var end = Math.Min(start + batchSize, entityCount);
 
 						for (var i = start; i < end; i++)
 						{
