@@ -9,6 +9,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Myriad.ECS</Title>
     <Authors>Martin Evans</Authors>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
