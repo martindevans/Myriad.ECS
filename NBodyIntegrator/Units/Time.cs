@@ -49,7 +49,7 @@ public struct Hours
 }
 
 public struct Seconds
-    : IEquatable<Seconds>
+    : IEquatable<Seconds>, IComparable<Seconds>, IComparable<double>
 {
     public double Value;
 
@@ -89,4 +89,54 @@ public struct Seconds
         return !(left == right);
     }
     #endregion
+
+    public readonly int CompareTo(Seconds other)
+    {
+        return Value.CompareTo(other.Value);
+    }
+
+    public readonly int CompareTo(double other)
+    {
+        return Value.CompareTo(other);
+    }
+
+    public static bool operator <(Seconds a, double b)
+    {
+        return a.Value < b;
+    }
+
+    public static bool operator <=(Seconds a, double b)
+    {
+        return a.Value <= b;
+    }
+
+    public static bool operator >(Seconds a, double b)
+    {
+        return a.Value > b;
+    }
+
+    public static bool operator >=(Seconds a, double b)
+    {
+        return a.Value >= b;
+    }
+
+    public static bool operator <(double a, Seconds b)
+    {
+        return a < b.Value;
+    }
+
+    public static bool operator <=(double a, Seconds b)
+    {
+        return a <= b.Value;
+    }
+
+    public static bool operator >(double a, Seconds b)
+    {
+        return a > b.Value;
+    }
+
+    public static bool operator >=(double a, Seconds b)
+    {
+        return a >= b.Value;
+    }
 }

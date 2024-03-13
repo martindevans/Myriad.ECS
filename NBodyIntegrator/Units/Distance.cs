@@ -316,6 +316,12 @@ public struct Metre3
         return !(left == right);
     }
     #endregion
+
+    public static Metre3 Lerp(Metre3 start, Metre3 end, double t)
+    {
+        var v = double3.Lerp(start.Value, end.Value, t);
+        return new Metre3(v);
+    }
 }
 
 public struct KiloMetre3

@@ -12,13 +12,9 @@ public sealed class RailTrimmer(World world)
     public override void Update(GameTime time)
     {
         foreach (var (_, rail) in world.Query<PagedRail>())
-        {
             for (var i = 0; i < MAX_ITERS; i++)
-            {
                 if (!TryTrimStart(ref rail.Item, time.Time))
                     break;
-            }
-        }
     }
 
     /// <summary>

@@ -71,6 +71,8 @@ public record struct EngineBurnSchedule(List<EngineBurn> Burns) : IComponent;
 public readonly record struct EngineBurn(Seconds Start, Seconds End, double Force, double MassPerSecond, double3 Direction)
     : IComparable<EngineBurn>
 {
+    public Seconds Duration => new(End.Value - Start.Value);
+
     public int CompareTo(EngineBurn other)
     {
         return Start.Value.CompareTo(other.Start.Value);

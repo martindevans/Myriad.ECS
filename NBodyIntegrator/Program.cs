@@ -4,6 +4,7 @@ using Myriad.ECS.Command;
 using Myriad.ECS.Systems;
 using Myriad.ECS.Worlds;
 using NBodyIntegrator;
+using NBodyIntegrator.Live;
 using NBodyIntegrator.Mathematics;
 using NBodyIntegrator.Orbits.Kepler;
 using NBodyIntegrator.Orbits.NBodies;
@@ -15,7 +16,6 @@ const double EARTH_MASS = 5.972E24; // kg
 const double G = 6.6743E-11;
 
 var world = new WorldBuilder().Build();
-
 var setup = new CommandBuffer(world);
 
 // Create Earth at the origin
@@ -89,7 +89,7 @@ var bnb = CreateNBody(
 
 // slightly randomised lunar orbiters
 var rng = new Random();
-for (var i = 0; i < 44; i++)
+for (var i = 0; i < 22; i++)
 {
     CreateNBody(
         setup,
@@ -106,23 +106,25 @@ var nb = bnb.Resolve(resolver);
 var systems = new SystemGroup(
     "main",
     new SystemGroup(
-        "kepler",
-        new KeplerWorldPosition(world)
-    ),
-    new SystemGroup(
         "nbody",
         new RailTrimmer(world),
         new RailIntegrator(world)
+    ),
+    new SystemGroup(
+        "live-state",
+        new KeplerWorldPosition(world),
+        new SetWorldPositionFromRail(world),
+        new EngineBurnUpdater(world)
     )
 );
 systems.Init();
 
 // Advance sim
-const long ticks = 100_000;
+const long ticks = 10_000_000;
 var tickMin = TimeSpan.MaxValue;
 var tickTotal = TimeSpan.Zero;
 var tickMax = TimeSpan.MinValue;
-var gt = new GameTime(1 / 60f);
+var gt = new GameTime(1 / 10f);
 var maxMem = 0L;
 
 AnsiConsole
@@ -161,11 +163,9 @@ AnsiConsole
         }
     });
 
-using var csvWriter = File.CreateText("data_dump.csv");
-csvWriter.WriteLine("entity,type,timestamp,posx,posy,posz");
 using var binWriter = new BinaryWriter(File.Create("data_dump.bin"));
-WriteCsv(csvWriter, world);
 WriteBinary(binWriter, world);
+binWriter.Flush();
 
 // General stats
 Console.WriteLine($"# {ticks:N0} Ticks");
@@ -183,7 +183,7 @@ var mint = double.MaxValue;
 var counter = 0;
 foreach (var (_, r) in world.Query<PagedRail>())
 {
-    var lastTime = r.Item.LastState().time;
+    var lastTime = r.Item.LastState().Time;
     maxt = Math.Max(maxt, lastTime);
     mint = Math.Min(mint, lastTime);
     counter++;
@@ -235,7 +235,7 @@ static CommandBuffer.BufferedEntity CreateNBody(CommandBuffer buffer, Metre3 pos
         // Burn for 2 minutes
         var end = start + 120;
 
-        // 2.64MN is a raptor 3 engine
+        // 2.64MN is a raptor 3 engines
         var force = 2_640_000;
 
         // 650kg/s fuel consumption
@@ -255,39 +255,6 @@ static CommandBuffer.BufferedEntity CreateNBody(CommandBuffer buffer, Metre3 pos
     }
 
     return entity;
-}
-
-static void WriteCsv(TextWriter writer, World world)
-{
-    double maxt = 0;
-
-    // Write out entire rail
-    foreach (var (e, r) in world.Query<PagedRail>())
-    {
-        maxt = Math.Max(maxt, r.Item.LastState().time);
-
-        foreach (var page in r.Item.Pages)
-        {
-            var positions = page.GetSpanPositions();
-            var times = page.GetSpanTimes();
-
-            for (var i = 0; i < positions.Length; i++)
-            {
-                var pos = positions[i].Value;
-                writer.WriteLine($"{e.ID},\"n\",{times[i]:F2},{pos.X:F3},{pos.Y:F3},{pos.Z:F3}");
-            }
-        }
-    }
-
-    // Write out kepler positions at hourly intervals
-    foreach (var (e, k, _) in world.Query<KeplerOrbit, WorldPosition>())
-    {
-        for (var i = 0; i < maxt; i += 3600)
-        {
-            var pos = k.Item.PositionAtTime(i);
-            writer.WriteLine($"{e.ID},\"k\",{i:F2},{pos.Value.X:F3},{pos.Value.Y:F3},{pos.Value.Z:F3}");
-        }
-    }
 }
 
 static void WriteBinary(BinaryWriter writer, World world)
@@ -331,14 +298,14 @@ static void WriteBinary(BinaryWriter writer, World world)
 
                 // Calculate delta from last estimated frame
                 var deltaPos = (Vector3)(pos - estimatePos);
-                var deltaTime = (Half)(time - estimateTime);
+                var deltaTime = (float)(time - estimateTime);
 
                 // Write single precision position
                 writer.Write(deltaPos.X);
                 writer.Write(deltaPos.Y);
                 writer.Write(deltaPos.Z);
 
-                // Write half precision time
+                // Write single precision delta time
                 writer.Write(deltaTime);
 
                 // Update cumulative estimate
@@ -348,7 +315,6 @@ static void WriteBinary(BinaryWriter writer, World world)
         }
     }
 
-    var per = (int)Math.Round(writer.BaseStream.Length / (float)packetCount);
-    writer.Flush();
-    AnsiConsole.WriteLine($"{packetCount} packets in {writer.BaseStream.Length.Bytes().Humanize()}. {per.Bytes()} average");
+    AnsiConsole.WriteLine($"Written {packetCount} packets");
+    AnsiConsole.WriteLine();
 }

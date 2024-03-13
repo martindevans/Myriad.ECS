@@ -24,8 +24,9 @@ public sealed class RailIntegrator(World world)
 
     public override void Update(GameTime time)
     {
-        world.Execute<Integrate, NBody, PagedRail, EngineBurnSchedule, Mass>(
-            new Integrate(_keplerMasses)
+        world.ExecuteParallel<Integrate, NBody, PagedRail, EngineBurnSchedule, Mass>(
+            new Integrate(_keplerMasses),
+            batchSize:1
         );
     }
 

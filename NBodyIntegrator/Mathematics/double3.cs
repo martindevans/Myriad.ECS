@@ -527,5 +527,14 @@ namespace NBodyIntegrator.Mathematics
                 Math.Abs(Z)
             );
         }
+
+        public static double3 Lerp(double3 start, double3 end, double t)
+        {
+            return new double3(
+                double.Lerp(start.X, end.X, t),
+                double.Lerp(start.Y, end.Y, t),
+                double.Lerp(start.Z, end.Z, t)
+            );
+        }
     }
 }
