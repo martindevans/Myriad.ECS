@@ -1,7 +1,7 @@
 ﻿namespace Myriad.ECS.Systems;
 
-public interface ISystemGroup
-    : ISystem, ISystemInit, ISystemBefore, ISystemAfter, IDisposable
+public interface ISystemGroup<in TData>
+    : ISystemInit<TData>, ISystemBefore<TData>, ISystemAfter<TData>, IDisposable
 {
     /// <summary>
     /// A unique identifier for this system group

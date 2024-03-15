@@ -8,7 +8,7 @@ using NBodyIntegrator.Units;
 namespace NBodyIntegrator.Live;
 
 public class SetWorldPositionFromRail(World world)
-    : BaseSystem
+    : BaseSystem<GameTime>
 {
     public override void Update(GameTime time)
     {

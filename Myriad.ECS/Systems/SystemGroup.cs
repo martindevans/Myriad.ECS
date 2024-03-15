@@ -2,8 +2,8 @@
 
 namespace Myriad.ECS.Systems;
 
-public sealed class SystemGroup
-    : ISystemGroup
+public sealed class SystemGroup<TData>
+    : ISystemGroup<TData>
 {
     public string Name { get; }
     public bool Enabled { get; set; } = true;
@@ -11,26 +11,26 @@ public sealed class SystemGroup
     public TimeSpan ExecutionTime { get; private set; }
     private readonly Stopwatch _timer = new();
 
-    private readonly ISystemBefore[] _beforeSystems;
-    private readonly ISystem[] _systems;
-    private readonly ISystemAfter[] _afterSystems;
+    private readonly ISystemBefore<TData>[] _beforeSystems;
+    private readonly ISystem<TData>[] _systems;
+    private readonly ISystemAfter<TData>[] _afterSystems;
 
-    public SystemGroup(string name, params ISystem[] systems)
+    public SystemGroup(string name, params ISystem<TData>[] systems)
     {
         Name = name;
 
-        _beforeSystems = systems.OfType<ISystemBefore>().ToArray();
+        _beforeSystems = systems.OfType<ISystemBefore<TData>>().ToArray();
         _systems = systems;
-        _afterSystems = systems.OfType<ISystemAfter>().ToArray();
+        _afterSystems = systems.OfType<ISystemAfter<TData>>().ToArray();
     }
 
     public void Init()
     {
-        foreach (var system in _systems.OfType<ISystemInit>())
+        foreach (var system in _systems.OfType<ISystemInit<TData>>())
             system.Init();
     }
 
-    public void BeforeUpdate(GameTime time)
+    public void BeforeUpdate(TData data)
     {
         _timer.Reset();
 
@@ -40,13 +40,13 @@ public sealed class SystemGroup
             {
                 foreach (var system in _beforeSystems)
                     if (system.Enabled)
-                        system.BeforeUpdate(time);
+                        system.BeforeUpdate(data);
             }
             _timer.Stop();
         }
     }
 
-    public void Update(GameTime time)
+    public void Update(TData data)
     {
         if (Enabled)
         {
@@ -54,13 +54,13 @@ public sealed class SystemGroup
             {
                 foreach (var system in _systems)
                     if (system.Enabled)
-                        system.Update(time);
+                        system.Update(data);
             }
             _timer.Stop();
         }
     }
 
-    public void AfterUpdate(GameTime time)
+    public void AfterUpdate(TData data)
     {
         if (Enabled)
         {
@@ -68,7 +68,7 @@ public sealed class SystemGroup
             {
                 foreach (var system in _afterSystems)
                     if (system.Enabled)
-                        system.AfterUpdate(time);
+                        system.AfterUpdate(data);
             }
             _timer.Stop();
         }

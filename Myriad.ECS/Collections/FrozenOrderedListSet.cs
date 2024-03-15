@@ -63,12 +63,12 @@ public class FrozenOrderedListSet<TItem>
     #region IsProperSubsetOf
     public bool IsProperSubsetOf(IEnumerable<TItem> other)
     {
-        if (other is OrderedListSet<TItem> ols)
-            return _items.IsProperSubsetOf(ols);
-        if (other is FrozenOrderedListSet<TItem> fols)
-            return _items.IsProperSubsetOf(fols);
-
-        return _items.IsProperSubsetOf(other);
+        return other switch
+        {
+            OrderedListSet<TItem> ols => _items.IsProperSubsetOf(ols),
+            FrozenOrderedListSet<TItem> fols => _items.IsProperSubsetOf(fols),
+            _ => _items.IsProperSubsetOf(other)
+        };
     }
 
     public bool IsProperSubsetOf(OrderedListSet<TItem> other)
@@ -85,12 +85,12 @@ public class FrozenOrderedListSet<TItem>
     #region IsProperSupersetOf
     public bool IsProperSupersetOf(IEnumerable<TItem> other)
     {
-        if (other is OrderedListSet<TItem> ols)
-            return _items.IsProperSupersetOf(ols);
-        if (other is FrozenOrderedListSet<TItem> fols)
-            return _items.IsProperSupersetOf(fols);
-
-        return _items.IsProperSupersetOf(other);
+        return other switch
+        {
+            OrderedListSet<TItem> ols => _items.IsProperSupersetOf(ols),
+            FrozenOrderedListSet<TItem> fols => _items.IsProperSupersetOf(fols),
+            _ => _items.IsProperSupersetOf(other)
+        };
     }
 
     public bool IsProperSupersetOf(OrderedListSet<TItem> other)
@@ -107,12 +107,12 @@ public class FrozenOrderedListSet<TItem>
     #region IsSubsetOf
     public bool IsSubsetOf(IEnumerable<TItem> other)
     {
-        if (other is OrderedListSet<TItem> ols)
-            return _items.IsSubsetOf(ols);
-        if (other is FrozenOrderedListSet<TItem> fols)
-            return _items.IsSubsetOf(fols);
-
-        return _items.IsSubsetOf(other);
+        return other switch
+        {
+            OrderedListSet<TItem> ols => _items.IsSubsetOf(ols),
+            FrozenOrderedListSet<TItem> fols => _items.IsSubsetOf(fols),
+            _ => _items.IsSubsetOf(other)
+        };
     }
 
     public bool IsSubsetOf(OrderedListSet<TItem> other)
@@ -129,12 +129,12 @@ public class FrozenOrderedListSet<TItem>
     #region IsSupersetOf
     public bool IsSupersetOf(IEnumerable<TItem> other)
     {
-        if (other is OrderedListSet<TItem> ols)
-            return _items.IsSupersetOf(ols);
-        if (other is FrozenOrderedListSet<TItem> fols)
-            return _items.IsSupersetOf(fols);
-
-        return _items.IsSupersetOf(other);
+        return other switch
+        {
+            OrderedListSet<TItem> ols => _items.IsSupersetOf(ols),
+            FrozenOrderedListSet<TItem> fols => _items.IsSupersetOf(fols),
+            _ => _items.IsSupersetOf(other)
+        };
     }
 
     public bool IsSupersetOf(OrderedListSet<TItem> other)
@@ -151,12 +151,12 @@ public class FrozenOrderedListSet<TItem>
     #region Overlaps
     public bool Overlaps(IEnumerable<TItem> other)
     {
-        if (other is OrderedListSet<TItem> ols)
-            return _items.Overlaps(ols);
-        if (other is FrozenOrderedListSet<TItem> fols)
-            return _items.Overlaps(fols);
-
-        return _items.Overlaps(other);
+        return other switch
+        {
+            OrderedListSet<TItem> ols => _items.Overlaps(ols),
+            FrozenOrderedListSet<TItem> fols => _items.Overlaps(fols),
+            _ => _items.Overlaps(other)
+        };
     }
 
     public bool Overlaps(OrderedListSet<TItem> other)
@@ -173,12 +173,12 @@ public class FrozenOrderedListSet<TItem>
     #region SetEquals
     public bool SetEquals(IEnumerable<TItem> other)
     {
-        if (other is OrderedListSet<TItem> ols)
-            return _items.SetEquals(ols);
-        if (other is FrozenOrderedListSet<TItem> fols)
-            return _items.SetEquals(fols);
-
-        return _items.SetEquals(other);
+        return other switch
+        {
+            OrderedListSet<TItem> ols => _items.SetEquals(ols),
+            FrozenOrderedListSet<TItem> fols => _items.SetEquals(fols),
+            _ => _items.SetEquals(other)
+        };
     }
 
     public bool SetEquals(OrderedListSet<TItem> other)

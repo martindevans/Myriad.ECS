@@ -11,7 +11,7 @@ using NBodyIntegrator.Units;
 namespace NBodyIntegrator.Orbits.NBodies;
 
 public sealed class RailIntegrator(World world)
-    : BaseSystem, ISystemInit
+    : BaseSystem<GameTime>, ISystemInit<GameTime>
 {
     private const int MaxWorkPerPoint = 8;
 

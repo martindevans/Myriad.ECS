@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myriad.ECS", "Myriad.ECS\My
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myriad.ECS.Tests", "Myriad.ECS.Tests\Myriad.ECS.Tests.csproj", "{6DD3CD1E-78C3-4A77-9652-75C8C136D788}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myriad.ECS.SourceGeneration", "Myriad.ECS.SourceGeneration\Myriad.ECS.SourceGeneration.csproj", "{7F118CA9-2918-4199-96C8-FD49FC314A3D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{680E8964-CA4A-4640-9A83-CCB38C32E028}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NBodyIntegrator", "NBodyIntegrator\NBodyIntegrator.csproj", "{90BEC8BE-67A3-484D-9CFF-91D3199D48DD}"
@@ -18,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParallelTasks", "ParallelTasks\ParallelTasks.csproj", "{DDA0D422-D241-44E0-A733-7309652DC1A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParallelTasks", "ParallelTasks\ParallelTasks.csproj", "{DDA0D422-D241-44E0-A733-7309652DC1A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,10 +32,6 @@ Global
 		{6DD3CD1E-78C3-4A77-9652-75C8C136D788}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DD3CD1E-78C3-4A77-9652-75C8C136D788}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DD3CD1E-78C3-4A77-9652-75C8C136D788}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F118CA9-2918-4199-96C8-FD49FC314A3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F118CA9-2918-4199-96C8-FD49FC314A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F118CA9-2918-4199-96C8-FD49FC314A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F118CA9-2918-4199-96C8-FD49FC314A3D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{680E8964-CA4A-4640-9A83-CCB38C32E028}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{680E8964-CA4A-4640-9A83-CCB38C32E028}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{680E8964-CA4A-4640-9A83-CCB38C32E028}.Release|Any CPU.ActiveCfg = Release|Any CPU

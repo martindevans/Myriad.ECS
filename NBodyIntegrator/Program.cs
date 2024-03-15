@@ -103,14 +103,14 @@ for (var i = 0; i < 22; i++)
 using var resolver = setup.Playback();
 var nb = bnb.Resolve(resolver);
 
-var systems = new SystemGroup(
+var systems = new SystemGroup<GameTime>(
     "main",
-    new SystemGroup(
+    new SystemGroup<GameTime>(
         "nbody",
         new RailTrimmer(world),
         new RailIntegrator(world)
     ),
-    new SystemGroup(
+    new SystemGroup<GameTime>(
         "live-state",
         new KeplerWorldPosition(world),
         new SetWorldPositionFromRail(world),

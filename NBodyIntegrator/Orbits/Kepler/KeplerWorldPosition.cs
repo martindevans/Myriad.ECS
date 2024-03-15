@@ -11,7 +11,7 @@ namespace NBodyIntegrator.Orbits.Kepler;
 /// </summary>
 /// <param name="world"></param>
 public sealed class KeplerWorldPosition(World world)
-    : BaseSystem, ISystemInit
+    : BaseSystem<GameTime>, ISystemInit<GameTime>
 {
     private KeplerObject[] _keplerMasses = [];
 

@@ -1,5 +1,4 @@
-﻿using System.Collections.Frozen;
-using Myriad.ECS.Registry;
+﻿using Myriad.ECS.Registry;
 using System.Runtime.CompilerServices;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;

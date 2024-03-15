@@ -5,7 +5,7 @@ using Myriad.ECS.Worlds;
 namespace NBodyIntegrator.Orbits.NBodies;
 
 public sealed class RailTrimmer(World world)
-    : BaseSystem
+    : BaseSystem<GameTime>
 {
     private const int MAX_ITERS = 64;
 

@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Myriad.ECS.SourceGeneration\Myriad.ECS.SourceGeneration.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\Myriad.ECS\Myriad.ECS.csproj" />
   </ItemGroup>
 
