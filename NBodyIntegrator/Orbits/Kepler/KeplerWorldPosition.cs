@@ -54,7 +54,7 @@ public sealed class KeplerWorldPosition(World world)
                         .Include<FixedBody>().Include<WorldPosition>().Include<GravityMass>()
                         .Build(world);
         foreach (var (e, _, w, g) in world.Query<FixedBody, WorldPosition, GravityMass>(fixedQuery))
-            keplerMasses.Add(new(e, -1, default, w.Item.Value, g.Item.Value));
+            keplerMasses.Add(new(e, -1, default, w.Ref.Value, g.Ref.Value));
 
         // Find all non-fixed bodies
         var dynamicQuery = new QueryBuilder()
@@ -65,7 +65,7 @@ public sealed class KeplerWorldPosition(World world)
         // not yet found the parent index for.
         var unmatched = new List<(Entity, GravityMass, KeplerOrbit)>();
         foreach (var (e, g, k) in world.Query<GravityMass, KeplerOrbit>(dynamicQuery))
-            unmatched.Add((e, g.Item, k.Item));
+            unmatched.Add((e, g.Ref, k.Ref));
 
         // Now match all those unmatched items
         while (unmatched.Count > 0)

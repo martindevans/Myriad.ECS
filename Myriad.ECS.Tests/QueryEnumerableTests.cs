@@ -159,9 +159,9 @@ public class QueryEnumerableTests
         var actualIndices = new HashSet<int>();
         foreach (var (_, f, i32, i64) in w.Query<ComponentFloat, ComponentInt32, ComponentInt64>(q))
         {
-            Assert.AreEqual(f.Item.Value, i32.Item.Value);
-            Assert.AreEqual(f.Item.Value, i64.Item.Value);
-            actualIndices.Add(i32.Item.Value);
+            Assert.AreEqual(f.Ref.Value, i32.Ref.Value);
+            Assert.AreEqual(f.Ref.Value, i64.Ref.Value);
+            actualIndices.Add(i32.Ref.Value);
         }
 
         Assert.IsTrue(expectedIndices.SetEquals(actualIndices));

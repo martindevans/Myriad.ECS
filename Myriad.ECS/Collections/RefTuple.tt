@@ -14,11 +14,16 @@
 // ReSharper disable CheckNamespace
 // ReSharper disable ArrangeAccessorOwnerBody
 
-namespace Myriad.ECS.Queries;
+namespace Myriad.ECS.Collections;
 
-public ref struct Ref<T>
+public ref struct RefT<T>
 {
-	public ref T Item;
+	public ref T Ref;
+
+	public static implicit operator T(RefT<T> reference)
+    {
+		return reference.Ref;
+    }
 }
 <# for (var i = 1; i <= PARAM_COUNT; i++)
 {
@@ -56,13 +61,13 @@ public readonly ref struct RefTuple<#= i #><<#= tparams #>>
 #>
 	}
 
-	public void Deconstruct(out Entity entity, <#= string.Join(", ", Enumerable.Range(0, i).Select(x => "out Ref<T" + x + "> item" + x)) #>)
+	public void Deconstruct(out Entity entity, <#= string.Join(", ", Enumerable.Range(0, i).Select(x => "out RefT<T" + x + "> item" + x)) #>)
 	{
 		entity = Entity;
 <# for (var k = 0; k < i; k++)
 {
 #>
-		item<#= k #> = new Ref<T<#= k #>> { Item = ref Item<#= k #> };
+		item<#= k #> = new RefT<T<#= k #>> { Ref = ref Item<#= k #> };
 <#
 }
 #>

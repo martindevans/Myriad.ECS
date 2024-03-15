@@ -13,7 +13,7 @@ public sealed class RailTrimmer(World world)
     {
         foreach (var (_, rail) in world.Query<PagedRail>())
             for (var i = 0; i < MAX_ITERS; i++)
-                if (!TryTrimStart(ref rail.Item, time.Time))
+                if (!TryTrimStart(ref rail.Ref, time.Time))
                     break;
     }
 

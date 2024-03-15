@@ -183,7 +183,7 @@ var mint = double.MaxValue;
 var counter = 0;
 foreach (var (_, r) in world.Query<PagedRail>())
 {
-    var lastTime = r.Item.LastState().Time;
+    var lastTime = r.Ref.LastState().Time;
     maxt = Math.Max(maxt, lastTime);
     mint = Math.Min(mint, lastTime);
     counter++;
@@ -264,7 +264,7 @@ static void WriteBinary(BinaryWriter writer, World world)
     // Write out entire rail
     foreach (var (e, r) in world.Query<PagedRail>())
     {
-        foreach (var page in r.Item.Pages)
+        foreach (var page in r.Ref.Pages)
         {
             packetCount++;
 
