@@ -122,4 +122,23 @@ public sealed class ParallelSystemGroup<TData>
         foreach (var system in _systems.OfType<IDisposable>())
             system.Dispose();
     }
+
+    public IEnumerable<ISystem<TData>> Systems
+    {
+        get
+        {
+            foreach (var system in _systems)
+            {
+                if (system is ISystemGroup<TData> group)
+                {
+                    foreach (var nested in group.Systems)
+                        yield return nested;
+                }
+                else
+                {
+                    yield return system;
+                }
+            }
+        }
+    }
 }

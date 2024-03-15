@@ -12,4 +12,9 @@ public interface ISystemGroup<in TData>
     /// Total time spent executing update calls in the last frame
     /// </summary>
     TimeSpan ExecutionTime { get; }
+
+    /// <summary>
+    /// Get all systems in this group
+    /// </summary>
+    IEnumerable<ISystem<TData>> Systems { get; }
 }

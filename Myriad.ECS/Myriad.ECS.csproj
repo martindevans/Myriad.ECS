@@ -9,7 +9,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Myriad.ECS</Title>
     <Authors>Martin Evans</Authors>
-    <Version>4.1.0</Version>
+    <Version>4.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -50,6 +50,16 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Queries\QueryBuilderExtras.cs">
+      <DependentUpon>QueryBuilderExtras.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Queries\QueryDelegate.cs">
+      <DependentUpon>QueryDelegate.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Queries\QueryEnumerable.cs">
       <DependentUpon>QueryEnumerable.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -87,6 +97,14 @@
     </None>
     <None Update="Queries\CachedQueries.tt">
       <LastGenOutput>CachedQueries.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Queries\QueryBuilderExtras.tt">
+      <LastGenOutput>QueryBuilderExtras.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Queries\QueryDelegate.tt">
+      <LastGenOutput>QueryDelegate.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="Queries\QueryEnumerable.tt">

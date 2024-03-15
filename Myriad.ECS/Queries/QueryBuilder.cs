@@ -9,7 +9,7 @@ namespace Myriad.ECS.Queries;
 /// <summary>
 /// Build a new <see cref="QueryDescription"/> object
 /// </summary>
-public sealed class QueryBuilder
+public sealed partial class QueryBuilder
 {
     private readonly IDSet<ComponentRegistry, IComponent, ComponentID> _include;
     private readonly IDSet<ComponentRegistry, IComponent, ComponentID> _exclude;

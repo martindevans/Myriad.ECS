@@ -9,6 +9,7 @@ public sealed class SystemGroup<TData>
     public bool Enabled { get; set; } = true;
 
     public TimeSpan ExecutionTime { get; private set; }
+
     private readonly Stopwatch _timer = new();
 
     private readonly ISystemBefore<TData>[] _beforeSystems;
@@ -80,5 +81,24 @@ public sealed class SystemGroup<TData>
     {
         foreach (var system in _systems.OfType<IDisposable>())
             system.Dispose();
+    }
+
+    public IEnumerable<ISystem<TData>> Systems
+    {
+        get
+        {
+            foreach (var system in _systems)
+            {
+                if (system is ISystemGroup<TData> group)
+                {
+                    foreach (var nested in group.Systems)
+                        yield return nested;
+                }
+                else
+                {
+                    yield return system;
+                }
+            }
+        }
     }
 }
