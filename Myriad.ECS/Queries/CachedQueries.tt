@@ -5,7 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 <#
-    const int PARAM_COUNT = 9;
+    const int PARAM_COUNT = 16;
 #>
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
