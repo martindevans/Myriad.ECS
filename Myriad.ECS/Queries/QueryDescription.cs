@@ -7,23 +7,35 @@ using Myriad.ECS.Worlds.Archetypes;
 namespace Myriad.ECS.Queries;
 
 public sealed class QueryDescription(
-    World world,
-    FrozenOrderedListSet<ComponentID> include,
-    FrozenOrderedListSet<ComponentID> exclude,
-    FrozenOrderedListSet<ComponentID> atLeastOne,
-    FrozenOrderedListSet<ComponentID> exactlyOne
+    World _world,
+    FrozenOrderedListSet<ComponentID> _include,
+    FrozenOrderedListSet<ComponentID> _exclude,
+    FrozenOrderedListSet<ComponentID> _atLeastOne,
+    FrozenOrderedListSet<ComponentID> _exactlyOne
 )
 {
-    private readonly World _world = world;
-
-    // Components
-    private readonly FrozenOrderedListSet<ComponentID> _include = include;
-    private readonly FrozenOrderedListSet<ComponentID> _exclude = exclude;
-    private readonly FrozenOrderedListSet<ComponentID> _atLeastOne = atLeastOne;
-    private readonly FrozenOrderedListSet<ComponentID> _exactlyOne = exactlyOne;
-
     // Cache of result from last time TryMatch was called
     private MatchResult? _result;
+
+    /// <summary>
+    /// Create a query builder which describes this query
+    /// </summary>
+    /// <returns></returns>
+    public QueryBuilder ToBuilder()
+    {
+        var builder = new QueryBuilder();
+
+        foreach (var id in _include)
+            builder.Include(id);
+        foreach (var id in _exclude)
+            builder.Exclude(id);
+        foreach (var id in _atLeastOne)
+            builder.AtLeastOneOf(id);
+        foreach (var id in _exactlyOne)
+            builder.ExactlyOneOf(id);
+
+        return new QueryBuilder();
+    }
 
     #region match
     /// <summary>

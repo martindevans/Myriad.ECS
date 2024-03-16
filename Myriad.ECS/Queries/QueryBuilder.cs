@@ -76,6 +76,12 @@ public sealed partial class QueryBuilder
         return this;
     }
 
+    internal QueryBuilder Include(ComponentID id)
+    {
+        _include.Add(id);
+        return this;
+    }
+
     /// <summary>
     /// Check if the given component type has been marked as "Include"
     /// </summary>
@@ -112,6 +118,12 @@ public sealed partial class QueryBuilder
         return this;
     }
 
+    internal QueryBuilder Exclude(ComponentID id)
+    {
+        _exclude.Add(id);
+        return this;
+    }
+
     public bool IsExcluded(Type type)
     {
         return _exclude.Contains(type);
@@ -138,6 +150,12 @@ public sealed partial class QueryBuilder
         return this;
     }
 
+    internal QueryBuilder AtLeastOneOf(ComponentID id)
+    {
+        _atLeastOne.Add(id);
+        return this;
+    }
+
     public bool IsAtLeastOneOf(Type type)
     {
         return _atLeastOne.Contains(type);
@@ -161,6 +179,12 @@ public sealed partial class QueryBuilder
     public QueryBuilder ExactlyOneOf(Type type)
     {
         _exactlyOne.Add(type);
+        return this;
+    }
+
+    internal QueryBuilder ExactlyOneOf(ComponentID id)
+    {
+        _exactlyOne.Add(id);
         return this;
     }
 
@@ -195,7 +219,7 @@ public sealed partial class QueryBuilder
             return _frozenCache;
         }
 
-        private bool Add(TID id, string caller)
+        public bool Add(TID id, [CallerMemberName] string caller = "")
         {
             check(id, Index, caller);
             if (_items.Add(id))

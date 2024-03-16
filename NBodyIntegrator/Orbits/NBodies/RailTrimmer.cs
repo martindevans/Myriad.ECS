@@ -1,6 +1,4 @@
-﻿using Myriad.ECS;
-using Myriad.ECS.Allocations;
-using Myriad.ECS.Queries;
+﻿using Myriad.ECS.Allocations;
 using Myriad.ECS.Systems;
 using Myriad.ECS.Worlds;
 
