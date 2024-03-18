@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Queries;
+using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Tests;
 
@@ -192,5 +193,40 @@ public class QueryBuilderTests
         {
             q.Exclude<ComponentFloat>();
         });
+    }
+
+    [TestMethod]
+    public void ConvertQueryToBuilder()
+    {
+        var world = new WorldBuilder().Build();
+
+        var query = new QueryBuilder()
+             .Include<ComponentInt16>()
+             .Exclude<ComponentInt32>()
+             .ExactlyOneOf<ComponentFloat>()
+             .AtLeastOneOf<ComponentInt64>()
+             .Build(world);
+
+        var builder = query.ToBuilder();
+
+        Assert.IsTrue(builder.IsIncluded<ComponentInt16>());
+        Assert.IsFalse(builder.IsIncluded<ComponentInt32>());
+        Assert.IsFalse(builder.IsIncluded<ComponentFloat>());
+        Assert.IsFalse(builder.IsIncluded<ComponentInt64>());
+
+        Assert.IsFalse(builder.IsExcluded<ComponentInt16>());
+        Assert.IsTrue(builder.IsExcluded<ComponentInt32>());
+        Assert.IsFalse(builder.IsExcluded<ComponentFloat>());
+        Assert.IsFalse(builder.IsExcluded<ComponentInt64>());
+
+        Assert.IsFalse(builder.IsExactlyOneOf<ComponentInt16>());
+        Assert.IsFalse(builder.IsExactlyOneOf<ComponentInt32>());
+        Assert.IsTrue(builder.IsExactlyOneOf<ComponentFloat>());
+        Assert.IsFalse(builder.IsExactlyOneOf<ComponentInt64>());
+
+        Assert.IsFalse(builder.IsAtLeastOneOf<ComponentInt16>());
+        Assert.IsFalse(builder.IsAtLeastOneOf<ComponentInt32>());
+        Assert.IsFalse(builder.IsAtLeastOneOf<ComponentFloat>());
+        Assert.IsTrue(builder.IsAtLeastOneOf<ComponentInt64>());
     }
 }

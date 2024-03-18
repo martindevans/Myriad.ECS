@@ -34,7 +34,7 @@ public sealed class QueryDescription(
         foreach (var id in _exactlyOne)
             builder.ExactlyOneOf(id);
 
-        return new QueryBuilder();
+        return builder;
     }
 
     #region match
