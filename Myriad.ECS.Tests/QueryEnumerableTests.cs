@@ -58,13 +58,8 @@ public class QueryEnumerableTests
         using var r = cb.Playback();
         var entity3 = r.Resolve(e3);
 
-        var q = new QueryBuilder()
-               .Include<ComponentInt64>()
-               .Include<ComponentFloat>()
-               .Build(w);
-
         var count = 0;
-        foreach (var e in w.Query<ComponentInt64, ComponentFloat>(q))
+        foreach (var e in w.Query<ComponentInt64, ComponentFloat>())
         {
             Assert.AreEqual(entity3, e.Entity);
             Assert.AreEqual(4, e.Item0.Value);
