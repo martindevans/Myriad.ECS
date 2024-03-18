@@ -122,11 +122,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		public void Query<T0>(QueryDelegate<T0> @delegate)
+		public void Query<T0>(QueryDelegate<T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
 		{
 			Execute<QueryDelegateWrapper1<T0>, T0>(
-				new QueryDelegateWrapper1<T0>(@delegate)
+				new QueryDelegateWrapper1<T0>(@delegate),
+				query
 			);
 		}
 
