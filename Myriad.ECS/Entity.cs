@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using Myriad.ECS.Collections;
 using Myriad.ECS.Worlds;
+using Standart.Hash.xxHash;
 
 namespace Myriad.ECS;
 
@@ -29,5 +31,22 @@ public readonly record struct Entity
             return idc;
 
         return Version.CompareTo(other.Version);
+    }
+
+    public long UniqueID()
+    {
+        // Set the entity ID and version into the hi and lo 32 bits
+        var u = new Union64
+        {
+            I0 = ID,
+            I1 = unchecked((int)Version)
+        };
+
+        // Hash it
+        unsafe
+        {
+            var span = new Span<byte>(&u.B0, 8);
+            return unchecked((long)xxHash64.ComputeHash(span, span.Length, 17));
+        }
     }
 }

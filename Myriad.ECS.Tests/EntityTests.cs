@@ -52,4 +52,22 @@ public class EntityTests
         Assert.AreNotEqual(0, c1);
         Assert.AreNotEqual(0, c2);
     }
+
+    [TestMethod]
+    public void EntityUniqueID()
+    {
+        var w = new WorldBuilder().Build();
+        var b = new CommandBuffer(w);
+
+        var eb1 = b.Create();
+        var eb2 = b.Create();
+        using var resolver = b.Playback();
+        var entity1 = resolver.Resolve(eb1);
+        var entity2 = resolver.Resolve(eb2);
+
+        var id1 = entity1.UniqueID();
+        var id2 = entity2.UniqueID();
+
+        Assert.AreNotEqual(id1, id2);
+    }
 }
