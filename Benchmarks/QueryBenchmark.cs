@@ -89,6 +89,15 @@ public class QueryBenchmark
             item.Item0.Value += item.Item1.Value;
     }
 
+    [Benchmark]
+    public void DelegateQuery()
+    {
+        _world.Query((ref Position pos, ref Velocity vel) =>
+        {
+            pos.Value += vel.Value;
+        });
+    }
+
     private struct QueryAction
         : IQuery2<Position, Velocity>
     {
