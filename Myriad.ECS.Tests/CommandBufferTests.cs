@@ -78,7 +78,23 @@ public class CommandBufferTests
             // Create lots of entities
             var buffered = new List<CommandBuffer.BufferedEntity>();
             for (var j = 0; j < 10000; j++)
-                buffered.Add(buffer.Create().Set(new ComponentInt32(j)));
+            {
+                var b = buffer.Create().Set(new ComponentInt32(j));
+                buffered.Add(b);
+
+                for (int k = 0; k < 3; k++)
+                {
+                    switch (rng.Next(0, 6))
+                    {
+                        case 0: b.Set(new ComponentByte((byte)i), true); break;
+                        case 1: b.Set(new ComponentInt16((short)i), true); break;
+                        case 2: b.Set(new ComponentFloat(i), true); break;
+                        case 3: b.Set(new ComponentInt32(i), true); break;
+                        case 4: b.Set(new ComponentInt64(i), true); break;
+                        default: break;
+                    }
+                }
+            }
 
             // Destroy some random entities
             for (var j = 0; j < 1000; j++)
@@ -113,8 +129,7 @@ public class CommandBufferTests
             }
 
             // Check archetypes
-            Assert.AreEqual(1, world.Archetypes.Count);
-            Assert.AreEqual(alive.Count, world.Archetypes.Single().EntityCount);
+            Assert.AreEqual(alive.Count, world.Archetypes.Select(a => a.EntityCount).Sum());
         }
     }
 

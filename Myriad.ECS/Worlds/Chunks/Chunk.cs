@@ -113,6 +113,8 @@ internal sealed class Chunk
     }
 
     #region add/remove entity
+    // Note that these must be called only from Archetype! The Archetype needs to do some bookeeping on create/destroy.
+
     internal Row AddEntity(Entity entity, ref EntityInfo info)
     {
         if (EntityCount == _entities.Length)
