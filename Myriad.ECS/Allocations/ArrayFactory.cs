@@ -25,7 +25,7 @@ internal static class ArrayFactory
     /// </summary>
     public static void Prepare(Type type)
     {
-        typeof(ArrayFactory).GetMethod("Prepare", BindingFlags.Public | BindingFlags.Static, [])!
+        typeof(ArrayFactory).GetMethod("Prepare", BindingFlags.Public | BindingFlags.Static, null, CallingConventions.Any, [], null)!
                             .MakeGenericMethod(type)
                             .Invoke(null, null);
     }

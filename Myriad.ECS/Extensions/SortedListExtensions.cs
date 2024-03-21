@@ -41,6 +41,6 @@ internal static class SortedListExtensions
             return _index < list.Count;
         }
 
-        public readonly (TKey, TValue) Current => (list.GetKeyAtIndex(_index), list.GetValueAtIndex(_index));
+        public readonly (TKey, TValue) Current => (list.Keys[_index], list.Values[_index]);
     }
 }

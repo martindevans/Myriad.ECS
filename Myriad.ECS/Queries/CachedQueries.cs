@@ -1,6 +1,7 @@
 ﻿using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
-using Standart.Hash.xxHash;
+using Myriad.ECS.xxHash;
+using Myriad.ECS.Extensions;
 using System.Runtime.InteropServices;
 
 // ReSharper disable UnusedType.Global
@@ -34,7 +35,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache1)
@@ -85,7 +86,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache2)
@@ -139,7 +140,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache3)
@@ -196,7 +197,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache4)
@@ -256,7 +257,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache5)
@@ -319,7 +320,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache6)
@@ -385,7 +386,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache7)
@@ -454,7 +455,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache8)
@@ -526,7 +527,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache9)
@@ -601,7 +602,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache10)
@@ -679,7 +680,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache11)
@@ -760,7 +761,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache12)
@@ -844,7 +845,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache13)
@@ -931,7 +932,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache14)
@@ -1021,7 +1022,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache15)
@@ -1114,7 +1115,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache16)

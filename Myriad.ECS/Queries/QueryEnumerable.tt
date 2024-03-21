@@ -7,6 +7,9 @@
 <#
     const int PARAM_COUNT = 16;
 #>
+
+#if NET6_0_OR_GREATER
+
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Collections;
@@ -37,6 +40,7 @@ using Myriad.ECS.Worlds.Chunks;
         refparamstup = "RefTuple" + i + tparams;
     }
 #>
+
 namespace Myriad.ECS.Queries
 {
     public readonly struct QueryResultEnumerable<#= i #><#= tparams #>
@@ -248,6 +252,7 @@ if (i > 0)
 }
 #>
 
+#endif
 
 <#+ 
     static string Constraints(int count, int spaces = 4)

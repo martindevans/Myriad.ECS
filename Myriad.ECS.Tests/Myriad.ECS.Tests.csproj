@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Myriad.ECS\Myriad.ECS.csproj" />
+    <ProjectReference Include="..\Myriad.ECS\Myriad.ECS.csproj" SetTargetFramework="TargetFramework=$(TargetFramework)" />
   </ItemGroup>
 
   <ItemGroup>

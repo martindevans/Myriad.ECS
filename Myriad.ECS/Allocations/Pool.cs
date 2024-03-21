@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable StaticMemberInGenericType
 
@@ -29,6 +30,7 @@ public static class Pool<T>
     public static T Get()
     {
         Init();
+        Debug.Assert(_items != null);
 
         if (_items.Count == 0)
         {
@@ -54,6 +56,7 @@ public static class Pool<T>
     public static void Return(T item)
     {
         Init();
+        Debug.Assert(_items != null);
 
         if (_pressure > _maxSize)
         {

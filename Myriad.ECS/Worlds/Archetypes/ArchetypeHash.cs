@@ -1,6 +1,6 @@
 ﻿using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
-using Standart.Hash.xxHash;
+using Myriad.ECS.xxHash;
 
 namespace Myriad.ECS.Worlds.Archetypes;
 
@@ -31,7 +31,7 @@ internal readonly record struct ArchetypeHash
         {
             // Hash compoent value to smear bits across 64 bit hash space
             var cv = component.Value;
-            var v = unchecked((long)xxHash64.ComputeHash(new Span<byte>(&cv, 4), 4));
+            var v = unchecked((long)xxHash64.ComputeHash(new Span<byte>(&cv, 4), 17));
 
             // xor this value to tiggle it in the set
             return value ^ v;

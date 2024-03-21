@@ -9,6 +9,13 @@ public sealed partial class WorldBuilder
 {
     private readonly List<OrderedListSet<ComponentID>> _archetypes = [ ];
 
+#if !NET6_0_OR_GREATER
+    private bool AddArchetype(HashSet<ComponentID> ids)
+    {
+        return AddArchetype(new FrozenOrderedListSet<ComponentID>(ids));
+    }
+#endif
+
     private bool AddArchetype(IReadOnlySet<ComponentID> ids)
     {
         if (_archetypes.Any(a => a.SetEquals(ids)))

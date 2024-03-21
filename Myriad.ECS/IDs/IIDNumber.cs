@@ -4,7 +4,5 @@ public interface IIDNumber<TSelf>
     : IEquatable<TSelf>, IComparable<TSelf>
     where TSelf : struct, IIDNumber<TSelf>
 {
-    static abstract TSelf First();
-
-    static abstract TSelf Next(TSelf value);
+    TSelf Next();
 }

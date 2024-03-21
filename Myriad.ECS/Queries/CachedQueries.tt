@@ -9,7 +9,8 @@
 #>
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
-using Standart.Hash.xxHash;
+using Myriad.ECS.xxHash;
+using Myriad.ECS.Extensions;
 using System.Runtime.InteropServices;
 
 // ReSharper disable UnusedType.Global
@@ -74,7 +75,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, byteSpan.Length, seed: 42);
+        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache<#= i #>)

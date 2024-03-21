@@ -326,7 +326,9 @@ public sealed class CommandBuffer(World World)
 
         public void Dispose()
         {
-            ObjectDisposedException.ThrowIf(Parent == null, typeof(Resolver));
+            if (Parent == null)
+                throw new ObjectDisposedException(nameof(Resolver));
+
             Parent = null;
             Lookup.Clear();
 

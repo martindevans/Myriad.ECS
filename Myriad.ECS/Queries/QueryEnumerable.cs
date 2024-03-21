@@ -1,4 +1,7 @@
-﻿using Myriad.ECS.Queries;
+﻿
+#if NET6_0_OR_GREATER
+
+using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Collections;
 using Myriad.ECS.Worlds.Chunks;
@@ -9,6 +12,7 @@ using Myriad.ECS.Worlds.Chunks;
 // ReSharper disable CheckNamespace
 // ReSharper disable ArrangeAccessorOwnerBody
 #pragma warning disable CA1822 // Mark members as static
+
 
 namespace Myriad.ECS.Queries
 {
@@ -135,6 +139,7 @@ namespace Myriad.ECS.Worlds
         }
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -291,6 +296,7 @@ namespace Myriad.ECS.Worlds
 
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -456,6 +462,7 @@ namespace Myriad.ECS.Worlds
 
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -630,6 +637,7 @@ namespace Myriad.ECS.Worlds
 
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -813,6 +821,7 @@ namespace Myriad.ECS.Worlds
 
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -1005,6 +1014,7 @@ namespace Myriad.ECS.Worlds
 
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -1206,6 +1216,7 @@ namespace Myriad.ECS.Worlds
 
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -1416,6 +1427,7 @@ namespace Myriad.ECS.Worlds
 
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -1635,6 +1647,7 @@ namespace Myriad.ECS.Worlds
 
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -1863,6 +1876,7 @@ namespace Myriad.ECS.Worlds
 
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -2100,6 +2114,7 @@ namespace Myriad.ECS.Worlds
 
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -2346,6 +2361,7 @@ namespace Myriad.ECS.Worlds
 
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -2601,6 +2617,7 @@ namespace Myriad.ECS.Worlds
 
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -2865,6 +2882,7 @@ namespace Myriad.ECS.Worlds
 
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -3138,6 +3156,7 @@ namespace Myriad.ECS.Worlds
 
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -3420,6 +3439,7 @@ namespace Myriad.ECS.Worlds
 
     }
 }
+
 
 namespace Myriad.ECS.Queries
 {
@@ -3713,4 +3733,5 @@ namespace Myriad.ECS.Worlds
 }
 
 
+#endif
 

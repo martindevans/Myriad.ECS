@@ -71,7 +71,14 @@ internal sealed class Chunk
         where T : IComponent
     {
         var componentArray = _components[_componentIndexLookup[id.Value]];
-        var typedArray = Unsafe.As<T[]>(componentArray);
+
+        var typedArray =
+#if NET6_0_OR_GREATER
+            Unsafe.As<T[]>(componentArray);
+#else
+            (T[])componentArray;
+#endif
+
         return typedArray.AsSpan(0, EntityCount);
     }
 
@@ -85,7 +92,14 @@ internal sealed class Chunk
         where T : IComponent
     {
         var componentArray = _components[_componentIndexLookup[id.Value]];
-        var typedArray = Unsafe.As<T[]>(componentArray);
+
+        var typedArray =
+#if NET6_0_OR_GREATER
+            Unsafe.As<T[]>(componentArray);
+#else
+            (T[])componentArray;
+#endif
+
         return typedArray;
     }
     #endregion

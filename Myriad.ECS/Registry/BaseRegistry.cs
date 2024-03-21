@@ -33,7 +33,7 @@ public abstract class BaseRegistry<TBase, TID>
             foreach (var assembly in assemblies)
             {
                 var types = from type in assembly.GetTypes()
-                            where type.IsAssignableTo(typeof(TBase))
+                            where typeof(TBase).IsAssignableFrom(type)
                             select type;
 
                 foreach (var type in types)
@@ -116,7 +116,7 @@ public abstract class BaseRegistry<TBase, TID>
 
     private static void TypeCheck(Type type)
     {
-        if (!type.IsAssignableTo(typeof(TBase)))
+        if (!typeof(TBase).IsAssignableFrom(type))
             throw new ArgumentException($"Type `{type.FullName}` is not assignable to `{typeof(TBase).Name}`)");
     }
 
@@ -124,14 +124,17 @@ public abstract class BaseRegistry<TBase, TID>
     {
         private readonly Dictionary<TID, Type> TypeLookup = [];
         private readonly Dictionary<Type, TID> IDLookup = [];
-        private TID _nextId = TID.First();
+
+        // Init the first ID to be the one after the default ID. That
+        // means that default is _not_ a valid ID.
+        private TID _nextId = default(TID).Next();
 
         public TID GetOrAdd(Type type)
         {
             if (!IDLookup.TryGetValue(type, out var id))
             {
                 id = _nextId;
-                _nextId = TID.Next(_nextId);
+                _nextId = _nextId.Next();
 
                 IDLookup[type] = id;
                 TypeLookup[id] = type;

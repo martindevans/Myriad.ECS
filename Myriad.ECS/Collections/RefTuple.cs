@@ -7,6 +7,8 @@
 
 namespace Myriad.ECS.Collections;
 
+#if NET6_0_OR_GREATER
+
 public ref struct RefT<T>
 {
 	public ref T Ref;
@@ -680,5 +682,7 @@ public readonly ref struct RefTuple16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 		item15 = new RefT<T15> { Ref = ref Item15 };
 	}
 }
+
+#endif
 
 

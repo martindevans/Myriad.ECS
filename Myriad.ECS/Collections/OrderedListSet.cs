@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Myriad.ECS.Extensions;
 
 namespace Myriad.ECS.Collections;
 
@@ -6,7 +7,7 @@ namespace Myriad.ECS.Collections;
 /// A set built out of an ordered list. This allows allocation free enumeration of the set.
 /// </summary>
 /// <typeparam name="TItem"></typeparam>
-public class OrderedListSet<TItem>
+internal class OrderedListSet<TItem>
     : IReadOnlySet<TItem>
     where TItem : IComparable<TItem>, IEquatable<TItem>
 {
@@ -25,7 +26,13 @@ public class OrderedListSet<TItem>
     }
 
     // ReSharper disable once ParameterTypeCanBeEnumerable.Local (Justification: the fact this is a set is important, it means there are definitely no duplicates)
-    public OrderedListSet(IReadOnlySet<TItem> items)
+    internal OrderedListSet(IReadOnlySet<TItem> items)
+    {
+        _items.AddRange(items);
+        _items.Sort();
+    }
+
+    internal OrderedListSet(HashSet<TItem> items)
     {
         _items.AddRange(items);
         _items.Sort();
@@ -48,7 +55,7 @@ public class OrderedListSet<TItem>
         return true;
     }
 
-    public void UnionWith<TSet>(TSet items)
+    internal void UnionWith<TSet>(TSet items)
         where TSet : IReadOnlySet<TItem>
     {
         if (_items.Count == 0)

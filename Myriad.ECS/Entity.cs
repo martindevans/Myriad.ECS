@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Myriad.ECS.Collections;
 using Myriad.ECS.Worlds;
-using Standart.Hash.xxHash;
+using Myriad.ECS.xxHash;
 
 namespace Myriad.ECS;
 
@@ -46,7 +46,7 @@ public readonly record struct Entity
         unsafe
         {
             var span = new Span<byte>(&u.B0, 8);
-            return unchecked((long)xxHash64.ComputeHash(span, span.Length, 17));
+            return unchecked((long)xxHash64.ComputeHash(span, 17));
         }
     }
 }

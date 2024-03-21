@@ -10,27 +10,32 @@ public class FrozenOrderedListSet<TItem>
     public int Count => _items.Count;
 
     #region constructors
-    public FrozenOrderedListSet()
+    internal FrozenOrderedListSet()
     {
         _items = [ ];
     }
 
-    public FrozenOrderedListSet(List<TItem> items)
+    internal FrozenOrderedListSet(List<TItem> items)
     {
         _items = new OrderedListSet<TItem>(items);
     }
 
-    public FrozenOrderedListSet(IReadOnlySet<TItem> items)
+    internal FrozenOrderedListSet(HashSet<TItem> items)
     {
         _items = new OrderedListSet<TItem>(items);
     }
 
-    public FrozenOrderedListSet(OrderedListSet<TItem> items)
+    internal FrozenOrderedListSet(IReadOnlySet<TItem> items)
     {
         _items = new OrderedListSet<TItem>(items);
     }
 
-    public FrozenOrderedListSet(FrozenOrderedListSet<TItem> items)
+    internal FrozenOrderedListSet(OrderedListSet<TItem> items)
+    {
+        _items = new OrderedListSet<TItem>(items);
+    }
+
+    internal FrozenOrderedListSet(FrozenOrderedListSet<TItem> items)
     {
         _items = new OrderedListSet<TItem>(items);
     }
@@ -71,7 +76,7 @@ public class FrozenOrderedListSet<TItem>
         };
     }
 
-    public bool IsProperSubsetOf(OrderedListSet<TItem> other)
+    internal bool IsProperSubsetOf(OrderedListSet<TItem> other)
     {
         return _items.IsProperSubsetOf(other);
     }
@@ -83,7 +88,7 @@ public class FrozenOrderedListSet<TItem>
     #endregion
 
     #region IsProperSupersetOf
-    public bool IsProperSupersetOf(IEnumerable<TItem> other)
+    bool IReadOnlySet<TItem>.IsProperSupersetOf(IEnumerable<TItem> other)
     {
         return other switch
         {
@@ -93,7 +98,7 @@ public class FrozenOrderedListSet<TItem>
         };
     }
 
-    public bool IsProperSupersetOf(OrderedListSet<TItem> other)
+    internal bool IsProperSupersetOf(OrderedListSet<TItem> other)
     {
         return _items.IsProperSupersetOf(other);
     }
@@ -105,7 +110,7 @@ public class FrozenOrderedListSet<TItem>
     #endregion
 
     #region IsSubsetOf
-    public bool IsSubsetOf(IEnumerable<TItem> other)
+    bool IReadOnlySet<TItem>.IsSubsetOf(IEnumerable<TItem> other)
     {
         return other switch
         {
@@ -115,7 +120,7 @@ public class FrozenOrderedListSet<TItem>
         };
     }
 
-    public bool IsSubsetOf(OrderedListSet<TItem> other)
+    internal bool IsSubsetOf(OrderedListSet<TItem> other)
     {
         return _items.IsSubsetOf(other);
     }
@@ -127,7 +132,7 @@ public class FrozenOrderedListSet<TItem>
     #endregion
 
     #region IsSupersetOf
-    public bool IsSupersetOf(IEnumerable<TItem> other)
+    bool IReadOnlySet<TItem>.IsSupersetOf(IEnumerable<TItem> other)
     {
         return other switch
         {
@@ -137,7 +142,7 @@ public class FrozenOrderedListSet<TItem>
         };
     }
 
-    public bool IsSupersetOf(OrderedListSet<TItem> other)
+    internal bool IsSupersetOf(OrderedListSet<TItem> other)
     {
         return _items.IsSupersetOf(other);
     }
@@ -149,7 +154,7 @@ public class FrozenOrderedListSet<TItem>
     #endregion
 
     #region Overlaps
-    public bool Overlaps(IEnumerable<TItem> other)
+    bool IReadOnlySet<TItem>.Overlaps(IEnumerable<TItem> other)
     {
         return other switch
         {
@@ -159,7 +164,7 @@ public class FrozenOrderedListSet<TItem>
         };
     }
 
-    public bool Overlaps(OrderedListSet<TItem> other)
+    internal bool Overlaps(OrderedListSet<TItem> other)
     {
         return _items.Overlaps(other);
     }
@@ -171,7 +176,7 @@ public class FrozenOrderedListSet<TItem>
     #endregion
 
     #region SetEquals
-    public bool SetEquals(IEnumerable<TItem> other)
+    bool IReadOnlySet<TItem>.SetEquals(IEnumerable<TItem> other)
     {
         return other switch
         {
@@ -181,7 +186,7 @@ public class FrozenOrderedListSet<TItem>
         };
     }
 
-    public bool SetEquals(OrderedListSet<TItem> other)
+    internal bool SetEquals(OrderedListSet<TItem> other)
     {
         return _items.SetEquals(other);
     }

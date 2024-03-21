@@ -85,8 +85,10 @@ public class QueryBenchmark
     [Benchmark]
     public void QueryEnumerable()
     {
+#if NET5_0_OR_GREATER
         foreach (var item in _world.Query<Position, Velocity>(_query))
             item.Item0.Value += item.Item1.Value;
+#endif
     }
 
     [Benchmark]

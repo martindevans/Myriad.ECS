@@ -15,14 +15,9 @@ public readonly record struct ComponentID
         Value = value;
     }
 
-    public static ComponentID First()
+    public ComponentID Next()
     {
-        return new ComponentID(1);
-    }
-
-    public static ComponentID Next(ComponentID value)
-    {
-        return new ComponentID(checked(value.Value + 1));
+        return new ComponentID(checked(Value + 1));
     }
 
     public int CompareTo(ComponentID other)
