@@ -19,6 +19,15 @@ public record struct ComponentArray<T>(T[] Array)
     /// <param name="Index"></param>
     /// <returns></returns>
     public readonly ref T this[int Index] => ref Array[Index];
+
+    public static ComponentArray<T> Create(int length, T template)
+    {
+        var arr = new ComponentArray<T>(new T[length]);
+        System.Array.Fill(arr.Array, template);
+        return arr;
+
+        
+    }
 }
 
 /// <summary>
