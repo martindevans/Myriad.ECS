@@ -166,7 +166,8 @@ public sealed class CommandBuffer(World World)
             throw new InvalidOperationException("Unknown entity ID in SetBuffered");
 
         // Try to find this component in the set
-        var index = set.IndexOfKey(ComponentID<T>.ID);
+        var key = ComponentID<T>.ID;
+        var index = set.IndexOfKey(key);
         if (index != -1)
         {
             if (!allowDuplicates)
@@ -177,7 +178,12 @@ public sealed class CommandBuffer(World World)
             prevSetter.ReturnToPool();
 
             // overwrite it with new setter
-            set.Values[index] = GenericComponentSetter<T>.Get(value);
+            var newSetter = GenericComponentSetter<T>.Get(value);
+#if NET6_0_OR_GREATER
+            set.SetValueAtIndex(index, newSetter);
+#else
+            set[key] = newSetter;
+#endif
         }
         else
         {

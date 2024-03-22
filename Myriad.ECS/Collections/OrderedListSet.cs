@@ -151,35 +151,37 @@ internal class OrderedListSet<TItem>
         return _items.BinarySearch(item) >= 0;
     }
 
-    public bool IsProperSubsetOf(IEnumerable<TItem> other)
-    {
-        throw new NotImplementedException();
-    }
+    //todo: other set methods when needed
 
-    public bool IsProperSubsetOf(OrderedListSet<TItem> other)
-    {
-        throw new NotImplementedException();
-    }
+    //public bool IsProperSubsetOf(IEnumerable<TItem> other)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
-    public bool IsProperSupersetOf(IEnumerable<TItem> other)
-    {
-        throw new NotImplementedException();
-    }
+    //public bool IsProperSubsetOf(OrderedListSet<TItem> other)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
-    public bool IsProperSupersetOf(OrderedListSet<TItem> other)
-    {
-        throw new NotImplementedException();
-    }
+    //public bool IsProperSupersetOf(IEnumerable<TItem> other)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
-    public bool IsSubsetOf(IEnumerable<TItem> other)
-    {
-        throw new NotImplementedException();
-    }
+    //public bool IsProperSupersetOf(OrderedListSet<TItem> other)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
-    public bool IsSubsetOf(OrderedListSet<TItem> other)
-    {
-        throw new NotImplementedException();
-    }
+    //public bool IsSubsetOf(IEnumerable<TItem> other)
+    //{
+    //    throw new NotImplementedException();
+    //}
+
+    //public bool IsSubsetOf(OrderedListSet<TItem> other)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
     #region IsSupersetOf
     public bool IsSupersetOf(IEnumerable<TItem> other)

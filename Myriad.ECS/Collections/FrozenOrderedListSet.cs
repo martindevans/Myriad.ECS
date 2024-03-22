@@ -9,11 +9,6 @@ public class FrozenOrderedListSet<TItem>
     public int Count => _items.Count;
 
     #region constructors
-    internal FrozenOrderedListSet()
-    {
-        _items = new();
-    }
-
     internal FrozenOrderedListSet(List<TItem> items)
     {
         _items = new OrderedListSet<TItem>(items);
@@ -52,41 +47,43 @@ public class FrozenOrderedListSet<TItem>
         return _items.Contains(item);
     }
 
-    #region IsProperSubsetOf
-    internal bool IsProperSubsetOf(OrderedListSet<TItem> other)
-    {
-        return _items.IsProperSubsetOf(other);
-    }
+    //todo: other set methods when needed
 
-    public bool IsProperSubsetOf(FrozenOrderedListSet<TItem> other)
-    {
-        return _items.IsProperSubsetOf(other._items);
-    }
-    #endregion
+    //#region IsProperSubsetOf
+    //internal bool IsProperSubsetOf(OrderedListSet<TItem> other)
+    //{
+    //    return _items.IsProperSubsetOf(other);
+    //}
 
-    #region IsProperSupersetOf
-    internal bool IsProperSupersetOf(OrderedListSet<TItem> other)
-    {
-        return _items.IsProperSupersetOf(other);
-    }
+    //public bool IsProperSubsetOf(FrozenOrderedListSet<TItem> other)
+    //{
+    //    return _items.IsProperSubsetOf(other._items);
+    //}
+    //#endregion
 
-    public bool IsProperSupersetOf(FrozenOrderedListSet<TItem> other)
-    {
-        return _items.IsProperSupersetOf(other._items);
-    }
-    #endregion
+    //#region IsProperSupersetOf
+    //internal bool IsProperSupersetOf(OrderedListSet<TItem> other)
+    //{
+    //    return _items.IsProperSupersetOf(other);
+    //}
 
-    #region IsSubsetOf
-    internal bool IsSubsetOf(OrderedListSet<TItem> other)
-    {
-        return _items.IsSubsetOf(other);
-    }
+    //public bool IsProperSupersetOf(FrozenOrderedListSet<TItem> other)
+    //{
+    //    return _items.IsProperSupersetOf(other._items);
+    //}
+    //#endregion
 
-    public bool IsSubsetOf(FrozenOrderedListSet<TItem> other)
-    {
-        return _items.IsSubsetOf(other._items);
-    }
-    #endregion
+    //#region IsSubsetOf
+    //internal bool IsSubsetOf(OrderedListSet<TItem> other)
+    //{
+    //    return _items.IsSubsetOf(other);
+    //}
+
+    //public bool IsSubsetOf(FrozenOrderedListSet<TItem> other)
+    //{
+    //    return _items.IsSubsetOf(other._items);
+    //}
+    //#endregion
 
     #region IsSupersetOf
     internal bool IsSupersetOf(OrderedListSet<TItem> other)
