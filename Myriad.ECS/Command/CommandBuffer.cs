@@ -165,18 +165,26 @@ public sealed class CommandBuffer(World World)
         if (!_bufferedSets.TryGetValue(id, out var set))
             throw new InvalidOperationException("Unknown entity ID in SetBuffered");
 
-        // Remove previous setter, if this was one
-        if (set.Remove(ComponentID<T>.ID, out var prevSetter))
+        // Try to find this component in the set
+        var index = set.IndexOfKey(ComponentID<T>.ID);
+        if (index != -1)
         {
             if (!allowDuplicates)
                 throw new InvalidOperationException("Cannot set the same component twice onto a buffered entity");
+
+            // Remove and recycle the old setter
+            var prevSetter = set.Values[index];
             prevSetter.ReturnToPool();
+
+            // overwrite it with new setter
+            set.Values[index] = GenericComponentSetter<T>.Get(value);
         }
-
-        // Add a setter to the list
-        var setter = GenericComponentSetter<T>.Get(value);
-
-        set.Add(setter.ID, setter);
+        else
+        {
+            // Add a setter to the set
+            var setter = GenericComponentSetter<T>.Get(value);
+            set.Add(setter.ID, setter);
+        }
     }
 
     /// <summary>

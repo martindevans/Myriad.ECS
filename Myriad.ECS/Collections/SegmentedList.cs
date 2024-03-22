@@ -14,7 +14,7 @@ internal class SegmentedList<TItem>
     /// <summary>
     /// Total capacity in all segments
     /// </summary>
-    public int TotalCapacity => SegmentCapacity * _segments.Count;
+    public int TotalCapacity { get; private set; }
 
     private readonly List<TItem[]> _segments = [];
 
@@ -58,5 +58,6 @@ internal class SegmentedList<TItem>
     public void Grow()
     {
         _segments.Add(new TItem[SegmentCapacity]);
+        TotalCapacity += SegmentCapacity;
     }
 }

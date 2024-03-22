@@ -39,7 +39,7 @@ public class CommandBufferTests
 
         // Create lots of entities
         var buffered = new List<CommandBuffer.BufferedEntity>();
-        for (var i = 0; i < 5000; i++)
+        for (var i = 0; i < 50000; i++)
             buffered.Add(buffer.Create().Set(new ComponentInt32(i)));
 
         // Execute buffer
