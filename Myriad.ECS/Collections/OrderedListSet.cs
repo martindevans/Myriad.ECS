@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using System.Runtime.InteropServices;
 using Myriad.ECS.Extensions;
+using Myriad.ECS.IDs;
 
 namespace Myriad.ECS.Collections;
 
@@ -8,7 +10,6 @@ namespace Myriad.ECS.Collections;
 /// </summary>
 /// <typeparam name="TItem"></typeparam>
 internal class OrderedListSet<TItem>
-    : IReadOnlySet<TItem>
     where TItem : IComparable<TItem>, IEquatable<TItem>
 {
     private readonly List<TItem> _items = [ ];
@@ -22,7 +23,9 @@ internal class OrderedListSet<TItem>
     // ReSharper disable once ParameterTypeCanBeEnumerable.Local
     public OrderedListSet(List<TItem> items)
     {
-        _items = [..items];
+        _items.EnsureCapacity(items.Count);
+        foreach (var item in items)
+            Add(item);
     }
 
     // ReSharper disable once ParameterTypeCanBeEnumerable.Local (Justification: the fact this is a set is important, it means there are definitely no duplicates)
@@ -42,9 +45,21 @@ internal class OrderedListSet<TItem>
     {
         _items = [..items._items];
     }
+
+    public OrderedListSet(FrozenOrderedListSet<TItem> items)
+    {
+        _items.EnsureCapacity(items.Count);
+        foreach (var item in items)
+            _items.Add(item);
+    }
     #endregion
 
-    #region mutate
+    internal IReadOnlyCollection<TItem> LINQ()
+    {
+        return _items;
+    }
+
+    #region add
     public bool Add(TItem item)
     {
         var index = _items.BinarySearch(item);
@@ -54,7 +69,9 @@ internal class OrderedListSet<TItem>
         _items.Insert(~index, item);
         return true;
     }
+    #endregion
 
+    #region unionwith
     internal void UnionWith<TSet>(TSet items)
         where TSet : IReadOnlySet<TItem>
     {
@@ -68,6 +85,43 @@ internal class OrderedListSet<TItem>
             foreach (var item in items)
                 Add(item);
         }
+    }
+
+    internal void UnionWith(OrderedListSet<TItem> items)
+    {
+        if (_items.Count == 0)
+        {
+            _items.AddRange(items._items);
+        }
+        else
+        {
+            foreach (var item in items)
+                Add(item);
+        }
+    }
+
+    internal void UnionWith(FrozenOrderedListSet<TItem> items)
+    {
+        if (_items.Count == 0)
+        {
+            _items.EnsureCapacity(items.Count);
+            foreach (var item in items)
+                _items.Add(item);
+        }
+        else
+        {
+            _items.EnsureCapacity(_items.Count + items.Count);
+            foreach (var item in items)
+                Add(item);
+        }
+    }
+    #endregion
+
+    public void IntersectWith(FrozenOrderedListSet<TItem> other)
+    {
+        for (var i = _items.Count - 1; i >= 0; i--)
+            if (!other.Contains(_items[i]))
+                _items.RemoveAt(i);
     }
 
     public bool Remove(TItem item)
@@ -84,24 +138,11 @@ internal class OrderedListSet<TItem>
     {
         _items.Clear();
     }
-    #endregion
 
     #region GetEnumerator
     public List<TItem>.Enumerator GetEnumerator()
     {
         return _items.GetEnumerator();
-    }
-
-    IEnumerator<TItem> IEnumerable<TItem>.GetEnumerator()
-    {
-        // ReSharper disable once HeapView.BoxingAllocation
-        return _items.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        // ReSharper disable once HeapView.BoxingAllocation
-        return GetEnumerator();
     }
     #endregion
 
@@ -115,12 +156,27 @@ internal class OrderedListSet<TItem>
         throw new NotImplementedException();
     }
 
+    public bool IsProperSubsetOf(OrderedListSet<TItem> other)
+    {
+        throw new NotImplementedException();
+    }
+
     public bool IsProperSupersetOf(IEnumerable<TItem> other)
     {
         throw new NotImplementedException();
     }
 
+    public bool IsProperSupersetOf(OrderedListSet<TItem> other)
+    {
+        throw new NotImplementedException();
+    }
+
     public bool IsSubsetOf(IEnumerable<TItem> other)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool IsSubsetOf(OrderedListSet<TItem> other)
     {
         throw new NotImplementedException();
     }
@@ -210,11 +266,24 @@ internal class OrderedListSet<TItem>
         if (Count != other.Count)
             return false;
 
+#if NET6_0_OR_GREATER
+        var a = CollectionsMarshal.AsSpan(_items);
+        var b = CollectionsMarshal.AsSpan(other._items);
+        return a.SequenceEqual(b);
+#else
         for (var i = other._items.Count - 1; i >= 0; i--)
             if (!_items[i].Equals(other._items[i]))
                 return false;
 
         return true;
+#endif
+    }
+#endregion
+
+    #region LINQ
+    internal TItem Single()
+    {
+        return _items.Single();
     }
     #endregion
 }

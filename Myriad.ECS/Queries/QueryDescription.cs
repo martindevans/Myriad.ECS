@@ -106,7 +106,7 @@ public sealed class QueryDescription(
             return null;
 
         // Get a hashset, which we might return later
-        var set = Pool<HashSet<ComponentID>>.Get();
+        var set = Pool<OrderedListSet<ComponentID>>.Get();
         set.Clear();
 
         // Check if there are any "exactly one" items
@@ -118,7 +118,7 @@ public sealed class QueryDescription(
             if (set.Count != 1)
             {
                 set.Clear();
-                Pool<HashSet<ComponentID>>.Return(set);
+                Pool.Return(set);
                 return null;
             }
 
@@ -134,14 +134,14 @@ public sealed class QueryDescription(
             if (set.Count == 0)
             {
                 set.Clear();
-                Pool<HashSet<ComponentID>>.Return(set);
+                Pool.Return(set);
                 return null;
             }
         }
         else
         {
             set.Clear();
-            Pool<HashSet<ComponentID>>.Return(set);
+            Pool.Return(set);
             set = null;
         }
 

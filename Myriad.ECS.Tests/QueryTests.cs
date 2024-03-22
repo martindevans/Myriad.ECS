@@ -60,8 +60,8 @@ public class QueryTests
 
         Assert.IsNotNull(a);
         Assert.AreEqual(1, a.Count);
-        Assert.IsNull(a.Single().AtLeastOne);
-        Assert.IsNull(a.Single().ExactlyOne);
+        Assert.IsNull(a.LINQ().Single().AtLeastOne);
+        Assert.IsNull(a.LINQ().Single().ExactlyOne);
     }
 
     [TestMethod]
@@ -80,8 +80,8 @@ public class QueryTests
         var a = q.GetArchetypes();
         Assert.IsNotNull(a);
         Assert.AreEqual(1, a.Count);
-        Assert.IsNull(a.Single().AtLeastOne);
-        Assert.IsNull(a.Single().ExactlyOne);
+        Assert.IsNull(a.LINQ().Single().AtLeastOne);
+        Assert.IsNull(a.LINQ().Single().ExactlyOne);
 
         // Add an archetype to the world
         var c = new OrderedListSet<ComponentID>(new HashSet<ComponentID> { ComponentRegistry.Get<ComponentInt32>(), ComponentRegistry.Get<ComponentFloat>() });
@@ -90,7 +90,7 @@ public class QueryTests
         var b = q.GetArchetypes();
         Assert.IsNotNull(b);
         Assert.AreEqual(2, b.Count);
-        Assert.IsTrue(a.All(x => x.Archetype.Components.Contains(ComponentRegistry.Get<ComponentFloat>())));
+        Assert.IsTrue(a.LINQ().All(x => x.Archetype.Components.Contains(ComponentRegistry.Get<ComponentFloat>())));
     }
 
     [TestMethod]
@@ -111,7 +111,7 @@ public class QueryTests
         Assert.IsNotNull(a);
         Assert.AreEqual(2, a.Count);
 
-        Assert.IsTrue(a.All(x => x.Archetype.Components.Contains(ComponentRegistry.Get<ComponentFloat>())));
+        Assert.IsTrue(a.LINQ().All(x => x.Archetype.Components.Contains(ComponentRegistry.Get<ComponentFloat>())));
     }
 
     [TestMethod]
@@ -133,7 +133,7 @@ public class QueryTests
         Assert.IsNotNull(a);
         Assert.AreEqual(1, a.Count);
 
-        var single = a.Single();
+        var single = a.LINQ().Single();
         Assert.IsNull(single.AtLeastOne);
         Assert.IsNull(single.ExactlyOne);
         Assert.IsTrue(single.Archetype.Components.Contains(ComponentRegistry.Get<ComponentFloat>()));

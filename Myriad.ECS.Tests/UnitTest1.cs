@@ -9,12 +9,6 @@ namespace Myriad.ECS.Tests;
 [TestClass]
 public class UnitTest1
 {
-    public UnitTest1()
-    {
-        // Register all the component we need
-        ComponentRegistry.Register(Assembly.GetExecutingAssembly());
-    }
-
     [TestMethod]
     public void TestMethod1()
     {

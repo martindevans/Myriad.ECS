@@ -101,17 +101,12 @@ public sealed partial class Archetype
         // Increase archetype entity count
         EntityCount++;
 
-        // Iterate over all candidate chunks, searching for one with space for an entity.
-        // Remove any from the list that turn out not to have space
-        for (var i = _chunksWithSpace.Count - 1; i >= 0; i--)
-        {
-            var chunk = _chunksWithSpace[i];
+        // Trim chunks with space collection to remove items
+        _chunksWithSpace.RemoveAll(static c => c.EntityCount == CHUNK_SIZE);
 
-            if (chunk.EntityCount >= CHUNK_SIZE)
-                _chunksWithSpace.RemoveAt(i);
-            else
-                return _chunksWithSpace[i].AddEntity(entity, ref info);
-        }
+        // If there's one with space, use it
+        if (_chunksWithSpace.Count > 0)
+            return _chunksWithSpace[0].AddEntity(entity, ref info);
 
         // No space in any chunks, create a new chunk
         var newChunk = _spareChunks.Count > 0 ? _spareChunks.Pop() : new Chunk(this, CHUNK_SIZE, _componentIndexLookup, _componentTypes, _componentIDs);

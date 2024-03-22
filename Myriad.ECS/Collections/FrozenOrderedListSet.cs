@@ -3,7 +3,6 @@
 namespace Myriad.ECS.Collections;
 
 public class FrozenOrderedListSet<TItem>
-    : IReadOnlySet<TItem>
     where TItem : IComparable<TItem>, IEquatable<TItem>
 {
     private readonly OrderedListSet<TItem> _items;
@@ -12,7 +11,7 @@ public class FrozenOrderedListSet<TItem>
     #region constructors
     internal FrozenOrderedListSet()
     {
-        _items = [ ];
+        _items = new();
     }
 
     internal FrozenOrderedListSet(List<TItem> items)
@@ -25,11 +24,6 @@ public class FrozenOrderedListSet<TItem>
         _items = new OrderedListSet<TItem>(items);
     }
 
-    internal FrozenOrderedListSet(IReadOnlySet<TItem> items)
-    {
-        _items = new OrderedListSet<TItem>(items);
-    }
-
     internal FrozenOrderedListSet(OrderedListSet<TItem> items)
     {
         _items = new OrderedListSet<TItem>(items);
@@ -37,26 +31,19 @@ public class FrozenOrderedListSet<TItem>
 
     internal FrozenOrderedListSet(FrozenOrderedListSet<TItem> items)
     {
-        _items = new OrderedListSet<TItem>(items);
+        _items = new OrderedListSet<TItem>(items._items);
     }
     #endregion
+
+    internal IReadOnlyCollection<TItem> LINQ()
+    {
+        return _items.LINQ();
+    }
 
     #region GetEnumerator
     public List<TItem>.Enumerator GetEnumerator()
     {
         return _items.GetEnumerator();
-    }
-
-    IEnumerator<TItem> IEnumerable<TItem>.GetEnumerator()
-    {
-        // ReSharper disable once HeapView.BoxingAllocation
-        return _items.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        // ReSharper disable once HeapView.BoxingAllocation
-        return GetEnumerator();
     }
     #endregion
 
@@ -66,16 +53,6 @@ public class FrozenOrderedListSet<TItem>
     }
 
     #region IsProperSubsetOf
-    public bool IsProperSubsetOf(IEnumerable<TItem> other)
-    {
-        return other switch
-        {
-            OrderedListSet<TItem> ols => _items.IsProperSubsetOf(ols),
-            FrozenOrderedListSet<TItem> fols => _items.IsProperSubsetOf(fols),
-            _ => _items.IsProperSubsetOf(other)
-        };
-    }
-
     internal bool IsProperSubsetOf(OrderedListSet<TItem> other)
     {
         return _items.IsProperSubsetOf(other);
@@ -88,16 +65,6 @@ public class FrozenOrderedListSet<TItem>
     #endregion
 
     #region IsProperSupersetOf
-    bool IReadOnlySet<TItem>.IsProperSupersetOf(IEnumerable<TItem> other)
-    {
-        return other switch
-        {
-            OrderedListSet<TItem> ols => _items.IsProperSupersetOf(ols),
-            FrozenOrderedListSet<TItem> fols => _items.IsProperSupersetOf(fols),
-            _ => _items.IsProperSupersetOf(other)
-        };
-    }
-
     internal bool IsProperSupersetOf(OrderedListSet<TItem> other)
     {
         return _items.IsProperSupersetOf(other);
@@ -110,16 +77,6 @@ public class FrozenOrderedListSet<TItem>
     #endregion
 
     #region IsSubsetOf
-    bool IReadOnlySet<TItem>.IsSubsetOf(IEnumerable<TItem> other)
-    {
-        return other switch
-        {
-            OrderedListSet<TItem> ols => _items.IsSubsetOf(ols),
-            FrozenOrderedListSet<TItem> fols => _items.IsSubsetOf(fols),
-            _ => _items.IsSubsetOf(other)
-        };
-    }
-
     internal bool IsSubsetOf(OrderedListSet<TItem> other)
     {
         return _items.IsSubsetOf(other);
@@ -132,16 +89,6 @@ public class FrozenOrderedListSet<TItem>
     #endregion
 
     #region IsSupersetOf
-    bool IReadOnlySet<TItem>.IsSupersetOf(IEnumerable<TItem> other)
-    {
-        return other switch
-        {
-            OrderedListSet<TItem> ols => _items.IsSupersetOf(ols),
-            FrozenOrderedListSet<TItem> fols => _items.IsSupersetOf(fols),
-            _ => _items.IsSupersetOf(other)
-        };
-    }
-
     internal bool IsSupersetOf(OrderedListSet<TItem> other)
     {
         return _items.IsSupersetOf(other);
@@ -154,16 +101,6 @@ public class FrozenOrderedListSet<TItem>
     #endregion
 
     #region Overlaps
-    bool IReadOnlySet<TItem>.Overlaps(IEnumerable<TItem> other)
-    {
-        return other switch
-        {
-            OrderedListSet<TItem> ols => _items.Overlaps(ols),
-            FrozenOrderedListSet<TItem> fols => _items.Overlaps(fols),
-            _ => _items.Overlaps(other)
-        };
-    }
-
     internal bool Overlaps(OrderedListSet<TItem> other)
     {
         return _items.Overlaps(other);
@@ -176,16 +113,6 @@ public class FrozenOrderedListSet<TItem>
     #endregion
 
     #region SetEquals
-    bool IReadOnlySet<TItem>.SetEquals(IEnumerable<TItem> other)
-    {
-        return other switch
-        {
-            OrderedListSet<TItem> ols => _items.SetEquals(ols),
-            FrozenOrderedListSet<TItem> fols => _items.SetEquals(fols),
-            _ => _items.SetEquals(other)
-        };
-    }
-
     internal bool SetEquals(OrderedListSet<TItem> other)
     {
         return _items.SetEquals(other);

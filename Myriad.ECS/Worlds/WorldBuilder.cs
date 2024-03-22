@@ -12,7 +12,11 @@ public sealed partial class WorldBuilder
 #if !NET6_0_OR_GREATER
     private bool AddArchetype(HashSet<ComponentID> ids)
     {
-        return AddArchetype(new FrozenOrderedListSet<ComponentID>(ids));
+        if (_archetypes.Any(a => a.SetEquals(ids)))
+            return false;
+
+        _archetypes.Add(new OrderedListSet<ComponentID>(ids));
+        return true;
     }
 #endif
 

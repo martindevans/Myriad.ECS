@@ -12,13 +12,13 @@ public sealed class CommandBuffer(World World)
     private uint _version;
     private uint _nextBufferedEntityId;
 
-    private readonly SortedList<uint, SortedList<ComponentID, BaseComponentSetter>> _bufferedSets = [];
-    private readonly SortedList<Entity, SortedList<ComponentID, BaseComponentSetter>> _entitySets = [];
-    private readonly SortedList<Entity, OrderedListSet<ComponentID>> _removes = [];
-    private readonly OrderedListSet<Entity> _modified = [ ];
+    private readonly SortedList<uint, SortedList<ComponentID, BaseComponentSetter>> _bufferedSets = [ ];
+    private readonly SortedList<Entity, SortedList<ComponentID, BaseComponentSetter>> _entitySets = [ ];
+    private readonly SortedList<Entity, OrderedListSet<ComponentID>> _removes = [ ];
+    private readonly OrderedListSet<Entity> _modified = new();
     private readonly List<Entity> _deletes = [ ];
 
-    private readonly OrderedListSet<ComponentID> _tempComponentIdSet = [ ];
+    private readonly OrderedListSet<ComponentID> _tempComponentIdSet = new();
 
     #region playback
     public Resolver Playback()
