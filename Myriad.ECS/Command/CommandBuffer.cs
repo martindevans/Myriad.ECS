@@ -10,9 +10,8 @@ namespace Myriad.ECS.Command;
 public sealed class CommandBuffer(World World)
 {
     private uint _version;
-    private uint _nextBufferedEntityId;
 
-    private readonly SortedList<uint, SortedList<ComponentID, BaseComponentSetter>> _bufferedSets = [ ];
+    private readonly List<SortedList<ComponentID, BaseComponentSetter>> _bufferedSets = [ ];
     private readonly SortedList<Entity, SortedList<ComponentID, BaseComponentSetter>> _entitySets = [ ];
     private readonly SortedList<Entity, OrderedListSet<ComponentID>> _removes = [ ];
     private readonly OrderedListSet<Entity> _modified = new();
@@ -120,8 +119,11 @@ public sealed class CommandBuffer(World World)
     private void CreateBufferedEntities(Resolver resolver)
     {
         _tempComponentIdSet.Clear();
-        foreach (var (bufEntId, components) in _bufferedSets.Enumerable())
+
+        for (uint bufEntId = 0; bufEntId < _bufferedSets.Count; bufEntId++)
         {
+            var components = _bufferedSets[(int)bufEntId];
+
             // Build a set of components on this new entity
             _tempComponentIdSet.Clear();
             foreach (var (compId, _) in components.Enumerable())
@@ -154,20 +156,23 @@ public sealed class CommandBuffer(World World)
         var set = Pool<SortedList<ComponentID, BaseComponentSetter>>.Get();
         set.Clear();
 
-        var id = checked(_nextBufferedEntityId++);
-        _bufferedSets.Add(id, set);
+        _bufferedSets.Add(set);
+        var id = (uint)(_bufferedSets.Count - 1);
+
         return new BufferedEntity(id, this);
     }
 
     private void SetBuffered<T>(uint id, T value, bool allowDuplicates = false)
         where T : IComponent
     {
-        if (!_bufferedSets.TryGetValue(id, out var set))
+        if (id >= _bufferedSets.Count)
             throw new InvalidOperationException("Unknown entity ID in SetBuffered");
+
+        var set = _bufferedSets[(int)id];
 
         // Try to find this component in the set
         var key = ComponentID<T>.ID;
-        var index = set.IndexOfKey(key);
+        var index =  set.IndexOfKey(key);
         if (index != -1)
         {
             if (!allowDuplicates)
