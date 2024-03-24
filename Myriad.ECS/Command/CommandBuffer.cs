@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.Allocations;
+﻿using System.Buffers;
+using Myriad.ECS.Allocations;
 using Myriad.ECS.Collections;
 using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
@@ -11,7 +12,11 @@ public sealed class CommandBuffer(World World)
 {
     private uint _version;
 
-    private readonly List<SortedList<ComponentID, BaseComponentSetter>> _bufferedSets = [ ];
+    private readonly List<BufferedEntityData> _bufferedSets = [ ];
+
+    private int _aggregateNodesCount;
+    private readonly BufferedAggregateNode[] _aggregateNodes = new BufferedAggregateNode[512];
+
     private readonly SortedList<Entity, SortedList<ComponentID, BaseComponentSetter>> _entitySets = [ ];
     private readonly SortedList<Entity, OrderedListSet<ComponentID>> _removes = [ ];
     private readonly OrderedListSet<Entity> _modified = new();
@@ -108,6 +113,7 @@ public sealed class CommandBuffer(World World)
         _entitySets.Clear();
         _removes.Clear();
         _tempComponentIdSet.Clear();
+        _aggregateNodesCount = 0;
 
         // Update the version of this buffer, invalidating all buffered entities for further modification
         unchecked { _version++; }
@@ -120,45 +126,91 @@ public sealed class CommandBuffer(World World)
     {
         _tempComponentIdSet.Clear();
 
-        for (uint bufEntId = 0; bufEntId < _bufferedSets.Count; bufEntId++)
+        // Keep a map from node ID -> archetype. This means we only need to calculate it once
+        // per node ID.
+        var archetypeLookup = ArrayPool<Archetype>.Shared.Rent(_aggregateNodesCount);
+        Array.Clear(archetypeLookup, 0, archetypeLookup.Length);
+        try
         {
-            var components = _bufferedSets[(int)bufEntId];
 
-            // Build a set of components on this new entity
-            _tempComponentIdSet.Clear();
-            foreach (var (compId, _) in components.Enumerable())
-                _tempComponentIdSet.Add(compId);
-
-            // Allocate an entity for it
-            var (entity, slot) = World.CreateEntity(_tempComponentIdSet);
-
-            // Store the new ID in the resolver so it can be retrieved later
-            resolver.Lookup.Add(bufEntId, entity);
-
-            // Write the components into the entity
-            foreach (var (_, setter) in components.Enumerable())
+            for (var i = 0; i < _bufferedSets.Count; i++)
             {
-                setter.Write(slot);
-                setter.ReturnToPool();
+                var bufferedData = _bufferedSets[i];
+                var components = bufferedData.Setters;
+
+                var archetype = GetArchetype(bufferedData, archetypeLookup);
+
+                var (entity, slot) = archetype.CreateEntity();
+
+                // Store the new ID in the resolver so it can be retrieved later
+                resolver.Lookup.Add(bufferedData.Id, entity);
+
+                // Write the components into the entity
+                foreach (var (_, setter) in components.Enumerable())
+                {
+                    setter.Write(slot);
+                    setter.ReturnToPool();
+                }
+
+                // Recycle
+                components.Clear();
+                Pool.Return(components);
             }
 
-            // Recycle
-            components.Clear();
-            Pool.Return(components);
+            _bufferedSets.Clear();
+            _tempComponentIdSet.Clear();
         }
-        _bufferedSets.Clear();
-        _tempComponentIdSet.Clear();
+        finally
+        {
+            ArrayPool<Archetype>.Shared.Return(archetypeLookup);
+        }
     }
+
+    private Archetype GetArchetype(BufferedEntityData entityData, Archetype?[] archetypeLookup)
+    {
+        // Check the cache
+        if (entityData.Node >= 0)
+        {
+            var a = archetypeLookup[entityData.Node];
+            if (a != null)
+                return a;
+        }
+
+        // Build a set of components on this new entity
+        _tempComponentIdSet.Clear();
+        foreach (var (compId, _) in entityData.Setters.Enumerable())
+            _tempComponentIdSet.Add(compId);
+
+        // Get the archetype
+        var archetype = World.GetOrCreateArchetype(_tempComponentIdSet);
+
+        // If the node ID is positive, cache it
+        if (entityData.Node >= 0)
+            archetypeLookup[entityData.Node] = archetype;
+
+        return archetype;
+    }
+
     #endregion
 
     public BufferedEntity Create()
     {
+        // Ensure the root aggregation node exists
+        if (_aggregateNodesCount == 0)
+        {
+            _aggregateNodesCount++;
+            _aggregateNodes[0] = new BufferedAggregateNode();
+        }
+
+        // Get a set to hold all of the component setters
         var set = Pool<SortedList<ComponentID, BaseComponentSetter>>.Get();
         set.Clear();
 
-        _bufferedSets.Add(set);
-        var id = (uint)(_bufferedSets.Count - 1);
-
+        // Store this entity in the collection of entities
+        // Put it in aggregate node 0 (i.e. no components)
+        var id = (uint)(_bufferedSets.Count);
+        _bufferedSets.Add(new BufferedEntityData(id, set, 0));
+        
         return new BufferedEntity(id, this);
     }
 
@@ -168,33 +220,42 @@ public sealed class CommandBuffer(World World)
         if (id >= _bufferedSets.Count)
             throw new InvalidOperationException("Unknown entity ID in SetBuffered");
 
-        var set = _bufferedSets[(int)id];
+        var bufferedData = _bufferedSets[(int)id];
+        var setters = bufferedData.Setters;
 
         // Try to find this component in the set
         var key = ComponentID<T>.ID;
-        var index =  set.IndexOfKey(key);
+        var index =  setters.IndexOfKey(key);
         if (index != -1)
         {
             if (!allowDuplicates)
                 throw new InvalidOperationException("Cannot set the same component twice onto a buffered entity");
 
             // Remove and recycle the old setter
-            var prevSetter = set.Values[index];
+            var prevSetter = setters.Values[index];
             prevSetter.ReturnToPool();
 
             // overwrite it with new setter
             var newSetter = GenericComponentSetter<T>.Get(value);
 #if NET6_0_OR_GREATER
-            set.SetValueAtIndex(index, newSetter);
+            setters.SetValueAtIndex(index, newSetter);
 #else
-            set[key] = newSetter;
+            setters[key] = newSetter;
 #endif
         }
         else
         {
             // Add a setter to the set
             var setter = GenericComponentSetter<T>.Get(value);
-            set.Add(setter.ID, setter);
+            setters.Add(setter.ID, setter);
+
+            // Update node id. Skip it if it's in node -1, once an entity is
+            // marked as node -1 it's been opted out of aggregation.
+            if (bufferedData.Node != -1)
+            {
+                bufferedData.Node = _aggregateNodes[bufferedData.Node].GetNodeIndex(key, _aggregateNodes, ref _aggregateNodesCount);
+                _bufferedSets[(int)id] = bufferedData;
+            }
         }
     }
 
@@ -283,6 +344,9 @@ public sealed class CommandBuffer(World World)
         }
     }
 
+    /// <summary>
+    /// An entity that has been created in a command buffer, but not yet created. Can be used to add components.
+    /// </summary>
     public readonly record struct BufferedEntity
     {
         private readonly uint _id;
@@ -323,6 +387,64 @@ public sealed class CommandBuffer(World World)
                 throw new InvalidOperationException("Cannot use a resolver from one CommandBuffer with BufferedEntity from another");
 
             return resolver.Lookup[_id];
+        }
+    }
+
+    private record struct BufferedEntityData(uint Id, SortedList<ComponentID, BaseComponentSetter> Setters, int Node)
+        : IComparable<BufferedEntityData>
+    {
+        public readonly int CompareTo(BufferedEntityData other)
+        {
+            return Node.CompareTo(other.Node);
+        }
+    }
+
+    private struct BufferedAggregateNode
+    {
+        private const int MaxEdges = 16;
+
+        private int _edgeCount;
+        private unsafe fixed int _componentIdBuffer[MaxEdges];
+        private unsafe fixed int _nodeIdBuffer[MaxEdges];
+
+        public int GetNodeIndex(ComponentID component, BufferedAggregateNode[] nodesArr, ref int nodesCount)
+        {
+            unsafe
+            {
+                fixed (int* componentIdBufferPtr = _componentIdBuffer)
+                fixed (int* nodeIdBufferPtr = _nodeIdBuffer)
+                {
+                    var componentIds = new Span<int>(componentIdBufferPtr, MaxEdges);
+                    var nodeIds = new Span<int>(nodeIdBufferPtr, MaxEdges);
+
+                    // Find the index of the edge for this component
+                    var idx = componentIds.Slice(0, _edgeCount).IndexOf(component.Value);
+                    if (idx >= 0)
+                        return nodeIds[idx];
+
+                    // Not found...
+
+                    // If the buffers are full return node -1. This is the "no particular group" node.
+                    if (_edgeCount == MaxEdges)
+                        return -1;
+
+                    // If the node array itself is full return -1. This is the "no particular group" node.
+                    if (nodesCount == nodesArr.Length)
+                        return -1;
+
+                    // Create a new node
+                    nodesArr[nodesCount] = new BufferedAggregateNode();
+                    var newNodeId = nodesCount++;
+
+                    // Create an edge point to a new node
+                    componentIds[_edgeCount] = component.Value;
+                    nodeIds[_edgeCount] = newNodeId;
+                    _edgeCount++;
+
+                    
+                    return newNodeId;
+                }
+            }
         }
     }
 

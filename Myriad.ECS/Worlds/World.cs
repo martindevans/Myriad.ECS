@@ -97,7 +97,7 @@ public sealed partial class World
         return a;
     }
 
-    private Archetype GetOrCreateArchetype(OrderedListSet<ComponentID> components)
+    internal Archetype GetOrCreateArchetype(OrderedListSet<ComponentID> components)
     {
         // Build archetype hash to accelerate querying
         var hash = ArchetypeHash.Create(components);
@@ -124,36 +124,39 @@ public sealed partial class World
 
         // Job done!
         return (entity, row);
-        
-        ref EntityInfo AllocateEntity(out Entity entity)
-        {
-            if (_deadEntities.Count > 0)
-            {
-                var prev = _deadEntities[^1];
-                _deadEntities.RemoveAt(_deadEntities.Count - 1);
-                entity = new Entity(prev.ID, unchecked(prev.Version + 1));
-
-                // Check if the version has rolled over and make sure we're _not_ using version 0
-                if (entity.Version == 0)
-                    entity = new Entity(entity.ID, 1);
-            }
-            else
-            {
-                // Allocate a new ID. This **must not** overflow!
-                entity = new Entity(checked(_nextEntityId++), 1);
-
-                // Check if the collection of all entities needs to grow
-                if (entity.ID >= _entities.TotalCapacity)
-                    _entities.Grow();
-            }
-
-            // Update the version
-            ref var slot = ref _entities[entity.ID];
-            slot.Version = entity.Version;
-
-            return ref slot;
-        }
     }
+
+    internal ref EntityInfo AllocateEntity(out Entity entity)
+    {
+        if (_deadEntities.Count > 0)
+        {
+            var prev = _deadEntities[^1];
+            _deadEntities.RemoveAt(_deadEntities.Count - 1);
+            entity = new Entity(prev.ID, unchecked(prev.Version + 1));
+
+            // Check if the version has rolled over and make sure we're _not_ using version 0
+            if (entity.Version == 0)
+                entity = new Entity(entity.ID, 1);
+        }
+        else
+        {
+            // Allocate a new ID. This **must not** overflow!
+            entity = new Entity(checked(_nextEntityId++), 1);
+
+            // Check if the collection of all entities needs to grow
+            if (entity.ID >= _entities.TotalCapacity)
+                _entities.Grow();
+        }
+
+        // Update the version
+        ref var slot = ref _entities[entity.ID];
+        slot.Version = entity.Version;
+
+        return ref slot;
+    }
+
+
+
 
     //todo: temp API?
     public ref T GetComponentRef<T>(Entity entity)

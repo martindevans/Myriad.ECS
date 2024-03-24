@@ -215,8 +215,8 @@ public class CommandBufferTests
         var buffer = new CommandBuffer(world);
 
         var eb = buffer
-            .Create()
-            .Set(new ComponentFloat(17));
+                .Create()
+                .Set(new ComponentFloat(17));
 
         var resolver = buffer.Playback();
         var entity = resolver.Resolve(eb);

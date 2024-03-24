@@ -1,6 +1,10 @@
 ﻿using BenchmarkDotNet.Running;
 using Benchmarks;
 
+//var e = new EntityCreateBenchmark();
+//e.Setup();
+//e.CreateBuffered();
+
 //var summary = BenchmarkRunner.Run<QueryBenchmark>();
 var summary = BenchmarkRunner.Run<EntityCreateBenchmark>();
 

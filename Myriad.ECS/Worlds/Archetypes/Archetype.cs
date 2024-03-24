@@ -90,6 +90,17 @@ public sealed partial class Archetype
         }
     }
 
+    internal (Entity entity, Row slot) CreateEntity()
+    {
+        // Allocate an entity in the world
+        ref var info = ref World.AllocateEntity(out var entity);
+
+        // Add it to this archetype, find a row to put components into
+        var row = AddEntity(entity, ref info);
+
+        return (entity, row);
+    }
+
     /// <summary>
     /// Find a chunk with space and add the given entity to it.
     /// </summary>
