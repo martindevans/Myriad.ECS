@@ -12,6 +12,11 @@ public sealed partial class CommandBuffer(World World)
 {
     private uint _version;
 
+    /// <summary>
+    /// Collection of all components to be set onto entities
+    /// </summary>
+    private readonly ComponentSetterCollection _setters = new();
+
     private readonly List<BufferedEntityData> _bufferedSets = [ ];
 
     // Keep track of a fix number of aggregation nodes. The root node (0) is the node for a new entity
@@ -103,10 +108,7 @@ public sealed partial class CommandBuffer(World World)
                 if (mod.Sets != null)
                 {
                     foreach (var (_, set) in mod.Sets.Enumerable())
-                    {
-                        set.Write(row);
-                        set.ReturnToPool();
-                    }
+                        _setters.Write(set, row);
 
                     // Recycle
                     mod.Sets.Clear();
@@ -114,6 +116,8 @@ public sealed partial class CommandBuffer(World World)
                 }
             }
         }
+
+        _setters.Clear();
         _entityModifications.Clear();
         _tempComponentIdSet.Clear();
         _aggregateNodesCount = 0;
@@ -150,10 +154,7 @@ public sealed partial class CommandBuffer(World World)
 
                 // Write the components into the entity
                 foreach (var (_, setter) in components.Enumerable())
-                {
-                    setter.Write(slot);
-                    setter.ReturnToPool();
-                }
+                    _setters.Write(setter, slot);
 
                 // Recycle
                 components.Clear();
@@ -193,7 +194,6 @@ public sealed partial class CommandBuffer(World World)
 
         return archetype;
     }
-
     #endregion
 
     public BufferedEntity Create()
@@ -206,7 +206,7 @@ public sealed partial class CommandBuffer(World World)
         }
 
         // Get a set to hold all of the component setters
-        var set = Pool<SortedList<ComponentID, BaseComponentSetter>>.Get();
+        var set = Pool<SortedList<ComponentID, ComponentSetterCollection.SetterId>>.Get();
         set.Clear();
 
         // Store this entity in the collection of entities
@@ -234,23 +234,15 @@ public sealed partial class CommandBuffer(World World)
             if (!allowDuplicates)
                 throw new InvalidOperationException("Cannot set the same component twice onto a buffered entity");
 
-            // Remove and recycle the old setter
-            var prevSetter = setters.Values[index];
-            prevSetter.ReturnToPool();
-
-            // overwrite it with new setter
-            var newSetter = GenericComponentSetter<T>.Get(value);
-#if NET6_0_OR_GREATER
-            setters.SetValueAtIndex(index, newSetter);
-#else
-            setters[key] = newSetter;
-#endif
+            _setters.Overwrite(setters.Values[index], value);
         }
         else
         {
-            // Add a setter to the set
-            var setter = GenericComponentSetter<T>.Get(value);
-            setters.Add(setter.ID, setter);
+            // Add to global collection of setters
+            var setterIndex = _setters.Add(value);
+
+            // Store the index in the per-entity collection
+            setters.Add(key, setterIndex);
 
             // Update node id. Skip it if it's in node -1, once an entity is
             // marked as node -1 it's been opted out of aggregation.
@@ -274,13 +266,19 @@ public sealed partial class CommandBuffer(World World)
         var mod = GetModificationData(entity, true, false);
 
         // Create a setter and store it in the list (recycling the old one, if it's there)
-        var setter = GenericComponentSetter<T>.Get(value);
-        if (mod.Sets!.Remove(setter.ID, out var old))
-            old.ReturnToPool();
-        mod.Sets!.Add(setter.ID, setter);
+        var id = ComponentID<T>.ID;
+        if (mod.Sets!.TryGetValue(id, out var existing))
+        {
+            _setters.Overwrite(existing, value);
+        }
+        else
+        {
+            var index = _setters.Add(value);
+            mod.Sets!.Add(id, index);
+        }
 
         // Remove it from the "remove" set. In case it was previously removed
-        mod.Removes?.Remove(setter.ID);
+        mod.Removes?.Remove(id);
     }
 
     /// <summary>
@@ -298,8 +296,7 @@ public sealed partial class CommandBuffer(World World)
         mod.Removes!.Add(id);
 
         // Remove it from the setters, if it's there
-        if (mod.Sets != null && mod.Sets.Remove(id, out var setter))
-            setter.ReturnToPool();
+        mod.Sets?.Remove(id);
     }
 
     /// <summary>
@@ -314,8 +311,6 @@ public sealed partial class CommandBuffer(World World)
         {
             if (mod.Sets != null)
             {
-                foreach (var (_, setter) in mod.Sets.Enumerable())
-                    setter.ReturnToPool();
                 mod.Sets.Clear();
                 Pool.Return(mod.Sets);
             }
@@ -348,7 +343,7 @@ public sealed partial class CommandBuffer(World World)
         if (idx == -1)
         {
             var mod = new EntityModificationData(
-                ensureSet ? Pool<SortedList<ComponentID, BaseComponentSetter>>.Get() : null,
+                ensureSet ? Pool<SortedList<ComponentID, ComponentSetterCollection.SetterId>>.Get() : null,
                 ensureRemove ? Pool<OrderedListSet<ComponentID>>.Get() : null
             );
             mod.Sets?.Clear();
@@ -366,7 +361,7 @@ public sealed partial class CommandBuffer(World World)
             var overwrite = false;
             if (mod.Sets == null && ensureSet)
             {
-                mod.Sets = Pool<SortedList<ComponentID, BaseComponentSetter>>.Get();
+                mod.Sets = Pool<SortedList<ComponentID, ComponentSetterCollection.SetterId>>.Get();
                 overwrite = true;
             }
 
@@ -395,7 +390,7 @@ public sealed partial class CommandBuffer(World World)
     /// <param name="Id">ID of this buffered entity, used in resolver to get actual entity</param>
     /// <param name="Setters">All setters to be run on this entity</param>
     /// <param name="Node">The "Node ID" of this entity, all buffered entities with the same node ID are in the same archetype (except -1)</param>
-    private record struct BufferedEntityData(uint Id, SortedList<ComponentID, BaseComponentSetter> Setters, int Node);
+    private record struct BufferedEntityData(uint Id, SortedList<ComponentID, ComponentSetterCollection.SetterId> Setters, int Node);
 
     private struct BufferedAggregateNode
     {
@@ -446,5 +441,5 @@ public sealed partial class CommandBuffer(World World)
         }
     }
 
-    private record struct EntityModificationData(SortedList<ComponentID, BaseComponentSetter>? Sets, OrderedListSet<ComponentID>? Removes);
+    private record struct EntityModificationData(SortedList<ComponentID, ComponentSetterCollection.SetterId>? Sets, OrderedListSet<ComponentID>? Removes);
 }
