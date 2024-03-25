@@ -8,7 +8,7 @@ using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Command;
 
-public sealed class CommandBuffer(World World)
+public sealed partial class CommandBuffer(World World)
 {
     private uint _version;
 
@@ -390,59 +390,12 @@ public sealed class CommandBuffer(World World)
     }
 
     /// <summary>
-    /// An entity that has been created in a command buffer, but not yet created. Can be used to add components.
+    /// Data about a new entity being created
     /// </summary>
-    public readonly record struct BufferedEntity
-    {
-        private readonly uint _id;
-        internal readonly uint Version;
-        private readonly CommandBuffer _buffer;
-
-        public BufferedEntity(uint id, CommandBuffer buffer)
-        {
-            _id = id;
-            _buffer = buffer;
-            Version = buffer._version;
-        }
-
-        private void Check()
-        {
-            if (Version != _buffer._version)
-                throw new InvalidOperationException("Cannot use `BufferedEntity` after CommandBuffer has been played");
-        }
-
-        public BufferedEntity Set<T>(T value, bool overwrite = false)
-            where T : IComponent
-        {
-            Check();
-            _buffer.SetBuffered(_id, value, overwrite);
-            return this;
-        }
-
-        /// <summary>
-        /// Resolve this buffered Entity into the real Entity that was constructed
-        /// </summary>
-        /// <param name="resolver"></param>
-        /// <returns></returns>
-        public Entity Resolve(Resolver resolver)
-        {
-            if (resolver.Parent == null)
-                throw new ObjectDisposedException("Resolver has already been disposed");
-            if (resolver.Parent != _buffer)
-                throw new InvalidOperationException("Cannot use a resolver from one CommandBuffer with BufferedEntity from another");
-
-            return resolver.Lookup[_id];
-        }
-    }
-
-    private record struct BufferedEntityData(uint Id, SortedList<ComponentID, BaseComponentSetter> Setters, int Node)
-        : IComparable<BufferedEntityData>
-    {
-        public readonly int CompareTo(BufferedEntityData other)
-        {
-            return Node.CompareTo(other.Node);
-        }
-    }
+    /// <param name="Id">ID of this buffered entity, used in resolver to get actual entity</param>
+    /// <param name="Setters">All setters to be run on this entity</param>
+    /// <param name="Node">The "Node ID" of this entity, all buffered entities with the same node ID are in the same archetype (except -1)</param>
+    private record struct BufferedEntityData(uint Id, SortedList<ComponentID, BaseComponentSetter> Setters, int Node);
 
     private struct BufferedAggregateNode
     {
@@ -494,45 +447,4 @@ public sealed class CommandBuffer(World World)
     }
 
     private record struct EntityModificationData(SortedList<ComponentID, BaseComponentSetter>? Sets, OrderedListSet<ComponentID>? Removes);
-
-    /// <summary>
-    /// Provides a way to resolve created entities. Must be disposed once finished with!
-    /// </summary>
-    public sealed class Resolver
-        : IDisposable
-    {
-        internal SortedList<uint, Entity> Lookup { get; } = [];
-        internal CommandBuffer? Parent { get; private set; }
-        private uint _version;
-
-        public int Count => Lookup.Count;
-
-        internal void Configure(CommandBuffer parent)
-        {
-            Lookup.Clear();
-            Parent = parent;
-            _version = parent._version;
-        }
-
-        public void Dispose()
-        {
-            if (Parent == null)
-                throw new ObjectDisposedException(nameof(Resolver));
-
-            Parent = null;
-            Lookup.Clear();
-
-            Pool<Resolver>.Return(this);
-        }
-
-        public Entity Resolve(BufferedEntity bufferedEntity)
-        {
-            if (_version != bufferedEntity.Version)
-                throw new InvalidOperationException("Cannot use a resolver from one CommandBuffer with BufferedEntity from another generation of the same buffer");
-
-            return bufferedEntity.Resolve(this);
-        }
-
-        public Entity this[int index] => Lookup.Values[index];
-    }
 }

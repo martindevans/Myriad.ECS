@@ -31,7 +31,7 @@ internal sealed class GenericComponentSetter<T>
     public override void ReturnToPool()
     {
         _value = default;
-        Pool<GenericComponentSetter<T>>.Return(this);
+        Pool.Return(this);
     }
 
     public override void Write(Row row)
