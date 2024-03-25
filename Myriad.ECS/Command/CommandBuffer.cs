@@ -14,12 +14,15 @@ public sealed class CommandBuffer(World World)
 
     private readonly List<BufferedEntityData> _bufferedSets = [ ];
 
+    // Keep track of a fix number of aggregation nodes. The root node (0) is the node for a new entity
+    // with no components. Every nodes stores a list of "edges" leading to other nodes. Edges indicate
+    // the addition of that component to the entity. Buffered entities keep track of their node ID. Every
+    // buffered entity with the same node ID therefore has the same archetype. Except for node=-1, which
+    // indicates unknown.
     private int _aggregateNodesCount;
-    private readonly BufferedAggregateNode[] _aggregateNodes = new BufferedAggregateNode[512];
+    private readonly BufferedAggregateNode[] _bufferedAggregateNodes = new BufferedAggregateNode[512];
 
-    private readonly SortedList<Entity, SortedList<ComponentID, BaseComponentSetter>> _entitySets = [ ];
-    private readonly SortedList<Entity, OrderedListSet<ComponentID>> _removes = [ ];
-    private readonly OrderedListSet<Entity> _modified = new();
+    private readonly SortedList<Entity, EntityModificationData> _entityModifications = [ ];
     private readonly List<Entity> _deletes = [ ];
 
     private readonly OrderedListSet<ComponentID> _tempComponentIdSet = new();
@@ -40,10 +43,10 @@ public sealed class CommandBuffer(World World)
         _deletes.Clear();
 
         // Structural changes (add/remove components)
-        if (_modified.Count > 0)
+        if (_entityModifications.Count > 0)
         {
             // Calculate the new archetype for the entity
-            foreach (var entity in _modified)
+            foreach (var (entity, mod) in _entityModifications.Enumerable())
             {
                 var currentArchetype = World.GetArchetype(entity);
 
@@ -54,9 +57,9 @@ public sealed class CommandBuffer(World World)
 
                 // Calculate the hash and component set of the new archetype
                 var hash = currentArchetype.Hash;
-                if (_entitySets.TryGetValue(entity, out var sets))
+                if (mod.Sets != null)
                 {
-                    foreach (var (id, _) in sets.Enumerable())
+                    foreach (var (id, _) in mod.Sets.Enumerable())
                     {
                         if (_tempComponentIdSet.Add(id))
                         {
@@ -65,9 +68,9 @@ public sealed class CommandBuffer(World World)
                         }
                     }
                 }
-                if (_removes.TryGetValue(entity, out var removes))
+                if (mod.Removes != null)
                 {
-                    foreach (var remove in removes)
+                    foreach (var remove in mod.Removes)
                     {
                         if (_tempComponentIdSet.Remove(remove))
                         {
@@ -75,8 +78,10 @@ public sealed class CommandBuffer(World World)
                             moveRequired = true;
                         }
                     }
-                    removes.Clear();
-                    Pool<OrderedListSet<ComponentID>>.Return(removes);
+
+                    // Recycle remove set
+                    mod.Removes.Clear();
+                    Pool.Return(mod.Removes);
                 }
 
                 // Get a row handle for the entity, moving it to a new archetype first if necessary
@@ -95,23 +100,21 @@ public sealed class CommandBuffer(World World)
                 }
 
                 // Run all setters
-                if (sets != null)
+                if (mod.Sets != null)
                 {
-                    foreach (var (_, set) in sets.Enumerable())
+                    foreach (var (_, set) in mod.Sets.Enumerable())
                     {
                         set.Write(row);
                         set.ReturnToPool();
                     }
 
                     // Recycle
-                    sets.Clear();
-                    Pool.Return(sets);
+                    mod.Sets.Clear();
+                    Pool.Return(mod.Sets);
                 }
             }
         }
-        _modified.Clear();
-        _entitySets.Clear();
-        _removes.Clear();
+        _entityModifications.Clear();
         _tempComponentIdSet.Clear();
         _aggregateNodesCount = 0;
 
@@ -199,7 +202,7 @@ public sealed class CommandBuffer(World World)
         if (_aggregateNodesCount == 0)
         {
             _aggregateNodesCount++;
-            _aggregateNodes[0] = new BufferedAggregateNode();
+            _bufferedAggregateNodes[0] = new BufferedAggregateNode();
         }
 
         // Get a set to hold all of the component setters
@@ -253,7 +256,7 @@ public sealed class CommandBuffer(World World)
             // marked as node -1 it's been opted out of aggregation.
             if (bufferedData.Node != -1)
             {
-                bufferedData.Node = _aggregateNodes[bufferedData.Node].GetNodeIndex(key, _aggregateNodes, ref _aggregateNodesCount);
+                bufferedData.Node = _bufferedAggregateNodes[bufferedData.Node].GetNodeIndex(key, _bufferedAggregateNodes, ref _aggregateNodesCount);
                 _bufferedSets[(int)id] = bufferedData;
             }
         }
@@ -268,25 +271,16 @@ public sealed class CommandBuffer(World World)
     public void Set<T>(Entity entity, T value)
         where T : IComponent
     {
-        if (!_entitySets.TryGetValue(entity, out var set))
-        {
-            set = Pool<SortedList<ComponentID, BaseComponentSetter>>.Get();
-            set.Clear();
-
-            _entitySets.Add(entity, set);
-        }
+        var mod = GetModificationData(entity, true, false);
 
         // Create a setter and store it in the list (recycling the old one, if it's there)
         var setter = GenericComponentSetter<T>.Get(value);
-        if (set.Remove(setter.ID, out var old))
+        if (mod.Sets!.Remove(setter.ID, out var old))
             old.ReturnToPool();
-        set.Add(setter.ID, setter);
+        mod.Sets!.Add(setter.ID, setter);
 
-        // Mark this as modified. If already modified it's possible there's an earlier remove operation for this
-        // component, which now needs to be removed.
-        if (!_modified.Add(entity))
-            if (_removes.TryGetValue(entity, out var removes))
-                removes.Remove(setter.ID);
+        // Remove it from the "remove" set. In case it was previously removed
+        mod.Removes?.Remove(setter.ID);
     }
 
     /// <summary>
@@ -297,25 +291,15 @@ public sealed class CommandBuffer(World World)
     public void Remove<T>(Entity entity)
         where T : IComponent
     {
-        // Get a list of "remove" operations for this entity
-        if (!_removes.TryGetValue(entity, out var set))
-        {
-            set = Pool<OrderedListSet<ComponentID>>.Get();
-            set.Clear();
-
-            _removes.Add(entity, set);
-        }
+        var mod = GetModificationData(entity, false, true);
 
         // Add a remover to the list
         var id = ComponentID<T>.ID;
-        set.Add(id);
+        mod.Removes!.Add(id);
 
-        // Add this entity to the modified set. If it was already there it's possible that
-        // there were some _sets_ for this component. Remove them.
-        if (!_modified.Add(entity))
-            if (_entitySets.TryGetValue(entity, out var sets))
-                if (sets.Remove(id, out var setter))
-                    setter.ReturnToPool();
+        // Remove it from the setters, if it's there
+        if (mod.Sets != null && mod.Sets.Remove(id, out var setter))
+            setter.ReturnToPool();
     }
 
     /// <summary>
@@ -325,8 +309,23 @@ public sealed class CommandBuffer(World World)
     public void Delete(Entity entity)
     {
         _deletes.Add(entity);
-        _entitySets.Remove(entity);
-        _removes.Remove(entity);
+
+        if (_entityModifications.Remove(entity, out var mod))
+        {
+            if (mod.Sets != null)
+            {
+                foreach (var (_, setter) in mod.Sets.Enumerable())
+                    setter.ReturnToPool();
+                mod.Sets.Clear();
+                Pool.Return(mod.Sets);
+            }
+
+            if (mod.Removes != null)
+            {
+                mod.Removes.Clear();
+                Pool.Return(mod.Removes);
+            }
+        }
     }
 
     /// <summary>
@@ -335,12 +334,58 @@ public sealed class CommandBuffer(World World)
     /// <param name="entities"></param>
     public void Delete(List<Entity> entities)
     {
-        _deletes.AddRange(entities);
+        _deletes.EnsureCapacity(_deletes.Count + entities.Capacity);
 
         foreach (var entity in entities)
+            Delete(entity);
+    }
+
+    private EntityModificationData GetModificationData(Entity entity, bool ensureSet, bool ensureRemove)
+    {
+        var idx = _entityModifications.IndexOfKey(entity);
+
+        // Add it if it's missing
+        if (idx == -1)
         {
-            _entitySets.Remove(entity);
-            _removes.Remove(entity);
+            var mod = new EntityModificationData(
+                ensureSet ? Pool<SortedList<ComponentID, BaseComponentSetter>>.Get() : null,
+                ensureRemove ? Pool<OrderedListSet<ComponentID>>.Get() : null
+            );
+            mod.Sets?.Clear();
+            mod.Removes?.Clear();
+
+            _entityModifications.Add(entity, mod);
+
+            return mod;
+        }
+        else
+        {
+            // It was found, but do we need to modify it
+            var mod = _entityModifications.Values[idx];
+
+            var overwrite = false;
+            if (mod.Sets == null && ensureSet)
+            {
+                mod.Sets = Pool<SortedList<ComponentID, BaseComponentSetter>>.Get();
+                overwrite = true;
+            }
+
+            if (mod.Removes == null && ensureRemove)
+            {
+                mod.Removes = Pool<OrderedListSet<ComponentID>>.Get();
+                overwrite = true;
+            }
+
+            if (overwrite)
+            {
+#if NET8_0_OR_GREATER
+                _entityModifications.SetValueAtIndex(idx, mod);
+#else
+                _entityModifications[entity] = mod;
+#endif
+            }
+
+            return mod;
         }
     }
 
@@ -448,6 +493,8 @@ public sealed class CommandBuffer(World World)
         }
     }
 
+    private record struct EntityModificationData(SortedList<ComponentID, BaseComponentSetter>? Sets, OrderedListSet<ComponentID>? Removes);
+
     /// <summary>
     /// Provides a way to resolve created entities. Must be disposed once finished with!
     /// </summary>
@@ -457,6 +504,8 @@ public sealed class CommandBuffer(World World)
         internal SortedList<uint, Entity> Lookup { get; } = [];
         internal CommandBuffer? Parent { get; private set; }
         private uint _version;
+
+        public int Count => Lookup.Count;
 
         internal void Configure(CommandBuffer parent)
         {
@@ -483,5 +532,7 @@ public sealed class CommandBuffer(World World)
 
             return bufferedEntity.Resolve(this);
         }
+
+        public Entity this[int index] => Lookup.Values[index];
     }
 }

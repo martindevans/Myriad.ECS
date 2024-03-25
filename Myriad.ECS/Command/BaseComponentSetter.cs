@@ -6,7 +6,7 @@ namespace Myriad.ECS.Command;
 
 internal abstract class BaseComponentSetter
 {
-    internal abstract ComponentID ID { get; }
+    public abstract ComponentID ID { get; }
 
     public abstract void ReturnToPool();
 
@@ -17,7 +17,7 @@ internal sealed class GenericComponentSetter<T>
     : BaseComponentSetter
     where T : IComponent
 {
-    internal override ComponentID ID { get; } = ComponentID<T>.ID;
+    public override ComponentID ID { get; } = ComponentID<T>.ID;
 
     private T? _value;
 
