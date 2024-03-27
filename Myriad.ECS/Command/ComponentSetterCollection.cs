@@ -1,4 +1,6 @@
-﻿using Myriad.ECS.Allocations;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using Myriad.ECS.Allocations;
 using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Archetypes;
@@ -69,12 +71,11 @@ internal class ComponentSetterCollection
         void Write(int index, Row dest);
     }
 
+    [DebuggerDisplay("Count = {_values.Count}")]
     private class GenericComponentList<T>
         : IComponentList
         where T : IComponent
     {
-        public int Count => _values.Count;
-
         private readonly List<T> _values = [ ];
 
         public void Clear()
@@ -102,8 +103,6 @@ internal class ComponentSetterCollection
         {
             dest.GetMutable<T>() = _values[index];
         }
-
-        
     }
     #endregion
 }

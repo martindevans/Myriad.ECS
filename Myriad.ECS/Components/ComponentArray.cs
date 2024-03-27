@@ -31,7 +31,7 @@ public record struct ComponentArray<T>(T[] Array)
 }
 
 /// <summary>
-/// Store an list in a component
+/// Store a list in a component
 /// </summary>
 /// <typeparam name="T"></typeparam>
 /// <param name="List"></param>

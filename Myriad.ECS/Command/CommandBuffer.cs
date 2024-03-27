@@ -1,4 +1,5 @@
 ﻿using System.Buffers;
+using System.Diagnostics;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.Collections;
 using Myriad.ECS.Extensions;
@@ -212,7 +213,7 @@ public sealed partial class CommandBuffer(World World)
         // Store this entity in the collection of entities
         // Put it in aggregate node 0 (i.e. no components)
         var id = (uint)(_bufferedSets.Count);
-        _bufferedSets.Add(new BufferedEntityData(id, set, 0));
+        _bufferedSets.Add(new BufferedEntityData(id, set));
         
         return new BufferedEntity(id, this);
     }
@@ -220,8 +221,7 @@ public sealed partial class CommandBuffer(World World)
     private void SetBuffered<T>(uint id, T value, bool allowDuplicates = false)
         where T : IComponent
     {
-        if (id >= _bufferedSets.Count)
-            throw new InvalidOperationException("Unknown entity ID in SetBuffered");
+        Debug.Assert(id < _bufferedSets.Count, "Unknown entity ID in SetBuffered");
 
         var bufferedData = _bufferedSets[(int)id];
         var setters = bufferedData.Setters;
@@ -387,10 +387,28 @@ public sealed partial class CommandBuffer(World World)
     /// <summary>
     /// Data about a new entity being created
     /// </summary>
-    /// <param name="Id">ID of this buffered entity, used in resolver to get actual entity</param>
-    /// <param name="Setters">All setters to be run on this entity</param>
-    /// <param name="Node">The "Node ID" of this entity, all buffered entities with the same node ID are in the same archetype (except -1)</param>
-    private record struct BufferedEntityData(uint Id, SortedList<ComponentID, ComponentSetterCollection.SetterId> Setters, int Node);
+    private record struct BufferedEntityData
+    {
+        /// <summary>ID of this buffered entity, used in resolver to get actual entity</summary>
+        public uint Id { get; }
+
+        /// <summary>All setters to be run on this entity</summary>
+        public SortedList<ComponentID, ComponentSetterCollection.SetterId> Setters { get; }
+
+        /// <summary>The "Node ID" of this entity, all buffered entities with the same node ID are in the same archetype (except -1)</summary>
+        public int Node { get; set; }
+
+        /// <summary>
+        /// Data about a new entity being created
+        /// </summary>
+        /// <param name="id">ID of this buffered entity, used in resolver to get actual entity</param>
+        /// <param name="setters">All setters to be run on this entity</param>
+        public BufferedEntityData(uint id, SortedList<ComponentID, ComponentSetterCollection.SetterId> setters)
+        {
+            Id = id;
+            Setters = setters;
+        }
+    }
 
     private struct BufferedAggregateNode
     {

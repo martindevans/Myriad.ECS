@@ -23,13 +23,12 @@ public class FrozenOrderedListSet<TItem>
     {
         _items = new OrderedListSet<TItem>(items);
     }
-
-    internal FrozenOrderedListSet(FrozenOrderedListSet<TItem> items)
-    {
-        _items = new OrderedListSet<TItem>(items._items);
-    }
     #endregion
 
+    /// <summary>
+    /// Get a collection which can be queried by LINQ (only use this for tests)
+    /// </summary>
+    /// <returns></returns>
     internal IReadOnlyCollection<TItem> LINQ()
     {
         return _items.LINQ();
@@ -93,7 +92,7 @@ public class FrozenOrderedListSet<TItem>
 
     public bool IsSupersetOf(FrozenOrderedListSet<TItem> other)
     {
-        return _items.IsSupersetOf(other._items);
+        return IsSupersetOf(other._items);
     }
     #endregion
 
@@ -105,7 +104,7 @@ public class FrozenOrderedListSet<TItem>
 
     public bool Overlaps(FrozenOrderedListSet<TItem> other)
     {
-        return _items.Overlaps(other._items);
+        return Overlaps(other._items);
     }
     #endregion
 
@@ -117,7 +116,7 @@ public class FrozenOrderedListSet<TItem>
 
     public bool SetEquals(FrozenOrderedListSet<TItem> other)
     {
-        return _items.SetEquals(other._items);
+        return SetEquals(other._items);
     }
     #endregion
 }

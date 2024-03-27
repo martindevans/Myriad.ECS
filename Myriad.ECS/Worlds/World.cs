@@ -26,7 +26,8 @@ public sealed partial class World
         // Get the entityinfo for this entity
         ref var entityInfo = ref _entities[delete.ID];
 
-        // Check this is still a valid entity reference
+        // Check this is still a valid entity reference. Early exit if the entity
+        // is already dead.
         if (entityInfo.Version != delete.Version)
             return;
 
@@ -72,22 +73,19 @@ public sealed partial class World
     /// <returns></returns>
     internal Archetype GetOrCreateArchetype(OrderedListSet<ComponentID> components, ArchetypeHash hash)
     {
-        // Get all archetypes with this hash
-        if (_archetypesByHash.TryGetValue(hash, out var candidates))
+        // Get list of all archetypes with this hash
+        if (!_archetypesByHash.TryGetValue(hash, out var candidates))
         {
-            // Check if any of the candidates are the one we need
-            foreach (var archetype in candidates)
-                if (archetype.SetEquals(components))
-                    return archetype;
-        }
-        else
-        {
-            // Create a new list, we're about to add an archetype to it
             candidates = [ ];
             _archetypesByHash.Add(hash, candidates);
         }
 
-        // Create the new archetype
+        // Check if any of the candidates are the one we need
+        foreach (var archetype in candidates)
+            if (archetype.SetEquals(components))
+                return archetype;
+
+        // Didn't find one, create the new archetype
         var a = new Archetype(this, new FrozenOrderedListSet<ComponentID>(components));
 
         // Add it to the relevant lists
@@ -132,11 +130,13 @@ public sealed partial class World
         {
             var prev = _deadEntities[^1];
             _deadEntities.RemoveAt(_deadEntities.Count - 1);
-            entity = new Entity(prev.ID, unchecked(prev.Version + 1));
 
-            // Check if the version has rolled over and make sure we're _not_ using version 0
-            if (entity.Version == 0)
-                entity = new Entity(entity.ID, 1);
+            // Add 2 to the version number, instead of 1. Zero is not a valid entity id, so we want
+            // to make sure that when the version overflows (after creating and destroying the same
+            // entity 4294967296 times) we don't end up back at zero. Since we always add two we'll
+            // skip straight from `uint.MaxValue => 1`. This saves checking and branching every time.
+            var v = unchecked(prev.Version + 2);
+            entity = new Entity(prev.ID, v);
         }
         else
         {
@@ -185,7 +185,7 @@ public sealed partial class World
         // Get the entityinfo for this entity
         var entityInfo = _entities[entity.ID];
 
-        // Get the set of component for this archetype
+        // Get the set of components for this archetype
         return entityInfo.Chunk.Archetype.Components;
     }
 

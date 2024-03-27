@@ -72,34 +72,6 @@ internal class OrderedListSet<TItem>
     #endregion
 
     #region unionwith
-    internal void UnionWith<TSet>(TSet items)
-        where TSet : IReadOnlySet<TItem>
-    {
-        if (_items.Count == 0)
-        {
-            _items.AddRange(items);
-            _items.Sort();
-        }
-        else
-        {
-            foreach (var item in items)
-                Add(item);
-        }
-    }
-
-    internal void UnionWith(OrderedListSet<TItem> items)
-    {
-        if (_items.Count == 0)
-        {
-            _items.AddRange(items._items);
-        }
-        else
-        {
-            foreach (var item in items)
-                Add(item);
-        }
-    }
-
     internal void UnionWith(FrozenOrderedListSet<TItem> items)
     {
         if (_items.Count == 0)
@@ -137,6 +109,11 @@ internal class OrderedListSet<TItem>
     public void Clear()
     {
         _items.Clear();
+    }
+
+    public FrozenOrderedListSet<TItem> Freeze()
+    {
+        return new FrozenOrderedListSet<TItem>(this);
     }
 
     #region GetEnumerator

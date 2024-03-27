@@ -58,7 +58,7 @@ internal sealed class Chunk
     {
         if (_entities[rowIndex] != entity)
             throw new InvalidOperationException("Mismatched entities in chunk");
-        return ref GetSpan<T>()[rowIndex];
+        return ref GetSpan<T>(ComponentID<T>.ID)[rowIndex];
     }
 
     internal Span<T> GetSpan<T>()
@@ -70,16 +70,7 @@ internal sealed class Chunk
     internal Span<T> GetSpan<T>(ComponentID id)
         where T : IComponent
     {
-        var componentArray = _components[_componentIndexLookup[id.Value]];
-
-        var typedArray =
-#if NET6_0_OR_GREATER
-            Unsafe.As<T[]>(componentArray);
-#else
-            (T[])componentArray;
-#endif
-
-        return typedArray.AsSpan(0, EntityCount);
+        return GetComponentArray<T>(id).AsSpan(0, EntityCount);
     }
 
     internal T[] GetComponentArray<T>()
@@ -88,6 +79,12 @@ internal sealed class Chunk
         return GetComponentArray<T>(ComponentID<T>.ID);
     }
 
+    /// <summary>
+    /// Get the component array, providing the component ID if it is known.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="id"></param>
+    /// <returns></returns>
     internal T[] GetComponentArray<T>(ComponentID id)
         where T : IComponent
     {
@@ -182,12 +179,8 @@ internal sealed class Chunk
         {
             var id = _componentIdLookup[i].Value;
 
-            // Check if the component is out of range (in which case it's not in the dest)
-            if (id >= destChunk._componentIndexLookup.Length)
-                continue;
-
-            // Check if it's explicitly -1 (in which case it's not in the dest)
-            if (destChunk._componentIndexLookup[id] == -1)
+            // Check if the component is not in the destination, in which case just don't copy it
+            if (id >= destChunk._componentIndexLookup.Length || destChunk._componentIndexLookup[id] == -1)
                 continue;
 
             // Get the two arrays

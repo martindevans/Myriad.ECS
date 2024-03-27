@@ -36,8 +36,13 @@ public class OrderedListSetTests
         set.Add(2);
         set.Add(3);
 
-        var ints = new HashSet<int> { 1, 2, 3, 4, };
-        set.UnionWith(ints);
+        var ints = new OrderedListSet<int>();
+        ints.Add(1);
+        ints.Add(2);
+        ints.Add(3);
+        ints.Add(4);
+        var frozen = new FrozenOrderedListSet<int>(ints);
+        set.UnionWith(frozen);
 
         Assert.AreEqual(4, set.Count);
         Assert.IsTrue(set.Contains(1));
@@ -101,7 +106,7 @@ public class OrderedListSetTests
         b.Add(1);
         b.Add(0);
 
-        Assert.IsFalse(a.SetEquals(b));
+        Assert.IsFalse(a.Freeze().SetEquals(b.Freeze()));
     }
 
     [TestMethod]
@@ -217,8 +222,8 @@ public class OrderedListSetTests
         b.Add(2);
         b.Add(3);
 
-        Assert.IsTrue(a.IsSupersetOf(b));
-        Assert.IsFalse(b.IsSupersetOf(a));
+        Assert.IsTrue(a.Freeze().IsSupersetOf(b.Freeze()));
+        Assert.IsFalse(b.Freeze().IsSupersetOf(a.Freeze()));
     }
 
     [TestMethod]

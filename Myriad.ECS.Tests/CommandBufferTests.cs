@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Command;
+using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 
@@ -292,6 +293,27 @@ public class CommandBufferTests
     }
 
     [TestMethod]
+    public void DeleteEntityTwice()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        var buffered = buffer.Create().Set(new ComponentFloat(1));
+        using var resolver = buffer.Playback();
+        var entity = resolver.Resolve(buffered);
+        Assert.IsTrue(entity.IsAlive(world));
+
+        buffer.Delete(entity);
+        buffer.Delete(entity);
+        buffer.Delete(entity);
+        buffer.Delete(entity);
+        buffer.Delete(entity);
+        buffer.Playback();
+
+        Assert.IsFalse(entity.IsAlive(world));
+    }
+
+    [TestMethod]
     public void DeleteEntities()
     {
         var world = new WorldBuilder().Build();
@@ -324,6 +346,34 @@ public class CommandBufferTests
         Assert.IsTrue(entities[2].IsAlive(world));
 
         Assert.AreEqual(3, world.GetComponentRef<ComponentFloat>(entities[2]).Value);
+    }
+
+    [TestMethod]
+    public void ModifyThenDelete()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        // Create entity
+        var buffered = buffer.Create().Set(new ComponentFloat(1));
+        using var resolver = buffer.Playback();
+        var entity = resolver.Resolve(buffered);
+        Assert.IsTrue(entity.IsAlive(world));
+
+        // Modify it _and_ delete it
+        buffer.Set(entity, new ComponentInt64(7));
+        buffer.Remove<ComponentFloat>(entity);
+        buffer.Delete(entity);
+
+        buffer.Playback().Dispose();
+
+        // Check it's dead
+        Assert.IsFalse(entity.IsAlive(world));
+        Assert.AreEqual(0, world.Count<ComponentFloat>());
+        Assert.AreEqual(0, world.Count<ComponentInt16>());
+        Assert.AreEqual(0, world.Count<ComponentInt32>());
+        Assert.AreEqual(0, world.Count<ComponentInt64>());
+        Assert.AreEqual(0, world.Count<ComponentFloat>());
     }
 
     [TestMethod]
@@ -502,5 +552,83 @@ public class CommandBufferTests
 
         // Check value is correct
         Assert.AreEqual(789, world.GetComponentRef<ComponentInt16>(entity).Value);
+    }
+
+    [TestMethod]
+    public void CreateManyArchetypes()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        // Create entities in lots of different archetypes. The idea is to
+        // create so many the entity runs out of aggregation buffers.
+
+        var buffered = new List<CommandBuffer.BufferedEntity>();
+        var rng = new Random(17);
+        for (var i = 0; i < 1024; i++)
+        {
+            var eb = buffer.Create();
+            buffered.Add(eb);
+
+            for (var j = 0; j < 4; j++)
+            {
+                switch (rng.Next(18))
+                {
+                    case 0: eb.Set(new Component0(), true); break;
+                    case 1: eb.Set(new Component1(), true); break;
+                    case 2: eb.Set(new Component2(), true); break;
+                    case 3: eb.Set(new Component3(), true); break;
+                    case 4: eb.Set(new Component4(), true); break;
+                    case 5: eb.Set(new Component5(), true); break;
+                    case 6: eb.Set(new Component6(), true); break;
+                    case 7: eb.Set(new Component7(), true); break;
+                    case 8: eb.Set(new Component8(), true); break;
+                    case 9: eb.Set(new Component9(), true); break;
+                    case 10: eb.Set(new Component10(), true); break;
+                    case 11: eb.Set(new Component11(), true); break;
+                    case 12: eb.Set(new Component12(), true); break;
+                    case 13: eb.Set(new Component13(), true); break;
+                    case 14: eb.Set(new Component14(), true); break;
+                    case 15: eb.Set(new Component15(), true); break;
+                    case 16: eb.Set(new Component16(), true); break;
+                    case 17: eb.Set(new Component17(), true); break;
+                }
+            }
+        }
+
+        using var resolver = buffer.Playback();
+        Assert.AreEqual(1024, resolver.Count);
+
+        // Ensure this is identical to the loop above!
+        rng = new Random(17);
+        for (var i = 0; i < buffered.Count; i++)
+        {
+            var entity = resolver[buffered[i]];
+
+            for (var j = 0; j < 4; j++)
+            {
+                switch (rng.Next(18))
+                {
+                    case 0: Assert.IsTrue(world.HasComponent<Component0>(entity)); break;
+                    case 1: Assert.IsTrue(world.HasComponent<Component1>(entity)); break;
+                    case 2: Assert.IsTrue(world.HasComponent<Component2>(entity)); break;
+                    case 3: Assert.IsTrue(world.HasComponent<Component3>(entity)); break;
+                    case 4: Assert.IsTrue(world.HasComponent<Component4>(entity)); break;
+                    case 5: Assert.IsTrue(world.HasComponent<Component5>(entity)); break;
+                    case 6: Assert.IsTrue(world.HasComponent<Component6>(entity)); break;
+                    case 7: Assert.IsTrue(world.HasComponent<Component7>(entity)); break;
+                    case 8: Assert.IsTrue(world.HasComponent<Component8>(entity)); break;
+                    case 9: Assert.IsTrue(world.HasComponent<Component9>(entity)); break;
+                    case 10: Assert.IsTrue(world.HasComponent<Component10>(entity)); break;
+                    case 11: Assert.IsTrue(world.HasComponent<Component11>(entity)); break;
+                    case 12: Assert.IsTrue(world.HasComponent<Component12>(entity)); break;
+                    case 13: Assert.IsTrue(world.HasComponent<Component13>(entity)); break;
+                    case 14: Assert.IsTrue(world.HasComponent<Component14>(entity)); break;
+                    case 15: Assert.IsTrue(world.HasComponent<Component15>(entity)); break;
+                    case 16: Assert.IsTrue(world.HasComponent<Component16>(entity)); break;
+                    case 17: Assert.IsTrue(world.HasComponent<Component17>(entity)); break;
+                }
+            }
+        }
     }
 }

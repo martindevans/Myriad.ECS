@@ -43,5 +43,7 @@ public sealed partial class CommandBuffer
         }
 
         public Entity this[int index] => Lookup.Values[index];
+
+        public Entity this[BufferedEntity entity] => Resolve(entity);
     }
 }
