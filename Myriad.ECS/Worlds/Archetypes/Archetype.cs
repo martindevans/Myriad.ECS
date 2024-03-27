@@ -141,6 +141,10 @@ public sealed partial class Archetype
 
     internal Row MigrateTo(Entity entity, ref EntityInfo info, Archetype to)
     {
+        // Early exit if we're migrating to where we already are!
+        if (to == this)
+            return info.Chunk.GetRow(entity, info);
+
         var chunk = info.Chunk;
         var row = chunk.MigrateTo(entity, ref info, to);
 
