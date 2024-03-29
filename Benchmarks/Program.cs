@@ -1,12 +1,13 @@
 ﻿using BenchmarkDotNet.Running;
 using Benchmarks;
 
-//var e = new EntityModifyBenchmark();
-//e.Setup();
-//e.Playback();
+var e = new EntityModifyBenchmark();
+e.Setup();
+e.IterationSetup();
+e.Playback();
 
 //var summary = BenchmarkRunner.Run<QueryBenchmark>();
-var summary = BenchmarkRunner.Run<EntityCreateBenchmark>();
+//var summary = BenchmarkRunner.Run<EntityCreateBenchmark>();
 //var summary = BenchmarkRunner.Run<EntityModifyBenchmark>();
 
 //var b = new QueryBenchmark();

@@ -77,7 +77,7 @@ public sealed class QueryDescription(
                 copy ??= new OrderedListSet<ArchetypeMatch>(_result.Value.Archetypes);
 
                 // Add the match
-                copy.Add(m);
+                copy.Add(m.Value);
             }
 
             if (copy == null)
@@ -175,16 +175,11 @@ public sealed class QueryDescription(
     /// <param name="Archetype">The archetype</param>
     /// <param name="AtLeastOne">All of the "at least one" components present (if there are any in this query)</param>
     /// <param name="ExactlyOne">The "exactly one" component present (if there is one in this query)</param>
-    public record ArchetypeMatch(Archetype Archetype, FrozenOrderedListSet<ComponentID>? AtLeastOne, ComponentID? ExactlyOne)
+    public readonly record struct ArchetypeMatch(Archetype Archetype, FrozenOrderedListSet<ComponentID>? AtLeastOne, ComponentID? ExactlyOne)
         : IComparable<ArchetypeMatch>
     {
-        public int CompareTo(ArchetypeMatch? other)
+        public int CompareTo(ArchetypeMatch other)
         {
-            if (ReferenceEquals(this, other))
-                return 0;
-            if (other == null)
-                return 1;
-
             return Archetype.Hash.CompareTo(other.Archetype.Hash);
         }
     }

@@ -11,10 +11,10 @@ namespace Myriad.ECS.Queries;
 /// </summary>
 public sealed partial class QueryBuilder
 {
-    private readonly IDSet<ComponentRegistry, IComponent, ComponentID> _include;
-    private readonly IDSet<ComponentRegistry, IComponent, ComponentID> _exclude;
-    private readonly IDSet<ComponentRegistry, IComponent, ComponentID> _atLeastOne;
-    private readonly IDSet<ComponentRegistry, IComponent, ComponentID> _exactlyOne;
+    private readonly ComponentSet _include;
+    private readonly ComponentSet _exclude;
+    private readonly ComponentSet _atLeastOne;
+    private readonly ComponentSet _exactlyOne;
 
     public QueryBuilder()
     {
@@ -200,26 +200,24 @@ public sealed partial class QueryBuilder
     }
     #endregion
 
-    private class IDSet<TR, TB, TID>(Action<TID, int, string> check, int Index)
-        where TR : BaseRegistry<TB, TID>
-        where TID : struct, IIDNumber<TID>
+    private class ComponentSet(Action<ComponentID, int, string> check, int Index)
     {
         public int Index { get; } = Index;
 
-        private readonly HashSet<TID> _items = [];
+        private readonly HashSet<ComponentID> _items = [];
 
-        private FrozenOrderedListSet<TID>? _frozenCache;
+        private FrozenOrderedListSet<ComponentID>? _frozenCache;
 
-        public FrozenOrderedListSet<TID> ToFrozenSet()
+        public FrozenOrderedListSet<ComponentID> ToFrozenSet()
         {
             if (_frozenCache != null)
                 return _frozenCache;
 
-            _frozenCache = new FrozenOrderedListSet<TID>(_items);
+            _frozenCache = new FrozenOrderedListSet<ComponentID>(_items);
             return _frozenCache;
         }
 
-        public bool Add(TID id, [CallerMemberName] string caller = "")
+        public bool Add(ComponentID id, [CallerMemberName] string caller = "")
         {
             check(id, Index, caller);
             if (_items.Add(id))
@@ -233,29 +231,29 @@ public sealed partial class QueryBuilder
 
         public bool Add(Type type, [CallerMemberName] string caller = "")
         {
-            return Add(BaseRegistry<TB, TID>.Get(type), caller);
+            return Add(ComponentRegistry.Get(type), caller);
         }
 
         public bool Add<T>([CallerMemberName] string caller = "")
-            where T : TB
+            where T : IComponent
         {
-            return Add(BaseRegistry<TB, TID>.Get<T>(), caller);
+            return Add(ComponentID<T>.ID, caller);
         }
 
-        public bool Contains(TID id)
+        public bool Contains(ComponentID id)
         {
             return _items.Contains(id);
         }
 
         public bool Contains(Type type)
         {
-            return Contains(BaseRegistry<TB, TID>.Get(type));
+            return Contains(ComponentRegistry.Get(type));
         }
 
         public bool Contains<T>()
-            where T : TB
+            where T : IComponent
         {
-            return Contains(BaseRegistry<TB, TID>.Get<T>());
+            return Contains(ComponentID<T>.ID);
         }
     }
 }

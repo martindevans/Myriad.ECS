@@ -3,7 +3,7 @@
 namespace Myriad.ECS.Collections;
 
 public class FrozenOrderedListSet<TItem>
-    where TItem : IComparable<TItem>, IEquatable<TItem>
+    where TItem : struct, IComparable<TItem>, IEquatable<TItem>
 {
     private readonly OrderedListSet<TItem> _items;
     public int Count => _items.Count;

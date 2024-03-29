@@ -10,7 +10,7 @@ namespace Myriad.ECS.Collections;
 /// </summary>
 /// <typeparam name="TItem"></typeparam>
 internal class OrderedListSet<TItem>
-    where TItem : IComparable<TItem>, IEquatable<TItem>
+    where TItem : struct, IComparable<TItem>, IEquatable<TItem>
 {
     private readonly List<TItem> _items = [ ];
     public int Count => _items.Count;
@@ -248,6 +248,16 @@ internal class OrderedListSet<TItem>
 #if NET6_0_OR_GREATER
         var a = CollectionsMarshal.AsSpan(_items);
         var b = CollectionsMarshal.AsSpan(other._items);
+
+        // Add a specialization for ComponentID. This allows it to be compared with fast SIMD equality
+        // instead of calling the equality implementation for every item individually.
+        if (typeof(TItem) == typeof(ComponentID))
+        {
+            var aa = MemoryMarshal.Cast<TItem, int>(a);
+            var bb = MemoryMarshal.Cast<TItem, int>(b);
+            return aa.SequenceEqual(bb);
+        }
+
         return a.SequenceEqual(b);
 #else
         for (var i = other._items.Count - 1; i >= 0; i--)

@@ -10,10 +10,11 @@ namespace Benchmarks;
 [ShortRunJob]
 public class EntityModifyBenchmark
 {
-    private const int COUNT = 100_000;
+    private const int COUNT = 1_000_000;
 
     private World _world = null!;
-    private List<Entity> _entities = [];
+    private readonly List<Entity> _entities = [];
+    private CommandBuffer _ready = null!;
 
     [GlobalSetup]
     public void Setup()
@@ -62,8 +63,8 @@ public class EntityModifyBenchmark
         }
     }
 
-    [Benchmark]
-    public void Playback()
+    [IterationSetup]
+    public void IterationSetup()
     {
         // Setup modifications in a buffer
         var rng = new Random();
@@ -71,7 +72,12 @@ public class EntityModifyBenchmark
         foreach (var entity in _entities)
             ModifyEntity(ready, rng, entity);
 
-        // Apply modifications
-        ready.Playback().Dispose();
+        _ready = ready;
+    }
+
+    [Benchmark]
+    public void Playback()
+    {
+        _ready.Playback().Dispose();
     }
 }

@@ -139,6 +139,14 @@ internal sealed class Chunk
         if (EntityCount == 0)
         {
             _entities[index] = default;
+
+            foreach (var component in _components)
+            {
+                // Clear out the components. This prevents chunks holding 
+                // onto references to dead managed components, and keeping them in memory.
+                Array.Clear(component, index, 1);
+            }
+
             return;
         }
 
@@ -157,6 +165,9 @@ internal sealed class Chunk
             foreach (var component in _components)
             {
                 Array.Copy(component, lastEntityIndex, component, index, 1);
+
+                // Clear out the components we just moved. This prevents chunks holding 
+                // onto references to dead managed components, and keeping them in memory.
                 Array.Clear(component, lastEntityIndex, 1);
             }
         }
