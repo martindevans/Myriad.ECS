@@ -27,17 +27,16 @@ public static class ComponentRegistry
     /// <param name="assemblies"></param>
     public static void Register(params Assembly[] assemblies)
     {
-        using (var locker = _lock.EnterWriteLock())
-        {
-            foreach (var assembly in assemblies)
-            {
-                var types = from type in assembly.GetTypes()
-                            where typeof(IComponent).IsAssignableFrom(type)
-                            select type;
+        using var locker = _lock.EnterWriteLock();
 
-                foreach (var type in types)
-                    locker.Value.GetOrAdd(type);
-            }
+        foreach (var assembly in assemblies)
+        {
+            var types = from type in assembly.GetTypes()
+                        where typeof(IComponent).IsAssignableFrom(type)
+                        select type;
+
+            foreach (var type in types)
+                locker.Value.GetOrAdd(type);
         }
     }
 
@@ -49,10 +48,9 @@ public static class ComponentRegistry
     {
         TypeCheck(type);
 
-        using (var locker = _lock.EnterWriteLock())
-        {
-            locker.Value.GetOrAdd(type);
-        }
+        using var locker = _lock.EnterWriteLock();
+
+        locker.Value.GetOrAdd(type);
     }
 
     /// <summary>
@@ -105,12 +103,12 @@ public static class ComponentRegistry
     /// <returns></returns>
     public static Type Get(ComponentID id)
     {
-        using (var locker = _lock.EnterReadLock())
-        {
-            if (!locker.Value.TryGet(id, out var type))
-                throw new InvalidOperationException("Unknown component ID");
-            return type;
-        }
+        using var locker = _lock.EnterReadLock();
+
+        if (!locker.Value.TryGet(id, out var type))
+            throw new InvalidOperationException("Unknown component ID");
+
+        return type;
     }
 
     private static void TypeCheck(Type type)

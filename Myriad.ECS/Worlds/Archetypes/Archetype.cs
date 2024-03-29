@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using Myriad.ECS.Collections;
+﻿using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Registry;
 using Myriad.ECS.Worlds.Chunks;
@@ -180,7 +179,7 @@ public sealed partial class Archetype
 
     internal IReadOnlyList<Chunk> Chunks => _chunks;
 
-    [MustDisposeResource]
+    //[MustDisposeResource]
     internal List<Chunk>.Enumerator GetChunkEnumerator()
     {
         return _chunks.GetEnumerator();

@@ -429,7 +429,7 @@ public sealed partial class CommandBuffer(World World)
                     var nodeIds = new Span<int>(nodeIdBufferPtr, MaxEdges);
 
                     // Find the index of the edge for this component
-                    var idx = componentIds.Slice(0, _edgeCount).IndexOf(component.Value);
+                    var idx = componentIds[.._edgeCount].IndexOf(component.Value);
                     if (idx >= 0)
                         return nodeIds[idx];
 
