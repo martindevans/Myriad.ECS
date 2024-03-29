@@ -13,7 +13,7 @@ namespace Benchmarks;
 [ShortRunJob]
 public class QueryBenchmark
 {
-    [Params(100_000, 1_000_000, 10_000_000), UsedImplicitly]
+    [Params(100_000, 1_000_000, 10_000_000)]
     public int EntityCount = 1_000_000;
 
     private World _world = null!;
