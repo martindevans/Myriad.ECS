@@ -1,0 +1,40 @@
+﻿using Myriad.ECS.Command;
+using Myriad.ECS.Systems;
+using Myriad.ECS.Worlds;
+
+namespace Myriad.ECS.Tests.Systems;
+
+[TestClass]
+public class SystemStateTests
+{
+    [TestMethod]
+    public void AttachState()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        var e0 = buffer.Create().Set(new Component0());
+        var e1 = buffer.Create().Set(new Component1());
+        var e2 = buffer.Create().Set(new Component2()).Set(new Component17());
+        var resolver = buffer.Playback();
+
+        // Auto attach C17 to an entities with C0
+        // Auto detach C17 from an entities without C0
+        var buffer2 = new CommandBuffer(world);
+        var state = new SystemState<Component0, Component17>(world, new Component17());
+        state.Update(buffer2);
+        buffer2.Playback().Dispose();
+
+        // Check it was attached to e0
+        Assert.IsTrue(world.HasComponent<Component0>(resolver[e0]));
+        Assert.IsTrue(world.HasComponent<Component17>(resolver[e0]));
+
+        // Check e1 was untouched
+        Assert.IsTrue(world.HasComponent<Component1>(resolver[e1]));
+        Assert.IsFalse(world.HasComponent<Component17>(resolver[e1]));
+
+        // Check it was removed from e2
+        Assert.IsTrue(world.HasComponent<Component2>(resolver[e2]));
+        Assert.IsFalse(world.HasComponent<Component17>(resolver[e2]));
+    }
+}

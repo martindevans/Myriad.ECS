@@ -1,0 +1,51 @@
+﻿using Myriad.ECS.Queries;
+
+namespace Myriad.ECS.Queries
+{
+    public interface IQuery0
+    {
+        public void Execute(Entity e);
+    }
+}
+
+namespace Myriad.ECS.Worlds
+{
+    public partial class World
+    {
+        public int Execute<TQ>(
+            TQ q,
+            QueryDescription query
+        )
+            where TQ : IQuery0
+        {
+            var archetypes = query.GetArchetypes();
+            if (archetypes.Count == 0)
+                return 0;
+
+            var count = 0;
+            foreach (var archetypeMatch in archetypes)
+            {
+                var archetype = archetypeMatch.Archetype;
+                if (archetype.EntityCount == 0)
+                    continue;
+
+                count += archetype.EntityCount;
+
+                var chunks = archetype.Chunks;
+                for (var c = chunks.Count - 1; c >= 0; c--)
+                {
+                    var chunk = chunks[c];
+
+                    var entities = chunk.Entities;
+                    if (entities.Length == 0)
+                        continue;
+
+                    for (var i = entities.Length - 1; i >= 0; i--)
+                        q.Execute(entities[i]);
+                }
+            }
+
+            return count;
+        }
+    }
+}
