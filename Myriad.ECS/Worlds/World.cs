@@ -1,5 +1,6 @@
 ﻿using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Worlds;
@@ -154,6 +155,21 @@ public sealed partial class World
 
         return ref slot;
     }
+
+    /// <summary>
+    /// Count how many entities match this query
+    /// </summary>
+    /// <param name="query"></param>
+    /// <returns></returns>
+    public int Count(QueryDescription query)
+    {
+        var count = 0;
+        foreach (var archetype in query.GetArchetypes())
+            count += archetype.Archetype.EntityCount;
+
+        return count;
+    }
+
 
 
 
