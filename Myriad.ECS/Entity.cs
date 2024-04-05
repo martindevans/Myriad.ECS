@@ -30,6 +30,17 @@ public readonly record struct Entity
     }
 
     /// <summary>
+    /// Check if this Entity still exists and is not a phantom.
+    /// </summary>
+    /// <param name="world"></param>
+    /// <returns></returns>
+    public bool IsAlive(World world)
+    {
+        return Exists(world)
+            && !IsPhantom(world);
+    }
+
+    /// <summary>
     /// Check if this Entity is in a phantom state. i.e. automatically excluded from queries
     /// and automatically deleted when the last IPhantomComponent component is removed.
     /// </summary>
