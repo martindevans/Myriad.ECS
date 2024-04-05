@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Command;
+using Myriad.ECS.Components;
 using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Tests;
@@ -6,6 +7,60 @@ namespace Myriad.ECS.Tests;
 [TestClass]
 public class PhantomTests
 {
+    [TestMethod]
+    public void CannotExplicitlyAttachPhantomBuffered()
+    {
+        var w = new WorldBuilder().Build();
+
+        // Create an entity with a phantom component
+        var cmd = new CommandBuffer(w);
+
+        var eb = cmd.Create().Set(new TestPhantom0()).Set(new ComponentInt32(42));
+
+        Assert.ThrowsException<InvalidOperationException>(() =>
+        {
+            eb.Set(new Phantom());
+        });
+    }
+
+    [TestMethod]
+    public void CannotExplicitlyAttachPhantom()
+    {
+        var w = new WorldBuilder().Build();
+
+        // Create an entity with a phantom component
+        var cmd = new CommandBuffer(w);
+
+        cmd.Create().Set(new TestPhantom0()).Set(new ComponentInt32(42));
+        var e = cmd.Playback()[0];
+
+        Assert.ThrowsException<InvalidOperationException>(() =>
+        {
+            cmd.Set(e, new Phantom());
+        });
+    }
+
+    [TestMethod]
+    public void CannotExplicitlyRemovePhantom()
+    {
+        var w = new WorldBuilder().Build();
+
+        // Create an entity with a phantom component
+        var cmd = new CommandBuffer(w);
+
+        cmd.Create().Set(new TestPhantom0()).Set(new ComponentInt32(42));
+        var e = cmd.Playback()[0];
+
+        // Delete it, so it becomes a phantom
+        cmd.Delete(e);
+        cmd.Playback().Dispose();
+
+        Assert.ThrowsException<InvalidOperationException>(() =>
+        {
+            cmd.Remove<Phantom>(e);
+        });
+    }
+
     [TestMethod]
     public void DeletePhantom()
     {
@@ -117,6 +172,33 @@ public class PhantomTests
 
     [TestMethod]
     public void AddPhantomComponentAndDelete()
+    {
+        var w = new WorldBuilder().Build();
+
+        // Create an entity without a phantom component
+        var cmd = new CommandBuffer(w);
+        var eb = cmd.Create().Set(new ComponentFloat(42));
+        var resolver = cmd.Playback();
+        var e = resolver[eb];
+        resolver.Dispose();
+
+        // Is the entity valid
+        Assert.IsTrue(e.Exists(w));
+        Assert.IsFalse(e.IsPhantom(w));
+
+        // Add a phantom component and then delete it
+        cmd.Set(e, new TestPhantom0());
+        cmd.Delete(e);
+        cmd.Playback().Dispose();
+
+        // Is the entity valid but no longer alive
+        Assert.IsTrue(e.Exists(w));
+        Assert.IsTrue(e.IsPhantom(w));
+        Assert.IsTrue(w.HasComponent<ComponentFloat>(e));
+    }
+
+    [TestMethod]
+    public void DeleteAndAddPhantomComponent()
     {
         var w = new WorldBuilder().Build();
 

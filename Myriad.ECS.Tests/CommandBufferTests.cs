@@ -17,6 +17,21 @@ public class CommandBufferTests
     }
 
     [TestMethod]
+    public void DisposeResolverTwiceThrows()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        var r = buffer.Playback();
+        r.Dispose();
+
+        Assert.ThrowsException<ObjectDisposedException>(() =>
+        {
+            r.Dispose();
+        });
+    }
+
+    [TestMethod]
     public void CreateEntity()
     {
         var world = new WorldBuilder().Build();

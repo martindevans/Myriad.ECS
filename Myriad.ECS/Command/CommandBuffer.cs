@@ -81,6 +81,21 @@ public sealed partial class CommandBuffer(World World)
             else
             {
                 World.DeleteImmediate(delete);
+
+                if (_entityModifications.Remove(delete, out var mod))
+                {
+                    if (mod.Sets != null)
+                    {
+                        mod.Sets.Clear();
+                        Pool.Return(mod.Sets);
+                    }
+
+                    if (mod.Removes != null)
+                    {
+                        mod.Removes.Clear();
+                        Pool.Return(mod.Removes);
+                    }
+                }
             }
         }
 
@@ -356,7 +371,7 @@ public sealed partial class CommandBuffer(World World)
         where T : IComponent
     {
         if (typeof(T) == typeof(Phantom))
-            throw new InvalidOperationException("Cannot remove `Phantom` component from an enity");
+            throw new InvalidOperationException("Cannot remove `Phantom` component from an entity");
 
         var mod = GetModificationData(entity, false, true);
 
@@ -375,21 +390,6 @@ public sealed partial class CommandBuffer(World World)
     public void Delete(Entity entity)
     {
         _deletes.Add(entity);
-
-        if (_entityModifications.Remove(entity, out var mod))
-        {
-            if (mod.Sets != null)
-            {
-                mod.Sets.Clear();
-                Pool.Return(mod.Sets);
-            }
-
-            if (mod.Removes != null)
-            {
-                mod.Removes.Clear();
-                Pool.Return(mod.Removes);
-            }
-        }
     }
 
     /// <summary>
