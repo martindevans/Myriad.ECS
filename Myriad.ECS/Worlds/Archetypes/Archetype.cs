@@ -1,4 +1,6 @@
-﻿using Myriad.ECS.Collections;
+﻿using System.Diagnostics.Contracts;
+using Myriad.ECS.Collections;
+using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Registry;
 using Myriad.ECS.Worlds.Chunks;
@@ -57,6 +59,16 @@ public sealed partial class Archetype
 
     public int EntityCount { get; private set; }
 
+    /// <summary>
+    /// Indicates if any of the components in this Archetype implement <see cref="IPhantomComponent"/>;
+    /// </summary>
+    public bool HasPhantomComponents { get; }
+
+    /// <summary>
+    /// Indicates if any of the components in this Archetype is <see cref="Phantom"/>
+    /// </summary>
+    public bool IsPhantom { get; }
+
     internal Archetype(World world, FrozenOrderedListSet<ComponentID> components)
     {
         World = world;
@@ -86,6 +98,12 @@ public sealed partial class Archetype
             _componentIDs[idx] = component;
 
             idx++;
+        }
+
+        foreach (var component in components)
+        {
+            IsPhantom |= component == ComponentID<Phantom>.ID;
+            HasPhantomComponents |= component.IsPhantomComponent;
         }
     }
 

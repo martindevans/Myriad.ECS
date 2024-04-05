@@ -178,7 +178,7 @@ public sealed partial class World
     public ref T GetComponentRef<T>(Entity entity)
         where T : IComponent
     {
-        if (!entity.IsAlive(this))
+        if (!entity.Exists(this))
             throw new ArgumentException("entity is not alive", nameof(entity));
 
         // Get the entityinfo for this entity
@@ -195,7 +195,7 @@ public sealed partial class World
 
     private FrozenOrderedListSet<ComponentID> GetComponentSet(Entity entity)
     {
-        if (!entity.IsAlive(this))
+        if (!entity.Exists(this))
             throw new ArgumentException("entity is not alive", nameof(entity));
 
         // Get the entityinfo for this entity
@@ -213,7 +213,7 @@ public sealed partial class World
 
     internal ref EntityInfo GetEntityInfo(Entity entity)
     {
-        if (!entity.IsAlive(this))
+        if (!entity.Exists(this))
             throw new ArgumentException("entity is not alive", nameof(entity));
 
         // Get the entityinfo for this entity

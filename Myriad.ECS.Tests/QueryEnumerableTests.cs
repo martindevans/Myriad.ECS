@@ -145,14 +145,8 @@ public class QueryEnumerableTests
         }
         using var r = cb.Playback();
 
-        var q = new QueryBuilder()
-               .Include<ComponentFloat>()
-               .Include<ComponentInt32>()
-               .Include<ComponentInt64>()
-               .Build(w);
-
         var actualIndices = new HashSet<int>();
-        foreach (var (_, f, i32, i64) in w.Query<ComponentFloat, ComponentInt32, ComponentInt64>(q))
+        foreach (var (_, f, i32, i64) in w.Query<ComponentFloat, ComponentInt32, ComponentInt64>())
         {
             Assert.AreEqual(f.Ref.Value, i32.Ref.Value);
             Assert.AreEqual(f.Ref.Value, i64.Ref.Value);

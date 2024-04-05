@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace Myriad.ECS.Collections;
+﻿namespace Myriad.ECS.Collections;
 
 public class FrozenOrderedListSet<TItem>
     where TItem : struct, IComparable<TItem>, IEquatable<TItem>

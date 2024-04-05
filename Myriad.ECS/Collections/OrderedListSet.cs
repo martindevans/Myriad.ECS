@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 
@@ -272,7 +271,21 @@ internal class OrderedListSet<TItem>
     #region LINQ
     internal TItem Single()
     {
-        return _items.Single();
+        if (_items.Count == 0)
+            throw new InvalidOperationException("Cannot get single item, there are 0 items");
+        if (_items.Count > 1)
+            throw new InvalidOperationException($"Cannot get single item, there are {_items.Count} items");
+
+        return _items[0];
+    }
+
+    internal bool Any(Func<TItem, bool> predicate)
+    {
+        foreach (var item in _items)
+            if (predicate(item))
+                return true;
+
+        return false;
     }
     #endregion
 }

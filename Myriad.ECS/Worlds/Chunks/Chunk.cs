@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Archetypes;
@@ -114,8 +115,10 @@ internal sealed class Chunk
 
     internal Row AddEntity(Entity entity, ref EntityInfo info)
     {
-        if (EntityCount == _entities.Length)
-            throw new InvalidOperationException("Cannot add entity to full chunk");
+        // It is safe to only debug assert here. It should never happen if Myriad is working
+        // correctly. If it does somehow go wrong you'll get an index out of range exception
+        // below so it still fails in a sensible way.
+        Debug.Assert(EntityCount < _entities.Length, "Cannot add entity to full chunk");
 
         // Use the next free slot
         var index = EntityCount++;
@@ -207,5 +210,5 @@ internal sealed class Chunk
 
         return destRow;
     }
-    #endregion
+#endregion
 }

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.Collections;
+using Myriad.ECS.Components;
 using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
@@ -44,11 +45,48 @@ public sealed partial class CommandBuffer(World World)
         CreateBufferedEntities(resolver);
 
         // Delete entities
-        foreach (var delete in _deletes)
-            World.DeleteImmediate(delete);
-        _deletes.Clear();
+        DeleteEntities();
 
         // Structural changes (add/remove components)
+        ApplyStructuralChanges();
+
+        // Clear all temporary state
+        _setters.Clear();
+        _entityModifications.Clear();
+        _tempComponentIdSet.Clear();
+        _aggregateNodesCount = 0;
+
+        // Update the version of this buffer, invalidating all buffered entities for further modification
+        unchecked { _version++; }
+
+        // Return the resolver
+        return resolver;
+    }
+
+    private void DeleteEntities()
+    {
+        foreach (var delete in _deletes)
+        {
+            if (!delete.Exists(World))
+                continue;
+
+            var archetype = World.GetArchetype(delete);
+            if (archetype is { IsPhantom: false, HasPhantomComponents: true })
+            {
+                // It has phantom components and isn't yet a phantom. Add a Phantom component.
+                InternalSet(delete, new Phantom());
+            }
+            else
+            {
+                World.DeleteImmediate(delete);
+            }
+        }
+
+        _deletes.Clear();
+    }
+
+    private void ApplyStructuralChanges()
+    {
         if (_entityModifications.Count > 0)
         {
             // Calculate the new archetype for the entity
@@ -90,44 +128,43 @@ public sealed partial class CommandBuffer(World World)
                     Pool.Return(mod.Removes);
                 }
 
-                // Get a row handle for the entity, moving it to a new archetype first if necessary
-                Row row;
-                if (moveRequired)
+                // If it's already a phantom then it will be autodeleted if the last phantom component has been removed.
+                var autodelete = currentArchetype.IsPhantom && !_tempComponentIdSet.Any(static a => a.IsPhantomComponent);
+                if (autodelete)
                 {
-                    // Get the new archetype we're moving to
-                    var newArchetype = World.GetOrCreateArchetype(_tempComponentIdSet, hash);
-
-                    // Migrate the entity across
-                    row = World.MigrateEntity(entity, newArchetype);
+                    World.DeleteImmediate(entity);
                 }
                 else
                 {
-                    row = World.GetRow(entity);
+                    // Get a row handle for the entity, moving it to a new archetype first if necessary
+                    Row row;
+                    if (moveRequired)
+                    {
+                        // Get the new archetype we're moving to
+                        var newArchetype = World.GetOrCreateArchetype(_tempComponentIdSet, hash);
+
+                        // Migrate the entity across
+                        row = World.MigrateEntity(entity, newArchetype);
+                    }
+                    else
+                    {
+                        row = World.GetRow(entity);
+                    }
+
+                    // Run all setters
+                    if (mod.Sets != null)
+                        foreach (var (_, set) in mod.Sets.Enumerable())
+                            _setters.Write(set, row);
                 }
 
-                // Run all setters
+                // Recycle setters
                 if (mod.Sets != null)
                 {
-                    foreach (var (_, set) in mod.Sets.Enumerable())
-                        _setters.Write(set, row);
-
-                    // Recycle
                     mod.Sets.Clear();
                     Pool.Return(mod.Sets);
                 }
             }
         }
-
-        _setters.Clear();
-        _entityModifications.Clear();
-        _tempComponentIdSet.Clear();
-        _aggregateNodesCount = 0;
-
-        // Update the version of this buffer, invalidating all buffered entities for further modification
-        unchecked { _version++; }
-
-        // Return the resolver
-        return resolver;
     }
 
     private void CreateBufferedEntities(Resolver resolver)
@@ -263,6 +300,15 @@ public sealed partial class CommandBuffer(World World)
     public void Set<T>(Entity entity, T value)
         where T : IComponent
     {
+        if (typeof(T) == typeof(Phantom))
+            throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
+
+        InternalSet(entity, value);
+    }
+
+    private void InternalSet<T>(Entity entity, T value)
+        where T : IComponent
+    {
         var mod = GetModificationData(entity, true, false);
 
         // Create a setter and store it in the list (recycling the old one, if it's there)
@@ -289,6 +335,9 @@ public sealed partial class CommandBuffer(World World)
     public void Remove<T>(Entity entity)
         where T : IComponent
     {
+        if (typeof(T) == typeof(Phantom))
+            throw new InvalidOperationException("Cannot remove `Phantom` component from an enity");
+
         var mod = GetModificationData(entity, false, true);
 
         // Add a remover to the list

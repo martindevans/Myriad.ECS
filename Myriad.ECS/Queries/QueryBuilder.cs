@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Collections;
+using Myriad.ECS.Components;
 
 namespace Myriad.ECS.Queries;
 
@@ -31,6 +32,10 @@ public sealed partial class QueryBuilder
     /// <returns></returns>
     public QueryDescription Build(World world)
     {
+        // Automatically exclude all Phantom entities, unless specifically requested.
+        if (!_include.Contains(ComponentID<Phantom>.ID))
+            Exclude<Phantom>();
+
         return new QueryDescription(
             world,
             _include.ToFrozenSet(),

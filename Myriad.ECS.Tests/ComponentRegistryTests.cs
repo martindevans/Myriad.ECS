@@ -54,4 +54,15 @@ public class ComponentRegistryTests
             ComponentRegistry.Get(default(ComponentID));
         });
     }
+
+    [TestMethod]
+    public void PhantomEntityHasPhantomFlag()
+    {
+        ComponentRegistry.Register(Assembly.GetExecutingAssembly());
+
+        Assert.IsTrue(ComponentRegistry.Get(typeof(TestPhantom0)).IsPhantomComponent);
+        Assert.IsTrue(ComponentRegistry.Get(typeof(TestPhantom1)).IsPhantomComponent);
+        Assert.IsTrue(ComponentRegistry.Get(typeof(TestPhantom2)).IsPhantomComponent);
+        Assert.IsFalse(ComponentRegistry.Get(typeof(Component1)).IsPhantomComponent);
+    }
 }

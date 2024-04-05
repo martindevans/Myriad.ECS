@@ -1,7 +1,5 @@
-using System.Reflection;
 using Myriad.ECS.Command;
 using Myriad.ECS.Queries;
-using Myriad.ECS.Registry;
 using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Tests;

@@ -52,13 +52,14 @@ public class EntityModifyBenchmark
     {
         for (var i = 0; i < 5; i++)
         {
-            switch (random.Next(0, 5))
+            switch (random.Next(0, 6))
             {
                 case 0: buffer.Set(entity, new ComponentByte((byte)i)); break;
                 case 1: buffer.Set(entity, new ComponentInt16((short)i)); break;
                 case 2: buffer.Set(entity, new ComponentFloat(i)); break;
                 case 3: buffer.Set(entity, new ComponentInt32(i)); break;
                 case 4: buffer.Set(entity, new ComponentInt64(i)); break;
+                case 5: break;
             }
         }
     }

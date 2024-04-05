@@ -5,19 +5,22 @@ namespace Myriad.ECS.IDs;
 
 [DebuggerDisplay("{Type} ({Value})")]
 public readonly record struct ComponentID
-    : IIDNumber<ComponentID>
+    : IComparable<ComponentID>
 {
+    internal const int SpecialBits = 1;
+    internal const int IsPhantomComponentMask = 1;
+
     public int Value { get; }
     public Type Type => ComponentRegistry.Get(this);
 
-    private ComponentID(int value)
+    /// <summary>
+    /// Indicates if this component implements <see cref="IsPhantomComponent"/>
+    /// </summary>
+    public bool IsPhantomComponent => (Value & IsPhantomComponentMask) == IsPhantomComponentMask;
+
+    internal ComponentID(int value)
     {
         Value = value;
-    }
-
-    public ComponentID Next()
-    {
-        return new ComponentID(checked(Value + 1));
     }
 
     public int CompareTo(ComponentID other)

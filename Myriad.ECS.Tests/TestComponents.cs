@@ -1,4 +1,6 @@
-﻿namespace Myriad.ECS.Tests;
+﻿using Myriad.ECS.Components;
+
+namespace Myriad.ECS.Tests;
 
 public record struct ComponentByte(byte Value) : IComponent;
 public record struct ComponentInt16(short Value) : IComponent;
@@ -24,3 +26,7 @@ public record struct Component14 : IComponent;
 public record struct Component15 : IComponent;
 public record struct Component16 : IComponent;
 public record struct Component17 : IComponent;
+
+public record struct TestPhantom0 : IPhantomComponent;
+public record struct TestPhantom1 : IPhantomComponent;
+public record struct TestPhantom2 : IPhantomComponent;

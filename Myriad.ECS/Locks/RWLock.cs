@@ -11,12 +11,6 @@ public class RWLock<T>(T value)
         return new ReadLockHandle(_lock, value);
     }
 
-    public UpgradeableReadLockHandle EnterUpgradeableReadLock()
-    {
-        _lock.EnterUpgradeableReadLock();
-        return new UpgradeableReadLockHandle(_lock, value);
-    }
-
     public WriteLockHandle EnterWriteLock()
     {
         _lock.EnterWriteLock();
@@ -37,29 +31,6 @@ public class RWLock<T>(T value)
         public void Dispose()
         {
             _lock.ExitReadLock();
-        }
-    }
-
-    public readonly ref struct UpgradeableReadLockHandle
-    {
-        private readonly ReaderWriterLockSlim _lock;
-        public readonly T Value;
-
-        internal UpgradeableReadLockHandle(ReaderWriterLockSlim @lock, T value)
-        {
-            _lock = @lock;
-            Value = value;
-        }
-
-        public WriteLockHandle UpgradeToWriteLock()
-        {
-            _lock.EnterWriteLock();
-            return new WriteLockHandle(_lock, Value);
-        }
-
-        public void Dispose()
-        {
-            _lock.ExitUpgradeableReadLock();
         }
     }
 

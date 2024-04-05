@@ -11,7 +11,7 @@ public class EntityTests
     public void DefaultEntityIsNotAlive()
     {
         var w = new WorldBuilder().Build();
-        Assert.IsFalse(default(Entity).IsAlive(w));
+        Assert.IsFalse(default(Entity).Exists(w));
     }
 
     [TestMethod]

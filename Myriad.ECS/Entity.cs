@@ -18,10 +18,28 @@ public readonly record struct Entity
         Version = version;
     }
 
-    public bool IsAlive(World world)
+    /// <summary>
+    /// Check if this Entity still exists.
+    /// </summary>
+    /// <param name="world"></param>
+    /// <returns></returns>
+    public bool Exists(World world)
     {
         return ID != 0
             && world.GetVersion(ID) == Version;
+    }
+
+    /// <summary>
+    /// Check if this Entity is in a phantom state. i.e. automatically excluded from queries
+    /// and automatically deleted when the last IPhantomComponent component is removed.
+    /// </summary>
+    /// <param name="world"></param>
+    /// <returns>true if this entity is a phantom. False is it does not exist or is not a phantom.</returns>
+    public bool IsPhantom(World world)
+    {
+        return ID != 0
+            && Exists(world)
+            && world.GetArchetype(this).IsPhantom;
     }
 
     public int CompareTo(Entity other)

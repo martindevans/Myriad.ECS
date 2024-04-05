@@ -2,6 +2,7 @@
 using Myriad.ECS.IDs;
 using System.Diagnostics.CodeAnalysis;
 using Myriad.ECS.Allocations;
+using Myriad.ECS.Components;
 
 namespace Myriad.ECS.Registry;
 
@@ -124,22 +125,32 @@ public static class ComponentRegistry
 
         // Init the first ID to be the one after the default ID. That
         // means that default is _not_ a valid ID.
-        private ComponentID _nextId = default(ComponentID).Next();
+        private int _nextId = 1;
 
         public ComponentID GetOrAdd(Type type)
         {
-            if (!IDLookup.TryGetValue(type, out var id))
+            if (!IDLookup.TryGetValue(type, out var value))
             {
-                id = _nextId;
-                _nextId = _nextId.Next();
+                var id = _nextId++;
 
-                IDLookup[type] = id;
-                TypeLookup[id] = type;
+                // Shift over the ID to make space for the special bits
+                id <<= ComponentID.SpecialBits;
 
+                // Set the bit indicating that this component implements IPhantomComponent
+                if (typeof(IPhantomComponent).IsAssignableFrom(type))
+                    id |= ComponentID.IsPhantomComponentMask;
+
+                // Store it for future lookups
+                value = new ComponentID(id);
+                IDLookup[type] = value;
+                TypeLookup[value] = type;
+
+                // Since we've discovered this component we're likely to need
+                // arrays made for it later. Prepare the array factory for that.
                 ArrayFactory.Prepare(type);
             }
 
-            return id;
+            return value;
         }
 
         public bool TryGet(Type type, out ComponentID id)

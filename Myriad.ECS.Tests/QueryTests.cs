@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Collections;
+using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Registry;
@@ -174,6 +175,7 @@ public class QueryTests
     {
         var w = new WorldBuilder()
            .WithArchetype<ComponentInt32>()
+           .WithArchetype<ComponentInt32>()
            .WithArchetype<ComponentFloat>()
            .WithArchetype<ComponentFloat, ComponentInt32>()
            .WithArchetype<ComponentInt16, ComponentInt64>()
@@ -196,6 +198,65 @@ public class QueryTests
 
             Assert.IsTrue(match.Archetype.Components.Contains(ComponentRegistry.Get<ComponentInt32>())
                        || match.Archetype.Components.Contains(ComponentRegistry.Get<ComponentFloat>()));
+        }
+    }
+
+    [TestMethod]
+    public void ExcludePhantoms()
+    {
+        var w = new WorldBuilder()
+               .WithArchetype<ComponentInt32>()
+               .WithArchetype<ComponentInt32, Phantom>()
+               .WithArchetype<ComponentFloat>()
+               .WithArchetype<ComponentFloat, ComponentInt32>()
+               .WithArchetype<ComponentInt16, ComponentInt64>()
+               .Build();
+
+        var q = new QueryBuilder()
+               .Include<ComponentInt32>()
+               .Build(w);
+
+        var matches = q.GetArchetypes();
+
+        Assert.IsNotNull(matches);
+        Assert.AreEqual(2, matches.Count);
+
+        foreach (var match in matches)
+        {
+            Assert.IsNotNull(match);
+            Assert.IsTrue(match.ExactlyOne == null);
+
+            Assert.IsTrue(match.Archetype.Components.Contains(ComponentRegistry.Get<ComponentInt32>()));
+        }
+    }
+
+    [TestMethod]
+    public void IncludePhantoms()
+    {
+        var w = new WorldBuilder()
+               .WithArchetype<ComponentInt32>()
+               .WithArchetype<ComponentInt32, Phantom>()
+               .WithArchetype<ComponentFloat>()
+               .WithArchetype<ComponentFloat, ComponentInt32>()
+               .WithArchetype<ComponentInt16, ComponentInt64>()
+               .Build();
+
+        var q = new QueryBuilder()
+               .Include<ComponentInt32>()
+               .Include<Phantom>()
+               .Build(w);
+
+        var matches = q.GetArchetypes();
+
+        Assert.IsNotNull(matches);
+        Assert.AreEqual(1, matches.Count);
+
+        foreach (var match in matches)
+        {
+            Assert.IsNotNull(match);
+            Assert.IsTrue(match.ExactlyOne == null);
+
+            Assert.IsTrue(match.Archetype.Components.Contains(ComponentRegistry.Get<ComponentInt32>()));
         }
     }
 }

@@ -51,13 +51,7 @@ public sealed partial class WorldBuilder
         var w = new World();
 
         foreach (var components in _archetypes)
-        {
-            var h = new ArchetypeHash();
-            foreach (var componentId in components)
-                h = h.Toggle(componentId);
-
-            w.GetOrCreateArchetype(components, h);
-        }
+            w.GetOrCreateArchetype(components);
 
         return w;
     }

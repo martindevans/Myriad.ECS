@@ -27,7 +27,7 @@ public class CommandBufferTests
         using var resolver = buffer.Playback();
         var entity = resolver.Resolve(eb);
 
-        Assert.IsTrue(entity.IsAlive(world));
+        Assert.IsTrue(entity.Exists(world));
         Assert.AreEqual(1, world.Archetypes.Count);
         Assert.AreEqual(0, world.Archetypes.Single().Components.Count);
     }
@@ -54,7 +54,7 @@ public class CommandBufferTests
         for (var i = 0; i < entities.Count; i++)
         {
             var entity = entities[i];
-            Assert.IsTrue(entity.IsAlive(world));
+            Assert.IsTrue(entity.Exists(world));
             Assert.AreEqual(1, world.Archetypes.Count);
             Assert.AreEqual(1, world.Archetypes.Single().Components.Count);
             Assert.AreEqual(i, world.GetComponentRef<ComponentInt32>(entity).Value);
@@ -104,7 +104,7 @@ public class CommandBufferTests
                     break;
                 var idx = rng.Next(0, alive.Count);
                 var ent = alive[idx];
-                Assert.IsTrue(ent.IsAlive(world));
+                Assert.IsTrue(ent.Exists(world));
                 buffer.Delete(ent);
                 alive.RemoveAt(idx);
                 dead.Add(ent);
@@ -121,12 +121,12 @@ public class CommandBufferTests
             for (var j = 0; j < alive.Count; j++)
             {
                 var entity = alive[j];
-                Assert.IsTrue(entity.IsAlive(world));
+                Assert.IsTrue(entity.Exists(world));
             }
             for (var j = 0; j < dead.Count; j++)
             {
                 var entity = dead[j];
-                Assert.IsTrue(!entity.IsAlive(world));
+                Assert.IsTrue(!entity.Exists(world));
             }
 
             // Check archetypes
@@ -222,7 +222,7 @@ public class CommandBufferTests
         var resolver = buffer.Playback();
         var entity = resolver.Resolve(eb);
 
-        Assert.IsTrue(entity.IsAlive(world));
+        Assert.IsTrue(entity.Exists(world));
         Assert.AreEqual(1, world.Archetypes.Count);
         Assert.AreEqual(1, world.Archetypes.Single().Components.Count);
         Assert.IsTrue(world.Archetypes.Single().Components.Contains(ComponentID<ComponentFloat>.ID));
@@ -279,14 +279,14 @@ public class CommandBufferTests
         };
 
         foreach (var entity in entities)
-            Assert.IsTrue(entity.IsAlive(world));
+            Assert.IsTrue(entity.Exists(world));
 
         buffer.Delete(entities[1]);
         buffer.Playback();
 
-        Assert.IsTrue(entities[0].IsAlive(world));
-        Assert.IsFalse(entities[1].IsAlive(world));
-        Assert.IsTrue(entities[2].IsAlive(world));
+        Assert.IsTrue(entities[0].Exists(world));
+        Assert.IsFalse(entities[1].Exists(world));
+        Assert.IsTrue(entities[2].Exists(world));
 
         Assert.AreEqual(1, world.GetComponentRef<ComponentFloat>(entities[0]).Value);
         Assert.AreEqual(3, world.GetComponentRef<ComponentFloat>(entities[2]).Value);
@@ -301,7 +301,7 @@ public class CommandBufferTests
         var buffered = buffer.Create().Set(new ComponentFloat(1));
         using var resolver = buffer.Playback();
         var entity = resolver.Resolve(buffered);
-        Assert.IsTrue(entity.IsAlive(world));
+        Assert.IsTrue(entity.Exists(world));
 
         buffer.Delete(entity);
         buffer.Delete(entity);
@@ -310,7 +310,7 @@ public class CommandBufferTests
         buffer.Delete(entity);
         buffer.Playback();
 
-        Assert.IsFalse(entity.IsAlive(world));
+        Assert.IsFalse(entity.Exists(world));
     }
 
     [TestMethod]
@@ -336,14 +336,14 @@ public class CommandBufferTests
         };
 
         foreach (var entity in entities)
-            Assert.IsTrue(entity.IsAlive(world));
+            Assert.IsTrue(entity.Exists(world));
 
         buffer.Delete([entities[0], entities[1]]);
         buffer.Playback();
 
-        Assert.IsFalse(entities[0].IsAlive(world));
-        Assert.IsFalse(entities[1].IsAlive(world));
-        Assert.IsTrue(entities[2].IsAlive(world));
+        Assert.IsFalse(entities[0].Exists(world));
+        Assert.IsFalse(entities[1].Exists(world));
+        Assert.IsTrue(entities[2].Exists(world));
 
         Assert.AreEqual(3, world.GetComponentRef<ComponentFloat>(entities[2]).Value);
     }
@@ -358,7 +358,7 @@ public class CommandBufferTests
         var buffered = buffer.Create().Set(new ComponentFloat(1));
         using var resolver = buffer.Playback();
         var entity = resolver.Resolve(buffered);
-        Assert.IsTrue(entity.IsAlive(world));
+        Assert.IsTrue(entity.Exists(world));
 
         // Modify it _and_ delete it
         buffer.Set(entity, new ComponentInt64(7));
@@ -368,7 +368,7 @@ public class CommandBufferTests
         buffer.Playback().Dispose();
 
         // Check it's dead
-        Assert.IsFalse(entity.IsAlive(world));
+        Assert.IsFalse(entity.Exists(world));
         Assert.AreEqual(0, world.Count<ComponentFloat>());
         Assert.AreEqual(0, world.Count<ComponentInt16>());
         Assert.AreEqual(0, world.Count<ComponentInt32>());
