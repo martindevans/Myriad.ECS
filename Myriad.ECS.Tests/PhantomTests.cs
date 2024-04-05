@@ -114,4 +114,31 @@ public class PhantomTests
         // Entity should no longer exist at all
         Assert.IsFalse(e.Exists(w));
     }
+
+    [TestMethod]
+    public void AddPhantomComponentAndDelete()
+    {
+        var w = new WorldBuilder().Build();
+
+        // Create an entity without a phantom component
+        var cmd = new CommandBuffer(w);
+        var eb = cmd.Create().Set(new ComponentFloat(42));
+        var resolver = cmd.Playback();
+        var e = resolver[eb];
+        resolver.Dispose();
+
+        // Is the entity valid
+        Assert.IsTrue(e.Exists(w));
+        Assert.IsFalse(e.IsPhantom(w));
+
+        // Delete it and also add a phantom component
+        cmd.Delete(e);
+        cmd.Set(e, new TestPhantom0());
+        cmd.Playback().Dispose();
+
+        // Is the entity valid but no longer alive
+        Assert.IsTrue(e.Exists(w));
+        Assert.IsTrue(e.IsPhantom(w));
+        Assert.IsTrue(w.HasComponent<ComponentFloat>(e));
+    }
 }

@@ -31,6 +31,7 @@ public sealed partial class CommandBuffer(World World)
 
     private readonly SortedList<Entity, EntityModificationData> _entityModifications = [ ];
     private readonly List<Entity> _deletes = [ ];
+    private readonly OrderedListSet<Entity> _maybeAddingPhantomComponent = new();
 
     private readonly OrderedListSet<ComponentID> _tempComponentIdSet = new();
 
@@ -51,6 +52,7 @@ public sealed partial class CommandBuffer(World World)
         ApplyStructuralChanges();
 
         // Clear all temporary state
+        _maybeAddingPhantomComponent.Clear();
         _setters.Clear();
         _entityModifications.Clear();
         _tempComponentIdSet.Clear();
@@ -71,7 +73,7 @@ public sealed partial class CommandBuffer(World World)
                 continue;
 
             var archetype = World.GetArchetype(delete);
-            if (archetype is { IsPhantom: false, HasPhantomComponents: true })
+            if (archetype is { IsPhantom: false, HasPhantomComponents: true } || IsAddingPhantomComponent(delete))
             {
                 // It has phantom components and isn't yet a phantom. Add a Phantom component.
                 InternalSet(delete, new Phantom());
@@ -83,6 +85,17 @@ public sealed partial class CommandBuffer(World World)
         }
 
         _deletes.Clear();
+
+        // Check if this entity should not be deleted, because a phantom component is being added
+        bool IsAddingPhantomComponent(Entity delete)
+        {
+            if (_maybeAddingPhantomComponent.Contains(delete) && _entityModifications.TryGetValue(delete, out var mod) && mod.Sets != null)
+                foreach (var (key, _) in mod.Sets.Enumerable())
+                    if (key.IsPhantomComponent)
+                        return true;
+
+            return false;
+        }
     }
 
     private void ApplyStructuralChanges()
@@ -325,6 +338,10 @@ public sealed partial class CommandBuffer(World World)
             var index = _setters.Add(value);
             mod.Sets!.Add(id, index);
         }
+
+        // Check if this is a phantom component being added
+        if (id.IsPhantomComponent)
+            _maybeAddingPhantomComponent.Add(entity);
 
         // Remove it from the "remove" set. In case it was previously removed
         mod.Removes?.Remove(id);
