@@ -260,6 +260,9 @@ public sealed partial class CommandBuffer(World World)
     {
         Debug.Assert(id < _bufferedSets.Count, "Unknown entity ID in SetBuffered");
 
+        if (typeof(T) == typeof(Phantom))
+            throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
+
         var bufferedData = _bufferedSets[(int)id];
         var setters = bufferedData.Setters;
 

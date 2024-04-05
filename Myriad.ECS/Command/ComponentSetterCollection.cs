@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
