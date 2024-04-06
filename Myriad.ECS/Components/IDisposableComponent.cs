@@ -17,8 +17,8 @@ namespace Myriad.ECS.Components
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TC"></typeparam>
     /// <param name="world"></param>
-    public class DisposableComponentSystem<T, TC>(World world, CommandBuffer? buffer = null)
-        : BaseSystem<T>
+    public sealed class DisposableComponentSystem<T, TC>(World world, CommandBuffer? buffer = null)
+        : BaseSystem<T>, IDisposable
         where TC : IDisposableComponent
     {
         private readonly CommandBuffer _cmd = buffer ?? new(world);
@@ -32,6 +32,19 @@ namespace Myriad.ECS.Components
 
             if (_autorun)
                 _cmd.Playback().Dispose();
+        }
+
+        public void Dispose()
+        {
+            var cmd = new CommandBuffer(world);
+
+            // Execute once with the query, disposing on phantoms
+            world.Execute<DisposalQuery, TC>(new DisposalQuery(cmd), _query);
+
+            // Execute again without the query, disposing even on live entities
+            world.Execute<DisposalQuery, TC>(new DisposalQuery(cmd));
+
+            cmd.Playback().Dispose();
         }
 
         private readonly struct DisposalQuery(CommandBuffer cmd)
