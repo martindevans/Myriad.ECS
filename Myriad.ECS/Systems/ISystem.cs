@@ -2,19 +2,12 @@
 
 public interface ISystem<in TData>
 {
-    /// <summary>
-    /// Indicates if this system is enabled. If false, all update calls will be skipped.
-    /// </summary>
-    bool Enabled { get; set; }
-
     public void Update(TData data);
 }
 
 public abstract class BaseSystem<TData>
     : ISystem<TData>
 {
-    public bool Enabled { get; set; } = true;
-
     public abstract void Update(TData data);
 }
 

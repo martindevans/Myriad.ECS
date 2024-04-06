@@ -33,8 +33,6 @@ public class CommandBufferSystem<T>(World world)
     /// </summary>
     public CommandBuffer Buffer { get; } = new(world);
 
-    public bool Enabled { get; set; }
-
     public void BeforeUpdate(T data)
     {
         _resolver?.Dispose();

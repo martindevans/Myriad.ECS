@@ -40,8 +40,7 @@ public sealed class SystemGroup<TData>
             _timer.Start();
             {
                 foreach (var system in _beforeSystems)
-                    if (system.Enabled)
-                        system.BeforeUpdate(data);
+                    system.BeforeUpdate(data);
             }
             _timer.Stop();
         }
@@ -54,8 +53,7 @@ public sealed class SystemGroup<TData>
             _timer.Start();
             {
                 foreach (var system in _systems)
-                    if (system.Enabled)
-                        system.Update(data);
+                    system.Update(data);
             }
             _timer.Stop();
         }
@@ -68,8 +66,7 @@ public sealed class SystemGroup<TData>
             _timer.Start();
             {
                 foreach (var system in _afterSystems)
-                    if (system.Enabled)
-                        system.AfterUpdate(data);
+                    system.AfterUpdate(data);
             }
             _timer.Stop();
         }

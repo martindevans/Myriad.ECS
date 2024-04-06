@@ -32,18 +32,15 @@ public sealed class ParallelSystemGroup<TData>
         _dataClosure = default;
         _beforeUpdate = system =>
         {
-            if (system.Enabled)
-                system.BeforeUpdate(_dataClosure!);
+            system.BeforeUpdate(_dataClosure!);
         };
         _update = system =>
         {
-            if (system.Enabled)
-                system.Update(_dataClosure!);
+            system.Update(_dataClosure!);
         };
         _afterUpdate = system =>
         {
-            if (system.Enabled)
-                system.Update(_dataClosure!);
+            system.Update(_dataClosure!);
         };
     }
 
@@ -61,7 +58,7 @@ public sealed class ParallelSystemGroup<TData>
         {
             _timer.Start();
             {
-                if (_beforeSystems.Length > 0 && AnyEnabled(_afterSystems))
+                if (_beforeSystems.Length > 0)
                 {
                     _dataClosure = data;
                     Parallel.ForEach(_beforeSystems, _beforeUpdate);
@@ -78,12 +75,9 @@ public sealed class ParallelSystemGroup<TData>
         {
             _timer.Start();
             {
-                if (AnyEnabled(_afterSystems))
-                {
-                    _dataClosure = data;
-                    Parallel.ForEach(_systems, _update);
-                    _dataClosure = default;
-                }
+                _dataClosure = data;
+                Parallel.ForEach(_systems, _update);
+                _dataClosure = default;
             }
             _timer.Stop();
         }
@@ -95,7 +89,7 @@ public sealed class ParallelSystemGroup<TData>
         {
             _timer.Start();
             {
-                if (_afterSystems.Length > 0 && AnyEnabled(_afterSystems))
+                if (_afterSystems.Length > 0)
                 {
                     _dataClosure = data;
                     Parallel.ForEach(_afterSystems, _afterUpdate);
@@ -106,15 +100,6 @@ public sealed class ParallelSystemGroup<TData>
         }
 
         ExecutionTime = _timer.Elapsed;
-    }
-
-    private static bool AnyEnabled<T>(T[] systems)
-        where T : ISystem<TData>
-    {
-        foreach (var system in systems)
-            if (system.Enabled)
-                return true;
-        return false;
     }
 
     public void Dispose()
