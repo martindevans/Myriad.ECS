@@ -7,7 +7,7 @@ public interface ISystem<in TData>
     /// </summary>
     bool Enabled { get; set; }
 
-    public void Update(TData time);
+    public void Update(TData data);
 }
 
 public abstract class BaseSystem<TData>

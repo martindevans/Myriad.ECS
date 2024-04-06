@@ -4,6 +4,13 @@ namespace Myriad.ECS.Components;
 
 public static class Extensions
 {
+	/// <summary>
+	/// Add a new component based on the index, forcing this entity into a different archetype. If creating many
+	/// entities and they need to be split up for some reason this can shard them.
+	/// </summary>
+	/// <param name="buffered"></param>
+	/// <param name="index"></param>
+	/// <returns></returns>
 	public static CommandBuffer.BufferedEntity AddSharding(this CommandBuffer.BufferedEntity buffered, int index)
 	{
 		switch (index % 16)
@@ -48,7 +55,15 @@ public static class Extensions
 		}
 	}
 
-	public static void AddSharding(this CommandBuffer buffer, Entity entity, int index)
+    /// <summary>
+    /// Add a new component based on the index, forcing this entity into a different archetype. If creating many
+    /// entities and they need to be split up for some reason this can shard them.
+    /// </summary>
+    /// <param name="buffer"></param>
+    /// <param name="entity"></param>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public static void AddSharding(this CommandBuffer buffer, Entity entity, int index)
 	{
 		switch (index % 16)
 		{
@@ -108,6 +123,11 @@ public static class Extensions
 		}
 	}
 
+	/// <summary>
+	/// Remove whatever sharding is attached to this entity
+	/// </summary>
+	/// <param name="buffer"></param>
+	/// <param name="entity"></param>
 	public static void RemoveSharding(this CommandBuffer buffer, Entity entity)
 	{
 		buffer.Remove<Shard0>(entity);

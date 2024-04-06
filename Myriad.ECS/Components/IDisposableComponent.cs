@@ -17,28 +17,27 @@ namespace Myriad.ECS.Components
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TC"></typeparam>
     /// <param name="world"></param>
-    public class DisposableComponentSystem<T, TC>(World world)
-        : ISystemAfter<T>
+    public class DisposableComponentSystem<T, TC>(World world, CommandBuffer? buffer = null)
+        : BaseSystem<T>
         where TC : IDisposableComponent
     {
-        public bool Enabled { get; set; }
+        private readonly CommandBuffer _cmd = buffer ?? new(world);
+        private readonly bool _autorun = buffer == null;
 
-        private readonly CommandBuffer _cmd = new(world);
+        private readonly QueryDescription _query = new QueryBuilder().Include<Phantom>().Include<TC>().Build(world);
 
-        public void Update(T time)
+        public override void Update(T t)
         {
-        }
+            world.Execute<DisposalQuery, TC>(new DisposalQuery(_cmd), _query);
 
-        public void AfterUpdate(T data)
-        {
-            world.Execute<DisposalQuery, Phantom, TC>(new DisposalQuery(_cmd));
-            _cmd.Playback().Dispose();
+            if (_autorun)
+                _cmd.Playback().Dispose();
         }
 
         private readonly struct DisposalQuery(CommandBuffer cmd)
-            : IQuery2<Phantom, TC>
+            : IQuery1<TC>
         {
-            public void Execute(Entity e, ref Phantom _, ref TC disposable)
+            public void Execute(Entity e, ref TC disposable)
             {
                 disposable.Dispose();
                 cmd.Remove<TC>(e);
