@@ -15,10 +15,9 @@ namespace Myriad.ECS.Worlds;
 public partial class World
 {
     // Cache of all queries with 1 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
+    // - component ID
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache1 = [ ];
+    private readonly List<(int, QueryDescription)> _queryCache1 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -28,27 +27,13 @@ public partial class World
     private QueryDescription GetCachedQuery<T0>()
         where T0 : IComponent
     {
-        // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-        ];
-
-        // Calculate hash of components, for fast rejection
-        var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var component = ComponentID<T0>.ID.Value;
 
         // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache1)
+        foreach (var (c, q) in _queryCache1)
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
-
-            // Since the sequences are sorted by component ID these should be identical
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+            if (c == component)
+                return q;
         }
 
         // Didn't find one, create it now
@@ -57,10 +42,11 @@ public partial class World
             .Build(this);
 
         // Add query to the cache
-        _queryCache1.Add((hash, orderedComponents.ToArray(), query));
+        _queryCache1.Add((component, query));
 
         return query;
     }
+
 
     // Cache of all queries with 2 included components. Tuple elements are:
     // - hash of sorted component IDs
@@ -113,6 +99,7 @@ public partial class World
 
         return query;
     }
+
 
     // Cache of all queries with 3 included components. Tuple elements are:
     // - hash of sorted component IDs
@@ -168,6 +155,7 @@ public partial class World
 
         return query;
     }
+
 
     // Cache of all queries with 4 included components. Tuple elements are:
     // - hash of sorted component IDs
@@ -226,6 +214,7 @@ public partial class World
 
         return query;
     }
+
 
     // Cache of all queries with 5 included components. Tuple elements are:
     // - hash of sorted component IDs
@@ -287,6 +276,7 @@ public partial class World
 
         return query;
     }
+
 
     // Cache of all queries with 6 included components. Tuple elements are:
     // - hash of sorted component IDs
@@ -351,6 +341,7 @@ public partial class World
 
         return query;
     }
+
 
     // Cache of all queries with 7 included components. Tuple elements are:
     // - hash of sorted component IDs
@@ -418,6 +409,7 @@ public partial class World
 
         return query;
     }
+
 
     // Cache of all queries with 8 included components. Tuple elements are:
     // - hash of sorted component IDs
@@ -488,6 +480,7 @@ public partial class World
 
         return query;
     }
+
 
     // Cache of all queries with 9 included components. Tuple elements are:
     // - hash of sorted component IDs
@@ -561,6 +554,7 @@ public partial class World
 
         return query;
     }
+
 
     // Cache of all queries with 10 included components. Tuple elements are:
     // - hash of sorted component IDs
@@ -637,6 +631,7 @@ public partial class World
 
         return query;
     }
+
 
     // Cache of all queries with 11 included components. Tuple elements are:
     // - hash of sorted component IDs
@@ -716,6 +711,7 @@ public partial class World
 
         return query;
     }
+
 
     // Cache of all queries with 12 included components. Tuple elements are:
     // - hash of sorted component IDs
@@ -798,6 +794,7 @@ public partial class World
 
         return query;
     }
+
 
     // Cache of all queries with 13 included components. Tuple elements are:
     // - hash of sorted component IDs
@@ -883,6 +880,7 @@ public partial class World
 
         return query;
     }
+
 
     // Cache of all queries with 14 included components. Tuple elements are:
     // - hash of sorted component IDs
@@ -971,6 +969,7 @@ public partial class World
 
         return query;
     }
+
 
     // Cache of all queries with 15 included components. Tuple elements are:
     // - hash of sorted component IDs
@@ -1062,6 +1061,7 @@ public partial class World
 
         return query;
     }
+
 
     // Cache of all queries with 16 included components. Tuple elements are:
     // - hash of sorted component IDs

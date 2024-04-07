@@ -10,6 +10,7 @@ internal static class ArrayFactory
     /// Prepare this type so that arrays of it can be constructed later
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    // ReSharper disable once UnusedMember.Global (Used implicity by reflection)
     public static void Prepare<T>()
     {
         _factories ??= [ ];

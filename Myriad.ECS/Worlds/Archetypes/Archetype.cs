@@ -159,7 +159,7 @@ public sealed partial class Archetype
     {
         // Early exit if we're migrating to where we already are!
         if (to == this)
-            return info.Chunk.GetRow(entity, info);
+            return info.GetRow(entity);
 
         var chunk = info.Chunk;
         var row = chunk.MigrateTo(entity, ref info, to);

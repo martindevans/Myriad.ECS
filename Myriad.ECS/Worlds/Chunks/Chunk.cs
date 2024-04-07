@@ -57,16 +57,15 @@ internal sealed class Chunk
     internal ref T GetRef<T>(Entity entity, int rowIndex)
         where T : IComponent
     {
-        if (_entities[rowIndex] != entity)
-            throw new InvalidOperationException("Mismatched entities in chunk");
+        Debug.Assert(_entities[rowIndex] == entity, "Mismatched entities in chunk");
         return ref GetSpan<T>(ComponentID<T>.ID)[rowIndex];
     }
 
-    internal Span<T> GetSpan<T>()
-        where T : IComponent
-    {
-        return GetSpan<T>(ComponentID<T>.ID);
-    }
+    //internal Span<T> GetSpan<T>()
+    //    where T : IComponent
+    //{
+    //    return GetSpan<T>(ComponentID<T>.ID);
+    //}
 
     internal Span<T> GetSpan<T>(ComponentID id)
         where T : IComponent
@@ -74,11 +73,11 @@ internal sealed class Chunk
         return GetComponentArray<T>(id).AsSpan(0, EntityCount);
     }
 
-    internal T[] GetComponentArray<T>()
-        where T : IComponent
-    {
-        return GetComponentArray<T>(ComponentID<T>.ID);
-    }
+    //internal T[] GetComponentArray<T>()
+    //    where T : IComponent
+    //{
+    //    return GetComponentArray<T>(ComponentID<T>.ID);
+    //}
 
     /// <summary>
     /// Get the component array, providing the component ID if it is known.
@@ -101,14 +100,6 @@ internal sealed class Chunk
         return typedArray;
     }
     #endregion
-
-    internal Row GetRow(Entity entity, EntityInfo info)
-    {
-        if (!ReferenceEquals(info.Chunk, this))
-            throw new ArgumentException("entity is not in this chunk", nameof(entity));
-
-        return new Row(entity, info.RowIndex, this);
-    }
 
     #region add/remove entity
     // Note that these must be called only from Archetype! The Archetype needs to do some bookeeping on create/destroy.
@@ -182,7 +173,7 @@ internal sealed class Chunk
         var oldInfo = info;
 
         // Get a reference to the row currently storing this entity
-        var srcRow = GetRow(entity, info);
+        var srcRow = info.GetRow(entity);
 
         // Move the entity to the new archetype
         var destRow = to.AddEntity(entity, ref info);

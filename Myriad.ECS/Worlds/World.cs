@@ -110,21 +110,6 @@ public sealed partial class World
         return info.Chunk.Archetype.MigrateTo(entity, ref info, to);
     }
 
-    internal (Entity entity, Row slot) CreateEntity(OrderedListSet<ComponentID> components)
-    {
-        // Find an ID to use for this new entity
-        ref var entityInfo = ref AllocateEntity(out var entity);
-
-        // Find the archetype for this entity
-        var archetype = GetOrCreateArchetype(components);
-
-        // Add this entity to the archetype
-        var row = archetype.AddEntity(entity, ref entityInfo);
-
-        // Job done!
-        return (entity, row);
-    }
-
     internal ref EntityInfo AllocateEntity(out Entity entity)
     {
         if (_deadEntities.Count > 0)
@@ -208,7 +193,7 @@ public sealed partial class World
     internal Row GetRow(Entity entity)
     {
         var info = GetEntityInfo(entity);
-        return info.Chunk.GetRow(entity, info);
+        return new Row(entity, info.RowIndex, info.Chunk);
     }
 
     internal ref EntityInfo GetEntityInfo(Entity entity)

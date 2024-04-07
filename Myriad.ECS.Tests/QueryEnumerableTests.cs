@@ -59,11 +59,11 @@ public class QueryEnumerableTests
         var entity3 = r.Resolve(e3);
 
         var count = 0;
-        foreach (var e in w.Query<ComponentInt64, ComponentFloat>())
+        foreach (var (e, i64, f32) in w.Query<ComponentInt64, ComponentFloat>())
         {
-            Assert.AreEqual(entity3, e.Entity);
-            Assert.AreEqual(4, e.Item0.Value);
-            Assert.AreEqual(3, e.Item1.Value);
+            Assert.AreEqual(entity3, e);
+            Assert.AreEqual(4, i64.Ref.Value);
+            Assert.AreEqual(3, f32.Ref.Value);
             count++;
         }
 

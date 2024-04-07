@@ -35,10 +35,7 @@ public class ComponentRegistryTests
     [TestMethod]
     public void DoesNotReassign()
     {
-        ComponentRegistry.Register(Assembly.GetExecutingAssembly());
-
         var id = ComponentRegistry.Get<ComponentInt32>();
-        ComponentRegistry.Register(typeof(ComponentInt32));
         var id2 = ComponentRegistry.Get<ComponentInt32>();
 
         Assert.AreEqual(id, id2);
@@ -47,8 +44,6 @@ public class ComponentRegistryTests
     [TestMethod]
     public void ThrowsForUnknownId()
     {
-        ComponentRegistry.Register(Assembly.GetExecutingAssembly());
-
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
             ComponentRegistry.Get(default(ComponentID));
@@ -58,8 +53,6 @@ public class ComponentRegistryTests
     [TestMethod]
     public void PhantomEntityHasPhantomFlag()
     {
-        ComponentRegistry.Register(Assembly.GetExecutingAssembly());
-
         Assert.IsTrue(ComponentRegistry.Get(typeof(TestPhantom0)).IsPhantomComponent);
         Assert.IsTrue(ComponentRegistry.Get(typeof(TestPhantom1)).IsPhantomComponent);
         Assert.IsTrue(ComponentRegistry.Get(typeof(TestPhantom2)).IsPhantomComponent);

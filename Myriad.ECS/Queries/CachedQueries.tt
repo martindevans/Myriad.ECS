@@ -23,7 +23,40 @@ namespace Myriad.ECS.Worlds;
 
 public partial class World
 {
-<# for (var i = 1; i <= PARAM_COUNT; i++)
+    // Cache of all queries with 1 included components. Tuple elements are:
+    // - component ID
+    // - the query itself
+    private readonly List<(int, QueryDescription)> _queryCache1 = [ ];
+
+    /// <summary>
+    /// Get a query that finds entities which include all of the given types. This query
+    /// will be shared with other requests for the same set of types.
+    /// </summary>
+    /// <returns>A query that finds entities which include all of the given types</returns>
+    private QueryDescription GetCachedQuery<T0>()
+        where T0 : IComponent
+    {
+        var component = ComponentID<T0>.ID.Value;
+
+        // Find query that matches these types
+        foreach (var (c, q) in _queryCache1)
+        {
+            if (c == component)
+                return q;
+        }
+
+        // Didn't find one, create it now
+        var query = new QueryBuilder()
+            .Include<T0>()
+            .Build(this);
+
+        // Add query to the cache
+        _queryCache1.Add((component, query));
+
+        return query;
+    }
+
+<# for (var i = 2; i <= PARAM_COUNT; i++)
 {
     var tparams = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
     if (i > 0)
@@ -41,6 +74,7 @@ public partial class World
         refparamstup = "RefTuple" + i + tparams;
     }
 #>
+
     // Cache of all queries with <#= i #> included components. Tuple elements are:
     // - hash of sorted component IDs
     // - sorted array of component IDs

@@ -12,12 +12,14 @@ public class EntityTests
     {
         var w = new WorldBuilder().Build();
         Assert.IsFalse(default(Entity).Exists(w));
+        Assert.IsFalse(default(Entity).IsAlive(w));
+        Assert.IsFalse(default(Entity).IsPhantom(w));
     }
 
     [TestMethod]
     public void CompareDefaultEntity()
     {
-        Assert.AreEqual(0, default(Entity).CompareTo(default(Entity)));
+        Assert.AreEqual(0, default(Entity).CompareTo(default));
     }
 
     [TestMethod]

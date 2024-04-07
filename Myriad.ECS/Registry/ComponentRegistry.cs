@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Myriad.ECS.IDs;
+﻿using Myriad.ECS.IDs;
 using System.Diagnostics.CodeAnalysis;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.Components;
@@ -12,47 +11,6 @@ namespace Myriad.ECS.Registry;
 public static class ComponentRegistry
 {
     private static readonly Locks.RWLock<State> _lock = new(new State());
-
-    /// <summary>
-    /// Register all IComponent in the given assembly
-    /// </summary>
-    /// <param name="assembly"></param>
-    public static void Register(Assembly assembly)
-    {
-        Register([assembly]);
-    }
-
-    /// <summary>
-    /// Register all IComponent in all given assemblies
-    /// </summary>
-    /// <param name="assemblies"></param>
-    public static void Register(params Assembly[] assemblies)
-    {
-        using var locker = _lock.EnterWriteLock();
-
-        foreach (var assembly in assemblies)
-        {
-            var types = from type in assembly.GetTypes()
-                        where typeof(IComponent).IsAssignableFrom(type)
-                        select type;
-
-            foreach (var type in types)
-                locker.Value.GetOrAdd(type);
-        }
-    }
-
-    /// <summary>
-    /// Register a specific component
-    /// </summary>
-    /// <param name="type"></param>
-    public static void Register(Type type)
-    {
-        TypeCheck(type);
-
-        using var locker = _lock.EnterWriteLock();
-
-        locker.Value.GetOrAdd(type);
-    }
 
     /// <summary>
     /// Get the ID for the given type

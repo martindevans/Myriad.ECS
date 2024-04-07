@@ -329,6 +329,33 @@ public class CommandBufferTests
     }
 
     [TestMethod]
+    public void DeleteDeadEntity()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        // Create an entity
+        var buffered = buffer.Create().Set(new ComponentFloat(1));
+        using var resolver = buffer.Playback();
+        var entity = resolver.Resolve(buffered);
+        Assert.IsTrue(entity.Exists(world));
+
+        // Setup deletion for that entity
+        buffer.Delete(entity);
+
+        // Delete that entity before playing back the first buffer
+        var buffer2 = new CommandBuffer(world);
+        buffer2.Delete(entity);
+        buffer2.Playback().Dispose();
+        Assert.IsFalse(entity.Exists(world));
+
+        // Now play the first buffer back
+        buffer.Playback().Dispose();
+
+        Assert.IsFalse(entity.Exists(world));
+    }
+
+    [TestMethod]
     public void DeleteEntities()
     {
         var world = new WorldBuilder().Build();

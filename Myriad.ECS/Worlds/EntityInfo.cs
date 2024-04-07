@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.Worlds.Chunks;
+﻿using Myriad.ECS.Worlds.Archetypes;
+using Myriad.ECS.Worlds.Chunks;
 
 namespace Myriad.ECS.Worlds;
 
@@ -18,4 +19,9 @@ internal struct EntityInfo
     /// The row in the chunk which contains this entity
     /// </summary>
     public int RowIndex;
+
+    public readonly Row GetRow(Entity entity)
+    {
+        return new Row(entity, RowIndex, Chunk);
+    }
 }
