@@ -8,8 +8,6 @@
     const int PARAM_COUNT = 16;
 #>
 
-#if NET6_0_OR_GREATER
-
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Collections;
@@ -262,8 +260,6 @@ if (i > 0)
 <#
 }
 #>
-
-#endif
 
 <#+ 
     static string Constraints(int count, int spaces = 4)

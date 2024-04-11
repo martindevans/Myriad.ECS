@@ -1,6 +1,4 @@
 ﻿
-#if NET6_0_OR_GREATER
-
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Collections;
@@ -3916,6 +3914,4 @@ namespace Myriad.ECS.Worlds
     }
 }
 
-
-#endif
 
