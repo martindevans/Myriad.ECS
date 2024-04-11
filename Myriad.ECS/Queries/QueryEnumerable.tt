@@ -81,7 +81,7 @@ namespace Myriad.ECS.Queries
 <# for (var k = 0; k < i; k++)
 {
 #>
-        private Span<T<#= k #>> Span<#= k #> = default;
+        private T<#= k #>[]? Components<#= k #>;
 <#
 }
 #>
@@ -107,14 +107,25 @@ else
 #>
                 return new <#= refparamstup #>(
                     SpanEntities[_entityIndex],
+#if NET6_0_OR_GREATER
 <#
 for (var k = 0; k < i; k++)
 {
 #>
-                    ref Span<#= k #>[_entityIndex]<#= k < i - 1 ? "," : "" #>
+                    new RefT<T<#= k #>>(ref Components<#= k #>![_entityIndex])<#= k < i - 1 ? "," : "" #>
 <#
 }
 #>
+#else
+<#
+for (var k = 0; k < i; k++)
+{
+#>
+                    new RefT<T<#= k #>>(Components<#= k #>!, _entityIndex)<#= k < i - 1 ? "," : "" #>
+<#
+}
+#>
+#endif
                 );
 <#
 }
@@ -130,7 +141,7 @@ for (var k = 0; k < i; k++)
 <# for (var k = 0; k < i; k++)
 {
 #>
-            Span<#= k #> = chunk.GetSpan<<#= "T" + k #>>(C<#= k #>);
+            Components<#= k #> = chunk.GetComponentArray<<#= "T" + k #>>(C<#= k #>);
 <#
 }
 #>

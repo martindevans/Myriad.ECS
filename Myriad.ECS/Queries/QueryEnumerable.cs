@@ -172,7 +172,7 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
+        private T0[]? Components0;
 
         internal QueryResultEnumerator1(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -185,7 +185,11 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple1<T0>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex)
+#endif
                 );
             
             }
@@ -196,7 +200,7 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
+            Components0 = chunk.GetComponentArray<T0>(C0);
         }
 
         private bool NextArchetype()
@@ -332,8 +336,8 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
-        private Span<T1> Span1 = default;
+        private T0[]? Components0;
+        private T1[]? Components1;
 
         internal QueryResultEnumerator2(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -346,8 +350,13 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple2<T0, T1>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex],
-                    ref Span1[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex]),
+                    new RefT<T1>(ref Components1![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex),
+                    new RefT<T1>(Components1!, _entityIndex)
+#endif
                 );
             
             }
@@ -358,8 +367,8 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
-            Span1 = chunk.GetSpan<T1>(C1);
+            Components0 = chunk.GetComponentArray<T0>(C0);
+            Components1 = chunk.GetComponentArray<T1>(C1);
         }
 
         private bool NextArchetype()
@@ -501,9 +510,9 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
-        private Span<T1> Span1 = default;
-        private Span<T2> Span2 = default;
+        private T0[]? Components0;
+        private T1[]? Components1;
+        private T2[]? Components2;
 
         internal QueryResultEnumerator3(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -516,9 +525,15 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple3<T0, T1, T2>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex],
-                    ref Span1[_entityIndex],
-                    ref Span2[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex]),
+                    new RefT<T1>(ref Components1![_entityIndex]),
+                    new RefT<T2>(ref Components2![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex),
+                    new RefT<T1>(Components1!, _entityIndex),
+                    new RefT<T2>(Components2!, _entityIndex)
+#endif
                 );
             
             }
@@ -529,9 +544,9 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
-            Span1 = chunk.GetSpan<T1>(C1);
-            Span2 = chunk.GetSpan<T2>(C2);
+            Components0 = chunk.GetComponentArray<T0>(C0);
+            Components1 = chunk.GetComponentArray<T1>(C1);
+            Components2 = chunk.GetComponentArray<T2>(C2);
         }
 
         private bool NextArchetype()
@@ -679,10 +694,10 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
-        private Span<T1> Span1 = default;
-        private Span<T2> Span2 = default;
-        private Span<T3> Span3 = default;
+        private T0[]? Components0;
+        private T1[]? Components1;
+        private T2[]? Components2;
+        private T3[]? Components3;
 
         internal QueryResultEnumerator4(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -695,10 +710,17 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple4<T0, T1, T2, T3>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex],
-                    ref Span1[_entityIndex],
-                    ref Span2[_entityIndex],
-                    ref Span3[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex]),
+                    new RefT<T1>(ref Components1![_entityIndex]),
+                    new RefT<T2>(ref Components2![_entityIndex]),
+                    new RefT<T3>(ref Components3![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex),
+                    new RefT<T1>(Components1!, _entityIndex),
+                    new RefT<T2>(Components2!, _entityIndex),
+                    new RefT<T3>(Components3!, _entityIndex)
+#endif
                 );
             
             }
@@ -709,10 +731,10 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
-            Span1 = chunk.GetSpan<T1>(C1);
-            Span2 = chunk.GetSpan<T2>(C2);
-            Span3 = chunk.GetSpan<T3>(C3);
+            Components0 = chunk.GetComponentArray<T0>(C0);
+            Components1 = chunk.GetComponentArray<T1>(C1);
+            Components2 = chunk.GetComponentArray<T2>(C2);
+            Components3 = chunk.GetComponentArray<T3>(C3);
         }
 
         private bool NextArchetype()
@@ -866,11 +888,11 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
-        private Span<T1> Span1 = default;
-        private Span<T2> Span2 = default;
-        private Span<T3> Span3 = default;
-        private Span<T4> Span4 = default;
+        private T0[]? Components0;
+        private T1[]? Components1;
+        private T2[]? Components2;
+        private T3[]? Components3;
+        private T4[]? Components4;
 
         internal QueryResultEnumerator5(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -883,11 +905,19 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple5<T0, T1, T2, T3, T4>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex],
-                    ref Span1[_entityIndex],
-                    ref Span2[_entityIndex],
-                    ref Span3[_entityIndex],
-                    ref Span4[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex]),
+                    new RefT<T1>(ref Components1![_entityIndex]),
+                    new RefT<T2>(ref Components2![_entityIndex]),
+                    new RefT<T3>(ref Components3![_entityIndex]),
+                    new RefT<T4>(ref Components4![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex),
+                    new RefT<T1>(Components1!, _entityIndex),
+                    new RefT<T2>(Components2!, _entityIndex),
+                    new RefT<T3>(Components3!, _entityIndex),
+                    new RefT<T4>(Components4!, _entityIndex)
+#endif
                 );
             
             }
@@ -898,11 +928,11 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
-            Span1 = chunk.GetSpan<T1>(C1);
-            Span2 = chunk.GetSpan<T2>(C2);
-            Span3 = chunk.GetSpan<T3>(C3);
-            Span4 = chunk.GetSpan<T4>(C4);
+            Components0 = chunk.GetComponentArray<T0>(C0);
+            Components1 = chunk.GetComponentArray<T1>(C1);
+            Components2 = chunk.GetComponentArray<T2>(C2);
+            Components3 = chunk.GetComponentArray<T3>(C3);
+            Components4 = chunk.GetComponentArray<T4>(C4);
         }
 
         private bool NextArchetype()
@@ -1062,12 +1092,12 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
-        private Span<T1> Span1 = default;
-        private Span<T2> Span2 = default;
-        private Span<T3> Span3 = default;
-        private Span<T4> Span4 = default;
-        private Span<T5> Span5 = default;
+        private T0[]? Components0;
+        private T1[]? Components1;
+        private T2[]? Components2;
+        private T3[]? Components3;
+        private T4[]? Components4;
+        private T5[]? Components5;
 
         internal QueryResultEnumerator6(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -1080,12 +1110,21 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple6<T0, T1, T2, T3, T4, T5>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex],
-                    ref Span1[_entityIndex],
-                    ref Span2[_entityIndex],
-                    ref Span3[_entityIndex],
-                    ref Span4[_entityIndex],
-                    ref Span5[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex]),
+                    new RefT<T1>(ref Components1![_entityIndex]),
+                    new RefT<T2>(ref Components2![_entityIndex]),
+                    new RefT<T3>(ref Components3![_entityIndex]),
+                    new RefT<T4>(ref Components4![_entityIndex]),
+                    new RefT<T5>(ref Components5![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex),
+                    new RefT<T1>(Components1!, _entityIndex),
+                    new RefT<T2>(Components2!, _entityIndex),
+                    new RefT<T3>(Components3!, _entityIndex),
+                    new RefT<T4>(Components4!, _entityIndex),
+                    new RefT<T5>(Components5!, _entityIndex)
+#endif
                 );
             
             }
@@ -1096,12 +1135,12 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
-            Span1 = chunk.GetSpan<T1>(C1);
-            Span2 = chunk.GetSpan<T2>(C2);
-            Span3 = chunk.GetSpan<T3>(C3);
-            Span4 = chunk.GetSpan<T4>(C4);
-            Span5 = chunk.GetSpan<T5>(C5);
+            Components0 = chunk.GetComponentArray<T0>(C0);
+            Components1 = chunk.GetComponentArray<T1>(C1);
+            Components2 = chunk.GetComponentArray<T2>(C2);
+            Components3 = chunk.GetComponentArray<T3>(C3);
+            Components4 = chunk.GetComponentArray<T4>(C4);
+            Components5 = chunk.GetComponentArray<T5>(C5);
         }
 
         private bool NextArchetype()
@@ -1267,13 +1306,13 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
-        private Span<T1> Span1 = default;
-        private Span<T2> Span2 = default;
-        private Span<T3> Span3 = default;
-        private Span<T4> Span4 = default;
-        private Span<T5> Span5 = default;
-        private Span<T6> Span6 = default;
+        private T0[]? Components0;
+        private T1[]? Components1;
+        private T2[]? Components2;
+        private T3[]? Components3;
+        private T4[]? Components4;
+        private T5[]? Components5;
+        private T6[]? Components6;
 
         internal QueryResultEnumerator7(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -1286,13 +1325,23 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple7<T0, T1, T2, T3, T4, T5, T6>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex],
-                    ref Span1[_entityIndex],
-                    ref Span2[_entityIndex],
-                    ref Span3[_entityIndex],
-                    ref Span4[_entityIndex],
-                    ref Span5[_entityIndex],
-                    ref Span6[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex]),
+                    new RefT<T1>(ref Components1![_entityIndex]),
+                    new RefT<T2>(ref Components2![_entityIndex]),
+                    new RefT<T3>(ref Components3![_entityIndex]),
+                    new RefT<T4>(ref Components4![_entityIndex]),
+                    new RefT<T5>(ref Components5![_entityIndex]),
+                    new RefT<T6>(ref Components6![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex),
+                    new RefT<T1>(Components1!, _entityIndex),
+                    new RefT<T2>(Components2!, _entityIndex),
+                    new RefT<T3>(Components3!, _entityIndex),
+                    new RefT<T4>(Components4!, _entityIndex),
+                    new RefT<T5>(Components5!, _entityIndex),
+                    new RefT<T6>(Components6!, _entityIndex)
+#endif
                 );
             
             }
@@ -1303,13 +1352,13 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
-            Span1 = chunk.GetSpan<T1>(C1);
-            Span2 = chunk.GetSpan<T2>(C2);
-            Span3 = chunk.GetSpan<T3>(C3);
-            Span4 = chunk.GetSpan<T4>(C4);
-            Span5 = chunk.GetSpan<T5>(C5);
-            Span6 = chunk.GetSpan<T6>(C6);
+            Components0 = chunk.GetComponentArray<T0>(C0);
+            Components1 = chunk.GetComponentArray<T1>(C1);
+            Components2 = chunk.GetComponentArray<T2>(C2);
+            Components3 = chunk.GetComponentArray<T3>(C3);
+            Components4 = chunk.GetComponentArray<T4>(C4);
+            Components5 = chunk.GetComponentArray<T5>(C5);
+            Components6 = chunk.GetComponentArray<T6>(C6);
         }
 
         private bool NextArchetype()
@@ -1481,14 +1530,14 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
-        private Span<T1> Span1 = default;
-        private Span<T2> Span2 = default;
-        private Span<T3> Span3 = default;
-        private Span<T4> Span4 = default;
-        private Span<T5> Span5 = default;
-        private Span<T6> Span6 = default;
-        private Span<T7> Span7 = default;
+        private T0[]? Components0;
+        private T1[]? Components1;
+        private T2[]? Components2;
+        private T3[]? Components3;
+        private T4[]? Components4;
+        private T5[]? Components5;
+        private T6[]? Components6;
+        private T7[]? Components7;
 
         internal QueryResultEnumerator8(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -1501,14 +1550,25 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple8<T0, T1, T2, T3, T4, T5, T6, T7>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex],
-                    ref Span1[_entityIndex],
-                    ref Span2[_entityIndex],
-                    ref Span3[_entityIndex],
-                    ref Span4[_entityIndex],
-                    ref Span5[_entityIndex],
-                    ref Span6[_entityIndex],
-                    ref Span7[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex]),
+                    new RefT<T1>(ref Components1![_entityIndex]),
+                    new RefT<T2>(ref Components2![_entityIndex]),
+                    new RefT<T3>(ref Components3![_entityIndex]),
+                    new RefT<T4>(ref Components4![_entityIndex]),
+                    new RefT<T5>(ref Components5![_entityIndex]),
+                    new RefT<T6>(ref Components6![_entityIndex]),
+                    new RefT<T7>(ref Components7![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex),
+                    new RefT<T1>(Components1!, _entityIndex),
+                    new RefT<T2>(Components2!, _entityIndex),
+                    new RefT<T3>(Components3!, _entityIndex),
+                    new RefT<T4>(Components4!, _entityIndex),
+                    new RefT<T5>(Components5!, _entityIndex),
+                    new RefT<T6>(Components6!, _entityIndex),
+                    new RefT<T7>(Components7!, _entityIndex)
+#endif
                 );
             
             }
@@ -1519,14 +1579,14 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
-            Span1 = chunk.GetSpan<T1>(C1);
-            Span2 = chunk.GetSpan<T2>(C2);
-            Span3 = chunk.GetSpan<T3>(C3);
-            Span4 = chunk.GetSpan<T4>(C4);
-            Span5 = chunk.GetSpan<T5>(C5);
-            Span6 = chunk.GetSpan<T6>(C6);
-            Span7 = chunk.GetSpan<T7>(C7);
+            Components0 = chunk.GetComponentArray<T0>(C0);
+            Components1 = chunk.GetComponentArray<T1>(C1);
+            Components2 = chunk.GetComponentArray<T2>(C2);
+            Components3 = chunk.GetComponentArray<T3>(C3);
+            Components4 = chunk.GetComponentArray<T4>(C4);
+            Components5 = chunk.GetComponentArray<T5>(C5);
+            Components6 = chunk.GetComponentArray<T6>(C6);
+            Components7 = chunk.GetComponentArray<T7>(C7);
         }
 
         private bool NextArchetype()
@@ -1704,15 +1764,15 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
-        private Span<T1> Span1 = default;
-        private Span<T2> Span2 = default;
-        private Span<T3> Span3 = default;
-        private Span<T4> Span4 = default;
-        private Span<T5> Span5 = default;
-        private Span<T6> Span6 = default;
-        private Span<T7> Span7 = default;
-        private Span<T8> Span8 = default;
+        private T0[]? Components0;
+        private T1[]? Components1;
+        private T2[]? Components2;
+        private T3[]? Components3;
+        private T4[]? Components4;
+        private T5[]? Components5;
+        private T6[]? Components6;
+        private T7[]? Components7;
+        private T8[]? Components8;
 
         internal QueryResultEnumerator9(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -1725,15 +1785,27 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex],
-                    ref Span1[_entityIndex],
-                    ref Span2[_entityIndex],
-                    ref Span3[_entityIndex],
-                    ref Span4[_entityIndex],
-                    ref Span5[_entityIndex],
-                    ref Span6[_entityIndex],
-                    ref Span7[_entityIndex],
-                    ref Span8[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex]),
+                    new RefT<T1>(ref Components1![_entityIndex]),
+                    new RefT<T2>(ref Components2![_entityIndex]),
+                    new RefT<T3>(ref Components3![_entityIndex]),
+                    new RefT<T4>(ref Components4![_entityIndex]),
+                    new RefT<T5>(ref Components5![_entityIndex]),
+                    new RefT<T6>(ref Components6![_entityIndex]),
+                    new RefT<T7>(ref Components7![_entityIndex]),
+                    new RefT<T8>(ref Components8![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex),
+                    new RefT<T1>(Components1!, _entityIndex),
+                    new RefT<T2>(Components2!, _entityIndex),
+                    new RefT<T3>(Components3!, _entityIndex),
+                    new RefT<T4>(Components4!, _entityIndex),
+                    new RefT<T5>(Components5!, _entityIndex),
+                    new RefT<T6>(Components6!, _entityIndex),
+                    new RefT<T7>(Components7!, _entityIndex),
+                    new RefT<T8>(Components8!, _entityIndex)
+#endif
                 );
             
             }
@@ -1744,15 +1816,15 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
-            Span1 = chunk.GetSpan<T1>(C1);
-            Span2 = chunk.GetSpan<T2>(C2);
-            Span3 = chunk.GetSpan<T3>(C3);
-            Span4 = chunk.GetSpan<T4>(C4);
-            Span5 = chunk.GetSpan<T5>(C5);
-            Span6 = chunk.GetSpan<T6>(C6);
-            Span7 = chunk.GetSpan<T7>(C7);
-            Span8 = chunk.GetSpan<T8>(C8);
+            Components0 = chunk.GetComponentArray<T0>(C0);
+            Components1 = chunk.GetComponentArray<T1>(C1);
+            Components2 = chunk.GetComponentArray<T2>(C2);
+            Components3 = chunk.GetComponentArray<T3>(C3);
+            Components4 = chunk.GetComponentArray<T4>(C4);
+            Components5 = chunk.GetComponentArray<T5>(C5);
+            Components6 = chunk.GetComponentArray<T6>(C6);
+            Components7 = chunk.GetComponentArray<T7>(C7);
+            Components8 = chunk.GetComponentArray<T8>(C8);
         }
 
         private bool NextArchetype()
@@ -1936,16 +2008,16 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
-        private Span<T1> Span1 = default;
-        private Span<T2> Span2 = default;
-        private Span<T3> Span3 = default;
-        private Span<T4> Span4 = default;
-        private Span<T5> Span5 = default;
-        private Span<T6> Span6 = default;
-        private Span<T7> Span7 = default;
-        private Span<T8> Span8 = default;
-        private Span<T9> Span9 = default;
+        private T0[]? Components0;
+        private T1[]? Components1;
+        private T2[]? Components2;
+        private T3[]? Components3;
+        private T4[]? Components4;
+        private T5[]? Components5;
+        private T6[]? Components6;
+        private T7[]? Components7;
+        private T8[]? Components8;
+        private T9[]? Components9;
 
         internal QueryResultEnumerator10(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -1958,16 +2030,29 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex],
-                    ref Span1[_entityIndex],
-                    ref Span2[_entityIndex],
-                    ref Span3[_entityIndex],
-                    ref Span4[_entityIndex],
-                    ref Span5[_entityIndex],
-                    ref Span6[_entityIndex],
-                    ref Span7[_entityIndex],
-                    ref Span8[_entityIndex],
-                    ref Span9[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex]),
+                    new RefT<T1>(ref Components1![_entityIndex]),
+                    new RefT<T2>(ref Components2![_entityIndex]),
+                    new RefT<T3>(ref Components3![_entityIndex]),
+                    new RefT<T4>(ref Components4![_entityIndex]),
+                    new RefT<T5>(ref Components5![_entityIndex]),
+                    new RefT<T6>(ref Components6![_entityIndex]),
+                    new RefT<T7>(ref Components7![_entityIndex]),
+                    new RefT<T8>(ref Components8![_entityIndex]),
+                    new RefT<T9>(ref Components9![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex),
+                    new RefT<T1>(Components1!, _entityIndex),
+                    new RefT<T2>(Components2!, _entityIndex),
+                    new RefT<T3>(Components3!, _entityIndex),
+                    new RefT<T4>(Components4!, _entityIndex),
+                    new RefT<T5>(Components5!, _entityIndex),
+                    new RefT<T6>(Components6!, _entityIndex),
+                    new RefT<T7>(Components7!, _entityIndex),
+                    new RefT<T8>(Components8!, _entityIndex),
+                    new RefT<T9>(Components9!, _entityIndex)
+#endif
                 );
             
             }
@@ -1978,16 +2063,16 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
-            Span1 = chunk.GetSpan<T1>(C1);
-            Span2 = chunk.GetSpan<T2>(C2);
-            Span3 = chunk.GetSpan<T3>(C3);
-            Span4 = chunk.GetSpan<T4>(C4);
-            Span5 = chunk.GetSpan<T5>(C5);
-            Span6 = chunk.GetSpan<T6>(C6);
-            Span7 = chunk.GetSpan<T7>(C7);
-            Span8 = chunk.GetSpan<T8>(C8);
-            Span9 = chunk.GetSpan<T9>(C9);
+            Components0 = chunk.GetComponentArray<T0>(C0);
+            Components1 = chunk.GetComponentArray<T1>(C1);
+            Components2 = chunk.GetComponentArray<T2>(C2);
+            Components3 = chunk.GetComponentArray<T3>(C3);
+            Components4 = chunk.GetComponentArray<T4>(C4);
+            Components5 = chunk.GetComponentArray<T5>(C5);
+            Components6 = chunk.GetComponentArray<T6>(C6);
+            Components7 = chunk.GetComponentArray<T7>(C7);
+            Components8 = chunk.GetComponentArray<T8>(C8);
+            Components9 = chunk.GetComponentArray<T9>(C9);
         }
 
         private bool NextArchetype()
@@ -2177,17 +2262,17 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
-        private Span<T1> Span1 = default;
-        private Span<T2> Span2 = default;
-        private Span<T3> Span3 = default;
-        private Span<T4> Span4 = default;
-        private Span<T5> Span5 = default;
-        private Span<T6> Span6 = default;
-        private Span<T7> Span7 = default;
-        private Span<T8> Span8 = default;
-        private Span<T9> Span9 = default;
-        private Span<T10> Span10 = default;
+        private T0[]? Components0;
+        private T1[]? Components1;
+        private T2[]? Components2;
+        private T3[]? Components3;
+        private T4[]? Components4;
+        private T5[]? Components5;
+        private T6[]? Components6;
+        private T7[]? Components7;
+        private T8[]? Components8;
+        private T9[]? Components9;
+        private T10[]? Components10;
 
         internal QueryResultEnumerator11(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -2200,17 +2285,31 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex],
-                    ref Span1[_entityIndex],
-                    ref Span2[_entityIndex],
-                    ref Span3[_entityIndex],
-                    ref Span4[_entityIndex],
-                    ref Span5[_entityIndex],
-                    ref Span6[_entityIndex],
-                    ref Span7[_entityIndex],
-                    ref Span8[_entityIndex],
-                    ref Span9[_entityIndex],
-                    ref Span10[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex]),
+                    new RefT<T1>(ref Components1![_entityIndex]),
+                    new RefT<T2>(ref Components2![_entityIndex]),
+                    new RefT<T3>(ref Components3![_entityIndex]),
+                    new RefT<T4>(ref Components4![_entityIndex]),
+                    new RefT<T5>(ref Components5![_entityIndex]),
+                    new RefT<T6>(ref Components6![_entityIndex]),
+                    new RefT<T7>(ref Components7![_entityIndex]),
+                    new RefT<T8>(ref Components8![_entityIndex]),
+                    new RefT<T9>(ref Components9![_entityIndex]),
+                    new RefT<T10>(ref Components10![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex),
+                    new RefT<T1>(Components1!, _entityIndex),
+                    new RefT<T2>(Components2!, _entityIndex),
+                    new RefT<T3>(Components3!, _entityIndex),
+                    new RefT<T4>(Components4!, _entityIndex),
+                    new RefT<T5>(Components5!, _entityIndex),
+                    new RefT<T6>(Components6!, _entityIndex),
+                    new RefT<T7>(Components7!, _entityIndex),
+                    new RefT<T8>(Components8!, _entityIndex),
+                    new RefT<T9>(Components9!, _entityIndex),
+                    new RefT<T10>(Components10!, _entityIndex)
+#endif
                 );
             
             }
@@ -2221,17 +2320,17 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
-            Span1 = chunk.GetSpan<T1>(C1);
-            Span2 = chunk.GetSpan<T2>(C2);
-            Span3 = chunk.GetSpan<T3>(C3);
-            Span4 = chunk.GetSpan<T4>(C4);
-            Span5 = chunk.GetSpan<T5>(C5);
-            Span6 = chunk.GetSpan<T6>(C6);
-            Span7 = chunk.GetSpan<T7>(C7);
-            Span8 = chunk.GetSpan<T8>(C8);
-            Span9 = chunk.GetSpan<T9>(C9);
-            Span10 = chunk.GetSpan<T10>(C10);
+            Components0 = chunk.GetComponentArray<T0>(C0);
+            Components1 = chunk.GetComponentArray<T1>(C1);
+            Components2 = chunk.GetComponentArray<T2>(C2);
+            Components3 = chunk.GetComponentArray<T3>(C3);
+            Components4 = chunk.GetComponentArray<T4>(C4);
+            Components5 = chunk.GetComponentArray<T5>(C5);
+            Components6 = chunk.GetComponentArray<T6>(C6);
+            Components7 = chunk.GetComponentArray<T7>(C7);
+            Components8 = chunk.GetComponentArray<T8>(C8);
+            Components9 = chunk.GetComponentArray<T9>(C9);
+            Components10 = chunk.GetComponentArray<T10>(C10);
         }
 
         private bool NextArchetype()
@@ -2427,18 +2526,18 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
-        private Span<T1> Span1 = default;
-        private Span<T2> Span2 = default;
-        private Span<T3> Span3 = default;
-        private Span<T4> Span4 = default;
-        private Span<T5> Span5 = default;
-        private Span<T6> Span6 = default;
-        private Span<T7> Span7 = default;
-        private Span<T8> Span8 = default;
-        private Span<T9> Span9 = default;
-        private Span<T10> Span10 = default;
-        private Span<T11> Span11 = default;
+        private T0[]? Components0;
+        private T1[]? Components1;
+        private T2[]? Components2;
+        private T3[]? Components3;
+        private T4[]? Components4;
+        private T5[]? Components5;
+        private T6[]? Components6;
+        private T7[]? Components7;
+        private T8[]? Components8;
+        private T9[]? Components9;
+        private T10[]? Components10;
+        private T11[]? Components11;
 
         internal QueryResultEnumerator12(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -2451,18 +2550,33 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex],
-                    ref Span1[_entityIndex],
-                    ref Span2[_entityIndex],
-                    ref Span3[_entityIndex],
-                    ref Span4[_entityIndex],
-                    ref Span5[_entityIndex],
-                    ref Span6[_entityIndex],
-                    ref Span7[_entityIndex],
-                    ref Span8[_entityIndex],
-                    ref Span9[_entityIndex],
-                    ref Span10[_entityIndex],
-                    ref Span11[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex]),
+                    new RefT<T1>(ref Components1![_entityIndex]),
+                    new RefT<T2>(ref Components2![_entityIndex]),
+                    new RefT<T3>(ref Components3![_entityIndex]),
+                    new RefT<T4>(ref Components4![_entityIndex]),
+                    new RefT<T5>(ref Components5![_entityIndex]),
+                    new RefT<T6>(ref Components6![_entityIndex]),
+                    new RefT<T7>(ref Components7![_entityIndex]),
+                    new RefT<T8>(ref Components8![_entityIndex]),
+                    new RefT<T9>(ref Components9![_entityIndex]),
+                    new RefT<T10>(ref Components10![_entityIndex]),
+                    new RefT<T11>(ref Components11![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex),
+                    new RefT<T1>(Components1!, _entityIndex),
+                    new RefT<T2>(Components2!, _entityIndex),
+                    new RefT<T3>(Components3!, _entityIndex),
+                    new RefT<T4>(Components4!, _entityIndex),
+                    new RefT<T5>(Components5!, _entityIndex),
+                    new RefT<T6>(Components6!, _entityIndex),
+                    new RefT<T7>(Components7!, _entityIndex),
+                    new RefT<T8>(Components8!, _entityIndex),
+                    new RefT<T9>(Components9!, _entityIndex),
+                    new RefT<T10>(Components10!, _entityIndex),
+                    new RefT<T11>(Components11!, _entityIndex)
+#endif
                 );
             
             }
@@ -2473,18 +2587,18 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
-            Span1 = chunk.GetSpan<T1>(C1);
-            Span2 = chunk.GetSpan<T2>(C2);
-            Span3 = chunk.GetSpan<T3>(C3);
-            Span4 = chunk.GetSpan<T4>(C4);
-            Span5 = chunk.GetSpan<T5>(C5);
-            Span6 = chunk.GetSpan<T6>(C6);
-            Span7 = chunk.GetSpan<T7>(C7);
-            Span8 = chunk.GetSpan<T8>(C8);
-            Span9 = chunk.GetSpan<T9>(C9);
-            Span10 = chunk.GetSpan<T10>(C10);
-            Span11 = chunk.GetSpan<T11>(C11);
+            Components0 = chunk.GetComponentArray<T0>(C0);
+            Components1 = chunk.GetComponentArray<T1>(C1);
+            Components2 = chunk.GetComponentArray<T2>(C2);
+            Components3 = chunk.GetComponentArray<T3>(C3);
+            Components4 = chunk.GetComponentArray<T4>(C4);
+            Components5 = chunk.GetComponentArray<T5>(C5);
+            Components6 = chunk.GetComponentArray<T6>(C6);
+            Components7 = chunk.GetComponentArray<T7>(C7);
+            Components8 = chunk.GetComponentArray<T8>(C8);
+            Components9 = chunk.GetComponentArray<T9>(C9);
+            Components10 = chunk.GetComponentArray<T10>(C10);
+            Components11 = chunk.GetComponentArray<T11>(C11);
         }
 
         private bool NextArchetype()
@@ -2686,19 +2800,19 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
-        private Span<T1> Span1 = default;
-        private Span<T2> Span2 = default;
-        private Span<T3> Span3 = default;
-        private Span<T4> Span4 = default;
-        private Span<T5> Span5 = default;
-        private Span<T6> Span6 = default;
-        private Span<T7> Span7 = default;
-        private Span<T8> Span8 = default;
-        private Span<T9> Span9 = default;
-        private Span<T10> Span10 = default;
-        private Span<T11> Span11 = default;
-        private Span<T12> Span12 = default;
+        private T0[]? Components0;
+        private T1[]? Components1;
+        private T2[]? Components2;
+        private T3[]? Components3;
+        private T4[]? Components4;
+        private T5[]? Components5;
+        private T6[]? Components6;
+        private T7[]? Components7;
+        private T8[]? Components8;
+        private T9[]? Components9;
+        private T10[]? Components10;
+        private T11[]? Components11;
+        private T12[]? Components12;
 
         internal QueryResultEnumerator13(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -2711,19 +2825,35 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex],
-                    ref Span1[_entityIndex],
-                    ref Span2[_entityIndex],
-                    ref Span3[_entityIndex],
-                    ref Span4[_entityIndex],
-                    ref Span5[_entityIndex],
-                    ref Span6[_entityIndex],
-                    ref Span7[_entityIndex],
-                    ref Span8[_entityIndex],
-                    ref Span9[_entityIndex],
-                    ref Span10[_entityIndex],
-                    ref Span11[_entityIndex],
-                    ref Span12[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex]),
+                    new RefT<T1>(ref Components1![_entityIndex]),
+                    new RefT<T2>(ref Components2![_entityIndex]),
+                    new RefT<T3>(ref Components3![_entityIndex]),
+                    new RefT<T4>(ref Components4![_entityIndex]),
+                    new RefT<T5>(ref Components5![_entityIndex]),
+                    new RefT<T6>(ref Components6![_entityIndex]),
+                    new RefT<T7>(ref Components7![_entityIndex]),
+                    new RefT<T8>(ref Components8![_entityIndex]),
+                    new RefT<T9>(ref Components9![_entityIndex]),
+                    new RefT<T10>(ref Components10![_entityIndex]),
+                    new RefT<T11>(ref Components11![_entityIndex]),
+                    new RefT<T12>(ref Components12![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex),
+                    new RefT<T1>(Components1!, _entityIndex),
+                    new RefT<T2>(Components2!, _entityIndex),
+                    new RefT<T3>(Components3!, _entityIndex),
+                    new RefT<T4>(Components4!, _entityIndex),
+                    new RefT<T5>(Components5!, _entityIndex),
+                    new RefT<T6>(Components6!, _entityIndex),
+                    new RefT<T7>(Components7!, _entityIndex),
+                    new RefT<T8>(Components8!, _entityIndex),
+                    new RefT<T9>(Components9!, _entityIndex),
+                    new RefT<T10>(Components10!, _entityIndex),
+                    new RefT<T11>(Components11!, _entityIndex),
+                    new RefT<T12>(Components12!, _entityIndex)
+#endif
                 );
             
             }
@@ -2734,19 +2864,19 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
-            Span1 = chunk.GetSpan<T1>(C1);
-            Span2 = chunk.GetSpan<T2>(C2);
-            Span3 = chunk.GetSpan<T3>(C3);
-            Span4 = chunk.GetSpan<T4>(C4);
-            Span5 = chunk.GetSpan<T5>(C5);
-            Span6 = chunk.GetSpan<T6>(C6);
-            Span7 = chunk.GetSpan<T7>(C7);
-            Span8 = chunk.GetSpan<T8>(C8);
-            Span9 = chunk.GetSpan<T9>(C9);
-            Span10 = chunk.GetSpan<T10>(C10);
-            Span11 = chunk.GetSpan<T11>(C11);
-            Span12 = chunk.GetSpan<T12>(C12);
+            Components0 = chunk.GetComponentArray<T0>(C0);
+            Components1 = chunk.GetComponentArray<T1>(C1);
+            Components2 = chunk.GetComponentArray<T2>(C2);
+            Components3 = chunk.GetComponentArray<T3>(C3);
+            Components4 = chunk.GetComponentArray<T4>(C4);
+            Components5 = chunk.GetComponentArray<T5>(C5);
+            Components6 = chunk.GetComponentArray<T6>(C6);
+            Components7 = chunk.GetComponentArray<T7>(C7);
+            Components8 = chunk.GetComponentArray<T8>(C8);
+            Components9 = chunk.GetComponentArray<T9>(C9);
+            Components10 = chunk.GetComponentArray<T10>(C10);
+            Components11 = chunk.GetComponentArray<T11>(C11);
+            Components12 = chunk.GetComponentArray<T12>(C12);
         }
 
         private bool NextArchetype()
@@ -2954,20 +3084,20 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
-        private Span<T1> Span1 = default;
-        private Span<T2> Span2 = default;
-        private Span<T3> Span3 = default;
-        private Span<T4> Span4 = default;
-        private Span<T5> Span5 = default;
-        private Span<T6> Span6 = default;
-        private Span<T7> Span7 = default;
-        private Span<T8> Span8 = default;
-        private Span<T9> Span9 = default;
-        private Span<T10> Span10 = default;
-        private Span<T11> Span11 = default;
-        private Span<T12> Span12 = default;
-        private Span<T13> Span13 = default;
+        private T0[]? Components0;
+        private T1[]? Components1;
+        private T2[]? Components2;
+        private T3[]? Components3;
+        private T4[]? Components4;
+        private T5[]? Components5;
+        private T6[]? Components6;
+        private T7[]? Components7;
+        private T8[]? Components8;
+        private T9[]? Components9;
+        private T10[]? Components10;
+        private T11[]? Components11;
+        private T12[]? Components12;
+        private T13[]? Components13;
 
         internal QueryResultEnumerator14(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -2980,20 +3110,37 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex],
-                    ref Span1[_entityIndex],
-                    ref Span2[_entityIndex],
-                    ref Span3[_entityIndex],
-                    ref Span4[_entityIndex],
-                    ref Span5[_entityIndex],
-                    ref Span6[_entityIndex],
-                    ref Span7[_entityIndex],
-                    ref Span8[_entityIndex],
-                    ref Span9[_entityIndex],
-                    ref Span10[_entityIndex],
-                    ref Span11[_entityIndex],
-                    ref Span12[_entityIndex],
-                    ref Span13[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex]),
+                    new RefT<T1>(ref Components1![_entityIndex]),
+                    new RefT<T2>(ref Components2![_entityIndex]),
+                    new RefT<T3>(ref Components3![_entityIndex]),
+                    new RefT<T4>(ref Components4![_entityIndex]),
+                    new RefT<T5>(ref Components5![_entityIndex]),
+                    new RefT<T6>(ref Components6![_entityIndex]),
+                    new RefT<T7>(ref Components7![_entityIndex]),
+                    new RefT<T8>(ref Components8![_entityIndex]),
+                    new RefT<T9>(ref Components9![_entityIndex]),
+                    new RefT<T10>(ref Components10![_entityIndex]),
+                    new RefT<T11>(ref Components11![_entityIndex]),
+                    new RefT<T12>(ref Components12![_entityIndex]),
+                    new RefT<T13>(ref Components13![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex),
+                    new RefT<T1>(Components1!, _entityIndex),
+                    new RefT<T2>(Components2!, _entityIndex),
+                    new RefT<T3>(Components3!, _entityIndex),
+                    new RefT<T4>(Components4!, _entityIndex),
+                    new RefT<T5>(Components5!, _entityIndex),
+                    new RefT<T6>(Components6!, _entityIndex),
+                    new RefT<T7>(Components7!, _entityIndex),
+                    new RefT<T8>(Components8!, _entityIndex),
+                    new RefT<T9>(Components9!, _entityIndex),
+                    new RefT<T10>(Components10!, _entityIndex),
+                    new RefT<T11>(Components11!, _entityIndex),
+                    new RefT<T12>(Components12!, _entityIndex),
+                    new RefT<T13>(Components13!, _entityIndex)
+#endif
                 );
             
             }
@@ -3004,20 +3151,20 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
-            Span1 = chunk.GetSpan<T1>(C1);
-            Span2 = chunk.GetSpan<T2>(C2);
-            Span3 = chunk.GetSpan<T3>(C3);
-            Span4 = chunk.GetSpan<T4>(C4);
-            Span5 = chunk.GetSpan<T5>(C5);
-            Span6 = chunk.GetSpan<T6>(C6);
-            Span7 = chunk.GetSpan<T7>(C7);
-            Span8 = chunk.GetSpan<T8>(C8);
-            Span9 = chunk.GetSpan<T9>(C9);
-            Span10 = chunk.GetSpan<T10>(C10);
-            Span11 = chunk.GetSpan<T11>(C11);
-            Span12 = chunk.GetSpan<T12>(C12);
-            Span13 = chunk.GetSpan<T13>(C13);
+            Components0 = chunk.GetComponentArray<T0>(C0);
+            Components1 = chunk.GetComponentArray<T1>(C1);
+            Components2 = chunk.GetComponentArray<T2>(C2);
+            Components3 = chunk.GetComponentArray<T3>(C3);
+            Components4 = chunk.GetComponentArray<T4>(C4);
+            Components5 = chunk.GetComponentArray<T5>(C5);
+            Components6 = chunk.GetComponentArray<T6>(C6);
+            Components7 = chunk.GetComponentArray<T7>(C7);
+            Components8 = chunk.GetComponentArray<T8>(C8);
+            Components9 = chunk.GetComponentArray<T9>(C9);
+            Components10 = chunk.GetComponentArray<T10>(C10);
+            Components11 = chunk.GetComponentArray<T11>(C11);
+            Components12 = chunk.GetComponentArray<T12>(C12);
+            Components13 = chunk.GetComponentArray<T13>(C13);
         }
 
         private bool NextArchetype()
@@ -3231,21 +3378,21 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
-        private Span<T1> Span1 = default;
-        private Span<T2> Span2 = default;
-        private Span<T3> Span3 = default;
-        private Span<T4> Span4 = default;
-        private Span<T5> Span5 = default;
-        private Span<T6> Span6 = default;
-        private Span<T7> Span7 = default;
-        private Span<T8> Span8 = default;
-        private Span<T9> Span9 = default;
-        private Span<T10> Span10 = default;
-        private Span<T11> Span11 = default;
-        private Span<T12> Span12 = default;
-        private Span<T13> Span13 = default;
-        private Span<T14> Span14 = default;
+        private T0[]? Components0;
+        private T1[]? Components1;
+        private T2[]? Components2;
+        private T3[]? Components3;
+        private T4[]? Components4;
+        private T5[]? Components5;
+        private T6[]? Components6;
+        private T7[]? Components7;
+        private T8[]? Components8;
+        private T9[]? Components9;
+        private T10[]? Components10;
+        private T11[]? Components11;
+        private T12[]? Components12;
+        private T13[]? Components13;
+        private T14[]? Components14;
 
         internal QueryResultEnumerator15(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -3258,21 +3405,39 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex],
-                    ref Span1[_entityIndex],
-                    ref Span2[_entityIndex],
-                    ref Span3[_entityIndex],
-                    ref Span4[_entityIndex],
-                    ref Span5[_entityIndex],
-                    ref Span6[_entityIndex],
-                    ref Span7[_entityIndex],
-                    ref Span8[_entityIndex],
-                    ref Span9[_entityIndex],
-                    ref Span10[_entityIndex],
-                    ref Span11[_entityIndex],
-                    ref Span12[_entityIndex],
-                    ref Span13[_entityIndex],
-                    ref Span14[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex]),
+                    new RefT<T1>(ref Components1![_entityIndex]),
+                    new RefT<T2>(ref Components2![_entityIndex]),
+                    new RefT<T3>(ref Components3![_entityIndex]),
+                    new RefT<T4>(ref Components4![_entityIndex]),
+                    new RefT<T5>(ref Components5![_entityIndex]),
+                    new RefT<T6>(ref Components6![_entityIndex]),
+                    new RefT<T7>(ref Components7![_entityIndex]),
+                    new RefT<T8>(ref Components8![_entityIndex]),
+                    new RefT<T9>(ref Components9![_entityIndex]),
+                    new RefT<T10>(ref Components10![_entityIndex]),
+                    new RefT<T11>(ref Components11![_entityIndex]),
+                    new RefT<T12>(ref Components12![_entityIndex]),
+                    new RefT<T13>(ref Components13![_entityIndex]),
+                    new RefT<T14>(ref Components14![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex),
+                    new RefT<T1>(Components1!, _entityIndex),
+                    new RefT<T2>(Components2!, _entityIndex),
+                    new RefT<T3>(Components3!, _entityIndex),
+                    new RefT<T4>(Components4!, _entityIndex),
+                    new RefT<T5>(Components5!, _entityIndex),
+                    new RefT<T6>(Components6!, _entityIndex),
+                    new RefT<T7>(Components7!, _entityIndex),
+                    new RefT<T8>(Components8!, _entityIndex),
+                    new RefT<T9>(Components9!, _entityIndex),
+                    new RefT<T10>(Components10!, _entityIndex),
+                    new RefT<T11>(Components11!, _entityIndex),
+                    new RefT<T12>(Components12!, _entityIndex),
+                    new RefT<T13>(Components13!, _entityIndex),
+                    new RefT<T14>(Components14!, _entityIndex)
+#endif
                 );
             
             }
@@ -3283,21 +3448,21 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
-            Span1 = chunk.GetSpan<T1>(C1);
-            Span2 = chunk.GetSpan<T2>(C2);
-            Span3 = chunk.GetSpan<T3>(C3);
-            Span4 = chunk.GetSpan<T4>(C4);
-            Span5 = chunk.GetSpan<T5>(C5);
-            Span6 = chunk.GetSpan<T6>(C6);
-            Span7 = chunk.GetSpan<T7>(C7);
-            Span8 = chunk.GetSpan<T8>(C8);
-            Span9 = chunk.GetSpan<T9>(C9);
-            Span10 = chunk.GetSpan<T10>(C10);
-            Span11 = chunk.GetSpan<T11>(C11);
-            Span12 = chunk.GetSpan<T12>(C12);
-            Span13 = chunk.GetSpan<T13>(C13);
-            Span14 = chunk.GetSpan<T14>(C14);
+            Components0 = chunk.GetComponentArray<T0>(C0);
+            Components1 = chunk.GetComponentArray<T1>(C1);
+            Components2 = chunk.GetComponentArray<T2>(C2);
+            Components3 = chunk.GetComponentArray<T3>(C3);
+            Components4 = chunk.GetComponentArray<T4>(C4);
+            Components5 = chunk.GetComponentArray<T5>(C5);
+            Components6 = chunk.GetComponentArray<T6>(C6);
+            Components7 = chunk.GetComponentArray<T7>(C7);
+            Components8 = chunk.GetComponentArray<T8>(C8);
+            Components9 = chunk.GetComponentArray<T9>(C9);
+            Components10 = chunk.GetComponentArray<T10>(C10);
+            Components11 = chunk.GetComponentArray<T11>(C11);
+            Components12 = chunk.GetComponentArray<T12>(C12);
+            Components13 = chunk.GetComponentArray<T13>(C13);
+            Components14 = chunk.GetComponentArray<T14>(C14);
         }
 
         private bool NextArchetype()
@@ -3517,22 +3682,22 @@ namespace Myriad.ECS.Queries
         private bool _initialized = false;
 
         private ReadOnlySpan<Entity> SpanEntities = default;
-        private Span<T0> Span0 = default;
-        private Span<T1> Span1 = default;
-        private Span<T2> Span2 = default;
-        private Span<T3> Span3 = default;
-        private Span<T4> Span4 = default;
-        private Span<T5> Span5 = default;
-        private Span<T6> Span6 = default;
-        private Span<T7> Span7 = default;
-        private Span<T8> Span8 = default;
-        private Span<T9> Span9 = default;
-        private Span<T10> Span10 = default;
-        private Span<T11> Span11 = default;
-        private Span<T12> Span12 = default;
-        private Span<T13> Span13 = default;
-        private Span<T14> Span14 = default;
-        private Span<T15> Span15 = default;
+        private T0[]? Components0;
+        private T1[]? Components1;
+        private T2[]? Components2;
+        private T3[]? Components3;
+        private T4[]? Components4;
+        private T5[]? Components5;
+        private T6[]? Components6;
+        private T7[]? Components7;
+        private T8[]? Components8;
+        private T9[]? Components9;
+        private T10[]? Components10;
+        private T11[]? Components11;
+        private T12[]? Components12;
+        private T13[]? Components13;
+        private T14[]? Components14;
+        private T15[]? Components15;
 
         internal QueryResultEnumerator16(FrozenOrderedListSet<QueryDescription.ArchetypeMatch> archetypes)
         {
@@ -3545,22 +3710,41 @@ namespace Myriad.ECS.Queries
             {
                 return new RefTuple16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
                     SpanEntities[_entityIndex],
-                    ref Span0[_entityIndex],
-                    ref Span1[_entityIndex],
-                    ref Span2[_entityIndex],
-                    ref Span3[_entityIndex],
-                    ref Span4[_entityIndex],
-                    ref Span5[_entityIndex],
-                    ref Span6[_entityIndex],
-                    ref Span7[_entityIndex],
-                    ref Span8[_entityIndex],
-                    ref Span9[_entityIndex],
-                    ref Span10[_entityIndex],
-                    ref Span11[_entityIndex],
-                    ref Span12[_entityIndex],
-                    ref Span13[_entityIndex],
-                    ref Span14[_entityIndex],
-                    ref Span15[_entityIndex]
+#if NET6_0_OR_GREATER
+                    new RefT<T0>(ref Components0![_entityIndex]),
+                    new RefT<T1>(ref Components1![_entityIndex]),
+                    new RefT<T2>(ref Components2![_entityIndex]),
+                    new RefT<T3>(ref Components3![_entityIndex]),
+                    new RefT<T4>(ref Components4![_entityIndex]),
+                    new RefT<T5>(ref Components5![_entityIndex]),
+                    new RefT<T6>(ref Components6![_entityIndex]),
+                    new RefT<T7>(ref Components7![_entityIndex]),
+                    new RefT<T8>(ref Components8![_entityIndex]),
+                    new RefT<T9>(ref Components9![_entityIndex]),
+                    new RefT<T10>(ref Components10![_entityIndex]),
+                    new RefT<T11>(ref Components11![_entityIndex]),
+                    new RefT<T12>(ref Components12![_entityIndex]),
+                    new RefT<T13>(ref Components13![_entityIndex]),
+                    new RefT<T14>(ref Components14![_entityIndex]),
+                    new RefT<T15>(ref Components15![_entityIndex])
+#else
+                    new RefT<T0>(Components0!, _entityIndex),
+                    new RefT<T1>(Components1!, _entityIndex),
+                    new RefT<T2>(Components2!, _entityIndex),
+                    new RefT<T3>(Components3!, _entityIndex),
+                    new RefT<T4>(Components4!, _entityIndex),
+                    new RefT<T5>(Components5!, _entityIndex),
+                    new RefT<T6>(Components6!, _entityIndex),
+                    new RefT<T7>(Components7!, _entityIndex),
+                    new RefT<T8>(Components8!, _entityIndex),
+                    new RefT<T9>(Components9!, _entityIndex),
+                    new RefT<T10>(Components10!, _entityIndex),
+                    new RefT<T11>(Components11!, _entityIndex),
+                    new RefT<T12>(Components12!, _entityIndex),
+                    new RefT<T13>(Components13!, _entityIndex),
+                    new RefT<T14>(Components14!, _entityIndex),
+                    new RefT<T15>(Components15!, _entityIndex)
+#endif
                 );
             
             }
@@ -3571,22 +3755,22 @@ namespace Myriad.ECS.Queries
             var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
-            Span0 = chunk.GetSpan<T0>(C0);
-            Span1 = chunk.GetSpan<T1>(C1);
-            Span2 = chunk.GetSpan<T2>(C2);
-            Span3 = chunk.GetSpan<T3>(C3);
-            Span4 = chunk.GetSpan<T4>(C4);
-            Span5 = chunk.GetSpan<T5>(C5);
-            Span6 = chunk.GetSpan<T6>(C6);
-            Span7 = chunk.GetSpan<T7>(C7);
-            Span8 = chunk.GetSpan<T8>(C8);
-            Span9 = chunk.GetSpan<T9>(C9);
-            Span10 = chunk.GetSpan<T10>(C10);
-            Span11 = chunk.GetSpan<T11>(C11);
-            Span12 = chunk.GetSpan<T12>(C12);
-            Span13 = chunk.GetSpan<T13>(C13);
-            Span14 = chunk.GetSpan<T14>(C14);
-            Span15 = chunk.GetSpan<T15>(C15);
+            Components0 = chunk.GetComponentArray<T0>(C0);
+            Components1 = chunk.GetComponentArray<T1>(C1);
+            Components2 = chunk.GetComponentArray<T2>(C2);
+            Components3 = chunk.GetComponentArray<T3>(C3);
+            Components4 = chunk.GetComponentArray<T4>(C4);
+            Components5 = chunk.GetComponentArray<T5>(C5);
+            Components6 = chunk.GetComponentArray<T6>(C6);
+            Components7 = chunk.GetComponentArray<T7>(C7);
+            Components8 = chunk.GetComponentArray<T8>(C8);
+            Components9 = chunk.GetComponentArray<T9>(C9);
+            Components10 = chunk.GetComponentArray<T10>(C10);
+            Components11 = chunk.GetComponentArray<T11>(C11);
+            Components12 = chunk.GetComponentArray<T12>(C12);
+            Components13 = chunk.GetComponentArray<T13>(C13);
+            Components14 = chunk.GetComponentArray<T14>(C14);
+            Components15 = chunk.GetComponentArray<T15>(C15);
         }
 
         private bool NextArchetype()

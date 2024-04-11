@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.Collections;
+﻿using System.Runtime.InteropServices;
+using Myriad.ECS.Collections;
 using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Registry;
@@ -59,6 +60,11 @@ public sealed partial class Archetype
     public int EntityCount { get; private set; }
 
     /// <summary>
+    /// Get the size (in bytes) of the smallest component in this archetype
+    /// </summary>
+    internal int SmallestComponent { get; }
+
+    /// <summary>
     /// Indicates if any of the components in this Archetype implement <see cref="IPhantomComponent"/>;
     /// </summary>
     public bool HasPhantomComponents { get; }
@@ -99,6 +105,19 @@ public sealed partial class Archetype
             idx++;
         }
 
+        // Calculate the size of the smallest component
+        SmallestComponent = int.MaxValue;
+        foreach (var componentType in _componentTypes)
+        {
+            if (componentType.IsValueType)
+                SmallestComponent = Math.Min(SmallestComponent, Marshal.SizeOf(_componentTypes[0]));
+            else
+                SmallestComponent = Math.Min(SmallestComponent, IntPtr.Size);
+        }
+        if (_componentTypes.Length == 0)
+            SmallestComponent = 0;
+
+        // Check if this archetype has any phantom components or if any of the components are Phantom
         foreach (var component in components)
         {
             IsPhantom |= component == ComponentID<Phantom>.ID;

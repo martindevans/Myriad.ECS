@@ -58,25 +58,25 @@ public class QueryBenchmark
         }
     }
 
-    [Benchmark]
+    //[Benchmark]
     public void Query()
     {
         _world.Execute<QueryAction, Position, Velocity>(new QueryAction(), _query);
     }
 
-    [Benchmark]
+    //[Benchmark]
     public void ChunkQuery()
     {
         _world.ExecuteChunk<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
     }
 
-    [Benchmark]
+    //[Benchmark]
     public void ParallelQuery()
     {
         _world.ExecuteParallel<QueryAction, Position, Velocity>(new QueryAction(), _query);
     }
 
-    [Benchmark]
+    //[Benchmark]
     public void ParallelChunkQuery()
     {
         _world.ExecuteChunkParallel<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
@@ -85,13 +85,11 @@ public class QueryBenchmark
     [Benchmark]
     public void QueryEnumerable()
     {
-#if NET5_0_OR_GREATER
         foreach (var item in _world.Query<Position, Velocity>(_query))
             item.Item0.Value += item.Item1.Value;
-#endif
     }
 
-    [Benchmark]
+    //[Benchmark]
     public void DelegateQuery()
     {
         _world.Query((ref Position pos, ref Velocity vel) =>

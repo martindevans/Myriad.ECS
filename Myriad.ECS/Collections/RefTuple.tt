@@ -14,19 +14,63 @@
 // ReSharper disable CheckNamespace
 // ReSharper disable ArrangeAccessorOwnerBody
 
+using System.Runtime.CompilerServices;
+
 namespace Myriad.ECS.Collections;
 
 #if NET6_0_OR_GREATER
 
-public ref struct RefT<T>
+public readonly ref struct RefT<T>
 {
-	public ref T Ref;
+	private readonly ref T _ref;
+
+	public ref T Ref 
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => ref _ref;
+	}
+
+	internal RefT(ref T r)
+	{
+		_ref = ref r;
+	}
 
 	public static implicit operator T(RefT<T> reference)
     {
 		return reference.Ref;
     }
 }
+
+#else
+
+public readonly struct RefT<T>
+{
+	private readonly T[] _arr;
+	private readonly int _index;
+
+	public ref T Ref
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	    get
+	    {
+			return ref _arr[_index];
+	    }
+	}
+
+	internal RefT(T[] a, int i)
+	{
+		_arr = a;
+		_index = i;
+	}
+
+	public static implicit operator T(RefT<T> reference)
+    {
+		return reference.Ref;
+    }
+}
+
+#endif
+
 <# for (var i = 1; i <= PARAM_COUNT; i++)
 {
 	var tparams = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
@@ -46,18 +90,23 @@ public readonly ref struct RefTuple<#= i #><<#= tparams #>>
 <# for (var k = 0; k < i; k++)
 {
 #>
-	public readonly ref T<#= k #> Item<#= k #>;
+	private readonly RefT<T<#= k #>> _item<#= k #>;
+	public ref T<#= k #> Item<#= k #>
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => ref _item<#= k #>.Ref;
+	}
+
 <#
 }
 #>
-
-	internal RefTuple<#= i #>(Entity entity, <#= string.Join(", ", Enumerable.Range(0, i).Select(x => "ref T" + x + " item" + x)) #>)
+	internal RefTuple<#= i #>(Entity entity, <#= string.Join(", ", Enumerable.Range(0, i).Select(x => "RefT<T" + x + "> item" + x)) #>)
 	{
 		Entity = entity;
 <# for (var k = 0; k < i; k++)
 {
 #>
-		Item<#= k #> = ref item<#= k #>;
+		_item<#= k #> = item<#= k #>;
 <#
 }
 #>
@@ -69,7 +118,7 @@ public readonly ref struct RefTuple<#= i #><<#= tparams #>>
 <# for (var k = 0; k < i; k++)
 {
 #>
-		item<#= k #> = new RefT<T<#= k #>> { Ref = ref Item<#= k #> };
+		item<#= k #> = _item<#= k #>;
 <#
 }
 #>
@@ -78,8 +127,6 @@ public readonly ref struct RefTuple<#= i #><<#= tparams #>>
 <#
 }
 #>
-
-#endif
 
 
 <#+ 
