@@ -98,7 +98,9 @@ public sealed class ParallelSystemGroup<TData>
             system.Dispose();
     }
 
-    public IEnumerable<ISystem<TData>> Systems
+    public IEnumerable<ISystem<TData>> Systems => _systems;
+
+    public IEnumerable<ISystem<TData>> RecursiveSystems
     {
         get
         {
@@ -106,7 +108,7 @@ public sealed class ParallelSystemGroup<TData>
             {
                 if (system is ISystemGroup<TData> group)
                 {
-                    foreach (var nested in group.Systems)
+                    foreach (var nested in group.RecursiveSystems)
                         yield return nested;
                 }
                 else
