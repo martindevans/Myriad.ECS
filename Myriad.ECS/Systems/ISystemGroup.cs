@@ -17,4 +17,9 @@ public interface ISystemGroup<in TData>
     /// Get all systems in this group
     /// </summary>
     IEnumerable<ISystem<TData>> Systems { get; }
+
+    /// <summary>
+    /// Get all systems in this group, expanding out all system groups into contained systems
+    /// </summary>
+    IEnumerable<ISystem<TData>> RecursiveSystems { get; }
 }

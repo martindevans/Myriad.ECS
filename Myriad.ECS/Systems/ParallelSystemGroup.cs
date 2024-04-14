@@ -6,7 +6,6 @@ public sealed class ParallelSystemGroup<TData>
     : ISystemGroup<TData>
 {
     public string Name { get; }
-    public bool Enabled { get; set; } = true;
 
     public TimeSpan ExecutionTime { get; private set; }
     private readonly Stopwatch _timer = new();
@@ -54,50 +53,41 @@ public sealed class ParallelSystemGroup<TData>
     {
         _timer.Reset();
 
-        if (Enabled)
+        _timer.Start();
         {
-            _timer.Start();
+            if (_beforeSystems.Length > 0)
             {
-                if (_beforeSystems.Length > 0)
-                {
-                    _dataClosure = data;
-                    Parallel.ForEach(_beforeSystems, _beforeUpdate);
-                    _dataClosure = default;
-                }
+                _dataClosure = data;
+                Parallel.ForEach(_beforeSystems, _beforeUpdate);
+                _dataClosure = default;
             }
-            _timer.Stop();
         }
+        _timer.Stop();
     }
 
     public void Update(TData data)
     {
-        if (Enabled)
+        _timer.Start();
         {
-            _timer.Start();
-            {
-                _dataClosure = data;
-                Parallel.ForEach(_systems, _update);
-                _dataClosure = default;
-            }
-            _timer.Stop();
+            _dataClosure = data;
+            Parallel.ForEach(_systems, _update);
+            _dataClosure = default;
         }
+        _timer.Stop();
     }
 
     public void AfterUpdate(TData data)
     {
-        if (Enabled)
+        _timer.Start();
         {
-            _timer.Start();
+            if (_afterSystems.Length > 0)
             {
-                if (_afterSystems.Length > 0)
-                {
-                    _dataClosure = data;
-                    Parallel.ForEach(_afterSystems, _afterUpdate);
-                    _dataClosure = default;
-                }
+                _dataClosure = data;
+                Parallel.ForEach(_afterSystems, _afterUpdate);
+                _dataClosure = default;
             }
-            _timer.Stop();
         }
+        _timer.Stop();
 
         ExecutionTime = _timer.Elapsed;
     }

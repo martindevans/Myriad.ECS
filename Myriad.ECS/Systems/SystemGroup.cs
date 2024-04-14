@@ -6,7 +6,6 @@ public sealed class SystemGroup<TData>
     : ISystemGroup<TData>
 {
     public string Name { get; }
-    public bool Enabled { get; set; } = true;
 
     public TimeSpan ExecutionTime { get; private set; }
 
@@ -35,41 +34,32 @@ public sealed class SystemGroup<TData>
     {
         _timer.Reset();
 
-        if (Enabled)
+        _timer.Start();
         {
-            _timer.Start();
-            {
-                foreach (var system in _beforeSystems)
-                    system.BeforeUpdate(data);
-            }
-            _timer.Stop();
+            foreach (var system in _beforeSystems)
+                system.BeforeUpdate(data);
         }
+        _timer.Stop();
     }
 
     public void Update(TData data)
     {
-        if (Enabled)
+        _timer.Start();
         {
-            _timer.Start();
-            {
-                foreach (var system in _systems)
-                    system.Update(data);
-            }
-            _timer.Stop();
+            foreach (var system in _systems)
+                system.Update(data);
         }
+        _timer.Stop();
     }
 
     public void AfterUpdate(TData data)
     {
-        if (Enabled)
+        _timer.Start();
         {
-            _timer.Start();
-            {
-                foreach (var system in _afterSystems)
-                    system.AfterUpdate(data);
-            }
-            _timer.Stop();
+            foreach (var system in _afterSystems)
+                system.AfterUpdate(data);
         }
+        _timer.Stop();
 
         ExecutionTime = _timer.Elapsed;
     }
@@ -80,7 +70,9 @@ public sealed class SystemGroup<TData>
             system.Dispose();
     }
 
-    public IEnumerable<ISystem<TData>> Systems
+    public IEnumerable<ISystem<TData>> Systems => _systems;
+
+    public IEnumerable<ISystem<TData>> RecursiveSystems
     {
         get
         {
@@ -88,7 +80,7 @@ public sealed class SystemGroup<TData>
             {
                 if (system is ISystemGroup<TData> group)
                 {
-                    foreach (var nested in group.Systems)
+                    foreach (var nested in group.RecursiveSystems)
                         yield return nested;
                 }
                 else
