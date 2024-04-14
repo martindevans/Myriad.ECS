@@ -19,7 +19,7 @@ public class SystemState<TComponent, TAssociated>(World world, TAssociated proto
     private readonly QueryDescription _removeQuery = new QueryBuilder().Exclude<TComponent>().Include<TAssociated>().Build(world);
     private readonly QueryDescription _removeQueryPhantom = new QueryBuilder().Include<TAssociated>().Include<Phantom>().Build(world);
 
-    private readonly bool _associatedIsPhantom = typeof(TAssociated).IsAssignableTo(typeof(IPhantomComponent));
+    private readonly bool _associatedIsPhantom = typeof(IPhantomComponent).IsAssignableFrom(typeof(TAssociated));
 
     public void Update(CommandBuffer cmd)
     {
