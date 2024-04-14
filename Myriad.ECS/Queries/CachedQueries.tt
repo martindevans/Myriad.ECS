@@ -87,7 +87,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<#= tparams #>()
-        <#= Constraints(i, 12) #>
+        <#= Constraints(i, 8) #>
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [

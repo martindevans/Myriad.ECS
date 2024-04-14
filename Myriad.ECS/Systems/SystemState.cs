@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Command;
+using Myriad.ECS.Components;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds;
 
@@ -16,28 +17,82 @@ public class SystemState<TComponent, TAssociated>(World world, TAssociated proto
 {
     private readonly QueryDescription _addQuery = new QueryBuilder().Include<TComponent>().Exclude<TAssociated>().Build(world);
     private readonly QueryDescription _removeQuery = new QueryBuilder().Exclude<TComponent>().Include<TAssociated>().Build(world);
+    private readonly QueryDescription _removeQueryPhantom = new QueryBuilder().Include<TAssociated>().Include<Phantom>().Build(world);
+
+    private readonly bool _associatedIsPhantom = typeof(TAssociated).IsAssignableTo(typeof(IPhantomComponent));
 
     public void Update(CommandBuffer cmd)
     {
-        world.Execute(new Attach(cmd, prototype), _addQuery);
-        world.Execute(new Detach(cmd), _removeQuery);
+        world.Execute(new Attach(this, cmd), _addQuery);
+        world.Execute<Detach, TAssociated>(new Detach(this, cmd), _removeQuery);
+
+        if (_associatedIsPhantom)
+            world.Execute<DetachPhantom, TAssociated>(new DetachPhantom(this, cmd), _removeQueryPhantom);
     }
 
-    private readonly struct Attach(CommandBuffer cmd, TAssociated prototype)
+    /// <summary>
+    /// Called when an Entity is found that has <see cref="TComponent"/> but does not have <see cref="TAssociated"/>.
+    ///
+    /// Call base.OnAttach to attach default <see cref="TAssociated"/>, or attach it yourself and do not call base.OnAttach.
+    /// </summary>
+    /// <param name="e"></param>
+    /// <param name="c"></param>
+    protected void OnAttach(Entity e, CommandBuffer c)
+    {
+        c.Set(e, prototype);
+    }
+
+    /// <summary>
+    /// Called when an Entity is found that has <see cref="TAssociated"/> but does not have <see cref="TComponent"/>.
+    /// 
+    /// Call base.OnDetach to detach <see cref="TAssociated"/>.
+    /// </summary>
+    /// <param name="e"></param>
+    /// <param name="c"></param>
+    /// <param name="associated"></param>
+    protected void OnDetach(Entity e, CommandBuffer c, ref TAssociated associated)
+    {
+        c.Remove<TAssociated>(e);
+    }
+
+    /// <summary>
+    /// Called when an Entity is found that has <see cref="TAssociated"/> and is a Phantom entity. This will only happen if <see cref="TAssociated"/> is
+    /// an <see cref="IPhantomComponent"/>.
+    /// 
+    /// call base.OnDetachPhantom to datach <see cref="TAssociated"/>
+    /// </summary>
+    /// <param name="e"></param>
+    /// <param name="c"></param>
+    /// <param name="associated"></param>
+    protected void OnDetachPhantom(Entity e, CommandBuffer c, TAssociated associated)
+    {
+        c.Remove<TAssociated>(e);
+    }
+
+    private readonly struct Attach(SystemState<TComponent, TAssociated> state, CommandBuffer cmd)
         : IQuery0
     {
         public void Execute(Entity e)
         {
-            cmd.Set(e, prototype);
+            state.OnAttach(e, cmd);
         }
     }
 
-    private readonly struct Detach(CommandBuffer cmd)
-        : IQuery0
+    private readonly struct Detach(SystemState<TComponent, TAssociated> state, CommandBuffer cmd)
+        : IQuery1<TAssociated>
     {
-        public void Execute(Entity e)
+        public void Execute(Entity e, ref TAssociated a)
         {
-            cmd.Remove<TAssociated>(e);
+            state.OnDetach(e, cmd, ref a);
+        }
+    }
+
+    private readonly struct DetachPhantom(SystemState<TComponent, TAssociated> state, CommandBuffer cmd)
+        : IQuery1<TAssociated>
+    {
+        public void Execute(Entity e, ref TAssociated a)
+        {
+            state.OnDetachPhantom(e, cmd, a);
         }
     }
 }

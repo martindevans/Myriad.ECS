@@ -61,7 +61,7 @@ public partial class World
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<T0, T1>()
         where T0 : IComponent
-            where T1 : IComponent
+        where T1 : IComponent
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [
@@ -114,8 +114,8 @@ public partial class World
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<T0, T1, T2>()
         where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [
@@ -170,9 +170,9 @@ public partial class World
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<T0, T1, T2, T3>()
         where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [
@@ -229,10 +229,10 @@ public partial class World
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4>()
         where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [
@@ -291,11 +291,11 @@ public partial class World
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5>()
         where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [
@@ -356,12 +356,12 @@ public partial class World
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>()
         where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [
@@ -424,13 +424,13 @@ public partial class World
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>()
         where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [
@@ -495,14 +495,14 @@ public partial class World
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
         where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [
@@ -569,15 +569,15 @@ public partial class World
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
         where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [
@@ -646,16 +646,16 @@ public partial class World
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
         where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [
@@ -726,17 +726,17 @@ public partial class World
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
         where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [
@@ -809,18 +809,18 @@ public partial class World
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
         where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [
@@ -895,19 +895,19 @@ public partial class World
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
         where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
-            where T13 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [
@@ -984,20 +984,20 @@ public partial class World
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
         where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
-            where T13 : IComponent
-            where T14 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [
@@ -1076,21 +1076,21 @@ public partial class World
     /// <returns>A query that finds entities which include all of the given types</returns>
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
         where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
-            where T13 : IComponent
-            where T14 : IComponent
-            where T15 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = [

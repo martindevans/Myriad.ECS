@@ -117,11 +117,10 @@ public sealed partial class World
             var prev = _deadEntities[^1];
             _deadEntities.RemoveAt(_deadEntities.Count - 1);
 
-            // Add 2 to the version number, instead of 1. Zero is not a valid entity id, so we want
-            // to make sure that when the version overflows (after creating and destroying the same
-            // entity 4294967296 times) we don't end up back at zero. Since we always add two we'll
-            // skip straight from `uint.MaxValue => 1`. This saves checking and branching every time.
-            var v = unchecked(prev.Version + 2);
+            var v = unchecked(prev.Version + 1);
+            if (v == 0)
+                v += 1;
+
             entity = new Entity(prev.ID, v);
         }
         else

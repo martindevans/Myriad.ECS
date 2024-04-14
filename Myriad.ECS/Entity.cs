@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Myriad.ECS.Collections;
+using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.xxHash;
 
@@ -77,5 +78,14 @@ public readonly record struct Entity
             var span = new Span<byte>(&u.B0, 8);
             return unchecked((long)xxHash64.ComputeHash(span, 17));
         }
+    }
+
+    public FrozenOrderedListSet<ComponentID> GetComponents(World w)
+    {
+        if (!Exists(w))
+            throw new InvalidOperationException("Cannot call GetComponents for entity that does not exist");
+
+        var info = w.GetEntityInfo(this);
+        return info.Chunk.Archetype.Components;
     }
 }

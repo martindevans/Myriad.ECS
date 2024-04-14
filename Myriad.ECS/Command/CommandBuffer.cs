@@ -21,8 +21,8 @@ public sealed partial class CommandBuffer(World World)
 
     private readonly List<BufferedEntityData> _bufferedSets = [ ];
 
-    // Keep track of a fix number of aggregation nodes. The root node (0) is the node for a new entity
-    // with no components. Every nodes stores a list of "edges" leading to other nodes. Edges indicate
+    // Keep track of a fixed number of aggregation nodes. The root node (0) is the node for a new entity
+    // with no components. Nodes store a list of "edges" leading to other nodes. Edges indicate
     // the addition of that component to the entity. Buffered entities keep track of their node ID. Every
     // buffered entity with the same node ID therefore has the same archetype. Except for node=-1, which
     // indicates unknown.
@@ -205,7 +205,6 @@ public sealed partial class CommandBuffer(World World)
         Array.Clear(archetypeLookup, 0, archetypeLookup.Length);
         try
         {
-
             for (var i = 0; i < _bufferedSets.Count; i++)
             {
                 var bufferedData = _bufferedSets[i];
