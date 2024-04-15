@@ -141,11 +141,11 @@ AnsiConsole
             systems.AfterUpdate(gt);
             gt.Tick();
 
-            if (systems.ExecutionTime < tickMin)
-                tickMin = systems.ExecutionTime;
-            tickTotal += systems.ExecutionTime;
-            if (systems.ExecutionTime > tickMax)
-                tickMax = systems.ExecutionTime;
+            if (systems.TotalExecutionTime < tickMin)
+                tickMin = systems.TotalExecutionTime;
+            tickTotal += systems.TotalExecutionTime;
+            if (systems.TotalExecutionTime > tickMax)
+                tickMax = systems.TotalExecutionTime;
 
             if (i % 1000 == 7)
                 maxMem = Math.Max(maxMem, GC.GetTotalMemory(false));
