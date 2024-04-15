@@ -1,93 +1,23 @@
-﻿using System.Diagnostics;
+﻿namespace Myriad.ECS.Systems;
 
-namespace Myriad.ECS.Systems;
-
-public sealed class SystemGroup<TData>
-    : ISystemGroup<TData>
+public sealed class SystemGroup<TData>(string name, params ISystem<TData>[] systems)
+    : BaseSystemGroup<TData>(name, systems)
 {
-    public string Name { get; }
-
-    public TimeSpan ExecutionTime { get; private set; }
-
-    private readonly Stopwatch _timer = new();
-
-    private readonly ISystemBefore<TData>[] _beforeSystems;
-    private readonly ISystem<TData>[] _systems;
-    private readonly ISystemAfter<TData>[] _afterSystems;
-
-    public SystemGroup(string name, params ISystem<TData>[] systems)
+    protected override void BeforeUpdateInternal(SystemGroupItem<TData>[] systems, TData data)
     {
-        Name = name;
-
-        _beforeSystems = systems.OfType<ISystemBefore<TData>>().ToArray();
-        _systems = systems;
-        _afterSystems = systems.OfType<ISystemAfter<TData>>().ToArray();
+        foreach (var item in systems)
+            item.BeforeUpdate(data);
     }
 
-    public void Init()
+    protected override void UpdateInternal(SystemGroupItem<TData>[] systems, TData data)
     {
-        foreach (var system in _systems.OfType<ISystemInit<TData>>())
-            system.Init();
+        foreach (var item in systems)
+            item.Update(data);
     }
 
-    public void BeforeUpdate(TData data)
+    protected override void AfterUpdateInternal(SystemGroupItem<TData>[] systems, TData data)
     {
-        _timer.Reset();
-
-        _timer.Start();
-        {
-            foreach (var system in _beforeSystems)
-                system.BeforeUpdate(data);
-        }
-        _timer.Stop();
-    }
-
-    public void Update(TData data)
-    {
-        _timer.Start();
-        {
-            foreach (var system in _systems)
-                system.Update(data);
-        }
-        _timer.Stop();
-    }
-
-    public void AfterUpdate(TData data)
-    {
-        _timer.Start();
-        {
-            foreach (var system in _afterSystems)
-                system.AfterUpdate(data);
-        }
-        _timer.Stop();
-
-        ExecutionTime = _timer.Elapsed;
-    }
-
-    public void Dispose()
-    {
-        foreach (var system in _systems.OfType<IDisposable>())
-            system.Dispose();
-    }
-
-    public IEnumerable<ISystem<TData>> Systems => _systems;
-
-    public IEnumerable<ISystem<TData>> RecursiveSystems
-    {
-        get
-        {
-            foreach (var system in _systems)
-            {
-                if (system is ISystemGroup<TData> group)
-                {
-                    foreach (var nested in group.RecursiveSystems)
-                        yield return nested;
-                }
-                else
-                {
-                    yield return system;
-                }
-            }
-        }
+        foreach (var item in systems)
+            item.AfterUpdate(data);
     }
 }

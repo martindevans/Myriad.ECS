@@ -1,32 +1,16 @@
-﻿using System.Diagnostics;
-
-namespace Myriad.ECS.Systems;
+﻿namespace Myriad.ECS.Systems;
 
 public sealed class ParallelSystemGroup<TData>
-    : ISystemGroup<TData>
+    : BaseSystemGroup<TData>
 {
-    public string Name { get; }
-
-    public TimeSpan ExecutionTime { get; private set; }
-    private readonly Stopwatch _timer = new();
-
-    private readonly ISystemBefore<TData>[] _beforeSystems;
-    private readonly ISystem<TData>[] _systems;
-    private readonly ISystemAfter<TData>[] _afterSystems;
-
     private TData? _dataClosure;
-    private readonly Action<ISystemBefore<TData>> _beforeUpdate;
-    private readonly Action<ISystem<TData>> _update;
-    private readonly Action<ISystemAfter<TData>> _afterUpdate;
+    private readonly Action<SystemGroupItem<TData>> _beforeUpdate;
+    private readonly Action<SystemGroupItem<TData>> _update;
+    private readonly Action<SystemGroupItem<TData>> _afterUpdate;
 
     public ParallelSystemGroup(string name, params ISystem<TData>[] systems)
+        : base(name, systems)
     {
-        Name = name;
-
-        _beforeSystems = systems.OfType<ISystemBefore<TData>>().ToArray();
-        _systems = systems;
-        _afterSystems = systems.OfType<ISystemAfter<TData>>().ToArray();
-
         // Create delegates now, capturing "this". This avoids creating ne delegates every frame.
         _dataClosure = default;
         _beforeUpdate = system =>
@@ -43,79 +27,33 @@ public sealed class ParallelSystemGroup<TData>
         };
     }
 
-    public void Init()
+    protected override void BeforeUpdateInternal(SystemGroupItem<TData>[] systems, TData data)
     {
-        foreach (var system in _systems.OfType<ISystemInit<TData>>())
-            system.Init();
-    }
-
-    public void BeforeUpdate(TData data)
-    {
-        _timer.Reset();
-
-        _timer.Start();
-        {
-            if (_beforeSystems.Length > 0)
-            {
-                _dataClosure = data;
-                Parallel.ForEach(_beforeSystems, _beforeUpdate);
-                _dataClosure = default;
-            }
-        }
-        _timer.Stop();
-    }
-
-    public void Update(TData data)
-    {
-        _timer.Start();
+        if (systems.Length > 0)
         {
             _dataClosure = data;
-            Parallel.ForEach(_systems, _update);
+            Parallel.ForEach(systems, _beforeUpdate);
             _dataClosure = default;
         }
-        _timer.Stop();
     }
 
-    public void AfterUpdate(TData data)
+    protected override void UpdateInternal(SystemGroupItem<TData>[] systems, TData data)
     {
-        _timer.Start();
+        if (systems.Length > 0)
         {
-            if (_afterSystems.Length > 0)
-            {
-                _dataClosure = data;
-                Parallel.ForEach(_afterSystems, _afterUpdate);
-                _dataClosure = default;
-            }
+            _dataClosure = data;
+            Parallel.ForEach(systems, _update);
+            _dataClosure = default;
         }
-        _timer.Stop();
-
-        ExecutionTime = _timer.Elapsed;
     }
 
-    public void Dispose()
+    protected override void AfterUpdateInternal(SystemGroupItem<TData>[] systems, TData data)
     {
-        foreach (var system in _systems.OfType<IDisposable>())
-            system.Dispose();
-    }
-
-    public IEnumerable<ISystem<TData>> Systems => _systems;
-
-    public IEnumerable<ISystem<TData>> RecursiveSystems
-    {
-        get
+        if (systems.Length > 0)
         {
-            foreach (var system in _systems)
-            {
-                if (system is ISystemGroup<TData> group)
-                {
-                    foreach (var nested in group.RecursiveSystems)
-                        yield return nested;
-                }
-                else
-                {
-                    yield return system;
-                }
-            }
+            _dataClosure = data;
+            Parallel.ForEach(systems, _afterUpdate);
+            _dataClosure = default;
         }
     }
 }
