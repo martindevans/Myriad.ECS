@@ -1,0 +1,247 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+	const int PARAM_COUNT = 16;
+	const int CHUNK_SIZE = 1024;
+#>
+using System.Diagnostics;
+using Myriad.ECS.Queries;
+using Myriad.ECS.IDs;
+using Myriad.ECS.Worlds.Archetypes;
+
+using Parallel = System.Threading.Tasks.Parallel;
+//using Parallel = ParallelTasks.Parallel;
+
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedParameter.Global
+// ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable ConvertToPrimaryConstructor
+
+<# for (var i = 1; i <= PARAM_COUNT; i++)
+{
+	var log2 = (int)Math.Log(CHUNK_SIZE, 2);
+	var sumij = i;
+	var generics = string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x));
+#>
+namespace Myriad.ECS.Queries
+{
+	public interface <#= NameMapper(i) #><out TR, <#= generics #>>
+		where <#= Constraints(sumij, 8) #>
+	{
+		public TR Execute(Entity e, <#= Refs(0, i) #>);
+	}
+
+	public interface <#= NameReducer(i) #><TValue>
+	{
+		public TValue Reduce(TValue a, TValue b);
+	}
+}
+
+namespace Myriad.ECS.Worlds
+{
+	public partial class World
+	{
+		/// <summary>
+		/// Execute a query, mapping every result to a value and then reducing those values to one final output
+		/// </summary>
+		/// <typeparam name="TM">Type of mapper</typeparam>
+		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TOutput">Type of value returned</typeparam>
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+		/// <typeparam name="T<#= k #>">Component <#= k #> to pass into mapper</typeparam>
+<#
+}
+#>
+		/// <param name="q">query, which produces a value per entity</param>
+		/// <param name="r">Reducer, for combining values</param>
+		/// <param name="initial">Initial value to start reducing from</param>
+		/// <param name="query">Query to select matched entities</param>
+		/// <returns>A value calculated by reducing all intermediate values</returns>
+		public TOutput ExecuteMapReduce<TM, TR, TOutput, <#= generics #>>(
+			TM q,
+			TR r,
+			TOutput initial,
+			QueryDescription? query = null
+		)
+			where <#= Constraints(sumij, 12) #>
+			where TM : <#= NameMapper(i) #><TOutput, <#= generics #>>
+			where TR : <#= NameReducer(i) #><TOutput>
+			where TOutput : unmanaged
+		{
+			query ??= GetCachedQuery<<#= generics #>>();
+
+			var archetypes = query.GetArchetypes();
+			if (archetypes.Count == 0)
+				return initial;
+
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+			var c<#= k #> = ComponentID<T<#= k #>>.ID;
+<#
+}
+#>
+
+			var accumulator = initial;
+
+			foreach (var archetypeMatch in archetypes)
+			{
+			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
+
+				var chunks = archetype.Chunks;
+				for (var c = chunks.Count - 1; c >= 0; c--)
+				{
+					var chunk = chunks[c];
+
+					var entities = chunk.Entities;
+					if (entities.Length == 0)
+						continue;
+
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+					var t<#= k #> = chunk.GetSpan<T<#= k #>>(c<#= k #>);
+<#
+}
+#>
+
+					for (var i = entities.Length - 1; i >= 0; i--)
+					{
+						accumulator = r.Reduce(accumulator, q.Execute(entities[i], <#= CallParameters(sumij) #>));
+					}
+				}
+			}
+
+			return accumulator;
+		}
+
+		/* public int ExecuteParallel<TQ, <#= generics #>>(
+			TQ q,
+			QueryDescription? query = null,
+			int batchSize = 16
+		)
+			where <#= Constraints(sumij, 12) #>
+			where TQ : <#= NameMapper(i) #><<#= generics #>>
+		{
+			query ??= GetCachedQuery<<#= generics #>>();
+
+			var archetypes = query.GetArchetypes();
+			if (archetypes.Count == 0)
+				return 0;
+
+	<# for (var k = 0; k < sumij; k++)
+	{
+	#>
+		var c<#= k #> = ComponentID<T<#= k #>>.ID;
+	<#
+	}
+	#>
+
+			var count = 0;
+			foreach (var archetypeMatch in archetypes)
+			{
+			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
+
+				count += archetype.EntityCount;
+
+				for (var c = 0; c < archetype.Chunks.Count; c++)
+                {
+                    var chunk = archetype.Chunks[c];
+
+					var entityCount = chunk.EntityCount;
+					if (entityCount == 0)
+						continue;
+
+					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+					var t<#= k #> = chunk.GetComponentArray<T<#= k #>>(c<#= k #>);
+<#
+}
+#>
+
+					Parallel.For(0, numBatches, b =>
+                    {
+						var start = b * batchSize;
+						var end = Math.Min(start + batchSize, entityCount);
+
+						for (var i = start; i < end; i++)
+						{
+							var entities = chunk.Entities;
+							q.Execute(entities[i], <#= CallParameters(sumij) #>);
+						}
+					});
+				}
+			}
+
+			return count;
+		} */
+	}
+}
+<#
+}
+#>
+
+
+<#+ 
+	static string Constraints(int count, int spaces = 4)
+    {
+		var prefix = new string(' ', spaces);
+        var str = string.Join(
+			$"\r\n{prefix}where ",
+			Enumerable.Range(0, count).Select(x => $"T{x} : IComponent")
+		);
+
+		return str;
+    }
+
+	static string NameMapper(int count)
+	{
+		return "IQueryMap" + count;
+	}
+
+	static string NameReducer(int count)
+	{
+		return "IQueryReduce" + count;
+	}
+
+	static string Refs(int start, int count)
+	{
+		var str = string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"ref T{x} t{x}")
+		);
+
+		return str;
+	}
+
+	static string Ins(int start, int count)
+	{
+		return string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"ref readonly T{x} t{x}")
+		);
+	}
+
+    static string CallParameters(int count)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(0, count).Select(x => $"ref t{x}[i]")
+        );
+
+        return str;
+    }
+#>

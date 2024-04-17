@@ -72,11 +72,26 @@ public readonly record struct Entity
             I1 = unchecked((int)Version)
         };
 
-        // Hash it
-        unsafe
+        // Swap around some bytes (this is effectively an injective hash)
+        Swap(ref u.B0, ref u.B1);
+        Swap(ref u.B2, ref u.B3);
+        Swap(ref u.B4, ref u.B5);
+        Swap(ref u.B6, ref u.B7);
+        unchecked
         {
-            var span = new Span<byte>(&u.B0, 8);
-            return unchecked((long)xxHash64.ComputeHash(span, 17));
+            u.I0 *= 1297519;
+            u.I1 *= 722479;
+        }
+        Swap(ref u.B4, ref u.B1);
+        Swap(ref u.B7, ref u.B3);
+        Swap(ref u.B0, ref u.B2);
+        Swap(ref u.B6, ref u.B5);
+
+        return u.Long;
+
+        static void Swap(ref byte a, ref byte b)
+        {
+            (a, b) = (b, a);
         }
     }
 

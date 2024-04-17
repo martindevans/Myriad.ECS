@@ -49,6 +49,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Queries\QueryMapReduce.cs">
+      <DependentUpon>QueryMapReduce.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Queries\QueryBuilderExtras.cs">
       <DependentUpon>QueryBuilderExtras.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -96,6 +101,10 @@
     </None>
     <None Update="Queries\CachedQueries.tt">
       <LastGenOutput>CachedQueries.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Queries\QueryMapReduce.tt">
+      <LastGenOutput>QueryMapReduce.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="Queries\QueryBuilderExtras.tt">
