@@ -171,6 +171,17 @@ public sealed partial class World
         return ref entityInfo.Chunk.GetRef<T>(entity);
     }
 
+    public object? GetBoxedComponent(Entity entity, ComponentID id)
+    {
+        if (!entity.Exists(this))
+            return null;
+        if (!GetComponentSet(entity).Contains(id))
+            return null;
+
+        ref var entityInfo = ref _entities[entity.ID];
+        return entityInfo.Chunk.GetComponentArray(id).GetValue(entityInfo.RowIndex);
+    }
+
     public bool HasComponent<T>(Entity entity)
         where T : IComponent
     {

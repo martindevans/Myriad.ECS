@@ -94,7 +94,7 @@ internal sealed class Chunk
     internal T[] GetComponentArray<T>(ComponentID id)
         where T : IComponent
     {
-        var componentArray = _components[_componentIndexLookup[id.Value]];
+        var componentArray = GetComponentArray(id);
 
         var typedArray =
 #if NET6_0_OR_GREATER
@@ -104,6 +104,11 @@ internal sealed class Chunk
 #endif
 
         return typedArray;
+    }
+
+    internal Array GetComponentArray(ComponentID id)
+    {
+        return _components[_componentIndexLookup[id.Value]];
     }
     #endregion
 

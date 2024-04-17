@@ -1,9 +1,7 @@
-﻿using System.Diagnostics;
-using Myriad.ECS.Queries;
+﻿using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
-using Myriad.ECS.Worlds.Archetypes;
 
-using Parallel = System.Threading.Tasks.Parallel;
+//using Parallel = System.Threading.Tasks.Parallel;
 //using Parallel = ParallelTasks.Parallel;
 
 // ReSharper disable UnusedType.Global

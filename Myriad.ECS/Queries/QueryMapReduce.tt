@@ -6,14 +6,11 @@
 <#@ output extension=".cs" #>
 <#
 	const int PARAM_COUNT = 16;
-	const int CHUNK_SIZE = 1024;
 #>
-using System.Diagnostics;
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
-using Myriad.ECS.Worlds.Archetypes;
 
-using Parallel = System.Threading.Tasks.Parallel;
+//using Parallel = System.Threading.Tasks.Parallel;
 //using Parallel = ParallelTasks.Parallel;
 
 // ReSharper disable UnusedType.Global
@@ -23,7 +20,6 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 <# for (var i = 1; i <= PARAM_COUNT; i++)
 {
-	var log2 = (int)Math.Log(CHUNK_SIZE, 2);
 	var sumij = i;
 	var generics = string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x));
 #>
