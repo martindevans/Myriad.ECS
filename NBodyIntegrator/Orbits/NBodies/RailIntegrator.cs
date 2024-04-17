@@ -43,7 +43,7 @@ public sealed class RailIntegrator(World world)
                 return;
 
             // Choose an integrator
-            var integrator = new RKF45(nbody.IntegratorPrecision.Epsilon(RKF45.DefaultEpsilon));
+            var integrator = new RKF45(nbody.IntegratorPrecision);
 
             // Get the index of the final point in the rail and copy out data
             var (pos, vel, tim) = rail.LastState();

@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using Humanizer;
+using Myriad.ECS;
 using Myriad.ECS.Command;
 using Myriad.ECS.Systems;
 using Myriad.ECS.Worlds;
@@ -46,22 +47,28 @@ setup.Create()
 
 
 // Create satellites at random altitudes, with the correct velocity for a circular orbit at that altitude
-const int count = 2;
+const int count = 1000;
+CommandBuffer.BufferedEntity baselineBuffered = default;
 for (var i = 0; i < count; i++)
 {
-    var altitude = ((float)i / count) * 35_786_000;
+    var precision = 0.001 + (i / (double)count) * 10;
+
+    var altitude = 0;//((float)i / count) * 35_786_000;
     var speed = Math.Sqrt((G * EARTH_MASS) / (EARTH_RADIUS + altitude));
 
     var position = new double3(altitude + EARTH_RADIUS, 0, 0);
     var velocity = new double3(0, 0, -speed);
 
-    CreateNBody(
+    var b = CreateNBody(
         setup,
         new Metre3(position),
         new Metre3(velocity),
-        NBodyPrecision.Medium,
+        precision,
         null
     );
+
+    if (i == 0)
+        baselineBuffered = b;
 }
 
 // Elliptical
@@ -78,49 +85,50 @@ for (var i = 0; i < count; i++)
 //    NBodyPrecision.Medium
 //);
 
-// lunar orbiter
-var bnb = CreateNBody(
-    setup,
-    new Metre3(384748000, 0, 0) + new Metre3(5000, 5000, 5000),
-    new Metre3(0, 0, -1000),
-    NBodyPrecision.Medium,
-    null
-);
+//// lunar orbiter
+//var bnb = CreateNBody(
+//    setup,
+//    new Metre3(384748000, 0, 0) + new Metre3(5000, 5000, 5000),
+//    new Metre3(0, 0, -1000),
+//    NBodyPrecision.Medium,
+//    null
+//);
 
-// slightly randomised lunar orbiters
-var rng = new Random();
-for (var i = 0; i < 22; i++)
-{
-    CreateNBody(
-        setup,
-        new Metre3(15422465, -13228745, 373592928) + new Metre3(1737000, 0, 0),
-        new Metre3(0, 2000, 0),
-        NBodyPrecision.Medium,
-        rng
-    );
-}
+//// slightly randomised lunar orbiters
+//var rng = new Random();
+//for (var i = 0; i < 22; i++)
+//{
+//    CreateNBody(
+//        setup,
+//        new Metre3(15422465, -13228745, 373592928) + new Metre3(1737000, 0, 0),
+//        new Metre3(0, 2000, 0),
+//        NBodyPrecision.Medium,
+//        rng
+//    );
+//}
 
 using var resolver = setup.Playback();
-var nb = bnb.Resolve(resolver);
+var baseline = baselineBuffered.Resolve(resolver);
+//var nb = bnb.Resolve(resolver);
 
 var systems = new SystemGroup<GameTime>(
     "main",
     new SystemGroup<GameTime>(
         "nbody",
-        new RailTrimmer(world),
+        //new RailTrimmer(world),
         new RailIntegrator(world)
-    ),
-    new SystemGroup<GameTime>(
-        "live-state",
-        new KeplerWorldPosition(world),
-        new SetWorldPositionFromRail(world),
-        new EngineBurnUpdater(world)
     )
+    //new SystemGroup<GameTime>(
+    //    "live-state",
+    //    new KeplerWorldPosition(world),
+    //    new SetWorldPositionFromRail(world),
+    //    new EngineBurnUpdater(world)
+    //)
 );
 systems.Init();
 
 // Advance sim
-const long ticks = 10_000_000;
+const long ticks = 100_000;
 var tickMin = TimeSpan.MaxValue;
 var tickTotal = TimeSpan.Zero;
 var tickMax = TimeSpan.MinValue;
@@ -163,9 +171,9 @@ AnsiConsole
         }
     });
 
-using var binWriter = new BinaryWriter(File.Create("data_dump.bin"));
-WriteBinary(binWriter, world);
-binWriter.Flush();
+//using var binWriter = new BinaryWriter(File.Create("data_dump.bin"));
+//WriteBinary(binWriter, world);
+//binWriter.Flush();
 
 // General stats
 Console.WriteLine($"# {ticks:N0} Ticks");
@@ -195,9 +203,59 @@ Console.WriteLine($" - Total Bodies: {counter}");
 Console.WriteLine($" - Longest:      {maxt.Seconds().Humanize(3)}");
 Console.WriteLine($" - Shortest:     {mint.Seconds().Humanize(3)}");
 
+WriteEnergyChart(world, baseline);
+
 return;
 
-static CommandBuffer.BufferedEntity CreateNBody(CommandBuffer buffer, Metre3 position, Metre3 velocity, NBodyPrecision precision, Random? rng)
+static void WriteEnergyChart(World world, Entity baseline)
+{
+    // Find the shortest rail
+    var endTime = double.MaxValue;
+    world.Query((ref PagedRail rail) =>
+    {
+        endTime = double.Min(endTime, rail.LastState().Time);
+    });
+    endTime -= 100;
+
+    // Find energy of min epsilon (baseline)
+    var (baselineEnergy, baselineSpeed, baselineAlt) = EnergySpeedAlt(ref world.GetComponentRef<PagedRail>(baseline), endTime);
+
+    using (var writer = new StreamWriter(File.Create("energy.csv")))
+    {
+        writer.WriteLine("epsilon,energy_delta,energy_delta_abs,speed_delta,alt_delta");
+
+        foreach (var (_, n, r) in world.Query<NBody, PagedRail>())
+        {
+            var (e, s, a) = EnergySpeedAlt(ref r.Ref, endTime);
+
+            e -= baselineEnergy;
+            s -= baselineSpeed;
+            a -= baselineAlt;
+
+            writer.WriteLine($"{n.Ref.IntegratorPrecision}, {e}, {Math.Abs(e)}, {s}, {a}");
+        }
+    }
+}
+
+static (double, double, double) EnergySpeedAlt(ref PagedRail rail, double time)
+{
+    var (before, after) = rail.NearestStates(time)!.Value;
+
+    var duration = after.Time - before.Time;
+    if (duration <= double.Epsilon)
+        throw new NotImplementedException();
+
+    var t = (time - before.Time) / duration;
+
+    var alt = Metre3.Lerp(before.Position, after.Position, t).Value.Length();
+    var spd = Metre3.Lerp(before.Velocity, after.Velocity, t).Value.Length();
+
+    var ke = 0.5 * 1 * spd * spd;
+    var pe = 1 * G * alt;
+    return (ke + pe, spd, alt);
+}
+
+static CommandBuffer.BufferedEntity CreateNBody(CommandBuffer buffer, Metre3 position, Metre3 velocity, double precision, Random? rng)
 {
     // Create entity
     var entity = buffer
@@ -257,64 +315,64 @@ static CommandBuffer.BufferedEntity CreateNBody(CommandBuffer buffer, Metre3 pos
     return entity;
 }
 
-static void WriteBinary(BinaryWriter writer, World world)
-{
-    var packetCount = 0;
+//static void WriteBinary(BinaryWriter writer, World world)
+//{
+//    var packetCount = 0;
 
-    // Write out entire rail
-    foreach (var (e, r) in world.Query<PagedRail>())
-    {
-        foreach (var page in r.Ref.Pages)
-        {
-            packetCount++;
+//    // Write out entire rail
+//    foreach (var (e, r) in world.Query<PagedRail>())
+//    {
+//        foreach (var page in r.Ref.Pages)
+//        {
+//            packetCount++;
 
-            var positions = page.GetSpanPositions();
-            var times = page.GetSpanTimes();
+//            var positions = page.GetSpanPositions();
+//            var times = page.GetSpanTimes();
 
-            // packet header:
-            writer.Write((ushort)0); // protocol version
-            writer.Write((ushort)0); // packet type
+//            // packet header:
+//            writer.Write((ushort)0); // protocol version
+//            writer.Write((ushort)0); // packet type
 
-            // Entity ID
-            writer.Write(e.ID);
-            writer.Write(e.Version);
+//            // Entity ID
+//            writer.Write(e.ID);
+//            writer.Write(e.Version);
 
-            // Write out a "keyframe" at the start
-            writer.Write(checked((ushort)positions.Length));
-            writer.Write(positions[0].Value.X);
-            writer.Write(positions[0].Value.Y);
-            writer.Write(positions[0].Value.Z);
-            writer.Write(times[0]);
+//            // Write out a "keyframe" at the start
+//            writer.Write(checked((ushort)positions.Length));
+//            writer.Write(positions[0].Value.X);
+//            writer.Write(positions[0].Value.Y);
+//            writer.Write(positions[0].Value.Z);
+//            writer.Write(times[0]);
 
-            // Keep track of the sum from the keyframe to the latest frame
-            var estimatePos = positions[0].Value;
-            var estimateTime = times[0];
+//            // Keep track of the sum from the keyframe to the latest frame
+//            var estimatePos = positions[0].Value;
+//            var estimateTime = times[0];
 
-            // Write out all the individual datapoints as a delta from the last predicted point
-            for (var i = 1; i < positions.Length; i++)
-            {
-                var pos = positions[i].Value;
-                var time = times[i];
+//            // Write out all the individual datapoints as a delta from the last predicted point
+//            for (var i = 1; i < positions.Length; i++)
+//            {
+//                var pos = positions[i].Value;
+//                var time = times[i];
 
-                // Calculate delta from last estimated frame
-                var deltaPos = (Vector3)(pos - estimatePos);
-                var deltaTime = (float)(time - estimateTime);
+//                // Calculate delta from last estimated frame
+//                var deltaPos = (Vector3)(pos - estimatePos);
+//                var deltaTime = (float)(time - estimateTime);
 
-                // Write single precision position
-                writer.Write(deltaPos.X);
-                writer.Write(deltaPos.Y);
-                writer.Write(deltaPos.Z);
+//                // Write single precision position
+//                writer.Write(deltaPos.X);
+//                writer.Write(deltaPos.Y);
+//                writer.Write(deltaPos.Z);
 
-                // Write single precision delta time
-                writer.Write(deltaTime);
+//                // Write single precision delta time
+//                writer.Write(deltaTime);
 
-                // Update cumulative estimate
-                estimatePos += (double3)deltaPos;
-                estimateTime += (float)deltaTime;
-            }
-        }
-    }
+//                // Update cumulative estimate
+//                estimatePos += (double3)deltaPos;
+//                estimateTime += (float)deltaTime;
+//            }
+//        }
+//    }
 
-    AnsiConsole.WriteLine($"Written {packetCount} packets");
-    AnsiConsole.WriteLine();
-}
+//    AnsiConsole.WriteLine($"Written {packetCount} packets");
+//    AnsiConsole.WriteLine();
+//}

@@ -61,7 +61,7 @@ namespace NBodyIntegrator.Orbits.NBodies.Integrators
 
         public const double MinDt = 0.1;
         public const double MaxDt = 900;
-        public const double DefaultEpsilon = 0.00125;
+        public const double DefaultEpsilon = 0.1;
 
         private readonly double? _epsilon;
 

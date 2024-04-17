@@ -50,7 +50,7 @@ public struct NBody
     /// <summary>
     /// Set how precise the orbital integrator is.
     /// </summary>
-    public NBodyPrecision IntegratorPrecision;
+    public double IntegratorPrecision;
 }
 
 public record struct Mass(double Value) : IComponent;
