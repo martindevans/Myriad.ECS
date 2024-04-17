@@ -8,6 +8,10 @@ Myriad.ECS is a high performance Entity Component System (ECS) for C#.
 
 [C# ECS Benchmarks](https://github.com/Doraku/Ecs.CSharp.Benchmark).
 
+## Unity
+
+Myriad.ECS supports netstandard2.0, and is compatible with Unity. There is a Unity integration package (providing editor integration) [here](https://github.com/martindevans/Myriad.ECS.Unity).
+
 ## Guide
 
 Everything in Myriad happens in a `World`, created with a `WorldBuilder`.
