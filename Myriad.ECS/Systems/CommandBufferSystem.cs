@@ -5,42 +5,128 @@ namespace Myriad.ECS.Systems;
 
 /// <summary>
 /// Executes a command buffer in Update.
-/// Resolver is available to be accessed in AfterUpdate, and is disposed in EarlyUpdate.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-/// <param name="world"></param>
-public class CommandBufferSystem<T>(World world)
-    : ISystem<T>, ISystemBefore<T>
+public class CommandBufferSystem<T>
+    : ISystem<T>
 {
-    private CommandBuffer.Resolver? _resolver;
+    private CommandBuffer.Resolver _resolver;
 
     /// <summary>
-    /// Get the resolver from the previous playback. This should only be accessed in
-    /// AfterUpdate, and will throw an exception in other cases.
+    /// Get the resolver from the previous playback.
     /// </summary>
-    public CommandBuffer.Resolver Resolver
-    {
-        get
-        {
-            if (_resolver == null)
-                throw new InvalidOperationException("Resolver is null. Must only access resolver in AfterUpdate");
-            return _resolver;
-        }
-    }
+    public CommandBuffer.Resolver Resolver => _resolver;
 
     /// <summary>
     /// The CommandBuffer which will be executed in the next Update tick.
     /// </summary>
-    public CommandBuffer Buffer { get; } = new(world);
+    public CommandBuffer Buffer { get; }
 
-    public void BeforeUpdate(T data)
+    /// <summary>
+    /// The world this system is bound to
+    /// </summary>
+    public World World { get; }
+
+    public CommandBufferSystem(World world)
     {
-        _resolver?.Dispose();
-        _resolver = null;
+        World = world;
+        Buffer = new CommandBuffer(World);
+
+        // Playback the buffer immediately to get a empty resolver
+        _resolver = Buffer.Playback();
     }
 
     public void Update(T time)
     {
+        _resolver.Dispose();
+        _resolver = Buffer.Playback();
+    }
+}
+
+/// <summary>
+/// Executes a command buffer in BeforeUpdate.
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public class EarlyCommandBufferSystem<T>
+    : ISystem<T>, ISystemBefore<T>
+{
+    private CommandBuffer.Resolver _resolver;
+
+    /// <summary>
+    /// Get the resolver from the previous playback.
+    /// </summary>
+    public CommandBuffer.Resolver Resolver => _resolver;
+
+    /// <summary>
+    /// The CommandBuffer which will be executed in the next Update tick.
+    /// </summary>
+    public CommandBuffer Buffer { get; }
+
+    /// <summary>
+    /// The world this system is bound to
+    /// </summary>
+    public World World { get; }
+
+    public EarlyCommandBufferSystem(World world)
+    {
+        World = world;
+        Buffer = new CommandBuffer(World);
+
+        // Playback the buffer immediately to get a empty resolver
+        _resolver = Buffer.Playback();
+    }
+
+    public void BeforeUpdate(T data)
+    {
+        _resolver.Dispose();
+        _resolver = Buffer.Playback();
+    }
+
+    public void Update(T time)
+    {
+    }
+}
+
+/// <summary>
+/// Executes a command buffer in AfterUpdate.
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public class LateCommandBufferSystem<T>
+    : ISystem<T>, ISystemAfter<T>
+{
+    private CommandBuffer.Resolver _resolver;
+
+    /// <summary>
+    /// Get the resolver from the previous playback.
+    /// </summary>
+    public CommandBuffer.Resolver Resolver => _resolver;
+
+    /// <summary>
+    /// The CommandBuffer which will be executed in the next Update tick.
+    /// </summary>
+    public CommandBuffer Buffer { get; }
+
+    /// <summary>
+    /// The world this system is bound to
+    /// </summary>
+    public World World { get; }
+
+    public LateCommandBufferSystem(World world)
+    {
+        World = world;
+        Buffer = new CommandBuffer(World);
+
+        // Playback the buffer immediately to get a empty resolver
+        _resolver = Buffer.Playback();
+    }
+
+    public void Update(T time)
+    {
+    }
+
+    public void AfterUpdate(T data)
+    {
+        _resolver.Dispose();
         _resolver = Buffer.Playback();
     }
 }
