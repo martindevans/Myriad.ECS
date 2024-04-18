@@ -24,6 +24,16 @@ public interface ISystemGroup<TData>
     /// Get all systems in this group, expanding out all system groups into contained systems
     /// </summary>
     IEnumerable<SystemGroupItem<TData>> RecursiveSystems { get; }
+
+    /// <summary>
+    /// Get a system of the given type
+    /// </summary>
+    /// <typeparam name="TSys"></typeparam>
+    /// <returns></returns>
+    TSys? TryGet<TSys>() where TSys : ISystem<TData>
+    {
+        return RecursiveSystems.Select(a => a.System).OfType<TSys>().FirstOrDefault();
+    }
 }
 
 public class SystemGroupItem<TData>
