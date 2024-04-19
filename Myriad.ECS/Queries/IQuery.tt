@@ -7,6 +7,7 @@
 <#
 	const int PARAM_COUNT = 16;
 #>
+using System.Diagnostics;
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 
@@ -78,12 +79,28 @@ namespace Myriad.ECS.Worlds
 {
 #>
 					var t<#= k #> = chunk.GetSpan<T<#= k #>>(c<#= k #>);
+					Debug.Assert(t<#= k #>.Length == entities.Length);
 <#
 }
 #>
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], <#= CallParameters(sumij) #>);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+						fixed (T<#= k #>* t<#= k #>ptr = &t<#= k #>[0])
+<#
+}
+#>
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], <#= CallParametersPtr(sumij) #>);
+						}
+					}
 				}
 			}
 
@@ -202,6 +219,16 @@ namespace Myriad.ECS.Worlds
         var str = string.Join(
             ", ",
             Enumerable.Range(0, count).Select(x => $"ref t{x}[i]")
+        );
+
+        return str;
+    }
+
+	static string CallParametersPtr(int count)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(0, count).Select(x => $"ref t{x}ptr[i]")
         );
 
         return str;

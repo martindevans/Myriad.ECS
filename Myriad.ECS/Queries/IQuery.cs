@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.Queries;
+﻿using System.Diagnostics;
+using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 
 using Parallel = System.Threading.Tasks.Parallel;
@@ -56,9 +57,19 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i]);
+						}
+					}
 				}
 			}
 
@@ -170,10 +181,22 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 					var t1 = chunk.GetSpan<T1>(c1);
+					Debug.Assert(t1.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i], ref t1[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						fixed (T1* t1ptr = &t1[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i]);
+						}
+					}
 				}
 			}
 
@@ -291,11 +314,25 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 					var t1 = chunk.GetSpan<T1>(c1);
+					Debug.Assert(t1.Length == entities.Length);
 					var t2 = chunk.GetSpan<T2>(c2);
+					Debug.Assert(t2.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						fixed (T1* t1ptr = &t1[0])
+						fixed (T2* t2ptr = &t2[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i]);
+						}
+					}
 				}
 			}
 
@@ -419,12 +456,28 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 					var t1 = chunk.GetSpan<T1>(c1);
+					Debug.Assert(t1.Length == entities.Length);
 					var t2 = chunk.GetSpan<T2>(c2);
+					Debug.Assert(t2.Length == entities.Length);
 					var t3 = chunk.GetSpan<T3>(c3);
+					Debug.Assert(t3.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						fixed (T1* t1ptr = &t1[0])
+						fixed (T2* t2ptr = &t2[0])
+						fixed (T3* t3ptr = &t3[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i]);
+						}
+					}
 				}
 			}
 
@@ -554,13 +607,31 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 					var t1 = chunk.GetSpan<T1>(c1);
+					Debug.Assert(t1.Length == entities.Length);
 					var t2 = chunk.GetSpan<T2>(c2);
+					Debug.Assert(t2.Length == entities.Length);
 					var t3 = chunk.GetSpan<T3>(c3);
+					Debug.Assert(t3.Length == entities.Length);
 					var t4 = chunk.GetSpan<T4>(c4);
+					Debug.Assert(t4.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						fixed (T1* t1ptr = &t1[0])
+						fixed (T2* t2ptr = &t2[0])
+						fixed (T3* t3ptr = &t3[0])
+						fixed (T4* t4ptr = &t4[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i]);
+						}
+					}
 				}
 			}
 
@@ -696,14 +767,34 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 					var t1 = chunk.GetSpan<T1>(c1);
+					Debug.Assert(t1.Length == entities.Length);
 					var t2 = chunk.GetSpan<T2>(c2);
+					Debug.Assert(t2.Length == entities.Length);
 					var t3 = chunk.GetSpan<T3>(c3);
+					Debug.Assert(t3.Length == entities.Length);
 					var t4 = chunk.GetSpan<T4>(c4);
+					Debug.Assert(t4.Length == entities.Length);
 					var t5 = chunk.GetSpan<T5>(c5);
+					Debug.Assert(t5.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						fixed (T1* t1ptr = &t1[0])
+						fixed (T2* t2ptr = &t2[0])
+						fixed (T3* t3ptr = &t3[0])
+						fixed (T4* t4ptr = &t4[0])
+						fixed (T5* t5ptr = &t5[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i]);
+						}
+					}
 				}
 			}
 
@@ -845,15 +936,37 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 					var t1 = chunk.GetSpan<T1>(c1);
+					Debug.Assert(t1.Length == entities.Length);
 					var t2 = chunk.GetSpan<T2>(c2);
+					Debug.Assert(t2.Length == entities.Length);
 					var t3 = chunk.GetSpan<T3>(c3);
+					Debug.Assert(t3.Length == entities.Length);
 					var t4 = chunk.GetSpan<T4>(c4);
+					Debug.Assert(t4.Length == entities.Length);
 					var t5 = chunk.GetSpan<T5>(c5);
+					Debug.Assert(t5.Length == entities.Length);
 					var t6 = chunk.GetSpan<T6>(c6);
+					Debug.Assert(t6.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						fixed (T1* t1ptr = &t1[0])
+						fixed (T2* t2ptr = &t2[0])
+						fixed (T3* t3ptr = &t3[0])
+						fixed (T4* t4ptr = &t4[0])
+						fixed (T5* t5ptr = &t5[0])
+						fixed (T6* t6ptr = &t6[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i]);
+						}
+					}
 				}
 			}
 
@@ -1001,16 +1114,40 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 					var t1 = chunk.GetSpan<T1>(c1);
+					Debug.Assert(t1.Length == entities.Length);
 					var t2 = chunk.GetSpan<T2>(c2);
+					Debug.Assert(t2.Length == entities.Length);
 					var t3 = chunk.GetSpan<T3>(c3);
+					Debug.Assert(t3.Length == entities.Length);
 					var t4 = chunk.GetSpan<T4>(c4);
+					Debug.Assert(t4.Length == entities.Length);
 					var t5 = chunk.GetSpan<T5>(c5);
+					Debug.Assert(t5.Length == entities.Length);
 					var t6 = chunk.GetSpan<T6>(c6);
+					Debug.Assert(t6.Length == entities.Length);
 					var t7 = chunk.GetSpan<T7>(c7);
+					Debug.Assert(t7.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						fixed (T1* t1ptr = &t1[0])
+						fixed (T2* t2ptr = &t2[0])
+						fixed (T3* t3ptr = &t3[0])
+						fixed (T4* t4ptr = &t4[0])
+						fixed (T5* t5ptr = &t5[0])
+						fixed (T6* t6ptr = &t6[0])
+						fixed (T7* t7ptr = &t7[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i]);
+						}
+					}
 				}
 			}
 
@@ -1164,17 +1301,43 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 					var t1 = chunk.GetSpan<T1>(c1);
+					Debug.Assert(t1.Length == entities.Length);
 					var t2 = chunk.GetSpan<T2>(c2);
+					Debug.Assert(t2.Length == entities.Length);
 					var t3 = chunk.GetSpan<T3>(c3);
+					Debug.Assert(t3.Length == entities.Length);
 					var t4 = chunk.GetSpan<T4>(c4);
+					Debug.Assert(t4.Length == entities.Length);
 					var t5 = chunk.GetSpan<T5>(c5);
+					Debug.Assert(t5.Length == entities.Length);
 					var t6 = chunk.GetSpan<T6>(c6);
+					Debug.Assert(t6.Length == entities.Length);
 					var t7 = chunk.GetSpan<T7>(c7);
+					Debug.Assert(t7.Length == entities.Length);
 					var t8 = chunk.GetSpan<T8>(c8);
+					Debug.Assert(t8.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						fixed (T1* t1ptr = &t1[0])
+						fixed (T2* t2ptr = &t2[0])
+						fixed (T3* t3ptr = &t3[0])
+						fixed (T4* t4ptr = &t4[0])
+						fixed (T5* t5ptr = &t5[0])
+						fixed (T6* t6ptr = &t6[0])
+						fixed (T7* t7ptr = &t7[0])
+						fixed (T8* t8ptr = &t8[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i]);
+						}
+					}
 				}
 			}
 
@@ -1334,18 +1497,46 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 					var t1 = chunk.GetSpan<T1>(c1);
+					Debug.Assert(t1.Length == entities.Length);
 					var t2 = chunk.GetSpan<T2>(c2);
+					Debug.Assert(t2.Length == entities.Length);
 					var t3 = chunk.GetSpan<T3>(c3);
+					Debug.Assert(t3.Length == entities.Length);
 					var t4 = chunk.GetSpan<T4>(c4);
+					Debug.Assert(t4.Length == entities.Length);
 					var t5 = chunk.GetSpan<T5>(c5);
+					Debug.Assert(t5.Length == entities.Length);
 					var t6 = chunk.GetSpan<T6>(c6);
+					Debug.Assert(t6.Length == entities.Length);
 					var t7 = chunk.GetSpan<T7>(c7);
+					Debug.Assert(t7.Length == entities.Length);
 					var t8 = chunk.GetSpan<T8>(c8);
+					Debug.Assert(t8.Length == entities.Length);
 					var t9 = chunk.GetSpan<T9>(c9);
+					Debug.Assert(t9.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						fixed (T1* t1ptr = &t1[0])
+						fixed (T2* t2ptr = &t2[0])
+						fixed (T3* t3ptr = &t3[0])
+						fixed (T4* t4ptr = &t4[0])
+						fixed (T5* t5ptr = &t5[0])
+						fixed (T6* t6ptr = &t6[0])
+						fixed (T7* t7ptr = &t7[0])
+						fixed (T8* t8ptr = &t8[0])
+						fixed (T9* t9ptr = &t9[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i], ref t9ptr[i]);
+						}
+					}
 				}
 			}
 
@@ -1511,19 +1702,49 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 					var t1 = chunk.GetSpan<T1>(c1);
+					Debug.Assert(t1.Length == entities.Length);
 					var t2 = chunk.GetSpan<T2>(c2);
+					Debug.Assert(t2.Length == entities.Length);
 					var t3 = chunk.GetSpan<T3>(c3);
+					Debug.Assert(t3.Length == entities.Length);
 					var t4 = chunk.GetSpan<T4>(c4);
+					Debug.Assert(t4.Length == entities.Length);
 					var t5 = chunk.GetSpan<T5>(c5);
+					Debug.Assert(t5.Length == entities.Length);
 					var t6 = chunk.GetSpan<T6>(c6);
+					Debug.Assert(t6.Length == entities.Length);
 					var t7 = chunk.GetSpan<T7>(c7);
+					Debug.Assert(t7.Length == entities.Length);
 					var t8 = chunk.GetSpan<T8>(c8);
+					Debug.Assert(t8.Length == entities.Length);
 					var t9 = chunk.GetSpan<T9>(c9);
+					Debug.Assert(t9.Length == entities.Length);
 					var t10 = chunk.GetSpan<T10>(c10);
+					Debug.Assert(t10.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						fixed (T1* t1ptr = &t1[0])
+						fixed (T2* t2ptr = &t2[0])
+						fixed (T3* t3ptr = &t3[0])
+						fixed (T4* t4ptr = &t4[0])
+						fixed (T5* t5ptr = &t5[0])
+						fixed (T6* t6ptr = &t6[0])
+						fixed (T7* t7ptr = &t7[0])
+						fixed (T8* t8ptr = &t8[0])
+						fixed (T9* t9ptr = &t9[0])
+						fixed (T10* t10ptr = &t10[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i], ref t9ptr[i], ref t10ptr[i]);
+						}
+					}
 				}
 			}
 
@@ -1695,20 +1916,52 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 					var t1 = chunk.GetSpan<T1>(c1);
+					Debug.Assert(t1.Length == entities.Length);
 					var t2 = chunk.GetSpan<T2>(c2);
+					Debug.Assert(t2.Length == entities.Length);
 					var t3 = chunk.GetSpan<T3>(c3);
+					Debug.Assert(t3.Length == entities.Length);
 					var t4 = chunk.GetSpan<T4>(c4);
+					Debug.Assert(t4.Length == entities.Length);
 					var t5 = chunk.GetSpan<T5>(c5);
+					Debug.Assert(t5.Length == entities.Length);
 					var t6 = chunk.GetSpan<T6>(c6);
+					Debug.Assert(t6.Length == entities.Length);
 					var t7 = chunk.GetSpan<T7>(c7);
+					Debug.Assert(t7.Length == entities.Length);
 					var t8 = chunk.GetSpan<T8>(c8);
+					Debug.Assert(t8.Length == entities.Length);
 					var t9 = chunk.GetSpan<T9>(c9);
+					Debug.Assert(t9.Length == entities.Length);
 					var t10 = chunk.GetSpan<T10>(c10);
+					Debug.Assert(t10.Length == entities.Length);
 					var t11 = chunk.GetSpan<T11>(c11);
+					Debug.Assert(t11.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						fixed (T1* t1ptr = &t1[0])
+						fixed (T2* t2ptr = &t2[0])
+						fixed (T3* t3ptr = &t3[0])
+						fixed (T4* t4ptr = &t4[0])
+						fixed (T5* t5ptr = &t5[0])
+						fixed (T6* t6ptr = &t6[0])
+						fixed (T7* t7ptr = &t7[0])
+						fixed (T8* t8ptr = &t8[0])
+						fixed (T9* t9ptr = &t9[0])
+						fixed (T10* t10ptr = &t10[0])
+						fixed (T11* t11ptr = &t11[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i], ref t9ptr[i], ref t10ptr[i], ref t11ptr[i]);
+						}
+					}
 				}
 			}
 
@@ -1886,21 +2139,55 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 					var t1 = chunk.GetSpan<T1>(c1);
+					Debug.Assert(t1.Length == entities.Length);
 					var t2 = chunk.GetSpan<T2>(c2);
+					Debug.Assert(t2.Length == entities.Length);
 					var t3 = chunk.GetSpan<T3>(c3);
+					Debug.Assert(t3.Length == entities.Length);
 					var t4 = chunk.GetSpan<T4>(c4);
+					Debug.Assert(t4.Length == entities.Length);
 					var t5 = chunk.GetSpan<T5>(c5);
+					Debug.Assert(t5.Length == entities.Length);
 					var t6 = chunk.GetSpan<T6>(c6);
+					Debug.Assert(t6.Length == entities.Length);
 					var t7 = chunk.GetSpan<T7>(c7);
+					Debug.Assert(t7.Length == entities.Length);
 					var t8 = chunk.GetSpan<T8>(c8);
+					Debug.Assert(t8.Length == entities.Length);
 					var t9 = chunk.GetSpan<T9>(c9);
+					Debug.Assert(t9.Length == entities.Length);
 					var t10 = chunk.GetSpan<T10>(c10);
+					Debug.Assert(t10.Length == entities.Length);
 					var t11 = chunk.GetSpan<T11>(c11);
+					Debug.Assert(t11.Length == entities.Length);
 					var t12 = chunk.GetSpan<T12>(c12);
+					Debug.Assert(t12.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						fixed (T1* t1ptr = &t1[0])
+						fixed (T2* t2ptr = &t2[0])
+						fixed (T3* t3ptr = &t3[0])
+						fixed (T4* t4ptr = &t4[0])
+						fixed (T5* t5ptr = &t5[0])
+						fixed (T6* t6ptr = &t6[0])
+						fixed (T7* t7ptr = &t7[0])
+						fixed (T8* t8ptr = &t8[0])
+						fixed (T9* t9ptr = &t9[0])
+						fixed (T10* t10ptr = &t10[0])
+						fixed (T11* t11ptr = &t11[0])
+						fixed (T12* t12ptr = &t12[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i], ref t9ptr[i], ref t10ptr[i], ref t11ptr[i], ref t12ptr[i]);
+						}
+					}
 				}
 			}
 
@@ -2084,22 +2371,58 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 					var t1 = chunk.GetSpan<T1>(c1);
+					Debug.Assert(t1.Length == entities.Length);
 					var t2 = chunk.GetSpan<T2>(c2);
+					Debug.Assert(t2.Length == entities.Length);
 					var t3 = chunk.GetSpan<T3>(c3);
+					Debug.Assert(t3.Length == entities.Length);
 					var t4 = chunk.GetSpan<T4>(c4);
+					Debug.Assert(t4.Length == entities.Length);
 					var t5 = chunk.GetSpan<T5>(c5);
+					Debug.Assert(t5.Length == entities.Length);
 					var t6 = chunk.GetSpan<T6>(c6);
+					Debug.Assert(t6.Length == entities.Length);
 					var t7 = chunk.GetSpan<T7>(c7);
+					Debug.Assert(t7.Length == entities.Length);
 					var t8 = chunk.GetSpan<T8>(c8);
+					Debug.Assert(t8.Length == entities.Length);
 					var t9 = chunk.GetSpan<T9>(c9);
+					Debug.Assert(t9.Length == entities.Length);
 					var t10 = chunk.GetSpan<T10>(c10);
+					Debug.Assert(t10.Length == entities.Length);
 					var t11 = chunk.GetSpan<T11>(c11);
+					Debug.Assert(t11.Length == entities.Length);
 					var t12 = chunk.GetSpan<T12>(c12);
+					Debug.Assert(t12.Length == entities.Length);
 					var t13 = chunk.GetSpan<T13>(c13);
+					Debug.Assert(t13.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						fixed (T1* t1ptr = &t1[0])
+						fixed (T2* t2ptr = &t2[0])
+						fixed (T3* t3ptr = &t3[0])
+						fixed (T4* t4ptr = &t4[0])
+						fixed (T5* t5ptr = &t5[0])
+						fixed (T6* t6ptr = &t6[0])
+						fixed (T7* t7ptr = &t7[0])
+						fixed (T8* t8ptr = &t8[0])
+						fixed (T9* t9ptr = &t9[0])
+						fixed (T10* t10ptr = &t10[0])
+						fixed (T11* t11ptr = &t11[0])
+						fixed (T12* t12ptr = &t12[0])
+						fixed (T13* t13ptr = &t13[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i], ref t9ptr[i], ref t10ptr[i], ref t11ptr[i], ref t12ptr[i], ref t13ptr[i]);
+						}
+					}
 				}
 			}
 
@@ -2289,23 +2612,61 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 					var t1 = chunk.GetSpan<T1>(c1);
+					Debug.Assert(t1.Length == entities.Length);
 					var t2 = chunk.GetSpan<T2>(c2);
+					Debug.Assert(t2.Length == entities.Length);
 					var t3 = chunk.GetSpan<T3>(c3);
+					Debug.Assert(t3.Length == entities.Length);
 					var t4 = chunk.GetSpan<T4>(c4);
+					Debug.Assert(t4.Length == entities.Length);
 					var t5 = chunk.GetSpan<T5>(c5);
+					Debug.Assert(t5.Length == entities.Length);
 					var t6 = chunk.GetSpan<T6>(c6);
+					Debug.Assert(t6.Length == entities.Length);
 					var t7 = chunk.GetSpan<T7>(c7);
+					Debug.Assert(t7.Length == entities.Length);
 					var t8 = chunk.GetSpan<T8>(c8);
+					Debug.Assert(t8.Length == entities.Length);
 					var t9 = chunk.GetSpan<T9>(c9);
+					Debug.Assert(t9.Length == entities.Length);
 					var t10 = chunk.GetSpan<T10>(c10);
+					Debug.Assert(t10.Length == entities.Length);
 					var t11 = chunk.GetSpan<T11>(c11);
+					Debug.Assert(t11.Length == entities.Length);
 					var t12 = chunk.GetSpan<T12>(c12);
+					Debug.Assert(t12.Length == entities.Length);
 					var t13 = chunk.GetSpan<T13>(c13);
+					Debug.Assert(t13.Length == entities.Length);
 					var t14 = chunk.GetSpan<T14>(c14);
+					Debug.Assert(t14.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						fixed (T1* t1ptr = &t1[0])
+						fixed (T2* t2ptr = &t2[0])
+						fixed (T3* t3ptr = &t3[0])
+						fixed (T4* t4ptr = &t4[0])
+						fixed (T5* t5ptr = &t5[0])
+						fixed (T6* t6ptr = &t6[0])
+						fixed (T7* t7ptr = &t7[0])
+						fixed (T8* t8ptr = &t8[0])
+						fixed (T9* t9ptr = &t9[0])
+						fixed (T10* t10ptr = &t10[0])
+						fixed (T11* t11ptr = &t11[0])
+						fixed (T12* t12ptr = &t12[0])
+						fixed (T13* t13ptr = &t13[0])
+						fixed (T14* t14ptr = &t14[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i], ref t9ptr[i], ref t10ptr[i], ref t11ptr[i], ref t12ptr[i], ref t13ptr[i], ref t14ptr[i]);
+						}
+					}
 				}
 			}
 
@@ -2501,24 +2862,64 @@ namespace Myriad.ECS.Worlds
 						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
+					Debug.Assert(t0.Length == entities.Length);
 					var t1 = chunk.GetSpan<T1>(c1);
+					Debug.Assert(t1.Length == entities.Length);
 					var t2 = chunk.GetSpan<T2>(c2);
+					Debug.Assert(t2.Length == entities.Length);
 					var t3 = chunk.GetSpan<T3>(c3);
+					Debug.Assert(t3.Length == entities.Length);
 					var t4 = chunk.GetSpan<T4>(c4);
+					Debug.Assert(t4.Length == entities.Length);
 					var t5 = chunk.GetSpan<T5>(c5);
+					Debug.Assert(t5.Length == entities.Length);
 					var t6 = chunk.GetSpan<T6>(c6);
+					Debug.Assert(t6.Length == entities.Length);
 					var t7 = chunk.GetSpan<T7>(c7);
+					Debug.Assert(t7.Length == entities.Length);
 					var t8 = chunk.GetSpan<T8>(c8);
+					Debug.Assert(t8.Length == entities.Length);
 					var t9 = chunk.GetSpan<T9>(c9);
+					Debug.Assert(t9.Length == entities.Length);
 					var t10 = chunk.GetSpan<T10>(c10);
+					Debug.Assert(t10.Length == entities.Length);
 					var t11 = chunk.GetSpan<T11>(c11);
+					Debug.Assert(t11.Length == entities.Length);
 					var t12 = chunk.GetSpan<T12>(c12);
+					Debug.Assert(t12.Length == entities.Length);
 					var t13 = chunk.GetSpan<T13>(c13);
+					Debug.Assert(t13.Length == entities.Length);
 					var t14 = chunk.GetSpan<T14>(c14);
+					Debug.Assert(t14.Length == entities.Length);
 					var t15 = chunk.GetSpan<T15>(c15);
+					Debug.Assert(t15.Length == entities.Length);
 
-					for (var i = entities.Length - 1; i >= 0; i--)
-						q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i]);
+					unsafe
+					{
+						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+						fixed (Entity* eptr = &entities[0])
+						fixed (T0* t0ptr = &t0[0])
+						fixed (T1* t1ptr = &t1[0])
+						fixed (T2* t2ptr = &t2[0])
+						fixed (T3* t3ptr = &t3[0])
+						fixed (T4* t4ptr = &t4[0])
+						fixed (T5* t5ptr = &t5[0])
+						fixed (T6* t6ptr = &t6[0])
+						fixed (T7* t7ptr = &t7[0])
+						fixed (T8* t8ptr = &t8[0])
+						fixed (T9* t9ptr = &t9[0])
+						fixed (T10* t10ptr = &t10[0])
+						fixed (T11* t11ptr = &t11[0])
+						fixed (T12* t12ptr = &t12[0])
+						fixed (T13* t13ptr = &t13[0])
+						fixed (T14* t14ptr = &t14[0])
+						fixed (T15* t15ptr = &t15[0])
+						#pragma warning restore CS8500
+						{
+							for (var i = entities.Length - 1; i >= 0; i--)
+								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i], ref t9ptr[i], ref t10ptr[i], ref t11ptr[i], ref t12ptr[i], ref t13ptr[i], ref t14ptr[i], ref t15ptr[i]);
+						}
+					}
 				}
 			}
 
