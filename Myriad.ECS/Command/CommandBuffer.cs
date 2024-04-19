@@ -405,6 +405,7 @@ public sealed partial class CommandBuffer(World World)
 
     private EntityModificationData GetModificationData(Entity entity, bool ensureSet, bool ensureRemove)
     {
+        // Get the index of this entity in the modifications lookup
         var idx = _entityModifications.IndexOfKey(entity);
 
         // Add it if it's missing
@@ -423,7 +424,7 @@ public sealed partial class CommandBuffer(World World)
         }
         else
         {
-            // It was found, but do we need to modify it
+            // Found it, now modify it (if necessary)
             var mod = _entityModifications.Values[idx];
 
             var overwrite = false;

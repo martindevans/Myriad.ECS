@@ -58,7 +58,7 @@ internal sealed class Chunk
         where T : IComponent
     {
         Debug.Assert(_entities[rowIndex] == entity, "Mismatched entities in chunk");
-        return ref GetSpan<T>(ComponentID<T>.ID)[rowIndex];
+        return ref GetRef<T>(rowIndex);
     }
 
     internal ref T GetRef<T>(int rowIndex)

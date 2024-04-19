@@ -38,7 +38,6 @@
   <ItemGroup>
     <Folder Include="Extensions\" />
     <Folder Include="Components\" />
-    <Folder Include="Systems\" />
   </ItemGroup>
 
 </Project>

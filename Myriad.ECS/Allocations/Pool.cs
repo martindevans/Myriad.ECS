@@ -72,7 +72,7 @@ public static class Pool<T>
         : IDisposable
     {
         public T Value { get; } = value;
-
+        
         public void Dispose()
         {
             Return(Value);

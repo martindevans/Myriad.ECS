@@ -110,6 +110,10 @@ internal class OrderedListSet<TItem>
         _items.Clear();
     }
 
+    /// <summary>
+    /// Copy this set to a new frozen set
+    /// </summary>
+    /// <returns></returns>
     public FrozenOrderedListSet<TItem> Freeze()
     {
         return new FrozenOrderedListSet<TItem>(this);

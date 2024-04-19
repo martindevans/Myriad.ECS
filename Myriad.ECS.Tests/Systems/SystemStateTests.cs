@@ -26,15 +26,15 @@ public class SystemStateTests
         buffer2.Playback().Dispose();
 
         // Check it was attached to e0
-        Assert.IsTrue(world.HasComponent<Component0>(resolver[e0]));
-        Assert.IsTrue(world.HasComponent<Component17>(resolver[e0]));
+        Assert.IsTrue(resolver[e0].HasComponent<Component0>(world));
+        Assert.IsTrue(resolver[e0].HasComponent<Component17>(world));
 
         // Check e1 was untouched
-        Assert.IsTrue(world.HasComponent<Component1>(resolver[e1]));
-        Assert.IsFalse(world.HasComponent<Component17>(resolver[e1]));
+        Assert.IsTrue(resolver[e1].HasComponent<Component1>(world));
+        Assert.IsFalse(resolver[e1].HasComponent<Component17>(world));
 
         // Check it was removed from e2
-        Assert.IsTrue(world.HasComponent<Component2>(resolver[e2]));
-        Assert.IsFalse(world.HasComponent<Component17>(resolver[e2]));
+        Assert.IsTrue(resolver[e2].HasComponent<Component2>(world));
+        Assert.IsFalse(resolver[e2].HasComponent<Component17>(world));
     }
 }

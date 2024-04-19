@@ -1,5 +1,4 @@
-﻿using Myriad.ECS.Allocations;
-using Myriad.ECS.Collections;
+﻿using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Worlds.Archetypes;
@@ -16,6 +15,8 @@ public sealed class QueryDescription(
 {
     // Cache of result from last time TryMatch was called
     private MatchResult? _result;
+
+    private OrderedListSet<ComponentID> _temporarySet = new();
 
     /// <summary>
     /// Create a query builder which describes this query
@@ -105,8 +106,8 @@ public sealed class QueryDescription(
         if (components.Overlaps(_exclude))
             return null;
 
-        // Get a hashset, which we might return later
-        var set = Pool<OrderedListSet<ComponentID>>.Get();
+        // Use the temp hashset to do this
+        var set = _temporarySet;
         set.Clear();
 
         // Check if there are any "exactly one" items
@@ -118,7 +119,6 @@ public sealed class QueryDescription(
             if (set.Count != 1)
             {
                 set.Clear();
-                Pool.Return(set);
                 return null;
             }
 
@@ -134,18 +134,16 @@ public sealed class QueryDescription(
             if (set.Count == 0)
             {
                 set.Clear();
-                Pool.Return(set);
                 return null;
             }
         }
         else
         {
             set.Clear();
-            Pool.Return(set);
             set = null;
         }
 
-        var atLeastOne = set == null ? null : new FrozenOrderedListSet<ComponentID>(set);
+        var atLeastOne = set?.Freeze();
 
         return new ArchetypeMatch(archetype, atLeastOne, exactlyOne);
     }

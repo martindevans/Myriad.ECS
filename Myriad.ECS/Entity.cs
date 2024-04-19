@@ -2,7 +2,6 @@
 using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
-using Myriad.ECS.xxHash;
 
 namespace Myriad.ECS;
 
@@ -54,6 +53,7 @@ public readonly record struct Entity
             && world.GetArchetype(this).IsPhantom;
     }
 
+    /// <inheritdoc />
     public int CompareTo(Entity other)
     {
         var idc = ID.CompareTo(other.ID);
@@ -63,6 +63,10 @@ public readonly record struct Entity
         return Version.CompareTo(other.Version);
     }
 
+    /// <summary>
+    /// Get a unique 64 bit ID for this entity
+    /// </summary>
+    /// <returns></returns>
     public long UniqueID()
     {
         // Set the entity ID and version into the hi and lo 32 bits
@@ -95,12 +99,26 @@ public readonly record struct Entity
         }
     }
 
+    /// <summary>
+    /// Get the set of components which this entity currently has
+    /// </summary>
+    /// <param name="w"></param>
+    /// <returns></returns>
     public FrozenOrderedListSet<ComponentID> GetComponents(World w)
     {
-        if (!Exists(w))
-            throw new InvalidOperationException("Cannot call GetComponents for entity that does not exist");
-
         var info = w.GetEntityInfo(this);
         return info.Chunk.Archetype.Components;
+    }
+
+    /// <summary>
+    /// Check if this entity has a component
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="w"></param>
+    /// <returns></returns>
+    public bool HasComponent<T>(World w)
+        where T : IComponent
+    {
+        return GetComponents(w).Contains(ComponentID<T>.ID);
     }
 }

@@ -182,12 +182,6 @@ public sealed partial class World
         return entityInfo.Chunk.GetComponentArray(id).GetValue(entityInfo.RowIndex);
     }
 
-    public bool HasComponent<T>(Entity entity)
-        where T : IComponent
-    {
-        return GetComponentSet(entity).Contains(ComponentID<T>.ID);
-    }
-
     private FrozenOrderedListSet<ComponentID> GetComponentSet(Entity entity)
     {
         if (!entity.Exists(this))

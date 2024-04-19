@@ -30,3 +30,24 @@ public record struct Component17 : IComponent;
 public record struct TestPhantom0 : IPhantomComponent;
 public record struct TestPhantom1 : IPhantomComponent;
 public record struct TestPhantom2 : IPhantomComponent;
+
+public class BoxedInt
+{
+    public int Value;
+}
+
+public record struct TestDisposable
+    : IDisposableComponent
+{
+    private readonly BoxedInt _box;
+
+    public TestDisposable(BoxedInt box)
+    {
+        _box = box;
+    }
+
+    public void Dispose()
+    {
+        _box.Value++;
+    }
+}

@@ -437,7 +437,7 @@ public class CommandBufferTests
         buffer.Playback();
 
         Assert.AreEqual(123, world.GetComponentRef<ComponentFloat>(entity).Value);
-        Assert.IsFalse(world.HasComponent<ComponentInt16>(entity));
+        Assert.IsFalse(entity.HasComponent<ComponentInt16>(world));
     }
 
     [TestMethod]
@@ -459,9 +459,9 @@ public class CommandBufferTests
         buffer.Playback();
 
         // Check they are all present
-        Assert.IsTrue(world.HasComponent<ComponentFloat>(entity));
-        Assert.IsTrue(world.HasComponent<ComponentInt16>(entity));
-        Assert.IsTrue(world.HasComponent<ComponentInt32>(entity));
+        Assert.IsTrue(entity.HasComponent<ComponentFloat>(world));
+        Assert.IsTrue(entity.HasComponent<ComponentInt16>(world));
+        Assert.IsTrue(entity.HasComponent<ComponentInt32>(world));
     }
 
     [TestMethod]
@@ -483,8 +483,8 @@ public class CommandBufferTests
         buffer.Playback();
 
         // Check the value has changed
-        Assert.IsTrue(world.HasComponent<ComponentFloat>(entity));
-        Assert.IsTrue(world.HasComponent<ComponentInt16>(entity));
+        Assert.IsTrue(entity.HasComponent<ComponentFloat>(world));
+        Assert.IsTrue(entity.HasComponent<ComponentInt16>(world));
         Assert.AreEqual(789, world.GetComponentRef<ComponentInt16>(entity).Value);
     }
 
@@ -508,8 +508,8 @@ public class CommandBufferTests
         buffer.Playback();
 
         // Check the value has changed to the latest value
-        Assert.IsTrue(world.HasComponent<ComponentFloat>(entity));
-        Assert.IsTrue(world.HasComponent<ComponentInt16>(entity));
+        Assert.IsTrue(entity.HasComponent<ComponentFloat>(world));
+        Assert.IsTrue(entity.HasComponent<ComponentInt16>(world));
         Assert.AreEqual(987, world.GetComponentRef<ComponentInt16>(entity).Value);
     }
 
@@ -536,8 +536,8 @@ public class CommandBufferTests
         buffer.Playback();
 
         // Check the value is gone
-        Assert.IsTrue(world.HasComponent<ComponentFloat>(entity));
-        Assert.IsFalse(world.HasComponent<ComponentInt16>(entity));
+        Assert.IsTrue(entity.HasComponent<ComponentFloat>(world));
+        Assert.IsFalse(entity.HasComponent<ComponentInt16>(world));
     }
 
     [TestMethod]
@@ -560,9 +560,9 @@ public class CommandBufferTests
         buffer.Playback();
 
         // Check entity is unchanged
-        Assert.IsTrue(world.HasComponent<ComponentFloat>(entity));
-        Assert.IsTrue(world.HasComponent<ComponentInt16>(entity));
-        Assert.IsFalse(world.HasComponent<ComponentInt32>(entity));
+        Assert.IsTrue(entity.HasComponent<ComponentFloat>(world));
+        Assert.IsTrue(entity.HasComponent<ComponentInt16>(world));
+        Assert.IsFalse(entity.HasComponent<ComponentInt32>(world));
     }
 
     [TestMethod]
@@ -588,9 +588,9 @@ public class CommandBufferTests
         buffer.Playback();
 
         // Check entity structure is unchanged
-        Assert.IsTrue(world.HasComponent<ComponentFloat>(entity));
-        Assert.IsTrue(world.HasComponent<ComponentInt16>(entity));
-        Assert.IsFalse(world.HasComponent<ComponentInt32>(entity));
+        Assert.IsTrue(entity.HasComponent<ComponentFloat>(world));
+        Assert.IsTrue(entity.HasComponent<ComponentInt16>(world));
+        Assert.IsFalse(entity.HasComponent<ComponentInt32>(world));
 
         // Check value is correct
         Assert.AreEqual(789, world.GetComponentRef<ComponentInt16>(entity).Value);
@@ -651,24 +651,24 @@ public class CommandBufferTests
             {
                 switch (rng.Next(18))
                 {
-                    case 0: Assert.IsTrue(world.HasComponent<Component0>(entity)); break;
-                    case 1: Assert.IsTrue(world.HasComponent<Component1>(entity)); break;
-                    case 2: Assert.IsTrue(world.HasComponent<Component2>(entity)); break;
-                    case 3: Assert.IsTrue(world.HasComponent<Component3>(entity)); break;
-                    case 4: Assert.IsTrue(world.HasComponent<Component4>(entity)); break;
-                    case 5: Assert.IsTrue(world.HasComponent<Component5>(entity)); break;
-                    case 6: Assert.IsTrue(world.HasComponent<Component6>(entity)); break;
-                    case 7: Assert.IsTrue(world.HasComponent<Component7>(entity)); break;
-                    case 8: Assert.IsTrue(world.HasComponent<Component8>(entity)); break;
-                    case 9: Assert.IsTrue(world.HasComponent<Component9>(entity)); break;
-                    case 10: Assert.IsTrue(world.HasComponent<Component10>(entity)); break;
-                    case 11: Assert.IsTrue(world.HasComponent<Component11>(entity)); break;
-                    case 12: Assert.IsTrue(world.HasComponent<Component12>(entity)); break;
-                    case 13: Assert.IsTrue(world.HasComponent<Component13>(entity)); break;
-                    case 14: Assert.IsTrue(world.HasComponent<Component14>(entity)); break;
-                    case 15: Assert.IsTrue(world.HasComponent<Component15>(entity)); break;
-                    case 16: Assert.IsTrue(world.HasComponent<Component16>(entity)); break;
-                    case 17: Assert.IsTrue(world.HasComponent<Component17>(entity)); break;
+                    case 0: Assert.IsTrue(entity.HasComponent<Component0>(world)); break;
+                    case 1: Assert.IsTrue(entity.HasComponent<Component1>(world)); break;
+                    case 2: Assert.IsTrue(entity.HasComponent<Component2>(world)); break;
+                    case 3: Assert.IsTrue(entity.HasComponent<Component3>(world)); break;
+                    case 4: Assert.IsTrue(entity.HasComponent<Component4>(world)); break;
+                    case 5: Assert.IsTrue(entity.HasComponent<Component5>(world)); break;
+                    case 6: Assert.IsTrue(entity.HasComponent<Component6>(world)); break;
+                    case 7: Assert.IsTrue(entity.HasComponent<Component7>(world)); break;
+                    case 8: Assert.IsTrue(entity.HasComponent<Component8>(world)); break;
+                    case 9: Assert.IsTrue(entity.HasComponent<Component9>(world)); break;
+                    case 10: Assert.IsTrue(entity.HasComponent<Component10>(world)); break;
+                    case 11: Assert.IsTrue(entity.HasComponent<Component11>(world)); break;
+                    case 12: Assert.IsTrue(entity.HasComponent<Component12>(world)); break;
+                    case 13: Assert.IsTrue(entity.HasComponent<Component13>(world)); break;
+                    case 14: Assert.IsTrue(entity.HasComponent<Component14>(world)); break;
+                    case 15: Assert.IsTrue(entity.HasComponent<Component15>(world)); break;
+                    case 16: Assert.IsTrue(entity.HasComponent<Component16>(world)); break;
+                    case 17: Assert.IsTrue(entity.HasComponent<Component17>(world)); break;
                 }
             }
         }

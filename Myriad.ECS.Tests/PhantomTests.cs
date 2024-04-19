@@ -116,7 +116,7 @@ public class PhantomTests
         // Is the entity valid but no longer alive
         Assert.IsTrue(e.Exists(w));
         Assert.IsTrue(e.IsPhantom(w));
-        Assert.IsTrue(w.HasComponent<ComponentInt32>(e));
+        Assert.IsTrue(e.HasComponent<ComponentInt32>(w));
 
         // Remove one of the non-phantom components
         cmd.Remove<ComponentInt32>(e);
@@ -125,7 +125,7 @@ public class PhantomTests
         // Is the entity valid but no longer alive
         Assert.IsTrue(e.Exists(w));
         Assert.IsTrue(e.IsPhantom(w));
-        Assert.IsFalse(w.HasComponent<ComponentInt32>(e));
+        Assert.IsFalse(e.HasComponent<ComponentInt32>(w));
     }
 
     [TestMethod]
@@ -151,7 +151,7 @@ public class PhantomTests
         // Is the entity valid but no longer alive
         Assert.IsTrue(e.Exists(w));
         Assert.IsTrue(e.IsPhantom(w));
-        Assert.IsTrue(w.HasComponent<ComponentInt32>(e));
+        Assert.IsTrue(e.HasComponent<ComponentInt32>(w));
 
         // Remove one phantom component
         cmd.Remove<TestPhantom1>(e);
@@ -160,7 +160,7 @@ public class PhantomTests
         // Is the entity valid but no longer alive
         Assert.IsTrue(e.Exists(w));
         Assert.IsTrue(e.IsPhantom(w));
-        Assert.IsFalse(w.HasComponent<TestPhantom1>(e));
+        Assert.IsFalse(e.HasComponent<TestPhantom1>(w));
 
         // Remove one more phantom component, this is the final one so it should be auto deleted.
         cmd.Remove<TestPhantom0>(e);
@@ -194,7 +194,7 @@ public class PhantomTests
         // Is the entity valid but no longer alive
         Assert.IsTrue(e.Exists(w));
         Assert.IsTrue(e.IsPhantom(w));
-        Assert.IsTrue(w.HasComponent<ComponentFloat>(e));
+        Assert.IsTrue(e.HasComponent<ComponentFloat>(w));
     }
 
     [TestMethod]
@@ -221,6 +221,6 @@ public class PhantomTests
         // Is the entity valid but no longer alive
         Assert.IsTrue(e.Exists(w));
         Assert.IsTrue(e.IsPhantom(w));
-        Assert.IsTrue(w.HasComponent<ComponentFloat>(e));
+        Assert.IsTrue(e.HasComponent<ComponentFloat>(w));
     }
 }
