@@ -135,7 +135,7 @@ for (var k = 0; k < i; k++)
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk!.Entities;
 <# for (var k = 0; k < i; k++)
 {
 #>

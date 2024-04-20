@@ -117,7 +117,7 @@ _world.Query(gametime, static (GameTime gametime, ref Position pos, ref Velocity
 
 #### Query Enumerable
 
-An enumerable query simply returns results as an enumerable of tuples. This requires `dotnet8.0` and is not available in `netstandard2.0`.
+An enumerable query simply returns results as an enumerable of tuples.
 
 ```csharp
 // Method signature
