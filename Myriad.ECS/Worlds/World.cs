@@ -7,7 +7,7 @@ namespace Myriad.ECS.Worlds;
 
 public sealed partial class World
 {
-    private readonly List<Archetype> _archetypes = [];
+    private readonly List<Archetype> _archetypes = [ ];
     private readonly Dictionary<ArchetypeHash, List<Archetype>> _archetypesByHash = [ ];
 
     // Keep track of dead entities so their ID can be re-used
@@ -140,60 +140,6 @@ public sealed partial class World
         return ref slot;
     }
 
-    /// <summary>
-    /// Count how many entities match this query
-    /// </summary>
-    /// <param name="query"></param>
-    /// <returns></returns>
-    public int Count(QueryDescription query)
-    {
-        var count = 0;
-        foreach (var archetype in query.GetArchetypes())
-            count += archetype.Archetype.EntityCount;
-
-        return count;
-    }
-
-
-
-
-
-    //todo: temp API?
-    public ref T GetComponentRef<T>(Entity entity)
-        where T : IComponent
-    {
-        if (!entity.Exists(this))
-            throw new ArgumentException("entity is not alive", nameof(entity));
-
-        // Get the entityinfo for this entity
-        ref var entityInfo = ref _entities[entity.ID];
-
-        return ref entityInfo.Chunk.GetRef<T>(entity);
-    }
-
-    public object? GetBoxedComponent(Entity entity, ComponentID id)
-    {
-        if (!entity.Exists(this))
-            return null;
-        if (!GetComponentSet(entity).Contains(id))
-            return null;
-
-        ref var entityInfo = ref _entities[entity.ID];
-        return entityInfo.Chunk.GetComponentArray(id).GetValue(entityInfo.RowIndex);
-    }
-
-    private FrozenOrderedListSet<ComponentID> GetComponentSet(Entity entity)
-    {
-        if (!entity.Exists(this))
-            throw new ArgumentException("entity is not alive", nameof(entity));
-
-        // Get the entityinfo for this entity
-        var entityInfo = _entities[entity.ID];
-
-        // Get the set of components for this archetype
-        return entityInfo.Chunk.Archetype.Components;
-    }
-
     internal Row GetRow(Entity entity)
     {
         var info = GetEntityInfo(entity);
@@ -202,10 +148,11 @@ public sealed partial class World
 
     internal ref EntityInfo GetEntityInfo(Entity entity)
     {
-        if (!entity.Exists(this))
+        ref var info = ref _entities[entity.ID];
+
+        if (info.Version != entity.Version)
             throw new ArgumentException("entity is not alive", nameof(entity));
 
-        // Get the entityinfo for this entity
-        return ref _entities[entity.ID];
+        return ref info;
     }
 }

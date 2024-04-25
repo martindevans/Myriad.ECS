@@ -42,7 +42,7 @@ public sealed class KeplerWorldPosition(World world)
 
         // Write that data back to the ECS
         for (var i = 0; i < _keplerMasses.Length; i++)
-            world.GetComponentRef<WorldPosition>(_keplerMasses[i].Self).Value = positions[i];
+            _keplerMasses[i].Self.GetComponentRef<WorldPosition>(world).Value = positions[i];
     }
 
     public static KeplerObject[] FindKeplerBodies(World world)

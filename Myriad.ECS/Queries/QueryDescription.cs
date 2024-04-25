@@ -149,6 +149,18 @@ public sealed class QueryDescription(
     }
     #endregion
 
+    /// <summary>
+    /// Count how many entities match this query
+    /// </summary>
+    /// <returns></returns>
+    public int Count()
+    {
+        var count = 0;
+        foreach (var archetype in GetArchetypes())
+            count += archetype.Archetype.EntityCount;
+        return count;
+    }
+
     private readonly struct MatchResult(int watermark, FrozenOrderedListSet<ArchetypeMatch> archetypes)
     {
         /// <summary>

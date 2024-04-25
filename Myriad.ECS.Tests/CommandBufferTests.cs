@@ -1,5 +1,4 @@
 ﻿using Myriad.ECS.Command;
-using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 
@@ -72,7 +71,7 @@ public class CommandBufferTests
             Assert.IsTrue(entity.Exists(world));
             Assert.AreEqual(1, world.Archetypes.Count);
             Assert.AreEqual(1, world.Archetypes.Single().Components.Count);
-            Assert.AreEqual(i, world.GetComponentRef<ComponentInt32>(entity).Value);
+            Assert.AreEqual(i, entity.GetComponentRef<ComponentInt32>(world).Value);
         }
     }
 
@@ -107,7 +106,6 @@ public class CommandBufferTests
                         case 2: b.Set(new ComponentFloat(i), true); break;
                         case 3: b.Set(new ComponentInt32(i), true); break;
                         case 4: b.Set(new ComponentInt64(i), true); break;
-                        default: break;
                     }
                 }
             }
@@ -303,8 +301,8 @@ public class CommandBufferTests
         Assert.IsFalse(entities[1].Exists(world));
         Assert.IsTrue(entities[2].Exists(world));
 
-        Assert.AreEqual(1, world.GetComponentRef<ComponentFloat>(entities[0]).Value);
-        Assert.AreEqual(3, world.GetComponentRef<ComponentFloat>(entities[2]).Value);
+        Assert.AreEqual(1, entities[0].GetComponentRef<ComponentFloat>(world).Value);
+        Assert.AreEqual(3, entities[2].GetComponentRef<ComponentFloat>(world).Value);
     }
 
     [TestMethod]
@@ -387,7 +385,7 @@ public class CommandBufferTests
         Assert.IsFalse(entities[1].Exists(world));
         Assert.IsTrue(entities[2].Exists(world));
 
-        Assert.AreEqual(3, world.GetComponentRef<ComponentFloat>(entities[2]).Value);
+        Assert.AreEqual(3, entities[2].GetComponentRef<ComponentFloat>(world).Value);
     }
 
     [TestMethod]
@@ -436,7 +434,7 @@ public class CommandBufferTests
         buffer.Remove<ComponentInt16>(entity);
         buffer.Playback();
 
-        Assert.AreEqual(123, world.GetComponentRef<ComponentFloat>(entity).Value);
+        Assert.AreEqual(123, entity.GetComponentRef<ComponentFloat>(world).Value);
         Assert.IsFalse(entity.HasComponent<ComponentInt16>(world));
     }
 
@@ -485,7 +483,7 @@ public class CommandBufferTests
         // Check the value has changed
         Assert.IsTrue(entity.HasComponent<ComponentFloat>(world));
         Assert.IsTrue(entity.HasComponent<ComponentInt16>(world));
-        Assert.AreEqual(789, world.GetComponentRef<ComponentInt16>(entity).Value);
+        Assert.AreEqual(789, entity.GetComponentRef<ComponentInt16>(world).Value);
     }
 
     [TestMethod]
@@ -510,7 +508,7 @@ public class CommandBufferTests
         // Check the value has changed to the latest value
         Assert.IsTrue(entity.HasComponent<ComponentFloat>(world));
         Assert.IsTrue(entity.HasComponent<ComponentInt16>(world));
-        Assert.AreEqual(987, world.GetComponentRef<ComponentInt16>(entity).Value);
+        Assert.AreEqual(987, entity.GetComponentRef<ComponentInt16>(world).Value);
     }
 
     [TestMethod]
@@ -593,7 +591,7 @@ public class CommandBufferTests
         Assert.IsFalse(entity.HasComponent<ComponentInt32>(world));
 
         // Check value is correct
-        Assert.AreEqual(789, world.GetComponentRef<ComponentInt16>(entity).Value);
+        Assert.AreEqual(789, entity.GetComponentRef<ComponentInt16>(world).Value);
     }
 
     [TestMethod]

@@ -1,0 +1,68 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+    const int PARAM_COUNT = 16;
+#>
+using Myriad.ECS.Queries;
+
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedParameter.Global
+// ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable CheckNamespace
+// ReSharper disable ArrangeAccessorOwnerBody
+
+namespace Myriad.ECS.Worlds;
+
+public partial class World
+{
+    /// <summary>
+    /// Count how many entities match this query
+    /// </summary>
+    /// <param name="query"></param>
+    /// <returns></returns>
+    public int Count(QueryDescription query)
+    {
+        return query.Count();
+    }
+
+<#
+for (var i = 1; i <= PARAM_COUNT; i++)
+{
+    var tparams = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
+    tparams = $"<{tparams}>";
+#>
+
+    /// <summary>
+    /// Count how many entities exist which include all given components
+    /// </summary>
+    /// <returns></returns>
+    public int Count<#= tparams #>()
+        <#= Constraints(i, 8) #>
+    {
+        var query = GetCachedQuery<#= tparams #>();
+        return query.Count();
+    }
+<#
+}
+#>
+}
+
+<#+ 
+    static string Constraints(int count, int spaces = 4)
+    {
+        if (count == 0)
+            return "";
+
+        var prefix = new string(' ', spaces);
+        var str = "where " + string.Join(
+            $"\r\n{prefix}where ",
+            Enumerable.Range(0, count).Select(x => $"T{x} : IComponent")
+        );
+
+        return str;
+    }
+#>

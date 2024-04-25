@@ -121,4 +121,33 @@ public readonly record struct Entity
     {
         return GetComponents(w).Contains(ComponentID<T>.ID);
     }
+
+    /// <summary>
+    /// Get a reference to a component of the given type. If the entity
+    /// does not have this component an exception will be thrown.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="world"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    public ref T GetComponentRef<T>(World world)
+        where T : IComponent
+    {
+        if (!Exists(world))
+            throw new InvalidOperationException("entity is not alive");
+
+        ref var entityInfo = ref world.GetEntityInfo(this);
+        return ref entityInfo.Chunk.GetRef<T>(this, entityInfo.RowIndex);
+    }
+
+    public object? GetBoxedComponent(World world, ComponentID id)
+    {
+        if (!Exists(world))
+            return null;
+        if (!GetComponents(world).Contains(id))
+            return null;
+
+        ref var entityInfo = ref world.GetEntityInfo(this);
+        return entityInfo.Chunk.GetComponentArray(id).GetValue(entityInfo.RowIndex);
+    }
 }
