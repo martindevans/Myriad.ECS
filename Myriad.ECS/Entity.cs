@@ -133,9 +133,6 @@ public readonly record struct Entity
     public ref T GetComponentRef<T>(World world)
         where T : IComponent
     {
-        if (!Exists(world))
-            throw new InvalidOperationException("entity is not alive");
-
         ref var entityInfo = ref world.GetEntityInfo(this);
         return ref entityInfo.Chunk.GetRef<T>(this, entityInfo.RowIndex);
     }
