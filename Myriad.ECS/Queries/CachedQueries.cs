@@ -1,8 +1,12 @@
 ﻿using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 using Myriad.ECS.xxHash;
-using Myriad.ECS.Extensions;
+using Myriad.ECS.Collections;
 using System.Runtime.InteropServices;
+
+#if NETSTANDARD2_1
+using Myriad.ECS.Extensions;
+#endif
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -17,7 +21,7 @@ public partial class World
     // Cache of all queries with 1 included components. Tuple elements are:
     // - component ID
     // - the query itself
-    private readonly List<(int, QueryDescription)> _queryCache1 = [ ];
+    private readonly SortedList<int, QueryDescription> _queryCache1 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -29,12 +33,9 @@ public partial class World
     {
         var component = ComponentID<T0>.ID.Value;
 
-        // Find query that matches these types
-        foreach (var (c, q) in _queryCache1)
-        {
-            if (c == component)
-                return q;
-        }
+        // Find query that matches this types
+        if (_queryCache1.TryGetValue(component, out var q))
+            return q;
 
         // Didn't find one, create it now
         var query = new QueryBuilder()
@@ -42,17 +43,15 @@ public partial class World
             .Build(this);
 
         // Add query to the cache
-        _queryCache1.Add((component, query));
+        _queryCache1.Add(component, query);
 
         return query;
     }
 
-
     // Cache of all queries with 2 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
+    // - component IDs combined together
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache2 = [ ];
+    private readonly SortedList<long, QueryDescription> _queryCache2 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -63,30 +62,16 @@ public partial class World
         where T0 : IComponent
         where T1 : IComponent
     {
-        // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-            ComponentID<T1>.ID.Value,
-        ];
-        orderedComponents.Sort();
-
-        // Calculate hash of components, for fast rejection
-        var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
-
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache2)
+        var u = new Union64
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            I0 = ComponentID<T0>.ID.Value,
+            I1 = ComponentID<T1>.ID.Value,
+        };
+        var key = u.Long;
 
-            // Since the sequences are sorted by component ID these should be identical
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
+        // Find query that matches this types
+        if (_queryCache2.TryGetValue(key, out var q))
             return q;
-        }
 
         // Didn't find one, create it now
         var query = new QueryBuilder()
@@ -95,7 +80,7 @@ public partial class World
             .Build(this);
 
         // Add query to the cache
-        _queryCache2.Add((hash, orderedComponents.ToArray(), query));
+        _queryCache2.Add(key, query);
 
         return query;
     }
@@ -137,6 +122,7 @@ public partial class World
                 continue;
 
             // Since the sequences are sorted by component ID these should be identical
+            // Comparing two int spans should be very fast (SIMD accelerated)
             if (!orderedComponents.SequenceEqual(c))
                 continue;
 
@@ -195,6 +181,7 @@ public partial class World
                 continue;
 
             // Since the sequences are sorted by component ID these should be identical
+            // Comparing two int spans should be very fast (SIMD accelerated)
             if (!orderedComponents.SequenceEqual(c))
                 continue;
 
@@ -256,6 +243,7 @@ public partial class World
                 continue;
 
             // Since the sequences are sorted by component ID these should be identical
+            // Comparing two int spans should be very fast (SIMD accelerated)
             if (!orderedComponents.SequenceEqual(c))
                 continue;
 
@@ -320,6 +308,7 @@ public partial class World
                 continue;
 
             // Since the sequences are sorted by component ID these should be identical
+            // Comparing two int spans should be very fast (SIMD accelerated)
             if (!orderedComponents.SequenceEqual(c))
                 continue;
 
@@ -387,6 +376,7 @@ public partial class World
                 continue;
 
             // Since the sequences are sorted by component ID these should be identical
+            // Comparing two int spans should be very fast (SIMD accelerated)
             if (!orderedComponents.SequenceEqual(c))
                 continue;
 
@@ -457,6 +447,7 @@ public partial class World
                 continue;
 
             // Since the sequences are sorted by component ID these should be identical
+            // Comparing two int spans should be very fast (SIMD accelerated)
             if (!orderedComponents.SequenceEqual(c))
                 continue;
 
@@ -530,6 +521,7 @@ public partial class World
                 continue;
 
             // Since the sequences are sorted by component ID these should be identical
+            // Comparing two int spans should be very fast (SIMD accelerated)
             if (!orderedComponents.SequenceEqual(c))
                 continue;
 
@@ -606,6 +598,7 @@ public partial class World
                 continue;
 
             // Since the sequences are sorted by component ID these should be identical
+            // Comparing two int spans should be very fast (SIMD accelerated)
             if (!orderedComponents.SequenceEqual(c))
                 continue;
 
@@ -685,6 +678,7 @@ public partial class World
                 continue;
 
             // Since the sequences are sorted by component ID these should be identical
+            // Comparing two int spans should be very fast (SIMD accelerated)
             if (!orderedComponents.SequenceEqual(c))
                 continue;
 
@@ -767,6 +761,7 @@ public partial class World
                 continue;
 
             // Since the sequences are sorted by component ID these should be identical
+            // Comparing two int spans should be very fast (SIMD accelerated)
             if (!orderedComponents.SequenceEqual(c))
                 continue;
 
@@ -852,6 +847,7 @@ public partial class World
                 continue;
 
             // Since the sequences are sorted by component ID these should be identical
+            // Comparing two int spans should be very fast (SIMD accelerated)
             if (!orderedComponents.SequenceEqual(c))
                 continue;
 
@@ -940,6 +936,7 @@ public partial class World
                 continue;
 
             // Since the sequences are sorted by component ID these should be identical
+            // Comparing two int spans should be very fast (SIMD accelerated)
             if (!orderedComponents.SequenceEqual(c))
                 continue;
 
@@ -1031,6 +1028,7 @@ public partial class World
                 continue;
 
             // Since the sequences are sorted by component ID these should be identical
+            // Comparing two int spans should be very fast (SIMD accelerated)
             if (!orderedComponents.SequenceEqual(c))
                 continue;
 
@@ -1125,6 +1123,7 @@ public partial class World
                 continue;
 
             // Since the sequences are sorted by component ID these should be identical
+            // Comparing two int spans should be very fast (SIMD accelerated)
             if (!orderedComponents.SequenceEqual(c))
                 continue;
 

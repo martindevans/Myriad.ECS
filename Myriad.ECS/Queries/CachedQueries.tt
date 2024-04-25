@@ -10,8 +10,12 @@
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 using Myriad.ECS.xxHash;
-using Myriad.ECS.Extensions;
+using Myriad.ECS.Collections;
 using System.Runtime.InteropServices;
+
+#if NETSTANDARD2_1
+using Myriad.ECS.Extensions;
+#endif
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -26,7 +30,7 @@ public partial class World
     // Cache of all queries with 1 included components. Tuple elements are:
     // - component ID
     // - the query itself
-    private readonly List<(int, QueryDescription)> _queryCache1 = [ ];
+    private readonly SortedList<int, QueryDescription> _queryCache1 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -38,12 +42,9 @@ public partial class World
     {
         var component = ComponentID<T0>.ID.Value;
 
-        // Find query that matches these types
-        foreach (var (c, q) in _queryCache1)
-        {
-            if (c == component)
-                return q;
-        }
+        // Find query that matches this types
+        if (_queryCache1.TryGetValue(component, out var q))
+            return q;
 
         // Didn't find one, create it now
         var query = new QueryBuilder()
@@ -51,12 +52,49 @@ public partial class World
             .Build(this);
 
         // Add query to the cache
-        _queryCache1.Add((component, query));
+        _queryCache1.Add(component, query);
 
         return query;
     }
 
-<# for (var i = 2; i <= PARAM_COUNT; i++)
+    // Cache of all queries with 2 included components. Tuple elements are:
+    // - component IDs combined together
+    // - the query itself
+    private readonly SortedList<long, QueryDescription> _queryCache2 = [ ];
+
+    /// <summary>
+    /// Get a query that finds entities which include all of the given types. This query
+    /// will be shared with other requests for the same set of types.
+    /// </summary>
+    /// <returns>A query that finds entities which include all of the given types</returns>
+    private QueryDescription GetCachedQuery<T0, T1>()
+        where T0 : IComponent
+        where T1 : IComponent
+    {
+        var u = new Union64
+        {
+            I0 = ComponentID<T0>.ID.Value,
+            I1 = ComponentID<T1>.ID.Value,
+        };
+        var key = u.Long;
+
+        // Find query that matches this types
+        if (_queryCache2.TryGetValue(key, out var q))
+            return q;
+
+        // Didn't find one, create it now
+        var query = new QueryBuilder()
+            .Include<T0>()
+            .Include<T1>()
+            .Build(this);
+
+        // Add query to the cache
+        _queryCache2.Add(key, query);
+
+        return query;
+    }
+
+<# for (var i = 3; i <= PARAM_COUNT; i++)
 {
     var tparams = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
     if (i > 0)
@@ -119,6 +157,7 @@ public partial class World
                 continue;
 
             // Since the sequences are sorted by component ID these should be identical
+            // Comparing two int spans should be very fast (SIMD accelerated)
             if (!orderedComponents.SequenceEqual(c))
                 continue;
 
