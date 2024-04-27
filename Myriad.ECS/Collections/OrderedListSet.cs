@@ -53,11 +53,6 @@ internal class OrderedListSet<TItem>
     }
     #endregion
 
-    internal IReadOnlyCollection<TItem> LINQ()
-    {
-        return _items;
-    }
-
     #region add
     public bool Add(TItem item)
     {
@@ -270,9 +265,14 @@ internal class OrderedListSet<TItem>
         return true;
 #endif
     }
-#endregion
+    #endregion
 
     #region LINQ
+    internal IReadOnlyCollection<TItem> LINQ()
+    {
+        return _items;
+    }
+
     internal TItem Single()
     {
         if (_items.Count == 0)

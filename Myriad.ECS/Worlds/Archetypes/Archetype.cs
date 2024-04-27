@@ -11,7 +11,7 @@ public sealed partial class Archetype
     /// <summary>
     /// Number of entities in a single chunk
     /// </summary>
-    private const int CHUNK_SIZE = 1024;
+    internal const int CHUNK_SIZE = 1024;
 
     /// <summary>
     /// How many empty chunks to keep as spares

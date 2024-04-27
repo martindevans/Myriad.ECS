@@ -16,7 +16,7 @@ public sealed class QueryDescription(
     // Cache of result from last time TryMatch was called
     private MatchResult? _result;
 
-    private OrderedListSet<ComponentID> _temporarySet = new();
+    private readonly OrderedListSet<ComponentID> _temporarySet = new();
 
     /// <summary>
     /// Create a query builder which describes this query

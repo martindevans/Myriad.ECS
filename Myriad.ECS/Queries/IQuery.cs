@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Worlds.Archetypes;
 
 using Parallel = System.Threading.Tasks.Parallel;
 //using Parallel = ParallelTasks.Parallel;
@@ -47,10 +48,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -90,6 +91,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 	
 			var count = 0;
@@ -101,15 +104,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 
@@ -118,11 +122,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i]);
-						}
 					});
 				}
 			}
@@ -171,10 +173,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -218,6 +220,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 	
@@ -230,15 +234,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -248,11 +253,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i], ref t1[i]);
-						}
 					});
 				}
 			}
@@ -304,10 +307,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -355,6 +358,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
@@ -368,15 +373,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -387,11 +393,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
-						}
 					});
 				}
 			}
@@ -446,10 +450,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -501,6 +505,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
@@ -515,15 +521,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -535,11 +542,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
-						}
 					});
 				}
 			}
@@ -597,10 +602,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -656,6 +661,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
@@ -671,15 +678,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -692,11 +700,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
-						}
 					});
 				}
 			}
@@ -757,10 +763,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -820,6 +826,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
@@ -836,15 +844,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -858,11 +867,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
-						}
 					});
 				}
 			}
@@ -926,10 +933,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -993,6 +1000,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
@@ -1010,15 +1019,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -1033,11 +1043,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
-						}
 					});
 				}
 			}
@@ -1104,10 +1112,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -1175,6 +1183,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
@@ -1193,15 +1203,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -1217,11 +1228,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
-						}
 					});
 				}
 			}
@@ -1291,10 +1300,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -1366,6 +1375,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
@@ -1385,15 +1396,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -1410,11 +1422,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
-						}
 					});
 				}
 			}
@@ -1487,10 +1497,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -1566,6 +1576,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
@@ -1586,15 +1598,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -1612,11 +1625,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
-						}
 					});
 				}
 			}
@@ -1692,10 +1703,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -1775,6 +1786,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
@@ -1796,15 +1809,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -1823,11 +1837,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
-						}
 					});
 				}
 			}
@@ -1906,10 +1918,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -1993,6 +2005,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
@@ -2015,15 +2029,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -2043,11 +2058,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
-						}
 					});
 				}
 			}
@@ -2129,10 +2142,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -2220,6 +2233,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
@@ -2243,15 +2258,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -2272,11 +2288,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
-						}
 					});
 				}
 			}
@@ -2361,10 +2375,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -2456,6 +2470,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
@@ -2480,15 +2496,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -2510,11 +2527,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i]);
-						}
 					});
 				}
 			}
@@ -2602,10 +2617,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -2701,6 +2716,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
@@ -2726,15 +2743,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -2757,11 +2775,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i]);
-						}
 					});
 				}
 			}
@@ -2852,10 +2868,10 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				var chunks = archetype.Chunks;
-				for (var c = chunks.Count - 1; c >= 0; c--)
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
 				{
-					var chunk = chunks[c];
+					var chunk = enumerator.Current;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -2955,6 +2971,8 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
+
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
@@ -2981,15 +2999,16 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				for (var c = 0; c < archetype.Chunks.Count; c++)
-                {
-                    var chunk = archetype.Chunks[c];
+				using var enumerator = archetype.GetChunkEnumerator();
+                while (enumerator.MoveNext())
+				{
+					var chunk = enumerator.Current;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
 						continue;
 
-					var numBatches = (int)Math.Ceiling(entityCount / (double)batchSize);
+					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
@@ -3013,11 +3032,9 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 
+						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-						{
-							var entities = chunk.Entities;
 							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i]);
-						}
 					});
 				}
 			}
