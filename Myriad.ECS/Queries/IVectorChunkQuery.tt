@@ -1,0 +1,266 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+	const int PARAM_COUNT = 16;
+#>
+using System.Numerics;
+using System.Runtime.InteropServices;
+using Myriad.ECS.Queries;
+using Myriad.ECS.IDs;
+
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedParameter.Global
+// ReSharper disable LoopCanBeConvertedToQuery
+
+<# for (var i = 1; i <= PARAM_COUNT; i++)
+{
+	var sumij = i;
+#>
+namespace Myriad.ECS.Queries
+{
+	public interface <#= Name(i) #><<#= VectorGenerics(i) #>>
+		where <#= VectorConstraints(sumij, 8) #>
+	{
+		/// <summary>
+        /// Execute work over SIMD vectors
+        /// </summary>
+		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+		/// <param name="t<#= k #>">Span of vectors of values, reinterpreted from component <#= k #></param>
+<#
+}
+#>
+		public void Execute(<#= Vectors(0, i) #>, int padding);
+	}
+}
+
+namespace Myriad.ECS.Worlds
+{
+	public partial class World
+	{
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+        /// <typeparam name="T<#= k #>">The type of the component <#= k #></typeparam>
+		/// <typeparam name="TV<#= k #>">The type component <#= k #> will be cast to in the SIMD vectors</typeparam>
+<#
+}
+#>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteVectorChunk<TQ, <#= Generics(i) #>>(
+			TQ q,
+			QueryDescription? query = null
+		)
+			where <#= Constraints(sumij, 12) #>
+			where TQ : <#= Name(i) #><<#= VectorGenerics(i) #>>
+		{
+			query ??= GetCachedQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>();
+
+			var archetypes = query.GetArchetypes();
+			if (archetypes.Count == 0)
+				return 0;
+
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+		    var c<#= k #> = ComponentID<T<#= k #>>.ID;
+<#
+}
+#>
+
+			// Allocate some spans we need to copy the "leftover" values
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+			Span<TV<#= k #>> lvs<#= k #> = stackalloc TV<#= k #>[Vector<TV<#= k #>>.Count];
+<# } #>
+
+			var count = 0;
+			foreach (var archetypeMatch in archetypes)
+			{
+			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
+
+				var chunks = archetype.Chunks;
+				for (var c = chunks.Count - 1; c >= 0; c--)
+				{
+					var chunk = chunks[c];
+
+					var entities = chunk.Entities;
+					if (entities.Length == 0)
+						continue;
+
+					count += entities.Length;
+
+					// Get spans:
+					// - tc: component span
+					// - ts: span of components, reinterpreted as TV
+					// - tv: span of reinterpreted values, as Vector<TV>
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+
+					var tc<#= k #> = chunk.GetSpan<T<#= k #>>(c<#= k #>);
+					var ts<#= k #> = MemoryMarshal.Cast<T<#= k #>, TV<#= k #>>(tc<#= k #>);
+					var tv<#= k #> = MemoryMarshal.Cast<TV<#= k #>, Vector<TV<#= k #>>>(ts<#= k #>);
+<# if (k != 0) { #>
+					if (tv<#= k #>.Length != tv0.Length)
+						throw new InvalidOperationException("Mismatched vector lengths");
+<# } #>
+<# } #>
+
+					// Execute the vectorised part
+					q.Execute(<#= CallVectorParameters(sumij) #>, 0);
+
+					// Copy data into a vector to handle the "leftover" at the end
+					// which can't fill a whole vector
+					var vectored = Vector<TV0>.Count * tv0.Length;
+					var leftover = ts0.Length - vectored;
+
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+					lvs<#= k #>.Clear();
+					ts<#= k #>[^leftover..].CopyTo(lvs<#= k #>);
+					var ls<#= k #> = MemoryMarshal.Cast<TV<#= k #>, Vector<TV<#= k #>>>(lvs<#= k #>);
+<# } #>
+
+					// Execute the leftover at the end
+					q.Execute(<#= CallLeftoverParameters(sumij) #>, leftover);
+
+					// Copy leftover back into place
+                    for (var i = 0; i < leftover; i++)
+					{
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+                        ts<#= k #>[ts<#= k #>.Length - leftover + i] = lvs<#= k #>[i];
+<# } #>
+					}
+				}
+			}
+
+			return count;
+		}
+	}
+}
+
+<#
+}
+#>
+
+
+<#+ 
+	static string Constraints(int count, int spaces = 4)
+    {
+        var prefix = new string(' ', spaces);
+        var str1 = string.Join(
+			$"\r\n{prefix}where ",
+			Enumerable.Range(0, count).Select(x => $"T{x} : struct, IComponent")
+		);
+
+		var str2 = string.Join(
+			$"\r\n{prefix}where ",
+			Enumerable.Range(0, count).Select(x => $"TV{x} : unmanaged")
+		);
+
+		return str1 + $"\r\n{prefix}where " + str2;
+    }
+
+	static string VectorConstraints(int count, int spaces = 4)
+    {
+        var prefix = new string(' ', spaces);
+
+		var str2 = string.Join(
+			$"\r\n{prefix}where ",
+			Enumerable.Range(0, count).Select(x => $"TV{x} : unmanaged")
+		);
+
+		return str2;
+    }
+
+	static string Generics(int count)
+	{
+		return string.Join(", ", Enumerable.Range(0, count).Select(x => $"T{x}, TV{x}"));
+	}
+
+	static string VectorGenerics(int count)
+	{
+		return string.Join(", ", Enumerable.Range(0, count).Select(x => $"TV{x}"));
+	}
+
+	static string Mod(int index, int mutable, int @readonly)
+	{
+		return index < mutable ? "ref" : "in";
+	}
+
+	static string Name(int count, int size = 0)
+	{
+		var sz = size == 0 ? "" : size.ToString();
+
+		return $"IVector{sz}ChunkQuery" + count;
+	}
+
+	static string Vectors(int start, int count)
+	{
+		var str = string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"Span<Vector<TV{x}>> t{x}")
+		);
+
+		return str;
+	}
+
+	static string Refs(int start, int count)
+	{
+		var str = string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"Span<TV{x}> t{x}")
+		);
+
+		return str;
+	}
+
+	static string CallVectorParameters(int count)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(0, count).Select(x => $"tv{x}")
+        );
+
+        return str;
+    }
+
+	static string CallLeftoverParameters(int count)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(0, count).Select(x => $"ls{x}")
+        );
+
+        return str;
+    }
+
+    static string CallParameters(int count)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(0, count).Select(x => $"ts{x}[x..]")
+        );
+
+        return str;
+    }
+#>

@@ -175,7 +175,7 @@ public sealed class QueryDescription(
 
         public bool IsStale(World world)
         {
-            return ArchetypeWatermark < world.Archetypes.Count;
+            return ArchetypeWatermark < world.ArchetypesCount;
         }
     }
 

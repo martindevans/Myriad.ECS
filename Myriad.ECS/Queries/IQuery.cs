@@ -51,7 +51,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -107,7 +107,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -176,7 +176,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -237,7 +237,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -310,7 +310,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -376,7 +376,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -453,7 +453,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -524,7 +524,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -605,7 +605,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -681,7 +681,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -766,7 +766,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -847,7 +847,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -936,7 +936,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -1022,7 +1022,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -1115,7 +1115,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -1206,7 +1206,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -1303,7 +1303,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -1399,7 +1399,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -1500,7 +1500,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -1601,7 +1601,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -1706,7 +1706,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -1812,7 +1812,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -1921,7 +1921,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -2032,7 +2032,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -2145,7 +2145,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -2261,7 +2261,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -2378,7 +2378,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -2499,7 +2499,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -2620,7 +2620,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -2746,7 +2746,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -2871,7 +2871,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -3002,7 +3002,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current;
+					var chunk = enumerator.Current!;
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)

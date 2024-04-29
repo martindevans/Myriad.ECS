@@ -17,6 +17,7 @@ public sealed partial class World
     private readonly SegmentedList<EntityInfo> _entities = new(1024);
 
     public IReadOnlyList<Archetype> Archetypes => _archetypes;
+    internal int ArchetypesCount => _archetypes.Count;
 
     internal World()
     {

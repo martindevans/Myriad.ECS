@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using BenchmarkDotNet.Attributes;
 using Benchmarks.Components;
-using JetBrains.Annotations;
 using Myriad.ECS;
 using Myriad.ECS.Command;
 using Myriad.ECS.Queries;
@@ -59,16 +58,22 @@ public class QueryBenchmark
         }
     }
 
-    //[Benchmark]
+    [Benchmark]
     public void Query()
     {
         _world.Execute<QueryAction, Position, Velocity>(new QueryAction(), _query);
     }
 
-    //[Benchmark]
+    [Benchmark]
     public void ChunkQuery()
     {
         _world.ExecuteChunk<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
+    }
+
+    [Benchmark]
+    public void SimdChunkQuery()
+    {
+        _world.ExecuteVectorChunk<SimdChunkQueryAction2, Position, float, Velocity, float>(new SimdChunkQueryAction2(), _query);
     }
 
     //[Benchmark]
@@ -90,7 +95,7 @@ public class QueryBenchmark
             item.Item0.Value += item.Item1.Value;
     }
 
-    //[Benchmark]
+    [Benchmark]
     public void DelegateQuery()
     {
         _world.Query((ref Position pos, ref Velocity vel) =>
@@ -117,6 +122,16 @@ public class QueryBenchmark
             {
                 pos[i].Value += vel[i].Value;
             }
+        }
+    }
+
+    private struct SimdChunkQueryAction2
+        : IVectorChunkQuery2<float, float>
+    {
+        public readonly void Execute(Span<Vector<float>> posf, Span<Vector<float>> velf, int pad)
+        {
+            for (var i = 0; i < posf.Length; i++)
+                posf[i] += velf[i];
         }
     }
 }

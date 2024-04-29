@@ -1,10 +1,9 @@
 ﻿using BenchmarkDotNet.Running;
 using Benchmarks;
 
-//var e = new EntityModifyBenchmark();
+//var e = new QueryBenchmark();
 //e.Setup();
-//e.IterationSetup();
-//e.Playback();
+//e.SimdChunkQuery();
 
 var summary = BenchmarkRunner.Run<QueryBenchmark>();
 //var summary = BenchmarkRunner.Run<EntityCreateBenchmark>();
