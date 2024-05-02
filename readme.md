@@ -29,15 +29,15 @@ public record struct Velocity(Vector2 Value) : IComponent;
 
 ### Phantom Components
 
-Myriad supports "Phantom Components", these are defined by `IPhantomComponent` instead of `IComponent`. When an `Entity` with any phantom components is destroyed the entity is not actually destroyed, instead it becomes a "phantom". Phantom entities are automatically **excluded** from queries, and must be explicitly included with `.Include<Phantom>`.
+Myriad supports "Phantom Components", these are defined by `IPhantomComponent` instead of `IComponent`. When an `Entity` with any phantom components is destroyed the entity is not actually destroyed, instead it becomes a "phantom". Phantom entities are automatically **excluded** from queries and must be explicitly included with `.Include<Phantom>`.
 
-A phantom entities can be destroyed in two ways:
+A phantom entity can be destroyed in two ways:
  - Delete it again.
  - Remove all phantom components.
 
 Phantom components are useful for tracking per-entity state. For example if there is some event that needs to run when an entity is destroyed you can attach a component when the entity is created (`DoTheThing : IPhantomComponent`) and then query for `Include<DoTheThing, Phantom>()`. When you have done whatever is needed you should remove the `DoTheThing` component. Once all of the phantoms have been handled and removed, the entity will be automatically destroyed.
 
-One common case for this is resource disposal, for this you can use `IDisposableComponent` and `DisposableComponentSystem`. Run a `DisposableComponentSystem` every frame for every type of disposable components and it will ensure resources are correctly disposed (even when the world is destroyed).
+One common case for this is resource disposal, for this you can use `IDisposableComponent` and `DisposableComponentSystem`. Run a `DisposableComponentSystem` every frame for every type of disposable component and it will ensure resources are correctly disposed (even when the world is destroyed).
 
 ### Querying
 
