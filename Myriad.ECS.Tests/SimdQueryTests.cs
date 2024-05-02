@@ -29,7 +29,7 @@ public class SimdQueryTests
     private struct AddInts
         : IVectorChunkQuery1<int>
     {
-        public readonly void Execute(Span<Vector<int>> t0, int pad)
+        public readonly void Execute(Span<Vector<int>> t0, int off, int pad)
         {
             for (var i = 0; i < t0.Length; i++)
                 t0[i] += t0[i];

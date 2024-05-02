@@ -73,7 +73,7 @@ public static class ComponentRegistry
     private static void TypeCheck(Type type)
     {
         if (!typeof(IComponent).IsAssignableFrom(type))
-            throw new ArgumentException($"Type `{type.FullName}` is not assignable to `{typeof(IComponent).Name}`)");
+            throw new ArgumentException($"Type `{type.FullName}` is not assignable to `{nameof(IComponent)}`)");
     }
 
     private class State

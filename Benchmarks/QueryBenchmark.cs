@@ -125,10 +125,10 @@ public class QueryBenchmark
         }
     }
 
-    private struct SimdChunkQueryAction2
+    private readonly struct SimdChunkQueryAction2
         : IVectorChunkQuery2<float, float>
     {
-        public readonly void Execute(Span<Vector<float>> posf, Span<Vector<float>> velf, int pad)
+        public void Execute(Span<Vector<float>> posf, Span<Vector<float>> velf, int offset, int pad)
         {
             for (var i = 0; i < posf.Length; i++)
                 posf[i] += velf[i];

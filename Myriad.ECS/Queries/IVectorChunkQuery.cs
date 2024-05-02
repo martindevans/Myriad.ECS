@@ -15,9 +15,11 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
-		public void Execute(Span<Vector<TV0>> t0, int padding);
+		public void Execute(Span<Vector<TV0>> t0, int offset, int padding);
 	}
 }
 
@@ -81,19 +83,24 @@ namespace Myriad.ECS.Worlds
 					var tv0 = MemoryMarshal.Cast<TV0, Vector<TV0>>(ts0);
 
 					// Execute the vectorised part
-					q.Execute(tv0, 0);
+					q.Execute(tv0, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
 					var ls0 = MemoryMarshal.Cast<TV0, Vector<TV0>>(lvs0);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, leftover);
+					q.Execute(ls0, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)
@@ -117,10 +124,12 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
-		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, int padding);
+		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, int offset, int padding);
 	}
 }
 
@@ -196,12 +205,17 @@ namespace Myriad.ECS.Worlds
 						throw new InvalidOperationException("Mismatched vector lengths");
 
 					// Execute the vectorised part
-					q.Execute(tv0, tv1, 0);
+					q.Execute(tv0, tv1, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
@@ -211,7 +225,7 @@ namespace Myriad.ECS.Worlds
 					var ls1 = MemoryMarshal.Cast<TV1, Vector<TV1>>(lvs1);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, ls1, leftover);
+					q.Execute(ls0, ls1, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)
@@ -237,11 +251,13 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
 		/// <param name="t2">Span of vectors of values, reinterpreted from component 2</param>
-		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, int padding);
+		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, int offset, int padding);
 	}
 }
 
@@ -329,12 +345,17 @@ namespace Myriad.ECS.Worlds
 						throw new InvalidOperationException("Mismatched vector lengths");
 
 					// Execute the vectorised part
-					q.Execute(tv0, tv1, tv2, 0);
+					q.Execute(tv0, tv1, tv2, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
@@ -347,7 +368,7 @@ namespace Myriad.ECS.Worlds
 					var ls2 = MemoryMarshal.Cast<TV2, Vector<TV2>>(lvs2);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, ls1, ls2, leftover);
+					q.Execute(ls0, ls1, ls2, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)
@@ -375,12 +396,14 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
 		/// <param name="t2">Span of vectors of values, reinterpreted from component 2</param>
 		/// <param name="t3">Span of vectors of values, reinterpreted from component 3</param>
-		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, int padding);
+		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, int offset, int padding);
 	}
 }
 
@@ -480,12 +503,17 @@ namespace Myriad.ECS.Worlds
 						throw new InvalidOperationException("Mismatched vector lengths");
 
 					// Execute the vectorised part
-					q.Execute(tv0, tv1, tv2, tv3, 0);
+					q.Execute(tv0, tv1, tv2, tv3, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
@@ -501,7 +529,7 @@ namespace Myriad.ECS.Worlds
 					var ls3 = MemoryMarshal.Cast<TV3, Vector<TV3>>(lvs3);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, ls1, ls2, ls3, leftover);
+					q.Execute(ls0, ls1, ls2, ls3, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)
@@ -531,13 +559,15 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
 		/// <param name="t2">Span of vectors of values, reinterpreted from component 2</param>
 		/// <param name="t3">Span of vectors of values, reinterpreted from component 3</param>
 		/// <param name="t4">Span of vectors of values, reinterpreted from component 4</param>
-		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, int padding);
+		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, int offset, int padding);
 	}
 }
 
@@ -649,12 +679,17 @@ namespace Myriad.ECS.Worlds
 						throw new InvalidOperationException("Mismatched vector lengths");
 
 					// Execute the vectorised part
-					q.Execute(tv0, tv1, tv2, tv3, tv4, 0);
+					q.Execute(tv0, tv1, tv2, tv3, tv4, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
@@ -673,7 +708,7 @@ namespace Myriad.ECS.Worlds
 					var ls4 = MemoryMarshal.Cast<TV4, Vector<TV4>>(lvs4);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, ls1, ls2, ls3, ls4, leftover);
+					q.Execute(ls0, ls1, ls2, ls3, ls4, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)
@@ -705,6 +740,8 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -712,7 +749,7 @@ namespace Myriad.ECS.Queries
 		/// <param name="t3">Span of vectors of values, reinterpreted from component 3</param>
 		/// <param name="t4">Span of vectors of values, reinterpreted from component 4</param>
 		/// <param name="t5">Span of vectors of values, reinterpreted from component 5</param>
-		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, int padding);
+		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, int offset, int padding);
 	}
 }
 
@@ -836,12 +873,17 @@ namespace Myriad.ECS.Worlds
 						throw new InvalidOperationException("Mismatched vector lengths");
 
 					// Execute the vectorised part
-					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, 0);
+					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
@@ -863,7 +905,7 @@ namespace Myriad.ECS.Worlds
 					var ls5 = MemoryMarshal.Cast<TV5, Vector<TV5>>(lvs5);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, leftover);
+					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)
@@ -897,6 +939,8 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -905,7 +949,7 @@ namespace Myriad.ECS.Queries
 		/// <param name="t4">Span of vectors of values, reinterpreted from component 4</param>
 		/// <param name="t5">Span of vectors of values, reinterpreted from component 5</param>
 		/// <param name="t6">Span of vectors of values, reinterpreted from component 6</param>
-		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, int padding);
+		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, int offset, int padding);
 	}
 }
 
@@ -1041,12 +1085,17 @@ namespace Myriad.ECS.Worlds
 						throw new InvalidOperationException("Mismatched vector lengths");
 
 					// Execute the vectorised part
-					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, 0);
+					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
@@ -1071,7 +1120,7 @@ namespace Myriad.ECS.Worlds
 					var ls6 = MemoryMarshal.Cast<TV6, Vector<TV6>>(lvs6);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, leftover);
+					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)
@@ -1107,6 +1156,8 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -1116,7 +1167,7 @@ namespace Myriad.ECS.Queries
 		/// <param name="t5">Span of vectors of values, reinterpreted from component 5</param>
 		/// <param name="t6">Span of vectors of values, reinterpreted from component 6</param>
 		/// <param name="t7">Span of vectors of values, reinterpreted from component 7</param>
-		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, int padding);
+		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, int offset, int padding);
 	}
 }
 
@@ -1264,12 +1315,17 @@ namespace Myriad.ECS.Worlds
 						throw new InvalidOperationException("Mismatched vector lengths");
 
 					// Execute the vectorised part
-					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, 0);
+					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
@@ -1297,7 +1353,7 @@ namespace Myriad.ECS.Worlds
 					var ls7 = MemoryMarshal.Cast<TV7, Vector<TV7>>(lvs7);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, leftover);
+					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)
@@ -1335,6 +1391,8 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -1345,7 +1403,7 @@ namespace Myriad.ECS.Queries
 		/// <param name="t6">Span of vectors of values, reinterpreted from component 6</param>
 		/// <param name="t7">Span of vectors of values, reinterpreted from component 7</param>
 		/// <param name="t8">Span of vectors of values, reinterpreted from component 8</param>
-		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, int padding);
+		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, int offset, int padding);
 	}
 }
 
@@ -1505,12 +1563,17 @@ namespace Myriad.ECS.Worlds
 						throw new InvalidOperationException("Mismatched vector lengths");
 
 					// Execute the vectorised part
-					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, 0);
+					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
@@ -1541,7 +1604,7 @@ namespace Myriad.ECS.Worlds
 					var ls8 = MemoryMarshal.Cast<TV8, Vector<TV8>>(lvs8);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, leftover);
+					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)
@@ -1581,6 +1644,8 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -1592,7 +1657,7 @@ namespace Myriad.ECS.Queries
 		/// <param name="t7">Span of vectors of values, reinterpreted from component 7</param>
 		/// <param name="t8">Span of vectors of values, reinterpreted from component 8</param>
 		/// <param name="t9">Span of vectors of values, reinterpreted from component 9</param>
-		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, Span<Vector<TV9>> t9, int padding);
+		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, Span<Vector<TV9>> t9, int offset, int padding);
 	}
 }
 
@@ -1764,12 +1829,17 @@ namespace Myriad.ECS.Worlds
 						throw new InvalidOperationException("Mismatched vector lengths");
 
 					// Execute the vectorised part
-					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, 0);
+					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
@@ -1803,7 +1873,7 @@ namespace Myriad.ECS.Worlds
 					var ls9 = MemoryMarshal.Cast<TV9, Vector<TV9>>(lvs9);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9, leftover);
+					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)
@@ -1845,6 +1915,8 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -1857,7 +1929,7 @@ namespace Myriad.ECS.Queries
 		/// <param name="t8">Span of vectors of values, reinterpreted from component 8</param>
 		/// <param name="t9">Span of vectors of values, reinterpreted from component 9</param>
 		/// <param name="t10">Span of vectors of values, reinterpreted from component 10</param>
-		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, Span<Vector<TV9>> t9, Span<Vector<TV10>> t10, int padding);
+		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, Span<Vector<TV9>> t9, Span<Vector<TV10>> t10, int offset, int padding);
 	}
 }
 
@@ -2041,12 +2113,17 @@ namespace Myriad.ECS.Worlds
 						throw new InvalidOperationException("Mismatched vector lengths");
 
 					// Execute the vectorised part
-					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10, 0);
+					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
@@ -2083,7 +2160,7 @@ namespace Myriad.ECS.Worlds
 					var ls10 = MemoryMarshal.Cast<TV10, Vector<TV10>>(lvs10);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9, ls10, leftover);
+					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9, ls10, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)
@@ -2127,6 +2204,8 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -2140,7 +2219,7 @@ namespace Myriad.ECS.Queries
 		/// <param name="t9">Span of vectors of values, reinterpreted from component 9</param>
 		/// <param name="t10">Span of vectors of values, reinterpreted from component 10</param>
 		/// <param name="t11">Span of vectors of values, reinterpreted from component 11</param>
-		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, Span<Vector<TV9>> t9, Span<Vector<TV10>> t10, Span<Vector<TV11>> t11, int padding);
+		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, Span<Vector<TV9>> t9, Span<Vector<TV10>> t10, Span<Vector<TV11>> t11, int offset, int padding);
 	}
 }
 
@@ -2336,12 +2415,17 @@ namespace Myriad.ECS.Worlds
 						throw new InvalidOperationException("Mismatched vector lengths");
 
 					// Execute the vectorised part
-					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10, tv11, 0);
+					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10, tv11, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
@@ -2381,7 +2465,7 @@ namespace Myriad.ECS.Worlds
 					var ls11 = MemoryMarshal.Cast<TV11, Vector<TV11>>(lvs11);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9, ls10, ls11, leftover);
+					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9, ls10, ls11, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)
@@ -2427,6 +2511,8 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -2441,7 +2527,7 @@ namespace Myriad.ECS.Queries
 		/// <param name="t10">Span of vectors of values, reinterpreted from component 10</param>
 		/// <param name="t11">Span of vectors of values, reinterpreted from component 11</param>
 		/// <param name="t12">Span of vectors of values, reinterpreted from component 12</param>
-		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, Span<Vector<TV9>> t9, Span<Vector<TV10>> t10, Span<Vector<TV11>> t11, Span<Vector<TV12>> t12, int padding);
+		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, Span<Vector<TV9>> t9, Span<Vector<TV10>> t10, Span<Vector<TV11>> t11, Span<Vector<TV12>> t12, int offset, int padding);
 	}
 }
 
@@ -2649,12 +2735,17 @@ namespace Myriad.ECS.Worlds
 						throw new InvalidOperationException("Mismatched vector lengths");
 
 					// Execute the vectorised part
-					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10, tv11, tv12, 0);
+					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10, tv11, tv12, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
@@ -2697,7 +2788,7 @@ namespace Myriad.ECS.Worlds
 					var ls12 = MemoryMarshal.Cast<TV12, Vector<TV12>>(lvs12);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9, ls10, ls11, ls12, leftover);
+					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9, ls10, ls11, ls12, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)
@@ -2745,6 +2836,8 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -2760,7 +2853,7 @@ namespace Myriad.ECS.Queries
 		/// <param name="t11">Span of vectors of values, reinterpreted from component 11</param>
 		/// <param name="t12">Span of vectors of values, reinterpreted from component 12</param>
 		/// <param name="t13">Span of vectors of values, reinterpreted from component 13</param>
-		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, Span<Vector<TV9>> t9, Span<Vector<TV10>> t10, Span<Vector<TV11>> t11, Span<Vector<TV12>> t12, Span<Vector<TV13>> t13, int padding);
+		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, Span<Vector<TV9>> t9, Span<Vector<TV10>> t10, Span<Vector<TV11>> t11, Span<Vector<TV12>> t12, Span<Vector<TV13>> t13, int offset, int padding);
 	}
 }
 
@@ -2980,12 +3073,17 @@ namespace Myriad.ECS.Worlds
 						throw new InvalidOperationException("Mismatched vector lengths");
 
 					// Execute the vectorised part
-					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10, tv11, tv12, tv13, 0);
+					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10, tv11, tv12, tv13, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
@@ -3031,7 +3129,7 @@ namespace Myriad.ECS.Worlds
 					var ls13 = MemoryMarshal.Cast<TV13, Vector<TV13>>(lvs13);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9, ls10, ls11, ls12, ls13, leftover);
+					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9, ls10, ls11, ls12, ls13, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)
@@ -3081,6 +3179,8 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -3097,7 +3197,7 @@ namespace Myriad.ECS.Queries
 		/// <param name="t12">Span of vectors of values, reinterpreted from component 12</param>
 		/// <param name="t13">Span of vectors of values, reinterpreted from component 13</param>
 		/// <param name="t14">Span of vectors of values, reinterpreted from component 14</param>
-		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, Span<Vector<TV9>> t9, Span<Vector<TV10>> t10, Span<Vector<TV11>> t11, Span<Vector<TV12>> t12, Span<Vector<TV13>> t13, Span<Vector<TV14>> t14, int padding);
+		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, Span<Vector<TV9>> t9, Span<Vector<TV10>> t10, Span<Vector<TV11>> t11, Span<Vector<TV12>> t12, Span<Vector<TV13>> t13, Span<Vector<TV14>> t14, int offset, int padding);
 	}
 }
 
@@ -3329,12 +3429,17 @@ namespace Myriad.ECS.Worlds
 						throw new InvalidOperationException("Mismatched vector lengths");
 
 					// Execute the vectorised part
-					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10, tv11, tv12, tv13, tv14, 0);
+					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10, tv11, tv12, tv13, tv14, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
@@ -3383,7 +3488,7 @@ namespace Myriad.ECS.Worlds
 					var ls14 = MemoryMarshal.Cast<TV14, Vector<TV14>>(lvs14);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9, ls10, ls11, ls12, ls13, ls14, leftover);
+					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9, ls10, ls11, ls12, ls13, ls14, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)
@@ -3435,6 +3540,8 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -3452,7 +3559,7 @@ namespace Myriad.ECS.Queries
 		/// <param name="t13">Span of vectors of values, reinterpreted from component 13</param>
 		/// <param name="t14">Span of vectors of values, reinterpreted from component 14</param>
 		/// <param name="t15">Span of vectors of values, reinterpreted from component 15</param>
-		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, Span<Vector<TV9>> t9, Span<Vector<TV10>> t10, Span<Vector<TV11>> t11, Span<Vector<TV12>> t12, Span<Vector<TV13>> t13, Span<Vector<TV14>> t14, Span<Vector<TV15>> t15, int padding);
+		public void Execute(Span<Vector<TV0>> t0, Span<Vector<TV1>> t1, Span<Vector<TV2>> t2, Span<Vector<TV3>> t3, Span<Vector<TV4>> t4, Span<Vector<TV5>> t5, Span<Vector<TV6>> t6, Span<Vector<TV7>> t7, Span<Vector<TV8>> t8, Span<Vector<TV9>> t9, Span<Vector<TV10>> t10, Span<Vector<TV11>> t11, Span<Vector<TV12>> t12, Span<Vector<TV13>> t13, Span<Vector<TV14>> t14, Span<Vector<TV15>> t15, int offset, int padding);
 	}
 }
 
@@ -3696,12 +3803,17 @@ namespace Myriad.ECS.Worlds
 						throw new InvalidOperationException("Mismatched vector lengths");
 
 					// Execute the vectorised part
-					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10, tv11, tv12, tv13, tv14, tv15, 0);
+					q.Execute(tv0, tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10, tv11, tv12, tv13, tv14, tv15, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 					lvs0.Clear();
 					ts0[^leftover..].CopyTo(lvs0);
@@ -3753,7 +3865,7 @@ namespace Myriad.ECS.Worlds
 					var ls15 = MemoryMarshal.Cast<TV15, Vector<TV15>>(lvs15);
 
 					// Execute the leftover at the end
-					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9, ls10, ls11, ls12, ls13, ls14, ls15, leftover);
+					q.Execute(ls0, ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9, ls10, ls11, ls12, ls13, ls14, ls15, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)

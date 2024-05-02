@@ -10,12 +10,10 @@ namespace Myriad.ECS.Systems;
 public class CommandBufferSystem<T>
     : ISystem<T>
 {
-    private CommandBuffer.Resolver _resolver;
-
     /// <summary>
     /// Get the resolver from the previous playback.
     /// </summary>
-    public CommandBuffer.Resolver Resolver => _resolver;
+    public CommandBuffer.Resolver Resolver { get; private set; }
 
     /// <summary>
     /// The CommandBuffer which will be executed in the next Update tick.
@@ -33,13 +31,13 @@ public class CommandBufferSystem<T>
         Buffer = new CommandBuffer(World);
 
         // Playback the buffer immediately to get a empty resolver
-        _resolver = Buffer.Playback();
+        Resolver = Buffer.Playback();
     }
 
     public void Update(T time)
     {
-        _resolver.Dispose();
-        _resolver = Buffer.Playback();
+        Resolver.Dispose();
+        Resolver = Buffer.Playback();
     }
 }
 
@@ -50,12 +48,10 @@ public class CommandBufferSystem<T>
 public class EarlyCommandBufferSystem<T>
     : ISystem<T>, ISystemBefore<T>
 {
-    private CommandBuffer.Resolver _resolver;
-
     /// <summary>
     /// Get the resolver from the previous playback.
     /// </summary>
-    public CommandBuffer.Resolver Resolver => _resolver;
+    public CommandBuffer.Resolver Resolver { get; private set; }
 
     /// <summary>
     /// The CommandBuffer which will be executed in the next Update tick.
@@ -73,13 +69,13 @@ public class EarlyCommandBufferSystem<T>
         Buffer = new CommandBuffer(World);
 
         // Playback the buffer immediately to get a empty resolver
-        _resolver = Buffer.Playback();
+        Resolver = Buffer.Playback();
     }
 
     public void BeforeUpdate(T data)
     {
-        _resolver.Dispose();
-        _resolver = Buffer.Playback();
+        Resolver.Dispose();
+        Resolver = Buffer.Playback();
     }
 
     public void Update(T time)
@@ -94,12 +90,10 @@ public class EarlyCommandBufferSystem<T>
 public class LateCommandBufferSystem<T>
     : ISystem<T>, ISystemAfter<T>
 {
-    private CommandBuffer.Resolver _resolver;
-
     /// <summary>
     /// Get the resolver from the previous playback.
     /// </summary>
-    public CommandBuffer.Resolver Resolver => _resolver;
+    public CommandBuffer.Resolver Resolver { get; private set; }
 
     /// <summary>
     /// The CommandBuffer which will be executed in the next Update tick.
@@ -117,7 +111,7 @@ public class LateCommandBufferSystem<T>
         Buffer = new CommandBuffer(World);
 
         // Playback the buffer immediately to get a empty resolver
-        _resolver = Buffer.Playback();
+        Resolver = Buffer.Playback();
     }
 
     public void Update(T time)
@@ -126,7 +120,7 @@ public class LateCommandBufferSystem<T>
 
     public void AfterUpdate(T data)
     {
-        _resolver.Dispose();
-        _resolver = Buffer.Playback();
+        Resolver.Dispose();
+        Resolver = Buffer.Playback();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Archetypes;
@@ -98,7 +97,7 @@ internal sealed class Chunk
 
         var typedArray =
 #if NET6_0_OR_GREATER
-            Unsafe.As<T[]>(componentArray);
+            System.Runtime.CompilerServices.Unsafe.As<T[]>(componentArray);
 #else
             (T[])componentArray;
 #endif

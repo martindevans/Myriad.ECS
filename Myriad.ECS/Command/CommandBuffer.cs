@@ -276,7 +276,7 @@ public sealed partial class CommandBuffer(World World)
 
         // Store this entity in the collection of entities
         // Put it in aggregate node 0 (i.e. no components)
-        var id = (uint)(_bufferedSets.Count);
+        var id = (uint)_bufferedSets.Count;
         _bufferedSets.Add(new BufferedEntityData(id, set));
         
         return new BufferedEntity(id, this);

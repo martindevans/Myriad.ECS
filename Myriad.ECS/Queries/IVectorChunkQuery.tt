@@ -28,6 +28,8 @@ namespace Myriad.ECS.Queries
 		/// <summary>
         /// Execute work over SIMD vectors
         /// </summary>
+		/// <param name="offset">How many far through a component does the first vector start. For example
+		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 <# for (var k = 0; k < sumij; k++)
 {
@@ -36,7 +38,7 @@ namespace Myriad.ECS.Queries
 <#
 }
 #>
-		public void Execute(<#= Vectors(0, i) #>, int padding);
+		public void Execute(<#= Vectors(0, i) #>, int offset, int padding);
 	}
 }
 
@@ -123,12 +125,17 @@ namespace Myriad.ECS.Worlds
 <# } #>
 
 					// Execute the vectorised part
-					q.Execute(<#= CallVectorParameters(sumij) #>, 0);
+					q.Execute(<#= CallVectorParameters(sumij) #>, 0, 0);
 
 					// Copy data into a vector to handle the "leftover" at the end
 					// which can't fill a whole vector
 					var vectored = Vector<TV0>.Count * tv0.Length;
 					var leftover = ts0.Length - vectored;
+					var itemsPerComponent = ts0.Length / tc0.Length;
+					var offset = vectored % itemsPerComponent;
+
+					if (leftover == 0)
+						continue;
 
 <# for (var k = 0; k < sumij; k++)
 {
@@ -139,7 +146,7 @@ namespace Myriad.ECS.Worlds
 <# } #>
 
 					// Execute the leftover at the end
-					q.Execute(<#= CallLeftoverParameters(sumij) #>, leftover);
+					q.Execute(<#= CallLeftoverParameters(sumij) #>, offset, leftover);
 
 					// Copy leftover back into place
                     for (var i = 0; i < leftover; i++)

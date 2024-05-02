@@ -44,6 +44,9 @@ public class SystemGroupItem<TData>
     private ISystemAfter<TData>? SystemAfter { get; }
     public ISystem<TData> System { get; }
 
+    /// <summary>
+    /// Type of <see cref="System"/>
+    /// </summary>
     public Type Type { get; }
 
     private readonly Stopwatch _timer = new();

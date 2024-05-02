@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.Components;
+﻿using System.Numerics;
+using Myriad.ECS.Components;
 
 namespace Myriad.ECS.Tests;
 
@@ -8,6 +9,7 @@ public record struct ComponentFloat(float Value) : IComponent;
 public record struct ComponentInt32(int Value) : IComponent;
 public record struct ComponentInt64(long Value) : IComponent;
 public record struct ComponentObject(object Value) : IComponent;
+public record struct ComponentVector3(Vector3 Value) : IComponent;
 
 public record struct Component0 : IComponent;
 public record struct Component1 : IComponent;

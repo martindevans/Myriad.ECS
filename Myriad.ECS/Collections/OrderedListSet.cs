@@ -27,13 +27,6 @@ internal class OrderedListSet<TItem>
             Add(item);
     }
 
-    // ReSharper disable once ParameterTypeCanBeEnumerable.Local (Justification: the fact this is a set is important, it means there are definitely no duplicates)
-    internal OrderedListSet(IReadOnlySet<TItem> items)
-    {
-        _items.AddRange(items);
-        _items.Sort();
-    }
-
     internal OrderedListSet(HashSet<TItem> items)
     {
         _items.AddRange(items);
@@ -159,18 +152,6 @@ internal class OrderedListSet<TItem>
     //}
 
     #region IsSupersetOf
-    public bool IsSupersetOf(IEnumerable<TItem> other)
-    {
-        if (other.TryGetNonEnumeratedCount(out var otherCount) && otherCount > Count)
-            return false;
-
-        foreach (var item in other)
-            if (_items.BinarySearch(item) < 0)
-                return false;
-
-        return true;
-    }
-
     public bool IsSupersetOf(OrderedListSet<TItem> other)
     {
         if (other.Count > Count)
@@ -185,20 +166,6 @@ internal class OrderedListSet<TItem>
     #endregion
 
     #region Overlaps
-    public bool Overlaps(IEnumerable<TItem> other)
-    {
-        if (Count == 0)
-            return false;
-        if (other.TryGetNonEnumeratedCount(out var count) && count == 0)
-            return false;
-
-        foreach (var item in other)
-            if (Contains(item))
-                return true;
-
-        return false;
-    }
-
     public bool Overlaps(OrderedListSet<TItem> other)
     {
         if (Count == 0)
@@ -215,25 +182,16 @@ internal class OrderedListSet<TItem>
     #endregion
 
     #region SetEquals
-    public bool SetEquals(IEnumerable<TItem> other)
+    public bool SetEquals(HashSet<TItem> other)
     {
         // Try to get the count, if possible. This allows a possible early exit without any work.
-        if (other.TryGetNonEnumeratedCount(out var count))
-            if (Count != count)
-                return false;
-
-        // Ensure every item in other is in set
-        count = 0;
-        foreach (var item in other)
-        {
-            count++;
-            if (_items.BinarySearch(item) < 0)
-                return false;
-        }
-
-        // Check that there are exactly the same number of items in both
-        if (Count != count)
+        if (other.Count != Count)
             return false;
+
+        // Ensure every item in this is in other
+        foreach (var item in _items)
+            if (!other.Contains(item))
+                return false;
 
         return true;
     }

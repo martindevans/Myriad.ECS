@@ -1,4 +1,4 @@
-﻿// ReSharper disable once CheckNamespace
+﻿// ReSharper disable All
 namespace System.Runtime.CompilerServices;
 
 #if !NET6_0_OR_GREATER
@@ -11,8 +11,6 @@ using Diagnostics.CodeAnalysis;
 /// This class should not be used by developers in source code.
 /// </summary>
 [ExcludeFromCodeCoverage, DebuggerNonUserCode]
-internal static class IsExternalInit
-{
-}
+internal static class IsExternalInit;
 
 #endif

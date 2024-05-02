@@ -27,9 +27,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
+// ReSharper disable All
+#pragma warning disable IDE1006 // Naming Styles
+
 namespace Myriad.ECS.xxHash
 {
     [ExcludeFromCodeCoverage]
+
     internal static partial class xxHash32
     {
         /// <summary>

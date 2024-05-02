@@ -1,4 +1,5 @@
-﻿// ReSharper disable once CheckNamespace
+﻿// ReSharper disable All
+#pragma warning disable IDE0060 // Remove unused parameter
 namespace System.Diagnostics.CodeAnalysis;
 
 #if !NET6_0_OR_GREATER
