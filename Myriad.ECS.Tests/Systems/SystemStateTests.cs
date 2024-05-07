@@ -21,7 +21,7 @@ public class SystemStateTests
         // Auto attach C17 to an entities with C0
         // Auto detach C17 from an entities without C0
         var buffer2 = new CommandBuffer(world);
-        var state = new SystemState<Component0, Component17>(world, new Component17());
+        var state = new SystemState<Component0, Component17>(world, _ => new Component17());
         state.Update(buffer2);
         buffer2.Playback().Dispose();
 
