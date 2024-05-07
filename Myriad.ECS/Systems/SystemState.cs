@@ -11,7 +11,7 @@ namespace Myriad.ECS.Systems;
 /// </summary>
 /// <typeparam name="TComponent"></typeparam>
 /// <typeparam name="TAssociated"></typeparam>
-public class SystemState<TComponent, TAssociated>(World world, TAssociated prototype)
+public class SystemState<TComponent, TAssociated>(World world, Func<Entity, TAssociated> factory)
     where TComponent : IComponent
     where TAssociated : IComponent
 {
@@ -39,7 +39,7 @@ public class SystemState<TComponent, TAssociated>(World world, TAssociated proto
     /// <param name="c"></param>
     protected void OnAttach(Entity e, CommandBuffer c)
     {
-        c.Set(e, prototype);
+        c.Set(e, factory(e));
     }
 
     /// <summary>
