@@ -70,7 +70,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -98,7 +99,7 @@ namespace Myriad.ECS.Worlds
 #>
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], <#= CallParametersPtr(sumij) #>);
 						}
 					}
@@ -111,7 +112,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where <#= Constraints(sumij, 12) #>
 			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
@@ -144,7 +145,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)

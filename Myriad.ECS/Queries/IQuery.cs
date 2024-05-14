@@ -51,7 +51,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -67,7 +68,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T0* t0ptr = &t0[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i]);
 						}
 					}
@@ -80,7 +81,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
 			where TQ : IQuery1<T0>
@@ -107,7 +108,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -176,7 +178,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -195,7 +198,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T1* t1ptr = &t1[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i]);
 						}
 					}
@@ -208,7 +211,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -237,7 +240,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -310,7 +314,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -332,7 +337,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T2* t2ptr = &t2[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i]);
 						}
 					}
@@ -345,7 +350,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -376,7 +381,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -453,7 +459,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -478,7 +485,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T3* t3ptr = &t3[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i]);
 						}
 					}
@@ -491,7 +498,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -524,7 +531,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -605,7 +613,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -633,7 +642,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T4* t4ptr = &t4[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i]);
 						}
 					}
@@ -646,7 +655,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -681,7 +690,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -766,7 +776,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -797,7 +808,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T5* t5ptr = &t5[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i]);
 						}
 					}
@@ -810,7 +821,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -847,7 +858,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -936,7 +948,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -970,7 +983,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T6* t6ptr = &t6[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i]);
 						}
 					}
@@ -983,7 +996,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1022,7 +1035,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -1115,7 +1129,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -1152,7 +1167,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T7* t7ptr = &t7[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i]);
 						}
 					}
@@ -1165,7 +1180,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1206,7 +1221,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -1303,7 +1319,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -1343,7 +1360,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T8* t8ptr = &t8[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i]);
 						}
 					}
@@ -1356,7 +1373,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1399,7 +1416,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -1500,7 +1518,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -1543,7 +1562,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T9* t9ptr = &t9[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i], ref t9ptr[i]);
 						}
 					}
@@ -1556,7 +1575,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1601,7 +1620,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -1706,7 +1726,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -1752,7 +1773,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T10* t10ptr = &t10[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i], ref t9ptr[i], ref t10ptr[i]);
 						}
 					}
@@ -1765,7 +1786,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1812,7 +1833,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -1921,7 +1943,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -1970,7 +1993,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T11* t11ptr = &t11[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i], ref t9ptr[i], ref t10ptr[i], ref t11ptr[i]);
 						}
 					}
@@ -1983,7 +2006,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2032,7 +2055,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -2145,7 +2169,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -2197,7 +2222,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T12* t12ptr = &t12[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i], ref t9ptr[i], ref t10ptr[i], ref t11ptr[i], ref t12ptr[i]);
 						}
 					}
@@ -2210,7 +2235,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2261,7 +2286,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -2378,7 +2404,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -2433,7 +2460,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T13* t13ptr = &t13[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i], ref t9ptr[i], ref t10ptr[i], ref t11ptr[i], ref t12ptr[i], ref t13ptr[i]);
 						}
 					}
@@ -2446,7 +2473,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2499,7 +2526,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -2620,7 +2648,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -2678,7 +2707,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T14* t14ptr = &t14[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i], ref t9ptr[i], ref t10ptr[i], ref t11ptr[i], ref t12ptr[i], ref t13ptr[i], ref t14ptr[i]);
 						}
 					}
@@ -2691,7 +2720,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2746,7 +2775,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)
@@ -2871,7 +2901,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities;
 					if (entities.Length == 0)
@@ -2932,7 +2963,7 @@ namespace Myriad.ECS.Worlds
 						fixed (T15* t15ptr = &t15[0])
 						#pragma warning restore CS8500
 						{
-							for (var i = entities.Length - 1; i >= 0; i--)
+							for (var i = 0; i < entities.Length; i++)
 								q.Execute(eptr[i], ref t0ptr[i], ref t1ptr[i], ref t2ptr[i], ref t3ptr[i], ref t4ptr[i], ref t5ptr[i], ref t6ptr[i], ref t7ptr[i], ref t8ptr[i], ref t9ptr[i], ref t10ptr[i], ref t11ptr[i], ref t12ptr[i], ref t13ptr[i], ref t14ptr[i], ref t15ptr[i]);
 						}
 					}
@@ -2945,7 +2976,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 16
+			int batchSize = 64
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3002,7 +3033,8 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
                 while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
+					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
 					if (entityCount == 0)

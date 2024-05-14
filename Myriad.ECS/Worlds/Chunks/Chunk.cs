@@ -93,16 +93,7 @@ internal sealed class Chunk
     internal T[] GetComponentArray<T>(ComponentID id)
         where T : IComponent
     {
-        var componentArray = GetComponentArray(id);
-
-        var typedArray =
-#if NET6_0_OR_GREATER
-            System.Runtime.CompilerServices.Unsafe.As<T[]>(componentArray);
-#else
-            (T[])componentArray;
-#endif
-
-        return typedArray;
+        return (GetComponentArray(id) as T[])!;
     }
 
     internal Array GetComponentArray(ComponentID id)

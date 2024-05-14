@@ -35,6 +35,7 @@ public class FrozenOrderedListSet<TItem>
     #region GetEnumerator
     public List<TItem>.Enumerator GetEnumerator()
     {
+        // ReSharper disable once NotDisposedResourceIsReturned
         return _items.GetEnumerator();
     }
     #endregion
