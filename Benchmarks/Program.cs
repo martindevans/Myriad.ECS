@@ -3,7 +3,7 @@ using Benchmarks;
 
 //var e = new QueryBenchmark();
 //e.Setup();
-//e.SimdChunkQuery();
+//e.Query();
 
 var summary = BenchmarkRunner.Run<QueryBenchmark>();
 //var summary = BenchmarkRunner.Run<EntityCreateBenchmark>();

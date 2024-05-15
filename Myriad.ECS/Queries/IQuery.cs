@@ -31,6 +31,16 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
 			where TQ : IQuery1<T0>
 		{
+			return Execute<TQ, T0>(ref q, query);
+		}
+
+		public int Execute<TQ, T0>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+			where TQ : IQuery1<T0>
+		{
 			query ??= GetCachedQuery<T0>();
 
 			var archetypes = query.GetArchetypes();
@@ -64,8 +74,8 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
@@ -157,6 +167,17 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
 			where TQ : IQuery2<T0, T1>
 		{
+			return Execute<TQ, T0, T1>(ref q, query);
+		}
+
+		public int Execute<TQ, T0, T1>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+			where TQ : IQuery2<T0, T1>
+		{
 			query ??= GetCachedQuery<T0, T1>();
 
 			var archetypes = query.GetArchetypes();
@@ -193,9 +214,9 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
-						fixed (T1* t1ptr = &t1[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
+						fixed (T1* t1ptr = t1)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
@@ -292,6 +313,18 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
 			where TQ : IQuery3<T0, T1, T2>
 		{
+			return Execute<TQ, T0, T1, T2>(ref q, query);
+		}
+
+		public int Execute<TQ, T0, T1, T2>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+			where TQ : IQuery3<T0, T1, T2>
+		{
 			query ??= GetCachedQuery<T0, T1, T2>();
 
 			var archetypes = query.GetArchetypes();
@@ -331,10 +364,10 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
-						fixed (T1* t1ptr = &t1[0])
-						fixed (T2* t2ptr = &t2[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
+						fixed (T1* t1ptr = t1)
+						fixed (T2* t2ptr = t2)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
@@ -436,6 +469,19 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
 			where TQ : IQuery4<T0, T1, T2, T3>
 		{
+			return Execute<TQ, T0, T1, T2, T3>(ref q, query);
+		}
+
+		public int Execute<TQ, T0, T1, T2, T3>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+			where TQ : IQuery4<T0, T1, T2, T3>
+		{
 			query ??= GetCachedQuery<T0, T1, T2, T3>();
 
 			var archetypes = query.GetArchetypes();
@@ -478,11 +524,11 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
-						fixed (T1* t1ptr = &t1[0])
-						fixed (T2* t2ptr = &t2[0])
-						fixed (T3* t3ptr = &t3[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
+						fixed (T1* t1ptr = t1)
+						fixed (T2* t2ptr = t2)
+						fixed (T3* t3ptr = t3)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
@@ -589,6 +635,20 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
 			where TQ : IQuery5<T0, T1, T2, T3, T4>
 		{
+			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, query);
+		}
+
+		public int Execute<TQ, T0, T1, T2, T3, T4>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+			where TQ : IQuery5<T0, T1, T2, T3, T4>
+		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4>();
 
 			var archetypes = query.GetArchetypes();
@@ -634,12 +694,12 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
-						fixed (T1* t1ptr = &t1[0])
-						fixed (T2* t2ptr = &t2[0])
-						fixed (T3* t3ptr = &t3[0])
-						fixed (T4* t4ptr = &t4[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
+						fixed (T1* t1ptr = t1)
+						fixed (T2* t2ptr = t2)
+						fixed (T3* t3ptr = t3)
+						fixed (T4* t4ptr = t4)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
@@ -751,6 +811,21 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
 			where TQ : IQuery6<T0, T1, T2, T3, T4, T5>
 		{
+			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, query);
+		}
+
+		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+			where TQ : IQuery6<T0, T1, T2, T3, T4, T5>
+		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5>();
 
 			var archetypes = query.GetArchetypes();
@@ -799,13 +874,13 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
-						fixed (T1* t1ptr = &t1[0])
-						fixed (T2* t2ptr = &t2[0])
-						fixed (T3* t3ptr = &t3[0])
-						fixed (T4* t4ptr = &t4[0])
-						fixed (T5* t5ptr = &t5[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
+						fixed (T1* t1ptr = t1)
+						fixed (T2* t2ptr = t2)
+						fixed (T3* t3ptr = t3)
+						fixed (T4* t4ptr = t4)
+						fixed (T5* t5ptr = t5)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
@@ -922,6 +997,22 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
 			where TQ : IQuery7<T0, T1, T2, T3, T4, T5, T6>
 		{
+			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, query);
+		}
+
+		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+			where TQ : IQuery7<T0, T1, T2, T3, T4, T5, T6>
+		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
 
 			var archetypes = query.GetArchetypes();
@@ -973,14 +1064,14 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
-						fixed (T1* t1ptr = &t1[0])
-						fixed (T2* t2ptr = &t2[0])
-						fixed (T3* t3ptr = &t3[0])
-						fixed (T4* t4ptr = &t4[0])
-						fixed (T5* t5ptr = &t5[0])
-						fixed (T6* t6ptr = &t6[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
+						fixed (T1* t1ptr = t1)
+						fixed (T2* t2ptr = t2)
+						fixed (T3* t3ptr = t3)
+						fixed (T4* t4ptr = t4)
+						fixed (T5* t5ptr = t5)
+						fixed (T6* t6ptr = t6)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
@@ -1102,6 +1193,23 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
 			where TQ : IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
+			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, query);
+		}
+
+		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+			where TQ : IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
 
 			var archetypes = query.GetArchetypes();
@@ -1156,15 +1264,15 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
-						fixed (T1* t1ptr = &t1[0])
-						fixed (T2* t2ptr = &t2[0])
-						fixed (T3* t3ptr = &t3[0])
-						fixed (T4* t4ptr = &t4[0])
-						fixed (T5* t5ptr = &t5[0])
-						fixed (T6* t6ptr = &t6[0])
-						fixed (T7* t7ptr = &t7[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
+						fixed (T1* t1ptr = t1)
+						fixed (T2* t2ptr = t2)
+						fixed (T3* t3ptr = t3)
+						fixed (T4* t4ptr = t4)
+						fixed (T5* t5ptr = t5)
+						fixed (T6* t6ptr = t6)
+						fixed (T7* t7ptr = t7)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
@@ -1291,6 +1399,24 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
 			where TQ : IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
+			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, query);
+		}
+
+		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+			where TQ : IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
 
 			var archetypes = query.GetArchetypes();
@@ -1348,16 +1474,16 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
-						fixed (T1* t1ptr = &t1[0])
-						fixed (T2* t2ptr = &t2[0])
-						fixed (T3* t3ptr = &t3[0])
-						fixed (T4* t4ptr = &t4[0])
-						fixed (T5* t5ptr = &t5[0])
-						fixed (T6* t6ptr = &t6[0])
-						fixed (T7* t7ptr = &t7[0])
-						fixed (T8* t8ptr = &t8[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
+						fixed (T1* t1ptr = t1)
+						fixed (T2* t2ptr = t2)
+						fixed (T3* t3ptr = t3)
+						fixed (T4* t4ptr = t4)
+						fixed (T5* t5ptr = t5)
+						fixed (T6* t6ptr = t6)
+						fixed (T7* t7ptr = t7)
+						fixed (T8* t8ptr = t8)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
@@ -1489,6 +1615,25 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
 			where TQ : IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
+			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, query);
+		}
+
+		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+			where TQ : IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>();
 
 			var archetypes = query.GetArchetypes();
@@ -1549,17 +1694,17 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
-						fixed (T1* t1ptr = &t1[0])
-						fixed (T2* t2ptr = &t2[0])
-						fixed (T3* t3ptr = &t3[0])
-						fixed (T4* t4ptr = &t4[0])
-						fixed (T5* t5ptr = &t5[0])
-						fixed (T6* t6ptr = &t6[0])
-						fixed (T7* t7ptr = &t7[0])
-						fixed (T8* t8ptr = &t8[0])
-						fixed (T9* t9ptr = &t9[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
+						fixed (T1* t1ptr = t1)
+						fixed (T2* t2ptr = t2)
+						fixed (T3* t3ptr = t3)
+						fixed (T4* t4ptr = t4)
+						fixed (T5* t5ptr = t5)
+						fixed (T6* t6ptr = t6)
+						fixed (T7* t7ptr = t7)
+						fixed (T8* t8ptr = t8)
+						fixed (T9* t9ptr = t9)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
@@ -1696,6 +1841,26 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
 			where TQ : IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
+			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, query);
+		}
+
+		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+			where TQ : IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
 
 			var archetypes = query.GetArchetypes();
@@ -1759,18 +1924,18 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
-						fixed (T1* t1ptr = &t1[0])
-						fixed (T2* t2ptr = &t2[0])
-						fixed (T3* t3ptr = &t3[0])
-						fixed (T4* t4ptr = &t4[0])
-						fixed (T5* t5ptr = &t5[0])
-						fixed (T6* t6ptr = &t6[0])
-						fixed (T7* t7ptr = &t7[0])
-						fixed (T8* t8ptr = &t8[0])
-						fixed (T9* t9ptr = &t9[0])
-						fixed (T10* t10ptr = &t10[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
+						fixed (T1* t1ptr = t1)
+						fixed (T2* t2ptr = t2)
+						fixed (T3* t3ptr = t3)
+						fixed (T4* t4ptr = t4)
+						fixed (T5* t5ptr = t5)
+						fixed (T6* t6ptr = t6)
+						fixed (T7* t7ptr = t7)
+						fixed (T8* t8ptr = t8)
+						fixed (T9* t9ptr = t9)
+						fixed (T10* t10ptr = t10)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
@@ -1912,6 +2077,27 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
 			where TQ : IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
+			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, query);
+		}
+
+		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+			where TQ : IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>();
 
 			var archetypes = query.GetArchetypes();
@@ -1978,19 +2164,19 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
-						fixed (T1* t1ptr = &t1[0])
-						fixed (T2* t2ptr = &t2[0])
-						fixed (T3* t3ptr = &t3[0])
-						fixed (T4* t4ptr = &t4[0])
-						fixed (T5* t5ptr = &t5[0])
-						fixed (T6* t6ptr = &t6[0])
-						fixed (T7* t7ptr = &t7[0])
-						fixed (T8* t8ptr = &t8[0])
-						fixed (T9* t9ptr = &t9[0])
-						fixed (T10* t10ptr = &t10[0])
-						fixed (T11* t11ptr = &t11[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
+						fixed (T1* t1ptr = t1)
+						fixed (T2* t2ptr = t2)
+						fixed (T3* t3ptr = t3)
+						fixed (T4* t4ptr = t4)
+						fixed (T5* t5ptr = t5)
+						fixed (T6* t6ptr = t6)
+						fixed (T7* t7ptr = t7)
+						fixed (T8* t8ptr = t8)
+						fixed (T9* t9ptr = t9)
+						fixed (T10* t10ptr = t10)
+						fixed (T11* t11ptr = t11)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
@@ -2137,6 +2323,28 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
 			where TQ : IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
+			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, query);
+		}
+
+		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+			where TQ : IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>();
 
 			var archetypes = query.GetArchetypes();
@@ -2206,20 +2414,20 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
-						fixed (T1* t1ptr = &t1[0])
-						fixed (T2* t2ptr = &t2[0])
-						fixed (T3* t3ptr = &t3[0])
-						fixed (T4* t4ptr = &t4[0])
-						fixed (T5* t5ptr = &t5[0])
-						fixed (T6* t6ptr = &t6[0])
-						fixed (T7* t7ptr = &t7[0])
-						fixed (T8* t8ptr = &t8[0])
-						fixed (T9* t9ptr = &t9[0])
-						fixed (T10* t10ptr = &t10[0])
-						fixed (T11* t11ptr = &t11[0])
-						fixed (T12* t12ptr = &t12[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
+						fixed (T1* t1ptr = t1)
+						fixed (T2* t2ptr = t2)
+						fixed (T3* t3ptr = t3)
+						fixed (T4* t4ptr = t4)
+						fixed (T5* t5ptr = t5)
+						fixed (T6* t6ptr = t6)
+						fixed (T7* t7ptr = t7)
+						fixed (T8* t8ptr = t8)
+						fixed (T9* t9ptr = t9)
+						fixed (T10* t10ptr = t10)
+						fixed (T11* t11ptr = t11)
+						fixed (T12* t12ptr = t12)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
@@ -2371,6 +2579,29 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
 			where TQ : IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
+			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, query);
+		}
+
+		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+			where TQ : IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>();
 
 			var archetypes = query.GetArchetypes();
@@ -2443,21 +2674,21 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
-						fixed (T1* t1ptr = &t1[0])
-						fixed (T2* t2ptr = &t2[0])
-						fixed (T3* t3ptr = &t3[0])
-						fixed (T4* t4ptr = &t4[0])
-						fixed (T5* t5ptr = &t5[0])
-						fixed (T6* t6ptr = &t6[0])
-						fixed (T7* t7ptr = &t7[0])
-						fixed (T8* t8ptr = &t8[0])
-						fixed (T9* t9ptr = &t9[0])
-						fixed (T10* t10ptr = &t10[0])
-						fixed (T11* t11ptr = &t11[0])
-						fixed (T12* t12ptr = &t12[0])
-						fixed (T13* t13ptr = &t13[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
+						fixed (T1* t1ptr = t1)
+						fixed (T2* t2ptr = t2)
+						fixed (T3* t3ptr = t3)
+						fixed (T4* t4ptr = t4)
+						fixed (T5* t5ptr = t5)
+						fixed (T6* t6ptr = t6)
+						fixed (T7* t7ptr = t7)
+						fixed (T8* t8ptr = t8)
+						fixed (T9* t9ptr = t9)
+						fixed (T10* t10ptr = t10)
+						fixed (T11* t11ptr = t11)
+						fixed (T12* t12ptr = t12)
+						fixed (T13* t13ptr = t13)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
@@ -2614,6 +2845,30 @@ namespace Myriad.ECS.Worlds
             where T14 : IComponent
 			where TQ : IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
+			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, query);
+		}
+
+		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+			where TQ : IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>();
 
 			var archetypes = query.GetArchetypes();
@@ -2689,22 +2944,22 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
-						fixed (T1* t1ptr = &t1[0])
-						fixed (T2* t2ptr = &t2[0])
-						fixed (T3* t3ptr = &t3[0])
-						fixed (T4* t4ptr = &t4[0])
-						fixed (T5* t5ptr = &t5[0])
-						fixed (T6* t6ptr = &t6[0])
-						fixed (T7* t7ptr = &t7[0])
-						fixed (T8* t8ptr = &t8[0])
-						fixed (T9* t9ptr = &t9[0])
-						fixed (T10* t10ptr = &t10[0])
-						fixed (T11* t11ptr = &t11[0])
-						fixed (T12* t12ptr = &t12[0])
-						fixed (T13* t13ptr = &t13[0])
-						fixed (T14* t14ptr = &t14[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
+						fixed (T1* t1ptr = t1)
+						fixed (T2* t2ptr = t2)
+						fixed (T3* t3ptr = t3)
+						fixed (T4* t4ptr = t4)
+						fixed (T5* t5ptr = t5)
+						fixed (T6* t6ptr = t6)
+						fixed (T7* t7ptr = t7)
+						fixed (T8* t8ptr = t8)
+						fixed (T9* t9ptr = t9)
+						fixed (T10* t10ptr = t10)
+						fixed (T11* t11ptr = t11)
+						fixed (T12* t12ptr = t12)
+						fixed (T13* t13ptr = t13)
+						fixed (T14* t14ptr = t14)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
@@ -2866,6 +3121,31 @@ namespace Myriad.ECS.Worlds
             where T15 : IComponent
 			where TQ : IQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
+			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, query);
+		}
+
+		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+            where T15 : IComponent
+			where TQ : IQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
 
 			var archetypes = query.GetArchetypes();
@@ -2944,23 +3224,23 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-						fixed (T0* t0ptr = &t0[0])
-						fixed (T1* t1ptr = &t1[0])
-						fixed (T2* t2ptr = &t2[0])
-						fixed (T3* t3ptr = &t3[0])
-						fixed (T4* t4ptr = &t4[0])
-						fixed (T5* t5ptr = &t5[0])
-						fixed (T6* t6ptr = &t6[0])
-						fixed (T7* t7ptr = &t7[0])
-						fixed (T8* t8ptr = &t8[0])
-						fixed (T9* t9ptr = &t9[0])
-						fixed (T10* t10ptr = &t10[0])
-						fixed (T11* t11ptr = &t11[0])
-						fixed (T12* t12ptr = &t12[0])
-						fixed (T13* t13ptr = &t13[0])
-						fixed (T14* t14ptr = &t14[0])
-						fixed (T15* t15ptr = &t15[0])
+						fixed (Entity* eptr = entities)
+						fixed (T0* t0ptr = t0)
+						fixed (T1* t1ptr = t1)
+						fixed (T2* t2ptr = t2)
+						fixed (T3* t3ptr = t3)
+						fixed (T4* t4ptr = t4)
+						fixed (T5* t5ptr = t5)
+						fixed (T6* t6ptr = t6)
+						fixed (T7* t7ptr = t7)
+						fixed (T8* t8ptr = t8)
+						fixed (T9* t9ptr = t9)
+						fixed (T10* t10ptr = t10)
+						fixed (T11* t11ptr = t11)
+						fixed (T12* t12ptr = t12)
+						fixed (T13* t13ptr = t13)
+						fixed (T14* t14ptr = t14)
+						fixed (T15* t15ptr = t15)
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)

@@ -22,12 +22,12 @@ using Parallel = System.Threading.Tasks.Parallel;
 
 <# for (var i = 1; i <= PARAM_COUNT; i++)
 {
-	var sumij = i;
+	var queryConstraints = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
 #>
 namespace Myriad.ECS.Queries
 {
-	public interface <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
-		where <#= Constraints(sumij, 8) #>
+	public interface <#= Name(i) #><<#= queryConstraints #>>
+		where <#= Constraints(i, 8) #>
 	{
 		public void Execute(Entity e, <#= Refs(0, i) #>);
 	}
@@ -37,20 +37,30 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
-		public int Execute<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
+		public int Execute<TQ, <#= queryConstraints #>>(
 			TQ q,
 			QueryDescription? query = null
 		)
-			where <#= Constraints(sumij, 12) #>
-			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+			where <#= Constraints(i, 12) #>
+			where TQ : <#= Name(i) #><<#= queryConstraints #>>
 		{
-			query ??= GetCachedQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>();
+			return Execute<TQ, <#= queryConstraints #>>(ref q, query);
+		}
+
+		public int Execute<TQ, <#= queryConstraints #>>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where <#= Constraints(i, 12) #>
+			where TQ : <#= Name(i) #><<#= queryConstraints #>>
+		{
+			query ??= GetCachedQuery<<#= queryConstraints #>>();
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
 				return 0;
 
-<# for (var k = 0; k < sumij; k++)
+<# for (var k = 0; k < i; k++)
 {
 #>
 			var c<#= k #> = ComponentID<T<#= k #>>.ID;
@@ -77,7 +87,7 @@ namespace Myriad.ECS.Worlds
 					if (entities.Length == 0)
 						continue;
 
-<# for (var k = 0; k < sumij; k++)
+<# for (var k = 0; k < i; k++)
 {
 #>
 					var t<#= k #> = chunk.GetSpan<T<#= k #>>(c<#= k #>);
@@ -89,18 +99,18 @@ namespace Myriad.ECS.Worlds
 					unsafe
 					{
 						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = &entities[0])
-<# for (var k = 0; k < sumij; k++)
+						fixed (Entity* eptr = entities)
+<# for (var k = 0; k < i; k++)
 {
 #>
-						fixed (T<#= k #>* t<#= k #>ptr = &t<#= k #>[0])
+						fixed (T<#= k #>* t<#= k #>ptr = t<#= k #>)
 <#
 }
 #>
 						#pragma warning restore CS8500
 						{
 							for (var i = 0; i < entities.Length; i++)
-								q.Execute(eptr[i], <#= CallParametersPtr(sumij) #>);
+								q.Execute(eptr[i], <#= CallParametersPtr(i) #>);
 						}
 					}
 				}
@@ -109,15 +119,15 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		public int ExecuteParallel<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
+		public int ExecuteParallel<TQ, <#= queryConstraints #>>(
 			TQ q,
 			QueryDescription? query = null,
 			int batchSize = 64
 		)
-			where <#= Constraints(sumij, 12) #>
-			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+			where <#= Constraints(i, 12) #>
+			where TQ : <#= Name(i) #><<#= queryConstraints #>>
 		{
-			query ??= GetCachedQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>();
+			query ??= GetCachedQuery<<#= queryConstraints #>>();
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
@@ -125,7 +135,7 @@ namespace Myriad.ECS.Worlds
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
 
-	<# for (var k = 0; k < sumij; k++)
+	<# for (var k = 0; k < i; k++)
 	{
 	#>
 		var c<#= k #> = ComponentID<T<#= k #>>.ID;
@@ -154,7 +164,7 @@ namespace Myriad.ECS.Worlds
 
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
-<# for (var k = 0; k < sumij; k++)
+<# for (var k = 0; k < i; k++)
 {
 #>
 					var t<#= k #> = chunk.GetComponentArray<T<#= k #>>(c<#= k #>);
@@ -169,7 +179,7 @@ namespace Myriad.ECS.Worlds
 
 						var entities = chunk.Entities;
 						for (var i = start; i < end; i++)
-							q.Execute(entities[i], <#= CallParameters(sumij) #>);
+							q.Execute(entities[i], <#= CallParameters(i) #>);
 					});
 				}
 			}

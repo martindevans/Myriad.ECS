@@ -61,48 +61,49 @@ public class QueryBenchmark
     [Benchmark]
     public void Query()
     {
-        _world.Execute<QueryAction, Position, Velocity>(new QueryAction(), _query);
-    }
-
-    [Benchmark]
-    public void ChunkQuery()
-    {
-        _world.ExecuteChunk<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
-    }
-
-    [Benchmark]
-    public void SimdChunkQuery()
-    {
-        _world.ExecuteVectorChunk<SimdChunkQueryAction2, Position, float, Velocity, float>(new SimdChunkQueryAction2(), _query);
+        var q = new QueryAction();
+        _world.Execute<QueryAction, Position, Velocity>(ref q, _query);
     }
 
     //[Benchmark]
-    public void ParallelQuery()
-    {
-        _world.ExecuteParallel<QueryAction, Position, Velocity>(new QueryAction(), _query);
-    }
+    //public void ChunkQuery()
+    //{
+    //    _world.ExecuteChunk<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
+    //}
 
     //[Benchmark]
-    public void ParallelChunkQuery()
-    {
-        _world.ExecuteChunkParallel<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
-    }
+    //public void SimdChunkQuery()
+    //{
+    //    _world.ExecuteVectorChunk<SimdChunkQueryAction2, Position, float, Velocity, float>(new SimdChunkQueryAction2(), _query);
+    //}
 
-    [Benchmark]
-    public void QueryEnumerable()
-    {
-        foreach (var item in _world.Query<Position, Velocity>(_query))
-            item.Item0.Value += item.Item1.Value;
-    }
+    ////[Benchmark]
+    //public void ParallelQuery()
+    //{
+    //    _world.ExecuteParallel<QueryAction, Position, Velocity>(new QueryAction(), _query);
+    //}
 
-    [Benchmark]
-    public void DelegateQuery()
-    {
-        _world.Query((ref Position pos, ref Velocity vel) =>
-        {
-            pos.Value += vel.Value;
-        });
-    }
+    ////[Benchmark]
+    //public void ParallelChunkQuery()
+    //{
+    //    _world.ExecuteChunkParallel<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
+    //}
+
+    //[Benchmark]
+    //public void QueryEnumerable()
+    //{
+    //    foreach (var item in _world.Query<Position, Velocity>(_query))
+    //        item.Item0.Value += item.Item1.Value;
+    //}
+
+    //[Benchmark]
+    //public void DelegateQuery()
+    //{
+    //    _world.Query((ref Position pos, ref Velocity vel) =>
+    //    {
+    //        pos.Value += vel.Value;
+    //    });
+    //}
 
     private struct QueryAction
         : IQuery2<Position, Velocity>
