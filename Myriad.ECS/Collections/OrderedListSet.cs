@@ -233,12 +233,12 @@ internal class OrderedListSet<TItem>
 
     internal TItem Single()
     {
-        if (_items.Count == 0)
-            throw new InvalidOperationException("Cannot get single item, there are 0 items");
-        if (_items.Count > 1)
-            throw new InvalidOperationException($"Cannot get single item, there are {_items.Count} items");
-
-        return _items[0];
+        return _items.Count switch
+        {
+            0 => throw new InvalidOperationException("Cannot get single item, there are 0 items"),
+            1 => _items[0],
+            _ => throw new InvalidOperationException($"Cannot get single item, there are {_items.Count} items"),
+        };
     }
 
     internal bool Any(Func<TItem, bool> predicate)

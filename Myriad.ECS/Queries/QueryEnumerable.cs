@@ -61,7 +61,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
         }
 
         private bool NextArchetype()
@@ -196,7 +196,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
         }
 
@@ -350,7 +350,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
         }
@@ -513,7 +513,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -685,7 +685,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -866,7 +866,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -1056,7 +1056,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -1255,7 +1255,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -1463,7 +1463,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -1680,7 +1680,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -1906,7 +1906,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -2141,7 +2141,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -2385,7 +2385,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -2638,7 +2638,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -2900,7 +2900,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -3171,7 +3171,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -3451,7 +3451,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current;
 
-            SpanEntities = chunk!.Entities;
+            SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);

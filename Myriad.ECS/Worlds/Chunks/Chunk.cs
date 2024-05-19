@@ -46,12 +46,12 @@ internal sealed class Chunk
     }
 
     #region get component
-    public ref T GetRef<T>(Entity entity)
-        where T : IComponent
-    {
-        var index = Archetype.World.GetEntityInfo(entity).RowIndex;
-        return ref GetRef<T>(entity, index);
-    }
+    //public ref T GetRef<T>(Entity entity)
+    //    where T : IComponent
+    //{
+    //    var index = Archetype.World.GetEntityInfo(entity).RowIndex;
+    //    return ref GetRef<T>(entity, index);
+    //}
 
     internal ref T GetRef<T>(Entity entity, int rowIndex)
         where T : IComponent

@@ -1,6 +1,6 @@
 ﻿using Myriad.ECS.Worlds;
-using System;
 using Myriad.ECS.Command;
+using Myriad.ECS.IDs;
 
 namespace Myriad.ECS.Tests;
 
@@ -71,5 +71,43 @@ public class EntityTests
         var id2 = entity2.UniqueID();
 
         Assert.AreNotEqual(id1, id2);
+    }
+
+    [TestMethod]
+    public void GetComponent()
+    {
+        var w = new WorldBuilder().Build();
+        var b = new CommandBuffer(w);
+
+        var e = b.Create()
+                 .Set(new ComponentInt16(7));
+        using var resolver = b.Playback();
+        var entity = resolver.Resolve(e);
+
+        ref var c = ref entity.GetComponentRef<ComponentInt16>(w);
+        Assert.AreEqual(7, c.Value);
+    }
+
+    [TestMethod]
+    public void GetBoxedComponent()
+    {
+        var w = new WorldBuilder().Build();
+        var b = new CommandBuffer(w);
+
+        var e = b.Create()
+                 .Set(new ComponentInt16(7));
+        using var resolver = b.Playback();
+        var entity = resolver.Resolve(e);
+
+        var c = (ComponentInt16)entity.GetBoxedComponent(w, ComponentID<ComponentInt16>.ID)!;
+        Assert.AreEqual(7, c.Value);
+
+        Assert.IsNull(entity.GetBoxedComponent(w, ComponentID<ComponentInt32>.ID));
+
+        b.Delete(entity);
+        b.Playback().Dispose();
+
+        Assert.IsNull(entity.GetBoxedComponent(w, ComponentID<ComponentInt16>.ID));
+        Assert.IsNull(entity.GetBoxedComponent(w, ComponentID<ComponentInt32>.ID));
     }
 }

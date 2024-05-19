@@ -47,11 +47,7 @@ public sealed partial class World
         if (entity.ID < 0 || entity.ID >= _entities.TotalCapacity)
             throw new ArgumentException("Invalid entity ID", nameof(entity));
 
-        var info = _entities[entity.ID];
-        if (info.Version != entity.Version)
-            throw new ArgumentException("Entity is not alive", nameof(entity));
-
-        return info.Chunk.Archetype;
+        return GetEntityInfo(entity).Chunk.Archetype;
     }
 
     /// <summary>

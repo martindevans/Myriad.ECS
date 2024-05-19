@@ -67,6 +67,11 @@ public partial class World
             I0 = ComponentID<T0>.ID.Value,
             I1 = ComponentID<T1>.ID.Value,
         };
+
+        // Sort them into order
+        if (u.I0 > u.I1)
+            (u.I0, u.I1) = (u.I1, u.I0);
+
         var key = u.Long;
 
         // Find query that matches this types
