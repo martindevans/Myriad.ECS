@@ -27,9 +27,9 @@ public sealed class ParallelSystemGroup<TData>
         };
     }
 
-    protected override void BeforeUpdateInternal(SystemGroupItem<TData>[] systems, TData data)
+    protected override void BeforeUpdateInternal(List<SystemGroupItem<TData>> systems, TData data)
     {
-        if (systems.Length > 0)
+        if (systems.Count > 0)
         {
             _dataClosure = data;
             Parallel.ForEach(systems, _beforeUpdate);
@@ -37,9 +37,9 @@ public sealed class ParallelSystemGroup<TData>
         }
     }
 
-    protected override void UpdateInternal(SystemGroupItem<TData>[] systems, TData data)
+    protected override void UpdateInternal(List<SystemGroupItem<TData>> systems, TData data)
     {
-        if (systems.Length > 0)
+        if (systems.Count > 0)
         {
             _dataClosure = data;
             Parallel.ForEach(systems, _update);
@@ -47,9 +47,9 @@ public sealed class ParallelSystemGroup<TData>
         }
     }
 
-    protected override void AfterUpdateInternal(SystemGroupItem<TData>[] systems, TData data)
+    protected override void AfterUpdateInternal(List<SystemGroupItem<TData>> systems, TData data)
     {
-        if (systems.Length > 0)
+        if (systems.Count > 0)
         {
             _dataClosure = data;
             Parallel.ForEach(systems, _afterUpdate);

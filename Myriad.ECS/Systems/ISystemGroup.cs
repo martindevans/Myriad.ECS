@@ -97,9 +97,9 @@ public abstract class BaseSystemGroup<TData>
 
     private readonly Stopwatch _timer = new();
 
-    private readonly SystemGroupItem<TData>[] _beforeSystems;
-    private readonly SystemGroupItem<TData>[] _systems;
-    private readonly SystemGroupItem<TData>[] _afterSystems;
+    private readonly List<SystemGroupItem<TData>> _beforeSystems;
+    private readonly List<SystemGroupItem<TData>> _systems;
+    private readonly List<SystemGroupItem<TData>> _afterSystems;
 
     protected BaseSystemGroup(string name, params ISystem<TData>[] systems)
     {
@@ -107,9 +107,9 @@ public abstract class BaseSystemGroup<TData>
 
         var sys = systems.Select(a => new SystemGroupItem<TData>(a)).ToArray();
 
-        _beforeSystems = sys.Where(a => a.System is ISystemBefore<TData>).ToArray();
-        _systems = sys;
-        _afterSystems = sys.Where(a => a.System is ISystemAfter<TData>).ToArray();
+        _beforeSystems = sys.Where(a => a.System is ISystemBefore<TData>).ToList();
+        _systems = sys.ToList();
+        _afterSystems = sys.Where(a => a.System is ISystemAfter<TData>).ToList();
     }
 
     public void Init()
@@ -126,6 +126,20 @@ public abstract class BaseSystemGroup<TData>
         GC.SuppressFinalize(this);
     }
 
+    protected SystemGroupItem<TData> Add(ISystem<TData> system)
+    {
+        var item = new SystemGroupItem<TData>(system);
+
+        _systems.Add(item);
+
+        if (system is ISystemBefore<TData>)
+            _beforeSystems.Add(item);
+        if (system is ISystemAfter<TData>)
+            _afterSystems.Add(item);
+
+        return item;
+    }
+
     public void BeforeUpdate(TData data)
     {
         _timer.Reset();
@@ -135,7 +149,7 @@ public abstract class BaseSystemGroup<TData>
         _timer.Stop();
     }
 
-    protected abstract void BeforeUpdateInternal(SystemGroupItem<TData>[] systems, TData data);
+    protected abstract void BeforeUpdateInternal(List<SystemGroupItem<TData>> systems, TData data);
 
     public void Update(TData data)
     {
@@ -144,7 +158,7 @@ public abstract class BaseSystemGroup<TData>
         _timer.Stop();
     }
 
-    protected abstract void UpdateInternal(SystemGroupItem<TData>[] systems, TData data);
+    protected abstract void UpdateInternal(List<SystemGroupItem<TData>> systems, TData data);
 
     public void AfterUpdate(TData data)
     {
@@ -155,7 +169,7 @@ public abstract class BaseSystemGroup<TData>
         TotalExecutionTime = _timer.Elapsed;
     }
 
-    protected abstract void AfterUpdateInternal(SystemGroupItem<TData>[] systems, TData data);
+    protected abstract void AfterUpdateInternal(List<SystemGroupItem<TData>> systems, TData data);
 
     public IEnumerable<SystemGroupItem<TData>> Systems => _systems;
 

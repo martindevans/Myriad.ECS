@@ -1,18 +1,22 @@
 ﻿using System.Numerics;
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Diagnosers;
 using Benchmarks.Components;
 using Myriad.ECS;
 using Myriad.ECS.Command;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds;
+using Myriad.ECS.Components;
 
 namespace Benchmarks;
 
+//[HardwareCounters(HardwareCounter.BranchMispredictions, HardwareCounter.BranchInstructions)]
+//[ThreadingDiagnoser]
 [MemoryDiagnoser]
 [ShortRunJob]
 public class QueryBenchmark
 {
-    [Params(100_000, 1_000_000, 10_000_000)]
+    [Params(100_000, 10_000_000)]
     public int EntityCount = 1_000_000;
 
     private World _world = null!;
@@ -77,7 +81,7 @@ public class QueryBenchmark
     //    _world.ExecuteVectorChunk<SimdChunkQueryAction2, Position, float, Velocity, float>(new SimdChunkQueryAction2(), _query);
     //}
 
-    ////[Benchmark]
+    //[Benchmark]
     //public void ParallelQuery()
     //{
     //    _world.ExecuteParallel<QueryAction, Position, Velocity>(new QueryAction(), _query);
