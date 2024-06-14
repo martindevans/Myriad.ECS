@@ -18,9 +18,7 @@ namespace Myriad.ECS.Worlds;
 
 public partial class World
 {
-    // Cache of all queries with 1 included components. Tuple elements are:
-    // - component ID
-    // - the query itself
+    // Cache of all queries with 1 included components.
     private readonly SortedList<int, QueryDescription> _queryCache1 = [ ];
 
     /// <summary>
@@ -48,9 +46,7 @@ public partial class World
         return query;
     }
 
-    // Cache of all queries with 2 included components. Tuple elements are:
-    // - component IDs combined together
-    // - the query itself
+    // Cache of all queries with 2 included components. Key is the 2 component IDs combined together
     private readonly SortedList<long, QueryDescription> _queryCache2 = [ ];
 
     /// <summary>
