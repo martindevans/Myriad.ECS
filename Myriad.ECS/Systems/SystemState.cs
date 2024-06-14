@@ -11,7 +11,7 @@ namespace Myriad.ECS.Systems;
 /// </summary>
 /// <typeparam name="TComponent"></typeparam>
 /// <typeparam name="TAssociated"></typeparam>
-public class SystemState<TComponent, TAssociated>(World world, Func<Entity, TAssociated> factory)
+public abstract class SystemState<TComponent, TAssociated>(World world)
     where TComponent : IComponent
     where TAssociated : IComponent
 {
@@ -30,6 +30,8 @@ public class SystemState<TComponent, TAssociated>(World world, Func<Entity, TAss
             world.Execute<DetachPhantom, TAssociated>(new DetachPhantom(this, cmd), _removeQueryPhantom);
     }
 
+    protected abstract TAssociated Create(Entity entity);
+
     /// <summary>
     /// Called when an Entity is found that has <see cref="TComponent"/> but does not have <see cref="TAssociated"/>.
     ///
@@ -39,7 +41,7 @@ public class SystemState<TComponent, TAssociated>(World world, Func<Entity, TAss
     /// <param name="c"></param>
     protected void OnAttach(Entity e, CommandBuffer c)
     {
-        c.Set(e, factory(e));
+        c.Set(e, Create(e));
     }
 
     /// <summary>
