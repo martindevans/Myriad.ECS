@@ -19,15 +19,15 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
     private readonly QueryDescription _removeQuery = new QueryBuilder().Exclude<TComponent>().Include<TAssociated>().Build(world);
     private readonly QueryDescription _removeQueryPhantom = new QueryBuilder().Include<TAssociated>().Include<Phantom>().Build(world);
 
-    private readonly bool _associatedIsPhantom = typeof(IPhantomComponent).IsAssignableFrom(typeof(TAssociated));
+    /// <summary>
+    /// Indicates if <see cref="TAssociated"/> is an <see cref="IPhantomComponent"/>
+    /// </summary>
+    public bool AssociatedIsPhantom { get; } = typeof(IPhantomComponent).IsAssignableFrom(typeof(TAssociated));
 
     public void Update(CommandBuffer cmd)
     {
         world.Execute(new Attach(this, cmd), _addQuery);
-        world.Execute<Detach, TAssociated>(new Detach(this, cmd), _removeQuery);
-
-        if (_associatedIsPhantom)
-            world.Execute<DetachPhantom, TAssociated>(new DetachPhantom(this, cmd), _removeQueryPhantom);
+        world.Execute<Detach, TAssociated>(new Detach(this, cmd), AssociatedIsPhantom ? _removeQueryPhantom : _removeQuery);
     }
 
     protected abstract TAssociated Create(Entity entity);
@@ -57,20 +57,6 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
         c.Remove<TAssociated>(e);
     }
 
-    /// <summary>
-    /// Called when an Entity is found that has <see cref="TAssociated"/> and is a Phantom entity. This will only happen if <see cref="TAssociated"/> is
-    /// an <see cref="IPhantomComponent"/>.
-    /// 
-    /// call base.OnDetachPhantom to datach <see cref="TAssociated"/>
-    /// </summary>
-    /// <param name="e"></param>
-    /// <param name="c"></param>
-    /// <param name="associated"></param>
-    protected virtual void OnDetachPhantom(Entity e, CommandBuffer c, ref TAssociated associated)
-    {
-        c.Remove<TAssociated>(e);
-    }
-
     private readonly struct Attach(SystemState<TComponent, TAssociated> state, CommandBuffer cmd)
         : IQuery0
     {
@@ -86,15 +72,6 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
         public void Execute(Entity e, ref TAssociated a)
         {
             state.OnDetach(e, cmd, ref a);
-        }
-    }
-
-    private readonly struct DetachPhantom(SystemState<TComponent, TAssociated> state, CommandBuffer cmd)
-        : IQuery1<TAssociated>
-    {
-        public void Execute(Entity e, ref TAssociated a)
-        {
-            state.OnDetachPhantom(e, cmd, ref a);
         }
     }
 }
