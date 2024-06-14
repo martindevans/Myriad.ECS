@@ -66,7 +66,7 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
     /// <param name="e"></param>
     /// <param name="c"></param>
     /// <param name="associated"></param>
-    protected virtual void OnDetachPhantom(Entity e, CommandBuffer c, TAssociated associated)
+    protected virtual void OnDetachPhantom(Entity e, CommandBuffer c, ref TAssociated associated)
     {
         c.Remove<TAssociated>(e);
     }
@@ -94,7 +94,7 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
     {
         public void Execute(Entity e, ref TAssociated a)
         {
-            state.OnDetachPhantom(e, cmd, a);
+            state.OnDetachPhantom(e, cmd, ref a);
         }
     }
 }
