@@ -98,3 +98,14 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
         }
     }
 }
+
+public class FactorySystemState<TComponent, TAssociated>(World world, Func<Entity, TAssociated> factory)
+    : SystemState<TComponent, TAssociated>(world)
+    where TComponent : IComponent
+    where TAssociated : IComponent
+{
+    protected override TAssociated Create(Entity entity)
+    {
+        return factory(entity);
+    }
+}
