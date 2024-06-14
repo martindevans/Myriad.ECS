@@ -39,7 +39,7 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
     /// </summary>
     /// <param name="e"></param>
     /// <param name="c"></param>
-    protected void OnAttach(Entity e, CommandBuffer c)
+    protected virtual void OnAttach(Entity e, CommandBuffer c)
     {
         c.Set(e, Create(e));
     }
@@ -52,7 +52,7 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
     /// <param name="e"></param>
     /// <param name="c"></param>
     /// <param name="associated"></param>
-    protected void OnDetach(Entity e, CommandBuffer c, ref TAssociated associated)
+    protected virtual void OnDetach(Entity e, CommandBuffer c, ref TAssociated associated)
     {
         c.Remove<TAssociated>(e);
     }
@@ -66,7 +66,7 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
     /// <param name="e"></param>
     /// <param name="c"></param>
     /// <param name="associated"></param>
-    protected void OnDetachPhantom(Entity e, CommandBuffer c, TAssociated associated)
+    protected virtual void OnDetachPhantom(Entity e, CommandBuffer c, TAssociated associated)
     {
         c.Remove<TAssociated>(e);
     }
