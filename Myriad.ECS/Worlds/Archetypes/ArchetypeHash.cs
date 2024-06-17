@@ -56,4 +56,9 @@ internal readonly record struct ArchetypeHash
     {
         return Value.CompareTo(other.Value);
     }
+
+    public override int GetHashCode()
+    {
+        return Value.GetHashCode();
+    }
 }

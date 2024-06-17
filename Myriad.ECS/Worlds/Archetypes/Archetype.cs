@@ -195,6 +195,11 @@ public sealed partial class Archetype
         }
     }
 
+    public override int GetHashCode()
+    {
+        return Hash.GetHashCode();
+    }
+
     internal IReadOnlyList<Chunk> Chunks => _chunks;
 
     //[MustDisposeResource]
@@ -207,4 +212,6 @@ public sealed partial class Archetype
     {
         return Components.SetEquals(query);
     }
+
+    public ArchetypeEntityEnumerable Entities => new ArchetypeEntityEnumerable(this);
 }
