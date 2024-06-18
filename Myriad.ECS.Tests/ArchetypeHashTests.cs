@@ -1,4 +1,4 @@
-﻿using Myriad.ECS.Registry;
+﻿using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Tests;

@@ -38,6 +38,16 @@ namespace Myriad.ECS.Worlds
 	public partial class World
 	{
 		public int Execute<TQ, <#= queryConstraints #>>(
+			QueryDescription? query = null
+		)
+			where <#= Constraints(i, 12) #>
+			where TQ : <#= Name(i) #><<#= queryConstraints #>>, new()
+		{
+			var q = new TQ();
+			return Execute<TQ, <#= queryConstraints #>>(ref q, query);
+		}
+
+		public int Execute<TQ, <#= queryConstraints #>>(
 			TQ q,
 			QueryDescription? query = null
 		)

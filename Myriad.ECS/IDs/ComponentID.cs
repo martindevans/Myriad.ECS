@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Myriad.ECS.Registry;
 
 namespace Myriad.ECS.IDs;
 

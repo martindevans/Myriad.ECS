@@ -1,6 +1,5 @@
 ﻿using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
-using Myriad.ECS.Registry;
 
 namespace Myriad.ECS.Worlds;
 

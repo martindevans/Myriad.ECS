@@ -1,6 +1,5 @@
 using System.Reflection;
 using Myriad.ECS.IDs;
-using Myriad.ECS.Registry;
 
 namespace Myriad.ECS.Tests;
 

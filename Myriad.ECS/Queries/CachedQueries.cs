@@ -91,7 +91,7 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache3 = [ ];
+    private readonly List<(ulong, int[], QueryDescription)> _queryCache3 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -113,7 +113,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache3)
@@ -148,7 +148,7 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache4 = [ ];
+    private readonly List<(ulong, int[], QueryDescription)> _queryCache4 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -172,7 +172,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache4)
@@ -208,7 +208,7 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache5 = [ ];
+    private readonly List<(ulong, int[], QueryDescription)> _queryCache5 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -234,7 +234,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache5)
@@ -271,7 +271,7 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache6 = [ ];
+    private readonly List<(ulong, int[], QueryDescription)> _queryCache6 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -299,7 +299,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache6)
@@ -337,7 +337,7 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache7 = [ ];
+    private readonly List<(ulong, int[], QueryDescription)> _queryCache7 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -367,7 +367,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache7)
@@ -406,7 +406,7 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache8 = [ ];
+    private readonly List<(ulong, int[], QueryDescription)> _queryCache8 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -438,7 +438,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache8)
@@ -478,7 +478,7 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache9 = [ ];
+    private readonly List<(ulong, int[], QueryDescription)> _queryCache9 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -512,7 +512,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache9)
@@ -553,7 +553,7 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache10 = [ ];
+    private readonly List<(ulong, int[], QueryDescription)> _queryCache10 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -589,7 +589,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache10)
@@ -631,7 +631,7 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache11 = [ ];
+    private readonly List<(ulong, int[], QueryDescription)> _queryCache11 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -669,7 +669,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache11)
@@ -712,7 +712,7 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache12 = [ ];
+    private readonly List<(ulong, int[], QueryDescription)> _queryCache12 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -752,7 +752,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache12)
@@ -796,7 +796,7 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache13 = [ ];
+    private readonly List<(ulong, int[], QueryDescription)> _queryCache13 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -838,7 +838,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache13)
@@ -883,7 +883,7 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache14 = [ ];
+    private readonly List<(ulong, int[], QueryDescription)> _queryCache14 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -927,7 +927,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache14)
@@ -973,7 +973,7 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache15 = [ ];
+    private readonly List<(ulong, int[], QueryDescription)> _queryCache15 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -1019,7 +1019,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache15)
@@ -1066,7 +1066,7 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache16 = [ ];
+    private readonly List<(ulong, int[], QueryDescription)> _queryCache16 = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -1114,7 +1114,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache16)

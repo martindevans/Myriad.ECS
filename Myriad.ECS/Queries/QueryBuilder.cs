@@ -1,5 +1,4 @@
-﻿using Myriad.ECS.Registry;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Collections;

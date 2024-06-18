@@ -1,7 +1,6 @@
 ﻿using Myriad.ECS.Collections;
 using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
-using Myriad.ECS.Registry;
 using Myriad.ECS.Worlds.Chunks;
 
 namespace Myriad.ECS.Worlds.Archetypes;

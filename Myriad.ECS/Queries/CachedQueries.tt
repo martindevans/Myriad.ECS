@@ -118,7 +118,7 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(uint, int[], QueryDescription)> _queryCache<#= i #> = [ ];
+    private readonly List<(ulong, int[], QueryDescription)> _queryCache<#= i #> = [ ];
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -148,7 +148,7 @@ public partial class World
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
-        var hash = xxHash32.ComputeHash(byteSpan, seed: 42);
+        var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
         // Find query that matches these types
         foreach (var (h, c, q) in _queryCache<#= i #>)
