@@ -8,13 +8,19 @@ using NBodyIntegrator.Units;
 namespace NBodyIntegrator.Live;
 
 public class SetWorldPositionFromRail(World world)
-    : BaseSystem<GameTime>
+    : BaseSystem<GameTime>, ISystemDeclare<GameTime>
 {
     public override void Update(GameTime time)
     {
-        world.ExecuteChunkParallel<UpdatePosition, PagedRail, WorldPosition>(
+        world.Execute<UpdatePosition, PagedRail, WorldPosition>(
             new UpdatePosition(time.Time)
         );
+    }
+
+    public void Declare(ref SystemDeclaration declaration)
+    {
+        declaration.Read<PagedRail>();
+        declaration.Write<WorldPosition>();
     }
 
     private readonly struct UpdatePosition(double time)

@@ -115,15 +115,15 @@ var systems = new SystemGroup<GameTime>(
     "main",
     new SystemGroup<GameTime>(
         "nbody",
-        //new RailTrimmer(world),
+        new RailTrimmer(world),
         new RailIntegrator(world)
+    ),
+    new PhasedParallelSystemGroup<GameTime>(
+        "live-state",
+        new KeplerWorldPosition(world),
+        new SetWorldPositionFromRail(world),
+        new EngineBurnUpdater(world)
     )
-    //new SystemGroup<GameTime>(
-    //    "live-state",
-    //    new KeplerWorldPosition(world),
-    //    new SetWorldPositionFromRail(world),
-    //    new EngineBurnUpdater(world)
-    //)
 );
 systems.Init();
 
@@ -170,10 +170,6 @@ AnsiConsole
             task.Increment(1);
         }
     });
-
-//using var binWriter = new BinaryWriter(File.Create("data_dump.bin"));
-//WriteBinary(binWriter, world);
-//binWriter.Flush();
 
 // General stats
 Console.WriteLine($"# {ticks:N0} Ticks");
@@ -314,65 +310,3 @@ static CommandBuffer.BufferedEntity CreateNBody(CommandBuffer buffer, Metre3 pos
 
     return entity;
 }
-
-//static void WriteBinary(BinaryWriter writer, World world)
-//{
-//    var packetCount = 0;
-
-//    // Write out entire rail
-//    foreach (var (e, r) in world.Query<PagedRail>())
-//    {
-//        foreach (var page in r.Ref.Pages)
-//        {
-//            packetCount++;
-
-//            var positions = page.GetSpanPositions();
-//            var times = page.GetSpanTimes();
-
-//            // packet header:
-//            writer.Write((ushort)0); // protocol version
-//            writer.Write((ushort)0); // packet type
-
-//            // Entity ID
-//            writer.Write(e.ID);
-//            writer.Write(e.Version);
-
-//            // Write out a "keyframe" at the start
-//            writer.Write(checked((ushort)positions.Length));
-//            writer.Write(positions[0].Value.X);
-//            writer.Write(positions[0].Value.Y);
-//            writer.Write(positions[0].Value.Z);
-//            writer.Write(times[0]);
-
-//            // Keep track of the sum from the keyframe to the latest frame
-//            var estimatePos = positions[0].Value;
-//            var estimateTime = times[0];
-
-//            // Write out all the individual datapoints as a delta from the last predicted point
-//            for (var i = 1; i < positions.Length; i++)
-//            {
-//                var pos = positions[i].Value;
-//                var time = times[i];
-
-//                // Calculate delta from last estimated frame
-//                var deltaPos = (Vector3)(pos - estimatePos);
-//                var deltaTime = (float)(time - estimateTime);
-
-//                // Write single precision position
-//                writer.Write(deltaPos.X);
-//                writer.Write(deltaPos.Y);
-//                writer.Write(deltaPos.Z);
-
-//                // Write single precision delta time
-//                writer.Write(deltaTime);
-
-//                // Update cumulative estimate
-//                estimatePos += (double3)deltaPos;
-//                estimateTime += (float)deltaTime;
-//            }
-//        }
-//    }
-
-//    AnsiConsole.WriteLine($"Written {packetCount} packets");
-//    AnsiConsole.WriteLine();
-//}

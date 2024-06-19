@@ -17,21 +17,15 @@ public interface IDisposableComponent
 /// <typeparam name="T"></typeparam>
 /// <typeparam name="TC"></typeparam>
 /// <param name="world"></param>
-public sealed class DisposableComponentSystem<T, TC>(World world, CommandBuffer? buffer = null)
+public sealed class DisposableComponentSystem<T, TC>(World world, CommandBuffer buffer)
     : BaseSystem<T>, IDisposable
     where TC : IDisposableComponent
 {
-    private readonly CommandBuffer _cmd = buffer ?? new(world);
-    private readonly bool _autorun = buffer == null;
-
     private readonly QueryDescription _query = new QueryBuilder().Include<Phantom>().Include<TC>().Build(world);
 
     public override void Update(T t)
     {
-        world.Execute<DisposalQuery, TC>(new DisposalQuery(_cmd), _query);
-
-        if (_autorun)
-            _cmd.Playback().Dispose();
+        world.Execute<DisposalQuery, TC>(new DisposalQuery(buffer), _query);
     }
 
     public void Dispose()
@@ -44,6 +38,7 @@ public sealed class DisposableComponentSystem<T, TC>(World world, CommandBuffer?
         // Execute again without the query, disposing even on live entities
         world.Execute<DisposalQuery, TC>(new DisposalQuery(cmd));
 
+        // Ensure the buffer runs
         cmd.Playback().Dispose();
     }
 

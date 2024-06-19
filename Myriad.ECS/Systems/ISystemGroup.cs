@@ -171,7 +171,9 @@ public abstract class BaseSystemGroup<TData>
 
     protected abstract void AfterUpdateInternal(List<SystemGroupItem<TData>> systems, TData data);
 
-    public IEnumerable<SystemGroupItem<TData>> Systems => _systems;
+    public IReadOnlyList<SystemGroupItem<TData>> Systems => _systems;
+
+    IEnumerable<SystemGroupItem<TData>> ISystemGroup<TData>.Systems => _systems;
 
     public IEnumerable<SystemGroupItem<TData>> RecursiveSystems
     {

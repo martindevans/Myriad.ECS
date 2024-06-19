@@ -12,7 +12,7 @@ public readonly struct LocalPool<T>
     private readonly int _maxSize;
 
     public LocalPool()
-        : this(32)
+        : this(16)
     {
     }
 

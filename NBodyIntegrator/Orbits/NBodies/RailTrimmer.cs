@@ -5,9 +5,14 @@ using Myriad.ECS.Worlds;
 namespace NBodyIntegrator.Orbits.NBodies;
 
 public sealed class RailTrimmer(World world)
-    : BaseSystem<GameTime>
+    : BaseSystem<GameTime>, ISystemDeclare<GameTime>
 {
     private const int MAX_ITERS = 64;
+
+    public void Declare(ref SystemDeclaration declaration)
+    {
+        declaration.Write<PagedRail>();
+    }
 
     public override void Update(GameTime time)
     {

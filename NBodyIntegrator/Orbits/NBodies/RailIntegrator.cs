@@ -11,7 +11,7 @@ using NBodyIntegrator.Units;
 namespace NBodyIntegrator.Orbits.NBodies;
 
 public sealed class RailIntegrator(World world)
-    : BaseSystem<GameTime>, ISystemInit<GameTime>
+    : BaseSystem<GameTime>, ISystemInit<GameTime>, ISystemDeclare<GameTime>
 {
     private const int MaxWorkPerPoint = 8;
 
@@ -20,6 +20,14 @@ public sealed class RailIntegrator(World world)
     public void Init()
     {
         _keplerMasses = KeplerWorldPosition.FindKeplerBodies(world);
+    }
+
+    public void Declare(ref SystemDeclaration declaration)
+    {
+        declaration.Write<NBody>();
+        declaration.Write<PagedRail>();
+        declaration.Read<EngineBurnSchedule>();
+        declaration.Read<Mass>();
     }
 
     public override void Update(GameTime time)

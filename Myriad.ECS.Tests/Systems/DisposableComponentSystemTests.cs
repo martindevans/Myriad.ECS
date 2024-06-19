@@ -18,8 +18,9 @@ public class DisposableComponentSystemTests
         cmd.Create().Set(new ComponentInt32(7)).Set(new TestDisposable(box));
         cmd.Playback().Dispose();
 
-        var sys = new DisposableComponentSystem<int, TestDisposable>(w);
+        var sys = new DisposableComponentSystem<int, TestDisposable>(w, cmd);
         sys.Update(0);
+        cmd.Playback().Dispose();
 
         Assert.AreEqual(0, box.Value);
     }
@@ -36,13 +37,15 @@ public class DisposableComponentSystemTests
         using var resolver = cmd.Playback();
         var entity = eb.Resolve(resolver);
 
+        // Delete entity (making it a phantom)
         cmd.Delete(entity);
         cmd.Playback().Dispose();
 
         Assert.IsTrue(entity.IsPhantom(w));
 
-        var sys = new DisposableComponentSystem<int, TestDisposable>(w);
+        var sys = new DisposableComponentSystem<int, TestDisposable>(w, cmd);
         sys.Update(0);
+        cmd.Playback().Dispose();
 
         Assert.AreEqual(1, box.Value);
         Assert.IsFalse(entity.IsPhantom(w));
@@ -60,7 +63,7 @@ public class DisposableComponentSystemTests
         using var resolver = cmd.Playback();
         var entity = eb.Resolve(resolver);
 
-        var sys = new DisposableComponentSystem<int, TestDisposable>(w);
+        var sys = new DisposableComponentSystem<int, TestDisposable>(w, cmd);
         sys.Dispose();
 
         Assert.AreEqual(1, box.Value);

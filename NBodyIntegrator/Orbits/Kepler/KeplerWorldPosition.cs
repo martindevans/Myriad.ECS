@@ -11,13 +11,18 @@ namespace NBodyIntegrator.Orbits.Kepler;
 /// </summary>
 /// <param name="world"></param>
 public sealed class KeplerWorldPosition(World world)
-    : BaseSystem<GameTime>, ISystemInit<GameTime>
+    : BaseSystem<GameTime>, ISystemInit<GameTime>, ISystemDeclare<GameTime>
 {
     private KeplerObject[] _keplerMasses = [];
 
     public void Init()
     {
         _keplerMasses = FindKeplerBodies(world);
+    }
+
+    public void Declare(ref SystemDeclaration declaration)
+    {
+        declaration.Write<WorldPosition>();
     }
 
     public override void Update(GameTime time)

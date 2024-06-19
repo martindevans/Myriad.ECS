@@ -7,13 +7,19 @@ using NBodyIntegrator.Orbits.NBodies;
 namespace NBodyIntegrator.Live;
 
 public class EngineBurnUpdater(World world)
-    : BaseSystem<GameTime>
+    : BaseSystem<GameTime>, ISystemDeclare<GameTime>
 {
     public override void Update(GameTime time)
     {
         world.Execute<UpdateMassFromBurn, EngineBurnSchedule, Mass>(
             new UpdateMassFromBurn(time.Time, time.DeltaTime)
         );
+    }
+
+    public void Declare(ref SystemDeclaration declaration)
+    {
+        declaration.Write<EngineBurnSchedule>();
+        declaration.Write<Mass>();
     }
 
     private readonly struct UpdateMassFromBurn : IQuery2<EngineBurnSchedule, Mass>
