@@ -49,6 +49,21 @@ public class OrderedParallelSystemGroupTest
         Assert.AreEqual(1, group.MaxDependencyChain);
     }
 
+    [TestMethod]
+    public void NoDeps()
+    {
+        var group = new OrderedParallelSystemGroup<int>(
+            "test",
+            new SystemEmpty<int>(),
+            new SystemEmpty<int>(),
+            new SystemEmpty<int>(),
+            new SystemEmpty<int>()
+        );
+
+        group.Update(0);
+        Assert.AreEqual(1, group.MaxDependencyChain);
+    }
+
     private class SystemCheckSemaphore<TComponent>
         : ISystemDeclare<ConcurrentDictionary<int, SemaphoreSlim>> where TComponent : IComponent
     {
@@ -67,6 +82,18 @@ public class OrderedParallelSystemGroupTest
         public void Declare(ref SystemDeclaration declaration)
         {
             declaration.Write<TComponent>();
+        }
+    }
+
+    private class SystemEmpty<TData>
+        : ISystemDeclare<TData>
+    {
+        public void Declare(ref SystemDeclaration declaration)
+        {
+        }
+
+        public void Update(TData data)
+        {
         }
     }
 }

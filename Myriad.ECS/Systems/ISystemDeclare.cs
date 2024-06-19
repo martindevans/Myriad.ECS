@@ -269,13 +269,13 @@ public sealed class OrderedParallelSystemGroup<TData>
         {
             if (_filters[i].Intersects(ref _filters[index]))
             {
-                await (_running[i] ?? Task.CompletedTask);
+                await (_running[i] ?? Task.CompletedTask).ConfigureAwait(false);
                 depth = Math.Max(_depth[i] + 1, depth);
             }
         }
         _depth[index] = depth;
 
-        await Task.Run(() => system.Update(data));
+        await Task.Run(() => system.Update(data)).ConfigureAwait(false);
     }
 
     protected override void AfterUpdateInternal(List<SystemGroupItem<TData>> systems, TData data)
