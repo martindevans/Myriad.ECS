@@ -5,6 +5,7 @@ using Myriad.ECS.Collections;
 using Myriad.ECS.Components;
 using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Worlds.Archetypes;
 
@@ -45,7 +46,8 @@ public sealed partial class CommandBuffer(World World)
         // Create buffered entities.
         CreateBufferedEntities(resolver);
 
-        // Delete entities
+        // Delete entities, this must occur before structural changes because it may trigger new structural changes
+        // by adding a new phantom component.
         DeleteEntities();
 
         // Structural changes (add/remove components)
@@ -102,9 +104,9 @@ public sealed partial class CommandBuffer(World World)
         _deletes.Clear();
 
         // Check if this entity should not be deleted, because a phantom component is being added
-        bool IsAddingPhantomComponent(Entity delete)
+        bool IsAddingPhantomComponent(Entity entity)
         {
-            if (_maybeAddingPhantomComponent.Contains(delete) && _entityModifications.TryGetValue(delete, out var mod) && mod.Sets != null)
+            if (_maybeAddingPhantomComponent.Contains(entity) && _entityModifications.TryGetValue(entity, out var mod) && mod.Sets != null)
                 foreach (var (key, _) in mod.Sets.Enumerable())
                     if (key.IsPhantomComponent)
                         return true;

@@ -1,5 +1,6 @@
 ﻿using Myriad.ECS.Command;
 using Myriad.ECS.Components;
+using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Tests.Components;
@@ -74,7 +75,14 @@ public class ShardingTests
             c.RemoveSharding(resolver.Resolve(bufferedEntity));
         c.Playback().Dispose();
 
+        Console.WriteLine($"ComponentInt64 => {ComponentID<ComponentInt64>.ID}");
+        foreach (var archetype in w.Archetypes)
+            if (archetype.EntityCount > 0)
+                Console.WriteLine(string.Join(",", archetype.Components.LINQ()));
+
         // Check that all but one archetype is empty
-        Assert.IsTrue(w.Archetypes.Count(a => a.EntityCount != 0) == 1);
+        Assert.AreEqual(1, w.Archetypes.Count(a => a.EntityCount != 0));
+
+        
     }
 }

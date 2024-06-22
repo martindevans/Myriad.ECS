@@ -27,6 +27,26 @@ public record struct Velocity(Vector2 Value) : IComponent;
 
 `IComponent` is simply a tag that ensures you cannot accidentally attach something to an entity that you didn't mean to. For example adding a `Vector2` to an `Entity` directly, instead of a `Position` or `Velocity` component.
 
+### CommandBuffer
+
+The only way to make structural changes to the world (creating or destroying entities, adding or removing components) is through a `CommandBuffer`. A `CommandBuffer` allows you to executes multiple commands, which are added to the buffer. The world is only modified when the buffered is executed.
+
+```csharp
+var buffer = new CommandBuffer(world);
+
+// Create an entity. This returns a "buffered entity" object that can be used to resolve the real Entity when it is eventually created
+var bufferedEntity = setup.Create()
+     .Set(new Position(new Vector3(1, 2, 3)))
+     .Set(new Velocity(new Vector3(0, 1, 0)))
+     .Set(new Mass(1));
+
+// Execute the buffer, receive a "resolver"
+using var resolver = buffer.Playback();
+
+// Resolve the buffered entity into a real Entity
+var entity = bufferedEntity.Resolve(resolver);
+```
+
 ### Phantom Components
 
 Myriad supports "Phantom Components", these are defined by `IPhantomComponent` instead of `IComponent`. When an `Entity` with any phantom components is destroyed the entity is not actually destroyed, instead it becomes a "phantom". Phantom entities are automatically **excluded** from queries and must be explicitly included with `.Include<Phantom>`.
@@ -127,3 +147,101 @@ public QueryResultEnumerable2<T0, T1> Query<T0, T1, ...etc>(QueryDescription que
 foreach (var (e, p, v) in world.Query<Position, Velocity>())
     p.Ref.Value += v.Ref.Value;
 ```
+
+### Systems
+
+Systems are a completely optional part of `Myriad.ECS`. The library can be used as an in memory database, without any systems running every tick.
+
+#### `ISystem`
+
+All systems must implement `ISystem<TData>`, with an `Update(TData)` method. The `TData` parameter specifies what type will be passed into the `Update` method, for example a `GameTime` object.
+
+#### `ISystemInit`
+
+Adds an `Init` method that is run exactly once, before any other calls.
+
+#### `ISystemBefore`
+
+Adds a `BeforeUpdate(TData)` which is called every tick, just before `Update`.
+
+#### `ISystemAfter`
+
+Adds an `AfterUpdate(TData)` which is called every tick, just after `Update`.
+
+#### `SystemGroup`
+
+Usually you will want to declare a set of systems to run in order every frame. A `SystemGroup` does this, and handles correctly calling all of the above interface methods. A `SystemGroup` is itself a system, so groups can be nested.
+
+A `SystemGroup` exposes a `TotalExecutionTime` property, which is the total time spent in `BeforeUpdate`, `Update` and `AfterUpdate` added together. This can be helpful for diagnosing slow systems.
+
+```csharp
+var cmdPhysics = new CommandBufferSystem(world);
+var cmdIo = new CommandBufferSystem(world);
+
+var systems = new SystemGroup<GameTime>(
+    "main",
+    new SystemGroup<GameTime>(
+        "physics",
+        new Integrator(world),
+        new SystemGroup<GameTime>(
+            "collisions",
+            new BroadPhaseCollisions(world, cmdPhysics),
+            new NarrowPhaseCollisions(world, cmdPhysics),
+        ),
+        cmdPhysics
+    ),
+    new SystemGroup<GameTime>(
+        "io",
+        new ReadPlayerInputKeyboard(world, cmdIo),
+        new ReadPlayerInputMouse(world, cmdIo),
+        new ReadPlayerInputController(world, cmdIo),
+        new ApplyHaptics(world),
+        cmdIo
+    )
+);
+systems.Init();
+```
+
+#### `CommandBufferSystem`
+
+In the above example `CommandBufferSystem`s are created at the start, are passed into various systems, and are scheduled at the end of their respective groups. A `CommandBufferSystem` exposes a `CommandBuffer` and executes the buffer when the systems runs.
+
+This allows multiple systems to share one single `CommandBuffer`, which is executed just once at the end of a group of systems instead of every system making ad-hoc changes.
+
+#### Parallel Systems
+
+`Myriad.ECS` includes 3 parallel system groups, these are all somewhat experimental and should be used carefully.
+
+#### `ParallelSystemGroup`
+
+Runs all systems in each phase using `Parallel.ForEach`. This means all of the systems within the group run in parallel with each other in each phase. If the systems modify the `World` in a non-threadsafe way (for example writing a component in 2 queries) this can cause undefined behaviour.
+
+#### Declarative Parallel Systems
+
+Using a `ParallelSystemGroup` requires carefully manually grouping systems up that can be run in parallel, which is difficult and error prone. `ISystemDeclare` adds a `Declare` method to systems which allows them to declare what components they access:
+
+```csharp
+void Declare(ref SystemDeclaration declaration)
+{
+    declaration.Write<Position>();
+    declaration.Read<Velocity>();
+    declaration.Read<Acceleration>();
+    declaration.Read<Static>();
+}
+```
+
+This declaration can be used to automatically safely schedule systems in parallel. This is used by three new system groups.
+
+#### `DeclareSystemGroup`
+
+Is a simple serial system group which implement `ISystemDeclare` and groups together declarations from all child systems. This can be used by a wrapper group to schedule this entire group as one item.
+
+#### `PhasedParallelSystemGroup`
+
+This discovers groups of systems which do not "overlap" in the components they write and executes items in the group in parallel. Groups are executed serially. The order of execution of each group is undefined. The only guarantee is that a system will not run in parallel with a another system that is modifying the same component as this one is reading or writing.
+
+Discovering the phasee groups is very quick, but this can only be used when the order of execution of the systems is completely unimportant.
+
+#### `OrderedParallelSystemGroup`
+
+Runs all the systems in the group "in order", but with parallelism where it cannot be "observed". Systems which read a component wait for earlier systems which write that component. Systems which write a component wait for earlier systems which write or read that component. As long as systems only read and write components and do not access any external state this should be identical to running the systems serially.

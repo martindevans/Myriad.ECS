@@ -26,6 +26,12 @@ public readonly record struct ComponentID
     {
         return Value.CompareTo(other.Value);
     }
+
+    public override string ToString()
+    {
+        var p = IsPhantomComponent ? " (phantom)" : "";
+        return $"C{Value}{p}";
+    }
 }
 
 internal static class ComponentID<T>

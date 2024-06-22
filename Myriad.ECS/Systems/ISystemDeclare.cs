@@ -196,8 +196,8 @@ public sealed class PhasedParallelSystemGroup<TData>
 }
 
 /// <summary>
-/// Execute systems in order, with parallism. Systems which reads a component waits for earlier systems which write that component. Systems which
-/// write a component wait for earlier systems which write or read a component.
+/// Execute systems in order, with parallism. Systems which reads a component waits for earlier systems which write
+/// that component. Systems which write a component wait for earlier systems which write or read a component.
 /// </summary>
 /// <typeparam name="TData"></typeparam>
 public sealed class OrderedParallelSystemGroup<TData>
