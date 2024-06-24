@@ -125,7 +125,7 @@ public partial class World
         }
         finally
         {
-            _lock2.ExitReadLock();
+            _lock2.ExitWriteLock();
         }
     }
 
@@ -214,7 +214,7 @@ public partial class World
         try
         {
             // Get or create list of items with this hash
-            if (_queryCache<#= i #>.TryGetValue(hash, out var list))
+            if (!_queryCache<#= i #>.TryGetValue(hash, out var list))
             {
                 list = [ ];
                 _queryCache<#= i #>.Add(hash, list);
@@ -232,7 +232,7 @@ public partial class World
                 .Build(this);
 
             // Add query to the cache
-            list!.Add((orderedComponents.ToArray(), query));
+            list.Add((orderedComponents.ToArray(), query));
 
             return query;
         }

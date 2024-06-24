@@ -15,6 +15,7 @@ public sealed class QueryDescription(
 {
     // Cache of result from last time TryMatch was called
     private MatchResult? _result;
+    private readonly ReaderWriterLockSlim _resultLock = new();
 
     private readonly OrderedListSet<ComponentID> _temporarySet = new();
 
@@ -45,55 +46,76 @@ public sealed class QueryDescription(
     /// <returns></returns>
     public FrozenOrderedListSet<ArchetypeMatch> GetArchetypes()
     {
-        // If this query has never been evaluated before do it now
-        if (_result == null)
+        // Quick check if we already have a non-stale result
+        _resultLock.EnterReadLock();
+        try
         {
-            // Check every archetype
-            var matches = new List<ArchetypeMatch>();
-            foreach (var item in _world.Archetypes)
-                if (TryMatch(item) is ArchetypeMatch m)
-                    matches.Add(m);
+            if (_result != null && !_result.Value.IsStale(_world))
+                return _result.Value.Archetypes;
+        }
+        finally
+        {
+            _resultLock.ExitReadLock();
+        }
 
-            // Store result for next time
-            _result = new MatchResult(_world.Archetypes.Count, new FrozenOrderedListSet<ArchetypeMatch>(matches));
+        // We don't have a valid cached result, calculate it now
+        _resultLock.EnterWriteLock();
+        try
+        {
+            // If this query has never been evaluated before do it now
+            if (_result == null)
+            {
+                // Check every archetype
+                var matches = new List<ArchetypeMatch>();
+                foreach (var item in _world.Archetypes)
+                    if (TryMatch(item) is ArchetypeMatch m)
+                        matches.Add(m);
 
-            // Return matches
+                // Store result for next time
+                _result = new MatchResult(_world.Archetypes.Count, new FrozenOrderedListSet<ArchetypeMatch>(matches));
+
+                // Return matches
+                return _result.Value.Archetypes;
+            }
+
+            // If the number of archetypes has changed since last time regenerate the cache
+            if (_result.Value.IsStale(_world))
+            {
+                // Lazy copy of the match set, in case there are no matches
+                var copy = (OrderedListSet<ArchetypeMatch>?)null;
+
+                // Check every new archetype
+                for (var i = _result.Value.ArchetypeWatermark; i < _world.Archetypes.Count; i++)
+                {
+                    var m = TryMatch(_world.Archetypes[i]);
+                    if (m == null)
+                        continue;
+
+                    // Lazy copy the set now that we know we need it
+                    copy ??= new OrderedListSet<ArchetypeMatch>(_result.Value.Archetypes);
+
+                    // Add the match
+                    copy.Add(m.Value);
+                }
+
+                if (copy == null)
+                {
+                    // Copy is null, that means nothing new was found, just use the old result with the new watermark
+                    _result = new MatchResult(_world.Archetypes.Count, _result.Value.Archetypes);
+                }
+                else
+                {
+                    // Create a new match result
+                    _result = new MatchResult(_world.Archetypes.Count, new FrozenOrderedListSet<ArchetypeMatch>(copy));
+                }
+            }
+
             return _result.Value.Archetypes;
         }
-
-        // If the number of archetypes has changed since last time regenerate the cache
-        if (_result.Value.IsStale(_world))
+        finally
         {
-            // Lazy copy of the match set, in case there are no matches
-            var copy = (OrderedListSet<ArchetypeMatch>?)null;
-
-            // Check every new archetype
-            for (var i = _result.Value.ArchetypeWatermark; i < _world.Archetypes.Count; i++)
-            {
-                var m = TryMatch(_world.Archetypes[i]);
-                if (m == null)
-                    continue;
-
-                // Lazy copy the set now that we know we need it
-                copy ??= new OrderedListSet<ArchetypeMatch>(_result.Value.Archetypes);
-
-                // Add the match
-                copy.Add(m.Value);
-            }
-
-            if (copy == null)
-            {
-                // Copy is null, that means nothing new was found, just use the old result with the new watermark
-                _result = new MatchResult(_world.Archetypes.Count, _result.Value.Archetypes);
-            }
-            else
-            {
-                // Create a new match result
-                _result = new MatchResult(_world.Archetypes.Count, new FrozenOrderedListSet<ArchetypeMatch>(copy));
-            }
+            _resultLock.ExitWriteLock();
         }
-
-        return _result.Value.Archetypes;
     }
 
     private ArchetypeMatch? TryMatch(Archetype archetype)

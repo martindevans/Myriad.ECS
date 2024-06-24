@@ -116,7 +116,7 @@ public partial class World
         }
         finally
         {
-            _lock2.ExitReadLock();
+            _lock2.ExitWriteLock();
         }
     }
 
@@ -179,7 +179,7 @@ public partial class World
         try
         {
             // Get or create list of items with this hash
-            if (_queryCache3.TryGetValue(hash, out var list))
+            if (!_queryCache3.TryGetValue(hash, out var list))
             {
                 list = [ ];
                 _queryCache3.Add(hash, list);
@@ -193,7 +193,7 @@ public partial class World
                 .Build(this);
 
             // Add query to the cache
-            list!.Add((orderedComponents.ToArray(), query));
+            list.Add((orderedComponents.ToArray(), query));
 
             return query;
         }
@@ -264,7 +264,7 @@ public partial class World
         try
         {
             // Get or create list of items with this hash
-            if (_queryCache4.TryGetValue(hash, out var list))
+            if (!_queryCache4.TryGetValue(hash, out var list))
             {
                 list = [ ];
                 _queryCache4.Add(hash, list);
@@ -279,7 +279,7 @@ public partial class World
                 .Build(this);
 
             // Add query to the cache
-            list!.Add((orderedComponents.ToArray(), query));
+            list.Add((orderedComponents.ToArray(), query));
 
             return query;
         }
@@ -352,7 +352,7 @@ public partial class World
         try
         {
             // Get or create list of items with this hash
-            if (_queryCache5.TryGetValue(hash, out var list))
+            if (!_queryCache5.TryGetValue(hash, out var list))
             {
                 list = [ ];
                 _queryCache5.Add(hash, list);
@@ -368,7 +368,7 @@ public partial class World
                 .Build(this);
 
             // Add query to the cache
-            list!.Add((orderedComponents.ToArray(), query));
+            list.Add((orderedComponents.ToArray(), query));
 
             return query;
         }
@@ -443,7 +443,7 @@ public partial class World
         try
         {
             // Get or create list of items with this hash
-            if (_queryCache6.TryGetValue(hash, out var list))
+            if (!_queryCache6.TryGetValue(hash, out var list))
             {
                 list = [ ];
                 _queryCache6.Add(hash, list);
@@ -460,7 +460,7 @@ public partial class World
                 .Build(this);
 
             // Add query to the cache
-            list!.Add((orderedComponents.ToArray(), query));
+            list.Add((orderedComponents.ToArray(), query));
 
             return query;
         }
@@ -537,7 +537,7 @@ public partial class World
         try
         {
             // Get or create list of items with this hash
-            if (_queryCache7.TryGetValue(hash, out var list))
+            if (!_queryCache7.TryGetValue(hash, out var list))
             {
                 list = [ ];
                 _queryCache7.Add(hash, list);
@@ -555,7 +555,7 @@ public partial class World
                 .Build(this);
 
             // Add query to the cache
-            list!.Add((orderedComponents.ToArray(), query));
+            list.Add((orderedComponents.ToArray(), query));
 
             return query;
         }
@@ -634,7 +634,7 @@ public partial class World
         try
         {
             // Get or create list of items with this hash
-            if (_queryCache8.TryGetValue(hash, out var list))
+            if (!_queryCache8.TryGetValue(hash, out var list))
             {
                 list = [ ];
                 _queryCache8.Add(hash, list);
@@ -653,7 +653,7 @@ public partial class World
                 .Build(this);
 
             // Add query to the cache
-            list!.Add((orderedComponents.ToArray(), query));
+            list.Add((orderedComponents.ToArray(), query));
 
             return query;
         }
@@ -734,7 +734,7 @@ public partial class World
         try
         {
             // Get or create list of items with this hash
-            if (_queryCache9.TryGetValue(hash, out var list))
+            if (!_queryCache9.TryGetValue(hash, out var list))
             {
                 list = [ ];
                 _queryCache9.Add(hash, list);
@@ -754,7 +754,7 @@ public partial class World
                 .Build(this);
 
             // Add query to the cache
-            list!.Add((orderedComponents.ToArray(), query));
+            list.Add((orderedComponents.ToArray(), query));
 
             return query;
         }
@@ -837,7 +837,7 @@ public partial class World
         try
         {
             // Get or create list of items with this hash
-            if (_queryCache10.TryGetValue(hash, out var list))
+            if (!_queryCache10.TryGetValue(hash, out var list))
             {
                 list = [ ];
                 _queryCache10.Add(hash, list);
@@ -858,7 +858,7 @@ public partial class World
                 .Build(this);
 
             // Add query to the cache
-            list!.Add((orderedComponents.ToArray(), query));
+            list.Add((orderedComponents.ToArray(), query));
 
             return query;
         }
@@ -943,7 +943,7 @@ public partial class World
         try
         {
             // Get or create list of items with this hash
-            if (_queryCache11.TryGetValue(hash, out var list))
+            if (!_queryCache11.TryGetValue(hash, out var list))
             {
                 list = [ ];
                 _queryCache11.Add(hash, list);
@@ -965,7 +965,7 @@ public partial class World
                 .Build(this);
 
             // Add query to the cache
-            list!.Add((orderedComponents.ToArray(), query));
+            list.Add((orderedComponents.ToArray(), query));
 
             return query;
         }
@@ -1052,7 +1052,7 @@ public partial class World
         try
         {
             // Get or create list of items with this hash
-            if (_queryCache12.TryGetValue(hash, out var list))
+            if (!_queryCache12.TryGetValue(hash, out var list))
             {
                 list = [ ];
                 _queryCache12.Add(hash, list);
@@ -1075,7 +1075,7 @@ public partial class World
                 .Build(this);
 
             // Add query to the cache
-            list!.Add((orderedComponents.ToArray(), query));
+            list.Add((orderedComponents.ToArray(), query));
 
             return query;
         }
@@ -1164,7 +1164,7 @@ public partial class World
         try
         {
             // Get or create list of items with this hash
-            if (_queryCache13.TryGetValue(hash, out var list))
+            if (!_queryCache13.TryGetValue(hash, out var list))
             {
                 list = [ ];
                 _queryCache13.Add(hash, list);
@@ -1188,7 +1188,7 @@ public partial class World
                 .Build(this);
 
             // Add query to the cache
-            list!.Add((orderedComponents.ToArray(), query));
+            list.Add((orderedComponents.ToArray(), query));
 
             return query;
         }
@@ -1279,7 +1279,7 @@ public partial class World
         try
         {
             // Get or create list of items with this hash
-            if (_queryCache14.TryGetValue(hash, out var list))
+            if (!_queryCache14.TryGetValue(hash, out var list))
             {
                 list = [ ];
                 _queryCache14.Add(hash, list);
@@ -1304,7 +1304,7 @@ public partial class World
                 .Build(this);
 
             // Add query to the cache
-            list!.Add((orderedComponents.ToArray(), query));
+            list.Add((orderedComponents.ToArray(), query));
 
             return query;
         }
@@ -1397,7 +1397,7 @@ public partial class World
         try
         {
             // Get or create list of items with this hash
-            if (_queryCache15.TryGetValue(hash, out var list))
+            if (!_queryCache15.TryGetValue(hash, out var list))
             {
                 list = [ ];
                 _queryCache15.Add(hash, list);
@@ -1423,7 +1423,7 @@ public partial class World
                 .Build(this);
 
             // Add query to the cache
-            list!.Add((orderedComponents.ToArray(), query));
+            list.Add((orderedComponents.ToArray(), query));
 
             return query;
         }
@@ -1518,7 +1518,7 @@ public partial class World
         try
         {
             // Get or create list of items with this hash
-            if (_queryCache16.TryGetValue(hash, out var list))
+            if (!_queryCache16.TryGetValue(hash, out var list))
             {
                 list = [ ];
                 _queryCache16.Add(hash, list);
@@ -1545,7 +1545,7 @@ public partial class World
                 .Build(this);
 
             // Add query to the cache
-            list!.Add((orderedComponents.ToArray(), query));
+            list.Add((orderedComponents.ToArray(), query));
 
             return query;
         }
