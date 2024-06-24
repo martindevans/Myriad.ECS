@@ -48,6 +48,16 @@ namespace Myriad.ECS.Worlds
 		}
 
 		public int Execute<TQ, <#= queryConstraints #>>(
+			ref QueryDescription? query
+		)
+			where <#= Constraints(i, 12) #>
+			where TQ : <#= Name(i) #><<#= queryConstraints #>>, new()
+		{
+			var q = new TQ();
+			return Execute<TQ, <#= queryConstraints #>>(ref q, ref query);
+		}
+
+		public int Execute<TQ, <#= queryConstraints #>>(
 			TQ q,
 			QueryDescription? query = null
 		)
@@ -58,8 +68,28 @@ namespace Myriad.ECS.Worlds
 		}
 
 		public int Execute<TQ, <#= queryConstraints #>>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where <#= Constraints(i, 12) #>
+			where TQ : <#= Name(i) #><<#= queryConstraints #>>
+		{
+			return Execute<TQ, <#= queryConstraints #>>(ref q, ref query);
+		}
+
+		public int Execute<TQ, <#= queryConstraints #>>(
 			ref TQ q,
 			QueryDescription? query = null
+		)
+			where <#= Constraints(i, 12) #>
+			where TQ : <#= Name(i) #><<#= queryConstraints #>>
+		{
+			return Execute<TQ, <#= queryConstraints #>>(ref q, ref query);
+		}
+
+		public int Execute<TQ, <#= queryConstraints #>>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where <#= Constraints(i, 12) #>
 			where TQ : <#= Name(i) #><<#= queryConstraints #>>

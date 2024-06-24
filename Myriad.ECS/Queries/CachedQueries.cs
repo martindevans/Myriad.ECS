@@ -20,6 +20,7 @@ public partial class World
 {
     // Cache of all queries with 1 included components.
     private readonly SortedList<int, QueryDescription> _queryCache1 = [ ];
+    private readonly ReaderWriterLockSlim _lock1 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -31,23 +32,40 @@ public partial class World
     {
         var component = ComponentID<T0>.ID.Value;
 
-        // Find query that matches this types
-        if (_queryCache1.TryGetValue(component, out var q))
-            return q;
+        _lock1.EnterReadLock();
+        try
+        {
+            // Find query that matches this types
+            if (_queryCache1.TryGetValue(component, out var q))
+                return q;
+        }
+        finally
+        {
+            _lock1.ExitReadLock();
+        }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Build(this);
+        _lock1.EnterWriteLock();
+        try
+        {
+            // Didn't find one, create it now
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache1.Add(component, query);
+            // Add query to the cache
+            _queryCache1[component] = query;
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock1.ExitWriteLock();
+        }
     }
 
     // Cache of all queries with 2 included components. Key is the 2 component IDs combined together
     private readonly SortedList<long, QueryDescription> _queryCache2 = [ ];
+    private readonly ReaderWriterLockSlim _lock2 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -70,20 +88,36 @@ public partial class World
 
         var key = u.Long;
 
-        // Find query that matches this types
-        if (_queryCache2.TryGetValue(key, out var q))
-            return q;
+        _lock2.EnterReadLock();
+        try
+        {
+            // Find query that matches this types
+            if (_queryCache2.TryGetValue(key, out var q))
+                return q;
+        }
+        finally
+        {
+            _lock2.ExitReadLock();
+        }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Build(this);
+        _lock2.EnterWriteLock();
+        try
+        {
+            // Didn't find one, create it now
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache2.Add(key, query);
+            // Add query to the cache
+            _queryCache2[key] = query;
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock2.ExitReadLock();
+        }
     }
 
 
@@ -91,7 +125,9 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(ulong, int[], QueryDescription)> _queryCache3 = [ ];
+    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache3 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock3 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -115,32 +151,56 @@ public partial class World
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache3)
+        _lock3.EnterReadLock();
+        try
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            // Get the list of items with this hash
+            if (_queryCache3.TryGetValue(hash, out var list))
+            {
+                // Find query that matches these types
+                foreach (var (c, q) in list)
+                {
+                    // Since the sequences are sorted by component ID these should be identical
+                    // Comparing two int spans should be very fast (SIMD accelerated)
+                    if (!orderedComponents.SequenceEqual(c))
+                        continue;
 
-            // Since the sequences are sorted by component ID these should be identical
-            // Comparing two int spans should be very fast (SIMD accelerated)
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+                    return q;
+                }
+            }
+        }
+        finally
+        {
+            _lock3.ExitReadLock();
         }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Include<T2>()
-            .Build(this);
+        // Didn't find query, create it now
+        _lock3.EnterWriteLock();
+        try
+        {
+            // Get or create list of items with this hash
+            if (_queryCache3.TryGetValue(hash, out var list))
+            {
+                list = [ ];
+                _queryCache3.Add(hash, list);
+            }
+            
+            // Create query
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Include<T2>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache3.Add((hash, orderedComponents.ToArray(), query));
+            // Add query to the cache
+            list!.Add((orderedComponents.ToArray(), query));
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock3.ExitWriteLock();
+        }
     }
 
 
@@ -148,7 +208,9 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(ulong, int[], QueryDescription)> _queryCache4 = [ ];
+    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache4 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock4 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -174,33 +236,57 @@ public partial class World
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache4)
+        _lock4.EnterReadLock();
+        try
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            // Get the list of items with this hash
+            if (_queryCache4.TryGetValue(hash, out var list))
+            {
+                // Find query that matches these types
+                foreach (var (c, q) in list)
+                {
+                    // Since the sequences are sorted by component ID these should be identical
+                    // Comparing two int spans should be very fast (SIMD accelerated)
+                    if (!orderedComponents.SequenceEqual(c))
+                        continue;
 
-            // Since the sequences are sorted by component ID these should be identical
-            // Comparing two int spans should be very fast (SIMD accelerated)
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+                    return q;
+                }
+            }
+        }
+        finally
+        {
+            _lock4.ExitReadLock();
         }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Include<T2>()
-            .Include<T3>()
-            .Build(this);
+        // Didn't find query, create it now
+        _lock4.EnterWriteLock();
+        try
+        {
+            // Get or create list of items with this hash
+            if (_queryCache4.TryGetValue(hash, out var list))
+            {
+                list = [ ];
+                _queryCache4.Add(hash, list);
+            }
+            
+            // Create query
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Include<T2>()
+                .Include<T3>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache4.Add((hash, orderedComponents.ToArray(), query));
+            // Add query to the cache
+            list!.Add((orderedComponents.ToArray(), query));
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock4.ExitWriteLock();
+        }
     }
 
 
@@ -208,7 +294,9 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(ulong, int[], QueryDescription)> _queryCache5 = [ ];
+    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache5 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock5 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -236,34 +324,58 @@ public partial class World
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache5)
+        _lock5.EnterReadLock();
+        try
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            // Get the list of items with this hash
+            if (_queryCache5.TryGetValue(hash, out var list))
+            {
+                // Find query that matches these types
+                foreach (var (c, q) in list)
+                {
+                    // Since the sequences are sorted by component ID these should be identical
+                    // Comparing two int spans should be very fast (SIMD accelerated)
+                    if (!orderedComponents.SequenceEqual(c))
+                        continue;
 
-            // Since the sequences are sorted by component ID these should be identical
-            // Comparing two int spans should be very fast (SIMD accelerated)
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+                    return q;
+                }
+            }
+        }
+        finally
+        {
+            _lock5.ExitReadLock();
         }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Include<T2>()
-            .Include<T3>()
-            .Include<T4>()
-            .Build(this);
+        // Didn't find query, create it now
+        _lock5.EnterWriteLock();
+        try
+        {
+            // Get or create list of items with this hash
+            if (_queryCache5.TryGetValue(hash, out var list))
+            {
+                list = [ ];
+                _queryCache5.Add(hash, list);
+            }
+            
+            // Create query
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Include<T2>()
+                .Include<T3>()
+                .Include<T4>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache5.Add((hash, orderedComponents.ToArray(), query));
+            // Add query to the cache
+            list!.Add((orderedComponents.ToArray(), query));
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock5.ExitWriteLock();
+        }
     }
 
 
@@ -271,7 +383,9 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(ulong, int[], QueryDescription)> _queryCache6 = [ ];
+    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache6 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock6 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -301,35 +415,59 @@ public partial class World
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache6)
+        _lock6.EnterReadLock();
+        try
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            // Get the list of items with this hash
+            if (_queryCache6.TryGetValue(hash, out var list))
+            {
+                // Find query that matches these types
+                foreach (var (c, q) in list)
+                {
+                    // Since the sequences are sorted by component ID these should be identical
+                    // Comparing two int spans should be very fast (SIMD accelerated)
+                    if (!orderedComponents.SequenceEqual(c))
+                        continue;
 
-            // Since the sequences are sorted by component ID these should be identical
-            // Comparing two int spans should be very fast (SIMD accelerated)
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+                    return q;
+                }
+            }
+        }
+        finally
+        {
+            _lock6.ExitReadLock();
         }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Include<T2>()
-            .Include<T3>()
-            .Include<T4>()
-            .Include<T5>()
-            .Build(this);
+        // Didn't find query, create it now
+        _lock6.EnterWriteLock();
+        try
+        {
+            // Get or create list of items with this hash
+            if (_queryCache6.TryGetValue(hash, out var list))
+            {
+                list = [ ];
+                _queryCache6.Add(hash, list);
+            }
+            
+            // Create query
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Include<T2>()
+                .Include<T3>()
+                .Include<T4>()
+                .Include<T5>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache6.Add((hash, orderedComponents.ToArray(), query));
+            // Add query to the cache
+            list!.Add((orderedComponents.ToArray(), query));
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock6.ExitWriteLock();
+        }
     }
 
 
@@ -337,7 +475,9 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(ulong, int[], QueryDescription)> _queryCache7 = [ ];
+    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache7 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock7 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -369,36 +509,60 @@ public partial class World
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache7)
+        _lock7.EnterReadLock();
+        try
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            // Get the list of items with this hash
+            if (_queryCache7.TryGetValue(hash, out var list))
+            {
+                // Find query that matches these types
+                foreach (var (c, q) in list)
+                {
+                    // Since the sequences are sorted by component ID these should be identical
+                    // Comparing two int spans should be very fast (SIMD accelerated)
+                    if (!orderedComponents.SequenceEqual(c))
+                        continue;
 
-            // Since the sequences are sorted by component ID these should be identical
-            // Comparing two int spans should be very fast (SIMD accelerated)
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+                    return q;
+                }
+            }
+        }
+        finally
+        {
+            _lock7.ExitReadLock();
         }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Include<T2>()
-            .Include<T3>()
-            .Include<T4>()
-            .Include<T5>()
-            .Include<T6>()
-            .Build(this);
+        // Didn't find query, create it now
+        _lock7.EnterWriteLock();
+        try
+        {
+            // Get or create list of items with this hash
+            if (_queryCache7.TryGetValue(hash, out var list))
+            {
+                list = [ ];
+                _queryCache7.Add(hash, list);
+            }
+            
+            // Create query
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Include<T2>()
+                .Include<T3>()
+                .Include<T4>()
+                .Include<T5>()
+                .Include<T6>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache7.Add((hash, orderedComponents.ToArray(), query));
+            // Add query to the cache
+            list!.Add((orderedComponents.ToArray(), query));
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock7.ExitWriteLock();
+        }
     }
 
 
@@ -406,7 +570,9 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(ulong, int[], QueryDescription)> _queryCache8 = [ ];
+    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache8 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock8 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -440,37 +606,61 @@ public partial class World
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache8)
+        _lock8.EnterReadLock();
+        try
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            // Get the list of items with this hash
+            if (_queryCache8.TryGetValue(hash, out var list))
+            {
+                // Find query that matches these types
+                foreach (var (c, q) in list)
+                {
+                    // Since the sequences are sorted by component ID these should be identical
+                    // Comparing two int spans should be very fast (SIMD accelerated)
+                    if (!orderedComponents.SequenceEqual(c))
+                        continue;
 
-            // Since the sequences are sorted by component ID these should be identical
-            // Comparing two int spans should be very fast (SIMD accelerated)
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+                    return q;
+                }
+            }
+        }
+        finally
+        {
+            _lock8.ExitReadLock();
         }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Include<T2>()
-            .Include<T3>()
-            .Include<T4>()
-            .Include<T5>()
-            .Include<T6>()
-            .Include<T7>()
-            .Build(this);
+        // Didn't find query, create it now
+        _lock8.EnterWriteLock();
+        try
+        {
+            // Get or create list of items with this hash
+            if (_queryCache8.TryGetValue(hash, out var list))
+            {
+                list = [ ];
+                _queryCache8.Add(hash, list);
+            }
+            
+            // Create query
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Include<T2>()
+                .Include<T3>()
+                .Include<T4>()
+                .Include<T5>()
+                .Include<T6>()
+                .Include<T7>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache8.Add((hash, orderedComponents.ToArray(), query));
+            // Add query to the cache
+            list!.Add((orderedComponents.ToArray(), query));
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock8.ExitWriteLock();
+        }
     }
 
 
@@ -478,7 +668,9 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(ulong, int[], QueryDescription)> _queryCache9 = [ ];
+    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache9 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock9 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -514,38 +706,62 @@ public partial class World
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache9)
+        _lock9.EnterReadLock();
+        try
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            // Get the list of items with this hash
+            if (_queryCache9.TryGetValue(hash, out var list))
+            {
+                // Find query that matches these types
+                foreach (var (c, q) in list)
+                {
+                    // Since the sequences are sorted by component ID these should be identical
+                    // Comparing two int spans should be very fast (SIMD accelerated)
+                    if (!orderedComponents.SequenceEqual(c))
+                        continue;
 
-            // Since the sequences are sorted by component ID these should be identical
-            // Comparing two int spans should be very fast (SIMD accelerated)
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+                    return q;
+                }
+            }
+        }
+        finally
+        {
+            _lock9.ExitReadLock();
         }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Include<T2>()
-            .Include<T3>()
-            .Include<T4>()
-            .Include<T5>()
-            .Include<T6>()
-            .Include<T7>()
-            .Include<T8>()
-            .Build(this);
+        // Didn't find query, create it now
+        _lock9.EnterWriteLock();
+        try
+        {
+            // Get or create list of items with this hash
+            if (_queryCache9.TryGetValue(hash, out var list))
+            {
+                list = [ ];
+                _queryCache9.Add(hash, list);
+            }
+            
+            // Create query
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Include<T2>()
+                .Include<T3>()
+                .Include<T4>()
+                .Include<T5>()
+                .Include<T6>()
+                .Include<T7>()
+                .Include<T8>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache9.Add((hash, orderedComponents.ToArray(), query));
+            // Add query to the cache
+            list!.Add((orderedComponents.ToArray(), query));
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock9.ExitWriteLock();
+        }
     }
 
 
@@ -553,7 +769,9 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(ulong, int[], QueryDescription)> _queryCache10 = [ ];
+    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache10 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock10 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -591,39 +809,63 @@ public partial class World
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache10)
+        _lock10.EnterReadLock();
+        try
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            // Get the list of items with this hash
+            if (_queryCache10.TryGetValue(hash, out var list))
+            {
+                // Find query that matches these types
+                foreach (var (c, q) in list)
+                {
+                    // Since the sequences are sorted by component ID these should be identical
+                    // Comparing two int spans should be very fast (SIMD accelerated)
+                    if (!orderedComponents.SequenceEqual(c))
+                        continue;
 
-            // Since the sequences are sorted by component ID these should be identical
-            // Comparing two int spans should be very fast (SIMD accelerated)
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+                    return q;
+                }
+            }
+        }
+        finally
+        {
+            _lock10.ExitReadLock();
         }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Include<T2>()
-            .Include<T3>()
-            .Include<T4>()
-            .Include<T5>()
-            .Include<T6>()
-            .Include<T7>()
-            .Include<T8>()
-            .Include<T9>()
-            .Build(this);
+        // Didn't find query, create it now
+        _lock10.EnterWriteLock();
+        try
+        {
+            // Get or create list of items with this hash
+            if (_queryCache10.TryGetValue(hash, out var list))
+            {
+                list = [ ];
+                _queryCache10.Add(hash, list);
+            }
+            
+            // Create query
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Include<T2>()
+                .Include<T3>()
+                .Include<T4>()
+                .Include<T5>()
+                .Include<T6>()
+                .Include<T7>()
+                .Include<T8>()
+                .Include<T9>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache10.Add((hash, orderedComponents.ToArray(), query));
+            // Add query to the cache
+            list!.Add((orderedComponents.ToArray(), query));
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock10.ExitWriteLock();
+        }
     }
 
 
@@ -631,7 +873,9 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(ulong, int[], QueryDescription)> _queryCache11 = [ ];
+    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache11 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock11 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -671,40 +915,64 @@ public partial class World
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache11)
+        _lock11.EnterReadLock();
+        try
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            // Get the list of items with this hash
+            if (_queryCache11.TryGetValue(hash, out var list))
+            {
+                // Find query that matches these types
+                foreach (var (c, q) in list)
+                {
+                    // Since the sequences are sorted by component ID these should be identical
+                    // Comparing two int spans should be very fast (SIMD accelerated)
+                    if (!orderedComponents.SequenceEqual(c))
+                        continue;
 
-            // Since the sequences are sorted by component ID these should be identical
-            // Comparing two int spans should be very fast (SIMD accelerated)
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+                    return q;
+                }
+            }
+        }
+        finally
+        {
+            _lock11.ExitReadLock();
         }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Include<T2>()
-            .Include<T3>()
-            .Include<T4>()
-            .Include<T5>()
-            .Include<T6>()
-            .Include<T7>()
-            .Include<T8>()
-            .Include<T9>()
-            .Include<T10>()
-            .Build(this);
+        // Didn't find query, create it now
+        _lock11.EnterWriteLock();
+        try
+        {
+            // Get or create list of items with this hash
+            if (_queryCache11.TryGetValue(hash, out var list))
+            {
+                list = [ ];
+                _queryCache11.Add(hash, list);
+            }
+            
+            // Create query
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Include<T2>()
+                .Include<T3>()
+                .Include<T4>()
+                .Include<T5>()
+                .Include<T6>()
+                .Include<T7>()
+                .Include<T8>()
+                .Include<T9>()
+                .Include<T10>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache11.Add((hash, orderedComponents.ToArray(), query));
+            // Add query to the cache
+            list!.Add((orderedComponents.ToArray(), query));
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock11.ExitWriteLock();
+        }
     }
 
 
@@ -712,7 +980,9 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(ulong, int[], QueryDescription)> _queryCache12 = [ ];
+    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache12 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock12 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -754,41 +1024,65 @@ public partial class World
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache12)
+        _lock12.EnterReadLock();
+        try
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            // Get the list of items with this hash
+            if (_queryCache12.TryGetValue(hash, out var list))
+            {
+                // Find query that matches these types
+                foreach (var (c, q) in list)
+                {
+                    // Since the sequences are sorted by component ID these should be identical
+                    // Comparing two int spans should be very fast (SIMD accelerated)
+                    if (!orderedComponents.SequenceEqual(c))
+                        continue;
 
-            // Since the sequences are sorted by component ID these should be identical
-            // Comparing two int spans should be very fast (SIMD accelerated)
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+                    return q;
+                }
+            }
+        }
+        finally
+        {
+            _lock12.ExitReadLock();
         }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Include<T2>()
-            .Include<T3>()
-            .Include<T4>()
-            .Include<T5>()
-            .Include<T6>()
-            .Include<T7>()
-            .Include<T8>()
-            .Include<T9>()
-            .Include<T10>()
-            .Include<T11>()
-            .Build(this);
+        // Didn't find query, create it now
+        _lock12.EnterWriteLock();
+        try
+        {
+            // Get or create list of items with this hash
+            if (_queryCache12.TryGetValue(hash, out var list))
+            {
+                list = [ ];
+                _queryCache12.Add(hash, list);
+            }
+            
+            // Create query
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Include<T2>()
+                .Include<T3>()
+                .Include<T4>()
+                .Include<T5>()
+                .Include<T6>()
+                .Include<T7>()
+                .Include<T8>()
+                .Include<T9>()
+                .Include<T10>()
+                .Include<T11>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache12.Add((hash, orderedComponents.ToArray(), query));
+            // Add query to the cache
+            list!.Add((orderedComponents.ToArray(), query));
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock12.ExitWriteLock();
+        }
     }
 
 
@@ -796,7 +1090,9 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(ulong, int[], QueryDescription)> _queryCache13 = [ ];
+    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache13 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock13 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -840,42 +1136,66 @@ public partial class World
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache13)
+        _lock13.EnterReadLock();
+        try
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            // Get the list of items with this hash
+            if (_queryCache13.TryGetValue(hash, out var list))
+            {
+                // Find query that matches these types
+                foreach (var (c, q) in list)
+                {
+                    // Since the sequences are sorted by component ID these should be identical
+                    // Comparing two int spans should be very fast (SIMD accelerated)
+                    if (!orderedComponents.SequenceEqual(c))
+                        continue;
 
-            // Since the sequences are sorted by component ID these should be identical
-            // Comparing two int spans should be very fast (SIMD accelerated)
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+                    return q;
+                }
+            }
+        }
+        finally
+        {
+            _lock13.ExitReadLock();
         }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Include<T2>()
-            .Include<T3>()
-            .Include<T4>()
-            .Include<T5>()
-            .Include<T6>()
-            .Include<T7>()
-            .Include<T8>()
-            .Include<T9>()
-            .Include<T10>()
-            .Include<T11>()
-            .Include<T12>()
-            .Build(this);
+        // Didn't find query, create it now
+        _lock13.EnterWriteLock();
+        try
+        {
+            // Get or create list of items with this hash
+            if (_queryCache13.TryGetValue(hash, out var list))
+            {
+                list = [ ];
+                _queryCache13.Add(hash, list);
+            }
+            
+            // Create query
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Include<T2>()
+                .Include<T3>()
+                .Include<T4>()
+                .Include<T5>()
+                .Include<T6>()
+                .Include<T7>()
+                .Include<T8>()
+                .Include<T9>()
+                .Include<T10>()
+                .Include<T11>()
+                .Include<T12>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache13.Add((hash, orderedComponents.ToArray(), query));
+            // Add query to the cache
+            list!.Add((orderedComponents.ToArray(), query));
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock13.ExitWriteLock();
+        }
     }
 
 
@@ -883,7 +1203,9 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(ulong, int[], QueryDescription)> _queryCache14 = [ ];
+    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache14 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock14 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -929,43 +1251,67 @@ public partial class World
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache14)
+        _lock14.EnterReadLock();
+        try
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            // Get the list of items with this hash
+            if (_queryCache14.TryGetValue(hash, out var list))
+            {
+                // Find query that matches these types
+                foreach (var (c, q) in list)
+                {
+                    // Since the sequences are sorted by component ID these should be identical
+                    // Comparing two int spans should be very fast (SIMD accelerated)
+                    if (!orderedComponents.SequenceEqual(c))
+                        continue;
 
-            // Since the sequences are sorted by component ID these should be identical
-            // Comparing two int spans should be very fast (SIMD accelerated)
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+                    return q;
+                }
+            }
+        }
+        finally
+        {
+            _lock14.ExitReadLock();
         }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Include<T2>()
-            .Include<T3>()
-            .Include<T4>()
-            .Include<T5>()
-            .Include<T6>()
-            .Include<T7>()
-            .Include<T8>()
-            .Include<T9>()
-            .Include<T10>()
-            .Include<T11>()
-            .Include<T12>()
-            .Include<T13>()
-            .Build(this);
+        // Didn't find query, create it now
+        _lock14.EnterWriteLock();
+        try
+        {
+            // Get or create list of items with this hash
+            if (_queryCache14.TryGetValue(hash, out var list))
+            {
+                list = [ ];
+                _queryCache14.Add(hash, list);
+            }
+            
+            // Create query
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Include<T2>()
+                .Include<T3>()
+                .Include<T4>()
+                .Include<T5>()
+                .Include<T6>()
+                .Include<T7>()
+                .Include<T8>()
+                .Include<T9>()
+                .Include<T10>()
+                .Include<T11>()
+                .Include<T12>()
+                .Include<T13>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache14.Add((hash, orderedComponents.ToArray(), query));
+            // Add query to the cache
+            list!.Add((orderedComponents.ToArray(), query));
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock14.ExitWriteLock();
+        }
     }
 
 
@@ -973,7 +1319,9 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(ulong, int[], QueryDescription)> _queryCache15 = [ ];
+    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache15 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock15 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -1021,44 +1369,68 @@ public partial class World
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache15)
+        _lock15.EnterReadLock();
+        try
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            // Get the list of items with this hash
+            if (_queryCache15.TryGetValue(hash, out var list))
+            {
+                // Find query that matches these types
+                foreach (var (c, q) in list)
+                {
+                    // Since the sequences are sorted by component ID these should be identical
+                    // Comparing two int spans should be very fast (SIMD accelerated)
+                    if (!orderedComponents.SequenceEqual(c))
+                        continue;
 
-            // Since the sequences are sorted by component ID these should be identical
-            // Comparing two int spans should be very fast (SIMD accelerated)
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+                    return q;
+                }
+            }
+        }
+        finally
+        {
+            _lock15.ExitReadLock();
         }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Include<T2>()
-            .Include<T3>()
-            .Include<T4>()
-            .Include<T5>()
-            .Include<T6>()
-            .Include<T7>()
-            .Include<T8>()
-            .Include<T9>()
-            .Include<T10>()
-            .Include<T11>()
-            .Include<T12>()
-            .Include<T13>()
-            .Include<T14>()
-            .Build(this);
+        // Didn't find query, create it now
+        _lock15.EnterWriteLock();
+        try
+        {
+            // Get or create list of items with this hash
+            if (_queryCache15.TryGetValue(hash, out var list))
+            {
+                list = [ ];
+                _queryCache15.Add(hash, list);
+            }
+            
+            // Create query
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Include<T2>()
+                .Include<T3>()
+                .Include<T4>()
+                .Include<T5>()
+                .Include<T6>()
+                .Include<T7>()
+                .Include<T8>()
+                .Include<T9>()
+                .Include<T10>()
+                .Include<T11>()
+                .Include<T12>()
+                .Include<T13>()
+                .Include<T14>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache15.Add((hash, orderedComponents.ToArray(), query));
+            // Add query to the cache
+            list!.Add((orderedComponents.ToArray(), query));
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock15.ExitWriteLock();
+        }
     }
 
 
@@ -1066,7 +1438,9 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(ulong, int[], QueryDescription)> _queryCache16 = [ ];
+    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache16 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock16 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -1116,45 +1490,69 @@ public partial class World
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache16)
+        _lock16.EnterReadLock();
+        try
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            // Get the list of items with this hash
+            if (_queryCache16.TryGetValue(hash, out var list))
+            {
+                // Find query that matches these types
+                foreach (var (c, q) in list)
+                {
+                    // Since the sequences are sorted by component ID these should be identical
+                    // Comparing two int spans should be very fast (SIMD accelerated)
+                    if (!orderedComponents.SequenceEqual(c))
+                        continue;
 
-            // Since the sequences are sorted by component ID these should be identical
-            // Comparing two int spans should be very fast (SIMD accelerated)
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+                    return q;
+                }
+            }
+        }
+        finally
+        {
+            _lock16.ExitReadLock();
         }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Include<T2>()
-            .Include<T3>()
-            .Include<T4>()
-            .Include<T5>()
-            .Include<T6>()
-            .Include<T7>()
-            .Include<T8>()
-            .Include<T9>()
-            .Include<T10>()
-            .Include<T11>()
-            .Include<T12>()
-            .Include<T13>()
-            .Include<T14>()
-            .Include<T15>()
-            .Build(this);
+        // Didn't find query, create it now
+        _lock16.EnterWriteLock();
+        try
+        {
+            // Get or create list of items with this hash
+            if (_queryCache16.TryGetValue(hash, out var list))
+            {
+                list = [ ];
+                _queryCache16.Add(hash, list);
+            }
+            
+            // Create query
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Include<T2>()
+                .Include<T3>()
+                .Include<T4>()
+                .Include<T5>()
+                .Include<T6>()
+                .Include<T7>()
+                .Include<T8>()
+                .Include<T9>()
+                .Include<T10>()
+                .Include<T11>()
+                .Include<T12>()
+                .Include<T13>()
+                .Include<T14>()
+                .Include<T15>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache16.Add((hash, orderedComponents.ToArray(), query));
+            // Add query to the cache
+            list!.Add((orderedComponents.ToArray(), query));
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock16.ExitWriteLock();
+        }
     }
 
 

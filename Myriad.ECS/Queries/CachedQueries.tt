@@ -29,6 +29,7 @@ public partial class World
 {
     // Cache of all queries with 1 included components.
     private readonly SortedList<int, QueryDescription> _queryCache1 = [ ];
+    private readonly ReaderWriterLockSlim _lock1 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -40,23 +41,40 @@ public partial class World
     {
         var component = ComponentID<T0>.ID.Value;
 
-        // Find query that matches this types
-        if (_queryCache1.TryGetValue(component, out var q))
-            return q;
+        _lock1.EnterReadLock();
+        try
+        {
+            // Find query that matches this types
+            if (_queryCache1.TryGetValue(component, out var q))
+                return q;
+        }
+        finally
+        {
+            _lock1.ExitReadLock();
+        }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Build(this);
+        _lock1.EnterWriteLock();
+        try
+        {
+            // Didn't find one, create it now
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache1.Add(component, query);
+            // Add query to the cache
+            _queryCache1[component] = query;
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock1.ExitWriteLock();
+        }
     }
 
     // Cache of all queries with 2 included components. Key is the 2 component IDs combined together
     private readonly SortedList<long, QueryDescription> _queryCache2 = [ ];
+    private readonly ReaderWriterLockSlim _lock2 = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -79,20 +97,36 @@ public partial class World
 
         var key = u.Long;
 
-        // Find query that matches this types
-        if (_queryCache2.TryGetValue(key, out var q))
-            return q;
+        _lock2.EnterReadLock();
+        try
+        {
+            // Find query that matches this types
+            if (_queryCache2.TryGetValue(key, out var q))
+                return q;
+        }
+        finally
+        {
+            _lock2.ExitReadLock();
+        }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
-            .Include<T0>()
-            .Include<T1>()
-            .Build(this);
+        _lock2.EnterWriteLock();
+        try
+        {
+            // Didn't find one, create it now
+            var query = new QueryBuilder()
+                .Include<T0>()
+                .Include<T1>()
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache2.Add(key, query);
+            // Add query to the cache
+            _queryCache2[key] = query;
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock2.ExitReadLock();
+        }
     }
 
 <# for (var i = 3; i <= PARAM_COUNT; i++)
@@ -118,7 +152,9 @@ public partial class World
     // - hash of sorted component IDs
     // - sorted array of component IDs
     // - the query itself
-    private readonly List<(ulong, int[], QueryDescription)> _queryCache<#= i #> = [ ];
+    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache<#= i #> = [ ];
+
+    private readonly ReaderWriterLockSlim _lock<#= i #> = new();
 
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
@@ -150,36 +186,60 @@ public partial class World
         var byteSpan = MemoryMarshal.Cast<int, byte>(orderedComponents);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 42);
 
-        // Find query that matches these types
-        foreach (var (h, c, q) in _queryCache<#= i #>)
+        _lock<#= i #>.EnterReadLock();
+        try
         {
-            // Early exit on hash check.
-            if (h != hash)
-                continue;
+            // Get the list of items with this hash
+            if (_queryCache<#= i #>.TryGetValue(hash, out var list))
+            {
+                // Find query that matches these types
+                foreach (var (c, q) in list)
+                {
+                    // Since the sequences are sorted by component ID these should be identical
+                    // Comparing two int spans should be very fast (SIMD accelerated)
+                    if (!orderedComponents.SequenceEqual(c))
+                        continue;
 
-            // Since the sequences are sorted by component ID these should be identical
-            // Comparing two int spans should be very fast (SIMD accelerated)
-            if (!orderedComponents.SequenceEqual(c))
-                continue;
-
-            return q;
+                    return q;
+                }
+            }
+        }
+        finally
+        {
+            _lock<#= i #>.ExitReadLock();
         }
 
-        // Didn't find one, create it now
-        var query = new QueryBuilder()
+        // Didn't find query, create it now
+        _lock<#= i #>.EnterWriteLock();
+        try
+        {
+            // Get or create list of items with this hash
+            if (_queryCache<#= i #>.TryGetValue(hash, out var list))
+            {
+                list = [ ];
+                _queryCache<#= i #>.Add(hash, list);
+            }
+            
+            // Create query
+            var query = new QueryBuilder()
 <# for (var k = 0; k < i; k++)
 {
 #>
-            .Include<<#= "T" + k #>>()
+                .Include<<#= "T" + k #>>()
 <#
 }
 #>
-            .Build(this);
+                .Build(this);
 
-        // Add query to the cache
-        _queryCache<#= i #>.Add((hash, orderedComponents.ToArray(), query));
+            // Add query to the cache
+            list!.Add((orderedComponents.ToArray(), query));
 
-        return query;
+            return query;
+        }
+        finally
+        {
+            _lock<#= i #>.ExitWriteLock();
+        }
     }
 
 <#
