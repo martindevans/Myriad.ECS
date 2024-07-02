@@ -18,11 +18,12 @@ using Myriad.ECS.IDs;
 <# for (var i = 1; i <= PARAM_COUNT; i++)
 {
 	var sumij = i;
+	var queryConstraints = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
 #>
 namespace Myriad.ECS.Queries
 {
 	public interface <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
-		where <#= Constraints(sumij, 8) #>
+		where <#= Constraints(i, 8) #>
 	{
 		public void Execute(ReadOnlySpan<Entity> e, <#= Refs(0, i) #>);
 	}
@@ -39,18 +40,142 @@ namespace Myriad.ECS.Worlds
 <# for (var k = 0; k < sumij; k++)
 {
 #>
-        /// <typeparam name="T<#= k #>"></typeparam>
+        /// <typeparam name="T<#= k #>">Type of component <#= k #> to retrieve</typeparam>
 <#
 }
 #>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
+			QueryDescription? query = null
+		)
+			where <#= Constraints(i, 12) #>
+			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+        /// <typeparam name="T<#= k #>">Type of component <#= k #> to retrieve</typeparam>
+<#
+}
+#>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
+			ref QueryDescription? query
+		)
+			where <#= Constraints(i, 12) #>
+			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+        /// <typeparam name="T<#= k #>">Type of component <#= k #> to retrieve</typeparam>
+<#
+}
+#>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
 			TQ q,
 			QueryDescription? query = null
 		)
-			where <#= Constraints(sumij, 12) #>
+			where <#= Constraints(i, 12) #>
+			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+		{
+			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+        /// <typeparam name="T<#= k #>">Type of component <#= k #> to retrieve</typeparam>
+<#
+}
+#>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where <#= Constraints(i, 12) #>
+			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+		{
+			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+        /// <typeparam name="T<#= k #>">Type of component <#= k #> to retrieve</typeparam>
+<#
+}
+#>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where <#= Constraints(i, 12) #>
+			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+		{
+			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+        /// <typeparam name="T<#= k #>">Type of component <#= k #> to retrieve</typeparam>
+<#
+}
+#>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
+			ref TQ q,
+			ref QueryDescription? query
+		)
+			where <#= Constraints(i, 12) #>
 			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
 			query ??= GetCachedQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>();

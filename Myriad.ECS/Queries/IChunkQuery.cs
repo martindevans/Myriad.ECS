@@ -23,13 +23,107 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+			where TQ : IChunkQuery1<T0>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+			where TQ : IChunkQuery1<T0>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+			where TQ : IChunkQuery1<T0>
+		{
+			return ExecuteChunk<TQ, T0>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+			where TQ : IChunkQuery1<T0>
+		{
+			return ExecuteChunk<TQ, T0>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+			where TQ : IChunkQuery1<T0>
+		{
+			return ExecuteChunk<TQ, T0>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
 			where TQ : IChunkQuery1<T0>
@@ -130,14 +224,118 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+			where TQ : IChunkQuery2<T0, T1>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+			where TQ : IChunkQuery2<T0, T1>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+			where TQ : IChunkQuery2<T0, T1>
+		{
+			return ExecuteChunk<TQ, T0, T1>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+			where TQ : IChunkQuery2<T0, T1>
+		{
+			return ExecuteChunk<TQ, T0, T1>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+			where TQ : IChunkQuery2<T0, T1>
+		{
+			return ExecuteChunk<TQ, T0, T1>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -245,15 +443,129 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+			where TQ : IChunkQuery3<T0, T1, T2>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+			where TQ : IChunkQuery3<T0, T1, T2>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+			where TQ : IChunkQuery3<T0, T1, T2>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+			where TQ : IChunkQuery3<T0, T1, T2>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+			where TQ : IChunkQuery3<T0, T1, T2>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -368,16 +680,140 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <typeparam name="T3"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+			where TQ : IChunkQuery4<T0, T1, T2, T3>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+			where TQ : IChunkQuery4<T0, T1, T2, T3>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+			where TQ : IChunkQuery4<T0, T1, T2, T3>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+			where TQ : IChunkQuery4<T0, T1, T2, T3>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+			where TQ : IChunkQuery4<T0, T1, T2, T3>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -499,17 +935,151 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <typeparam name="T3"></typeparam>
-        /// <typeparam name="T4"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+			where TQ : IChunkQuery5<T0, T1, T2, T3, T4>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+			where TQ : IChunkQuery5<T0, T1, T2, T3, T4>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+			where TQ : IChunkQuery5<T0, T1, T2, T3, T4>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+			where TQ : IChunkQuery5<T0, T1, T2, T3, T4>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+			where TQ : IChunkQuery5<T0, T1, T2, T3, T4>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -638,18 +1208,162 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <typeparam name="T3"></typeparam>
-        /// <typeparam name="T4"></typeparam>
-        /// <typeparam name="T5"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+			where TQ : IChunkQuery6<T0, T1, T2, T3, T4, T5>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+			where TQ : IChunkQuery6<T0, T1, T2, T3, T4, T5>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+			where TQ : IChunkQuery6<T0, T1, T2, T3, T4, T5>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+			where TQ : IChunkQuery6<T0, T1, T2, T3, T4, T5>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+			where TQ : IChunkQuery6<T0, T1, T2, T3, T4, T5>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -785,19 +1499,173 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <typeparam name="T3"></typeparam>
-        /// <typeparam name="T4"></typeparam>
-        /// <typeparam name="T5"></typeparam>
-        /// <typeparam name="T6"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+			where TQ : IChunkQuery7<T0, T1, T2, T3, T4, T5, T6>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+			where TQ : IChunkQuery7<T0, T1, T2, T3, T4, T5, T6>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+			where TQ : IChunkQuery7<T0, T1, T2, T3, T4, T5, T6>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+			where TQ : IChunkQuery7<T0, T1, T2, T3, T4, T5, T6>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+			where TQ : IChunkQuery7<T0, T1, T2, T3, T4, T5, T6>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -940,20 +1808,184 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <typeparam name="T3"></typeparam>
-        /// <typeparam name="T4"></typeparam>
-        /// <typeparam name="T5"></typeparam>
-        /// <typeparam name="T6"></typeparam>
-        /// <typeparam name="T7"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+			where TQ : IChunkQuery8<T0, T1, T2, T3, T4, T5, T6, T7>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+			where TQ : IChunkQuery8<T0, T1, T2, T3, T4, T5, T6, T7>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+			where TQ : IChunkQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+			where TQ : IChunkQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+			where TQ : IChunkQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1103,21 +2135,195 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <typeparam name="T3"></typeparam>
-        /// <typeparam name="T4"></typeparam>
-        /// <typeparam name="T5"></typeparam>
-        /// <typeparam name="T6"></typeparam>
-        /// <typeparam name="T7"></typeparam>
-        /// <typeparam name="T8"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+			where TQ : IChunkQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+			where TQ : IChunkQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+			where TQ : IChunkQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+			where TQ : IChunkQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+			where TQ : IChunkQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1274,22 +2480,206 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <typeparam name="T3"></typeparam>
-        /// <typeparam name="T4"></typeparam>
-        /// <typeparam name="T5"></typeparam>
-        /// <typeparam name="T6"></typeparam>
-        /// <typeparam name="T7"></typeparam>
-        /// <typeparam name="T8"></typeparam>
-        /// <typeparam name="T9"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+			where TQ : IChunkQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+			where TQ : IChunkQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+			where TQ : IChunkQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+			where TQ : IChunkQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+			where TQ : IChunkQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1453,23 +2843,217 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <typeparam name="T3"></typeparam>
-        /// <typeparam name="T4"></typeparam>
-        /// <typeparam name="T5"></typeparam>
-        /// <typeparam name="T6"></typeparam>
-        /// <typeparam name="T7"></typeparam>
-        /// <typeparam name="T8"></typeparam>
-        /// <typeparam name="T9"></typeparam>
-        /// <typeparam name="T10"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+			where TQ : IChunkQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+			where TQ : IChunkQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+			where TQ : IChunkQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+			where TQ : IChunkQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+			where TQ : IChunkQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1640,24 +3224,228 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <typeparam name="T3"></typeparam>
-        /// <typeparam name="T4"></typeparam>
-        /// <typeparam name="T5"></typeparam>
-        /// <typeparam name="T6"></typeparam>
-        /// <typeparam name="T7"></typeparam>
-        /// <typeparam name="T8"></typeparam>
-        /// <typeparam name="T9"></typeparam>
-        /// <typeparam name="T10"></typeparam>
-        /// <typeparam name="T11"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+			where TQ : IChunkQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+			where TQ : IChunkQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+			where TQ : IChunkQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+			where TQ : IChunkQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+			where TQ : IChunkQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1835,25 +3623,239 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <typeparam name="T3"></typeparam>
-        /// <typeparam name="T4"></typeparam>
-        /// <typeparam name="T5"></typeparam>
-        /// <typeparam name="T6"></typeparam>
-        /// <typeparam name="T7"></typeparam>
-        /// <typeparam name="T8"></typeparam>
-        /// <typeparam name="T9"></typeparam>
-        /// <typeparam name="T10"></typeparam>
-        /// <typeparam name="T11"></typeparam>
-        /// <typeparam name="T12"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+			where TQ : IChunkQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+			where TQ : IChunkQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+			where TQ : IChunkQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+			where TQ : IChunkQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+			where TQ : IChunkQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2038,26 +4040,250 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <typeparam name="T3"></typeparam>
-        /// <typeparam name="T4"></typeparam>
-        /// <typeparam name="T5"></typeparam>
-        /// <typeparam name="T6"></typeparam>
-        /// <typeparam name="T7"></typeparam>
-        /// <typeparam name="T8"></typeparam>
-        /// <typeparam name="T9"></typeparam>
-        /// <typeparam name="T10"></typeparam>
-        /// <typeparam name="T11"></typeparam>
-        /// <typeparam name="T12"></typeparam>
-        /// <typeparam name="T13"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+			where TQ : IChunkQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+			where TQ : IChunkQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+			where TQ : IChunkQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+			where TQ : IChunkQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+			where TQ : IChunkQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2249,27 +4475,261 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <typeparam name="T3"></typeparam>
-        /// <typeparam name="T4"></typeparam>
-        /// <typeparam name="T5"></typeparam>
-        /// <typeparam name="T6"></typeparam>
-        /// <typeparam name="T7"></typeparam>
-        /// <typeparam name="T8"></typeparam>
-        /// <typeparam name="T9"></typeparam>
-        /// <typeparam name="T10"></typeparam>
-        /// <typeparam name="T11"></typeparam>
-        /// <typeparam name="T12"></typeparam>
-        /// <typeparam name="T13"></typeparam>
-        /// <typeparam name="T14"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+			where TQ : IChunkQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+			where TQ : IChunkQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+			where TQ : IChunkQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+			where TQ : IChunkQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+			where TQ : IChunkQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2468,28 +4928,272 @@ namespace Myriad.ECS.Worlds
         /// Execute a query which executes on entire chunks.
         /// </summary>
         /// <typeparam name="TQ">The type of the query</typeparam>
-        /// <typeparam name="T0"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <typeparam name="T3"></typeparam>
-        /// <typeparam name="T4"></typeparam>
-        /// <typeparam name="T5"></typeparam>
-        /// <typeparam name="T6"></typeparam>
-        /// <typeparam name="T7"></typeparam>
-        /// <typeparam name="T8"></typeparam>
-        /// <typeparam name="T9"></typeparam>
-        /// <typeparam name="T10"></typeparam>
-        /// <typeparam name="T11"></typeparam>
-        /// <typeparam name="T12"></typeparam>
-        /// <typeparam name="T13"></typeparam>
-        /// <typeparam name="T14"></typeparam>
-        /// <typeparam name="T15"></typeparam>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over</param>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <typeparam name="T15">Type of component 15 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+            where T15 : IComponent
+			where TQ : IChunkQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <typeparam name="T15">Type of component 15 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+            where T15 : IComponent
+			where TQ : IChunkQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
+		{
+			var q = new TQ();
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <typeparam name="T15">Type of component 15 to retrieve</typeparam>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
 			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+            where T15 : IComponent
+			where TQ : IChunkQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <typeparam name="T15">Type of component 15 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+            where T15 : IComponent
+			where TQ : IChunkQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <typeparam name="T15">Type of component 15 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a default
+		/// query object will be used (based on type parameters).</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+			ref TQ q,
+			QueryDescription? query = null
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+            where T15 : IComponent
+			where TQ : IChunkQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+		{
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <typeparam name="T15">Type of component 15 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+			ref TQ q,
+			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
