@@ -16,7 +16,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		public void Execute(Span<Vector<TV0>> t0, int offset, int padding);
@@ -125,7 +125,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -252,7 +252,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -397,7 +397,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -560,7 +560,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -741,7 +741,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -940,7 +940,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -1157,7 +1157,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -1392,7 +1392,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -1645,7 +1645,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -1916,7 +1916,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -2205,7 +2205,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -2512,7 +2512,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -2837,7 +2837,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -3180,7 +3180,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
@@ -3541,7 +3541,7 @@ namespace Myriad.ECS.Queries
         /// Execute work over SIMD vectors
         /// </summary>
 		/// <param name="offset">How many far through a component does the first vector start. For example
-		/// if the component in a vector3 then a value of 2 would indicate that Z is the first element.</param>
+		/// if the component is a vector3 then a value of 2 would indicate that Z is the first element.</param>
 		/// <param name="padding">How many items at the end of the last vector in the span are padding items</param>
 		/// <param name="t0">Span of vectors of values, reinterpreted from component 0</param>
 		/// <param name="t1">Span of vectors of values, reinterpreted from component 1</param>
