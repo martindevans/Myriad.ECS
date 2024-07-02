@@ -119,12 +119,21 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		public void Query<<#= delegate_type_params #>>(QueryDelegateEntity<<#= delegate_type_params #>> @delegate, ref QueryDescription? query)
+			where <#= Constraints(i, 12) #>
+		{
+			Execute<<#= delegate_wrapper_name #>E<<#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #>E<<#= delegate_type_params #>>(@delegate),
+				ref query
+			);
+		}
+
 		public void Query<<#= delegate_type_params #>>(QueryDelegateEntity<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
 			Execute<<#= delegate_wrapper_name #>E<<#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #>E<<#= delegate_type_params #>>(@delegate),
-				query
+				ref query
 			);
 		}
 
@@ -137,12 +146,21 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		public void Query<<#= delegate_type_params #>>(QueryDelegate<<#= delegate_type_params #>> @delegate, ref QueryDescription? query)
+			where <#= Constraints(i, 12) #>
+		{
+			Execute<<#= delegate_wrapper_name #><<#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #><<#= delegate_type_params #>>(@delegate),
+				ref query
+			);
+		}
+
 		public void Query<<#= delegate_type_params #>>(QueryDelegate<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
 			Execute<<#= delegate_wrapper_name #><<#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #><<#= delegate_type_params #>>(@delegate),
-				query
+				ref query
 			);
 		}
 
@@ -157,12 +175,21 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		public void Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateEntityData<TData, <#= delegate_type_params #>> @delegate, ref QueryDescription? query)
+			where <#= Constraints(i, 12) #>
+		{
+			Execute<<#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>(data, @delegate),
+				ref query
+			);
+		}
+
 		public void Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateEntityData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
 			Execute<<#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>(data, @delegate),
-				query
+				ref query
 			);
 		}
 
@@ -175,12 +202,21 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		public void Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateData<TData, <#= delegate_type_params #>> @delegate, ref QueryDescription? query)
+			where <#= Constraints(i, 12) #>
+		{
+			Execute<<#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>(data, @delegate),
+				ref query
+			);
+		}
+
 		public void Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
 			Execute<<#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>(data, @delegate),
-				query
+				ref query
 			);
 		}
 

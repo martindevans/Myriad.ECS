@@ -128,7 +128,6 @@ namespace Myriad.ECS.Worlds
     public partial class World
     {
         public QueryResultEnumerable0 Query(QueryDescription query)
-            
         {
             return new QueryResultEnumerable0(
                 query
@@ -263,25 +262,22 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable1<T0> Query<T0>(QueryDescription query)
+        public QueryResultEnumerable1<T0> Query<T0>(QueryDescription? query = null)
             where T0 : IComponent
         {
-            return new QueryResultEnumerable1<T0>(
-                query
-            );
+            return Query<T0>(ref query);
         }
 
-        public QueryResultEnumerable1<T0> Query<T0>()
+        public QueryResultEnumerable1<T0> Query<T0>(ref QueryDescription? query)
             where T0 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0>();
+            query ??= GetCachedQuery<T0>();
 
             return new QueryResultEnumerable1<T0>(
                 query
             );
         }
-
     }
 }
 
@@ -418,27 +414,24 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable2<T0, T1> Query<T0, T1>(QueryDescription query)
+        public QueryResultEnumerable2<T0, T1> Query<T0, T1>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
         {
-            return new QueryResultEnumerable2<T0, T1>(
-                query
-            );
+            return Query<T0, T1>(ref query);
         }
 
-        public QueryResultEnumerable2<T0, T1> Query<T0, T1>()
+        public QueryResultEnumerable2<T0, T1> Query<T0, T1>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0, T1>();
+            query ??= GetCachedQuery<T0, T1>();
 
             return new QueryResultEnumerable2<T0, T1>(
                 query
             );
         }
-
     }
 }
 
@@ -582,29 +575,26 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable3<T0, T1, T2> Query<T0, T1, T2>(QueryDescription query)
+        public QueryResultEnumerable3<T0, T1, T2> Query<T0, T1, T2>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
         {
-            return new QueryResultEnumerable3<T0, T1, T2>(
-                query
-            );
+            return Query<T0, T1, T2>(ref query);
         }
 
-        public QueryResultEnumerable3<T0, T1, T2> Query<T0, T1, T2>()
+        public QueryResultEnumerable3<T0, T1, T2> Query<T0, T1, T2>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0, T1, T2>();
+            query ??= GetCachedQuery<T0, T1, T2>();
 
             return new QueryResultEnumerable3<T0, T1, T2>(
                 query
             );
         }
-
     }
 }
 
@@ -755,31 +745,28 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable4<T0, T1, T2, T3> Query<T0, T1, T2, T3>(QueryDescription query)
+        public QueryResultEnumerable4<T0, T1, T2, T3> Query<T0, T1, T2, T3>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
         {
-            return new QueryResultEnumerable4<T0, T1, T2, T3>(
-                query
-            );
+            return Query<T0, T1, T2, T3>(ref query);
         }
 
-        public QueryResultEnumerable4<T0, T1, T2, T3> Query<T0, T1, T2, T3>()
+        public QueryResultEnumerable4<T0, T1, T2, T3> Query<T0, T1, T2, T3>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0, T1, T2, T3>();
+            query ??= GetCachedQuery<T0, T1, T2, T3>();
 
             return new QueryResultEnumerable4<T0, T1, T2, T3>(
                 query
             );
         }
-
     }
 }
 
@@ -937,19 +924,17 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable5<T0, T1, T2, T3, T4> Query<T0, T1, T2, T3, T4>(QueryDescription query)
+        public QueryResultEnumerable5<T0, T1, T2, T3, T4> Query<T0, T1, T2, T3, T4>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
         {
-            return new QueryResultEnumerable5<T0, T1, T2, T3, T4>(
-                query
-            );
+            return Query<T0, T1, T2, T3, T4>(ref query);
         }
 
-        public QueryResultEnumerable5<T0, T1, T2, T3, T4> Query<T0, T1, T2, T3, T4>()
+        public QueryResultEnumerable5<T0, T1, T2, T3, T4> Query<T0, T1, T2, T3, T4>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -957,13 +942,12 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0, T1, T2, T3, T4>();
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4>();
 
             return new QueryResultEnumerable5<T0, T1, T2, T3, T4>(
                 query
             );
         }
-
     }
 }
 
@@ -1128,7 +1112,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable6<T0, T1, T2, T3, T4, T5> Query<T0, T1, T2, T3, T4, T5>(QueryDescription query)
+        public QueryResultEnumerable6<T0, T1, T2, T3, T4, T5> Query<T0, T1, T2, T3, T4, T5>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1136,12 +1120,10 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
         {
-            return new QueryResultEnumerable6<T0, T1, T2, T3, T4, T5>(
-                query
-            );
+            return Query<T0, T1, T2, T3, T4, T5>(ref query);
         }
 
-        public QueryResultEnumerable6<T0, T1, T2, T3, T4, T5> Query<T0, T1, T2, T3, T4, T5>()
+        public QueryResultEnumerable6<T0, T1, T2, T3, T4, T5> Query<T0, T1, T2, T3, T4, T5>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1150,13 +1132,12 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0, T1, T2, T3, T4, T5>();
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5>();
 
             return new QueryResultEnumerable6<T0, T1, T2, T3, T4, T5>(
                 query
             );
         }
-
     }
 }
 
@@ -1328,7 +1309,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable7<T0, T1, T2, T3, T4, T5, T6> Query<T0, T1, T2, T3, T4, T5, T6>(QueryDescription query)
+        public QueryResultEnumerable7<T0, T1, T2, T3, T4, T5, T6> Query<T0, T1, T2, T3, T4, T5, T6>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1337,12 +1318,10 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
         {
-            return new QueryResultEnumerable7<T0, T1, T2, T3, T4, T5, T6>(
-                query
-            );
+            return Query<T0, T1, T2, T3, T4, T5, T6>(ref query);
         }
 
-        public QueryResultEnumerable7<T0, T1, T2, T3, T4, T5, T6> Query<T0, T1, T2, T3, T4, T5, T6>()
+        public QueryResultEnumerable7<T0, T1, T2, T3, T4, T5, T6> Query<T0, T1, T2, T3, T4, T5, T6>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1352,13 +1331,12 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
 
             return new QueryResultEnumerable7<T0, T1, T2, T3, T4, T5, T6>(
                 query
             );
         }
-
     }
 }
 
@@ -1537,7 +1515,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable8<T0, T1, T2, T3, T4, T5, T6, T7> Query<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDescription query)
+        public QueryResultEnumerable8<T0, T1, T2, T3, T4, T5, T6, T7> Query<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1547,12 +1525,10 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
         {
-            return new QueryResultEnumerable8<T0, T1, T2, T3, T4, T5, T6, T7>(
-                query
-            );
+            return Query<T0, T1, T2, T3, T4, T5, T6, T7>(ref query);
         }
 
-        public QueryResultEnumerable8<T0, T1, T2, T3, T4, T5, T6, T7> Query<T0, T1, T2, T3, T4, T5, T6, T7>()
+        public QueryResultEnumerable8<T0, T1, T2, T3, T4, T5, T6, T7> Query<T0, T1, T2, T3, T4, T5, T6, T7>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1563,13 +1539,12 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
 
             return new QueryResultEnumerable8<T0, T1, T2, T3, T4, T5, T6, T7>(
                 query
             );
         }
-
     }
 }
 
@@ -1755,7 +1730,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable9<T0, T1, T2, T3, T4, T5, T6, T7, T8> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDescription query)
+        public QueryResultEnumerable9<T0, T1, T2, T3, T4, T5, T6, T7, T8> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1766,12 +1741,10 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
         {
-            return new QueryResultEnumerable9<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
-                query
-            );
+            return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref query);
         }
 
-        public QueryResultEnumerable9<T0, T1, T2, T3, T4, T5, T6, T7, T8> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
+        public QueryResultEnumerable9<T0, T1, T2, T3, T4, T5, T6, T7, T8> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1783,13 +1756,12 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
 
             return new QueryResultEnumerable9<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
                 query
             );
         }
-
     }
 }
 
@@ -1982,7 +1954,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDescription query)
+        public QueryResultEnumerable10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1994,12 +1966,10 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
         {
-            return new QueryResultEnumerable10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-                query
-            );
+            return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref query);
         }
 
-        public QueryResultEnumerable10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
+        public QueryResultEnumerable10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2012,13 +1982,12 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>();
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>();
 
             return new QueryResultEnumerable10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
                 query
             );
         }
-
     }
 }
 
@@ -2218,7 +2187,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDescription query)
+        public QueryResultEnumerable11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2231,12 +2200,10 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
         {
-            return new QueryResultEnumerable11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-                query
-            );
+            return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref query);
         }
 
-        public QueryResultEnumerable11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
+        public QueryResultEnumerable11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2250,13 +2217,12 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
 
             return new QueryResultEnumerable11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
                 query
             );
         }
-
     }
 }
 
@@ -2463,7 +2429,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDescription query)
+        public QueryResultEnumerable12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2477,12 +2443,10 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
         {
-            return new QueryResultEnumerable12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-                query
-            );
+            return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref query);
         }
 
-        public QueryResultEnumerable12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
+        public QueryResultEnumerable12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2497,13 +2461,12 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>();
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>();
 
             return new QueryResultEnumerable12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
                 query
             );
         }
-
     }
 }
 
@@ -2717,7 +2680,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDescription query)
+        public QueryResultEnumerable13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2732,12 +2695,10 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
         {
-            return new QueryResultEnumerable13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-                query
-            );
+            return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref query);
         }
 
-        public QueryResultEnumerable13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
+        public QueryResultEnumerable13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2753,13 +2714,12 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>();
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>();
 
             return new QueryResultEnumerable13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
                 query
             );
         }
-
     }
 }
 
@@ -2980,7 +2940,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDescription query)
+        public QueryResultEnumerable14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2996,12 +2956,10 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
         {
-            return new QueryResultEnumerable14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
-                query
-            );
+            return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref query);
         }
 
-        public QueryResultEnumerable14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
+        public QueryResultEnumerable14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -3018,13 +2976,12 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>();
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>();
 
             return new QueryResultEnumerable14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
                 query
             );
         }
-
     }
 }
 
@@ -3252,7 +3209,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDescription query)
+        public QueryResultEnumerable15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -3269,12 +3226,10 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
         {
-            return new QueryResultEnumerable15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
-                query
-            );
+            return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref query);
         }
 
-        public QueryResultEnumerable15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
+        public QueryResultEnumerable15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -3292,13 +3247,12 @@ namespace Myriad.ECS.Worlds
             where T14 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>();
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>();
 
             return new QueryResultEnumerable15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
                 query
             );
         }
-
     }
 }
 
@@ -3533,7 +3487,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(QueryDescription query)
+        public QueryResultEnumerable16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -3551,12 +3505,10 @@ namespace Myriad.ECS.Worlds
             where T14 : IComponent
             where T15 : IComponent
         {
-            return new QueryResultEnumerable16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
-                query
-            );
+            return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref query);
         }
 
-        public QueryResultEnumerable16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
+        public QueryResultEnumerable16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -3575,13 +3527,12 @@ namespace Myriad.ECS.Worlds
             where T15 : IComponent
         {
             // Find query that matches these types
-            var query = GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
+            query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
 
             return new QueryResultEnumerable16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
                 query
             );
         }
-
     }
 }
 

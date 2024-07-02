@@ -20,7 +20,6 @@ public partial class World
         return query.Count();
     }
 
-
     /// <summary>
     /// Count how many entities exist which include all given components
     /// </summary>
@@ -316,5 +315,6 @@ public partial class World
         var query = GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
         return query.Count();
     }
+
 }
 

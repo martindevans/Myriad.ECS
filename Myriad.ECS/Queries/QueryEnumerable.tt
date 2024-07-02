@@ -208,29 +208,36 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
-        public QueryResultEnumerable<#= i #><#= tparams #> Query<#= tparams #>(QueryDescription query)
-            <#= Constraints(i, 12) #>
+<# if (i == 0)
+{
+#>
+        public QueryResultEnumerable0 Query(QueryDescription query)
         {
-            return new QueryResultEnumerable<#= i #><#= tparams #>(
+            return new QueryResultEnumerable0(
                 query
             );
         }
 <#
-if (i > 0)
+}
+else
 {
 #>
+        public QueryResultEnumerable<#= i #><#= tparams #> Query<#= tparams #>(QueryDescription? query = null)
+            <#= Constraints(i, 12) #>
+        {
+            return Query<#= tparams #>(ref query);
+        }
 
-        public QueryResultEnumerable<#= i #><#= tparams #> Query<#= tparams #>()
+        public QueryResultEnumerable<#= i #><#= tparams #> Query<#= tparams #>(ref QueryDescription? query)
             <#= Constraints(i, 12) #>
         {
             // Find query that matches these types
-            var query = GetCachedQuery<#= tparams #>();
+            query ??= GetCachedQuery<#= tparams #>();
 
             return new QueryResultEnumerable<#= i #><#= tparams #>(
                 query
             );
         }
-
 <#
 }
 #>

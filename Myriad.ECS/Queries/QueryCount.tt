@@ -35,7 +35,6 @@ for (var i = 1; i <= PARAM_COUNT; i++)
     var tparams = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
     tparams = $"<{tparams}>";
 #>
-
     /// <summary>
     /// Count how many entities exist which include all given components
     /// </summary>
@@ -46,6 +45,7 @@ for (var i = 1; i <= PARAM_COUNT; i++)
         var query = GetCachedQuery<#= tparams #>();
         return query.Count();
     }
+
 <#
 }
 #>
