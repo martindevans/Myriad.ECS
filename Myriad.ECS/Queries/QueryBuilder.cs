@@ -12,9 +12,16 @@ namespace Myriad.ECS.Queries;
 public sealed partial class QueryBuilder
 {
     private readonly ComponentSet _include;
+    public IEnumerable<ComponentID> Included => _include.Items;
+
     private readonly ComponentSet _exclude;
+    public IEnumerable<ComponentID> Excluded => _exclude.Items;
+
     private readonly ComponentSet _atLeastOne;
+    public IEnumerable<ComponentID> AtLeastOnes => _atLeastOne.Items;
+
     private readonly ComponentSet _exactlyOne;
+    public IEnumerable<ComponentID> ExactlyOnes => _exactlyOne.Items;
 
     public QueryBuilder()
     {
@@ -209,6 +216,7 @@ public sealed partial class QueryBuilder
         public int Index { get; } = Index;
 
         private readonly HashSet<ComponentID> _items = [];
+        public IEnumerable<ComponentID> Items => _items;
 
         private FrozenOrderedListSet<ComponentID>? _frozenCache;
 
