@@ -87,7 +87,12 @@ public sealed partial class QueryBuilder
         return this;
     }
 
-    internal QueryBuilder Include(ComponentID id)
+    /// <summary>
+    /// The given component must exist for an entity to be matched by this query
+    /// </summary>
+    /// <param name="id">The component type</param>
+    /// <returns>this builder</returns>
+    public QueryBuilder Include(ComponentID id)
     {
         _include.Add(id);
         return this;
@@ -113,9 +118,24 @@ public sealed partial class QueryBuilder
     {
         return _include.Contains<T>();
     }
+
+    /// <summary>
+    /// Check if the given component type has been marked as "Include"
+    /// </summary>
+    /// <param name="id">The component id</param>
+    /// <returns>true, if the component is included, otherwise false</returns>
+    public bool IsIncluded(ComponentID id)
+    {
+        return _include.Contains(id);
+    }
     #endregion
 
     #region exclude
+    /// <summary>
+    /// The given component must not exist for an entity to be matched by this query
+    /// </summary>
+    /// <typeparam name="T">The component type</typeparam>
+    /// <returns>this builder</returns>
     public QueryBuilder Exclude<T>()
         where T : IComponent
     {
@@ -123,13 +143,23 @@ public sealed partial class QueryBuilder
         return this;
     }
 
+    /// <summary>
+    /// The given component must not exist for an entity to be matched by this query
+    /// </summary>
+    /// <param name="type">The component type</param>
+    /// <returns>this builder</returns>
     public QueryBuilder Exclude(Type type)
     {
         _exclude.Add(type);
         return this;
     }
 
-    internal QueryBuilder Exclude(ComponentID id)
+    /// <summary>
+    /// The given component must not exist for an entity to be matched by this query
+    /// </summary>
+    /// <param name="id">The component type</param>
+    /// <returns>this builder</returns>
+    public QueryBuilder Exclude(ComponentID id)
     {
         _exclude.Add(id);
         return this;
@@ -145,9 +175,19 @@ public sealed partial class QueryBuilder
     {
         return _exclude.Contains<T>();
     }
+
+    public bool IsExcluded(ComponentID id)
+    {
+        return _exclude.Contains(id);
+    }
     #endregion
 
     #region at least one
+    /// <summary>
+    /// At least one of all components specified as AtLeastOneOf must exist for an entity to be matched by this query
+    /// </summary>
+    /// <typeparam name="T">The component type</typeparam>
+    /// <returns>this builder</returns>
     public QueryBuilder AtLeastOneOf<T>()
         where T : IComponent
     {
@@ -155,13 +195,23 @@ public sealed partial class QueryBuilder
         return this;
     }
 
+    /// <summary>
+    /// At least one of all components specified as AtLeastOneOf must exist for an entity to be matched by this query
+    /// </summary>
+    /// <param name="type">The component type</param>
+    /// <returns>this builder</returns>
     public QueryBuilder AtLeastOneOf(Type type)
     {
         _atLeastOne.Add(type);
         return this;
     }
 
-    internal QueryBuilder AtLeastOneOf(ComponentID id)
+    /// <summary>
+    /// At least one of all components specified as AtLeastOneOf must exist for an entity to be matched by this query
+    /// </summary>
+    /// <param name="id">The component type</param>
+    /// <returns>this builder</returns>
+    public QueryBuilder AtLeastOneOf(ComponentID id)
     {
         _atLeastOne.Add(id);
         return this;
@@ -177,9 +227,19 @@ public sealed partial class QueryBuilder
     {
         return _atLeastOne.Contains<T>();
     }
+
+    public bool IsAtLeastOneOf(ComponentID id)
+    {
+        return _atLeastOne.Contains(id);
+    }
     #endregion
 
     #region exactly one
+    /// <summary>
+    /// Exactly one of all components specified as ExactlyOneOf must exist for an entity to be matched by this query
+    /// </summary>
+    /// <typeparam name="T">The component type</typeparam>
+    /// <returns>this builder</returns>
     public QueryBuilder ExactlyOneOf<T>()
         where T : IComponent
     {
@@ -187,13 +247,23 @@ public sealed partial class QueryBuilder
         return this;
     }
 
+    /// <summary>
+    /// Exactly one of all components specified as ExactlyOneOf must exist for an entity to be matched by this query
+    /// </summary>
+    /// <param name="type">The component type</param>
+    /// <returns>this builder</returns>
     public QueryBuilder ExactlyOneOf(Type type)
     {
         _exactlyOne.Add(type);
         return this;
     }
 
-    internal QueryBuilder ExactlyOneOf(ComponentID id)
+    /// <summary>
+    /// Exactly one of all components specified as ExactlyOneOf must exist for an entity to be matched by this query
+    /// </summary>
+    /// <param name="id">The component type</param>
+    /// <returns>this builder</returns>
+    public QueryBuilder ExactlyOneOf(ComponentID id)
     {
         _exactlyOne.Add(id);
         return this;
@@ -208,6 +278,11 @@ public sealed partial class QueryBuilder
         where T : IComponent
     {
         return _exactlyOne.Contains<T>();
+    }
+
+    public bool IsExactlyOneOf(ComponentID id)
+    {
+        return _exactlyOne.Contains(id);
     }
     #endregion
 

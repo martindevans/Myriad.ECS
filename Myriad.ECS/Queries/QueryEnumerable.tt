@@ -133,7 +133,7 @@ for (var k = 0; k < i; k++)
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
 <# for (var k = 0; k < i; k++)
@@ -193,13 +193,6 @@ for (var k = 0; k < i; k++)
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }

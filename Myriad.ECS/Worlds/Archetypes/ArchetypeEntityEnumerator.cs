@@ -3,6 +3,9 @@ using Myriad.ECS.Worlds.Chunks;
 
 namespace Myriad.ECS.Worlds.Archetypes;
 
+/// <summary>
+/// Enumerable of all the entities in a single archetype
+/// </summary>
 public readonly struct ArchetypeEntityEnumerable
 {
     public Archetype Archetype { get; }
@@ -26,7 +29,11 @@ public readonly struct ArchetypeEntityEnumerable
     }
 }
 
+/// <summary>
+/// Enumerator over the entities in an archetype
+/// </summary>
 public struct ArchetypeEntityEnumerator
+    : IDisposable
 {
     private List<Chunk>.Enumerator _chunksEnumerator;
     private int _entityIndex = -1;
@@ -62,7 +69,6 @@ public struct ArchetypeEntityEnumerator
         return true;
     }
 
-    // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
     public void Dispose()
     {
         _chunksEnumerator.Dispose();

@@ -59,7 +59,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
         }
@@ -112,13 +112,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -193,7 +186,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -247,13 +240,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -344,7 +330,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -399,13 +385,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -504,7 +483,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -560,13 +539,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -673,7 +645,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -730,13 +702,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -851,7 +816,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -909,13 +874,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -1038,7 +996,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -1097,13 +1055,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -1234,7 +1185,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -1294,13 +1245,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -1439,7 +1383,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -1500,13 +1444,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -1653,7 +1590,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -1715,13 +1652,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -1876,7 +1806,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -1939,13 +1869,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -2108,7 +2031,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -2172,13 +2095,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -2349,7 +2265,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -2414,13 +2330,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -2599,7 +2508,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -2665,13 +2574,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -2858,7 +2760,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -2925,13 +2827,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -3126,7 +3021,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -3194,13 +3089,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }
@@ -3403,7 +3291,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current!;
+            var chunk = _chunksEnumerator.Current;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -3472,13 +3360,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
             return true;
-        }
-
-        // ReSharper disable once UnusedMember.Global (Justification: used by enumerator)
-        public void Dispose()
-        {
-            _archetypesEnumerator.Dispose();
-            _chunksEnumerator.Dispose();
         }
     }
 }

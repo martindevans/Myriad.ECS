@@ -38,7 +38,8 @@ public class ComponentBloomFilterTests
         b.Add(ComponentID<Component14>.ID);
         b.Add(ComponentID<Component15>.ID);
 
-        Assert.IsFalse(a.Intersects(ref b));
+        var i = a.Intersects(ref b);
+        Assert.IsFalse(i);
     }
 
     [TestMethod]
