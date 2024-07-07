@@ -1,5 +1,6 @@
 ﻿using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Worlds;
