@@ -89,6 +89,7 @@ public sealed class QueryDescription
         return Include.Contains(id);
     }
 
+
     public bool IsExcluded<T>()
         where T : IComponent
     {
@@ -105,10 +106,11 @@ public sealed class QueryDescription
         return Exclude.Contains(id);
     }
 
+
     public bool IsAtLeastOneOf<T>()
         where T : IComponent
     {
-        return IsAtleastOneOf(ComponentID<T>.ID);
+        return IsAtLeastOneOf(ComponentID<T>.ID);
     }
 
     public bool IsAtLeastOneOf(Type type)
@@ -120,6 +122,7 @@ public sealed class QueryDescription
     {
         return AtLeastOneOf.Contains(id);
     }
+
 
     public bool IsExactlyOneOf<T>()
         where T : IComponent
