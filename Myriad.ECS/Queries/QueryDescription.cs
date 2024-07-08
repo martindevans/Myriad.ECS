@@ -326,19 +326,23 @@ public sealed class QueryDescription
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="item"></param>
-    public void Overwrite<T>(T item)
+    /// <returns>The number of entities written to</returns>
+    public int Overwrite<T>(T item)
         where T : IComponent
     {
         var id = ComponentID<T>.ID;
 
         // Can't do any work if this item is specifically not in this query
         if (IsExcluded(id))
-            return;
+            return 0;
 
+        var count = 0;
         foreach (var archetype in GetArchetypes())
         {
             if (!archetype.Archetype.Components.Contains(id))
                 continue;
+
+            count += archetype.Archetype.EntityCount;
 
             using var chunks = archetype.Archetype.GetChunkEnumerator();
             while (chunks.MoveNext())
@@ -348,6 +352,8 @@ public sealed class QueryDescription
                 arr.Fill(item);
             }
         }
+
+        return count;
     }
     #endregion
 }

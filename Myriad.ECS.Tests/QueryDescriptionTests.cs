@@ -8,7 +8,7 @@ using Myriad.ECS.Worlds.Archetypes;
 namespace Myriad.ECS.Tests;
 
 [TestClass]
-public class QueryTests
+public class QueryDescriptionTests
 {
     [TestMethod]
     public void IncludeMatchNone()
