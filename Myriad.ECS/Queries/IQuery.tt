@@ -4,6 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
+<#@ include file="TemplateHeaders/ParallelWorkLoopSetup.t4" #>
 <#
 	const int PARAM_COUNT = 16;
 #>
@@ -179,46 +180,20 @@ namespace Myriad.ECS.Worlds
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
 
-	<# for (var k = 0; k < i; k++)
-	{
-	#>
-		var c<#= k #> = ComponentID<T<#= k #>>.ID;
-	<#
-	}
-	#>
+<# for (var k = 0; k < i; k++)
+{
+#>
+			var c<#= k #> = ComponentID<T<#= k #>>.ID;
+<#
+}
+#>
 
-			// Borrow a counter which will be used to keep track of all in-progress work
-			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
-			var workCounter = workCounterRental.Value.Event;
-			workCounter.Reset(1);
-
-			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
-			var workersArr = ArrayPool<ParallelQueryWorker<<#= workItemName #>>?>.Shared.Rent(processors);
-			var workers = workersArr.AsMemory(0, processors);
-			for (var i = 0; i < workers.Length; i++)
-			{
-				workersArr[i] = Pool<ParallelQueryWorker<<#= workItemName #>>>.Get();
-				workersArr[i]!.Configure(workersArr, workCounter);
-			}
-
-			// Start the workers. Even though there is no work they cannot exit yet because
-			// the counter was reset to 1 above.
-			foreach (var item in workersArr)
-			{
-				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
-			}
+<#
+			EmitParallelWorkLoopSetup(workItemName);
+#>
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -253,9 +228,7 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new <#= workItemName #>(
+						var item = new <#= workItemName #>(
 							eMem,
 <# for (var k = 0; k < i; k++)
 {
@@ -265,47 +238,34 @@ namespace Myriad.ECS.Worlds
 }
 #>
 							q
-						));
+						);
 
-						workerEnqueueIdx++;
-						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
+<#
+						EmitEnqueueParallelWork("item");
+#>
 					}
 				}
 			}
 
-			// Clear the 1 that was added at the start (when the counter was reset)
-			workCounter.Signal();
-
-			// Wait for work to finish
-			workCounter.Wait();
-
-			// Recycle workers
-			for (var i = 0; i < workers.Length; i++)
-			{
-				var worker = workersArr[i]!;
-				worker.FinishEvent.Wait();
-				worker.Clear();
-				Pool.Return(worker);
-			}
-			Array.Clear(workersArr, 0, workersArr.Length);
-			ArrayPool<ParallelQueryWorker<<#= workItemName #>>>.Shared.Return(workersArr!);
+<#
+			EmitParallelWorkLoopWaitAndTeardown(workItemName);
+#>
 
 			return count;
 		}
 
-		private struct WorkItem<#= i #><TQ, <#= queryConstraints #>>
+		private readonly struct WorkItem<#= i #><TQ, <#= queryConstraints #>>
 			: IWorkItem
 			where <#= Constraints(i, 12) #>
 			where TQ : <#= Name(i) #><<#= queryConstraints #>>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
+			private readonly Memory<Entity> _entities;
 <# for (var k = 0; k < i; k++)
 {
 #>
-			Memory<T<#= k #>> _c<#= k #>;
+			private readonly Memory<T<#= k #>> _c<#= k #>;
 <#
 }
 #>

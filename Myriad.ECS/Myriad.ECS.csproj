@@ -105,6 +105,9 @@
       <LastGenOutput>Sharding.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
+    <None Update="Queries\TemplateHeaders\ParallelWorkLoopSetup.t4">
+      <Generator></Generator>
+    </None>
     <None Update="Queries\IVectorChunkQuery.tt">
       <LastGenOutput>IVectorChunkQuery.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>

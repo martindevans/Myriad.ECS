@@ -9,6 +9,7 @@
 #>
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Threading;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -276,6 +277,62 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem<#= i #><TQ, <#= queryConstraints #>>
+			: IWorkItem
+			where <#= Constraints(i, 12) #>
+			where TQ : <#= Name(i) #><<#= queryConstraints #>>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+<# for (var k = 0; k < i; k++)
+{
+#>
+			private readonly Memory<T<#= k #>> _c<#= k #>;
+<#
+}
+#>
+
+			public ChunkWorkItem<#= i #>(
+				Memory<Entity> entities,
+<# for (var k = 0; k < i; k++)
+{
+#>
+				Memory<T<#= k #>> c<#= k #>,
+<#
+}
+#>
+				TQ q
+			)
+			{
+				_entities = entities;
+
+<# for (var k = 0; k < i; k++)
+{
+#>
+				_c<#= k #> = c<#= k #>;
+<#
+}
+#>
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+<# for (var k = 0; k < i; k++)
+{
+#>
+					, _c<#= k #>.Span
+<#
+}
+#>
+				);
+			}
 		}
 	}
 }

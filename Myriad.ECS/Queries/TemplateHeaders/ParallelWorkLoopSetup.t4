@@ -1,0 +1,77 @@
+﻿<#
+void EmitParallelWorkLoopSetup(string workItemName)
+{
+#>
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<<#= workItemName #>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<<#= workItemName #>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+<#
+}
+#>
+
+<#
+void EmitEnqueueParallelWork(string itemName)
+{
+#>
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(<#= itemName #>);
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+<#
+}
+#>
+
+<#
+void EmitParallelWorkLoopWaitAndTeardown(string workItemName)
+{
+#>
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<<#= workItemName #>>>.Shared.Return(workersArr!);
+<#
+}
+#>

@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿
+
+using System.Diagnostics;
 using System.Buffers;
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
@@ -148,7 +150,7 @@ namespace Myriad.ECS.Worlds
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
 
 			var c0 = ComponentID<T0>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -178,9 +180,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -209,13 +213,15 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem1<TQ, T0>(
+						var item = new WorkItem1<TQ, T0>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -244,15 +250,15 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem1<TQ, T0>
+		private readonly struct WorkItem1<TQ, T0>
 			: IWorkItem
 			where T0 : IComponent
 			where TQ : IQuery1<T0>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
 
 			public WorkItem1(
 				Memory<Entity> entities,
@@ -430,7 +436,7 @@ namespace Myriad.ECS.Worlds
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -460,9 +466,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -492,14 +500,16 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem2<TQ, T0, T1>(
+						var item = new WorkItem2<TQ, T0, T1>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							t1.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -528,17 +538,17 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem2<TQ, T0, T1>
+		private readonly struct WorkItem2<TQ, T0, T1>
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
 			where TQ : IQuery2<T0, T1>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
-			Memory<T1> _c1;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
 
 			public WorkItem2(
 				Memory<Entity> entities,
@@ -733,7 +743,7 @@ namespace Myriad.ECS.Worlds
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -763,9 +773,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -796,15 +808,17 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem3<TQ, T0, T1, T2>(
+						var item = new WorkItem3<TQ, T0, T1, T2>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							t1.AsMemory(start, batchCount),
 							t2.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -833,19 +847,19 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem3<TQ, T0, T1, T2>
+		private readonly struct WorkItem3<TQ, T0, T1, T2>
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
 			where TQ : IQuery3<T0, T1, T2>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
-			Memory<T1> _c1;
-			Memory<T2> _c2;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
 
 			public WorkItem3(
 				Memory<Entity> entities,
@@ -1057,7 +1071,7 @@ namespace Myriad.ECS.Worlds
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
 			var c3 = ComponentID<T3>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -1087,9 +1101,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -1121,16 +1137,18 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem4<TQ, T0, T1, T2, T3>(
+						var item = new WorkItem4<TQ, T0, T1, T2, T3>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							t1.AsMemory(start, batchCount),
 							t2.AsMemory(start, batchCount),
 							t3.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -1159,7 +1177,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem4<TQ, T0, T1, T2, T3>
+		private readonly struct WorkItem4<TQ, T0, T1, T2, T3>
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
@@ -1167,13 +1185,13 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
 			where TQ : IQuery4<T0, T1, T2, T3>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
-			Memory<T1> _c1;
-			Memory<T2> _c2;
-			Memory<T3> _c3;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
 
 			public WorkItem4(
 				Memory<Entity> entities,
@@ -1402,7 +1420,7 @@ namespace Myriad.ECS.Worlds
 			var c2 = ComponentID<T2>.ID;
 			var c3 = ComponentID<T3>.ID;
 			var c4 = ComponentID<T4>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -1432,9 +1450,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -1467,9 +1487,7 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem5<TQ, T0, T1, T2, T3, T4>(
+						var item = new WorkItem5<TQ, T0, T1, T2, T3, T4>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							t1.AsMemory(start, batchCount),
@@ -1477,7 +1495,11 @@ namespace Myriad.ECS.Worlds
 							t3.AsMemory(start, batchCount),
 							t4.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -1506,7 +1528,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem5<TQ, T0, T1, T2, T3, T4>
+		private readonly struct WorkItem5<TQ, T0, T1, T2, T3, T4>
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
@@ -1515,14 +1537,14 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
 			where TQ : IQuery5<T0, T1, T2, T3, T4>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
-			Memory<T1> _c1;
-			Memory<T2> _c2;
-			Memory<T3> _c3;
-			Memory<T4> _c4;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
 
 			public WorkItem5(
 				Memory<Entity> entities,
@@ -1768,7 +1790,7 @@ namespace Myriad.ECS.Worlds
 			var c3 = ComponentID<T3>.ID;
 			var c4 = ComponentID<T4>.ID;
 			var c5 = ComponentID<T5>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -1798,9 +1820,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -1834,9 +1858,7 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem6<TQ, T0, T1, T2, T3, T4, T5>(
+						var item = new WorkItem6<TQ, T0, T1, T2, T3, T4, T5>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							t1.AsMemory(start, batchCount),
@@ -1845,7 +1867,11 @@ namespace Myriad.ECS.Worlds
 							t4.AsMemory(start, batchCount),
 							t5.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -1874,7 +1900,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem6<TQ, T0, T1, T2, T3, T4, T5>
+		private readonly struct WorkItem6<TQ, T0, T1, T2, T3, T4, T5>
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
@@ -1884,15 +1910,15 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
 			where TQ : IQuery6<T0, T1, T2, T3, T4, T5>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
-			Memory<T1> _c1;
-			Memory<T2> _c2;
-			Memory<T3> _c3;
-			Memory<T4> _c4;
-			Memory<T5> _c5;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
 
 			public WorkItem6(
 				Memory<Entity> entities,
@@ -2155,7 +2181,7 @@ namespace Myriad.ECS.Worlds
 			var c4 = ComponentID<T4>.ID;
 			var c5 = ComponentID<T5>.ID;
 			var c6 = ComponentID<T6>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -2185,9 +2211,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -2222,9 +2250,7 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>(
+						var item = new WorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							t1.AsMemory(start, batchCount),
@@ -2234,7 +2260,11 @@ namespace Myriad.ECS.Worlds
 							t5.AsMemory(start, batchCount),
 							t6.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -2263,7 +2293,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>
+		private readonly struct WorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
@@ -2274,16 +2304,16 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
 			where TQ : IQuery7<T0, T1, T2, T3, T4, T5, T6>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
-			Memory<T1> _c1;
-			Memory<T2> _c2;
-			Memory<T3> _c3;
-			Memory<T4> _c4;
-			Memory<T5> _c5;
-			Memory<T6> _c6;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
 
 			public WorkItem7(
 				Memory<Entity> entities,
@@ -2563,7 +2593,7 @@ namespace Myriad.ECS.Worlds
 			var c5 = ComponentID<T5>.ID;
 			var c6 = ComponentID<T6>.ID;
 			var c7 = ComponentID<T7>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -2593,9 +2623,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -2631,9 +2663,7 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
+						var item = new WorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							t1.AsMemory(start, batchCount),
@@ -2644,7 +2674,11 @@ namespace Myriad.ECS.Worlds
 							t6.AsMemory(start, batchCount),
 							t7.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -2673,7 +2707,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>
+		private readonly struct WorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
@@ -2685,17 +2719,17 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
 			where TQ : IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
-			Memory<T1> _c1;
-			Memory<T2> _c2;
-			Memory<T3> _c3;
-			Memory<T4> _c4;
-			Memory<T5> _c5;
-			Memory<T6> _c6;
-			Memory<T7> _c7;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
 
 			public WorkItem8(
 				Memory<Entity> entities,
@@ -2992,7 +3026,7 @@ namespace Myriad.ECS.Worlds
 			var c6 = ComponentID<T6>.ID;
 			var c7 = ComponentID<T7>.ID;
 			var c8 = ComponentID<T8>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -3022,9 +3056,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -3061,9 +3097,7 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+						var item = new WorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							t1.AsMemory(start, batchCount),
@@ -3075,7 +3109,11 @@ namespace Myriad.ECS.Worlds
 							t7.AsMemory(start, batchCount),
 							t8.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -3104,7 +3142,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>
+		private readonly struct WorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
@@ -3117,18 +3155,18 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
 			where TQ : IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
-			Memory<T1> _c1;
-			Memory<T2> _c2;
-			Memory<T3> _c3;
-			Memory<T4> _c4;
-			Memory<T5> _c5;
-			Memory<T6> _c6;
-			Memory<T7> _c7;
-			Memory<T8> _c8;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
 
 			public WorkItem9(
 				Memory<Entity> entities,
@@ -3442,7 +3480,7 @@ namespace Myriad.ECS.Worlds
 			var c7 = ComponentID<T7>.ID;
 			var c8 = ComponentID<T8>.ID;
 			var c9 = ComponentID<T9>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -3472,9 +3510,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -3512,9 +3552,7 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+						var item = new WorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							t1.AsMemory(start, batchCount),
@@ -3527,7 +3565,11 @@ namespace Myriad.ECS.Worlds
 							t8.AsMemory(start, batchCount),
 							t9.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -3556,7 +3598,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+		private readonly struct WorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
@@ -3570,19 +3612,19 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
 			where TQ : IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
-			Memory<T1> _c1;
-			Memory<T2> _c2;
-			Memory<T3> _c3;
-			Memory<T4> _c4;
-			Memory<T5> _c5;
-			Memory<T6> _c6;
-			Memory<T7> _c7;
-			Memory<T8> _c8;
-			Memory<T9> _c9;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
+			private readonly Memory<T9> _c9;
 
 			public WorkItem10(
 				Memory<Entity> entities,
@@ -3913,7 +3955,7 @@ namespace Myriad.ECS.Worlds
 			var c8 = ComponentID<T8>.ID;
 			var c9 = ComponentID<T9>.ID;
 			var c10 = ComponentID<T10>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -3943,9 +3985,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -3984,9 +4028,7 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+						var item = new WorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							t1.AsMemory(start, batchCount),
@@ -4000,7 +4042,11 @@ namespace Myriad.ECS.Worlds
 							t9.AsMemory(start, batchCount),
 							t10.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -4029,7 +4075,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+		private readonly struct WorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
@@ -4044,20 +4090,20 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
 			where TQ : IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
-			Memory<T1> _c1;
-			Memory<T2> _c2;
-			Memory<T3> _c3;
-			Memory<T4> _c4;
-			Memory<T5> _c5;
-			Memory<T6> _c6;
-			Memory<T7> _c7;
-			Memory<T8> _c8;
-			Memory<T9> _c9;
-			Memory<T10> _c10;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
+			private readonly Memory<T9> _c9;
+			private readonly Memory<T10> _c10;
 
 			public WorkItem11(
 				Memory<Entity> entities,
@@ -4405,7 +4451,7 @@ namespace Myriad.ECS.Worlds
 			var c9 = ComponentID<T9>.ID;
 			var c10 = ComponentID<T10>.ID;
 			var c11 = ComponentID<T11>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -4435,9 +4481,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -4477,9 +4525,7 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+						var item = new WorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							t1.AsMemory(start, batchCount),
@@ -4494,7 +4540,11 @@ namespace Myriad.ECS.Worlds
 							t10.AsMemory(start, batchCount),
 							t11.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -4523,7 +4573,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+		private readonly struct WorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
@@ -4539,21 +4589,21 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
 			where TQ : IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
-			Memory<T1> _c1;
-			Memory<T2> _c2;
-			Memory<T3> _c3;
-			Memory<T4> _c4;
-			Memory<T5> _c5;
-			Memory<T6> _c6;
-			Memory<T7> _c7;
-			Memory<T8> _c8;
-			Memory<T9> _c9;
-			Memory<T10> _c10;
-			Memory<T11> _c11;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
+			private readonly Memory<T9> _c9;
+			private readonly Memory<T10> _c10;
+			private readonly Memory<T11> _c11;
 
 			public WorkItem12(
 				Memory<Entity> entities,
@@ -4918,7 +4968,7 @@ namespace Myriad.ECS.Worlds
 			var c10 = ComponentID<T10>.ID;
 			var c11 = ComponentID<T11>.ID;
 			var c12 = ComponentID<T12>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -4948,9 +4998,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -4991,9 +5043,7 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+						var item = new WorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							t1.AsMemory(start, batchCount),
@@ -5009,7 +5059,11 @@ namespace Myriad.ECS.Worlds
 							t11.AsMemory(start, batchCount),
 							t12.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -5038,7 +5092,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+		private readonly struct WorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
@@ -5055,22 +5109,22 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
 			where TQ : IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
-			Memory<T1> _c1;
-			Memory<T2> _c2;
-			Memory<T3> _c3;
-			Memory<T4> _c4;
-			Memory<T5> _c5;
-			Memory<T6> _c6;
-			Memory<T7> _c7;
-			Memory<T8> _c8;
-			Memory<T9> _c9;
-			Memory<T10> _c10;
-			Memory<T11> _c11;
-			Memory<T12> _c12;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
+			private readonly Memory<T9> _c9;
+			private readonly Memory<T10> _c10;
+			private readonly Memory<T11> _c11;
+			private readonly Memory<T12> _c12;
 
 			public WorkItem13(
 				Memory<Entity> entities,
@@ -5452,7 +5506,7 @@ namespace Myriad.ECS.Worlds
 			var c11 = ComponentID<T11>.ID;
 			var c12 = ComponentID<T12>.ID;
 			var c13 = ComponentID<T13>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -5482,9 +5536,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -5526,9 +5582,7 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+						var item = new WorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							t1.AsMemory(start, batchCount),
@@ -5545,7 +5599,11 @@ namespace Myriad.ECS.Worlds
 							t12.AsMemory(start, batchCount),
 							t13.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -5574,7 +5632,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+		private readonly struct WorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
@@ -5592,23 +5650,23 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
 			where TQ : IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
-			Memory<T1> _c1;
-			Memory<T2> _c2;
-			Memory<T3> _c3;
-			Memory<T4> _c4;
-			Memory<T5> _c5;
-			Memory<T6> _c6;
-			Memory<T7> _c7;
-			Memory<T8> _c8;
-			Memory<T9> _c9;
-			Memory<T10> _c10;
-			Memory<T11> _c11;
-			Memory<T12> _c12;
-			Memory<T13> _c13;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
+			private readonly Memory<T9> _c9;
+			private readonly Memory<T10> _c10;
+			private readonly Memory<T11> _c11;
+			private readonly Memory<T12> _c12;
+			private readonly Memory<T13> _c13;
 
 			public WorkItem14(
 				Memory<Entity> entities,
@@ -6007,7 +6065,7 @@ namespace Myriad.ECS.Worlds
 			var c12 = ComponentID<T12>.ID;
 			var c13 = ComponentID<T13>.ID;
 			var c14 = ComponentID<T14>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -6037,9 +6095,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -6082,9 +6142,7 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+						var item = new WorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							t1.AsMemory(start, batchCount),
@@ -6102,7 +6160,11 @@ namespace Myriad.ECS.Worlds
 							t13.AsMemory(start, batchCount),
 							t14.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -6131,7 +6193,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+		private readonly struct WorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
@@ -6150,24 +6212,24 @@ namespace Myriad.ECS.Worlds
             where T14 : IComponent
 			where TQ : IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
-			Memory<T1> _c1;
-			Memory<T2> _c2;
-			Memory<T3> _c3;
-			Memory<T4> _c4;
-			Memory<T5> _c5;
-			Memory<T6> _c6;
-			Memory<T7> _c7;
-			Memory<T8> _c8;
-			Memory<T9> _c9;
-			Memory<T10> _c10;
-			Memory<T11> _c11;
-			Memory<T12> _c12;
-			Memory<T13> _c13;
-			Memory<T14> _c14;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
+			private readonly Memory<T9> _c9;
+			private readonly Memory<T10> _c10;
+			private readonly Memory<T11> _c11;
+			private readonly Memory<T12> _c12;
+			private readonly Memory<T13> _c13;
+			private readonly Memory<T14> _c14;
 
 			public WorkItem15(
 				Memory<Entity> entities,
@@ -6583,7 +6645,7 @@ namespace Myriad.ECS.Worlds
 			var c13 = ComponentID<T13>.ID;
 			var c14 = ComponentID<T14>.ID;
 			var c15 = ComponentID<T15>.ID;
-	
+
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -6613,9 +6675,11 @@ namespace Myriad.ECS.Worlds
 				}
 			}
 
+			// Enqueue work to this index
+			var workerEnqueueIdx = 0;
+
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
-			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -6659,9 +6723,7 @@ namespace Myriad.ECS.Worlds
 						var batchCount = end - start;
 						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
-						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+						var item = new WorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 							eMem,
 							t0.AsMemory(start, batchCount),
 							t1.AsMemory(start, batchCount),
@@ -6680,7 +6742,11 @@ namespace Myriad.ECS.Worlds
 							t14.AsMemory(start, batchCount),
 							t15.AsMemory(start, batchCount),
 							q
-						));
+						);
+
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
@@ -6709,7 +6775,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		private struct WorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+		private readonly struct WorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
@@ -6729,25 +6795,25 @@ namespace Myriad.ECS.Worlds
             where T15 : IComponent
 			where TQ : IQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
-			private TQ _q;
+			private readonly TQ _q;
 
-			Memory<Entity> _entities;
-			Memory<T0> _c0;
-			Memory<T1> _c1;
-			Memory<T2> _c2;
-			Memory<T3> _c3;
-			Memory<T4> _c4;
-			Memory<T5> _c5;
-			Memory<T6> _c6;
-			Memory<T7> _c7;
-			Memory<T8> _c8;
-			Memory<T9> _c9;
-			Memory<T10> _c10;
-			Memory<T11> _c11;
-			Memory<T12> _c12;
-			Memory<T13> _c13;
-			Memory<T14> _c14;
-			Memory<T15> _c15;
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
+			private readonly Memory<T9> _c9;
+			private readonly Memory<T10> _c10;
+			private readonly Memory<T11> _c11;
+			private readonly Memory<T12> _c12;
+			private readonly Memory<T13> _c13;
+			private readonly Memory<T14> _c14;
+			private readonly Memory<T15> _c15;
 
 			public WorkItem16(
 				Memory<Entity> entities,

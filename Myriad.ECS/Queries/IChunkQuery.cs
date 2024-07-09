@@ -1,5 +1,6 @@
 ﻿using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Threading;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -184,6 +185,7 @@ namespace Myriad.ECS.Worlds
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
 					continue;
+                count += archetype.EntityCount;
 
 				Parallel.For(0, archetype.Chunks.Count, c =>
 				{
@@ -193,8 +195,6 @@ namespace Myriad.ECS.Worlds
 					if (entities.Length == 0)
 						return;
 
-					Interlocked.Add(ref count, entities.Length);
-
 					var t0 = chunk.GetSpan<T0>(c0);
 
 					q.Execute(entities, t0);
@@ -202,6 +202,38 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem1<TQ, T0>
+			: IWorkItem
+			where T0 : IComponent
+			where TQ : IChunkQuery1<T0>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+
+			public ChunkWorkItem1(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+				);
+			}
 		}
 	}
 }
@@ -420,6 +452,43 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem2<TQ, T0, T1>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+			where TQ : IChunkQuery2<T0, T1>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+
+			public ChunkWorkItem2(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+					, _c1.Span
+				);
+			}
 		}
 	}
 }
@@ -656,6 +725,48 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem3<TQ, T0, T1, T2>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+			where TQ : IChunkQuery3<T0, T1, T2>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+
+			public ChunkWorkItem3(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+					, _c1.Span
+					, _c2.Span
+				);
+			}
 		}
 	}
 }
@@ -910,6 +1021,53 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem4<TQ, T0, T1, T2, T3>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+			where TQ : IChunkQuery4<T0, T1, T2, T3>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+
+			public ChunkWorkItem4(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+					, _c1.Span
+					, _c2.Span
+					, _c3.Span
+				);
+			}
 		}
 	}
 }
@@ -1182,6 +1340,58 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem5<TQ, T0, T1, T2, T3, T4>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+			where TQ : IChunkQuery5<T0, T1, T2, T3, T4>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+
+			public ChunkWorkItem5(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+					, _c1.Span
+					, _c2.Span
+					, _c3.Span
+					, _c4.Span
+				);
+			}
 		}
 	}
 }
@@ -1472,6 +1682,63 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem6<TQ, T0, T1, T2, T3, T4, T5>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+			where TQ : IChunkQuery6<T0, T1, T2, T3, T4, T5>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+
+			public ChunkWorkItem6(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+					, _c1.Span
+					, _c2.Span
+					, _c3.Span
+					, _c4.Span
+					, _c5.Span
+				);
+			}
 		}
 	}
 }
@@ -1780,6 +2047,68 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+			where TQ : IChunkQuery7<T0, T1, T2, T3, T4, T5, T6>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+
+			public ChunkWorkItem7(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+					, _c1.Span
+					, _c2.Span
+					, _c3.Span
+					, _c4.Span
+					, _c5.Span
+					, _c6.Span
+				);
+			}
 		}
 	}
 }
@@ -2106,6 +2435,73 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+			where TQ : IChunkQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+
+			public ChunkWorkItem8(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+					, _c1.Span
+					, _c2.Span
+					, _c3.Span
+					, _c4.Span
+					, _c5.Span
+					, _c6.Span
+					, _c7.Span
+				);
+			}
 		}
 	}
 }
@@ -2450,6 +2846,78 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+			where TQ : IChunkQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
+
+			public ChunkWorkItem9(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+					, _c1.Span
+					, _c2.Span
+					, _c3.Span
+					, _c4.Span
+					, _c5.Span
+					, _c6.Span
+					, _c7.Span
+					, _c8.Span
+				);
+			}
 		}
 	}
 }
@@ -2812,6 +3280,83 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+			where TQ : IChunkQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
+			private readonly Memory<T9> _c9;
+
+			public ChunkWorkItem10(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				Memory<T9> c9,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+				_c9 = c9;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+					, _c1.Span
+					, _c2.Span
+					, _c3.Span
+					, _c4.Span
+					, _c5.Span
+					, _c6.Span
+					, _c7.Span
+					, _c8.Span
+					, _c9.Span
+				);
+			}
 		}
 	}
 }
@@ -3192,6 +3737,88 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+			where TQ : IChunkQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
+			private readonly Memory<T9> _c9;
+			private readonly Memory<T10> _c10;
+
+			public ChunkWorkItem11(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				Memory<T9> c9,
+				Memory<T10> c10,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+				_c9 = c9;
+				_c10 = c10;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+					, _c1.Span
+					, _c2.Span
+					, _c3.Span
+					, _c4.Span
+					, _c5.Span
+					, _c6.Span
+					, _c7.Span
+					, _c8.Span
+					, _c9.Span
+					, _c10.Span
+				);
+			}
 		}
 	}
 }
@@ -3590,6 +4217,93 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+			where TQ : IChunkQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
+			private readonly Memory<T9> _c9;
+			private readonly Memory<T10> _c10;
+			private readonly Memory<T11> _c11;
+
+			public ChunkWorkItem12(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				Memory<T9> c9,
+				Memory<T10> c10,
+				Memory<T11> c11,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+				_c9 = c9;
+				_c10 = c10;
+				_c11 = c11;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+					, _c1.Span
+					, _c2.Span
+					, _c3.Span
+					, _c4.Span
+					, _c5.Span
+					, _c6.Span
+					, _c7.Span
+					, _c8.Span
+					, _c9.Span
+					, _c10.Span
+					, _c11.Span
+				);
+			}
 		}
 	}
 }
@@ -4006,6 +4720,98 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+			where TQ : IChunkQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
+			private readonly Memory<T9> _c9;
+			private readonly Memory<T10> _c10;
+			private readonly Memory<T11> _c11;
+			private readonly Memory<T12> _c12;
+
+			public ChunkWorkItem13(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				Memory<T9> c9,
+				Memory<T10> c10,
+				Memory<T11> c11,
+				Memory<T12> c12,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+				_c9 = c9;
+				_c10 = c10;
+				_c11 = c11;
+				_c12 = c12;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+					, _c1.Span
+					, _c2.Span
+					, _c3.Span
+					, _c4.Span
+					, _c5.Span
+					, _c6.Span
+					, _c7.Span
+					, _c8.Span
+					, _c9.Span
+					, _c10.Span
+					, _c11.Span
+					, _c12.Span
+				);
+			}
 		}
 	}
 }
@@ -4440,6 +5246,103 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+			where TQ : IChunkQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
+			private readonly Memory<T9> _c9;
+			private readonly Memory<T10> _c10;
+			private readonly Memory<T11> _c11;
+			private readonly Memory<T12> _c12;
+			private readonly Memory<T13> _c13;
+
+			public ChunkWorkItem14(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				Memory<T9> c9,
+				Memory<T10> c10,
+				Memory<T11> c11,
+				Memory<T12> c12,
+				Memory<T13> c13,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+				_c9 = c9;
+				_c10 = c10;
+				_c11 = c11;
+				_c12 = c12;
+				_c13 = c13;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+					, _c1.Span
+					, _c2.Span
+					, _c3.Span
+					, _c4.Span
+					, _c5.Span
+					, _c6.Span
+					, _c7.Span
+					, _c8.Span
+					, _c9.Span
+					, _c10.Span
+					, _c11.Span
+					, _c12.Span
+					, _c13.Span
+				);
+			}
 		}
 	}
 }
@@ -4892,6 +5795,108 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+			where TQ : IChunkQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
+			private readonly Memory<T9> _c9;
+			private readonly Memory<T10> _c10;
+			private readonly Memory<T11> _c11;
+			private readonly Memory<T12> _c12;
+			private readonly Memory<T13> _c13;
+			private readonly Memory<T14> _c14;
+
+			public ChunkWorkItem15(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				Memory<T9> c9,
+				Memory<T10> c10,
+				Memory<T11> c11,
+				Memory<T12> c12,
+				Memory<T13> c13,
+				Memory<T14> c14,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+				_c9 = c9;
+				_c10 = c10;
+				_c11 = c11;
+				_c12 = c12;
+				_c13 = c13;
+				_c14 = c14;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+					, _c1.Span
+					, _c2.Span
+					, _c3.Span
+					, _c4.Span
+					, _c5.Span
+					, _c6.Span
+					, _c7.Span
+					, _c8.Span
+					, _c9.Span
+					, _c10.Span
+					, _c11.Span
+					, _c12.Span
+					, _c13.Span
+					, _c14.Span
+				);
+			}
 		}
 	}
 }
@@ -5362,6 +6367,113 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
+		}
+
+		private readonly struct ChunkWorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+            where T15 : IComponent
+			where TQ : IChunkQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+		{
+			private readonly TQ _q;
+
+			private readonly Memory<Entity> _entities;
+			private readonly Memory<T0> _c0;
+			private readonly Memory<T1> _c1;
+			private readonly Memory<T2> _c2;
+			private readonly Memory<T3> _c3;
+			private readonly Memory<T4> _c4;
+			private readonly Memory<T5> _c5;
+			private readonly Memory<T6> _c6;
+			private readonly Memory<T7> _c7;
+			private readonly Memory<T8> _c8;
+			private readonly Memory<T9> _c9;
+			private readonly Memory<T10> _c10;
+			private readonly Memory<T11> _c11;
+			private readonly Memory<T12> _c12;
+			private readonly Memory<T13> _c13;
+			private readonly Memory<T14> _c14;
+			private readonly Memory<T15> _c15;
+
+			public ChunkWorkItem16(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				Memory<T9> c9,
+				Memory<T10> c10,
+				Memory<T11> c11,
+				Memory<T12> c12,
+				Memory<T13> c13,
+				Memory<T14> c14,
+				Memory<T15> c15,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+				_c9 = c9;
+				_c10 = c10;
+				_c11 = c11;
+				_c12 = c12;
+				_c13 = c13;
+				_c14 = c14;
+				_c15 = c15;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				_q.Execute(
+					_entities.Span
+					, _c0.Span
+					, _c1.Span
+					, _c2.Span
+					, _c3.Span
+					, _c4.Span
+					, _c5.Span
+					, _c6.Span
+					, _c7.Span
+					, _c8.Span
+					, _c9.Span
+					, _c10.Span
+					, _c11.Span
+					, _c12.Span
+					, _c13.Span
+					, _c14.Span
+					, _c15.Span
+				);
+			}
 		}
 	}
 }

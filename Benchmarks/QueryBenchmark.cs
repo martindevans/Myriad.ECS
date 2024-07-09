@@ -114,8 +114,8 @@ public class QueryBenchmark
         {
             pos.Value += vel.Value;
             pos.Value += new Vector2(
-                (float)Math.Sqrt(Math.Abs(pos.Value.X)),
-                (float)Math.Tanh(pos.Value.Y)
+                (float)Math.Sqrt(Math.Abs(Math.Tanh(pos.Value.X))),
+                (float)Math.Sqrt(Math.Abs(Math.Tanh(pos.Value.Y)))
             );
         }
     }
@@ -130,8 +130,8 @@ public class QueryBenchmark
                 pos[i].Value += vel[i].Value;
 
                 pos[i].Value += new Vector2(
-                    (float)Math.Sqrt(Math.Abs(pos[i].Value.X)),
-                    (float)Math.Tanh(pos[i].Value.Y)
+                    (float)Math.Sqrt(Math.Abs(Math.Tanh(pos[i].Value.X))),
+                    (float)Math.Sqrt(Math.Abs(Math.Tanh(pos[i].Value.Y)))
                 );
             }
         }
