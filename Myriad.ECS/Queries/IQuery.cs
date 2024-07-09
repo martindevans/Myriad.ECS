@@ -1,9 +1,12 @@
 ﻿using System.Diagnostics;
+using System.Buffers;
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Archetypes;
+using Myriad.ECS.Allocations;
+using Myriad.ECS.Threading;
 
-using Parallel = System.Threading.Tasks.Parallel;
+//using Parallel = System.Threading.Tasks.Parallel;
 //using Parallel = ParallelTasks.Parallel;
 
 // ReSharper disable UnusedType.Global
@@ -131,7 +134,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
 			where TQ : IQuery1<T0>
@@ -146,7 +149,38 @@ namespace Myriad.ECS.Worlds
 
 			var c0 = ComponentID<T0>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem1<TQ, T0>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem1<TQ, T0>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -168,20 +202,84 @@ namespace Myriad.ECS.Worlds
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem1<TQ, T0>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem1<TQ, T0>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem1<TQ, T0>
+			: IWorkItem
+			where T0 : IComponent
+			where TQ : IQuery1<T0>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+
+			public WorkItem1(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+					);
+				}
+			}
 		}
 	}
 }
@@ -316,7 +414,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -333,7 +431,38 @@ namespace Myriad.ECS.Worlds
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem2<TQ, T0, T1>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem2<TQ, T0, T1>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -356,20 +485,91 @@ namespace Myriad.ECS.Worlds
 
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i], ref t1[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem2<TQ, T0, T1>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							t1.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem2<TQ, T0, T1>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem2<TQ, T0, T1>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+			where TQ : IQuery2<T0, T1>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+			Memory<T1> _c1;
+
+			public WorkItem2(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+				var c1 = _c1.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+						, ref c1[i]
+					);
+				}
+			}
 		}
 	}
 }
@@ -515,7 +715,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -534,7 +734,38 @@ namespace Myriad.ECS.Worlds
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem3<TQ, T0, T1, T2>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem3<TQ, T0, T1, T2>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -558,20 +789,98 @@ namespace Myriad.ECS.Worlds
 					var t0 = chunk.GetComponentArray<T0>(c0);
 					var t1 = chunk.GetComponentArray<T1>(c1);
 					var t2 = chunk.GetComponentArray<T2>(c2);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem3<TQ, T0, T1, T2>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							t1.AsMemory(start, batchCount),
+							t2.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem3<TQ, T0, T1, T2>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem3<TQ, T0, T1, T2>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+			where TQ : IQuery3<T0, T1, T2>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+			Memory<T1> _c1;
+			Memory<T2> _c2;
+
+			public WorkItem3(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+				var c1 = _c1.Span;
+				var c2 = _c2.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+						, ref c1[i]
+						, ref c2[i]
+					);
+				}
+			}
 		}
 	}
 }
@@ -728,7 +1037,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -749,7 +1058,38 @@ namespace Myriad.ECS.Worlds
 			var c2 = ComponentID<T2>.ID;
 			var c3 = ComponentID<T3>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem4<TQ, T0, T1, T2, T3>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem4<TQ, T0, T1, T2, T3>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -774,20 +1114,105 @@ namespace Myriad.ECS.Worlds
 					var t1 = chunk.GetComponentArray<T1>(c1);
 					var t2 = chunk.GetComponentArray<T2>(c2);
 					var t3 = chunk.GetComponentArray<T3>(c3);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem4<TQ, T0, T1, T2, T3>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							t1.AsMemory(start, batchCount),
+							t2.AsMemory(start, batchCount),
+							t3.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem4<TQ, T0, T1, T2, T3>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem4<TQ, T0, T1, T2, T3>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+			where TQ : IQuery4<T0, T1, T2, T3>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+			Memory<T1> _c1;
+			Memory<T2> _c2;
+			Memory<T3> _c3;
+
+			public WorkItem4(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+				var c1 = _c1.Span;
+				var c2 = _c2.Span;
+				var c3 = _c3.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+						, ref c1[i]
+						, ref c2[i]
+						, ref c3[i]
+					);
+				}
+			}
 		}
 	}
 }
@@ -955,7 +1380,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -978,7 +1403,38 @@ namespace Myriad.ECS.Worlds
 			var c3 = ComponentID<T3>.ID;
 			var c4 = ComponentID<T4>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem5<TQ, T0, T1, T2, T3, T4>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem5<TQ, T0, T1, T2, T3, T4>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -1004,20 +1460,112 @@ namespace Myriad.ECS.Worlds
 					var t2 = chunk.GetComponentArray<T2>(c2);
 					var t3 = chunk.GetComponentArray<T3>(c3);
 					var t4 = chunk.GetComponentArray<T4>(c4);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem5<TQ, T0, T1, T2, T3, T4>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							t1.AsMemory(start, batchCount),
+							t2.AsMemory(start, batchCount),
+							t3.AsMemory(start, batchCount),
+							t4.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem5<TQ, T0, T1, T2, T3, T4>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem5<TQ, T0, T1, T2, T3, T4>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+			where TQ : IQuery5<T0, T1, T2, T3, T4>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+			Memory<T1> _c1;
+			Memory<T2> _c2;
+			Memory<T3> _c3;
+			Memory<T4> _c4;
+
+			public WorkItem5(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+				var c1 = _c1.Span;
+				var c2 = _c2.Span;
+				var c3 = _c3.Span;
+				var c4 = _c4.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+						, ref c1[i]
+						, ref c2[i]
+						, ref c3[i]
+						, ref c4[i]
+					);
+				}
+			}
 		}
 	}
 }
@@ -1196,7 +1744,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1221,7 +1769,38 @@ namespace Myriad.ECS.Worlds
 			var c4 = ComponentID<T4>.ID;
 			var c5 = ComponentID<T5>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem6<TQ, T0, T1, T2, T3, T4, T5>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem6<TQ, T0, T1, T2, T3, T4, T5>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -1248,20 +1827,119 @@ namespace Myriad.ECS.Worlds
 					var t3 = chunk.GetComponentArray<T3>(c3);
 					var t4 = chunk.GetComponentArray<T4>(c4);
 					var t5 = chunk.GetComponentArray<T5>(c5);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem6<TQ, T0, T1, T2, T3, T4, T5>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							t1.AsMemory(start, batchCount),
+							t2.AsMemory(start, batchCount),
+							t3.AsMemory(start, batchCount),
+							t4.AsMemory(start, batchCount),
+							t5.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem6<TQ, T0, T1, T2, T3, T4, T5>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem6<TQ, T0, T1, T2, T3, T4, T5>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+			where TQ : IQuery6<T0, T1, T2, T3, T4, T5>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+			Memory<T1> _c1;
+			Memory<T2> _c2;
+			Memory<T3> _c3;
+			Memory<T4> _c4;
+			Memory<T5> _c5;
+
+			public WorkItem6(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+				var c1 = _c1.Span;
+				var c2 = _c2.Span;
+				var c3 = _c3.Span;
+				var c4 = _c4.Span;
+				var c5 = _c5.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+						, ref c1[i]
+						, ref c2[i]
+						, ref c3[i]
+						, ref c4[i]
+						, ref c5[i]
+					);
+				}
+			}
 		}
 	}
 }
@@ -1451,7 +2129,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1478,7 +2156,38 @@ namespace Myriad.ECS.Worlds
 			var c5 = ComponentID<T5>.ID;
 			var c6 = ComponentID<T6>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -1506,20 +2215,126 @@ namespace Myriad.ECS.Worlds
 					var t4 = chunk.GetComponentArray<T4>(c4);
 					var t5 = chunk.GetComponentArray<T5>(c5);
 					var t6 = chunk.GetComponentArray<T6>(c6);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							t1.AsMemory(start, batchCount),
+							t2.AsMemory(start, batchCount),
+							t3.AsMemory(start, batchCount),
+							t4.AsMemory(start, batchCount),
+							t5.AsMemory(start, batchCount),
+							t6.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+			where TQ : IQuery7<T0, T1, T2, T3, T4, T5, T6>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+			Memory<T1> _c1;
+			Memory<T2> _c2;
+			Memory<T3> _c3;
+			Memory<T4> _c4;
+			Memory<T5> _c5;
+			Memory<T6> _c6;
+
+			public WorkItem7(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+				var c1 = _c1.Span;
+				var c2 = _c2.Span;
+				var c3 = _c3.Span;
+				var c4 = _c4.Span;
+				var c5 = _c5.Span;
+				var c6 = _c6.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+						, ref c1[i]
+						, ref c2[i]
+						, ref c3[i]
+						, ref c4[i]
+						, ref c5[i]
+						, ref c6[i]
+					);
+				}
+			}
 		}
 	}
 }
@@ -1720,7 +2535,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1749,7 +2564,38 @@ namespace Myriad.ECS.Worlds
 			var c6 = ComponentID<T6>.ID;
 			var c7 = ComponentID<T7>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -1778,20 +2624,133 @@ namespace Myriad.ECS.Worlds
 					var t5 = chunk.GetComponentArray<T5>(c5);
 					var t6 = chunk.GetComponentArray<T6>(c6);
 					var t7 = chunk.GetComponentArray<T7>(c7);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							t1.AsMemory(start, batchCount),
+							t2.AsMemory(start, batchCount),
+							t3.AsMemory(start, batchCount),
+							t4.AsMemory(start, batchCount),
+							t5.AsMemory(start, batchCount),
+							t6.AsMemory(start, batchCount),
+							t7.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+			where TQ : IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+			Memory<T1> _c1;
+			Memory<T2> _c2;
+			Memory<T3> _c3;
+			Memory<T4> _c4;
+			Memory<T5> _c5;
+			Memory<T6> _c6;
+			Memory<T7> _c7;
+
+			public WorkItem8(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+				var c1 = _c1.Span;
+				var c2 = _c2.Span;
+				var c3 = _c3.Span;
+				var c4 = _c4.Span;
+				var c5 = _c5.Span;
+				var c6 = _c6.Span;
+				var c7 = _c7.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+						, ref c1[i]
+						, ref c2[i]
+						, ref c3[i]
+						, ref c4[i]
+						, ref c5[i]
+						, ref c6[i]
+						, ref c7[i]
+					);
+				}
+			}
 		}
 	}
 }
@@ -2003,7 +2962,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2034,7 +2993,38 @@ namespace Myriad.ECS.Worlds
 			var c7 = ComponentID<T7>.ID;
 			var c8 = ComponentID<T8>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -2064,20 +3054,140 @@ namespace Myriad.ECS.Worlds
 					var t6 = chunk.GetComponentArray<T6>(c6);
 					var t7 = chunk.GetComponentArray<T7>(c7);
 					var t8 = chunk.GetComponentArray<T8>(c8);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							t1.AsMemory(start, batchCount),
+							t2.AsMemory(start, batchCount),
+							t3.AsMemory(start, batchCount),
+							t4.AsMemory(start, batchCount),
+							t5.AsMemory(start, batchCount),
+							t6.AsMemory(start, batchCount),
+							t7.AsMemory(start, batchCount),
+							t8.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+			where TQ : IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+			Memory<T1> _c1;
+			Memory<T2> _c2;
+			Memory<T3> _c3;
+			Memory<T4> _c4;
+			Memory<T5> _c5;
+			Memory<T6> _c6;
+			Memory<T7> _c7;
+			Memory<T8> _c8;
+
+			public WorkItem9(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+				var c1 = _c1.Span;
+				var c2 = _c2.Span;
+				var c3 = _c3.Span;
+				var c4 = _c4.Span;
+				var c5 = _c5.Span;
+				var c6 = _c6.Span;
+				var c7 = _c7.Span;
+				var c8 = _c8.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+						, ref c1[i]
+						, ref c2[i]
+						, ref c3[i]
+						, ref c4[i]
+						, ref c5[i]
+						, ref c6[i]
+						, ref c7[i]
+						, ref c8[i]
+					);
+				}
+			}
 		}
 	}
 }
@@ -2300,7 +3410,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2333,7 +3443,38 @@ namespace Myriad.ECS.Worlds
 			var c8 = ComponentID<T8>.ID;
 			var c9 = ComponentID<T9>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -2364,20 +3505,147 @@ namespace Myriad.ECS.Worlds
 					var t7 = chunk.GetComponentArray<T7>(c7);
 					var t8 = chunk.GetComponentArray<T8>(c8);
 					var t9 = chunk.GetComponentArray<T9>(c9);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							t1.AsMemory(start, batchCount),
+							t2.AsMemory(start, batchCount),
+							t3.AsMemory(start, batchCount),
+							t4.AsMemory(start, batchCount),
+							t5.AsMemory(start, batchCount),
+							t6.AsMemory(start, batchCount),
+							t7.AsMemory(start, batchCount),
+							t8.AsMemory(start, batchCount),
+							t9.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+			where TQ : IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+			Memory<T1> _c1;
+			Memory<T2> _c2;
+			Memory<T3> _c3;
+			Memory<T4> _c4;
+			Memory<T5> _c5;
+			Memory<T6> _c6;
+			Memory<T7> _c7;
+			Memory<T8> _c8;
+			Memory<T9> _c9;
+
+			public WorkItem10(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				Memory<T9> c9,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+				_c9 = c9;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+				var c1 = _c1.Span;
+				var c2 = _c2.Span;
+				var c3 = _c3.Span;
+				var c4 = _c4.Span;
+				var c5 = _c5.Span;
+				var c6 = _c6.Span;
+				var c7 = _c7.Span;
+				var c8 = _c8.Span;
+				var c9 = _c9.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+						, ref c1[i]
+						, ref c2[i]
+						, ref c3[i]
+						, ref c4[i]
+						, ref c5[i]
+						, ref c6[i]
+						, ref c7[i]
+						, ref c8[i]
+						, ref c9[i]
+					);
+				}
+			}
 		}
 	}
 }
@@ -2611,7 +3879,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2646,7 +3914,38 @@ namespace Myriad.ECS.Worlds
 			var c9 = ComponentID<T9>.ID;
 			var c10 = ComponentID<T10>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -2678,20 +3977,154 @@ namespace Myriad.ECS.Worlds
 					var t8 = chunk.GetComponentArray<T8>(c8);
 					var t9 = chunk.GetComponentArray<T9>(c9);
 					var t10 = chunk.GetComponentArray<T10>(c10);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							t1.AsMemory(start, batchCount),
+							t2.AsMemory(start, batchCount),
+							t3.AsMemory(start, batchCount),
+							t4.AsMemory(start, batchCount),
+							t5.AsMemory(start, batchCount),
+							t6.AsMemory(start, batchCount),
+							t7.AsMemory(start, batchCount),
+							t8.AsMemory(start, batchCount),
+							t9.AsMemory(start, batchCount),
+							t10.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+			where TQ : IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+			Memory<T1> _c1;
+			Memory<T2> _c2;
+			Memory<T3> _c3;
+			Memory<T4> _c4;
+			Memory<T5> _c5;
+			Memory<T6> _c6;
+			Memory<T7> _c7;
+			Memory<T8> _c8;
+			Memory<T9> _c9;
+			Memory<T10> _c10;
+
+			public WorkItem11(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				Memory<T9> c9,
+				Memory<T10> c10,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+				_c9 = c9;
+				_c10 = c10;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+				var c1 = _c1.Span;
+				var c2 = _c2.Span;
+				var c3 = _c3.Span;
+				var c4 = _c4.Span;
+				var c5 = _c5.Span;
+				var c6 = _c6.Span;
+				var c7 = _c7.Span;
+				var c8 = _c8.Span;
+				var c9 = _c9.Span;
+				var c10 = _c10.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+						, ref c1[i]
+						, ref c2[i]
+						, ref c3[i]
+						, ref c4[i]
+						, ref c5[i]
+						, ref c6[i]
+						, ref c7[i]
+						, ref c8[i]
+						, ref c9[i]
+						, ref c10[i]
+					);
+				}
+			}
 		}
 	}
 }
@@ -2936,7 +4369,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2973,7 +4406,38 @@ namespace Myriad.ECS.Worlds
 			var c10 = ComponentID<T10>.ID;
 			var c11 = ComponentID<T11>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -3006,20 +4470,161 @@ namespace Myriad.ECS.Worlds
 					var t9 = chunk.GetComponentArray<T9>(c9);
 					var t10 = chunk.GetComponentArray<T10>(c10);
 					var t11 = chunk.GetComponentArray<T11>(c11);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							t1.AsMemory(start, batchCount),
+							t2.AsMemory(start, batchCount),
+							t3.AsMemory(start, batchCount),
+							t4.AsMemory(start, batchCount),
+							t5.AsMemory(start, batchCount),
+							t6.AsMemory(start, batchCount),
+							t7.AsMemory(start, batchCount),
+							t8.AsMemory(start, batchCount),
+							t9.AsMemory(start, batchCount),
+							t10.AsMemory(start, batchCount),
+							t11.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+			where TQ : IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+			Memory<T1> _c1;
+			Memory<T2> _c2;
+			Memory<T3> _c3;
+			Memory<T4> _c4;
+			Memory<T5> _c5;
+			Memory<T6> _c6;
+			Memory<T7> _c7;
+			Memory<T8> _c8;
+			Memory<T9> _c9;
+			Memory<T10> _c10;
+			Memory<T11> _c11;
+
+			public WorkItem12(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				Memory<T9> c9,
+				Memory<T10> c10,
+				Memory<T11> c11,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+				_c9 = c9;
+				_c10 = c10;
+				_c11 = c11;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+				var c1 = _c1.Span;
+				var c2 = _c2.Span;
+				var c3 = _c3.Span;
+				var c4 = _c4.Span;
+				var c5 = _c5.Span;
+				var c6 = _c6.Span;
+				var c7 = _c7.Span;
+				var c8 = _c8.Span;
+				var c9 = _c9.Span;
+				var c10 = _c10.Span;
+				var c11 = _c11.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+						, ref c1[i]
+						, ref c2[i]
+						, ref c3[i]
+						, ref c4[i]
+						, ref c5[i]
+						, ref c6[i]
+						, ref c7[i]
+						, ref c8[i]
+						, ref c9[i]
+						, ref c10[i]
+						, ref c11[i]
+					);
+				}
+			}
 		}
 	}
 }
@@ -3275,7 +4880,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3314,7 +4919,38 @@ namespace Myriad.ECS.Worlds
 			var c11 = ComponentID<T11>.ID;
 			var c12 = ComponentID<T12>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -3348,20 +4984,168 @@ namespace Myriad.ECS.Worlds
 					var t10 = chunk.GetComponentArray<T10>(c10);
 					var t11 = chunk.GetComponentArray<T11>(c11);
 					var t12 = chunk.GetComponentArray<T12>(c12);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							t1.AsMemory(start, batchCount),
+							t2.AsMemory(start, batchCount),
+							t3.AsMemory(start, batchCount),
+							t4.AsMemory(start, batchCount),
+							t5.AsMemory(start, batchCount),
+							t6.AsMemory(start, batchCount),
+							t7.AsMemory(start, batchCount),
+							t8.AsMemory(start, batchCount),
+							t9.AsMemory(start, batchCount),
+							t10.AsMemory(start, batchCount),
+							t11.AsMemory(start, batchCount),
+							t12.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+			where TQ : IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+			Memory<T1> _c1;
+			Memory<T2> _c2;
+			Memory<T3> _c3;
+			Memory<T4> _c4;
+			Memory<T5> _c5;
+			Memory<T6> _c6;
+			Memory<T7> _c7;
+			Memory<T8> _c8;
+			Memory<T9> _c9;
+			Memory<T10> _c10;
+			Memory<T11> _c11;
+			Memory<T12> _c12;
+
+			public WorkItem13(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				Memory<T9> c9,
+				Memory<T10> c10,
+				Memory<T11> c11,
+				Memory<T12> c12,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+				_c9 = c9;
+				_c10 = c10;
+				_c11 = c11;
+				_c12 = c12;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+				var c1 = _c1.Span;
+				var c2 = _c2.Span;
+				var c3 = _c3.Span;
+				var c4 = _c4.Span;
+				var c5 = _c5.Span;
+				var c6 = _c6.Span;
+				var c7 = _c7.Span;
+				var c8 = _c8.Span;
+				var c9 = _c9.Span;
+				var c10 = _c10.Span;
+				var c11 = _c11.Span;
+				var c12 = _c12.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+						, ref c1[i]
+						, ref c2[i]
+						, ref c3[i]
+						, ref c4[i]
+						, ref c5[i]
+						, ref c6[i]
+						, ref c7[i]
+						, ref c8[i]
+						, ref c9[i]
+						, ref c10[i]
+						, ref c11[i]
+						, ref c12[i]
+					);
+				}
+			}
 		}
 	}
 }
@@ -3628,7 +5412,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3669,7 +5453,38 @@ namespace Myriad.ECS.Worlds
 			var c12 = ComponentID<T12>.ID;
 			var c13 = ComponentID<T13>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -3704,20 +5519,175 @@ namespace Myriad.ECS.Worlds
 					var t11 = chunk.GetComponentArray<T11>(c11);
 					var t12 = chunk.GetComponentArray<T12>(c12);
 					var t13 = chunk.GetComponentArray<T13>(c13);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							t1.AsMemory(start, batchCount),
+							t2.AsMemory(start, batchCount),
+							t3.AsMemory(start, batchCount),
+							t4.AsMemory(start, batchCount),
+							t5.AsMemory(start, batchCount),
+							t6.AsMemory(start, batchCount),
+							t7.AsMemory(start, batchCount),
+							t8.AsMemory(start, batchCount),
+							t9.AsMemory(start, batchCount),
+							t10.AsMemory(start, batchCount),
+							t11.AsMemory(start, batchCount),
+							t12.AsMemory(start, batchCount),
+							t13.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+			where TQ : IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+			Memory<T1> _c1;
+			Memory<T2> _c2;
+			Memory<T3> _c3;
+			Memory<T4> _c4;
+			Memory<T5> _c5;
+			Memory<T6> _c6;
+			Memory<T7> _c7;
+			Memory<T8> _c8;
+			Memory<T9> _c9;
+			Memory<T10> _c10;
+			Memory<T11> _c11;
+			Memory<T12> _c12;
+			Memory<T13> _c13;
+
+			public WorkItem14(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				Memory<T9> c9,
+				Memory<T10> c10,
+				Memory<T11> c11,
+				Memory<T12> c12,
+				Memory<T13> c13,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+				_c9 = c9;
+				_c10 = c10;
+				_c11 = c11;
+				_c12 = c12;
+				_c13 = c13;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+				var c1 = _c1.Span;
+				var c2 = _c2.Span;
+				var c3 = _c3.Span;
+				var c4 = _c4.Span;
+				var c5 = _c5.Span;
+				var c6 = _c6.Span;
+				var c7 = _c7.Span;
+				var c8 = _c8.Span;
+				var c9 = _c9.Span;
+				var c10 = _c10.Span;
+				var c11 = _c11.Span;
+				var c12 = _c12.Span;
+				var c13 = _c13.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+						, ref c1[i]
+						, ref c2[i]
+						, ref c3[i]
+						, ref c4[i]
+						, ref c5[i]
+						, ref c6[i]
+						, ref c7[i]
+						, ref c8[i]
+						, ref c9[i]
+						, ref c10[i]
+						, ref c11[i]
+						, ref c12[i]
+						, ref c13[i]
+					);
+				}
+			}
 		}
 	}
 }
@@ -3995,7 +5965,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4038,7 +6008,38 @@ namespace Myriad.ECS.Worlds
 			var c13 = ComponentID<T13>.ID;
 			var c14 = ComponentID<T14>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -4074,20 +6075,182 @@ namespace Myriad.ECS.Worlds
 					var t12 = chunk.GetComponentArray<T12>(c12);
 					var t13 = chunk.GetComponentArray<T13>(c13);
 					var t14 = chunk.GetComponentArray<T14>(c14);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							t1.AsMemory(start, batchCount),
+							t2.AsMemory(start, batchCount),
+							t3.AsMemory(start, batchCount),
+							t4.AsMemory(start, batchCount),
+							t5.AsMemory(start, batchCount),
+							t6.AsMemory(start, batchCount),
+							t7.AsMemory(start, batchCount),
+							t8.AsMemory(start, batchCount),
+							t9.AsMemory(start, batchCount),
+							t10.AsMemory(start, batchCount),
+							t11.AsMemory(start, batchCount),
+							t12.AsMemory(start, batchCount),
+							t13.AsMemory(start, batchCount),
+							t14.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+			where TQ : IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+			Memory<T1> _c1;
+			Memory<T2> _c2;
+			Memory<T3> _c3;
+			Memory<T4> _c4;
+			Memory<T5> _c5;
+			Memory<T6> _c6;
+			Memory<T7> _c7;
+			Memory<T8> _c8;
+			Memory<T9> _c9;
+			Memory<T10> _c10;
+			Memory<T11> _c11;
+			Memory<T12> _c12;
+			Memory<T13> _c13;
+			Memory<T14> _c14;
+
+			public WorkItem15(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				Memory<T9> c9,
+				Memory<T10> c10,
+				Memory<T11> c11,
+				Memory<T12> c12,
+				Memory<T13> c13,
+				Memory<T14> c14,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+				_c9 = c9;
+				_c10 = c10;
+				_c11 = c11;
+				_c12 = c12;
+				_c13 = c13;
+				_c14 = c14;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+				var c1 = _c1.Span;
+				var c2 = _c2.Span;
+				var c3 = _c3.Span;
+				var c4 = _c4.Span;
+				var c5 = _c5.Span;
+				var c6 = _c6.Span;
+				var c7 = _c7.Span;
+				var c8 = _c8.Span;
+				var c9 = _c9.Span;
+				var c10 = _c10.Span;
+				var c11 = _c11.Span;
+				var c12 = _c12.Span;
+				var c13 = _c13.Span;
+				var c14 = _c14.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+						, ref c1[i]
+						, ref c2[i]
+						, ref c3[i]
+						, ref c4[i]
+						, ref c5[i]
+						, ref c6[i]
+						, ref c7[i]
+						, ref c8[i]
+						, ref c9[i]
+						, ref c10[i]
+						, ref c11[i]
+						, ref c12[i]
+						, ref c13[i]
+						, ref c14[i]
+					);
+				}
+			}
 		}
 	}
 }
@@ -4376,7 +6539,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4421,7 +6584,38 @@ namespace Myriad.ECS.Worlds
 			var c14 = ComponentID<T14>.ID;
 			var c15 = ComponentID<T15>.ID;
 	
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<WorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<WorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -4458,20 +6652,189 @@ namespace Myriad.ECS.Worlds
 					var t13 = chunk.GetComponentArray<T13>(c13);
 					var t14 = chunk.GetComponentArray<T14>(c14);
 					var t15 = chunk.GetComponentArray<T15>(c15);
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i]);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new WorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+							eMem,
+							t0.AsMemory(start, batchCount),
+							t1.AsMemory(start, batchCount),
+							t2.AsMemory(start, batchCount),
+							t3.AsMemory(start, batchCount),
+							t4.AsMemory(start, batchCount),
+							t5.AsMemory(start, batchCount),
+							t6.AsMemory(start, batchCount),
+							t7.AsMemory(start, batchCount),
+							t8.AsMemory(start, batchCount),
+							t9.AsMemory(start, batchCount),
+							t10.AsMemory(start, batchCount),
+							t11.AsMemory(start, batchCount),
+							t12.AsMemory(start, batchCount),
+							t13.AsMemory(start, batchCount),
+							t14.AsMemory(start, batchCount),
+							t15.AsMemory(start, batchCount),
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<WorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+			: IWorkItem
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+            where T15 : IComponent
+			where TQ : IQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+			Memory<T0> _c0;
+			Memory<T1> _c1;
+			Memory<T2> _c2;
+			Memory<T3> _c3;
+			Memory<T4> _c4;
+			Memory<T5> _c5;
+			Memory<T6> _c6;
+			Memory<T7> _c7;
+			Memory<T8> _c8;
+			Memory<T9> _c9;
+			Memory<T10> _c10;
+			Memory<T11> _c11;
+			Memory<T12> _c12;
+			Memory<T13> _c13;
+			Memory<T14> _c14;
+			Memory<T15> _c15;
+
+			public WorkItem16(
+				Memory<Entity> entities,
+				Memory<T0> c0,
+				Memory<T1> c1,
+				Memory<T2> c2,
+				Memory<T3> c3,
+				Memory<T4> c4,
+				Memory<T5> c5,
+				Memory<T6> c6,
+				Memory<T7> c7,
+				Memory<T8> c8,
+				Memory<T9> c9,
+				Memory<T10> c10,
+				Memory<T11> c11,
+				Memory<T12> c12,
+				Memory<T13> c13,
+				Memory<T14> c14,
+				Memory<T15> c15,
+				TQ q
+			)
+			{
+				_entities = entities;
+
+				_c0 = c0;
+				_c1 = c1;
+				_c2 = c2;
+				_c3 = c3;
+				_c4 = c4;
+				_c5 = c5;
+				_c6 = c6;
+				_c7 = c7;
+				_c8 = c8;
+				_c9 = c9;
+				_c10 = c10;
+				_c11 = c11;
+				_c12 = c12;
+				_c13 = c13;
+				_c14 = c14;
+				_c15 = c15;
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+				var c0 = _c0.Span;
+				var c1 = _c1.Span;
+				var c2 = _c2.Span;
+				var c3 = _c3.Span;
+				var c4 = _c4.Span;
+				var c5 = _c5.Span;
+				var c6 = _c6.Span;
+				var c7 = _c7.Span;
+				var c8 = _c8.Span;
+				var c9 = _c9.Span;
+				var c10 = _c10.Span;
+				var c11 = _c11.Span;
+				var c12 = _c12.Span;
+				var c13 = _c13.Span;
+				var c14 = _c14.Span;
+				var c15 = _c15.Span;
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+						, ref c0[i]
+						, ref c1[i]
+						, ref c2[i]
+						, ref c3[i]
+						, ref c4[i]
+						, ref c5[i]
+						, ref c6[i]
+						, ref c7[i]
+						, ref c8[i]
+						, ref c9[i]
+						, ref c10[i]
+						, ref c11[i]
+						, ref c12[i]
+						, ref c13[i]
+						, ref c14[i]
+						, ref c15[i]
+					);
+				}
+			}
 		}
 	}
 }

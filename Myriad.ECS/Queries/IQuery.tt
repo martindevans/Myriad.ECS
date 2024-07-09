@@ -8,11 +8,14 @@
 	const int PARAM_COUNT = 16;
 #>
 using System.Diagnostics;
+using System.Buffers;
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Archetypes;
+using Myriad.ECS.Allocations;
+using Myriad.ECS.Threading;
 
-using Parallel = System.Threading.Tasks.Parallel;
+//using Parallel = System.Threading.Tasks.Parallel;
 //using Parallel = ParallelTasks.Parallel;
 
 // ReSharper disable UnusedType.Global
@@ -23,6 +26,7 @@ using Parallel = System.Threading.Tasks.Parallel;
 <# for (var i = 1; i <= PARAM_COUNT; i++)
 {
 	var queryConstraints = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
+	var workItemName = $"WorkItem{i}<TQ, {queryConstraints}>";
 #>
 namespace Myriad.ECS.Queries
 {
@@ -162,7 +166,7 @@ namespace Myriad.ECS.Worlds
 		public int ExecuteParallel<TQ, <#= queryConstraints #>>(
 			TQ q,
 			QueryDescription? query = null,
-			int batchSize = 64
+			int batchSize = 128
 		)
 			where <#= Constraints(i, 12) #>
 			where TQ : <#= Name(i) #><<#= queryConstraints #>>
@@ -183,7 +187,38 @@ namespace Myriad.ECS.Worlds
 	}
 	#>
 
+			// Borrow a counter which will be used to keep track of all in-progress work
+			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
+			var workCounter = workCounterRental.Value.Event;
+			workCounter.Reset(1);
+
+			// Create parallel workers
+			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var workersArr = ArrayPool<ParallelQueryWorker<<#= workItemName #>>?>.Shared.Rent(processors);
+			var workers = workersArr.AsMemory(0, processors);
+			for (var i = 0; i < workers.Length; i++)
+			{
+				workersArr[i] = Pool<ParallelQueryWorker<<#= workItemName #>>>.Get();
+				workersArr[i]!.Configure(workersArr, workCounter);
+			}
+
+			// Start the workers. Even though there is no work they cannot exit yet because
+			// the counter was reset to 1 above.
+			foreach (var item in workersArr)
+			{
+				if (item != null)
+				{
+#if NET8_0_OR_GREATER
+					ThreadPool.UnsafeQueueUserWorkItem(item, true);
+#else
+					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
+#endif
+				}
+			}
+
+			// Enqueue all of the work into the parallel workers
 			var count = 0;
+			var workerEnqueueIdx = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
@@ -211,20 +246,120 @@ namespace Myriad.ECS.Worlds
 <#
 }
 #>
-
-					Parallel.For(0, numBatches, b =>
-                    {
+					for (var b = 0; b < numBatches; b++)
+					{
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
+						var batchCount = end - start;
+						var eMem = chunk.GetEntitesMemory(start, batchCount);
 
-						var entities = chunk.Entities;
-						for (var i = start; i < end; i++)
-							q.Execute(entities[i], <#= CallParameters(i) #>);
-					});
+						// Add work to a worker, keeping track of the total amount of work created
+						workCounter.AddCount();
+						workersArr[workerEnqueueIdx]!.Enqueue(new <#= workItemName #>(
+							eMem,
+<# for (var k = 0; k < i; k++)
+{
+#>
+							t<#= k #>.AsMemory(start, batchCount),
+<#
+}
+#>
+							q
+						));
+
+						workerEnqueueIdx++;
+						if (workerEnqueueIdx >= workers.Length)
+							workerEnqueueIdx = 0;
+					}
 				}
 			}
 
+			// Clear the 1 that was added at the start (when the counter was reset)
+			workCounter.Signal();
+
+			// Wait for work to finish
+			workCounter.Wait();
+
+			// Recycle workers
+			for (var i = 0; i < workers.Length; i++)
+			{
+				var worker = workersArr[i]!;
+				worker.FinishEvent.Wait();
+				worker.Clear();
+				Pool.Return(worker);
+			}
+			Array.Clear(workersArr, 0, workersArr.Length);
+			ArrayPool<ParallelQueryWorker<<#= workItemName #>>>.Shared.Return(workersArr!);
+
 			return count;
+		}
+
+		private struct WorkItem<#= i #><TQ, <#= queryConstraints #>>
+			: IWorkItem
+			where <#= Constraints(i, 12) #>
+			where TQ : <#= Name(i) #><<#= queryConstraints #>>
+		{
+			private TQ _q;
+
+			Memory<Entity> _entities;
+<# for (var k = 0; k < i; k++)
+{
+#>
+			Memory<T<#= k #>> _c<#= k #>;
+<#
+}
+#>
+
+			public WorkItem<#= i #>(
+				Memory<Entity> entities,
+<# for (var k = 0; k < i; k++)
+{
+#>
+				Memory<T<#= k #>> c<#= k #>,
+<#
+}
+#>
+				TQ q
+			)
+			{
+				_entities = entities;
+
+<# for (var k = 0; k < i; k++)
+{
+#>
+				_c<#= k #> = c<#= k #>;
+<#
+}
+#>
+
+				_q = q;
+			}
+
+			public readonly void Execute()
+			{
+				var eSpan = _entities.Span;
+<# for (var k = 0; k < i; k++)
+{
+#>
+				var c<#= k #> = _c<#= k #>.Span;
+<#
+}
+#>
+
+				for (var i = 0; i < _entities.Length; i++)
+				{
+					_q.Execute(
+						eSpan[i]
+<# for (var k = 0; k < i; k++)
+{
+#>
+						, ref c<#= k #>[i]
+<#
+}
+#>
+					);
+				}
+			}
 		}
 	}
 }

@@ -1,12 +1,10 @@
 ﻿using System.Numerics;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Diagnosers;
 using Benchmarks.Components;
 using Myriad.ECS;
 using Myriad.ECS.Command;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds;
-using Myriad.ECS.Components;
 
 namespace Benchmarks;
 
@@ -81,13 +79,13 @@ public class QueryBenchmark
     //    _world.ExecuteVectorChunk<SimdChunkQueryAction2, Position, float, Velocity, float>(new SimdChunkQueryAction2(), _query);
     //}
 
-    //[Benchmark]
-    //public void ParallelQuery()
-    //{
-    //    _world.ExecuteParallel<QueryAction, Position, Velocity>(new QueryAction(), _query);
-    //}
+    [Benchmark]
+    public void ParallelQuery()
+    {
+        _world.ExecuteParallel<QueryAction, Position, Velocity>(new QueryAction(), _query);
+    }
 
-    ////[Benchmark]
+    //[Benchmark]
     //public void ParallelChunkQuery()
     //{
     //    _world.ExecuteChunkParallel<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
@@ -115,6 +113,10 @@ public class QueryBenchmark
         public readonly void Execute(Entity e, ref Position pos, ref Velocity vel)
         {
             pos.Value += vel.Value;
+            pos.Value += new Vector2(
+                (float)Math.Sqrt(Math.Abs(pos.Value.X)),
+                (float)Math.Tanh(pos.Value.Y)
+            );
         }
     }
 
@@ -126,6 +128,11 @@ public class QueryBenchmark
             for (var i = 0; i < pos.Length; i++)
             {
                 pos[i].Value += vel[i].Value;
+
+                pos[i].Value += new Vector2(
+                    (float)Math.Sqrt(Math.Abs(pos[i].Value.X)),
+                    (float)Math.Tanh(pos[i].Value.Y)
+                );
             }
         }
     }
@@ -137,6 +144,8 @@ public class QueryBenchmark
         {
             for (var i = 0; i < posf.Length; i++)
                 posf[i] += velf[i];
+
+            throw new NotImplementedException("implement extra complicated stuff");
         }
     }
 }
