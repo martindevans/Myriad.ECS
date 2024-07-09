@@ -12,7 +12,7 @@ internal class ParallelQueryWorker<TWork>
     private ParallelQueryWorker<TWork>?[]? _siblings;
     private CountdownEvent? _counter;
 
-    private ConcurrentQueue<TWork> _work { get; } = new();
+    private readonly ConcurrentQueue<TWork> _work = new();
 
     public ManualResetEventSlim FinishEvent { get; } = new ManualResetEventSlim(false);
 
@@ -88,7 +88,7 @@ internal class ParallelQueryWorker<TWork>
         _work.Enqueue(work);
     }
 
-    public bool Steal(out TWork result)
+    private bool Steal(out TWork result)
     {
         return _work.TryDequeue(out result);
     }
