@@ -151,6 +151,7 @@ namespace Myriad.ECS.Worlds
 
 			var c0 = ComponentID<T0>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -182,6 +183,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -219,6 +221,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -226,10 +229,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -246,6 +251,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem1<TQ, T0>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -273,7 +279,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;
@@ -437,6 +443,7 @@ namespace Myriad.ECS.Worlds
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -468,6 +475,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -507,6 +515,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -514,10 +523,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -534,6 +545,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem2<TQ, T0, T1>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -565,7 +577,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;
@@ -744,6 +756,7 @@ namespace Myriad.ECS.Worlds
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -775,6 +788,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -816,6 +830,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -823,10 +838,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -843,6 +860,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem3<TQ, T0, T1, T2>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -878,7 +896,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;
@@ -1072,6 +1090,7 @@ namespace Myriad.ECS.Worlds
 			var c2 = ComponentID<T2>.ID;
 			var c3 = ComponentID<T3>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -1103,6 +1122,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -1146,6 +1166,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -1153,10 +1174,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -1173,6 +1196,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem4<TQ, T0, T1, T2, T3>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -1212,7 +1236,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;
@@ -1421,6 +1445,7 @@ namespace Myriad.ECS.Worlds
 			var c3 = ComponentID<T3>.ID;
 			var c4 = ComponentID<T4>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -1452,6 +1477,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -1497,6 +1523,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -1504,10 +1531,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -1524,6 +1553,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem5<TQ, T0, T1, T2, T3, T4>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -1567,7 +1597,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;
@@ -1791,6 +1821,7 @@ namespace Myriad.ECS.Worlds
 			var c4 = ComponentID<T4>.ID;
 			var c5 = ComponentID<T5>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -1822,6 +1853,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -1869,6 +1901,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -1876,10 +1909,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -1896,6 +1931,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem6<TQ, T0, T1, T2, T3, T4, T5>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -1943,7 +1979,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;
@@ -2182,6 +2218,7 @@ namespace Myriad.ECS.Worlds
 			var c5 = ComponentID<T5>.ID;
 			var c6 = ComponentID<T6>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -2213,6 +2250,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -2262,6 +2300,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -2269,10 +2308,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -2289,6 +2330,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -2340,7 +2382,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;
@@ -2594,6 +2636,7 @@ namespace Myriad.ECS.Worlds
 			var c6 = ComponentID<T6>.ID;
 			var c7 = ComponentID<T7>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -2625,6 +2668,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -2676,6 +2720,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -2683,10 +2728,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -2703,6 +2750,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -2758,7 +2806,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;
@@ -3027,6 +3075,7 @@ namespace Myriad.ECS.Worlds
 			var c7 = ComponentID<T7>.ID;
 			var c8 = ComponentID<T8>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -3058,6 +3107,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -3111,6 +3161,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -3118,10 +3169,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -3138,6 +3191,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -3197,7 +3251,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;
@@ -3481,6 +3535,7 @@ namespace Myriad.ECS.Worlds
 			var c8 = ComponentID<T8>.ID;
 			var c9 = ComponentID<T9>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -3512,6 +3567,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -3567,6 +3623,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -3574,10 +3631,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -3594,6 +3653,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -3657,7 +3717,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;
@@ -3956,6 +4016,7 @@ namespace Myriad.ECS.Worlds
 			var c9 = ComponentID<T9>.ID;
 			var c10 = ComponentID<T10>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -3987,6 +4048,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -4044,6 +4106,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -4051,10 +4114,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -4071,6 +4136,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -4138,7 +4204,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;
@@ -4452,6 +4518,7 @@ namespace Myriad.ECS.Worlds
 			var c10 = ComponentID<T10>.ID;
 			var c11 = ComponentID<T11>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -4483,6 +4550,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -4542,6 +4610,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -4549,10 +4618,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -4569,6 +4640,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -4640,7 +4712,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;
@@ -4969,6 +5041,7 @@ namespace Myriad.ECS.Worlds
 			var c11 = ComponentID<T11>.ID;
 			var c12 = ComponentID<T12>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -5000,6 +5073,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -5061,6 +5135,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -5068,10 +5143,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -5088,6 +5165,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -5163,7 +5241,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;
@@ -5507,6 +5585,7 @@ namespace Myriad.ECS.Worlds
 			var c12 = ComponentID<T12>.ID;
 			var c13 = ComponentID<T13>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -5538,6 +5617,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -5601,6 +5681,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -5608,10 +5689,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -5628,6 +5711,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -5707,7 +5791,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;
@@ -6066,6 +6150,7 @@ namespace Myriad.ECS.Worlds
 			var c13 = ComponentID<T13>.ID;
 			var c14 = ComponentID<T14>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -6097,6 +6182,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -6162,6 +6248,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -6169,10 +6256,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -6189,6 +6278,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -6272,7 +6362,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;
@@ -6646,6 +6736,7 @@ namespace Myriad.ECS.Worlds
 			var c14 = ComponentID<T14>.ID;
 			var c15 = ComponentID<T15>.ID;
 
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -6677,6 +6768,7 @@ namespace Myriad.ECS.Worlds
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 
 			// Enqueue all of the work into the parallel workers
 			var count = 0;
@@ -6744,6 +6836,7 @@ namespace Myriad.ECS.Worlds
 							q
 						);
 
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
@@ -6751,10 +6844,12 @@ namespace Myriad.ECS.Worlds
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 					}
 				}
 			}
 
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -6771,6 +6866,7 @@ namespace Myriad.ECS.Worlds
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<WorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>>>.Shared.Return(workersArr!);
+			#endregion
 
 			return count;
 		}
@@ -6858,7 +6954,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 				var c0 = _c0.Span;

@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Command;
+using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Tests;
@@ -6,13 +7,9 @@ namespace Myriad.ECS.Tests;
 [TestClass]
 public class ParallelQueryTests
 {
-    [TestMethod]
-    public void IncrementValues()
+    private void SetupRandomEntities(World world)
     {
-        var w = new WorldBuilder().Build();
-        var b = new CommandBuffer(w);
-
-        // Create some random entities
+        var b = new CommandBuffer(world);
         var r = new Random(3452);
         for (var i = 0; i < 1_000_000; i++)
         {
@@ -32,6 +29,13 @@ public class ParallelQueryTests
         }
 
         b.Playback().Dispose();
+    }
+
+    [TestMethod]
+    public void IncrementValues()
+    {
+        var w = new WorldBuilder().Build();
+        SetupRandomEntities(w);
 
         // Increment just the int32s
         for (var i = 0; i < 128; i++)
@@ -55,5 +59,40 @@ public class ParallelQueryTests
             Assert.AreEqual(0, v.Ref.Value);
         foreach (var (_, v) in w.Query<ComponentInt64>())
             Assert.AreEqual(0, v.Ref.Value);
+    }
+
+    [TestMethod]
+    public void ChunkIncrementValues()
+    {
+        var w = new WorldBuilder().Build();
+        SetupRandomEntities(w);
+
+        // Increment just the int32s
+        for (var i = 0; i < 128; i++)
+            w.ExecuteChunkParallel<IncrementInt, ComponentInt32>(new IncrementInt());
+
+        // check they're 128
+        foreach (var (_, v) in w.Query<ComponentInt32>())
+            Assert.AreEqual(128, v.Ref.Value);
+
+        // Check everything else is 0
+        foreach (var (_, v) in w.Query<ComponentByte>())
+            Assert.AreEqual(0, v.Ref.Value);
+        foreach (var (_, v) in w.Query<ComponentInt16>())
+            Assert.AreEqual(0, v.Ref.Value);
+        foreach (var (_, v) in w.Query<ComponentFloat>())
+            Assert.AreEqual(0, v.Ref.Value);
+        foreach (var (_, v) in w.Query<ComponentInt64>())
+            Assert.AreEqual(0, v.Ref.Value);
+    }
+
+    private struct IncrementInt
+        : IChunkQuery1<ComponentInt32>
+    {
+        public void Execute(ReadOnlySpan<Entity> e, Span<ComponentInt32> t0)
+        {
+            for (var i = 0; i < t0.Length; i++)
+                t0[i].Value++;
+        }
     }
 }

@@ -295,7 +295,7 @@ namespace Myriad.ECS.Worlds
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				var eSpan = _entities.Span;
 <# for (var k = 0; k < i; k++)

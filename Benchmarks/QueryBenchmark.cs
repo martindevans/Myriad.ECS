@@ -67,11 +67,11 @@ public class QueryBenchmark
         _world.Execute<QueryAction, Position, Velocity>(ref q, _query);
     }
 
-    //[Benchmark]
-    //public void ChunkQuery()
-    //{
-    //    _world.ExecuteChunk<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
-    //}
+    [Benchmark]
+    public void ChunkQuery()
+    {
+        _world.ExecuteChunk<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
+    }
 
     //[Benchmark]
     //public void SimdChunkQuery()
@@ -85,11 +85,11 @@ public class QueryBenchmark
         _world.ExecuteParallel<QueryAction, Position, Velocity>(new QueryAction(), _query);
     }
 
-    //[Benchmark]
-    //public void ParallelChunkQuery()
-    //{
-    //    _world.ExecuteChunkParallel<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
-    //}
+    [Benchmark]
+    public void ParallelChunkQuery()
+    {
+        _world.ExecuteChunkParallel<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
+    }
 
     //[Benchmark]
     //public void QueryEnumerable()
@@ -115,7 +115,7 @@ public class QueryBenchmark
             pos.Value += vel.Value;
             pos.Value += new Vector2(
                 (float)Math.Sqrt(Math.Abs(Math.Tanh(pos.Value.X))),
-                (float)Math.Sqrt(Math.Abs(Math.Tanh(pos.Value.Y)))
+                (float)Math.Tanh(pos.Value.Y)
             );
         }
     }
@@ -131,7 +131,7 @@ public class QueryBenchmark
 
                 pos[i].Value += new Vector2(
                     (float)Math.Sqrt(Math.Abs(Math.Tanh(pos[i].Value.X))),
-                    (float)Math.Sqrt(Math.Abs(Math.Tanh(pos[i].Value.Y)))
+                    (float)Math.Tanh(pos[i].Value.Y)
                 );
             }
         }

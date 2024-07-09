@@ -4,12 +4,15 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
+<#@ include file="TemplateHeaders/ParallelWorkLoopSetup.t4" #>
 <#
 	const int PARAM_COUNT = 16;
 #>
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Threading;
+using Myriad.ECS.Allocations;
+using System.Buffers;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -20,6 +23,7 @@ using Myriad.ECS.Threading;
 {
 	var sumij = i;
 	var queryConstraints = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
+	var workItemName = $"ChunkWorkItem{i}<TQ, {queryConstraints}>";
 #>
 namespace Myriad.ECS.Queries
 {
@@ -247,6 +251,10 @@ namespace Myriad.ECS.Worlds
 }
 #>
 
+<#
+			EmitParallelWorkLoopSetup(workItemName);
+#>
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
@@ -254,27 +262,21 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
-				Parallel.For(0, archetype.Chunks.Count, c =>
+				using var enumerator = archetype.GetChunkEnumerator();
+				while (enumerator.MoveNext())
 				{
-					var chunk = archetype.Chunks[c];
+					var chunk = enumerator.Current!;
+					var item = new <#= workItemName #>(chunk, q);
 
-					var entities = chunk.Entities;
-					if (entities.Length == 0)
-						return;
-
-					Interlocked.Add(ref count, entities.Length);
-
-<# for (var k = 0; k < sumij; k++)
-{
-#>
-					var t<#= k #> = chunk.GetSpan<T<#= k #>>(c<#= k #>);
 <#
-}
+					EmitEnqueueParallelWork("item");
 #>
-
-					q.Execute(entities, <#= CallParameters(sumij) #>);
-				});
+				}
 			}
+
+<#
+			EmitParallelWorkLoopWaitAndTeardown(workItemName);
+#>
 
 			return count;
 		}
@@ -285,49 +287,22 @@ namespace Myriad.ECS.Worlds
 			where TQ : <#= Name(i) #><<#= queryConstraints #>>
 		{
 			private readonly TQ _q;
+			private readonly Chunks.Chunk _chunk;
 
-			private readonly Memory<Entity> _entities;
-<# for (var k = 0; k < i; k++)
-{
-#>
-			private readonly Memory<T<#= k #>> _c<#= k #>;
-<#
-}
-#>
-
-			public ChunkWorkItem<#= i #>(
-				Memory<Entity> entities,
-<# for (var k = 0; k < i; k++)
-{
-#>
-				Memory<T<#= k #>> c<#= k #>,
-<#
-}
-#>
-				TQ q
-			)
+			public ChunkWorkItem<#= i #>(Chunks.Chunk chunk, TQ q)
 			{
-				_entities = entities;
-
-<# for (var k = 0; k < i; k++)
-{
-#>
-				_c<#= k #> = c<#= k #>;
-<#
-}
-#>
-
+				_chunk = chunk;
 				_q = q;
 			}
 
-			public readonly void Execute()
+			public void Execute()
 			{
 				_q.Execute(
-					_entities.Span
+					_chunk.Entities
 <# for (var k = 0; k < i; k++)
 {
 #>
-					, _c<#= k #>.Span
+					, _chunk.GetSpan<T<#= k #>>()
 <#
 }
 #>

@@ -2,6 +2,7 @@
 void EmitParallelWorkLoopSetup(string workItemName)
 {
 #>
+			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -33,6 +34,7 @@ void EmitParallelWorkLoopSetup(string workItemName)
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
+			#endregion
 <#
 }
 #>
@@ -41,6 +43,7 @@ void EmitParallelWorkLoopSetup(string workItemName)
 void EmitEnqueueParallelWork(string itemName)
 {
 #>
+						#region Parallel Work Loop Add To Queue
 						// Add work to a worker, keeping track of the total amount of work created
 						workCounter.AddCount();
 						workersArr[workerEnqueueIdx]!.Enqueue(<#= itemName #>);
@@ -48,6 +51,7 @@ void EmitEnqueueParallelWork(string itemName)
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
 							workerEnqueueIdx = 0;
+						#endregion
 <#
 }
 #>
@@ -56,6 +60,7 @@ void EmitEnqueueParallelWork(string itemName)
 void EmitParallelWorkLoopWaitAndTeardown(string workItemName)
 {
 #>
+			#region Parallel Work Loop Teardown
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
 
@@ -72,6 +77,7 @@ void EmitParallelWorkLoopWaitAndTeardown(string workItemName)
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<<#= workItemName #>>>.Shared.Return(workersArr!);
+			#endregion
 <#
 }
 #>

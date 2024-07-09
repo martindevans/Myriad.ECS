@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using Myriad.ECS.Queries;
 
 namespace Myriad.ECS.Threading;
 
@@ -44,15 +45,26 @@ internal class ParallelQueryWorker<TWork>
             if (counter == null || siblings == null)
                 throw new InvalidOperationException("Cannot execute work - worker not configured");
 
+            var rng = new ValueRandom(Array.IndexOf(siblings, this));
+
             while (!counter.IsSet || _work.Count > 0)
             {
                 // Process the entire local queue
                 while (_work.TryDequeue(out var work))
                     DoWorkItem(counter, ref work);
 
-                // Try to steal work off siblings
-                foreach (var sibling in siblings)
+                // Do a few rounds of trying to steal work off siblings.
+                // If at any point work gets added to the local work queue
+                // immediately break off and do that
+                for (var i = 0; i < 64 && _work.Count == 0; i++)
                 {
+                    // Choose a random sibling. This prevents all workers starting from the first
+                    // worker every time, which would cause unnecessary contention and bias the system
+                    // to drain those queues first.
+                    var idx = Math.Abs(rng.Next()) % siblings.Length;
+                    var sibling = siblings[idx];
+
+                    // Steal work
                     if (sibling == null || !sibling.Steal(out var work))
                         continue;
                     DoWorkItem(counter, ref work);
