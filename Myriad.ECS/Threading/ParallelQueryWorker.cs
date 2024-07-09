@@ -47,16 +47,16 @@ internal class ParallelQueryWorker<TWork>
 
             var rng = new ValueRandom(Array.IndexOf(siblings, this));
 
-            while (!counter.IsSet || _work.Count > 0)
+            while (!counter.IsSet)
             {
                 // Process the entire local queue
                 while (_work.TryDequeue(out var work))
                     DoWorkItem(counter, ref work);
 
                 // Do a few rounds of trying to steal work off siblings.
-                // If at any point work gets added to the local work queue
-                // immediately break off and do that
-                for (var i = 0; i < 64 && _work.Count == 0; i++)
+                // Break out of the loop if there is any local work to do, or if the counter
+                // is set (indicating there is no more work available anywhere).
+                for (var i = 0; i < siblings.Length && _work.IsEmpty && !counter.IsSet; i++)
                 {
                     // Choose a random sibling. This prevents all workers starting from the first
                     // worker every time, which would cause unnecessary contention and bias the system
