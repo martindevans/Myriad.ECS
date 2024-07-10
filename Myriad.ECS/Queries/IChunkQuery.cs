@@ -181,8 +181,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -224,6 +222,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -231,8 +234,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem1<TQ, T0>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -243,8 +245,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -254,11 +281,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem1<TQ, T0>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;
@@ -475,9 +506,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-		    var c1 = ComponentID<T1>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -519,6 +547,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -526,8 +559,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem2<TQ, T0, T1>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -538,8 +570,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -549,11 +606,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem2<TQ, T0, T1>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;
@@ -788,10 +849,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-		    var c1 = ComponentID<T1>.ID;
-		    var c2 = ComponentID<T2>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -833,6 +890,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -840,8 +902,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem3<TQ, T0, T1, T2>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -852,8 +913,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -863,11 +949,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem3<TQ, T0, T1, T2>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;
@@ -1120,11 +1210,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-		    var c1 = ComponentID<T1>.ID;
-		    var c2 = ComponentID<T2>.ID;
-		    var c3 = ComponentID<T3>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -1166,6 +1251,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -1173,8 +1263,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem4<TQ, T0, T1, T2, T3>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -1185,8 +1274,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -1196,11 +1310,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem4<TQ, T0, T1, T2, T3>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;
@@ -1471,12 +1589,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-		    var c1 = ComponentID<T1>.ID;
-		    var c2 = ComponentID<T2>.ID;
-		    var c3 = ComponentID<T3>.ID;
-		    var c4 = ComponentID<T4>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -1518,6 +1630,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -1525,8 +1642,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem5<TQ, T0, T1, T2, T3, T4>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -1537,8 +1653,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -1548,11 +1689,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem5<TQ, T0, T1, T2, T3, T4>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;
@@ -1841,13 +1986,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-		    var c1 = ComponentID<T1>.ID;
-		    var c2 = ComponentID<T2>.ID;
-		    var c3 = ComponentID<T3>.ID;
-		    var c4 = ComponentID<T4>.ID;
-		    var c5 = ComponentID<T5>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -1889,6 +2027,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -1896,8 +2039,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem6<TQ, T0, T1, T2, T3, T4, T5>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -1908,8 +2050,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -1919,11 +2086,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem6<TQ, T0, T1, T2, T3, T4, T5>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;
@@ -2230,14 +2401,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-		    var c1 = ComponentID<T1>.ID;
-		    var c2 = ComponentID<T2>.ID;
-		    var c3 = ComponentID<T3>.ID;
-		    var c4 = ComponentID<T4>.ID;
-		    var c5 = ComponentID<T5>.ID;
-		    var c6 = ComponentID<T6>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -2279,6 +2442,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -2286,8 +2454,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -2298,8 +2465,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -2309,11 +2501,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;
@@ -2638,15 +2834,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-		    var c1 = ComponentID<T1>.ID;
-		    var c2 = ComponentID<T2>.ID;
-		    var c3 = ComponentID<T3>.ID;
-		    var c4 = ComponentID<T4>.ID;
-		    var c5 = ComponentID<T5>.ID;
-		    var c6 = ComponentID<T6>.ID;
-		    var c7 = ComponentID<T7>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -2688,6 +2875,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -2695,8 +2887,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -2707,8 +2898,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -2718,11 +2934,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;
@@ -3065,16 +3285,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-		    var c1 = ComponentID<T1>.ID;
-		    var c2 = ComponentID<T2>.ID;
-		    var c3 = ComponentID<T3>.ID;
-		    var c4 = ComponentID<T4>.ID;
-		    var c5 = ComponentID<T5>.ID;
-		    var c6 = ComponentID<T6>.ID;
-		    var c7 = ComponentID<T7>.ID;
-		    var c8 = ComponentID<T8>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -3116,6 +3326,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -3123,8 +3338,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -3135,8 +3349,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -3146,11 +3385,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;
@@ -3511,17 +3754,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-		    var c1 = ComponentID<T1>.ID;
-		    var c2 = ComponentID<T2>.ID;
-		    var c3 = ComponentID<T3>.ID;
-		    var c4 = ComponentID<T4>.ID;
-		    var c5 = ComponentID<T5>.ID;
-		    var c6 = ComponentID<T6>.ID;
-		    var c7 = ComponentID<T7>.ID;
-		    var c8 = ComponentID<T8>.ID;
-		    var c9 = ComponentID<T9>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -3563,6 +3795,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -3570,8 +3807,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -3582,8 +3818,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -3593,11 +3854,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;
@@ -3976,18 +4241,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-		    var c1 = ComponentID<T1>.ID;
-		    var c2 = ComponentID<T2>.ID;
-		    var c3 = ComponentID<T3>.ID;
-		    var c4 = ComponentID<T4>.ID;
-		    var c5 = ComponentID<T5>.ID;
-		    var c6 = ComponentID<T6>.ID;
-		    var c7 = ComponentID<T7>.ID;
-		    var c8 = ComponentID<T8>.ID;
-		    var c9 = ComponentID<T9>.ID;
-		    var c10 = ComponentID<T10>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -4029,6 +4282,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -4036,8 +4294,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -4048,8 +4305,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -4059,11 +4341,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;
@@ -4460,19 +4746,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-		    var c1 = ComponentID<T1>.ID;
-		    var c2 = ComponentID<T2>.ID;
-		    var c3 = ComponentID<T3>.ID;
-		    var c4 = ComponentID<T4>.ID;
-		    var c5 = ComponentID<T5>.ID;
-		    var c6 = ComponentID<T6>.ID;
-		    var c7 = ComponentID<T7>.ID;
-		    var c8 = ComponentID<T8>.ID;
-		    var c9 = ComponentID<T9>.ID;
-		    var c10 = ComponentID<T10>.ID;
-		    var c11 = ComponentID<T11>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -4514,6 +4787,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -4521,8 +4799,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -4533,8 +4810,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -4544,11 +4846,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;
@@ -4963,20 +5269,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-		    var c1 = ComponentID<T1>.ID;
-		    var c2 = ComponentID<T2>.ID;
-		    var c3 = ComponentID<T3>.ID;
-		    var c4 = ComponentID<T4>.ID;
-		    var c5 = ComponentID<T5>.ID;
-		    var c6 = ComponentID<T6>.ID;
-		    var c7 = ComponentID<T7>.ID;
-		    var c8 = ComponentID<T8>.ID;
-		    var c9 = ComponentID<T9>.ID;
-		    var c10 = ComponentID<T10>.ID;
-		    var c11 = ComponentID<T11>.ID;
-		    var c12 = ComponentID<T12>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -5018,6 +5310,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -5025,8 +5322,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -5037,8 +5333,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -5048,11 +5369,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;
@@ -5485,21 +5810,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-		    var c1 = ComponentID<T1>.ID;
-		    var c2 = ComponentID<T2>.ID;
-		    var c3 = ComponentID<T3>.ID;
-		    var c4 = ComponentID<T4>.ID;
-		    var c5 = ComponentID<T5>.ID;
-		    var c6 = ComponentID<T6>.ID;
-		    var c7 = ComponentID<T7>.ID;
-		    var c8 = ComponentID<T8>.ID;
-		    var c9 = ComponentID<T9>.ID;
-		    var c10 = ComponentID<T10>.ID;
-		    var c11 = ComponentID<T11>.ID;
-		    var c12 = ComponentID<T12>.ID;
-		    var c13 = ComponentID<T13>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -5541,6 +5851,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -5548,8 +5863,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -5560,8 +5874,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -5571,11 +5910,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;
@@ -6026,22 +6369,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-		    var c1 = ComponentID<T1>.ID;
-		    var c2 = ComponentID<T2>.ID;
-		    var c3 = ComponentID<T3>.ID;
-		    var c4 = ComponentID<T4>.ID;
-		    var c5 = ComponentID<T5>.ID;
-		    var c6 = ComponentID<T6>.ID;
-		    var c7 = ComponentID<T7>.ID;
-		    var c8 = ComponentID<T8>.ID;
-		    var c9 = ComponentID<T9>.ID;
-		    var c10 = ComponentID<T10>.ID;
-		    var c11 = ComponentID<T11>.ID;
-		    var c12 = ComponentID<T12>.ID;
-		    var c13 = ComponentID<T13>.ID;
-		    var c14 = ComponentID<T14>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -6083,6 +6410,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -6090,8 +6422,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -6102,8 +6433,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -6113,11 +6469,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;
@@ -6586,23 +6946,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentID<T0>.ID;
-		    var c1 = ComponentID<T1>.ID;
-		    var c2 = ComponentID<T2>.ID;
-		    var c3 = ComponentID<T3>.ID;
-		    var c4 = ComponentID<T4>.ID;
-		    var c5 = ComponentID<T5>.ID;
-		    var c6 = ComponentID<T6>.ID;
-		    var c7 = ComponentID<T7>.ID;
-		    var c8 = ComponentID<T8>.ID;
-		    var c9 = ComponentID<T9>.ID;
-		    var c10 = ComponentID<T10>.ID;
-		    var c11 = ComponentID<T11>.ID;
-		    var c12 = ComponentID<T12>.ID;
-		    var c13 = ComponentID<T13>.ID;
-		    var c14 = ComponentID<T14>.ID;
-		    var c15 = ComponentID<T15>.ID;
-
 			#region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
@@ -6644,6 +6987,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -6651,8 +6999,7 @@ namespace Myriad.ECS.Worlds
 					var item = new ChunkWorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
-						workCounter.AddCount();
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(item);
 
 						workerEnqueueIdx++;
@@ -6663,8 +7010,33 @@ namespace Myriad.ECS.Worlds
 			}
 
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -6674,11 +7046,15 @@ namespace Myriad.ECS.Worlds
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<ChunkWorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 
 			return count;

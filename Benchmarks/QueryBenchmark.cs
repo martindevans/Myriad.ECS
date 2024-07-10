@@ -9,8 +9,8 @@ using Myriad.ECS.Worlds;
 namespace Benchmarks;
 
 //[HardwareCounters(HardwareCounter.BranchMispredictions, HardwareCounter.BranchInstructions)]
-//[ThreadingDiagnoser]
-[MemoryDiagnoser]
+[ThreadingDiagnoser]
+//[MemoryDiagnoser]
 [ShortRunJob]
 public class QueryBenchmark
 {
@@ -60,18 +60,18 @@ public class QueryBenchmark
         }
     }
 
-    [Benchmark]
-    public void Query()
-    {
-        var q = new QueryAction();
-        _world.Execute<QueryAction, Position, Velocity>(ref q, _query);
-    }
+    //[Benchmark]
+    //public void Query()
+    //{
+    //    var q = new QueryAction();
+    //    _world.Execute<QueryAction, Position, Velocity>(ref q, _query);
+    //}
 
-    [Benchmark]
-    public void ChunkQuery()
-    {
-        _world.ExecuteChunk<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
-    }
+    //[Benchmark]
+    //public void ChunkQuery()
+    //{
+    //    _world.ExecuteChunk<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
+    //}
 
     //[Benchmark]
     //public void SimdChunkQuery()

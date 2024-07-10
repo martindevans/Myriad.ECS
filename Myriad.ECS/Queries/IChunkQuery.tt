@@ -243,14 +243,6 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-<# for (var k = 0; k < sumij; k++)
-{
-#>
-		    var c<#= k #> = ComponentID<T<#= k #>>.ID;
-<#
-}
-#>
-
 <#
 			EmitParallelWorkLoopSetup(workItemName);
 #>
@@ -262,6 +254,11 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+				count += archetype.EntityCount;
+
+				// Inrement work counter for all of the chunk we're about to enqueue
+				workCounter.AddCount(archetype.Chunks.Count);
+
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
@@ -269,7 +266,7 @@ namespace Myriad.ECS.Worlds
 					var item = new <#= workItemName #>(chunk, q);
 
 <#
-					EmitEnqueueParallelWork("item");
+					EmitEnqueueParallelWork("item", false);
 #>
 				}
 			}

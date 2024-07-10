@@ -40,12 +40,19 @@ void EmitParallelWorkLoopSetup(string workItemName)
 #>
 
 <#
-void EmitEnqueueParallelWork(string itemName)
+void EmitEnqueueParallelWork(string itemName, bool incrementWorkCount = true)
 {
 #>
 						#region Parallel Work Loop Add To Queue
-						// Add work to a worker, keeping track of the total amount of work created
+<# if (incrementWorkCount)
+{
+#>
+						// Increment counter before adding the work to a worker
 						workCounter.AddCount();
+<#
+}
+#>
+						// Add work to a worker
 						workersArr[workerEnqueueIdx]!.Enqueue(<#= itemName #>);
 
 						workerEnqueueIdx++;
@@ -61,8 +68,33 @@ void EmitParallelWorkLoopWaitAndTeardown(string workItemName)
 {
 #>
 			#region Parallel Work Loop Teardown
+			// Collection of exceptions thrown in any work
+			List<Exception>? exceptions = null;
+
 			// Clear the 1 that was added at the start (when the counter was reset)
 			workCounter.Signal();
+
+			// Try to steal some work to do on this thread
+			while (!workCounter.IsSet)
+			{
+				for (var i = 0; i < workers.Length && !workCounter.IsSet; i++)
+				{
+					if (workersArr[i]!.Steal(out var work))
+					{
+						workCounter.Signal();
+						try
+						{
+							work.Execute();
+						}
+						catch (Exception ex)
+						{
+							exceptions ??= [ ];
+							exceptions.Add(ex);
+							break;
+						}
+					}
+				}
+			}
 
 			// Wait for work to finish
 			workCounter.Wait();
@@ -72,11 +104,15 @@ void EmitParallelWorkLoopWaitAndTeardown(string workItemName)
 			{
 				var worker = workersArr[i]!;
 				worker.FinishEvent.Wait();
-				worker.Clear();
+				worker.Clear(ref exceptions);
 				Pool.Return(worker);
 			}
 			Array.Clear(workersArr, 0, workersArr.Length);
 			ArrayPool<ParallelQueryWorker<<#= workItemName #>>>.Shared.Return(workersArr!);
+
+			// Throw collected exceptions
+			if (exceptions is { Count: > 0 })
+				throw new AggregateException(exceptions);
 			#endregion
 <#
 }

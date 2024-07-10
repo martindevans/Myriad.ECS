@@ -214,6 +214,9 @@ namespace Myriad.ECS.Worlds
 
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
+					// Inrement work counter for all of the batches we're about to create
+					workCounter.AddCount(numBatches);
+
 <# for (var k = 0; k < i; k++)
 {
 #>
@@ -241,7 +244,7 @@ namespace Myriad.ECS.Worlds
 						);
 
 <#
-						EmitEnqueueParallelWork("item");
+						EmitEnqueueParallelWork("item", false);
 #>
 					}
 				}

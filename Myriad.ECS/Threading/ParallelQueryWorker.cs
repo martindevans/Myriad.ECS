@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using Myriad.ECS.Queries;
 
 namespace Myriad.ECS.Threading;
@@ -13,6 +14,7 @@ internal class ParallelQueryWorker<TWork>
     private CountdownEvent? _counter;
 
     private readonly ConcurrentQueue<TWork> _work = new();
+    private List<Exception> _exceptions = [ ];
 
     public ManualResetEventSlim FinishEvent { get; } = new ManualResetEventSlim(false);
 
@@ -20,11 +22,19 @@ internal class ParallelQueryWorker<TWork>
     {
         _siblings = siblings;
         _counter = counter;
+        _exceptions.Clear();
         FinishEvent.Reset();
     }
 
-    public void Clear()
+    public void Clear(ref List<Exception>? exceptions)
     {
+        if (_exceptions.Count > 0)
+        {
+            exceptions ??= [ ];
+            exceptions.AddRange(_exceptions);
+            _exceptions.Clear();
+        }
+
         _counter = null;
         _siblings = null;
         _work.Clear();
@@ -45,6 +55,7 @@ internal class ParallelQueryWorker<TWork>
             if (counter == null || siblings == null)
                 throw new InvalidOperationException("Cannot execute work - worker not configured");
 
+            // Seed an RNG with the index of this worker in the siblings array
             var rng = new ValueRandom(Array.IndexOf(siblings, this));
 
             while (!counter.IsSet)
@@ -80,7 +91,15 @@ internal class ParallelQueryWorker<TWork>
     private void DoWorkItem(CountdownEvent counter, ref TWork work)
     {
         counter.Signal();
-        work.Execute();
+
+        try
+        {
+            work.Execute();
+        }
+        catch (Exception ex)
+        {
+            _exceptions.Add(ex);
+        }
     }
 
     public void Enqueue(TWork work)
@@ -88,7 +107,7 @@ internal class ParallelQueryWorker<TWork>
         _work.Enqueue(work);
     }
 
-    private bool Steal(out TWork result)
+    public bool Steal(out TWork result)
     {
         return _work.TryDequeue(out result);
     }
