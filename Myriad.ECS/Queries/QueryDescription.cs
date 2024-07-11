@@ -320,6 +320,18 @@ public sealed class QueryDescription
         return count;
     }
 
+    /// <summary>
+    /// Check if this query matches any entities
+    /// </summary>
+    /// <returns></returns>
+    public bool Any()
+    {
+        foreach (var archetype in GetArchetypes())
+            if (archetype.Archetype.EntityCount > 0)
+                return true;
+        return false;
+    }
+
     #region bulk write
     /// <summary>
     /// Overwrite a component for every entity which matches this query

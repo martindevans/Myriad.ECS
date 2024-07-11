@@ -17,7 +17,6 @@ using System.Buffers;
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
 // ReSharper disable LoopCanBeConvertedToQuery
-#pragma warning disable CA1822 // Mark members as static
 
 <# for (var i = 1; i <= PARAM_COUNT; i++)
 {
@@ -241,6 +240,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 <#

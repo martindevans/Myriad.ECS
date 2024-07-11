@@ -178,6 +178,10 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
+				return 0;
+
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
 
 <# for (var k = 0; k < i; k++)

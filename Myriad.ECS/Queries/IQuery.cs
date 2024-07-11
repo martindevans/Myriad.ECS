@@ -147,6 +147,10 @@ namespace Myriad.ECS.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
+				return 0;
+
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
 
 			var c0 = ComponentID<T0>.ID;
@@ -467,6 +471,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -810,6 +818,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -1174,6 +1186,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -1559,6 +1575,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -1965,6 +1985,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -2392,6 +2416,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -2840,6 +2868,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -3309,6 +3341,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -3799,6 +3835,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -4310,6 +4350,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -4842,6 +4886,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -5395,6 +5443,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -5969,6 +6021,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -6564,6 +6620,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -7180,6 +7240,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);

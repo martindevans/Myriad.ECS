@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using Myriad.ECS.Queries;
 
 namespace Myriad.ECS.Threading;
@@ -14,7 +13,7 @@ internal class ParallelQueryWorker<TWork>
     private CountdownEvent? _counter;
 
     private readonly ConcurrentQueue<TWork> _work = new();
-    private List<Exception> _exceptions = [ ];
+    private readonly List<Exception> _exceptions = [ ];
 
     public ManualResetEventSlim FinishEvent { get; } = new ManualResetEventSlim(false);
 
@@ -41,10 +40,12 @@ internal class ParallelQueryWorker<TWork>
         FinishEvent.Reset();
     }
 
+#if !NET8_0_OR_GREATER
     public void Execute(object? state)
     {
         Execute();
     }
+#endif
 
     public void Execute()
     {

@@ -9,7 +9,6 @@ using System.Buffers;
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
 // ReSharper disable LoopCanBeConvertedToQuery
-#pragma warning disable CA1822 // Mark members as static
 
 namespace Myriad.ECS.Queries
 {
@@ -179,6 +178,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -504,6 +507,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -847,6 +854,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -1208,6 +1219,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -1587,6 +1602,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -1984,6 +2003,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -2399,6 +2422,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -2832,6 +2859,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -3283,6 +3314,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -3752,6 +3787,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -4239,6 +4278,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -4744,6 +4787,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -5267,6 +5314,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -5808,6 +5859,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -6367,6 +6422,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -6944,6 +7003,10 @@ namespace Myriad.ECS.Worlds
 
 			var archetypes = query.GetArchetypes();
 			if (archetypes.Count == 0)
+				return 0;
+
+			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
+			if (!query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
