@@ -4,9 +4,7 @@ using Myriad.ECS.Queries;
 namespace Myriad.ECS.Threading;
 
 internal class ParallelQueryWorker<TWork>
-#if NET8_0_OR_GREATER
-    : IThreadPoolWorkItem
-#endif
+    : IThreadPoolWork
     where TWork : struct, IWorkItem
 {
     private ParallelQueryWorker<TWork>?[]? _siblings;
@@ -39,13 +37,6 @@ internal class ParallelQueryWorker<TWork>
         _work.Clear();
         FinishEvent.Reset();
     }
-
-#if !NET8_0_OR_GREATER
-    public void Execute(object? state)
-    {
-        Execute();
-    }
-#endif
 
     public void Execute()
     {

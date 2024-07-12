@@ -176,13 +176,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -503,13 +497,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -851,13 +839,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -1220,13 +1202,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -1610,13 +1586,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -2021,13 +1991,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -2453,13 +2417,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -2906,13 +2864,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -3380,13 +3332,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -3875,13 +3821,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -4391,13 +4331,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -4928,13 +4862,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -5486,13 +5414,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -6065,13 +5987,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -6665,13 +6581,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -7286,13 +7196,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index

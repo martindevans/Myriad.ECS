@@ -1,12 +1,15 @@
 ﻿using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
+using Myriad.ECS.Threading;
 using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Worlds;
 
 public sealed partial class World
 {
+    internal IThreadPool ThreadPool { get; }
+
     private readonly List<Archetype> _archetypes = [ ];
     private readonly Dictionary<ArchetypeHash, List<Archetype>> _archetypesByHash = [ ];
 
@@ -19,8 +22,9 @@ public sealed partial class World
     public IReadOnlyList<Archetype> Archetypes => _archetypes;
     internal int ArchetypesCount => _archetypes.Count;
 
-    internal World()
+    internal World(IThreadPool pool)
     {
+        ThreadPool = pool;
     }
 
     #region bulk write

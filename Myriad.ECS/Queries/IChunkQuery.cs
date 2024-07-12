@@ -205,13 +205,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -233,7 +227,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem1<TQ, T0>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
@@ -534,13 +528,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -562,7 +550,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem2<TQ, T0, T1>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
@@ -881,13 +869,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -909,7 +891,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem3<TQ, T0, T1, T2>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
@@ -1246,13 +1228,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -1274,7 +1250,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem4<TQ, T0, T1, T2, T3>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
@@ -1629,13 +1605,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -1657,7 +1627,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem5<TQ, T0, T1, T2, T3, T4>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
@@ -2030,13 +2000,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -2058,7 +2022,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem6<TQ, T0, T1, T2, T3, T4, T5>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
@@ -2449,13 +2413,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -2477,7 +2435,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
@@ -2886,13 +2844,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -2914,7 +2866,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
@@ -3341,13 +3293,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -3369,7 +3315,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
@@ -3814,13 +3760,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -3842,7 +3782,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
@@ -4305,13 +4245,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -4333,7 +4267,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
@@ -4814,13 +4748,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -4842,7 +4770,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
@@ -5341,13 +5269,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -5369,7 +5291,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
@@ -5886,13 +5808,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -5914,7 +5830,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
@@ -6449,13 +6365,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -6477,7 +6387,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
@@ -7030,13 +6940,7 @@ namespace Myriad.ECS.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-				{
-#if NET8_0_OR_GREATER
-					ThreadPool.UnsafeQueueUserWorkItem(item, true);
-#else
-					ThreadPool.UnsafeQueueUserWorkItem(item.Execute, true);
-#endif
-				}
+					ThreadPool.QueueUserWorkItem(item);
 			}
 
 			// Enqueue work to this index
@@ -7058,7 +6962,7 @@ namespace Myriad.ECS.Worlds
 				using var enumerator = archetype.GetChunkEnumerator();
 				while (enumerator.MoveNext())
 				{
-					var chunk = enumerator.Current!;
+					var chunk = enumerator.Current;
 					var item = new ChunkWorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(chunk, q);
 
 						#region Parallel Work Loop Add To Queue
