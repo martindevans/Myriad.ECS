@@ -29,7 +29,7 @@ namespace Myriad.ECS.Queries
 	public interface <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		where <#= Constraints(i, 8) #>
 	{
-		public void Execute(ReadOnlySpan<Entity> e, <#= Refs(0, i) #>);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, <#= Refs(0, i) #>);
 	}
 }
 
@@ -222,7 +222,7 @@ namespace Myriad.ECS.Worlds
 }
 #>
 
-					q.Execute(entities, <#= CallParameters(sumij) #>);
+					q.Execute(new ChunkHandle(chunk), entities, <#= CallParameters(sumij) #>);
 				}
 			}
 
@@ -298,7 +298,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 <# for (var k = 0; k < i; k++)
 {
 #>

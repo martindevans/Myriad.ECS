@@ -89,7 +89,7 @@ public class ParallelQueryTests
     private struct IncrementInt
         : IChunkQuery1<ComponentInt32>
     {
-        public void Execute(ReadOnlySpan<Entity> e, Span<ComponentInt32> t0)
+        public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<ComponentInt32> t0)
         {
             for (var i = 0; i < t0.Length; i++)
                 t0[i].Value++;

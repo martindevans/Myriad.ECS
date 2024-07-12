@@ -15,7 +15,7 @@ namespace Myriad.ECS.Queries
 	public interface IChunkQuery1<T0>
 		where T0 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0);
 	}
 }
 
@@ -160,7 +160,7 @@ namespace Myriad.ECS.Worlds
 
 					var t0 = chunk.GetSpan<T0>(c0);
 
-					q.Execute(entities, t0);
+					q.Execute(new ChunkHandle(chunk), entities, t0);
 				}
 			}
 
@@ -315,7 +315,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 				);
 			}
@@ -329,7 +329,7 @@ namespace Myriad.ECS.Queries
 		where T0 : IComponent
         where T1 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1);
 	}
 }
 
@@ -488,7 +488,7 @@ namespace Myriad.ECS.Worlds
 					var t0 = chunk.GetSpan<T0>(c0);
 					var t1 = chunk.GetSpan<T1>(c1);
 
-					q.Execute(entities, t0, t1);
+					q.Execute(new ChunkHandle(chunk), entities, t0, t1);
 				}
 			}
 
@@ -645,7 +645,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 				);
@@ -661,7 +661,7 @@ namespace Myriad.ECS.Queries
         where T1 : IComponent
         where T2 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2);
 	}
 }
 
@@ -834,7 +834,7 @@ namespace Myriad.ECS.Worlds
 					var t1 = chunk.GetSpan<T1>(c1);
 					var t2 = chunk.GetSpan<T2>(c2);
 
-					q.Execute(entities, t0, t1, t2);
+					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2);
 				}
 			}
 
@@ -993,7 +993,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -1011,7 +1011,7 @@ namespace Myriad.ECS.Queries
         where T2 : IComponent
         where T3 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3);
 	}
 }
 
@@ -1198,7 +1198,7 @@ namespace Myriad.ECS.Worlds
 					var t2 = chunk.GetSpan<T2>(c2);
 					var t3 = chunk.GetSpan<T3>(c3);
 
-					q.Execute(entities, t0, t1, t2, t3);
+					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3);
 				}
 			}
 
@@ -1359,7 +1359,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -1379,7 +1379,7 @@ namespace Myriad.ECS.Queries
         where T3 : IComponent
         where T4 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4);
 	}
 }
 
@@ -1580,7 +1580,7 @@ namespace Myriad.ECS.Worlds
 					var t3 = chunk.GetSpan<T3>(c3);
 					var t4 = chunk.GetSpan<T4>(c4);
 
-					q.Execute(entities, t0, t1, t2, t3, t4);
+					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4);
 				}
 			}
 
@@ -1743,7 +1743,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -1765,7 +1765,7 @@ namespace Myriad.ECS.Queries
         where T4 : IComponent
         where T5 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5);
 	}
 }
 
@@ -1980,7 +1980,7 @@ namespace Myriad.ECS.Worlds
 					var t4 = chunk.GetSpan<T4>(c4);
 					var t5 = chunk.GetSpan<T5>(c5);
 
-					q.Execute(entities, t0, t1, t2, t3, t4, t5);
+					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5);
 				}
 			}
 
@@ -2145,7 +2145,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -2169,7 +2169,7 @@ namespace Myriad.ECS.Queries
         where T5 : IComponent
         where T6 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6);
 	}
 }
 
@@ -2398,7 +2398,7 @@ namespace Myriad.ECS.Worlds
 					var t5 = chunk.GetSpan<T5>(c5);
 					var t6 = chunk.GetSpan<T6>(c6);
 
-					q.Execute(entities, t0, t1, t2, t3, t4, t5, t6);
+					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6);
 				}
 			}
 
@@ -2565,7 +2565,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -2591,7 +2591,7 @@ namespace Myriad.ECS.Queries
         where T6 : IComponent
         where T7 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7);
 	}
 }
 
@@ -2834,7 +2834,7 @@ namespace Myriad.ECS.Worlds
 					var t6 = chunk.GetSpan<T6>(c6);
 					var t7 = chunk.GetSpan<T7>(c7);
 
-					q.Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7);
+					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7);
 				}
 			}
 
@@ -3003,7 +3003,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -3031,7 +3031,7 @@ namespace Myriad.ECS.Queries
         where T7 : IComponent
         where T8 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8);
 	}
 }
 
@@ -3288,7 +3288,7 @@ namespace Myriad.ECS.Worlds
 					var t7 = chunk.GetSpan<T7>(c7);
 					var t8 = chunk.GetSpan<T8>(c8);
 
-					q.Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
+					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
 				}
 			}
 
@@ -3459,7 +3459,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -3489,7 +3489,7 @@ namespace Myriad.ECS.Queries
         where T8 : IComponent
         where T9 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9);
 	}
 }
 
@@ -3760,7 +3760,7 @@ namespace Myriad.ECS.Worlds
 					var t8 = chunk.GetSpan<T8>(c8);
 					var t9 = chunk.GetSpan<T9>(c9);
 
-					q.Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
+					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
 				}
 			}
 
@@ -3933,7 +3933,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -3965,7 +3965,7 @@ namespace Myriad.ECS.Queries
         where T9 : IComponent
         where T10 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10);
 	}
 }
 
@@ -4250,7 +4250,7 @@ namespace Myriad.ECS.Worlds
 					var t9 = chunk.GetSpan<T9>(c9);
 					var t10 = chunk.GetSpan<T10>(c10);
 
-					q.Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
+					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
 				}
 			}
 
@@ -4425,7 +4425,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -4459,7 +4459,7 @@ namespace Myriad.ECS.Queries
         where T10 : IComponent
         where T11 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11);
 	}
 }
 
@@ -4758,7 +4758,7 @@ namespace Myriad.ECS.Worlds
 					var t10 = chunk.GetSpan<T10>(c10);
 					var t11 = chunk.GetSpan<T11>(c11);
 
-					q.Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
+					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
 				}
 			}
 
@@ -4935,7 +4935,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -4971,7 +4971,7 @@ namespace Myriad.ECS.Queries
         where T11 : IComponent
         where T12 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12);
 	}
 }
 
@@ -5284,7 +5284,7 @@ namespace Myriad.ECS.Worlds
 					var t11 = chunk.GetSpan<T11>(c11);
 					var t12 = chunk.GetSpan<T12>(c12);
 
-					q.Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
+					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
 				}
 			}
 
@@ -5463,7 +5463,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -5501,7 +5501,7 @@ namespace Myriad.ECS.Queries
         where T12 : IComponent
         where T13 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12, Span<T13> t13);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12, Span<T13> t13);
 	}
 }
 
@@ -5828,7 +5828,7 @@ namespace Myriad.ECS.Worlds
 					var t12 = chunk.GetSpan<T12>(c12);
 					var t13 = chunk.GetSpan<T13>(c13);
 
-					q.Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
+					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
 				}
 			}
 
@@ -6009,7 +6009,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -6049,7 +6049,7 @@ namespace Myriad.ECS.Queries
         where T13 : IComponent
         where T14 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12, Span<T13> t13, Span<T14> t14);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12, Span<T13> t13, Span<T14> t14);
 	}
 }
 
@@ -6390,7 +6390,7 @@ namespace Myriad.ECS.Worlds
 					var t13 = chunk.GetSpan<T13>(c13);
 					var t14 = chunk.GetSpan<T14>(c14);
 
-					q.Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
+					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
 				}
 			}
 
@@ -6573,7 +6573,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -6615,7 +6615,7 @@ namespace Myriad.ECS.Queries
         where T14 : IComponent
         where T15 : IComponent
 	{
-		public void Execute(ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12, Span<T13> t13, Span<T14> t14, Span<T15> t15);
+		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12, Span<T13> t13, Span<T14> t14, Span<T15> t15);
 	}
 }
 
@@ -6970,7 +6970,7 @@ namespace Myriad.ECS.Worlds
 					var t14 = chunk.GetSpan<T14>(c14);
 					var t15 = chunk.GetSpan<T15>(c15);
 
-					q.Execute(entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15);
+					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15);
 				}
 			}
 
@@ -7155,7 +7155,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					_chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()

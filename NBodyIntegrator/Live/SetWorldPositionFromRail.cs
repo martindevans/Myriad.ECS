@@ -26,7 +26,7 @@ public class SetWorldPositionFromRail(World world)
     private readonly struct UpdatePosition(double time)
         : IChunkQuery2<PagedRail, WorldPosition>, IQuery2<PagedRail, WorldPosition>
     {
-        public void Execute(ReadOnlySpan<Entity> e, Span<PagedRail> r, Span<WorldPosition> w)
+        public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<PagedRail> r, Span<WorldPosition> w)
         {
             for (var i = 0; i < e.Length; i++)
                 Execute(e[i], ref r[i], ref w[i]);
