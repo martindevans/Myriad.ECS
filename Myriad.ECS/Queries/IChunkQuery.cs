@@ -191,7 +191,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem1<TQ, T0>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
@@ -514,7 +514,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem2<TQ, T0, T1>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
@@ -855,7 +855,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem3<TQ, T0, T1, T2>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
@@ -1214,7 +1214,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem4<TQ, T0, T1, T2, T3>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
@@ -1591,7 +1591,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem5<TQ, T0, T1, T2, T3, T4>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
@@ -1986,7 +1986,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem6<TQ, T0, T1, T2, T3, T4, T5>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
@@ -2399,7 +2399,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
@@ -2830,7 +2830,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
@@ -3279,7 +3279,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
@@ -3746,7 +3746,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
@@ -4231,7 +4231,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
@@ -4734,7 +4734,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
@@ -5255,7 +5255,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
@@ -5794,7 +5794,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
@@ -6351,7 +6351,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
@@ -6926,7 +6926,7 @@ namespace Myriad.ECS.Worlds
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<ChunkWorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)

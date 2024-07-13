@@ -6,6 +6,11 @@
 public interface IThreadPool
 {
     /// <summary>
+    /// Get how many workers threads should be scheduled
+    /// </summary>
+    int Threads { get; }
+
+    /// <summary>
     /// Queue a delegate to be called on another thread
     /// </summary>
     /// <param name="callback"></param>
@@ -20,20 +25,4 @@ public interface IThreadPoolWork
 #if !NET8_0_OR_GREATER
     void Execute();
 #endif
-}
-
-/// <summary>
-/// Use the dotnet <see cref="ThreadPool"/>
-/// </summary>
-public class DefaultThreadPool
-    : IThreadPool
-{
-    public void QueueUserWorkItem(IThreadPoolWork callback)
-    {
-#if NET8_0_OR_GREATER
-        ThreadPool.UnsafeQueueUserWorkItem(callback, false);
-#else
-        ThreadPool.UnsafeQueueUserWorkItem(_ => callback.Execute(), null);
-#endif
-    }
 }

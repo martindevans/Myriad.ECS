@@ -9,7 +9,7 @@ void EmitParallelWorkLoopSetup(string workItemName)
 			workCounter.Reset(1);
 
 			// Create parallel workers
-			var processors = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
+			var processors = ThreadPool.Threads;
 			var workersArr = ArrayPool<ParallelQueryWorker<<#= workItemName #>>?>.Shared.Rent(processors);
 			var workers = workersArr.AsMemory(0, processors);
 			for (var i = 0; i < workers.Length; i++)
