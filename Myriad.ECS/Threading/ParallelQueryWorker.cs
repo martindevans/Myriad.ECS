@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using Myriad.ECS.Queries;
 
 namespace Myriad.ECS.Threading;
@@ -44,8 +45,7 @@ internal class ParallelQueryWorker<TWork>
         {
             var counter = _counter;
             var siblings = _siblings;
-            if (counter == null || siblings == null)
-                throw new InvalidOperationException("Cannot execute work - worker not configured");
+            Debug.Assert(counter != null && siblings != null, "Cannot execute work - worker not configured");
 
             // Seed an RNG with the index of this worker in the siblings array
             var rng = new ValueRandom(Array.IndexOf(siblings, this));

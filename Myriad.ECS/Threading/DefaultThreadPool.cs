@@ -1,6 +1,4 @@
-﻿using System.Collections.Concurrent;
-
-namespace Myriad.ECS.Threading;
+﻿namespace Myriad.ECS.Threading;
 
 /// <summary>
 /// Use the dotnet <see cref="ThreadPool"/>

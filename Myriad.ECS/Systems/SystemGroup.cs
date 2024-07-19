@@ -1,5 +1,11 @@
 ﻿namespace Myriad.ECS.Systems;
 
+/// <summary>
+/// Execute all systems in order
+/// </summary>
+/// <typeparam name="TData"></typeparam>
+/// <param name="name"></param>
+/// <param name="systems"></param>
 public sealed class SystemGroup<TData>(string name, params ISystem<TData>[] systems)
     : BaseSystemGroup<TData>(name, systems)
 {
@@ -22,6 +28,12 @@ public sealed class SystemGroup<TData>(string name, params ISystem<TData>[] syst
     }
 }
 
+/// <summary>
+/// Execute all systems in order, allows adding new systems to the group
+/// </summary>
+/// <typeparam name="TData"></typeparam>
+/// <param name="name"></param>
+/// <param name="systems"></param>
 public sealed class DynamicSystemGroup<TData>(string name, params ISystem<TData>[] systems)
     : BaseSystemGroup<TData>(name, systems)
 {

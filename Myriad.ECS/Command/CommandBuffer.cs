@@ -5,7 +5,6 @@ using Myriad.ECS.Collections;
 using Myriad.ECS.Components;
 using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
-using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Worlds.Archetypes;
 

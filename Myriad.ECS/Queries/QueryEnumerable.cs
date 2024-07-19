@@ -9,7 +9,6 @@ using Myriad.ECS.Worlds.Chunks;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable CheckNamespace
 // ReSharper disable ArrangeAccessorOwnerBody
-#pragma warning disable CA1822 // Mark members as static
 
 
 namespace Myriad.ECS.Queries
@@ -59,7 +58,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
         }
@@ -186,7 +185,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -330,7 +329,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -483,7 +482,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -645,7 +644,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -816,7 +815,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -996,7 +995,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -1185,7 +1184,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -1383,7 +1382,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -1590,7 +1589,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -1806,7 +1805,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -2031,7 +2030,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -2265,7 +2264,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -2508,7 +2507,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -2760,7 +2759,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -3021,7 +3020,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);
@@ -3291,7 +3290,7 @@ namespace Myriad.ECS.Queries
 
         private void GetChunkSpans()
         {
-            var chunk = _chunksEnumerator.Current;
+            var chunk = _chunksEnumerator.Current!;
 
             SpanEntities = chunk.Entities;
             Components0 = chunk.GetComponentArray<T0>(C0);

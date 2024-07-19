@@ -86,13 +86,40 @@ public class ParallelQueryTests
             Assert.AreEqual(0, v.Ref.Value);
     }
 
-    private struct IncrementInt
+    [TestMethod]
+    public void ChunkExceptions()
+    {
+        var w = new WorldBuilder().Build();
+        SetupRandomEntities(w);
+
+        // Increment just the int32s
+        Assert.ThrowsException<AggregateException>(() =>
+        {
+            w.ExecuteChunkParallel<SometimesThrowOtherwiseIncrement, ComponentInt32>(new SometimesThrowOtherwiseIncrement());
+        });
+    }
+
+    private readonly struct IncrementInt
         : IChunkQuery1<ComponentInt32>
     {
         public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<ComponentInt32> t0)
         {
             for (var i = 0; i < t0.Length; i++)
                 t0[i].Value++;
+        }
+    }
+
+    private readonly struct SometimesThrowOtherwiseIncrement
+        : IChunkQuery1<ComponentInt32>
+    {
+        public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<ComponentInt32> t0)
+        {
+            for (var i = 0; i < t0.Length; i++)
+            {
+                if (i == 21)
+                    throw new Exception("Expected");
+                t0[i].Value++;
+            }
         }
     }
 }

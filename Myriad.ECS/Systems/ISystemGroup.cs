@@ -2,6 +2,10 @@
 
 namespace Myriad.ECS.Systems;
 
+/// <summary>
+/// A group of systems that will be executed together. A group is itself a system, so groups can be nested.
+/// </summary>
+/// <typeparam name="TData"></typeparam>
 public interface ISystemGroup<TData>
     : ISystemInit<TData>, ISystemBefore<TData>, ISystemAfter<TData>, IDisposable
 {
@@ -50,8 +54,20 @@ public class SystemGroupItem<TData>
     public Type Type { get; }
 
     private readonly Stopwatch _timer = new();
+
+    /// <summary>
+    /// Time elapsed in last BeforeUpdate phase
+    /// </summary>
     public TimeSpan BeforeUpdateTime { get; private set; }
+
+    /// <summary>
+    /// Time elapsed in last Update phase
+    /// </summary>
     public TimeSpan UpdateTime { get; private set; }
+
+    /// <summary>
+    /// Time elapsed in last AfterUpdate phase
+    /// </summary>
     public TimeSpan AfterUpdateTime { get; private set; }
 
     public SystemGroupItem(ISystem<TData> system)
