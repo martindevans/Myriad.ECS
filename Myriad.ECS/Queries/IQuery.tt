@@ -233,7 +233,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitesMemory(start, batchCount);
+						var eMem = chunk.GetEntitiesMemory(start, batchCount);
 
 						var item = new <#= workItemName #>(
 							eMem,

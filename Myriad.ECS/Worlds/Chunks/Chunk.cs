@@ -204,7 +204,7 @@ internal sealed class Chunk
     }
 #endregion
 
-    public Memory<Entity> GetEntitesMemory(int start, int count)
+    public Memory<Entity> GetEntitiesMemory(int start, int count)
     {
         if (start + count > EntityCount)
             throw new ArgumentException("start + count is more than the number of entities", nameof(count));
