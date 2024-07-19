@@ -318,7 +318,7 @@ public sealed partial class QueryBuilder
 
         public bool Add(Type type, [CallerMemberName] string caller = "")
         {
-            return Add(ComponentRegistry.Get(type), caller);
+            return Add(ComponentID.Get(type), caller);
         }
 
         public bool Add<T>([CallerMemberName] string caller = "")
@@ -334,7 +334,7 @@ public sealed partial class QueryBuilder
 
         public bool Contains(Type type)
         {
-            return Contains(ComponentRegistry.Get(type));
+            return Contains(ComponentID.Get(type));
         }
 
         public bool Contains<T>()

@@ -7,7 +7,7 @@ namespace Myriad.ECS.IDs;
 /// <summary>
 /// Store a lookup from component type to unique 32 bit ID.
 /// </summary>
-public static class ComponentRegistry
+internal static class ComponentRegistry
 {
     private static readonly Locks.RWLock<State> _lock = new(new State());
 

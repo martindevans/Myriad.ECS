@@ -10,11 +10,11 @@ public class ArchetypeHashTests
     public void ArchetypeHashEqual()
     {
         var hash1 = new ArchetypeHash()
-           .Toggle(ComponentRegistry.Get<ComponentFloat>());
+           .Toggle(ComponentID<ComponentFloat>.ID);
         Console.WriteLine(hash1);
 
         var hash2 = new ArchetypeHash()
-           .Toggle(ComponentRegistry.Get<ComponentFloat>());
+           .Toggle(ComponentID<ComponentFloat>.ID);
         Console.WriteLine(hash1);
 
         Assert.AreEqual(hash1, hash2);
@@ -24,11 +24,11 @@ public class ArchetypeHashTests
     public void ArchetypeHashNotEqual()
     {
         var hash1 = new ArchetypeHash();
-        hash1 = hash1.Toggle(ComponentRegistry.Get<ComponentInt16>());
+        hash1 = hash1.Toggle(ComponentID<ComponentInt16>.ID);
         Console.WriteLine(hash1);
 
         var hash2 = new ArchetypeHash();
-        hash2 = hash2.Toggle(ComponentRegistry.Get<ComponentFloat>());
+        hash2 = hash2.Toggle(ComponentID<ComponentFloat>.ID);
         Console.WriteLine(hash2);
 
         Assert.AreNotEqual(hash1, hash2);
@@ -38,20 +38,20 @@ public class ArchetypeHashTests
     public void ArchetypeHashRemoveComponents()
     {
         var hash1 = new ArchetypeHash()
-           .Toggle(ComponentRegistry.Get<ComponentInt16>())
-            .Toggle(ComponentRegistry.Get<ComponentFloat>());
+           .Toggle(ComponentID<ComponentInt16>.ID)
+            .Toggle(ComponentID<ComponentFloat>.ID);
         Console.WriteLine(hash1);
 
         // Create the same hash again, with one extra item
         var hash2 = new ArchetypeHash()
-           .Toggle(ComponentRegistry.Get<ComponentInt16>())
-           .Toggle(ComponentRegistry.Get<ComponentFloat>())
-           .Toggle(ComponentRegistry.Get<ComponentInt32>());
+           .Toggle(ComponentID<ComponentInt16>.ID)
+           .Toggle(ComponentID<ComponentFloat>.ID)
+           .Toggle(ComponentID<ComponentInt32>.ID);
         Console.WriteLine(hash2);
         Assert.AreNotEqual(hash1, hash2);
 
         // Remove the extra item
-        hash2 = hash2.Toggle(ComponentRegistry.Get<ComponentInt32>());
+        hash2 = hash2.Toggle(ComponentID<ComponentInt32>.ID);
         Assert.AreEqual(hash1, hash2);
     }
 }

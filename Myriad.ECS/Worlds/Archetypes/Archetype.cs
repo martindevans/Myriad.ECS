@@ -91,7 +91,7 @@ public sealed partial class Archetype
         var idx = 0;
         foreach (var component in components)
         {
-            _componentTypes[idx] = ComponentRegistry.Get(component);
+            _componentTypes[idx] = component.Type;
             _componentIndexLookup[component.Value] = idx;
             _componentIDs[idx] = component;
 

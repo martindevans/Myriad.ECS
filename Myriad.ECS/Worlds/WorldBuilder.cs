@@ -27,7 +27,7 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentID>(types.Length);
 
         foreach (var type in types)
-            if (!set.Add(ComponentRegistry.Get(type)))
+            if (!set.Add(ComponentID.Get(type)))
                 throw new ArgumentException($"Duplicate component type: {type.Name}");
 
         AddArchetype(set);

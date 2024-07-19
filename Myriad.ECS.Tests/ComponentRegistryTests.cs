@@ -11,7 +11,7 @@ public class ComponentRegistryTests
     {
         Assert.ThrowsException<ArgumentException>(() =>
         {
-            ComponentRegistry.Get(typeof(int));
+            ComponentID.Get(typeof(int));
         });
     }
 
@@ -20,10 +20,10 @@ public class ComponentRegistryTests
     {
         var ids = new[]
         {
-            ComponentRegistry.Get<ComponentInt32>(),
-            ComponentRegistry.Get<ComponentInt64>(),
-            ComponentRegistry.Get(typeof(ComponentInt16)),
-            ComponentRegistry.Get(typeof(ComponentFloat)),
+            ComponentID<ComponentInt32>.ID,
+            ComponentID<ComponentInt64>.ID,
+            ComponentID.Get(typeof(ComponentInt16)),
+            ComponentID.Get(typeof(ComponentFloat)),
         };
 
         Assert.AreEqual(4, ids.Distinct().Count());
@@ -34,8 +34,8 @@ public class ComponentRegistryTests
     [TestMethod]
     public void DoesNotReassign()
     {
-        var id = ComponentRegistry.Get<ComponentInt32>();
-        var id2 = ComponentRegistry.Get<ComponentInt32>();
+        var id = ComponentID<ComponentInt32>.ID;
+        var id2 = ComponentID<ComponentInt32>.ID;
 
         Assert.AreEqual(id, id2);
     }
@@ -45,16 +45,16 @@ public class ComponentRegistryTests
     {
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
-            ComponentRegistry.Get(default(ComponentID));
+            var t = default(ComponentID).Type;
         });
     }
 
     [TestMethod]
     public void PhantomEntityHasPhantomFlag()
     {
-        Assert.IsTrue(ComponentRegistry.Get(typeof(TestPhantom0)).IsPhantomComponent);
-        Assert.IsTrue(ComponentRegistry.Get(typeof(TestPhantom1)).IsPhantomComponent);
-        Assert.IsTrue(ComponentRegistry.Get(typeof(TestPhantom2)).IsPhantomComponent);
-        Assert.IsFalse(ComponentRegistry.Get(typeof(Component1)).IsPhantomComponent);
+        Assert.IsTrue(ComponentID.Get(typeof(TestPhantom0)).IsPhantomComponent);
+        Assert.IsTrue(ComponentID.Get(typeof(TestPhantom1)).IsPhantomComponent);
+        Assert.IsTrue(ComponentID.Get(typeof(TestPhantom2)).IsPhantomComponent);
+        Assert.IsFalse(ComponentID.Get(typeof(Component1)).IsPhantomComponent);
     }
 }

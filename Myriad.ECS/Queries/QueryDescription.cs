@@ -81,7 +81,7 @@ public sealed class QueryDescription
 
     public bool IsIncluded(Type type)
     {
-        return IsIncluded(ComponentRegistry.Get(type));
+        return IsIncluded(ComponentID.Get(type));
     }
 
     public bool IsIncluded(ComponentID id)
@@ -98,7 +98,7 @@ public sealed class QueryDescription
 
     public bool IsExcluded(Type type)
     {
-        return IsExcluded(ComponentRegistry.Get(type));
+        return IsExcluded(ComponentID.Get(type));
     }
 
     public bool IsExcluded(ComponentID id)
@@ -115,7 +115,7 @@ public sealed class QueryDescription
 
     public bool IsAtLeastOneOf(Type type)
     {
-        return IsExcluded(ComponentRegistry.Get(type));
+        return IsExcluded(ComponentID.Get(type));
     }
 
     public bool IsAtLeastOneOf(ComponentID id)
@@ -132,7 +132,7 @@ public sealed class QueryDescription
 
     public bool IsExactlyOneOf(Type type)
     {
-        return IsExactlyOneOf(ComponentRegistry.Get(type));
+        return IsExactlyOneOf(ComponentID.Get(type));
     }
 
     public bool IsExactlyOneOf(ComponentID id)
