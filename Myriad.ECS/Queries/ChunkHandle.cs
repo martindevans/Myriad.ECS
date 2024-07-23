@@ -1,5 +1,6 @@
 ﻿using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Worlds.Archetypes;
 using Myriad.ECS.Worlds.Chunks;
 
 namespace Myriad.ECS.Queries;
@@ -10,6 +11,11 @@ namespace Myriad.ECS.Queries;
 public readonly ref struct ChunkHandle
 {
     private readonly Chunk _chunk;
+
+    /// <summary>
+    /// The archetype this chunk belongs to
+    /// </summary>
+    public Archetype Archetype => _chunk.Archetype;
 
     /// <summary>
     /// Get the total number of entities in this chunk

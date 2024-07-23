@@ -55,6 +55,9 @@ public sealed partial class Archetype
     private readonly ComponentID[] _componentIDs;
     private readonly Type[] _componentTypes;
 
+    /// <summary>
+    /// The total number of entities in this archetype
+    /// </summary>
     public int EntityCount { get; private set; }
 
     /// <summary>
