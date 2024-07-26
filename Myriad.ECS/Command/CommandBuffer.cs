@@ -10,9 +10,11 @@ using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Command;
 
-public sealed partial class CommandBuffer(World World)
+public sealed partial class CommandBuffer(World _world)
 {
     private uint _version;
+
+    public World World => _world;
 
     /// <summary>
     /// Collection of all components to be set onto entities
@@ -34,6 +36,9 @@ public sealed partial class CommandBuffer(World World)
     private readonly OrderedListSet<Entity> _maybeAddingPhantomComponent = new();
 
     private readonly OrderedListSet<ComponentID> _tempComponentIdSet = new();
+
+    private readonly BufferedRelationBinder _bufferedRelationBindings = new();
+    private readonly UnbufferedRelationBinder _unbufferedRelationBindings = new();
 
     #region playback
     public Resolver Playback()
@@ -61,6 +66,12 @@ public sealed partial class CommandBuffer(World World)
 
         // Update the version of this buffer, invalidating all buffered entities for further modification
         unchecked { _version++; }
+
+        // Apply all late-bound relationships
+        _bufferedRelationBindings.Apply(resolver);
+        _bufferedRelationBindings.Clear();
+        _unbufferedRelationBindings.Apply(resolver);
+        _unbufferedRelationBindings.Clear();
 
         // Return the resolver
         return resolver;
@@ -322,6 +333,16 @@ public sealed partial class CommandBuffer(World World)
         }
     }
 
+    private void SetBuffered<T>(uint id, T value, BufferedEntity relation, bool allowDuplicates = false)
+        where T : IEntityRelationComponent
+    {
+        if (relation._buffer != this)
+            throw new ArgumentException("Target of relation must be BufferedEntity from the same CommandBuffer", nameof(relation));
+
+        SetBuffered(id, value, allowDuplicates);
+        _bufferedRelationBindings.Create<T>(new BufferedEntity(id, this), relation);
+    }
+
     /// <summary>
     /// Add or overwrite a component attached to an entity
     /// </summary>
@@ -334,6 +355,33 @@ public sealed partial class CommandBuffer(World World)
         if (typeof(T) == typeof(Phantom))
             throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
 
+        InternalSet(entity, value);
+    }
+
+    /// <summary>
+    /// Add or overwrite a component attached to an entity
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="entity"></param>
+    /// <param name="value"></param>
+    /// <param name="relation">When this buffer is played back the given buffered entity will be set into the component</param>
+    public void Set<T>(Entity entity, T value, BufferedEntity relation)
+        where T : IEntityRelationComponent
+    {
+        InternalSet(entity, value, relation);
+    }
+
+    /// <summary>
+    /// Add or overwrite a component attached to an entity
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="entity"></param>
+    /// <param name="value"></param>
+    /// <param name="relation"></param>
+    public void Set<T>(Entity entity, T value, Entity relation)
+        where T : IEntityRelationComponent
+    {
+        value.Target = relation;
         InternalSet(entity, value);
     }
 
@@ -360,6 +408,16 @@ public sealed partial class CommandBuffer(World World)
 
         // Remove it from the "remove" set. In case it was previously removed
         mod.Removes?.Remove(id);
+    }
+
+    private void InternalSet<T>(Entity entity, T value, BufferedEntity relation)
+        where T : IEntityRelationComponent
+    {
+        if (relation._buffer != this)
+            throw new ArgumentException("Target of relation must be BufferedEntity from the same CommandBuffer", nameof(relation));
+
+        InternalSet(entity, value);
+        _unbufferedRelationBindings.Create<T>(entity, relation);
     }
 
     /// <summary>

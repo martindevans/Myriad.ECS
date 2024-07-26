@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Allocations;
+using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Command;
 
@@ -15,6 +16,8 @@ public sealed partial class CommandBuffer
         private uint _version;
 
         public int Count => Lookup.Count;
+
+        public World World => Parent!.World;
 
         internal void Configure(CommandBuffer parent)
         {
