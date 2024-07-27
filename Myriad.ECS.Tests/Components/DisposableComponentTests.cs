@@ -116,4 +116,29 @@ public class DisposableComponentTests
         // Check the component was disposed 3 times
         Assert.AreEqual(3, box.Value);
     }
+
+    [TestMethod]
+    public void DisposableMakesBufferedChanges()
+    {
+        var w = new WorldBuilder().Build();
+
+        // Create an entity with a disposable test component. boxed integer will be incrmented every time it is disposed
+        var box = new BoxedInt();
+        var cmd = new CommandBuffer(w);
+
+        // Create two entities. Entity b is setup to delet entity a when it is disposed
+        var ab = cmd.Create().Set(new TestDisposable(box));
+        var bb = cmd.Create().Set(new TestDisposableParent(), ab);
+        var resolver = cmd.Playback();
+        var a = ab.Resolve(resolver);
+        var b = bb.Resolve(resolver);
+        resolver.Dispose();
+
+        cmd.Delete(b);
+        cmd.Playback().Dispose();
+
+        Assert.IsFalse(a.IsAlive(w));
+        Assert.IsFalse(b.IsAlive(w));
+        Assert.AreEqual(1, box.Value);
+    }
 }

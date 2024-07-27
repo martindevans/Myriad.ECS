@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Myriad.ECS.Command;
 using Myriad.ECS.Components;
 
 namespace Myriad.ECS.Tests;
@@ -53,9 +54,20 @@ public readonly record struct TestDisposable
         _box = box;
     }
 
-    public void Dispose()
+    public void Dispose(ref LazyCommandBuffer lazy)
     {
         _box.Value++;
+    }
+}
+
+public record struct TestDisposableParent
+    : IDisposableComponent, IEntityRelationComponent
+{
+    public Entity Target { get; set; }
+
+    public void Dispose(ref LazyCommandBuffer lazy)
+    {
+        lazy.CommandBuffer.Delete(Target);
     }
 }
 
@@ -69,7 +81,7 @@ public readonly record struct TestDisposablePhantom
         _box = box;
     }
 
-    public void Dispose()
+    public void Dispose(ref LazyCommandBuffer laz)
     {
         _box.Value++;
     }

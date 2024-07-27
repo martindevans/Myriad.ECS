@@ -50,12 +50,15 @@ public sealed partial class CommandBuffer(World _world)
         // Create buffered entities.
         CreateBufferedEntities(resolver);
 
+        // Lazy command buffer accumulates any changes caused by applying this command buffer
+        var lazy = new LazyCommandBuffer(World);
+        
         // Delete entities, this must occur before structural changes because it may trigger new structural changes
         // by adding a new phantom component.
-        DeleteEntities();
+        DeleteEntities(ref lazy);
 
         // Structural changes (add/remove components)
-        ApplyStructuralChanges();
+        ApplyStructuralChanges(ref lazy);
 
         // Clear all temporary state
         _maybeAddingPhantomComponent.Clear();
@@ -73,11 +76,19 @@ public sealed partial class CommandBuffer(World _world)
         _unbufferedRelationBindings.Apply(resolver);
         _unbufferedRelationBindings.Clear();
 
+        // Apply any changes caused by these changes
+        var lazyBuffer = lazy.Get();
+        if (lazyBuffer != null)
+        {
+            lazyBuffer.Playback().Dispose();
+            World.ReturnPooledCommandBuffer(lazyBuffer);
+        }
+
         // Return the resolver
         return resolver;
     }
 
-    private void DeleteEntities()
+    private void DeleteEntities(ref LazyCommandBuffer lazy)
     {
         foreach (var delete in _deletes)
         {
@@ -92,7 +103,7 @@ public sealed partial class CommandBuffer(World _world)
             }
             else
             {
-                World.DeleteImmediate(delete);
+                World.DeleteImmediate(delete, ref lazy);
 
                 if (_entityModifications.Remove(delete, out var mod))
                 {
@@ -125,7 +136,7 @@ public sealed partial class CommandBuffer(World _world)
         }
     }
 
-    private void ApplyStructuralChanges()
+    private void ApplyStructuralChanges(ref LazyCommandBuffer lazy)
     {
         if (_entityModifications.Count > 0)
         {
@@ -172,7 +183,7 @@ public sealed partial class CommandBuffer(World _world)
                 var autodelete = currentArchetype.IsPhantom && !_tempComponentIdSet.Any(static a => a.IsPhantomComponent);
                 if (autodelete)
                 {
-                    World.DeleteImmediate(entity);
+                    World.DeleteImmediate(entity, ref lazy);
                 }
                 else
                 {
@@ -184,7 +195,7 @@ public sealed partial class CommandBuffer(World _world)
                         var newArchetype = World.GetOrCreateArchetype(_tempComponentIdSet, hash);
 
                         // Migrate the entity across
-                        row = World.MigrateEntity(entity, newArchetype);
+                        row = World.MigrateEntity(entity, newArchetype, ref lazy);
                     }
                     else
                     {

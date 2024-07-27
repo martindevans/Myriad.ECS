@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Collections;
+using Myriad.ECS.Command;
 using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Chunks;
@@ -126,14 +127,14 @@ public sealed partial class Archetype
             _disposer = new ArchetypeComponentDisposal(components);
     }
 
-    internal void Dispose()
+    internal void Dispose(ref LazyCommandBuffer buffer)
     {
         if (_disposer == null)
             return;
 
         foreach (var chunk in _chunks)
             for (var i = 0; i < chunk.EntityCount; i++)
-                _disposer.DisposeEntity(chunk, i);
+                _disposer.DisposeEntity(ref buffer, chunk, i);
     }
 
     internal (Entity entity, Row slot) CreateEntity()
@@ -174,10 +175,10 @@ public sealed partial class Archetype
         return newChunk.AddEntity(entity, ref info);
     }
 
-    internal void RemoveEntity(EntityInfo info)
+    internal void RemoveEntity(EntityInfo info, ref LazyCommandBuffer lazy)
     {
         // Run disposal for all IDisposableComponent components
-        _disposer?.DisposeEntity(info);
+        _disposer?.DisposeEntity(ref lazy, info);
 
         // Remove the entity from the chunk, component data is lost after this point
         info.Chunk.RemoveEntity(info);
@@ -189,14 +190,14 @@ public sealed partial class Archetype
         HandleChunkEntityRemoved(info.Chunk);
     }
 
-    internal Row MigrateTo(Entity entity, ref EntityInfo info, Archetype to)
+    internal Row MigrateTo(Entity entity, ref EntityInfo info, Archetype to, ref LazyCommandBuffer lazy)
     {
         // Early exit if we're migrating to where we already are!
         if (to == this)
             return info.GetRow(entity);
 
         // Handle disposable components which are being removed
-        _disposer?.DisposeRemoved(info, to.Components);
+        _disposer?.DisposeRemoved(ref lazy, info, to.Components);
 
         var chunk = info.Chunk;
         var row = chunk.MigrateTo(entity, ref info, to);

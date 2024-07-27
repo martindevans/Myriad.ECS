@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Collections;
+using Myriad.ECS.Command;
 using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Chunks;
@@ -36,22 +37,22 @@ internal class ArchetypeComponentDisposal
         return disposer;
     }
 
-    public void DisposeEntity(EntityInfo info)
+    public void DisposeEntity(ref LazyCommandBuffer buffer, EntityInfo info)
     {
-        DisposeEntity(info.Chunk, info.RowIndex);
+        DisposeEntity(ref buffer, info.Chunk, info.RowIndex);
     }
 
-    public void DisposeEntity(Chunk chunk, int rowIndex)
+    public void DisposeEntity(ref LazyCommandBuffer buffer, Chunk chunk, int rowIndex)
     {
         foreach (var disposer in _disposers)
-            disposer.Dispose(chunk, rowIndex);
+            disposer.Dispose(ref buffer, chunk, rowIndex);
     }
 
-    public void DisposeRemoved(EntityInfo info, FrozenOrderedListSet<ComponentID> to)
+    public void DisposeRemoved(ref LazyCommandBuffer buffer, EntityInfo info, FrozenOrderedListSet<ComponentID> to)
     {
         foreach (var disposer in _disposers)
             if (!to.Contains(disposer.Component))
-                disposer.Dispose(info.Chunk, info.RowIndex);
+                disposer.Dispose(ref buffer, info.Chunk, info.RowIndex);
     }
 
     private class Disposer<TComponent>
@@ -60,9 +61,9 @@ internal class ArchetypeComponentDisposal
     {
         public ComponentID Component { get; } = ComponentID<TComponent>.ID;
 
-        public void Dispose(Chunk chunk, int rowIndex)
+        public void Dispose(ref LazyCommandBuffer buffer, Chunk chunk, int rowIndex)
         {
-            chunk.GetRef<TComponent>(rowIndex, Component).Dispose();
+            chunk.GetRef<TComponent>(rowIndex, Component).Dispose(ref buffer);
         }
     }
 
@@ -70,6 +71,6 @@ internal class ArchetypeComponentDisposal
     {
         ComponentID Component { get; }
 
-        void Dispose(Chunk chunk, int rowIndex);
+        void Dispose(ref LazyCommandBuffer buffer, Chunk chunk, int rowIndex);
     }
 }
