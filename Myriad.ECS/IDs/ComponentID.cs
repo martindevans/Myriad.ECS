@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Myriad.ECS.Components;
 
 namespace Myriad.ECS.IDs;
 
@@ -9,16 +10,22 @@ namespace Myriad.ECS.IDs;
 public readonly record struct ComponentID
     : IComparable<ComponentID>
 {
-    internal const int SpecialBits = 1;
-    internal const int IsPhantomComponentMask = 1;
+    internal const int SpecialBits             = 0b11;
+    internal const int IsPhantomComponentMask  = 0b01;
+    internal const int IsRelationComponentMask = 0b10;
 
     public int Value { get; }
     public Type Type => ComponentRegistry.Get(this);
 
     /// <summary>
-    /// Indicates if this component implements <see cref="IsPhantomComponent"/>
+    /// Indicates if this component implements <see cref="IPhantomComponent"/>
     /// </summary>
     public bool IsPhantomComponent => (Value & IsPhantomComponentMask) == IsPhantomComponentMask;
+
+    /// <summary>
+    /// Indicates if this component implements <see cref="IEntityRelationComponent"/>
+    /// </summary>
+    public bool IsRelationComponent => (Value & IsRelationComponentMask) == IsRelationComponentMask;
 
     internal ComponentID(int value)
     {

@@ -67,7 +67,7 @@ public sealed partial class CommandBuffer(World _world)
         // Update the version of this buffer, invalidating all buffered entities for further modification
         unchecked { _version++; }
 
-        // Apply all late-bound relationships
+        // Apply all late-bound relationships (this requires using the resolver, so must be done after the version bump)
         _bufferedRelationBindings.Apply(resolver);
         _bufferedRelationBindings.Clear();
         _unbufferedRelationBindings.Apply(resolver);

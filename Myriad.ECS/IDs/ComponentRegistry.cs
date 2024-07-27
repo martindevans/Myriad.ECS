@@ -97,6 +97,10 @@ internal static class ComponentRegistry
                 if (typeof(IPhantomComponent).IsAssignableFrom(type))
                     id |= ComponentID.IsPhantomComponentMask;
 
+                // Set the bit indicating that this component implements IEntityRelationComponent
+                if (typeof(IEntityRelationComponent).IsAssignableFrom(type))
+                    id |= ComponentID.IsRelationComponentMask;
+
                 // Store it for future lookups
                 value = new ComponentID(id);
                 IDLookup[type] = value;

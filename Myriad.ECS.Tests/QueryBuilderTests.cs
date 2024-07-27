@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.Queries;
+﻿using Myriad.ECS.IDs;
+using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Tests;
@@ -22,13 +23,21 @@ public class QueryBuilderTests
 
         Assert.IsTrue(q.IsIncluded<ComponentFloat>());
         Assert.IsTrue(q.IsIncluded(typeof(ComponentFloat)));
+        Assert.IsTrue(q.IsIncluded(ComponentID<ComponentFloat>.ID));
+        CollectionAssert.Contains(q.Included.ToArray(), ComponentID<ComponentFloat>.ID);
+
         Assert.IsFalse(q.IsIncluded<ComponentInt32>());
         Assert.IsFalse(q.IsIncluded(typeof(ComponentInt32)));
+        Assert.IsFalse(q.IsIncluded(ComponentID<ComponentInt32>.ID));
+        CollectionAssert.DoesNotContain(q.Included.ToArray(), ComponentID<ComponentInt32>.ID);
 
         Assert.IsFalse(q.IsExcluded<ComponentInt32>());
         Assert.IsFalse(q.IsIncluded(typeof(ComponentInt32)));
+        Assert.IsFalse(q.IsIncluded(ComponentID<ComponentInt32>.ID));
+
         Assert.IsFalse(q.IsExcluded<ComponentFloat>());
         Assert.IsFalse(q.IsExcluded(typeof(ComponentFloat)));
+        Assert.IsFalse(q.IsExcluded(ComponentID<ComponentFloat>.ID));
     }
 
     [TestMethod]
@@ -78,7 +87,10 @@ public class QueryBuilderTests
            .Exclude<ComponentFloat>();
 
         Assert.IsTrue(q.IsExcluded<ComponentFloat>());
+        CollectionAssert.Contains(q.Excluded.ToArray(), ComponentID<ComponentFloat>.ID);
+
         Assert.IsFalse(q.IsExcluded<ComponentInt32>());
+        CollectionAssert.DoesNotContain(q.Excluded.ToArray(), ComponentID<ComponentInt32>.ID);
 
         Assert.IsFalse(q.IsIncluded<ComponentInt32>());
         Assert.IsFalse(q.IsIncluded<ComponentFloat>());
@@ -118,8 +130,13 @@ public class QueryBuilderTests
 
         Assert.IsTrue(q.IsAtLeastOneOf<ComponentFloat>());
         Assert.IsTrue(q.IsAtLeastOneOf(typeof(ComponentFloat)));
+        Assert.IsTrue(q.IsAtLeastOneOf(ComponentID<ComponentFloat>.ID));
+        CollectionAssert.Contains(q.AtLeastOnes.ToArray(), ComponentID<ComponentFloat>.ID);
+
         Assert.IsFalse(q.IsAtLeastOneOf<ComponentInt32>());
         Assert.IsFalse(q.IsAtLeastOneOf(typeof(ComponentInt32)));
+        Assert.IsFalse(q.IsAtLeastOneOf(ComponentID<ComponentInt32>.ID));
+        CollectionAssert.DoesNotContain(q.AtLeastOnes.ToArray(), ComponentID<ComponentInt32>.ID);
 
         Assert.IsFalse(q.IsIncluded<ComponentInt32>());
         Assert.IsFalse(q.IsIncluded(typeof(ComponentInt32)));
@@ -161,8 +178,13 @@ public class QueryBuilderTests
 
         Assert.IsTrue(q.IsExactlyOneOf<ComponentFloat>());
         Assert.IsTrue(q.IsExactlyOneOf(typeof(ComponentFloat)));
+        Assert.IsTrue(q.IsExactlyOneOf(ComponentID<ComponentFloat>.ID));
+        CollectionAssert.Contains(q.ExactlyOnes.ToArray(), ComponentID<ComponentFloat>.ID);
+
         Assert.IsFalse(q.IsExactlyOneOf<ComponentInt32>());
         Assert.IsFalse(q.IsExactlyOneOf(typeof(ComponentInt32)));
+        Assert.IsFalse(q.IsExactlyOneOf(ComponentID<ComponentInt32>.ID));
+        CollectionAssert.DoesNotContain(q.ExactlyOnes.ToArray(), ComponentID<ComponentInt32>.ID);
 
         Assert.IsFalse(q.IsIncluded<ComponentInt32>());
         Assert.IsFalse(q.IsIncluded(typeof(ComponentInt32)));
@@ -228,5 +250,25 @@ public class QueryBuilderTests
         Assert.IsFalse(builder.IsAtLeastOneOf<ComponentInt32>());
         Assert.IsFalse(builder.IsAtLeastOneOf<ComponentFloat>());
         Assert.IsTrue(builder.IsAtLeastOneOf<ComponentInt64>());
+    }
+
+    [TestMethod]
+    public void BuildTwiceSharesParts()
+    {
+        var world = new WorldBuilder().Build();
+
+        var builder = new QueryBuilder()
+                     .Include<ComponentInt16>()
+                     .Exclude<ComponentInt32>()
+                     .ExactlyOneOf<ComponentFloat>()
+                     .AtLeastOneOf<ComponentInt64>();
+
+        var q1 = builder.Build(world);
+        var q2 = builder.Build(world);
+
+        Assert.AreSame(q1.Include, q2.Include);
+        Assert.AreSame(q1.Exclude, q2.Exclude);
+        Assert.AreSame(q1.ExactlyOneOf, q2.ExactlyOneOf);
+        Assert.AreSame(q1.AtLeastOneOf, q2.AtLeastOneOf);
     }
 }

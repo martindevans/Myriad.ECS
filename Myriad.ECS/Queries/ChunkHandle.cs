@@ -22,16 +22,6 @@ public readonly ref struct ChunkHandle
     /// </summary>
     public int EntityCount => _chunk.EntityCount;
 
-    /// <summary>
-    /// Indicates if any of the components in this Archetype implement <see cref="IPhantomComponent"/>;
-    /// </summary>
-    public bool HasPhantomComponents => _chunk.Archetype.HasPhantomComponents;
-
-    /// <summary>
-    /// Indicates if any of the components in this Archetype is <see cref="Phantom"/>
-    /// </summary>
-    public bool IsPhantom => _chunk.Archetype.IsPhantom;
-
     internal ChunkHandle(Chunk chunk)
     {
         _chunk = chunk;

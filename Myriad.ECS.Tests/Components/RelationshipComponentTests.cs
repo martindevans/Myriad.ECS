@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Command;
+using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Tests.Components;
@@ -7,7 +8,14 @@ namespace Myriad.ECS.Tests.Components;
 public class RelationshipComponentTests
 {
     [TestMethod]
-    public void BindBuffered()
+    public void ComponentIdFlag()
+    {
+        Assert.IsFalse(ComponentID<ComponentInt32>.ID.IsRelationComponent);
+        Assert.IsTrue(ComponentID<Relational1>.ID.IsRelationComponent);
+    }
+
+    [TestMethod]
+    public void BindBufferedBuffered()
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
@@ -27,7 +35,7 @@ public class RelationshipComponentTests
     }
 
     [TestMethod]
-    public void BindUnbuffered()
+    public void BindUnbufferedBuffered()
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
@@ -49,5 +57,46 @@ public class RelationshipComponentTests
 
         Assert.AreEqual(a, c.GetComponentRef<Relational1>(world).Target);
         Assert.AreEqual(b, c.GetComponentRef<Relational2>(world).Target);
+    }
+
+    [TestMethod]
+    public void BindBufferedUnbuffered()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        // Create an entity
+        var ab = buffer.Create();
+        using var resolver1 = buffer.Playback();
+        var a = ab.Resolve(resolver1);
+
+        // Create a new entity, pointing at the existing one
+        var bb = buffer.Create().Set(new Relational1(), a);
+        using var resolver2 = buffer.Playback();
+        var b = bb.Resolve(resolver2);
+
+        Assert.AreEqual(a, b.GetComponentRef<Relational1>(world).Target);
+    }
+
+    [TestMethod]
+    public void BindUnbufferedUnbuffered()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        // Create two entities
+        var ab = buffer.Create();
+        var bb = buffer.Create();
+        using var resolver1 = buffer.Playback();
+        var a = ab.Resolve(resolver1);
+        var b = bb.Resolve(resolver1);
+
+        // Add relationship
+        buffer.Set(a, new Relational1(), b);
+        buffer.Set(b, new Relational1(), a);
+        buffer.Playback().Dispose();
+
+        Assert.AreEqual(b, a.GetComponentRef<Relational1>(world).Target);
+        Assert.AreEqual(a, b.GetComponentRef<Relational1>(world).Target);
     }
 }

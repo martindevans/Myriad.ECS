@@ -70,6 +70,11 @@ public sealed partial class Archetype
     /// </summary>
     public bool IsPhantom { get; }
 
+    /// <summary>
+    /// Indicates if ant of the components in this Archetype im[lement <see cref="IEntityRelationComponent"/>
+    /// </summary>
+    public bool HasRelationCompoents { get; }
+
     internal Archetype(World world, FrozenOrderedListSet<ComponentID> components)
     {
         World = world;
@@ -106,6 +111,7 @@ public sealed partial class Archetype
         {
             IsPhantom |= component == ComponentID<Phantom>.ID;
             HasPhantomComponents |= component.IsPhantomComponent;
+            HasRelationCompoents |= component.IsRelationComponent;
         }
     }
 
