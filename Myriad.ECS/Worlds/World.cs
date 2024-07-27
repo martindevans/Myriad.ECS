@@ -7,6 +7,7 @@ using Myriad.ECS.Worlds.Archetypes;
 namespace Myriad.ECS.Worlds;
 
 public sealed partial class World
+    : IDisposable
 {
     internal IThreadPool ThreadPool { get; }
 
@@ -25,6 +26,12 @@ public sealed partial class World
     internal World(IThreadPool pool)
     {
         ThreadPool = pool;
+    }
+
+    public void Dispose()
+    {
+        foreach (var archetype in _archetypes)
+            archetype.Dispose();
     }
 
     #region bulk write

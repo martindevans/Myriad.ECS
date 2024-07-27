@@ -43,12 +43,28 @@ public class BoxedInt
     public int Value;
 }
 
-public record struct TestDisposable
+public readonly record struct TestDisposable
     : IDisposableComponent
 {
     private readonly BoxedInt _box;
 
     public TestDisposable(BoxedInt box)
+    {
+        _box = box;
+    }
+
+    public void Dispose()
+    {
+        _box.Value++;
+    }
+}
+
+public readonly record struct TestDisposablePhantom
+    : IDisposableComponent, IPhantomComponent
+{
+    private readonly BoxedInt _box;
+
+    public TestDisposablePhantom(BoxedInt box)
     {
         _box = box;
     }

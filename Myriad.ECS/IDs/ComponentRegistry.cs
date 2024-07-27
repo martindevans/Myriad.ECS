@@ -91,7 +91,7 @@ internal static class ComponentRegistry
                 var id = _nextId++;
 
                 // Shift over the ID to make space for the special bits
-                id <<= ComponentID.SpecialBits;
+                id <<= ComponentID.SpecialBitsCount;
 
                 // Set the bit indicating that this component implements IPhantomComponent
                 if (typeof(IPhantomComponent).IsAssignableFrom(type))
@@ -100,6 +100,10 @@ internal static class ComponentRegistry
                 // Set the bit indicating that this component implements IEntityRelationComponent
                 if (typeof(IEntityRelationComponent).IsAssignableFrom(type))
                     id |= ComponentID.IsRelationComponentMask;
+
+                // Set the bit indicating that this component implements IDisposableComponent
+                if (typeof(IDisposableComponent).IsAssignableFrom(type))
+                    id |= ComponentID.IsDisposableComponentMask;
 
                 // Store it for future lookups
                 value = new ComponentID(id);

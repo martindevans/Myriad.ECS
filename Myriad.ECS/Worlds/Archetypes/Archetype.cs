@@ -54,6 +54,7 @@ public sealed partial class Archetype
 
     private readonly ComponentID[] _componentIDs;
     private readonly Type[] _componentTypes;
+    private readonly ArchetypeComponentDisposal? _disposer;
 
     /// <summary>
     /// The total number of entities in this archetype
@@ -73,7 +74,12 @@ public sealed partial class Archetype
     /// <summary>
     /// Indicates if ant of the components in this Archetype im[lement <see cref="IEntityRelationComponent"/>
     /// </summary>
-    public bool HasRelationCompoents { get; }
+    public bool HasRelationComponents { get; }
+
+    /// <summary>
+    /// Indicates if ant of the components in this Archetype im[lement <see cref="IDisposableComponent"/>
+    /// </summary>
+    public bool HasDisposableComponents { get; }
 
     internal Archetype(World world, FrozenOrderedListSet<ComponentID> components)
     {
@@ -106,13 +112,28 @@ public sealed partial class Archetype
             idx++;
         }
 
-        // Check if this archetype has any phantom components or if any of the components are Phantom
+        // Gather flags for special components
         foreach (var component in components)
         {
             IsPhantom |= component == ComponentID<Phantom>.ID;
             HasPhantomComponents |= component.IsPhantomComponent;
-            HasRelationCompoents |= component.IsRelationComponent;
+            HasRelationComponents |= component.IsRelationComponent;
+            HasDisposableComponents |= component.IsDisposableComponent;
         }
+
+        // Create a disposer if it's needed
+        if (HasDisposableComponents)
+            _disposer = new ArchetypeComponentDisposal(components);
+    }
+
+    internal void Dispose()
+    {
+        if (_disposer == null)
+            return;
+
+        foreach (var chunk in _chunks)
+            for (var i = 0; i < chunk.EntityCount; i++)
+                _disposer.DisposeEntity(chunk, i);
     }
 
     internal (Entity entity, Row slot) CreateEntity()
@@ -155,6 +176,10 @@ public sealed partial class Archetype
 
     internal void RemoveEntity(EntityInfo info)
     {
+        // Run disposal for all IDisposableComponent components
+        _disposer?.DisposeEntity(info);
+
+        // Remove the entity from the chunk, component data is lost after this point
         info.Chunk.RemoveEntity(info);
 
         // Decrease archetype entity count
@@ -169,6 +194,9 @@ public sealed partial class Archetype
         // Early exit if we're migrating to where we already are!
         if (to == this)
             return info.GetRow(entity);
+
+        // Handle disposable components which are being removed
+        _disposer?.DisposeRemoved(info, to.Components);
 
         var chunk = info.Chunk;
         var row = chunk.MigrateTo(entity, ref info, to);
