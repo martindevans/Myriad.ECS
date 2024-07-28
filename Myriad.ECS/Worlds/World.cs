@@ -39,8 +39,7 @@ public sealed partial class World
         foreach (var archetype in _archetypes)
             archetype.Dispose(ref lazy);
 
-        var buffer = lazy.Get();
-        if (buffer != null)
+        if (lazy.TryGetBuffer(out var buffer))
         {
             buffer.Playback().Dispose();
             ReturnPooledCommandBuffer(buffer);

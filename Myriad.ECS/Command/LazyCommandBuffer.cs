@@ -1,5 +1,5 @@
 ﻿using Myriad.ECS.Worlds;
-using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Myriad.ECS.Command;
 
@@ -14,6 +14,9 @@ public struct LazyCommandBuffer
         _buffer = null;
     }
 
+    /// <summary>
+    /// Get the buffer, constructing one if it does not yet exist
+    /// </summary>
     public CommandBuffer CommandBuffer
     {
         get
@@ -24,8 +27,14 @@ public struct LazyCommandBuffer
         }
     }
 
-    internal CommandBuffer? Get()
+    /// <summary>
+    /// Get the buffer, or null if it does not yet exist
+    /// </summary>
+    /// <param name="buffer"></param>
+    /// <returns></returns>
+    public readonly bool TryGetBuffer([NotNullWhen(true)] out CommandBuffer? buffer)
     {
-        return _buffer;
+        buffer = _buffer;
+        return buffer != null;
     }
 }

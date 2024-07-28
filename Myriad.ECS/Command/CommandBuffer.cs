@@ -77,8 +77,7 @@ public sealed partial class CommandBuffer(World _world)
         _unbufferedRelationBindings.Clear();
 
         // Apply any changes caused by these changes
-        var lazyBuffer = lazy.Get();
-        if (lazyBuffer != null)
+        if (lazy.TryGetBuffer(out var lazyBuffer))
         {
             lazyBuffer.Playback().Dispose();
             World.ReturnPooledCommandBuffer(lazyBuffer);
