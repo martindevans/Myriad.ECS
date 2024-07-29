@@ -5,12 +5,13 @@ namespace Myriad.ECS.Command;
 
 public struct LazyCommandBuffer
 {
-    private readonly World _world;
     private CommandBuffer? _buffer;
+
+    public World World { get; private set; }
 
     public LazyCommandBuffer(World world)
     {
-        _world = world;
+        World = world;
         _buffer = null;
     }
 
@@ -22,7 +23,7 @@ public struct LazyCommandBuffer
         get
         {
             if (_buffer == null)
-                _buffer = _world.GetPooledCommandBuffer();
+                _buffer = World.GetPooledCommandBuffer();
             return _buffer;
         }
     }
