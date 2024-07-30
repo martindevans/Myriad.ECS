@@ -177,11 +177,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -500,11 +498,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -841,11 +837,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -1200,11 +1194,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -1577,11 +1569,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -1972,11 +1962,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -2385,11 +2373,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -2816,11 +2802,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -3265,11 +3249,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -3732,11 +3714,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -4217,11 +4197,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -4720,11 +4698,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -5241,11 +5217,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -5780,11 +5754,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -6337,11 +6309,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup
@@ -6912,11 +6882,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 			#region Parallel Work Loop Setup

@@ -239,11 +239,9 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (!query.Any())
+			if (archetypes.Count == 0 || !query.Any())
 				return 0;
 
 <#
