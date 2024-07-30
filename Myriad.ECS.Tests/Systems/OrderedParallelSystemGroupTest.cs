@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using Myriad.ECS.IDs;
 using Myriad.ECS.Systems;
 
 namespace Myriad.ECS.Tests.Systems;
@@ -12,22 +11,28 @@ public class OrderedParallelSystemGroupTest
     {
         var group = new OrderedParallelSystemGroup<ConcurrentDictionary<int, SemaphoreSlim>>(
             "test",
-            new SystemCheckSemaphore<Component0>(),
-            new SystemCheckSemaphore<Component0>(),
-            new SystemCheckSemaphore<Component1>(),
-            new SystemCheckSemaphore<Component1>(),
-            new SystemCheckSemaphore<Component2>(),
-            new SystemCheckSemaphore<Component2>(),
-            new SystemCheckSemaphore<Component3>(),
-            new SystemCheckSemaphore<Component3>(),
-            new SystemCheckSemaphore<Component4>()
+            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component0>(),
+            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component0>(),
+            new PhasedParallelSystemGroupTest.SystemReadComponent<Component0>(),
+            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component1>(),
+            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component1>(),
+            new PhasedParallelSystemGroupTest.SystemReadComponent<Component1>(),
+            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component2>(),
+            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component2>(),
+            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component3>(),
+            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component3>(),
+            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component4>()
         );
 
         var values = new ConcurrentDictionary<int, SemaphoreSlim>();
         for (var i = 0; i < 250; i++)
+        {
+            group.BeforeUpdate(values);
             group.Update(values);
+            group.AfterUpdate(values);
+        }
 
-        Assert.AreEqual(2, group.MaxDependencyChain);
+        Assert.AreEqual(3, group.MaxDependencyChain);
     }
 
     [TestMethod]
@@ -35,16 +40,20 @@ public class OrderedParallelSystemGroupTest
     {
         var group = new OrderedParallelSystemGroup<ConcurrentDictionary<int, SemaphoreSlim>>(
             "test",
-            new SystemCheckSemaphore<Component0>(),
-            new SystemCheckSemaphore<Component1>(),
-            new SystemCheckSemaphore<Component2>(),
-            new SystemCheckSemaphore<Component3>(),
-            new SystemCheckSemaphore<Component4>()
+            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component0>(),
+            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component1>(),
+            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component2>(),
+            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component3>(),
+            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component4>()
         );
 
         var values = new ConcurrentDictionary<int, SemaphoreSlim>();
         for (var i = 0; i < 250; i++)
+        {
+            group.BeforeUpdate(values);
             group.Update(values);
+            group.AfterUpdate(values);
+        }
 
         Assert.AreEqual(1, group.MaxDependencyChain);
     }
@@ -54,46 +63,17 @@ public class OrderedParallelSystemGroupTest
     {
         var group = new OrderedParallelSystemGroup<int>(
             "test",
-            new SystemEmpty<int>(),
-            new SystemEmpty<int>(),
-            new SystemEmpty<int>(),
-            new SystemEmpty<int>()
+            new PhasedParallelSystemGroupTest.SystemEmpty<int>(),
+            new PhasedParallelSystemGroupTest.SystemEmpty<int>(),
+            new PhasedParallelSystemGroupTest.SystemEmpty<int>(),
+            new PhasedParallelSystemGroupTest.SystemEmpty<int>()
         );
 
+        group.Init();
+        group.BeforeUpdate(0);
         group.Update(0);
+        group.AfterUpdate(0);
+        group.Dispose();
         Assert.AreEqual(1, group.MaxDependencyChain);
-    }
-
-    private class SystemCheckSemaphore<TComponent>
-        : ISystemDeclare<ConcurrentDictionary<int, SemaphoreSlim>> where TComponent : IComponent
-    {
-        public void Update(ConcurrentDictionary<int, SemaphoreSlim> data)
-        {
-            var v = data.GetOrAdd(ComponentID<TComponent>.ID.Value, new SemaphoreSlim(1));
-
-            if (!v.Wait(0))
-                Assert.Fail("Failed to take lock");
-
-            Thread.Sleep(1);
-
-            v.Release();
-        }
-
-        public void Declare(ref SystemDeclaration declaration)
-        {
-            declaration.Write<TComponent>();
-        }
-    }
-
-    private class SystemEmpty<TData>
-        : ISystemDeclare<TData>
-    {
-        public void Declare(ref SystemDeclaration declaration)
-        {
-        }
-
-        public void Update(TData data)
-        {
-        }
     }
 }

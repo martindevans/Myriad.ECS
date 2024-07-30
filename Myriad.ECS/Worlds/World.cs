@@ -55,7 +55,8 @@ public sealed partial class World
 
     internal void ReturnPooledCommandBuffer(CommandBuffer buffer)
     {
-        _commandBufferPool.Add(buffer);
+        if (_commandBufferPool.Count < 32)
+            _commandBufferPool.Add(buffer);
     }
 
     #region bulk write

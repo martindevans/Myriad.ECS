@@ -36,21 +36,17 @@ internal struct ComponentBloomFilter
 
     public readonly bool Intersects(ref readonly ComponentBloomFilter other)
     {
-        // If any of them do _not_ overlap, then the overall set can't overlap
-        if ((_a & other._a) == 0)
-            return false;
-        if ((_b & other._b) == 0)
-            return false;
-        if ((_c & other._c) == 0)
-            return false;
-        if ((_d & other._d) == 0)
-            return false;
-        if ((_e & other._e) == 0)
-            return false;
-        if ((_f & other._f) == 0)
-            return false;
+        // The same items have been added to all 6 sets, with different hashes.
+        // Therefore if _any_ of the sets do not intersect, then the overall
+        // set does not intersect.
+        var fail = (_a & other._a) == 0
+                || (_b & other._b) == 0
+                || (_c & other._c) == 0
+                || (_d & other._d) == 0
+                || (_e & other._e) == 0
+                || (_f & other._f) == 0;
 
-        return true;
+        return !fail;
     }
 
     internal void Union(ref readonly ComponentBloomFilter other)

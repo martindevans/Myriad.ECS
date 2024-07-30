@@ -21,6 +21,11 @@ public readonly ref struct ChunkHandle
     /// </summary>
     public int EntityCount => _chunk.EntityCount;
 
+    /// <summary>
+    /// Get the entities in this chunk
+    /// </summary>
+    public ReadOnlySpan<Entity> Entities => _chunk.Entities;
+
     internal ChunkHandle(Chunk chunk)
     {
         _chunk = chunk;
