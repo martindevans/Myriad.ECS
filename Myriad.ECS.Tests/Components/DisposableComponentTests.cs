@@ -141,4 +141,135 @@ public class DisposableComponentTests
         Assert.IsFalse(b.IsAlive(w));
         Assert.AreEqual(1, box.Value);
     }
+
+    [TestMethod]
+    public void LeakFromCommandBufferSetDeleteConflict()
+    {
+        var w = new WorldBuilder().Build();
+
+        // boxed int will be incremented when dispose happens
+        var box = new BoxedInt();
+
+        var cmd = new CommandBuffer(w);
+
+        // Create an entity
+        var be = cmd.Create();
+        var resolver1 = cmd.Playback();
+        var entity = resolver1.Resolve(be);
+        resolver1.Dispose();
+
+        // Delete the entity
+        cmd.Delete(entity);
+
+        // Enqueue attachment of a disposal component... but that entity is already going to be deleted!
+        cmd.Set(entity, new TestDisposable(box));
+
+        // Nothing has been disposed yet
+        Assert.AreEqual(0, box.Value);
+
+        // Execute the buffer
+        cmd.Playback().Dispose();
+
+        // Ensure the component was disposed, even though it wasn't ever really even applied!
+        Assert.AreEqual(1, box.Value);
+    }
+
+    [TestMethod]
+    public void LeakFromCommandBufferSetDoubleDeleteConflict()
+    {
+        var w = new WorldBuilder().Build();
+
+        // boxed int will be incremented when dispose happens
+        var box = new BoxedInt();
+
+        var cmd = new CommandBuffer(w);
+
+        // Create an entity
+        var be = cmd.Create();
+        var resolver1 = cmd.Playback();
+        var entity = resolver1.Resolve(be);
+        resolver1.Dispose();
+
+        // Enqueue deletion of entity in one command buffer
+        cmd.Delete(entity);
+
+        // Setup a disposable in another buffer
+        var cmd2 = new CommandBuffer(w);
+        cmd2.Set(entity, new TestDisposable(box));
+
+        // Delete entity
+        cmd.Playback().Dispose();
+
+        // Nothing has been disposed yet
+        Assert.AreEqual(0, box.Value);
+
+        // Execute the second buffer
+        cmd2.Playback().Dispose();
+
+        // Ensure the component was disposed, even though it wasn't ever really even applied!
+        Assert.AreEqual(1, box.Value);
+    }
+
+    [TestMethod]
+    public void LeakFromCommandBufferSetSetConflict()
+    {
+        var w = new WorldBuilder().Build();
+
+        // boxed int will be incremented when dispose happens
+        var box1 = new BoxedInt();
+        var box2 = new BoxedInt();
+
+        var cmd = new CommandBuffer(w);
+
+        // Create an entity
+        var be = cmd.Create();
+        var resolver1 = cmd.Playback();
+        var entity = resolver1.Resolve(be);
+        resolver1.Dispose();
+
+        // Enqueue attachment of a disposal component, twice
+        cmd.Set(entity, new TestDisposable(box1));
+        cmd.Set(entity, new TestDisposable(box2));
+
+        // Nothing has been disposed yet
+        Assert.AreEqual(0, box1.Value);
+        Assert.AreEqual(0, box2.Value);
+
+        // Execute the buffer
+        cmd.Playback().Dispose();
+
+        // Ensure the first one was disposed
+        Assert.AreEqual(1, box1.Value);
+        Assert.AreEqual(0, box2.Value);
+    }
+
+    [TestMethod]
+    public void LeakFromCommandBufferBufferedSetSetConflict()
+    {
+        var w = new WorldBuilder().Build();
+
+        // boxed int will be incremented when dispose happens
+        var box1 = new BoxedInt();
+        var box2 = new BoxedInt();
+
+        var cmd = new CommandBuffer(w);
+
+        // Create an entity
+        var be = cmd.Create();
+
+        // Enqueue attachment of a disposal component, twice. To an entity that doesn't exist yet.
+        be.Set(new TestDisposable(box1));
+        be.Set(new TestDisposable(box2), overwrite:true);
+
+        // Nothing has been disposed yet
+        Assert.AreEqual(0, box1.Value);
+        Assert.AreEqual(0, box2.Value);
+
+        // Execute the buffer
+        cmd.Playback().Dispose();
+
+        // Ensure the first one was disposed
+        Assert.AreEqual(1, box1.Value);
+        Assert.AreEqual(0, box2.Value);
+    }
 }

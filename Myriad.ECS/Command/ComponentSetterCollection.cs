@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Myriad.ECS.Allocations;
+using Myriad.ECS.Components;
 using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Archetypes;
@@ -48,9 +49,46 @@ internal class ComponentSetterCollection
         list.Write(id.Index, row);
     }
 
+    /// <summary>
+    /// Dispose all disposable components specified by the given sorted list
+    /// </summary>
+    /// <param name="sets"></param>
+    /// <param name="buffer"></param>
+    public void Dispose(SortedList<ComponentID, SetterId>? sets, ref LazyCommandBuffer buffer)
+    {
+        if (sets == null)
+            return;
+
+        foreach (var (cid, sid) in sets)
+        {
+            if (!cid.IsDisposableComponent)
+                continue;
+
+            var list = _components[sid.ID];
+            list.Dispose(sid.Index, ref buffer);
+        }
+    }
+
+    /// <summary>
+    /// Dispose all disposable components that were not written to an entity
+    /// </summary>
+    /// <param name="lazy"></param>
+    public void DisposeAllOverwritten(ref LazyCommandBuffer lazy)
+    {
+        foreach (var componentList in _components)
+            componentList.Value.DisposeAllOverwritten(ref lazy);
+    }
+
     public readonly struct SetterId
     {
+        /// <summary>
+        /// Component ID of the component being overwritten
+        /// </summary>
         internal readonly ComponentID ID;
+
+        /// <summary>
+        /// Index of the setter in the setters list
+        /// </summary>
         internal readonly int Index;
 
         internal SetterId(ComponentID id, int idx)
@@ -68,6 +106,10 @@ internal class ComponentSetterCollection
         void Recycle();
 
         void Write(int index, Row dest);
+
+        void Dispose(int index, ref LazyCommandBuffer buffer);
+
+        void DisposeAllOverwritten(ref LazyCommandBuffer lazy);
     }
 
     [DebuggerDisplay("Count = {_values.Count}")]
@@ -75,11 +117,15 @@ internal class ComponentSetterCollection
         : IComponentList
         where T : IComponent
     {
+        private static readonly IDisposer _disposer = Disposer<T>.Instance;
+
         private readonly List<T> _values = [ ];
+        private readonly List<T> _overwrittenDisposableValues = [];
 
         public void Clear()
         {
             _values.Clear();
+            _overwrittenDisposableValues.Clear();
         }
 
         public int Add(T value)
@@ -90,6 +136,9 @@ internal class ComponentSetterCollection
 
         public void Overwrite(SetterId index, T value)
         {
+            if (index.ID.IsDisposableComponent)
+                _overwrittenDisposableValues.Add(_values[index.Index]);
+
             _values[index.Index] = value;
         }
 
@@ -101,6 +150,17 @@ internal class ComponentSetterCollection
         public void Write(int index, Row dest)
         {
             dest.GetMutable<T>() = _values[index];
+        }
+
+        public void Dispose(int index, ref LazyCommandBuffer buffer)
+        {
+            _disposer.Dispose(_values, index, ref buffer);
+        }
+
+        public void DisposeAllOverwritten(ref LazyCommandBuffer lazy)
+        {
+            _disposer.DisposeAll(_overwrittenDisposableValues, ref lazy);
+            _overwrittenDisposableValues.Clear();
         }
     }
     #endregion

@@ -41,6 +41,10 @@ public sealed partial class CommandBuffer(World _world)
     private readonly UnbufferedRelationBinder _unbufferedRelationBindings = new();
 
     #region playback
+    /// <summary>
+    /// Apply all of the operations in this buffer to the <see cref="World"/>
+    /// </summary>
+    /// <returns></returns>
     public Resolver Playback()
     {
         // Create a "resolver" that can be used to resolve entity IDs
@@ -59,6 +63,9 @@ public sealed partial class CommandBuffer(World _world)
 
         // Structural changes (add/remove components)
         ApplyStructuralChanges(ref lazy);
+
+        // Dispose all disposable components which were enqueued but were never attached to an Entity
+        _setters.DisposeAllOverwritten(ref lazy);
 
         // Clear all temporary state
         _maybeAddingPhantomComponent.Clear();
@@ -91,6 +98,11 @@ public sealed partial class CommandBuffer(World _world)
     {
         foreach (var delete in _deletes)
         {
+            // If there are any modifications enqueue for this entity, delete them
+            if (_entityModifications.TryGetValue(delete, out var mods))
+                _setters.Dispose(mods.Sets, ref lazy);
+
+            // Skip deleted entities
             if (!delete.Exists(World))
                 continue;
 
@@ -104,6 +116,7 @@ public sealed partial class CommandBuffer(World _world)
             {
                 World.DeleteImmediate(delete, ref lazy);
 
+                // Return objects to pools
                 if (_entityModifications.Remove(delete, out var mod))
                 {
                     if (mod.Sets != null)
@@ -142,6 +155,13 @@ public sealed partial class CommandBuffer(World _world)
             // Calculate the new archetype for the entity
             foreach (var (entity, mod) in _entityModifications.Enumerable())
             {
+                // Skip entities that have been deleted since this was enqueued
+                if (!entity.Exists(World))
+                {
+                    _setters.Dispose(mod.Sets, ref lazy);
+                    continue;
+                }
+
                 var currentArchetype = World.GetArchetype(entity);
 
                 // Set all of the current archetype components

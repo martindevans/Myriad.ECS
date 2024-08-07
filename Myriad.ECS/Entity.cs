@@ -137,6 +137,12 @@ public readonly record struct Entity
         return ref entityInfo.Chunk.GetRef<T>(this, entityInfo.RowIndex);
     }
 
+    /// <summary>
+    /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!
+    /// </summary>
+    /// <param name="world"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public object? GetBoxedComponent(World world, ComponentID id)
     {
         if (!Exists(world))

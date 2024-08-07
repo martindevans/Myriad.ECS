@@ -1,17 +1,8 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\Martin\AppData\Local\Temp\JetBrains\ReSharperPlatformVs17\vAny_ac125f2d\CoverageData\_Myriad.ECS.1518930650\Snapshot\snapshot.utdcvr</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=25d542a0_002Dd4ec_002D41c8_002D87ef_002Df2cf6e6be299/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Session #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;And&gt;&#xD;
-    &lt;Namespace&gt;Myriad.ECS.Tests.Components&lt;/Namespace&gt;&#xD;
-    &lt;Project Location="C:\Users\Martin\Documents\dotnet\Myriad.ECS\Myriad.ECS.Tests" Presentation="&amp;lt;Myriad.ECS.Tests&amp;gt;" /&gt;&#xD;
-  &lt;/And&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8e61bc76_002D8052_002D4593_002Dbc4b_002Df2f1b4944488/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;And&gt;&#xD;
-    &lt;Namespace&gt;Myriad.ECS.Tests.Components&lt;/Namespace&gt;&#xD;
-    &lt;Project Location="C:\Users\Martin\Documents\dotnet\Myriad.ECS\Myriad.ECS.Tests" Presentation="&amp;lt;Myriad.ECS.Tests&amp;gt;" /&gt;&#xD;
-  &lt;/And&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
+	
+	
+	
+	
 	
 	
 	
