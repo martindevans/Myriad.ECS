@@ -59,4 +59,9 @@ public sealed class DynamicSystemGroup<TData>(string name, params ISystem<TData>
     {
         return base.Add(system);
     }
+
+    public new bool Remove(ISystem<TData> system)
+    {
+        return base.Remove(system);
+    }
 }

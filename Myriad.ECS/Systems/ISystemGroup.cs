@@ -156,6 +156,22 @@ public abstract class BaseSystemGroup<TData>
         return item;
     }
 
+    protected bool Remove(ISystem<TData> system)
+    {
+        for (var i = 0; i < _systems.Count; i++)
+        {
+            if (_systems[i].System == system)
+            {
+                _beforeSystems.Remove(_systems[i]);
+                _afterSystems.Remove(_systems[i]);
+                _systems.RemoveAt(i);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void BeforeUpdate(TData data)
     {
         _timer.Reset();
