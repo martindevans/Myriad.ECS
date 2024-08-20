@@ -7,6 +7,7 @@
 <#
     const int PARAM_COUNT = 16;
 #>
+using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
 
 // ReSharper disable UnusedType.Global
@@ -42,7 +43,42 @@ for (var i = 1; i <= PARAM_COUNT; i++)
     public int Count<#= tparams #>()
         <#= Constraints(i, 8) #>
     {
-        var query = GetCachedQuery<#= tparams #>();
+        var query = GetCachedQuery<T0, T1>();
+        return query.Count();
+    }
+
+    /// <summary>
+    /// Count how many entities exist which include all given components
+    /// </summary>
+    /// <returns></returns>
+    public int Count<#= tparams #>(ref QueryDescription? query)
+        <#= Constraints(i, 8) #>
+    {
+        QueryBuilder? builder = null;
+        if (query != null)
+        {
+<#
+for (var j = 0; j < i; j++)
+{
+#>
+            var c<#= j #> = ComponentID<T<#= j #>>.ID;
+            if (!query.IsIncluded(c<#= j #>))
+            {
+                builder ??= query.ToBuilder();
+                builder.Include(c<#= j #>);
+            }
+
+<#
+}
+#>
+            if (builder != null)
+                query = builder.Build(query.World);
+        }
+        else
+        {
+            query = GetCachedQuery<#= tparams #>();
+        }
+
         return query.Count();
     }
 

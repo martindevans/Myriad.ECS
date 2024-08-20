@@ -50,6 +50,10 @@ public class ParallelQueryTests
         foreach (var (_, v) in w.Query<ComponentInt32>())
             Assert.AreEqual(128, v.Ref.Value);
 
+        // check they're 128 in a different way
+        foreach (var item in w.Query<ComponentInt32>())
+            Assert.AreEqual(128, item.Item0.Value);
+
         // Check everything else is 0
         foreach (var (_, v) in w.Query<ComponentByte>())
             Assert.AreEqual(0, v.Ref.Value);

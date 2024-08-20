@@ -235,7 +235,6 @@ internal class OrderedListSet<TItem>
     {
         return _items.Count switch
         {
-            0 => throw new InvalidOperationException("Cannot get single item, there are 0 items"),
             1 => _items[0],
             _ => throw new InvalidOperationException($"Cannot get single item, there are {_items.Count} items"),
         };

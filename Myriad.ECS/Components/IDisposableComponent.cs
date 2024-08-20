@@ -36,8 +36,7 @@ internal static class Disposer
 
     public static IDisposer Get(ComponentID id)
     {
-        if (_disposerCache == null)
-            _disposerCache = [ ];
+        _disposerCache ??= [ ];
 
         if (!_disposerCache.TryGetValue(id, out var value))
         {
@@ -74,11 +73,11 @@ internal static class Disposer<T>
     {
         public ComponentID Component { get; } = ComponentID<U>.ID;
 
-        public void Dispose(Array array, int index, ref LazyCommandBuffer buffer)
-        {
-            var arr = (U[])array;
-            arr[index].Dispose(ref buffer);
-        }
+        //public void Dispose(Array array, int index, ref LazyCommandBuffer buffer)
+        //{
+        //    var arr = (U[])array;
+        //    arr[index].Dispose(ref buffer);
+        //}
 
         public void Dispose(IList list, int index, ref LazyCommandBuffer buffer)
         {
@@ -104,10 +103,6 @@ internal static class Disposer<T>
     {
         public ComponentID Component { get; } = ComponentID<T>.ID;
 
-        public void Dispose(Array array, int index, ref LazyCommandBuffer buffer)
-        {
-        }
-
         public void Dispose(IList list, int index, ref LazyCommandBuffer buffer)
         {
         }
@@ -125,8 +120,6 @@ internal static class Disposer<T>
 internal interface IDisposer
 {
     public ComponentID Component { get; }
-
-    void Dispose(Array array, int index, ref LazyCommandBuffer buffer);
 
     void Dispose(IList list, int index, ref LazyCommandBuffer buffer);
 

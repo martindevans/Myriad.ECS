@@ -22,8 +22,7 @@ public struct LazyCommandBuffer
     {
         get
         {
-            if (_buffer == null)
-                _buffer = World.GetPooledCommandBuffer();
+            _buffer ??= World.GetPooledCommandBuffer();
             return _buffer;
         }
     }
