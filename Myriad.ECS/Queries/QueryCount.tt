@@ -43,7 +43,7 @@ for (var i = 1; i <= PARAM_COUNT; i++)
     public int Count<#= tparams #>()
         <#= Constraints(i, 8) #>
     {
-        var query = GetCachedQuery<T0, T1>();
+        var query = GetCachedQuery<#= tparams #>();
         return query.Count();
     }
 
