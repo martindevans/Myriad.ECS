@@ -13,17 +13,16 @@ public sealed partial class CommandBuffer
     {
         internal SortedList<uint, Entity> Lookup { get; } = [];
         internal CommandBuffer? Parent { get; private set; }
-        private uint _version;
 
+        public uint Version { get; private set; }
         public int Count => Lookup.Count;
-
         public World World => Parent!.World;
 
-        internal void Configure(CommandBuffer parent)
+        internal void Configure(CommandBuffer buffer)
         {
             Lookup.Clear();
-            Parent = parent;
-            _version = parent._version;
+            Parent = buffer;
+            Version = buffer._version;
         }
 
         public void Dispose()
@@ -37,16 +36,6 @@ public sealed partial class CommandBuffer
             Pool.Return(this);
         }
 
-        public Entity Resolve(BufferedEntity bufferedEntity)
-        {
-            if (_version != bufferedEntity.Version)
-                throw new InvalidOperationException("Cannot use a resolver from one CommandBuffer with BufferedEntity from another generation of the same buffer");
-
-            return bufferedEntity.Resolve(this);
-        }
-
         public Entity this[int index] => Lookup.Values[index];
-
-        public Entity this[BufferedEntity entity] => Resolve(entity);
     }
 }

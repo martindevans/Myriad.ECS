@@ -39,7 +39,7 @@ public class CommandBufferTests
         var eb = buffer.Create();
 
         using var resolver = buffer.Playback();
-        var entity = resolver.Resolve(eb);
+        var entity = eb.Resolve();
 
         Assert.IsTrue(entity.Exists(world));
         Assert.AreEqual(1, world.Archetypes.Count);
@@ -63,7 +63,7 @@ public class CommandBufferTests
         // Resolve results
         var entities = new List<Entity>();
         foreach (var b in buffered)
-            entities.Add(resolver.Resolve(b));
+            entities.Add(b.Resolve());
 
         for (var i = 0; i < entities.Count; i++)
         {
@@ -124,11 +124,12 @@ public class CommandBufferTests
             }
 
             // Execute
-            var resolver = buffer.Playback();
-
-            // Resolve results
-            foreach (var b in buffered)
-                alive.Add(resolver.Resolve(b));
+            using (buffer.Playback())
+            {
+                // Resolve results
+                foreach (var b in buffered)
+                    alive.Add(b.Resolve());
+            }
 
             // Check all the entities
             for (var j = 0; j < alive.Count; j++)
@@ -160,7 +161,7 @@ public class CommandBufferTests
 
         Assert.ThrowsException<ObjectDisposedException>(() =>
         {
-            resolver.Resolve(eb);
+            eb.Resolve();
         });
     }
 
@@ -173,15 +174,15 @@ public class CommandBufferTests
 
         // Create the entity
         var eb1 = buffer1.Create();
-        buffer1.Playback();
+        buffer1.Playback().Dispose();
 
         // Also run the other buffer to get another resolver
-        var resolver2 = buffer2.Playback();
+        using var resolver2 = buffer2.Playback();
 
         // Resolve the entity ID using the wrong resolver
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
-            resolver2.Resolve(eb1);
+            eb1.Resolve();
         });
     }
 
@@ -193,15 +194,15 @@ public class CommandBufferTests
 
         // Create the entity
         var eb1 = buffer1.Create();
-        buffer1.Playback();
+        buffer1.Playback().Dispose();
 
         // Re-use that buffer
-        var resolver2 = buffer1.Playback();
+        using var resolver2 = buffer1.Playback();
 
         // Resolve the entity ID using the wrong resolver
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsException<ObjectDisposedException>(() =>
         {
-            resolver2.Resolve(eb1);
+            eb1.Resolve();
         });
     }
 
@@ -213,7 +214,7 @@ public class CommandBufferTests
 
         // Create the entity
         var eb1 = buffer1.Create();
-        buffer1.Playback();
+        using var resolver = buffer1.Playback();
 
         // Try to modify the buffered entity
         Assert.ThrowsException<InvalidOperationException>(() =>
@@ -232,8 +233,8 @@ public class CommandBufferTests
                 .Create()
                 .Set(new ComponentFloat(17));
 
-        var resolver = buffer.Playback();
-        var entity = resolver.Resolve(eb);
+        using var resolver = buffer.Playback();
+        var entity = eb.Resolve();
 
         Assert.IsTrue(entity.Exists(world));
         Assert.AreEqual(1, world.Archetypes.Count);
@@ -286,9 +287,9 @@ public class CommandBufferTests
 
         var entities = new[]
         {
-            resolver.Resolve(buffered[0]),
-            resolver.Resolve(buffered[1]),
-            resolver.Resolve(buffered[2])
+            buffered[0].Resolve(),
+            buffered[1].Resolve(),
+            buffered[2].Resolve(),
         };
 
         foreach (var entity in entities)
@@ -313,7 +314,7 @@ public class CommandBufferTests
 
         var buffered = buffer.Create().Set(new ComponentFloat(1));
         using var resolver = buffer.Playback();
-        var entity = resolver.Resolve(buffered);
+        var entity = buffered.Resolve();
         Assert.IsTrue(entity.Exists(world));
 
         buffer.Delete(entity);
@@ -335,7 +336,7 @@ public class CommandBufferTests
         // Create an entity
         var buffered = buffer.Create().Set(new ComponentFloat(1));
         using var resolver = buffer.Playback();
-        var entity = resolver.Resolve(buffered);
+        var entity = buffered.Resolve();
         Assert.IsTrue(entity.Exists(world));
 
         // Setup deletion for that entity
@@ -370,9 +371,9 @@ public class CommandBufferTests
 
         var entities = new[]
         {
-            resolver.Resolve(buffered[0]),
-            resolver.Resolve(buffered[1]),
-            resolver.Resolve(buffered[2])
+            buffered[0].Resolve(),
+            buffered[1].Resolve(),
+            buffered[2].Resolve(),
         };
 
         foreach (var entity in entities)
@@ -397,7 +398,7 @@ public class CommandBufferTests
         // Create entity
         var buffered = buffer.Create().Set(new ComponentFloat(1));
         using var resolver = buffer.Playback();
-        var entity = resolver.Resolve(buffered);
+        var entity = buffered.Resolve();
         Assert.IsTrue(entity.Exists(world));
 
         // Modify it _and_ delete it
@@ -428,7 +429,7 @@ public class CommandBufferTests
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
         using var resolver = buffer.Playback();
-        var entity = resolver.Resolve(eb);
+        var entity = eb.Resolve();
 
         // Remove a component
         buffer.Remove<ComponentInt16>(entity);
@@ -450,7 +451,7 @@ public class CommandBufferTests
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
         using var resolver = buffer.Playback();
-        var entity = resolver.Resolve(eb);
+        var entity = eb.Resolve();
 
         // Add a third
         buffer.Set(entity, new ComponentInt32(789));
@@ -474,7 +475,7 @@ public class CommandBufferTests
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
         using var resolver = buffer.Playback();
-        var entity = resolver.Resolve(eb);
+        var entity = eb.Resolve();
 
         // Overwrite one
         buffer.Set(entity, new ComponentInt16(789));
@@ -498,7 +499,7 @@ public class CommandBufferTests
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
         using var resolver = buffer.Playback();
-        var entity = resolver.Resolve(eb);
+        var entity = eb.Resolve();
 
         // Overwrite one, twice
         buffer.Set(entity, new ComponentInt16(789));
@@ -523,7 +524,7 @@ public class CommandBufferTests
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
         using var resolver = buffer.Playback();
-        var entity = resolver.Resolve(eb);
+        var entity = eb.Resolve();
 
         // Overwrite one
         buffer.Set(entity, new ComponentInt16(789));
@@ -550,7 +551,7 @@ public class CommandBufferTests
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
         using var resolver = buffer.Playback();
-        var entity = resolver.Resolve(eb);
+        var entity = eb.Resolve();
 
         // Remove a component
         buffer.Remove<ComponentInt32>(entity);
@@ -575,7 +576,7 @@ public class CommandBufferTests
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
         using var resolver = buffer.Playback();
-        var entity = resolver.Resolve(eb);
+        var entity = eb.Resolve();
 
         // Remove a component
         buffer.Remove<ComponentInt16>(entity);
@@ -643,7 +644,7 @@ public class CommandBufferTests
         rng = new Random(17);
         for (var i = 0; i < buffered.Count; i++)
         {
-            var entity = resolver[buffered[i]];
+            var entity = buffered[i].Resolve();
 
             for (var j = 0; j < 4; j++)
             {

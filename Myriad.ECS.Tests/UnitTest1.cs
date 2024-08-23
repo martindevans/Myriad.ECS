@@ -27,9 +27,9 @@ public class UnitTest1
         using var resolver = cmd.Playback();
 
         // Resolve the IDs of the entities
-        var e1 = be1.Resolve(resolver);
+        var e1 = be1.Resolve();
         Assert.IsNotNull(e1);
-        var e2 = be2.Resolve(resolver);
+        var e2 = be2.Resolve();
         Assert.IsNotNull(e2);
 
         // Run query

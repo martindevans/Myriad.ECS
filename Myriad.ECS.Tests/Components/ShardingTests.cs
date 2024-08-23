@@ -46,7 +46,7 @@ public class ShardingTests
 
         // Add sharding
         for (var i = 0; i < buffered.Count; i++)
-            c.AddSharding(buffered[i].Resolve(resolver), i);
+            c.AddSharding(buffered[i].Resolve(), i);
         c.Playback().Dispose();
 
         // All entities are the same (except for sharding). So check that
@@ -72,7 +72,7 @@ public class ShardingTests
         // Remove sharding from all entities
         using var resolver = c.Playback();
         foreach (var bufferedEntity in buffered)
-            c.RemoveSharding(resolver.Resolve(bufferedEntity));
+            c.RemoveSharding(bufferedEntity.Resolve());
         c.Playback().Dispose();
 
         Console.WriteLine($"ComponentInt64 => {ComponentID<ComponentInt64>.ID}");

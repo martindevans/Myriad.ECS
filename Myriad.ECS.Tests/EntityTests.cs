@@ -30,7 +30,7 @@ public class EntityTests
 
         var eb = b.Create();
         using var resolver = b.Playback();
-        var entity = resolver.Resolve(eb);
+        var entity = eb.Resolve();
 
         Assert.AreEqual(0, entity.CompareTo(entity));
     }
@@ -44,8 +44,8 @@ public class EntityTests
         var eb1 = b.Create();
         var eb2 = b.Create();
         using var resolver = b.Playback();
-        var entity1 = resolver.Resolve(eb1);
-        var entity2 = resolver.Resolve(eb2);
+        var entity1 = eb1.Resolve();
+        var entity2 = eb2.Resolve();
 
         var c1 = entity1.CompareTo(entity2);
         var c2 = entity2.CompareTo(entity1);
@@ -64,8 +64,8 @@ public class EntityTests
         var eb1 = b.Create();
         var eb2 = b.Create();
         using var resolver = b.Playback();
-        var entity1 = resolver.Resolve(eb1);
-        var entity2 = resolver.Resolve(eb2);
+        var entity1 = eb1.Resolve();
+        var entity2 = eb2.Resolve();
 
         var id1 = entity1.UniqueID();
         var id2 = entity2.UniqueID();
@@ -82,7 +82,7 @@ public class EntityTests
         var e = b.Create()
                  .Set(new ComponentInt16(7));
         using var resolver = b.Playback();
-        var entity = resolver.Resolve(e);
+        var entity = e.Resolve();
 
         ref var c = ref entity.GetComponentRef<ComponentInt16>(w);
         Assert.AreEqual(7, c.Value);
@@ -97,7 +97,7 @@ public class EntityTests
         var e = b.Create()
                  .Set(new ComponentInt16(7));
         using var resolver = b.Playback();
-        var entity = resolver.Resolve(e);
+        var entity = e.Resolve();
 
         var c = (ComponentInt16)entity.GetBoxedComponent(w, ComponentID<ComponentInt16>.ID)!;
         Assert.AreEqual(7, c.Value);

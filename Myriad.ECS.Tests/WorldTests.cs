@@ -17,9 +17,9 @@ public class WorldTests
         var bb = cmd.Create().Set(new ComponentInt32(2)).Set(new ComponentFloat(10));
         var cb = cmd.Create().Set(new ComponentFloat(10));
         using var resolver = cmd.Playback();
-        var a = resolver[ab];
-        var b = resolver[bb];
-        var c = resolver[cb];
+        var a = ab.Resolve();
+        var b = bb.Resolve();
+        var c = cb.Resolve();
 
         Assert.AreEqual(2, w.Overwrite(new ComponentInt32(3)));
 
@@ -40,9 +40,9 @@ public class WorldTests
         var bb = cmd.Create().Set(new ComponentInt32(2)).Set(new ComponentFloat(10));
         var cb = cmd.Create().Set(new ComponentFloat(10));
         using var resolver = cmd.Playback();
-        var a = resolver[ab];
-        var b = resolver[bb];
-        var c = resolver[cb];
+        var a = ab.Resolve();
+        var b = bb.Resolve();
+        var c = cb.Resolve();
 
         var q = new QueryBuilder().Exclude<ComponentFloat>().Build(w);
 
@@ -65,9 +65,9 @@ public class WorldTests
         var bb = cmd.Create().Set(new ComponentInt32(2)).Set(new ComponentFloat(10));
         var cb = cmd.Create().Set(new ComponentFloat(10));
         using var resolver = cmd.Playback();
-        var a = resolver[ab];
-        var b = resolver[bb];
-        var c = resolver[cb];
+        var a = ab.Resolve();
+        var b = bb.Resolve();
+        var c = cb.Resolve();
 
         var q = new QueryBuilder().Include<ComponentFloat>().Build(w);
 

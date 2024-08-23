@@ -70,7 +70,7 @@ public class PhantomTests
         var cmd = new CommandBuffer(w);
         var eb = cmd.Create().Set(new TestPhantom0()).Set(new ComponentInt32(42));
         var resolver = cmd.Playback();
-        var e = resolver[eb];
+        var e = eb.Resolve();
         resolver.Dispose();
 
         // Is the entity valid
@@ -102,7 +102,7 @@ public class PhantomTests
         var cmd = new CommandBuffer(w);
         var eb = cmd.Create().Set(new TestPhantom0()).Set(new TestPhantom1()).Set(new ComponentInt32(42)).Set(new ComponentFloat(42));
         var resolver = cmd.Playback();
-        var e = resolver[eb];
+        var e = eb.Resolve();
         resolver.Dispose();
 
         // Is the entity valid
@@ -137,7 +137,7 @@ public class PhantomTests
         var cmd = new CommandBuffer(w);
         var eb = cmd.Create().Set(new TestPhantom0()).Set(new TestPhantom1()).Set(new ComponentInt32(42)).Set(new ComponentFloat(42));
         var resolver = cmd.Playback();
-        var e = resolver[eb];
+        var e = eb.Resolve();
         resolver.Dispose();
 
         // Is the entity valid
@@ -179,7 +179,7 @@ public class PhantomTests
         var cmd = new CommandBuffer(w);
         var eb = cmd.Create().Set(new ComponentFloat(42));
         var resolver = cmd.Playback();
-        var e = resolver[eb];
+        var e = eb.Resolve();
         resolver.Dispose();
 
         // Is the entity valid
@@ -206,7 +206,7 @@ public class PhantomTests
         var cmd = new CommandBuffer(w);
         var eb = cmd.Create().Set(new ComponentFloat(42));
         var resolver = cmd.Playback();
-        var e = resolver[eb];
+        var e = eb.Resolve();
         resolver.Dispose();
 
         // Is the entity valid

@@ -42,7 +42,7 @@ public class EntityChurnBenchmark
 
             // Resolve results
             foreach (var b in _buffered)
-                alive.Add(resolver.Resolve(b));
+                alive.Add(b.Resolve());
             _buffered.Clear();
         }
     }

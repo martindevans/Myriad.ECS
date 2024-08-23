@@ -26,9 +26,9 @@ public class RelationshipComponentTests
 
         using var resolver = buffer.Playback();
 
-        var a = ab.Resolve(resolver);
-        var b = bb.Resolve(resolver);
-        var c = cb.Resolve(resolver);
+        var a = ab.Resolve();
+        var b = bb.Resolve();
+        var c = cb.Resolve();
 
         Assert.AreEqual(a, c.GetComponentRef<Relational1>(world).Target);
         Assert.AreEqual(b, c.GetComponentRef<Relational2>(world).Target);
@@ -43,7 +43,7 @@ public class RelationshipComponentTests
         // Create an entity
         var cb = buffer.Create();
         using var resolver1 = buffer.Playback();
-        var c = cb.Resolve(resolver1);
+        var c = cb.Resolve();
 
         // Add relationships to existing entity
         var ab = buffer.Create().Set(new ComponentInt32(17));
@@ -52,8 +52,8 @@ public class RelationshipComponentTests
         buffer.Set(c, new Relational2(default, 42), bb);
         using var resolver2 = buffer.Playback();
 
-        var a = ab.Resolve(resolver2);
-        var b = bb.Resolve(resolver2);
+        var a = ab.Resolve();
+        var b = bb.Resolve();
 
         Assert.AreEqual(a, c.GetComponentRef<Relational1>(world).Target);
         Assert.AreEqual(b, c.GetComponentRef<Relational2>(world).Target);
@@ -68,12 +68,12 @@ public class RelationshipComponentTests
         // Create an entity
         var ab = buffer.Create();
         using var resolver1 = buffer.Playback();
-        var a = ab.Resolve(resolver1);
+        var a = ab.Resolve();
 
         // Create a new entity, pointing at the existing one
         var bb = buffer.Create().Set(new Relational1(), a);
         using var resolver2 = buffer.Playback();
-        var b = bb.Resolve(resolver2);
+        var b = bb.Resolve();
 
         Assert.AreEqual(a, b.GetComponentRef<Relational1>(world).Target);
     }
@@ -88,8 +88,8 @@ public class RelationshipComponentTests
         var ab = buffer.Create();
         var bb = buffer.Create();
         using var resolver1 = buffer.Playback();
-        var a = ab.Resolve(resolver1);
-        var b = bb.Resolve(resolver1);
+        var a = ab.Resolve();
+        var b = bb.Resolve();
 
         // Add relationship
         buffer.Set(a, new Relational1(), b);

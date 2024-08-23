@@ -25,7 +25,7 @@ var earthBuffered = setup.Create()
      .Set(new WorldPosition(new Metre3(0, 0, 0)))
      .Set(new GravityMass(EARTH_MASS));
 using var resolver1 = setup.Playback();
-var earth = earthBuffered.Resolve(resolver1);
+var earth = earthBuffered.Resolve();
 
 // Create moon on kepler rails
 setup.Create()
@@ -108,7 +108,7 @@ for (var i = 0; i < count; i++)
 //}
 
 using var resolver = setup.Playback();
-var baseline = baselineBuffered.Resolve(resolver);
+var baseline = baselineBuffered.Resolve();
 //var nb = bnb.Resolve(resolver);
 
 var systems = new SystemGroup<GameTime>(

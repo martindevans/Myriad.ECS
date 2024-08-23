@@ -16,7 +16,7 @@ public class SystemStateTests
         var e0 = buffer.Create().Set(new Component0());
         var e1 = buffer.Create().Set(new Component1());
         var e2 = buffer.Create().Set(new Component2()).Set(new Component17());
-        var resolver = buffer.Playback();
+        using var resolver = buffer.Playback();
 
         // Auto attach C17 to an entities with C0
         // Auto detach C17 from an entities without C0
@@ -26,15 +26,15 @@ public class SystemStateTests
         buffer2.Playback().Dispose();
 
         // Check it was attached to e0
-        Assert.IsTrue(resolver[e0].HasComponent<Component0>(world));
-        Assert.IsTrue(resolver[e0].HasComponent<Component17>(world));
+        Assert.IsTrue(e0.Resolve().HasComponent<Component0>(world));
+        Assert.IsTrue(e0.Resolve().HasComponent<Component17>(world));
 
         // Check e1 was untouched
-        Assert.IsTrue(resolver[e1].HasComponent<Component1>(world));
-        Assert.IsFalse(resolver[e1].HasComponent<Component17>(world));
+        Assert.IsTrue(e1.Resolve().HasComponent<Component1>(world));
+        Assert.IsFalse(e1.Resolve().HasComponent<Component17>(world));
 
         // Check it was removed from e2
-        Assert.IsTrue(resolver[e2].HasComponent<Component2>(world));
-        Assert.IsFalse(resolver[e2].HasComponent<Component17>(world));
+        Assert.IsTrue(e2.Resolve().HasComponent<Component2>(world));
+        Assert.IsFalse(e2.Resolve().HasComponent<Component17>(world));
     }
 }

@@ -80,8 +80,8 @@ public partial class CommandBuffer
         {
             foreach (var (setOnBuf, tgtBuf) in bindings.Enumerable())
             {
-                var setOn = buffer.Resolve(setOnBuf);
-                var tgt = buffer.Resolve(tgtBuf);
+                var setOn = setOnBuf.Resolve();
+                var tgt = tgtBuf.Resolve();
 
                 setOn.GetComponentRef<TComponent>(buffer.World).Target = tgt;
             }
@@ -95,7 +95,7 @@ public partial class CommandBuffer
         {
             foreach (var (setOn, tgtBuf) in bindings.Enumerable())
             {
-                var tgt = buffer.Resolve(tgtBuf);
+                var tgt = tgtBuf.Resolve();
 
                 setOn.GetComponentRef<TComponent>(buffer.World).Target = tgt;
             }

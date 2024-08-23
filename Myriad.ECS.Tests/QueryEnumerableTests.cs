@@ -57,7 +57,7 @@ public class QueryEnumerableTests
         cb.Create().Set(new ComponentObject(new object()));
         var e3 = cb.Create().Set(new ComponentFloat(3)).Set(new ComponentInt64(4));
         using var r = cb.Playback();
-        var entity3 = r.Resolve(e3);
+        var entity3 = e3.Resolve();
 
         var count = 0;
         foreach (var (e, i64, f32) in w.Query<ComponentInt64, ComponentFloat>())

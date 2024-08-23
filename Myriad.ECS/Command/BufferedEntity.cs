@@ -12,18 +12,21 @@ public sealed partial class CommandBuffer
         private readonly uint _id;
         internal readonly uint Version;
         internal readonly CommandBuffer _buffer;
+        private readonly Resolver _resolver;
 
-        public BufferedEntity(uint id, CommandBuffer buffer)
+        public BufferedEntity(uint id, CommandBuffer buffer, Resolver resolver)
         {
             _id = id;
             _buffer = buffer;
+            _resolver = resolver;
+
             Version = buffer._version;
         }
 
-        private void Check()
+        private void CheckIsMutable()
         {
             if (Version != _buffer._version)
-                throw new InvalidOperationException("Cannot use `BufferedEntity` after CommandBuffer has been played");
+                throw new InvalidOperationException("Cannot use `BufferedEntity` after `CommandBuffer` has been played");
         }
 
         /// <summary>
@@ -36,7 +39,7 @@ public sealed partial class CommandBuffer
         public BufferedEntity Set<T>(T value, bool overwrite = false)
             where T : IComponent
         {
-            Check();
+            CheckIsMutable();
             _buffer.SetBuffered(_id, value, overwrite);
             return this;
         }
@@ -52,7 +55,7 @@ public sealed partial class CommandBuffer
         public BufferedEntity Set<T>(T value, BufferedEntity relation, bool overwrite = false)
             where T : IEntityRelationComponent
         {
-            Check();
+            CheckIsMutable();
             _buffer.SetBuffered(_id, value, relation, overwrite);
             return this;
         }
@@ -68,7 +71,7 @@ public sealed partial class CommandBuffer
         public BufferedEntity Set<T>(T value, Entity relation, bool overwrite = false)
             where T : IEntityRelationComponent
         {
-            Check();
+            CheckIsMutable();
             value.Target = relation;
             _buffer.SetBuffered(_id, value, overwrite);
             return this;
@@ -79,14 +82,16 @@ public sealed partial class CommandBuffer
         /// </summary>
         /// <param name="resolver"></param>
         /// <returns></returns>
-        public Entity Resolve(Resolver resolver)
+        public Entity Resolve()
         {
-            if (resolver.Parent == null)
+            if (_resolver.Parent == null)
                 throw new ObjectDisposedException("Resolver has already been disposed");
-            if (resolver.Parent != _buffer)
+            if (_resolver.Parent != _buffer)
                 throw new InvalidOperationException("Cannot use a resolver from one CommandBuffer with BufferedEntity from another");
+            if (_resolver.Version != Version)
+                throw new ObjectDisposedException("Resolver has already been disposed");
 
-            return resolver.Lookup[_id];
+            return _resolver.Lookup[_id];
         }
     }
 }

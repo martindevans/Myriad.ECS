@@ -32,7 +32,7 @@ public class DisposableComponentTests
         var cmd = new CommandBuffer(w);
         var eb = cmd.Create().Set(new ComponentInt32(7)).Set(new TestDisposable(box));
         using var resolver = cmd.Playback();
-        var entity = eb.Resolve(resolver);
+        var entity = eb.Resolve();
 
         // Delete entity
         cmd.Delete(entity);
@@ -54,7 +54,7 @@ public class DisposableComponentTests
         var cmd = new CommandBuffer(w);
         var eb = cmd.Create().Set(new TestDisposablePhantom(box));
         using var resolver = cmd.Playback();
-        var entity = eb.Resolve(resolver);
+        var entity = eb.Resolve();
 
         // Delete entity
         cmd.Delete(entity);
@@ -85,7 +85,7 @@ public class DisposableComponentTests
         var cmd = new CommandBuffer(w);
         var eb = cmd.Create().Set(new ComponentInt32(7)).Set(new TestDisposable(box));
         using var resolver = cmd.Playback();
-        var entity = eb.Resolve(resolver);
+        var entity = eb.Resolve();
 
         // Remove component
         cmd.Remove<TestDisposable>(entity);
@@ -130,8 +130,8 @@ public class DisposableComponentTests
         var ab = cmd.Create().Set(new TestDisposable(box));
         var bb = cmd.Create().Set(new TestDisposableParent(), ab);
         var resolver = cmd.Playback();
-        var a = ab.Resolve(resolver);
-        var b = bb.Resolve(resolver);
+        var a = ab.Resolve();
+        var b = bb.Resolve();
         resolver.Dispose();
 
         cmd.Delete(b);
@@ -155,7 +155,7 @@ public class DisposableComponentTests
         // Create an entity
         var be = cmd.Create();
         var resolver1 = cmd.Playback();
-        var entity = resolver1.Resolve(be);
+        var entity = be.Resolve();
         resolver1.Dispose();
 
         // Delete the entity
@@ -187,7 +187,7 @@ public class DisposableComponentTests
         // Create an entity
         var be = cmd.Create();
         var resolver1 = cmd.Playback();
-        var entity = resolver1.Resolve(be);
+        var entity = be.Resolve();
         resolver1.Dispose();
 
         // Enqueue deletion of entity in one command buffer
@@ -224,7 +224,7 @@ public class DisposableComponentTests
         // Create an entity
         var be = cmd.Create();
         var resolver1 = cmd.Playback();
-        var entity = resolver1.Resolve(be);
+        var entity = be.Resolve();
         resolver1.Dispose();
 
         // Enqueue attachment of a disposal component, twice

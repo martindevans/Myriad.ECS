@@ -10,11 +10,11 @@ using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Command;
 
-public sealed partial class CommandBuffer(World _world)
+public sealed partial class CommandBuffer
 {
     private uint _version;
 
-    public World World => _world;
+    public World World { get; }
 
     /// <summary>
     /// Collection of all components to be set onto entities
@@ -40,6 +40,16 @@ public sealed partial class CommandBuffer(World _world)
     private readonly BufferedRelationBinder _bufferedRelationBindings = new();
     private readonly UnbufferedRelationBinder _unbufferedRelationBindings = new();
 
+    private Resolver _nextResolver;
+
+    public CommandBuffer(World world)
+    {
+        World = world;
+
+        _nextResolver = Pool<Resolver>.Get();
+        _nextResolver.Configure(this);
+    }
+
     #region playback
     /// <summary>
     /// Apply all of the operations in this buffer to the <see cref="World"/>
@@ -47,9 +57,8 @@ public sealed partial class CommandBuffer(World _world)
     /// <returns></returns>
     public Resolver Playback()
     {
-        // Create a "resolver" that can be used to resolve entity IDs
-        var resolver = Pool<Resolver>.Get();
-        resolver.Configure(this);
+        // Use this resolver for this playback
+        var resolver = _nextResolver;
 
         // Create buffered entities.
         CreateBufferedEntities(resolver);
@@ -89,6 +98,10 @@ public sealed partial class CommandBuffer(World _world)
             lazyBuffer.Playback().Dispose();
             World.ReturnPooledCommandBuffer(lazyBuffer);
         }
+
+        // Create a resolver ready to use in the future
+        _nextResolver = Pool<Resolver>.Get();
+        _nextResolver.Configure(this);
 
         // Return the resolver
         return resolver;
@@ -321,7 +334,7 @@ public sealed partial class CommandBuffer(World _world)
         var id = (uint)_bufferedSets.Count;
         _bufferedSets.Add(new BufferedEntityData(id, set));
         
-        return new BufferedEntity(id, this);
+        return new BufferedEntity(id, this, _nextResolver);
     }
 
     private void SetBuffered<T>(uint id, T value, bool allowDuplicates = false)
@@ -370,7 +383,7 @@ public sealed partial class CommandBuffer(World _world)
             throw new ArgumentException("Target of relation must be BufferedEntity from the same CommandBuffer", nameof(relation));
 
         SetBuffered(id, value, allowDuplicates);
-        _bufferedRelationBindings.Create<T>(new BufferedEntity(id, this), relation);
+        _bufferedRelationBindings.Create<T>(new BufferedEntity(id, this, _nextResolver), relation);
     }
 
     /// <summary>

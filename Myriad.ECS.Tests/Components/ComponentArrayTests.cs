@@ -16,7 +16,7 @@ public class ComponentArrayTests
         var e = b.Create()
                  .Set(ComponentArray<int>.Create(7, 0));
         using var resolver = b.Playback();
-        var entity = resolver.Resolve(e);
+        var entity = e.Resolve();
 
         var arr = entity.GetComponentRef<ComponentArray<int>>(w);
         Assert.AreEqual(7, arr.Length);
@@ -37,7 +37,7 @@ public class ComponentArrayTests
         var e = b.Create()
                  .Set(ComponentList<int>.Create(7, 0));
         using var resolver = b.Playback();
-        var entity = resolver.Resolve(e);
+        var entity = e.Resolve();
 
         var list = entity.GetComponentRef<ComponentList<int>>(w);
         Assert.AreEqual(7, list.Count);
