@@ -10,6 +10,9 @@ internal struct Union64
     [FieldOffset(0)] public int I0;
     [FieldOffset(4)] public int I1;
 
+    [FieldOffset(0)] public uint U0;
+    [FieldOffset(4)] public uint U1;
+
     [FieldOffset(0)] public byte B0;
     [FieldOffset(1)] public byte B1;
     [FieldOffset(2)] public byte B2;

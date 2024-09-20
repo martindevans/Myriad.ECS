@@ -73,7 +73,7 @@ public readonly record struct Entity
         var u = new Union64
         {
             I0 = ID,
-            I1 = unchecked((int)Version)
+            U1 = Version
         };
 
         // Swap around some bytes (this is effectively an injective hash)
