@@ -43,7 +43,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct <#= delegate_wrapper_name #>E<<#= delegate_type_params #>>
-		: IQuery<#= i #><<#= delegate_type_params #>>
+		: IQuery<<#= delegate_type_params #>>
 		where <#= Constraints(i, 12) #>
 	{
 		private readonly QueryDelegateEntity<<#= delegate_type_params #>> _delegate;
@@ -60,7 +60,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct <#= delegate_wrapper_name #><<#= delegate_type_params #>>
-		: IQuery<#= i #><<#= delegate_type_params #>>
+		: IQuery<<#= delegate_type_params #>>
 		where <#= Constraints(i, 12) #>
 	{
 		private readonly QueryDelegate<<#= delegate_type_params #>> _delegate;
@@ -77,7 +77,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct <#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>
-		: IQuery<#= i #><<#= delegate_type_params #>>
+		: IQuery<<#= delegate_type_params #>>
 		where <#= Constraints(i, 12) #>
 	{
 		private readonly QueryDelegateEntityData<TData, <#= delegate_type_params #>> _delegate;
@@ -96,7 +96,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct <#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>
-		: IQuery<#= i #><<#= delegate_type_params #>>
+		: IQuery<<#= delegate_type_params #>>
 		where <#= Constraints(i, 12) #>
 	{
 		private readonly QueryDelegateData<TData, <#= delegate_type_params #>> _delegate;

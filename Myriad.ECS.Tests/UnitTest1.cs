@@ -43,7 +43,7 @@ public class UnitTest1
 }
 
 public readonly partial struct MultiplyAdd(float factor)
-    : IQuery2<ComponentFloat, ComponentInt32>
+    : IQuery<ComponentFloat, ComponentInt32>
 {
     public void Execute(Entity e, ref ComponentFloat f, ref ComponentInt32 i)
     {

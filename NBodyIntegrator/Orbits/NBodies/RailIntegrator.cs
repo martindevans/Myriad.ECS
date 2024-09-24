@@ -39,7 +39,7 @@ public sealed class RailIntegrator(World world)
     }
 
     private readonly struct Integrate(KeplerObject[] keplerMasses)
-        : IQuery4<NBody, PagedRail, EngineBurnSchedule, Mass>
+        : IQuery<NBody, PagedRail, EngineBurnSchedule, Mass>
     {
         public void Execute(
             Entity e,

@@ -2,12 +2,12 @@
 
 namespace Myriad.ECS.Queries
 {
-    public interface IQuery0
+    public interface IQuery
     {
         public void Execute(Entity e);
     }
 
-    public interface IChunkQuery0
+    public interface IChunkQuery
     {
         public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e);
     }
@@ -21,7 +21,7 @@ namespace Myriad.ECS.Worlds
             TQ q,
             QueryDescription query
         )
-            where TQ : IQuery0
+            where TQ : IQuery
         {
             var archetypes = query.GetArchetypes();
             if (archetypes.Count == 0)
@@ -60,7 +60,7 @@ namespace Myriad.ECS.Worlds
             TQ q,
             QueryDescription query
         )
-            where TQ : IChunkQuery0
+            where TQ : IChunkQuery
         {
             var archetypes = query.GetArchetypes();
             if (archetypes.Count == 0)

@@ -25,7 +25,7 @@ using Myriad.ECS.IDs;
 #>
 namespace Myriad.ECS.Queries
 {
-	public interface <#= NameMapper(i) #><out TR, <#= generics #>>
+	public interface IQueryMap<out TR, <#= generics #>>
 		where <#= Constraints(sumij, 8) #>
 	{
 		public TR Execute(Entity e, <#= Refs(0, i) #>);
@@ -46,7 +46,7 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where <#= Constraints(sumij, 12) #>
-			where TM : <#= NameMapper(i) #><TOutput, <#= generics #>>, new()
+			where TM : IQueryMap<TOutput, <#= generics #>>, new()
 			where TR : <#= NameReducer(i) #><TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, <#= generics #>>(initial, ref query);
@@ -57,7 +57,7 @@ namespace Myriad.ECS.Worlds
 			ref QueryDescription? query
 		)
 			where <#= Constraints(sumij, 12) #>
-			where TM : <#= NameMapper(i) #><TOutput, <#= generics #>>, new()
+			where TM : IQueryMap<TOutput, <#= generics #>>, new()
 			where TR : <#= NameReducer(i) #><TOutput>, new()
 		{
 			var q = new TM();
@@ -72,7 +72,7 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where <#= Constraints(sumij, 12) #>
-			where TM : <#= NameMapper(i) #><TOutput, <#= generics #>>
+			where TM : IQueryMap<TOutput, <#= generics #>>
 			where TR : <#= NameReducer(i) #><TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, <#= generics #>>(ref q, ref r, initial, ref query);
@@ -103,7 +103,7 @@ namespace Myriad.ECS.Worlds
 			ref QueryDescription? query
 		)
 			where <#= Constraints(sumij, 12) #>
-			where TM : <#= NameMapper(i) #><TOutput, <#= generics #>>
+			where TM : IQueryMap<TOutput, <#= generics #>>
 			where TR : <#= NameReducer(i) #><TOutput>
 		{
 			query ??= GetCachedQuery<<#= generics #>>();

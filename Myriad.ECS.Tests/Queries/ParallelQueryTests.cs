@@ -104,7 +104,7 @@ public class ParallelQueryTests
     }
 
     private readonly struct IncrementInt
-        : IChunkQuery1<ComponentInt32>
+        : IChunkQuery<ComponentInt32>
     {
         public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<ComponentInt32> t0)
         {
@@ -114,7 +114,7 @@ public class ParallelQueryTests
     }
 
     private readonly struct SometimesThrowOtherwiseIncrement
-        : IChunkQuery1<ComponentInt32>
+        : IChunkQuery<ComponentInt32>
     {
         public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<ComponentInt32> t0)
         {

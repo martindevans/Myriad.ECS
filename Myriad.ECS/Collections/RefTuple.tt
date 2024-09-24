@@ -79,11 +79,11 @@ public readonly struct RefT<T>
 	var refparamstup = refparams;
 	if (i > 1)
 	{
-		refparamstup = "RefTuple" + i + "<" + tparams + ">";
+		refparamstup = "RefTuple" + "<" + tparams + ">";
 	}
 #>
 
-public readonly ref struct RefTuple<#= i #><<#= tparams #>>
+public readonly ref struct RefTuple<<#= tparams #>>
 {
 	public readonly Entity Entity;
 
@@ -100,7 +100,7 @@ public readonly ref struct RefTuple<#= i #><<#= tparams #>>
 <#
 }
 #>
-	internal RefTuple<#= i #>(Entity entity, <#= string.Join(", ", Enumerable.Range(0, i).Select(x => "RefT<T" + x + "> item" + x)) #>)
+	internal RefTuple(Entity entity, <#= string.Join(", ", Enumerable.Range(0, i).Select(x => "RefT<T" + x + "> item" + x)) #>)
 	{
 		Entity = entity;
 <# for (var k = 0; k < i; k++)

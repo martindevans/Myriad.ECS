@@ -27,7 +27,7 @@ public class SimdQueryTests
     }
 
     private struct AddInts
-        : IVectorChunkQuery1<int>
+        : IVectorChunkQuery<int>
     {
         public readonly void Execute(Span<Vector<int>> t0, int off, int pad)
         {

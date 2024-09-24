@@ -18,7 +18,7 @@ using Myriad.ECS.Threading;
 
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery1<T0>
+	public interface IQuery<T0>
 		where T0 : IComponent
 	{
 		public void Execute(Entity e, ref T0 t0);
@@ -33,7 +33,7 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where T0 : IComponent
-			where TQ : IQuery1<T0>, new()
+			where TQ : IQuery<T0>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0>(ref q, query);
@@ -43,7 +43,7 @@ namespace Myriad.ECS.Worlds
 			ref QueryDescription? query
 		)
 			where T0 : IComponent
-			where TQ : IQuery1<T0>, new()
+			where TQ : IQuery<T0>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0>(ref q, ref query);
@@ -54,7 +54,7 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where T0 : IComponent
-			where TQ : IQuery1<T0>
+			where TQ : IQuery<T0>
 		{
 			return Execute<TQ, T0>(ref q, query);
 		}
@@ -64,7 +64,7 @@ namespace Myriad.ECS.Worlds
 			ref QueryDescription? query
 		)
 			where T0 : IComponent
-			where TQ : IQuery1<T0>
+			where TQ : IQuery<T0>
 		{
 			return Execute<TQ, T0>(ref q, ref query);
 		}
@@ -74,7 +74,7 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where T0 : IComponent
-			where TQ : IQuery1<T0>
+			where TQ : IQuery<T0>
 		{
 			return Execute<TQ, T0>(ref q, ref query);
 		}
@@ -84,7 +84,7 @@ namespace Myriad.ECS.Worlds
 			ref QueryDescription? query
 		)
 			where T0 : IComponent
-			where TQ : IQuery1<T0>
+			where TQ : IQuery<T0>
 		{
 			query ??= GetCachedQuery<T0>();
 
@@ -139,7 +139,7 @@ namespace Myriad.ECS.Worlds
 			int batchSize = 128
 		)
 			where T0 : IComponent
-			where TQ : IQuery1<T0>
+			where TQ : IQuery<T0>
 		{
 			query ??= GetCachedQuery<T0>();
 
@@ -286,7 +286,7 @@ namespace Myriad.ECS.Worlds
 		private readonly struct WorkItem1<TQ, T0>
 			: IWorkItem
 			where T0 : IComponent
-			where TQ : IQuery1<T0>
+			where TQ : IQuery<T0>
 		{
 			private readonly TQ _q;
 
@@ -324,7 +324,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery2<T0, T1>
+	public interface IQuery<T0, T1>
 		where T0 : IComponent
         where T1 : IComponent
 	{
@@ -341,7 +341,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TQ : IQuery2<T0, T1>, new()
+			where TQ : IQuery<T0, T1>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1>(ref q, query);
@@ -352,7 +352,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TQ : IQuery2<T0, T1>, new()
+			where TQ : IQuery<T0, T1>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1>(ref q, ref query);
@@ -364,7 +364,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TQ : IQuery2<T0, T1>
+			where TQ : IQuery<T0, T1>
 		{
 			return Execute<TQ, T0, T1>(ref q, query);
 		}
@@ -375,7 +375,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TQ : IQuery2<T0, T1>
+			where TQ : IQuery<T0, T1>
 		{
 			return Execute<TQ, T0, T1>(ref q, ref query);
 		}
@@ -386,7 +386,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TQ : IQuery2<T0, T1>
+			where TQ : IQuery<T0, T1>
 		{
 			return Execute<TQ, T0, T1>(ref q, ref query);
 		}
@@ -397,7 +397,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TQ : IQuery2<T0, T1>
+			where TQ : IQuery<T0, T1>
 		{
 			query ??= GetCachedQuery<T0, T1>();
 
@@ -457,7 +457,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TQ : IQuery2<T0, T1>
+			where TQ : IQuery<T0, T1>
 		{
 			query ??= GetCachedQuery<T0, T1>();
 
@@ -608,7 +608,7 @@ namespace Myriad.ECS.Worlds
 			: IWorkItem
 			where T0 : IComponent
             where T1 : IComponent
-			where TQ : IQuery2<T0, T1>
+			where TQ : IQuery<T0, T1>
 		{
 			private readonly TQ _q;
 
@@ -651,7 +651,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery3<T0, T1, T2>
+	public interface IQuery<T0, T1, T2>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -670,7 +670,7 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TQ : IQuery3<T0, T1, T2>, new()
+			where TQ : IQuery<T0, T1, T2>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2>(ref q, query);
@@ -682,7 +682,7 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TQ : IQuery3<T0, T1, T2>, new()
+			where TQ : IQuery<T0, T1, T2>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2>(ref q, ref query);
@@ -695,7 +695,7 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TQ : IQuery3<T0, T1, T2>
+			where TQ : IQuery<T0, T1, T2>
 		{
 			return Execute<TQ, T0, T1, T2>(ref q, query);
 		}
@@ -707,7 +707,7 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TQ : IQuery3<T0, T1, T2>
+			where TQ : IQuery<T0, T1, T2>
 		{
 			return Execute<TQ, T0, T1, T2>(ref q, ref query);
 		}
@@ -719,7 +719,7 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TQ : IQuery3<T0, T1, T2>
+			where TQ : IQuery<T0, T1, T2>
 		{
 			return Execute<TQ, T0, T1, T2>(ref q, ref query);
 		}
@@ -731,7 +731,7 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TQ : IQuery3<T0, T1, T2>
+			where TQ : IQuery<T0, T1, T2>
 		{
 			query ??= GetCachedQuery<T0, T1, T2>();
 
@@ -796,7 +796,7 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TQ : IQuery3<T0, T1, T2>
+			where TQ : IQuery<T0, T1, T2>
 		{
 			query ??= GetCachedQuery<T0, T1, T2>();
 
@@ -951,7 +951,7 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TQ : IQuery3<T0, T1, T2>
+			where TQ : IQuery<T0, T1, T2>
 		{
 			private readonly TQ _q;
 
@@ -999,7 +999,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery4<T0, T1, T2, T3>
+	public interface IQuery<T0, T1, T2, T3>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1020,7 +1020,7 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TQ : IQuery4<T0, T1, T2, T3>, new()
+			where TQ : IQuery<T0, T1, T2, T3>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3>(ref q, query);
@@ -1033,7 +1033,7 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TQ : IQuery4<T0, T1, T2, T3>, new()
+			where TQ : IQuery<T0, T1, T2, T3>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3>(ref q, ref query);
@@ -1047,7 +1047,7 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TQ : IQuery4<T0, T1, T2, T3>
+			where TQ : IQuery<T0, T1, T2, T3>
 		{
 			return Execute<TQ, T0, T1, T2, T3>(ref q, query);
 		}
@@ -1060,7 +1060,7 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TQ : IQuery4<T0, T1, T2, T3>
+			where TQ : IQuery<T0, T1, T2, T3>
 		{
 			return Execute<TQ, T0, T1, T2, T3>(ref q, ref query);
 		}
@@ -1073,7 +1073,7 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TQ : IQuery4<T0, T1, T2, T3>
+			where TQ : IQuery<T0, T1, T2, T3>
 		{
 			return Execute<TQ, T0, T1, T2, T3>(ref q, ref query);
 		}
@@ -1086,7 +1086,7 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TQ : IQuery4<T0, T1, T2, T3>
+			where TQ : IQuery<T0, T1, T2, T3>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3>();
 
@@ -1156,7 +1156,7 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TQ : IQuery4<T0, T1, T2, T3>
+			where TQ : IQuery<T0, T1, T2, T3>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3>();
 
@@ -1315,7 +1315,7 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TQ : IQuery4<T0, T1, T2, T3>
+			where TQ : IQuery<T0, T1, T2, T3>
 		{
 			private readonly TQ _q;
 
@@ -1368,7 +1368,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery5<T0, T1, T2, T3, T4>
+	public interface IQuery<T0, T1, T2, T3, T4>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1391,7 +1391,7 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TQ : IQuery5<T0, T1, T2, T3, T4>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, query);
@@ -1405,7 +1405,7 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TQ : IQuery5<T0, T1, T2, T3, T4>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
@@ -1420,7 +1420,7 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TQ : IQuery5<T0, T1, T2, T3, T4>
+			where TQ : IQuery<T0, T1, T2, T3, T4>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, query);
 		}
@@ -1434,7 +1434,7 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TQ : IQuery5<T0, T1, T2, T3, T4>
+			where TQ : IQuery<T0, T1, T2, T3, T4>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
 		}
@@ -1448,7 +1448,7 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TQ : IQuery5<T0, T1, T2, T3, T4>
+			where TQ : IQuery<T0, T1, T2, T3, T4>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
 		}
@@ -1462,7 +1462,7 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TQ : IQuery5<T0, T1, T2, T3, T4>
+			where TQ : IQuery<T0, T1, T2, T3, T4>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4>();
 
@@ -1537,7 +1537,7 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TQ : IQuery5<T0, T1, T2, T3, T4>
+			where TQ : IQuery<T0, T1, T2, T3, T4>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4>();
 
@@ -1700,7 +1700,7 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TQ : IQuery5<T0, T1, T2, T3, T4>
+			where TQ : IQuery<T0, T1, T2, T3, T4>
 		{
 			private readonly TQ _q;
 
@@ -1758,7 +1758,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery6<T0, T1, T2, T3, T4, T5>
+	public interface IQuery<T0, T1, T2, T3, T4, T5>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1783,7 +1783,7 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TQ : IQuery6<T0, T1, T2, T3, T4, T5>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, query);
@@ -1798,7 +1798,7 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TQ : IQuery6<T0, T1, T2, T3, T4, T5>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
@@ -1814,7 +1814,7 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TQ : IQuery6<T0, T1, T2, T3, T4, T5>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, query);
 		}
@@ -1829,7 +1829,7 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TQ : IQuery6<T0, T1, T2, T3, T4, T5>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
 		}
@@ -1844,7 +1844,7 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TQ : IQuery6<T0, T1, T2, T3, T4, T5>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
 		}
@@ -1859,7 +1859,7 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TQ : IQuery6<T0, T1, T2, T3, T4, T5>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5>();
 
@@ -1939,7 +1939,7 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TQ : IQuery6<T0, T1, T2, T3, T4, T5>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5>();
 
@@ -2106,7 +2106,7 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TQ : IQuery6<T0, T1, T2, T3, T4, T5>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5>
 		{
 			private readonly TQ _q;
 
@@ -2169,7 +2169,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery7<T0, T1, T2, T3, T4, T5, T6>
+	public interface IQuery<T0, T1, T2, T3, T4, T5, T6>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -2196,7 +2196,7 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TQ : IQuery7<T0, T1, T2, T3, T4, T5, T6>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, query);
@@ -2212,7 +2212,7 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TQ : IQuery7<T0, T1, T2, T3, T4, T5, T6>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
@@ -2229,7 +2229,7 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TQ : IQuery7<T0, T1, T2, T3, T4, T5, T6>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, query);
 		}
@@ -2245,7 +2245,7 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TQ : IQuery7<T0, T1, T2, T3, T4, T5, T6>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
 		}
@@ -2261,7 +2261,7 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TQ : IQuery7<T0, T1, T2, T3, T4, T5, T6>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
 		}
@@ -2277,7 +2277,7 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TQ : IQuery7<T0, T1, T2, T3, T4, T5, T6>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
 
@@ -2362,7 +2362,7 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TQ : IQuery7<T0, T1, T2, T3, T4, T5, T6>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
 
@@ -2533,7 +2533,7 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TQ : IQuery7<T0, T1, T2, T3, T4, T5, T6>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
 			private readonly TQ _q;
 
@@ -2601,7 +2601,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -2630,7 +2630,7 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TQ : IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, query);
@@ -2647,7 +2647,7 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TQ : IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
@@ -2665,7 +2665,7 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TQ : IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, query);
 		}
@@ -2682,7 +2682,7 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TQ : IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
 		}
@@ -2699,7 +2699,7 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TQ : IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
 		}
@@ -2716,7 +2716,7 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TQ : IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
 
@@ -2806,7 +2806,7 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TQ : IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
 
@@ -2981,7 +2981,7 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TQ : IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
 			private readonly TQ _q;
 
@@ -3054,7 +3054,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -3085,7 +3085,7 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TQ : IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, query);
@@ -3103,7 +3103,7 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TQ : IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
@@ -3122,7 +3122,7 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TQ : IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, query);
 		}
@@ -3140,7 +3140,7 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TQ : IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
 		}
@@ -3158,7 +3158,7 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TQ : IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
 		}
@@ -3176,7 +3176,7 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TQ : IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
 
@@ -3271,7 +3271,7 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TQ : IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
 
@@ -3450,7 +3450,7 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TQ : IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
 			private readonly TQ _q;
 
@@ -3528,7 +3528,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -3561,7 +3561,7 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TQ : IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, query);
@@ -3580,7 +3580,7 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TQ : IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
@@ -3600,7 +3600,7 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TQ : IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, query);
 		}
@@ -3619,7 +3619,7 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TQ : IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
 		}
@@ -3638,7 +3638,7 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TQ : IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
 		}
@@ -3657,7 +3657,7 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TQ : IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>();
 
@@ -3757,7 +3757,7 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TQ : IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>();
 
@@ -3940,7 +3940,7 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TQ : IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
 			private readonly TQ _q;
 
@@ -4023,7 +4023,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -4058,7 +4058,7 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TQ : IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, query);
@@ -4078,7 +4078,7 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TQ : IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
@@ -4099,7 +4099,7 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TQ : IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, query);
 		}
@@ -4119,7 +4119,7 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TQ : IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
 		}
@@ -4139,7 +4139,7 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TQ : IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
 		}
@@ -4159,7 +4159,7 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TQ : IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
 
@@ -4264,7 +4264,7 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TQ : IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
 
@@ -4451,7 +4451,7 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TQ : IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
 			private readonly TQ _q;
 
@@ -4539,7 +4539,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -4576,7 +4576,7 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TQ : IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, query);
@@ -4597,7 +4597,7 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TQ : IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
@@ -4619,7 +4619,7 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TQ : IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, query);
 		}
@@ -4640,7 +4640,7 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TQ : IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
 		}
@@ -4661,7 +4661,7 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TQ : IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
 		}
@@ -4682,7 +4682,7 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TQ : IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>();
 
@@ -4792,7 +4792,7 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TQ : IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>();
 
@@ -4983,7 +4983,7 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TQ : IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
 			private readonly TQ _q;
 
@@ -5076,7 +5076,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -5115,7 +5115,7 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TQ : IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, query);
@@ -5137,7 +5137,7 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TQ : IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
@@ -5160,7 +5160,7 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TQ : IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, query);
 		}
@@ -5182,7 +5182,7 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TQ : IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
 		}
@@ -5204,7 +5204,7 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TQ : IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
 		}
@@ -5226,7 +5226,7 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TQ : IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>();
 
@@ -5341,7 +5341,7 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TQ : IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>();
 
@@ -5536,7 +5536,7 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TQ : IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
 			private readonly TQ _q;
 
@@ -5634,7 +5634,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -5675,7 +5675,7 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TQ : IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, query);
@@ -5698,7 +5698,7 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TQ : IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
@@ -5722,7 +5722,7 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TQ : IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, query);
 		}
@@ -5745,7 +5745,7 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TQ : IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
 		}
@@ -5768,7 +5768,7 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TQ : IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
 		}
@@ -5791,7 +5791,7 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TQ : IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>();
 
@@ -5911,7 +5911,7 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TQ : IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>();
 
@@ -6110,7 +6110,7 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TQ : IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
 			private readonly TQ _q;
 
@@ -6213,7 +6213,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -6256,7 +6256,7 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TQ : IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, query);
@@ -6280,7 +6280,7 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TQ : IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
@@ -6305,7 +6305,7 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TQ : IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, query);
 		}
@@ -6329,7 +6329,7 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TQ : IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
 		}
@@ -6353,7 +6353,7 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TQ : IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
 		}
@@ -6377,7 +6377,7 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TQ : IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>();
 
@@ -6502,7 +6502,7 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TQ : IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>();
 
@@ -6705,7 +6705,7 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TQ : IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
 			private readonly TQ _q;
 
@@ -6813,7 +6813,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -6858,7 +6858,7 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TQ : IQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, query);
@@ -6883,7 +6883,7 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TQ : IQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
 		{
 			var q = new TQ();
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
@@ -6909,7 +6909,7 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TQ : IQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, query);
 		}
@@ -6934,7 +6934,7 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TQ : IQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
 		}
@@ -6959,7 +6959,7 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TQ : IQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
 		}
@@ -6984,7 +6984,7 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TQ : IQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
 
@@ -7114,7 +7114,7 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TQ : IQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
 
@@ -7321,7 +7321,7 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TQ : IQuery16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+			where TQ : IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
 			private readonly TQ _q;
 

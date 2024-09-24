@@ -108,7 +108,7 @@ public class QueryBenchmark
     //}
 
     private struct QueryAction
-        : IQuery2<Position, Velocity>
+        : IQuery<Position, Velocity>
     {
         public readonly void Execute(Entity e, ref Position pos, ref Velocity vel)
         {
@@ -121,7 +121,7 @@ public class QueryBenchmark
     }
 
     private struct ChunkQueryAction
-        : IChunkQuery2<Position, Velocity>
+        : IChunkQuery<Position, Velocity>
     {
         public readonly void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<Position> pos, Span<Velocity> vel)
         {
@@ -138,7 +138,7 @@ public class QueryBenchmark
     }
 
     private readonly struct SimdChunkQueryAction2
-        : IVectorChunkQuery2<float, float>
+        : IVectorChunkQuery<float, float>
     {
         public void Execute(Span<Vector<float>> posf, Span<Vector<float>> velf, int offset, int pad)
         {

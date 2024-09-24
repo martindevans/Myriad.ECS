@@ -58,7 +58,7 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
     }
 
     private readonly struct Attach(SystemState<TComponent, TAssociated> state, CommandBuffer cmd)
-        : IQuery0
+        : IQuery
     {
         public void Execute(Entity e)
         {
@@ -67,7 +67,7 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
     }
 
     private readonly struct Detach(SystemState<TComponent, TAssociated> state, CommandBuffer cmd)
-        : IQuery1<TAssociated>
+        : IQuery<TAssociated>
     {
         public void Execute(Entity e, ref TAssociated a)
         {

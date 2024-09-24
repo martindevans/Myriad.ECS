@@ -22,7 +22,7 @@ public class EngineBurnUpdater(World world)
         declaration.Write<Mass>();
     }
 
-    private readonly struct UpdateMassFromBurn : IQuery2<EngineBurnSchedule, Mass>
+    private readonly struct UpdateMassFromBurn : IQuery<EngineBurnSchedule, Mass>
     {
         private readonly double _time;
         private readonly double _deltaTime;

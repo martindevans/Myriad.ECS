@@ -63,7 +63,7 @@ public readonly struct RefT<T>
 #endif
 
 
-public readonly ref struct RefTuple1<T0>
+public readonly ref struct RefTuple<T0>
 {
 	public readonly Entity Entity;
 
@@ -74,7 +74,7 @@ public readonly ref struct RefTuple1<T0>
 		get => ref _item0.Ref;
 	}
 
-	internal RefTuple1(Entity entity, RefT<T0> item0)
+	internal RefTuple(Entity entity, RefT<T0> item0)
 	{
 		Entity = entity;
 		_item0 = item0;
@@ -87,7 +87,7 @@ public readonly ref struct RefTuple1<T0>
 	}
 }
 
-public readonly ref struct RefTuple2<T0, T1>
+public readonly ref struct RefTuple<T0, T1>
 {
 	public readonly Entity Entity;
 
@@ -105,7 +105,7 @@ public readonly ref struct RefTuple2<T0, T1>
 		get => ref _item1.Ref;
 	}
 
-	internal RefTuple2(Entity entity, RefT<T0> item0, RefT<T1> item1)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1)
 	{
 		Entity = entity;
 		_item0 = item0;
@@ -120,7 +120,7 @@ public readonly ref struct RefTuple2<T0, T1>
 	}
 }
 
-public readonly ref struct RefTuple3<T0, T1, T2>
+public readonly ref struct RefTuple<T0, T1, T2>
 {
 	public readonly Entity Entity;
 
@@ -145,7 +145,7 @@ public readonly ref struct RefTuple3<T0, T1, T2>
 		get => ref _item2.Ref;
 	}
 
-	internal RefTuple3(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2)
 	{
 		Entity = entity;
 		_item0 = item0;
@@ -162,7 +162,7 @@ public readonly ref struct RefTuple3<T0, T1, T2>
 	}
 }
 
-public readonly ref struct RefTuple4<T0, T1, T2, T3>
+public readonly ref struct RefTuple<T0, T1, T2, T3>
 {
 	public readonly Entity Entity;
 
@@ -194,7 +194,7 @@ public readonly ref struct RefTuple4<T0, T1, T2, T3>
 		get => ref _item3.Ref;
 	}
 
-	internal RefTuple4(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3)
 	{
 		Entity = entity;
 		_item0 = item0;
@@ -213,7 +213,7 @@ public readonly ref struct RefTuple4<T0, T1, T2, T3>
 	}
 }
 
-public readonly ref struct RefTuple5<T0, T1, T2, T3, T4>
+public readonly ref struct RefTuple<T0, T1, T2, T3, T4>
 {
 	public readonly Entity Entity;
 
@@ -252,7 +252,7 @@ public readonly ref struct RefTuple5<T0, T1, T2, T3, T4>
 		get => ref _item4.Ref;
 	}
 
-	internal RefTuple5(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4)
 	{
 		Entity = entity;
 		_item0 = item0;
@@ -273,7 +273,7 @@ public readonly ref struct RefTuple5<T0, T1, T2, T3, T4>
 	}
 }
 
-public readonly ref struct RefTuple6<T0, T1, T2, T3, T4, T5>
+public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5>
 {
 	public readonly Entity Entity;
 
@@ -319,7 +319,7 @@ public readonly ref struct RefTuple6<T0, T1, T2, T3, T4, T5>
 		get => ref _item5.Ref;
 	}
 
-	internal RefTuple6(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5)
 	{
 		Entity = entity;
 		_item0 = item0;
@@ -342,7 +342,7 @@ public readonly ref struct RefTuple6<T0, T1, T2, T3, T4, T5>
 	}
 }
 
-public readonly ref struct RefTuple7<T0, T1, T2, T3, T4, T5, T6>
+public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6>
 {
 	public readonly Entity Entity;
 
@@ -395,7 +395,7 @@ public readonly ref struct RefTuple7<T0, T1, T2, T3, T4, T5, T6>
 		get => ref _item6.Ref;
 	}
 
-	internal RefTuple7(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6)
 	{
 		Entity = entity;
 		_item0 = item0;
@@ -420,7 +420,7 @@ public readonly ref struct RefTuple7<T0, T1, T2, T3, T4, T5, T6>
 	}
 }
 
-public readonly ref struct RefTuple8<T0, T1, T2, T3, T4, T5, T6, T7>
+public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7>
 {
 	public readonly Entity Entity;
 
@@ -480,7 +480,7 @@ public readonly ref struct RefTuple8<T0, T1, T2, T3, T4, T5, T6, T7>
 		get => ref _item7.Ref;
 	}
 
-	internal RefTuple8(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7)
 	{
 		Entity = entity;
 		_item0 = item0;
@@ -507,7 +507,7 @@ public readonly ref struct RefTuple8<T0, T1, T2, T3, T4, T5, T6, T7>
 	}
 }
 
-public readonly ref struct RefTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 {
 	public readonly Entity Entity;
 
@@ -574,7 +574,7 @@ public readonly ref struct RefTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		get => ref _item8.Ref;
 	}
 
-	internal RefTuple9(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8)
 	{
 		Entity = entity;
 		_item0 = item0;
@@ -603,7 +603,7 @@ public readonly ref struct RefTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 	}
 }
 
-public readonly ref struct RefTuple10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 {
 	public readonly Entity Entity;
 
@@ -677,7 +677,7 @@ public readonly ref struct RefTuple10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		get => ref _item9.Ref;
 	}
 
-	internal RefTuple10(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9)
 	{
 		Entity = entity;
 		_item0 = item0;
@@ -708,7 +708,7 @@ public readonly ref struct RefTuple10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 	}
 }
 
-public readonly ref struct RefTuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 {
 	public readonly Entity Entity;
 
@@ -789,7 +789,7 @@ public readonly ref struct RefTuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 		get => ref _item10.Ref;
 	}
 
-	internal RefTuple11(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10)
 	{
 		Entity = entity;
 		_item0 = item0;
@@ -822,7 +822,7 @@ public readonly ref struct RefTuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 	}
 }
 
-public readonly ref struct RefTuple12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 {
 	public readonly Entity Entity;
 
@@ -910,7 +910,7 @@ public readonly ref struct RefTuple12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 		get => ref _item11.Ref;
 	}
 
-	internal RefTuple12(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11)
 	{
 		Entity = entity;
 		_item0 = item0;
@@ -945,7 +945,7 @@ public readonly ref struct RefTuple12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 	}
 }
 
-public readonly ref struct RefTuple13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 {
 	public readonly Entity Entity;
 
@@ -1040,7 +1040,7 @@ public readonly ref struct RefTuple13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 		get => ref _item12.Ref;
 	}
 
-	internal RefTuple13(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12)
 	{
 		Entity = entity;
 		_item0 = item0;
@@ -1077,7 +1077,7 @@ public readonly ref struct RefTuple13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 	}
 }
 
-public readonly ref struct RefTuple14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 {
 	public readonly Entity Entity;
 
@@ -1179,7 +1179,7 @@ public readonly ref struct RefTuple14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 		get => ref _item13.Ref;
 	}
 
-	internal RefTuple14(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12, RefT<T13> item13)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12, RefT<T13> item13)
 	{
 		Entity = entity;
 		_item0 = item0;
@@ -1218,7 +1218,7 @@ public readonly ref struct RefTuple14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 	}
 }
 
-public readonly ref struct RefTuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 {
 	public readonly Entity Entity;
 
@@ -1327,7 +1327,7 @@ public readonly ref struct RefTuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 		get => ref _item14.Ref;
 	}
 
-	internal RefTuple15(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12, RefT<T13> item13, RefT<T14> item14)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12, RefT<T13> item13, RefT<T14> item14)
 	{
 		Entity = entity;
 		_item0 = item0;
@@ -1368,7 +1368,7 @@ public readonly ref struct RefTuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 	}
 }
 
-public readonly ref struct RefTuple16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 {
 	public readonly Entity Entity;
 
@@ -1484,7 +1484,7 @@ public readonly ref struct RefTuple16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T1
 		get => ref _item15.Ref;
 	}
 
-	internal RefTuple16(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12, RefT<T13> item13, RefT<T14> item14, RefT<T15> item15)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12, RefT<T13> item13, RefT<T14> item14, RefT<T15> item15)
 	{
 		Entity = entity;
 		_item0 = item0;

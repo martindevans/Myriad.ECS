@@ -51,7 +51,7 @@ namespace Myriad.ECS.Tests.Queries
         }
 
         private struct MapGetInteger
-            : IQueryMap1<int, ComponentInt32>
+            : IQueryMap<int, ComponentInt32>
         {
             public readonly int Execute(Entity e, ref ComponentInt32 t0)
             {

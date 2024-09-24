@@ -218,7 +218,7 @@ namespace Myriad.ECS.Worlds
 	{
 		var sz = size == 0 ? "" : size.ToString();
 
-		return $"IVector{sz}ChunkQuery" + count;
+		return $"IVector{sz}ChunkQuery";
 	}
 
 	static string Vectors(int start, int count)

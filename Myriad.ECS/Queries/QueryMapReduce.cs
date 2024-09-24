@@ -11,7 +11,7 @@ using Myriad.ECS.IDs;
 
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap1<out TR, T0>
+	public interface IQueryMap<out TR, T0>
 		where T0 : IComponent
 	{
 		public TR Execute(Entity e, ref T0 t0);
@@ -32,7 +32,7 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where T0 : IComponent
-			where TM : IQueryMap1<TOutput, T0>, new()
+			where TM : IQueryMap<TOutput, T0>, new()
 			where TR : IQueryReduce1<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0>(initial, ref query);
@@ -43,7 +43,7 @@ namespace Myriad.ECS.Worlds
 			ref QueryDescription? query
 		)
 			where T0 : IComponent
-			where TM : IQueryMap1<TOutput, T0>, new()
+			where TM : IQueryMap<TOutput, T0>, new()
 			where TR : IQueryReduce1<TOutput>, new()
 		{
 			var q = new TM();
@@ -58,7 +58,7 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where T0 : IComponent
-			where TM : IQueryMap1<TOutput, T0>
+			where TM : IQueryMap<TOutput, T0>
 			where TR : IQueryReduce1<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0>(ref q, ref r, initial, ref query);
@@ -83,7 +83,7 @@ namespace Myriad.ECS.Worlds
 			ref QueryDescription? query
 		)
 			where T0 : IComponent
-			where TM : IQueryMap1<TOutput, T0>
+			where TM : IQueryMap<TOutput, T0>
 			where TR : IQueryReduce1<TOutput>
 		{
 			query ??= GetCachedQuery<T0>();
@@ -126,7 +126,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap2<out TR, T0, T1>
+	public interface IQueryMap<out TR, T0, T1>
 		where T0 : IComponent
         where T1 : IComponent
 	{
@@ -149,7 +149,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TM : IQueryMap2<TOutput, T0, T1>, new()
+			where TM : IQueryMap<TOutput, T0, T1>, new()
 			where TR : IQueryReduce2<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1>(initial, ref query);
@@ -161,7 +161,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TM : IQueryMap2<TOutput, T0, T1>, new()
+			where TM : IQueryMap<TOutput, T0, T1>, new()
 			where TR : IQueryReduce2<TOutput>, new()
 		{
 			var q = new TM();
@@ -177,7 +177,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TM : IQueryMap2<TOutput, T0, T1>
+			where TM : IQueryMap<TOutput, T0, T1>
 			where TR : IQueryReduce2<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1>(ref q, ref r, initial, ref query);
@@ -204,7 +204,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TM : IQueryMap2<TOutput, T0, T1>
+			where TM : IQueryMap<TOutput, T0, T1>
 			where TR : IQueryReduce2<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1>();
@@ -249,7 +249,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap3<out TR, T0, T1, T2>
+	public interface IQueryMap<out TR, T0, T1, T2>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -274,7 +274,7 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TM : IQueryMap3<TOutput, T0, T1, T2>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2>, new()
 			where TR : IQueryReduce3<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2>(initial, ref query);
@@ -287,7 +287,7 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TM : IQueryMap3<TOutput, T0, T1, T2>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2>, new()
 			where TR : IQueryReduce3<TOutput>, new()
 		{
 			var q = new TM();
@@ -304,7 +304,7 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TM : IQueryMap3<TOutput, T0, T1, T2>
+			where TM : IQueryMap<TOutput, T0, T1, T2>
 			where TR : IQueryReduce3<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2>(ref q, ref r, initial, ref query);
@@ -333,7 +333,7 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TM : IQueryMap3<TOutput, T0, T1, T2>
+			where TM : IQueryMap<TOutput, T0, T1, T2>
 			where TR : IQueryReduce3<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2>();
@@ -380,7 +380,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap4<out TR, T0, T1, T2, T3>
+	public interface IQueryMap<out TR, T0, T1, T2, T3>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -407,7 +407,7 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TM : IQueryMap4<TOutput, T0, T1, T2, T3>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3>, new()
 			where TR : IQueryReduce4<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3>(initial, ref query);
@@ -421,7 +421,7 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TM : IQueryMap4<TOutput, T0, T1, T2, T3>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3>, new()
 			where TR : IQueryReduce4<TOutput>, new()
 		{
 			var q = new TM();
@@ -439,7 +439,7 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TM : IQueryMap4<TOutput, T0, T1, T2, T3>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3>
 			where TR : IQueryReduce4<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3>(ref q, ref r, initial, ref query);
@@ -470,7 +470,7 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TM : IQueryMap4<TOutput, T0, T1, T2, T3>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3>
 			where TR : IQueryReduce4<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3>();
@@ -519,7 +519,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap5<out TR, T0, T1, T2, T3, T4>
+	public interface IQueryMap<out TR, T0, T1, T2, T3, T4>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -548,7 +548,7 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TM : IQueryMap5<TOutput, T0, T1, T2, T3, T4>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4>, new()
 			where TR : IQueryReduce5<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4>(initial, ref query);
@@ -563,7 +563,7 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TM : IQueryMap5<TOutput, T0, T1, T2, T3, T4>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4>, new()
 			where TR : IQueryReduce5<TOutput>, new()
 		{
 			var q = new TM();
@@ -582,7 +582,7 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TM : IQueryMap5<TOutput, T0, T1, T2, T3, T4>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4>
 			where TR : IQueryReduce5<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4>(ref q, ref r, initial, ref query);
@@ -615,7 +615,7 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TM : IQueryMap5<TOutput, T0, T1, T2, T3, T4>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4>
 			where TR : IQueryReduce5<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4>();
@@ -666,7 +666,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap6<out TR, T0, T1, T2, T3, T4, T5>
+	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -697,7 +697,7 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TM : IQueryMap6<TOutput, T0, T1, T2, T3, T4, T5>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>, new()
 			where TR : IQueryReduce6<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5>(initial, ref query);
@@ -713,7 +713,7 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TM : IQueryMap6<TOutput, T0, T1, T2, T3, T4, T5>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>, new()
 			where TR : IQueryReduce6<TOutput>, new()
 		{
 			var q = new TM();
@@ -733,7 +733,7 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TM : IQueryMap6<TOutput, T0, T1, T2, T3, T4, T5>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>
 			where TR : IQueryReduce6<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5>(ref q, ref r, initial, ref query);
@@ -768,7 +768,7 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TM : IQueryMap6<TOutput, T0, T1, T2, T3, T4, T5>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>
 			where TR : IQueryReduce6<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5>();
@@ -821,7 +821,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap7<out TR, T0, T1, T2, T3, T4, T5, T6>
+	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -854,7 +854,7 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TM : IQueryMap7<TOutput, T0, T1, T2, T3, T4, T5, T6>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>, new()
 			where TR : IQueryReduce7<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6>(initial, ref query);
@@ -871,7 +871,7 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TM : IQueryMap7<TOutput, T0, T1, T2, T3, T4, T5, T6>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>, new()
 			where TR : IQueryReduce7<TOutput>, new()
 		{
 			var q = new TM();
@@ -892,7 +892,7 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TM : IQueryMap7<TOutput, T0, T1, T2, T3, T4, T5, T6>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>
 			where TR : IQueryReduce7<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6>(ref q, ref r, initial, ref query);
@@ -929,7 +929,7 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TM : IQueryMap7<TOutput, T0, T1, T2, T3, T4, T5, T6>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>
 			where TR : IQueryReduce7<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
@@ -984,7 +984,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap8<out TR, T0, T1, T2, T3, T4, T5, T6, T7>
+	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1019,7 +1019,7 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TM : IQueryMap8<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>, new()
 			where TR : IQueryReduce8<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(initial, ref query);
@@ -1037,7 +1037,7 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TM : IQueryMap8<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>, new()
 			where TR : IQueryReduce8<TOutput>, new()
 		{
 			var q = new TM();
@@ -1059,7 +1059,7 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TM : IQueryMap8<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>
 			where TR : IQueryReduce8<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref r, initial, ref query);
@@ -1098,7 +1098,7 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TM : IQueryMap8<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>
 			where TR : IQueryReduce8<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
@@ -1155,7 +1155,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap9<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8>
+	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1192,7 +1192,7 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TM : IQueryMap9<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
 			where TR : IQueryReduce9<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(initial, ref query);
@@ -1211,7 +1211,7 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TM : IQueryMap9<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
 			where TR : IQueryReduce9<TOutput>, new()
 		{
 			var q = new TM();
@@ -1234,7 +1234,7 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TM : IQueryMap9<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>
 			where TR : IQueryReduce9<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref r, initial, ref query);
@@ -1275,7 +1275,7 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TM : IQueryMap9<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>
 			where TR : IQueryReduce9<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
@@ -1334,7 +1334,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap10<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1373,7 +1373,7 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TM : IQueryMap10<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
 			where TR : IQueryReduce10<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(initial, ref query);
@@ -1393,7 +1393,7 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TM : IQueryMap10<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
 			where TR : IQueryReduce10<TOutput>, new()
 		{
 			var q = new TM();
@@ -1417,7 +1417,7 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TM : IQueryMap10<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 			where TR : IQueryReduce10<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref r, initial, ref query);
@@ -1460,7 +1460,7 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TM : IQueryMap10<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 			where TR : IQueryReduce10<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>();
@@ -1521,7 +1521,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap11<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1562,7 +1562,7 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TM : IQueryMap11<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
 			where TR : IQueryReduce11<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(initial, ref query);
@@ -1583,7 +1583,7 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TM : IQueryMap11<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
 			where TR : IQueryReduce11<TOutput>, new()
 		{
 			var q = new TM();
@@ -1608,7 +1608,7 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TM : IQueryMap11<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 			where TR : IQueryReduce11<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref r, initial, ref query);
@@ -1653,7 +1653,7 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TM : IQueryMap11<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 			where TR : IQueryReduce11<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
@@ -1716,7 +1716,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap12<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1759,7 +1759,7 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TM : IQueryMap12<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
 			where TR : IQueryReduce12<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(initial, ref query);
@@ -1781,7 +1781,7 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TM : IQueryMap12<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
 			where TR : IQueryReduce12<TOutput>, new()
 		{
 			var q = new TM();
@@ -1807,7 +1807,7 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TM : IQueryMap12<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 			where TR : IQueryReduce12<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref r, initial, ref query);
@@ -1854,7 +1854,7 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TM : IQueryMap12<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 			where TR : IQueryReduce12<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>();
@@ -1919,7 +1919,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap13<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1964,7 +1964,7 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TM : IQueryMap13<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
 			where TR : IQueryReduce13<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(initial, ref query);
@@ -1987,7 +1987,7 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TM : IQueryMap13<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
 			where TR : IQueryReduce13<TOutput>, new()
 		{
 			var q = new TM();
@@ -2014,7 +2014,7 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TM : IQueryMap13<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 			where TR : IQueryReduce13<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref r, initial, ref query);
@@ -2063,7 +2063,7 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TM : IQueryMap13<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 			where TR : IQueryReduce13<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>();
@@ -2130,7 +2130,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap14<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -2177,7 +2177,7 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TM : IQueryMap14<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
 			where TR : IQueryReduce14<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(initial, ref query);
@@ -2201,7 +2201,7 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TM : IQueryMap14<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
 			where TR : IQueryReduce14<TOutput>, new()
 		{
 			var q = new TM();
@@ -2229,7 +2229,7 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TM : IQueryMap14<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 			where TR : IQueryReduce14<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref r, initial, ref query);
@@ -2280,7 +2280,7 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TM : IQueryMap14<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 			where TR : IQueryReduce14<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>();
@@ -2349,7 +2349,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap15<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -2398,7 +2398,7 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TM : IQueryMap15<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
 			where TR : IQueryReduce15<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(initial, ref query);
@@ -2423,7 +2423,7 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TM : IQueryMap15<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
 			where TR : IQueryReduce15<TOutput>, new()
 		{
 			var q = new TM();
@@ -2452,7 +2452,7 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TM : IQueryMap15<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 			where TR : IQueryReduce15<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref r, initial, ref query);
@@ -2505,7 +2505,7 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TM : IQueryMap15<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 			where TR : IQueryReduce15<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>();
@@ -2576,7 +2576,7 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
-	public interface IQueryMap16<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -2627,7 +2627,7 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TM : IQueryMap16<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
 			where TR : IQueryReduce16<TOutput>, new()
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(initial, ref query);
@@ -2653,7 +2653,7 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TM : IQueryMap16<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
 			where TR : IQueryReduce16<TOutput>, new()
 		{
 			var q = new TM();
@@ -2683,7 +2683,7 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TM : IQueryMap16<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 			where TR : IQueryReduce16<TOutput>
 		{
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref r, initial, ref query);
@@ -2738,7 +2738,7 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TM : IQueryMap16<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 			where TR : IQueryReduce16<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();

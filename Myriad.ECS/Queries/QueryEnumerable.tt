@@ -35,7 +35,7 @@ using Myriad.ECS.Worlds.Chunks;
     }
     else
     {
-        refparamstup = "RefTuple" + i + tparams;
+        refparamstup = "RefTuple" + tparams;
     }
 #>
 

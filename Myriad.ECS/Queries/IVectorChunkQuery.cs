@@ -9,7 +9,7 @@ using Myriad.ECS.IDs;
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery1<TV0>
+	public interface IVectorChunkQuery<TV0>
 		where TV0 : unmanaged
 	{
 		/// <summary>
@@ -42,7 +42,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : struct, IComponent
             where TV0 : unmanaged
-			where TQ : IVectorChunkQuery1<TV0>
+			where TQ : IVectorChunkQuery<TV0>
 		{
 			query ??= GetCachedQuery<T0>();
 
@@ -117,7 +117,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery2<TV0, TV1>
+	public interface IVectorChunkQuery<TV0, TV1>
 		where TV0 : unmanaged
         where TV1 : unmanaged
 	{
@@ -156,7 +156,7 @@ namespace Myriad.ECS.Worlds
             where T1 : struct, IComponent
             where TV0 : unmanaged
             where TV1 : unmanaged
-			where TQ : IVectorChunkQuery2<TV0, TV1>
+			where TQ : IVectorChunkQuery<TV0, TV1>
 		{
 			query ??= GetCachedQuery<T0, T1>();
 
@@ -243,7 +243,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery3<TV0, TV1, TV2>
+	public interface IVectorChunkQuery<TV0, TV1, TV2>
 		where TV0 : unmanaged
         where TV1 : unmanaged
         where TV2 : unmanaged
@@ -288,7 +288,7 @@ namespace Myriad.ECS.Worlds
             where TV0 : unmanaged
             where TV1 : unmanaged
             where TV2 : unmanaged
-			where TQ : IVectorChunkQuery3<TV0, TV1, TV2>
+			where TQ : IVectorChunkQuery<TV0, TV1, TV2>
 		{
 			query ??= GetCachedQuery<T0, T1, T2>();
 
@@ -387,7 +387,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery4<TV0, TV1, TV2, TV3>
+	public interface IVectorChunkQuery<TV0, TV1, TV2, TV3>
 		where TV0 : unmanaged
         where TV1 : unmanaged
         where TV2 : unmanaged
@@ -438,7 +438,7 @@ namespace Myriad.ECS.Worlds
             where TV1 : unmanaged
             where TV2 : unmanaged
             where TV3 : unmanaged
-			where TQ : IVectorChunkQuery4<TV0, TV1, TV2, TV3>
+			where TQ : IVectorChunkQuery<TV0, TV1, TV2, TV3>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3>();
 
@@ -549,7 +549,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery5<TV0, TV1, TV2, TV3, TV4>
+	public interface IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4>
 		where TV0 : unmanaged
         where TV1 : unmanaged
         where TV2 : unmanaged
@@ -606,7 +606,7 @@ namespace Myriad.ECS.Worlds
             where TV2 : unmanaged
             where TV3 : unmanaged
             where TV4 : unmanaged
-			where TQ : IVectorChunkQuery5<TV0, TV1, TV2, TV3, TV4>
+			where TQ : IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4>();
 
@@ -729,7 +729,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery6<TV0, TV1, TV2, TV3, TV4, TV5>
+	public interface IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5>
 		where TV0 : unmanaged
         where TV1 : unmanaged
         where TV2 : unmanaged
@@ -792,7 +792,7 @@ namespace Myriad.ECS.Worlds
             where TV3 : unmanaged
             where TV4 : unmanaged
             where TV5 : unmanaged
-			where TQ : IVectorChunkQuery6<TV0, TV1, TV2, TV3, TV4, TV5>
+			where TQ : IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5>();
 
@@ -927,7 +927,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery7<TV0, TV1, TV2, TV3, TV4, TV5, TV6>
+	public interface IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6>
 		where TV0 : unmanaged
         where TV1 : unmanaged
         where TV2 : unmanaged
@@ -996,7 +996,7 @@ namespace Myriad.ECS.Worlds
             where TV4 : unmanaged
             where TV5 : unmanaged
             where TV6 : unmanaged
-			where TQ : IVectorChunkQuery7<TV0, TV1, TV2, TV3, TV4, TV5, TV6>
+			where TQ : IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
 
@@ -1143,7 +1143,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery8<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7>
+	public interface IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7>
 		where TV0 : unmanaged
         where TV1 : unmanaged
         where TV2 : unmanaged
@@ -1218,7 +1218,7 @@ namespace Myriad.ECS.Worlds
             where TV5 : unmanaged
             where TV6 : unmanaged
             where TV7 : unmanaged
-			where TQ : IVectorChunkQuery8<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7>
+			where TQ : IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
 
@@ -1377,7 +1377,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery9<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8>
+	public interface IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8>
 		where TV0 : unmanaged
         where TV1 : unmanaged
         where TV2 : unmanaged
@@ -1458,7 +1458,7 @@ namespace Myriad.ECS.Worlds
             where TV6 : unmanaged
             where TV7 : unmanaged
             where TV8 : unmanaged
-			where TQ : IVectorChunkQuery9<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8>
+			where TQ : IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
 
@@ -1629,7 +1629,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery10<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9>
+	public interface IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9>
 		where TV0 : unmanaged
         where TV1 : unmanaged
         where TV2 : unmanaged
@@ -1716,7 +1716,7 @@ namespace Myriad.ECS.Worlds
             where TV7 : unmanaged
             where TV8 : unmanaged
             where TV9 : unmanaged
-			where TQ : IVectorChunkQuery10<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9>
+			where TQ : IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>();
 
@@ -1899,7 +1899,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery11<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10>
+	public interface IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10>
 		where TV0 : unmanaged
         where TV1 : unmanaged
         where TV2 : unmanaged
@@ -1992,7 +1992,7 @@ namespace Myriad.ECS.Worlds
             where TV8 : unmanaged
             where TV9 : unmanaged
             where TV10 : unmanaged
-			where TQ : IVectorChunkQuery11<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10>
+			where TQ : IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
 
@@ -2187,7 +2187,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery12<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11>
+	public interface IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11>
 		where TV0 : unmanaged
         where TV1 : unmanaged
         where TV2 : unmanaged
@@ -2286,7 +2286,7 @@ namespace Myriad.ECS.Worlds
             where TV9 : unmanaged
             where TV10 : unmanaged
             where TV11 : unmanaged
-			where TQ : IVectorChunkQuery12<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11>
+			where TQ : IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>();
 
@@ -2493,7 +2493,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery13<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12>
+	public interface IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12>
 		where TV0 : unmanaged
         where TV1 : unmanaged
         where TV2 : unmanaged
@@ -2598,7 +2598,7 @@ namespace Myriad.ECS.Worlds
             where TV10 : unmanaged
             where TV11 : unmanaged
             where TV12 : unmanaged
-			where TQ : IVectorChunkQuery13<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12>
+			where TQ : IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>();
 
@@ -2817,7 +2817,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery14<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12, TV13>
+	public interface IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12, TV13>
 		where TV0 : unmanaged
         where TV1 : unmanaged
         where TV2 : unmanaged
@@ -2928,7 +2928,7 @@ namespace Myriad.ECS.Worlds
             where TV11 : unmanaged
             where TV12 : unmanaged
             where TV13 : unmanaged
-			where TQ : IVectorChunkQuery14<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12, TV13>
+			where TQ : IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12, TV13>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>();
 
@@ -3159,7 +3159,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery15<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12, TV13, TV14>
+	public interface IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12, TV13, TV14>
 		where TV0 : unmanaged
         where TV1 : unmanaged
         where TV2 : unmanaged
@@ -3276,7 +3276,7 @@ namespace Myriad.ECS.Worlds
             where TV12 : unmanaged
             where TV13 : unmanaged
             where TV14 : unmanaged
-			where TQ : IVectorChunkQuery15<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12, TV13, TV14>
+			where TQ : IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12, TV13, TV14>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>();
 
@@ -3519,7 +3519,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
-	public interface IVectorChunkQuery16<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12, TV13, TV14, TV15>
+	public interface IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12, TV13, TV14, TV15>
 		where TV0 : unmanaged
         where TV1 : unmanaged
         where TV2 : unmanaged
@@ -3642,7 +3642,7 @@ namespace Myriad.ECS.Worlds
             where TV13 : unmanaged
             where TV14 : unmanaged
             where TV15 : unmanaged
-			where TQ : IVectorChunkQuery16<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12, TV13, TV14, TV15>
+			where TQ : IVectorChunkQuery<TV0, TV1, TV2, TV3, TV4, TV5, TV6, TV7, TV8, TV9, TV10, TV11, TV12, TV13, TV14, TV15>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
 

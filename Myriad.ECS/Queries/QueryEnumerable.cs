@@ -9,6 +9,7 @@ using Myriad.ECS.Worlds.Chunks;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable CheckNamespace
 // ReSharper disable ArrangeAccessorOwnerBody
+#pragma warning disable CA1822 // Mark members as static
 
 
 namespace Myriad.ECS.Queries
@@ -167,11 +168,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple1<T0> Current
+        public readonly RefTuple<T0> Current
         {
             get
             {
-                return new RefTuple1<T0>(
+                return new RefTuple<T0>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex])
@@ -309,11 +310,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple2<T0, T1> Current
+        public readonly RefTuple<T0, T1> Current
         {
             get
             {
-                return new RefTuple2<T0, T1>(
+                return new RefTuple<T0, T1>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
@@ -460,11 +461,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple3<T0, T1, T2> Current
+        public readonly RefTuple<T0, T1, T2> Current
         {
             get
             {
-                return new RefTuple3<T0, T1, T2>(
+                return new RefTuple<T0, T1, T2>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
@@ -620,11 +621,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple4<T0, T1, T2, T3> Current
+        public readonly RefTuple<T0, T1, T2, T3> Current
         {
             get
             {
-                return new RefTuple4<T0, T1, T2, T3>(
+                return new RefTuple<T0, T1, T2, T3>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
@@ -789,11 +790,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple5<T0, T1, T2, T3, T4> Current
+        public readonly RefTuple<T0, T1, T2, T3, T4> Current
         {
             get
             {
-                return new RefTuple5<T0, T1, T2, T3, T4>(
+                return new RefTuple<T0, T1, T2, T3, T4>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
@@ -967,11 +968,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple6<T0, T1, T2, T3, T4, T5> Current
+        public readonly RefTuple<T0, T1, T2, T3, T4, T5> Current
         {
             get
             {
-                return new RefTuple6<T0, T1, T2, T3, T4, T5>(
+                return new RefTuple<T0, T1, T2, T3, T4, T5>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
@@ -1154,11 +1155,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple7<T0, T1, T2, T3, T4, T5, T6> Current
+        public readonly RefTuple<T0, T1, T2, T3, T4, T5, T6> Current
         {
             get
             {
-                return new RefTuple7<T0, T1, T2, T3, T4, T5, T6>(
+                return new RefTuple<T0, T1, T2, T3, T4, T5, T6>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
@@ -1350,11 +1351,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple8<T0, T1, T2, T3, T4, T5, T6, T7> Current
+        public readonly RefTuple<T0, T1, T2, T3, T4, T5, T6, T7> Current
         {
             get
             {
-                return new RefTuple8<T0, T1, T2, T3, T4, T5, T6, T7>(
+                return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
@@ -1555,11 +1556,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8> Current
+        public readonly RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> Current
         {
             get
             {
-                return new RefTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+                return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
@@ -1769,11 +1770,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> Current
+        public readonly RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> Current
         {
             get
             {
-                return new RefTuple10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+                return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
@@ -1992,11 +1993,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Current
+        public readonly RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Current
         {
             get
             {
-                return new RefTuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+                return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
@@ -2224,11 +2225,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Current
+        public readonly RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Current
         {
             get
             {
-                return new RefTuple12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+                return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
@@ -2465,11 +2466,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Current
+        public readonly RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Current
         {
             get
             {
-                return new RefTuple13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+                return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
@@ -2715,11 +2716,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Current
+        public readonly RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Current
         {
             get
             {
-                return new RefTuple14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+                return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
@@ -2974,11 +2975,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Current
+        public readonly RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Current
         {
             get
             {
-                return new RefTuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+                return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
@@ -3242,11 +3243,11 @@ namespace Myriad.ECS.Queries
             _archetypesEnumerator = archetypes.GetEnumerator();
         }
 
-        public readonly RefTuple16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Current
+        public readonly RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Current
         {
             get
             {
-                return new RefTuple16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+                return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
                     SpanEntities[_entityIndex],
 #if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),

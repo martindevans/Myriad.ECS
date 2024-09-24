@@ -44,7 +44,7 @@ public class StructQueryTests
     }
 
     private readonly struct PutEntitiesInList0(List<Entity> entities)
-        : IChunkQuery0
+        : IChunkQuery
     {
         public readonly List<Entity> Entities = entities;
 
@@ -58,7 +58,7 @@ public class StructQueryTests
     }
 
     private readonly struct PutEntitiesInList1<T>(List<Entity> entities)
-        : IQuery1<T>
+        : IQuery<T>
         where T : IComponent
     {
         public readonly List<Entity> Entities = entities;

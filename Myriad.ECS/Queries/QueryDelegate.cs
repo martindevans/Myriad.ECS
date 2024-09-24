@@ -28,7 +28,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct QueryDelegateWrapper1E<T0>
-		: IQuery1<T0>
+		: IQuery<T0>
 		where T0 : IComponent
 	{
 		private readonly QueryDelegateEntity<T0> _delegate;
@@ -45,7 +45,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper1<T0>
-		: IQuery1<T0>
+		: IQuery<T0>
 		where T0 : IComponent
 	{
 		private readonly QueryDelegate<T0> _delegate;
@@ -62,7 +62,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper1ED<TData, T0>
-		: IQuery1<T0>
+		: IQuery<T0>
 		where T0 : IComponent
 	{
 		private readonly QueryDelegateEntityData<TData, T0> _delegate;
@@ -81,7 +81,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper1D<TData, T0>
-		: IQuery1<T0>
+		: IQuery<T0>
 		where T0 : IComponent
 	{
 		private readonly QueryDelegateData<TData, T0> _delegate;
@@ -239,7 +239,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct QueryDelegateWrapper2E<T0, T1>
-		: IQuery2<T0, T1>
+		: IQuery<T0, T1>
 		where T0 : IComponent
             where T1 : IComponent
 	{
@@ -257,7 +257,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper2<T0, T1>
-		: IQuery2<T0, T1>
+		: IQuery<T0, T1>
 		where T0 : IComponent
             where T1 : IComponent
 	{
@@ -275,7 +275,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper2ED<TData, T0, T1>
-		: IQuery2<T0, T1>
+		: IQuery<T0, T1>
 		where T0 : IComponent
             where T1 : IComponent
 	{
@@ -295,7 +295,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper2D<TData, T0, T1>
-		: IQuery2<T0, T1>
+		: IQuery<T0, T1>
 		where T0 : IComponent
             where T1 : IComponent
 	{
@@ -466,7 +466,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct QueryDelegateWrapper3E<T0, T1, T2>
-		: IQuery3<T0, T1, T2>
+		: IQuery<T0, T1, T2>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -485,7 +485,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper3<T0, T1, T2>
-		: IQuery3<T0, T1, T2>
+		: IQuery<T0, T1, T2>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -504,7 +504,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper3ED<TData, T0, T1, T2>
-		: IQuery3<T0, T1, T2>
+		: IQuery<T0, T1, T2>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -525,7 +525,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper3D<TData, T0, T1, T2>
-		: IQuery3<T0, T1, T2>
+		: IQuery<T0, T1, T2>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -709,7 +709,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct QueryDelegateWrapper4E<T0, T1, T2, T3>
-		: IQuery4<T0, T1, T2, T3>
+		: IQuery<T0, T1, T2, T3>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -729,7 +729,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper4<T0, T1, T2, T3>
-		: IQuery4<T0, T1, T2, T3>
+		: IQuery<T0, T1, T2, T3>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -749,7 +749,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper4ED<TData, T0, T1, T2, T3>
-		: IQuery4<T0, T1, T2, T3>
+		: IQuery<T0, T1, T2, T3>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -771,7 +771,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper4D<TData, T0, T1, T2, T3>
-		: IQuery4<T0, T1, T2, T3>
+		: IQuery<T0, T1, T2, T3>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -968,7 +968,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct QueryDelegateWrapper5E<T0, T1, T2, T3, T4>
-		: IQuery5<T0, T1, T2, T3, T4>
+		: IQuery<T0, T1, T2, T3, T4>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -989,7 +989,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper5<T0, T1, T2, T3, T4>
-		: IQuery5<T0, T1, T2, T3, T4>
+		: IQuery<T0, T1, T2, T3, T4>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1010,7 +1010,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper5ED<TData, T0, T1, T2, T3, T4>
-		: IQuery5<T0, T1, T2, T3, T4>
+		: IQuery<T0, T1, T2, T3, T4>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1033,7 +1033,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper5D<TData, T0, T1, T2, T3, T4>
-		: IQuery5<T0, T1, T2, T3, T4>
+		: IQuery<T0, T1, T2, T3, T4>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1243,7 +1243,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct QueryDelegateWrapper6E<T0, T1, T2, T3, T4, T5>
-		: IQuery6<T0, T1, T2, T3, T4, T5>
+		: IQuery<T0, T1, T2, T3, T4, T5>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1265,7 +1265,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper6<T0, T1, T2, T3, T4, T5>
-		: IQuery6<T0, T1, T2, T3, T4, T5>
+		: IQuery<T0, T1, T2, T3, T4, T5>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1287,7 +1287,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper6ED<TData, T0, T1, T2, T3, T4, T5>
-		: IQuery6<T0, T1, T2, T3, T4, T5>
+		: IQuery<T0, T1, T2, T3, T4, T5>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1311,7 +1311,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper6D<TData, T0, T1, T2, T3, T4, T5>
-		: IQuery6<T0, T1, T2, T3, T4, T5>
+		: IQuery<T0, T1, T2, T3, T4, T5>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1534,7 +1534,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct QueryDelegateWrapper7E<T0, T1, T2, T3, T4, T5, T6>
-		: IQuery7<T0, T1, T2, T3, T4, T5, T6>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1557,7 +1557,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper7<T0, T1, T2, T3, T4, T5, T6>
-		: IQuery7<T0, T1, T2, T3, T4, T5, T6>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1580,7 +1580,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper7ED<TData, T0, T1, T2, T3, T4, T5, T6>
-		: IQuery7<T0, T1, T2, T3, T4, T5, T6>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1605,7 +1605,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper7D<TData, T0, T1, T2, T3, T4, T5, T6>
-		: IQuery7<T0, T1, T2, T3, T4, T5, T6>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1841,7 +1841,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct QueryDelegateWrapper8E<T0, T1, T2, T3, T4, T5, T6, T7>
-		: IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1865,7 +1865,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper8<T0, T1, T2, T3, T4, T5, T6, T7>
-		: IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1889,7 +1889,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper8ED<TData, T0, T1, T2, T3, T4, T5, T6, T7>
-		: IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1915,7 +1915,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper8D<TData, T0, T1, T2, T3, T4, T5, T6, T7>
-		: IQuery8<T0, T1, T2, T3, T4, T5, T6, T7>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2164,7 +2164,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct QueryDelegateWrapper9E<T0, T1, T2, T3, T4, T5, T6, T7, T8>
-		: IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2189,7 +2189,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
-		: IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2214,7 +2214,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper9ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>
-		: IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2241,7 +2241,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper9D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>
-		: IQuery9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2503,7 +2503,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct QueryDelegateWrapper10E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
-		: IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2529,7 +2529,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
-		: IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2555,7 +2555,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper10ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
-		: IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2583,7 +2583,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper10D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
-		: IQuery10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2858,7 +2858,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct QueryDelegateWrapper11E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
-		: IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2885,7 +2885,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
-		: IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2912,7 +2912,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper11ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
-		: IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2941,7 +2941,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper11D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
-		: IQuery11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -3229,7 +3229,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct QueryDelegateWrapper12E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
-		: IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -3257,7 +3257,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
-		: IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -3285,7 +3285,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper12ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
-		: IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -3315,7 +3315,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper12D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
-		: IQuery12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -3616,7 +3616,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct QueryDelegateWrapper13E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
-		: IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -3645,7 +3645,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
-		: IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -3674,7 +3674,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper13ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
-		: IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -3705,7 +3705,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper13D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
-		: IQuery13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -4019,7 +4019,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct QueryDelegateWrapper14E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
-		: IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -4049,7 +4049,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
-		: IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -4079,7 +4079,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper14ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
-		: IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -4111,7 +4111,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper14D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
-		: IQuery14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -4438,7 +4438,7 @@ namespace Myriad.ECS.Queries
 	);
 
 	internal readonly struct QueryDelegateWrapper15E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
-		: IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -4469,7 +4469,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
-		: IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -4500,7 +4500,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper15ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
-		: IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -4533,7 +4533,7 @@ namespace Myriad.ECS.Queries
 	}
 
 	internal readonly struct QueryDelegateWrapper15D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
-		: IQuery15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+		: IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent

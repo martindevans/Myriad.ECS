@@ -26,7 +26,7 @@ using System.Buffers;
 #>
 namespace Myriad.ECS.Queries
 {
-	public interface <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+	public interface IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		where <#= Constraints(i, 8) #>
 	{
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, <#= Refs(0, i) #>);
@@ -55,7 +55,7 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where <#= Constraints(i, 12) #>
-			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>, new()
+			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>, new()
 		{
 			var q = new TQ();
 			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, query);
@@ -79,7 +79,7 @@ namespace Myriad.ECS.Worlds
 			ref QueryDescription? query
 		)
 			where <#= Constraints(i, 12) #>
-			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>, new()
+			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>, new()
 		{
 			var q = new TQ();
 			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query);
@@ -105,7 +105,7 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where <#= Constraints(i, 12) #>
-			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
 			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, query);
 		}
@@ -130,7 +130,7 @@ namespace Myriad.ECS.Worlds
 			ref QueryDescription? query
 		)
 			where <#= Constraints(i, 12) #>
-			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
 			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query);
 		}
@@ -155,7 +155,7 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where <#= Constraints(i, 12) #>
-			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
 			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query);
 		}
@@ -180,7 +180,7 @@ namespace Myriad.ECS.Worlds
 			ref QueryDescription? query
 		)
 			where <#= Constraints(i, 12) #>
-			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
 			query ??= GetCachedQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>();
 
@@ -234,7 +234,7 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where <#= Constraints(sumij, 12) #>
-			where TQ : <#= Name(i) #><<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
 			query ??= GetCachedQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>();
 
@@ -282,7 +282,7 @@ namespace Myriad.ECS.Worlds
 		private readonly struct ChunkWorkItem<#= i #><TQ, <#= queryConstraints #>>
 			: IWorkItem
 			where <#= Constraints(i, 12) #>
-			where TQ : <#= Name(i) #><<#= queryConstraints #>>
+			where TQ : IChunkQuery<<#= queryConstraints #>>
 		{
 			private readonly TQ _q;
 			private readonly Chunks.Chunk _chunk;
@@ -330,11 +330,6 @@ namespace Myriad.ECS.Worlds
 	static string Mod(int index, int mutable, int @readonly)
 	{
 		return index < mutable ? "ref" : "in";
-	}
-
-	static string Name(int mutable)
-	{
-		return "IChunkQuery" + mutable;
 	}
 
 	static string Refs(int start, int count)
