@@ -32,10 +32,10 @@ jobs:
         dotnet-version: 8.x.x
 
     - name: Build
-      run: dotnet build $SOLUTION --configuration $BUILD_CONFIG --no-restore
+      run: dotnet build $SOLUTION --configuration $BUILD_CONFIG
 
     - name: Run tests
-      run: dotnet test /p:Configuration=$BUILD_CONFIG --no-restore --no-build --verbosity normal
+      run: dotnet test /p:Configuration=$BUILD_CONFIG --verbosity normal
 
     - name: Publish
       #if: startsWith(github.ref, 'refs/heads/release')
