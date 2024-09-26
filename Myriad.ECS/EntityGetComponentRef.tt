@@ -1,0 +1,64 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using Myriad.ECS.Collections;
+using Myriad.ECS.Worlds;
+
+namespace Myriad.ECS;
+
+/* dotcover disable */
+
+public readonly partial record struct Entity
+{
+<# for (var i = 2; i <= 16; i++)
+{
+    var queryConstraints = string.Join(", ", Enumerable.Range(0, i).Select(x => "where T" + x + " : IComponent"));
+    var types = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
+#>
+    /// <summary>
+    /// Declare a specific archetype that should be created ahead of time in this world. This
+    /// can prevent expensive structural changes in the world later.
+    /// </summary>
+    public RefTuple<<#= types #>> GetComponentRef<<#= types #>>(World world)
+        where <#= Constraints(i, 8) #>
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        return new RefTuple<<#= types #>>(
+            this,
+<# for (var j = 0; j < i; j++)
+{
+    var comma = (j == (i - 1)) ? "" : ",";
+#>
+#if NET6_0_OR_GREATER
+            new RefT<T<#= j #>>(ref entityInfo.Chunk.GetRef<T<#= j #>>(entityInfo.RowIndex))<#= comma #>
+#else
+            new RefT<T<#= j #>>(entityInfo.Chunk.GetComponentArray<T<#= j #>>(), entityInfo.RowIndex)<#= comma #>
+#endif
+
+<#
+}
+#>
+        );
+    }
+
+<#
+}
+#>
+}
+
+<#+ 
+	static string Constraints(int count, int spaces = 4)
+    {
+		var prefix = new string(' ', spaces);
+        var str = string.Join(
+			$"\r\n{prefix}where ",
+			Enumerable.Range(0, count).Select(x => $"T{x} : IComponent")
+		);
+
+		return str;
+    }
+#>

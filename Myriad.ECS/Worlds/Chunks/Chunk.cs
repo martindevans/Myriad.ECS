@@ -84,11 +84,11 @@ internal sealed class Chunk
         return GetComponentArray<T>(id).AsSpan(0, EntityCount);
     }
 
-    //internal T[] GetComponentArray<T>()
-    //    where T : IComponent
-    //{
-    //    return GetComponentArray<T>(ComponentID<T>.ID);
-    //}
+    internal T[] GetComponentArray<T>()
+        where T : IComponent
+    {
+        return GetComponentArray<T>(ComponentID<T>.ID);
+    }
 
     /// <summary>
     /// Get the component array, providing the component ID if it is known.

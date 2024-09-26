@@ -6,7 +6,7 @@ using Myriad.ECS.Worlds;
 namespace Myriad.ECS;
 
 [DebuggerDisplay("{ID}v{Version}")]
-public readonly record struct Entity
+public readonly partial record struct Entity
     : IComparable<Entity>
 {
     public readonly int ID;

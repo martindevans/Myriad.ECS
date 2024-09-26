@@ -10,7 +10,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Myriad.ECS</Title>
     <Authors>Martin Evans</Authors>
-    <Version>23.0.0</Version>
+    <Version>23.1.0</Version>
     <Description>Myriad.ECS is a high performance Entity Component System (ECS).</Description>
     <PackageProjectUrl>https://github.com/martindevans/Myriad.ECS</PackageProjectUrl>
     <RepositoryUrl>https://github.com/martindevans/Myriad.ECS</RepositoryUrl>
@@ -79,6 +79,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="EntityGetComponentRef.cs">
+      <DependentUpon>EntityGetComponentRef.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Worlds\WorldBuilderWithArchetype.cs">
       <DependentUpon>WorldBuilderWithArchetype.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -138,6 +143,10 @@
     </None>
     <None Update="Queries\QueryEnumerable.tt">
       <LastGenOutput>QueryEnumerable.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="EntityGetComponentRef.tt">
+      <LastGenOutput>EntityGetComponentRef.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="Worlds\WorldBuilderWithArchetype.tt">
