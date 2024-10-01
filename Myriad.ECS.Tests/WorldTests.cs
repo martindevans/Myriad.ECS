@@ -23,11 +23,11 @@ public class WorldTests
 
         Assert.AreEqual(2, w.Overwrite(new ComponentInt32(3)));
 
-        Assert.AreEqual(3, a.GetComponentRef<ComponentInt32>(w).Value);
-        Assert.AreEqual(3, b.GetComponentRef<ComponentInt32>(w).Value);
+        Assert.AreEqual(3, a.GetComponentRef<ComponentInt32>().Value);
+        Assert.AreEqual(3, b.GetComponentRef<ComponentInt32>().Value);
 
-        Assert.AreEqual(10, b.GetComponentRef<ComponentFloat>(w).Value);
-        Assert.AreEqual(10, c.GetComponentRef<ComponentFloat>(w).Value);
+        Assert.AreEqual(10, b.GetComponentRef<ComponentFloat>().Value);
+        Assert.AreEqual(10, c.GetComponentRef<ComponentFloat>().Value);
     }
 
     [TestMethod]
@@ -48,11 +48,11 @@ public class WorldTests
 
         Assert.AreEqual(1, w.Overwrite(new ComponentInt32(3), q));
 
-        Assert.AreEqual(3, a.GetComponentRef<ComponentInt32>(w).Value);
-        Assert.AreEqual(2, b.GetComponentRef<ComponentInt32>(w).Value);
+        Assert.AreEqual(3, a.GetComponentRef<ComponentInt32>().Value);
+        Assert.AreEqual(2, b.GetComponentRef<ComponentInt32>().Value);
 
-        Assert.AreEqual(10, b.GetComponentRef<ComponentFloat>(w).Value);
-        Assert.AreEqual(10, c.GetComponentRef<ComponentFloat>(w).Value);
+        Assert.AreEqual(10, b.GetComponentRef<ComponentFloat>().Value);
+        Assert.AreEqual(10, c.GetComponentRef<ComponentFloat>().Value);
     }
 
     [TestMethod]
@@ -73,11 +73,11 @@ public class WorldTests
 
         Assert.AreEqual(1, w.Overwrite(new ComponentInt32(3), q));
 
-        Assert.AreEqual(1, a.GetComponentRef<ComponentInt32>(w).Value);
-        Assert.AreEqual(3, b.GetComponentRef<ComponentInt32>(w).Value);
+        Assert.AreEqual(1, a.GetComponentRef<ComponentInt32>().Value);
+        Assert.AreEqual(3, b.GetComponentRef<ComponentInt32>().Value);
 
-        Assert.AreEqual(10, b.GetComponentRef<ComponentFloat>(w).Value);
-        Assert.AreEqual(10, c.GetComponentRef<ComponentFloat>(w).Value);
+        Assert.AreEqual(10, b.GetComponentRef<ComponentFloat>().Value);
+        Assert.AreEqual(10, c.GetComponentRef<ComponentFloat>().Value);
     }
 
     [TestMethod]

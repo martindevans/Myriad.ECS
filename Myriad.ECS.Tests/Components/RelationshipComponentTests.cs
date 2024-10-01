@@ -30,8 +30,8 @@ public class RelationshipComponentTests
         var b = bb.Resolve();
         var c = cb.Resolve();
 
-        Assert.AreEqual(a, c.GetComponentRef<Relational1>(world).Target);
-        Assert.AreEqual(b, c.GetComponentRef<Relational2>(world).Target);
+        Assert.AreEqual(a, c.GetComponentRef<Relational1>().Target);
+        Assert.AreEqual(b, c.GetComponentRef<Relational2>().Target);
     }
 
     [TestMethod]
@@ -55,8 +55,8 @@ public class RelationshipComponentTests
         var a = ab.Resolve();
         var b = bb.Resolve();
 
-        Assert.AreEqual(a, c.GetComponentRef<Relational1>(world).Target);
-        Assert.AreEqual(b, c.GetComponentRef<Relational2>(world).Target);
+        Assert.AreEqual(a, c.GetComponentRef<Relational1>().Target);
+        Assert.AreEqual(b, c.GetComponentRef<Relational2>().Target);
     }
 
     [TestMethod]
@@ -75,7 +75,7 @@ public class RelationshipComponentTests
         using var resolver2 = buffer.Playback();
         var b = bb.Resolve();
 
-        Assert.AreEqual(a, b.GetComponentRef<Relational1>(world).Target);
+        Assert.AreEqual(a, b.GetComponentRef<Relational1>().Target);
     }
 
     [TestMethod]
@@ -96,7 +96,7 @@ public class RelationshipComponentTests
         buffer.Set(b, new Relational1(), a);
         buffer.Playback().Dispose();
 
-        Assert.AreEqual(b, a.GetComponentRef<Relational1>(world).Target);
-        Assert.AreEqual(a, b.GetComponentRef<Relational1>(world).Target);
+        Assert.AreEqual(b, a.GetComponentRef<Relational1>().Target);
+        Assert.AreEqual(a, b.GetComponentRef<Relational1>().Target);
     }
 }

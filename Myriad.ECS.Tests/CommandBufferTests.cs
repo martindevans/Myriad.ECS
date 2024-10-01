@@ -41,7 +41,7 @@ public class CommandBufferTests
         using var resolver = buffer.Playback();
         var entity = eb.Resolve();
 
-        Assert.IsTrue(entity.Exists(world));
+        Assert.IsTrue(entity.Exists());
         Assert.AreEqual(1, world.Archetypes.Count);
         Assert.AreEqual(0, world.Archetypes.Single().Components.Count);
     }
@@ -68,10 +68,10 @@ public class CommandBufferTests
         for (var i = 0; i < entities.Count; i++)
         {
             var entity = entities[i];
-            Assert.IsTrue(entity.Exists(world));
+            Assert.IsTrue(entity.Exists());
             Assert.AreEqual(1, world.Archetypes.Count);
             Assert.AreEqual(1, world.Archetypes.Single().Components.Count);
-            Assert.AreEqual(i, entity.GetComponentRef<ComponentInt32>(world).Value);
+            Assert.AreEqual(i, entity.GetComponentRef<ComponentInt32>().Value);
         }
     }
 
@@ -117,7 +117,7 @@ public class CommandBufferTests
                     break;
                 var idx = rng.Next(0, alive.Count);
                 var ent = alive[idx];
-                Assert.IsTrue(ent.Exists(world));
+                Assert.IsTrue(ent.Exists());
                 buffer.Delete(ent);
                 alive.RemoveAt(idx);
                 dead.Add(ent);
@@ -135,12 +135,12 @@ public class CommandBufferTests
             for (var j = 0; j < alive.Count; j++)
             {
                 var entity = alive[j];
-                Assert.IsTrue(entity.Exists(world));
+                Assert.IsTrue(entity.Exists());
             }
             for (var j = 0; j < dead.Count; j++)
             {
                 var entity = dead[j];
-                Assert.IsTrue(!entity.Exists(world));
+                Assert.IsTrue(!entity.Exists());
             }
 
             // Check archetypes
@@ -236,7 +236,7 @@ public class CommandBufferTests
         using var resolver = buffer.Playback();
         var entity = eb.Resolve();
 
-        Assert.IsTrue(entity.Exists(world));
+        Assert.IsTrue(entity.Exists());
         Assert.AreEqual(1, world.Archetypes.Count);
         Assert.AreEqual(1, world.Archetypes.Single().Components.Count);
         Assert.IsTrue(world.Archetypes.Single().Components.Contains(ComponentID<ComponentFloat>.ID));
@@ -293,17 +293,17 @@ public class CommandBufferTests
         };
 
         foreach (var entity in entities)
-            Assert.IsTrue(entity.Exists(world));
+            Assert.IsTrue(entity.Exists());
 
         buffer.Delete(entities[1]);
         buffer.Playback();
 
-        Assert.IsTrue(entities[0].Exists(world));
-        Assert.IsFalse(entities[1].Exists(world));
-        Assert.IsTrue(entities[2].Exists(world));
+        Assert.IsTrue(entities[0].Exists());
+        Assert.IsFalse(entities[1].Exists());
+        Assert.IsTrue(entities[2].Exists());
 
-        Assert.AreEqual(1, entities[0].GetComponentRef<ComponentFloat>(world).Value);
-        Assert.AreEqual(3, entities[2].GetComponentRef<ComponentFloat>(world).Value);
+        Assert.AreEqual(1, entities[0].GetComponentRef<ComponentFloat>().Value);
+        Assert.AreEqual(3, entities[2].GetComponentRef<ComponentFloat>().Value);
     }
 
     [TestMethod]
@@ -315,7 +315,7 @@ public class CommandBufferTests
         var buffered = buffer.Create().Set(new ComponentFloat(1));
         using var resolver = buffer.Playback();
         var entity = buffered.Resolve();
-        Assert.IsTrue(entity.Exists(world));
+        Assert.IsTrue(entity.Exists());
 
         buffer.Delete(entity);
         buffer.Delete(entity);
@@ -324,7 +324,7 @@ public class CommandBufferTests
         buffer.Delete(entity);
         buffer.Playback();
 
-        Assert.IsFalse(entity.Exists(world));
+        Assert.IsFalse(entity.Exists());
     }
 
     [TestMethod]
@@ -337,7 +337,7 @@ public class CommandBufferTests
         var buffered = buffer.Create().Set(new ComponentFloat(1));
         using var resolver = buffer.Playback();
         var entity = buffered.Resolve();
-        Assert.IsTrue(entity.Exists(world));
+        Assert.IsTrue(entity.Exists());
 
         // Setup deletion for that entity
         buffer.Delete(entity);
@@ -346,12 +346,12 @@ public class CommandBufferTests
         var buffer2 = new CommandBuffer(world);
         buffer2.Delete(entity);
         buffer2.Playback().Dispose();
-        Assert.IsFalse(entity.Exists(world));
+        Assert.IsFalse(entity.Exists());
 
         // Now play the first buffer back
         buffer.Playback().Dispose();
 
-        Assert.IsFalse(entity.Exists(world));
+        Assert.IsFalse(entity.Exists());
     }
 
     [TestMethod]
@@ -377,16 +377,16 @@ public class CommandBufferTests
         };
 
         foreach (var entity in entities)
-            Assert.IsTrue(entity.Exists(world));
+            Assert.IsTrue(entity.Exists());
 
         buffer.Delete([entities[0], entities[1]]);
         buffer.Playback();
 
-        Assert.IsFalse(entities[0].Exists(world));
-        Assert.IsFalse(entities[1].Exists(world));
-        Assert.IsTrue(entities[2].Exists(world));
+        Assert.IsFalse(entities[0].Exists());
+        Assert.IsFalse(entities[1].Exists());
+        Assert.IsTrue(entities[2].Exists());
 
-        Assert.AreEqual(3, entities[2].GetComponentRef<ComponentFloat>(world).Value);
+        Assert.AreEqual(3, entities[2].GetComponentRef<ComponentFloat>().Value);
     }
 
     [TestMethod]
@@ -399,7 +399,7 @@ public class CommandBufferTests
         var buffered = buffer.Create().Set(new ComponentFloat(1));
         using var resolver = buffer.Playback();
         var entity = buffered.Resolve();
-        Assert.IsTrue(entity.Exists(world));
+        Assert.IsTrue(entity.Exists());
 
         // Modify it _and_ delete it
         buffer.Set(entity, new ComponentInt64(7));
@@ -409,7 +409,7 @@ public class CommandBufferTests
         buffer.Playback().Dispose();
 
         // Check it's dead
-        Assert.IsFalse(entity.Exists(world));
+        Assert.IsFalse(entity.Exists());
         Assert.AreEqual(0, world.Count<ComponentFloat>());
         Assert.AreEqual(0, world.Count<ComponentInt16>());
         Assert.AreEqual(0, world.Count<ComponentInt32>());
@@ -435,8 +435,8 @@ public class CommandBufferTests
         buffer.Remove<ComponentInt16>(entity);
         buffer.Playback();
 
-        Assert.AreEqual(123, entity.GetComponentRef<ComponentFloat>(world).Value);
-        Assert.IsFalse(entity.HasComponent<ComponentInt16>(world));
+        Assert.AreEqual(123, entity.GetComponentRef<ComponentFloat>().Value);
+        Assert.IsFalse(entity.HasComponent<ComponentInt16>());
     }
 
     [TestMethod]
@@ -458,9 +458,9 @@ public class CommandBufferTests
         buffer.Playback();
 
         // Check they are all present
-        Assert.IsTrue(entity.HasComponent<ComponentFloat>(world));
-        Assert.IsTrue(entity.HasComponent<ComponentInt16>(world));
-        Assert.IsTrue(entity.HasComponent<ComponentInt32>(world));
+        Assert.IsTrue(entity.HasComponent<ComponentFloat>());
+        Assert.IsTrue(entity.HasComponent<ComponentInt16>());
+        Assert.IsTrue(entity.HasComponent<ComponentInt32>());
     }
 
     [TestMethod]
@@ -482,9 +482,9 @@ public class CommandBufferTests
         buffer.Playback();
 
         // Check the value has changed
-        Assert.IsTrue(entity.HasComponent<ComponentFloat>(world));
-        Assert.IsTrue(entity.HasComponent<ComponentInt16>(world));
-        Assert.AreEqual(789, entity.GetComponentRef<ComponentInt16>(world).Value);
+        Assert.IsTrue(entity.HasComponent<ComponentFloat>());
+        Assert.IsTrue(entity.HasComponent<ComponentInt16>());
+        Assert.AreEqual(789, entity.GetComponentRef<ComponentInt16>().Value);
     }
 
     [TestMethod]
@@ -507,9 +507,9 @@ public class CommandBufferTests
         buffer.Playback();
 
         // Check the value has changed to the latest value
-        Assert.IsTrue(entity.HasComponent<ComponentFloat>(world));
-        Assert.IsTrue(entity.HasComponent<ComponentInt16>(world));
-        Assert.AreEqual(987, entity.GetComponentRef<ComponentInt16>(world).Value);
+        Assert.IsTrue(entity.HasComponent<ComponentFloat>());
+        Assert.IsTrue(entity.HasComponent<ComponentInt16>());
+        Assert.AreEqual(987, entity.GetComponentRef<ComponentInt16>().Value);
     }
 
     [TestMethod]
@@ -535,8 +535,8 @@ public class CommandBufferTests
         buffer.Playback();
 
         // Check the value is gone
-        Assert.IsTrue(entity.HasComponent<ComponentFloat>(world));
-        Assert.IsFalse(entity.HasComponent<ComponentInt16>(world));
+        Assert.IsTrue(entity.HasComponent<ComponentFloat>());
+        Assert.IsFalse(entity.HasComponent<ComponentInt16>());
     }
 
     [TestMethod]
@@ -559,9 +559,9 @@ public class CommandBufferTests
         buffer.Playback();
 
         // Check entity is unchanged
-        Assert.IsTrue(entity.HasComponent<ComponentFloat>(world));
-        Assert.IsTrue(entity.HasComponent<ComponentInt16>(world));
-        Assert.IsFalse(entity.HasComponent<ComponentInt32>(world));
+        Assert.IsTrue(entity.HasComponent<ComponentFloat>());
+        Assert.IsTrue(entity.HasComponent<ComponentInt16>());
+        Assert.IsFalse(entity.HasComponent<ComponentInt32>());
     }
 
     [TestMethod]
@@ -587,12 +587,12 @@ public class CommandBufferTests
         buffer.Playback();
 
         // Check entity structure is unchanged
-        Assert.IsTrue(entity.HasComponent<ComponentFloat>(world));
-        Assert.IsTrue(entity.HasComponent<ComponentInt16>(world));
-        Assert.IsFalse(entity.HasComponent<ComponentInt32>(world));
+        Assert.IsTrue(entity.HasComponent<ComponentFloat>());
+        Assert.IsTrue(entity.HasComponent<ComponentInt16>());
+        Assert.IsFalse(entity.HasComponent<ComponentInt32>());
 
         // Check value is correct
-        Assert.AreEqual(789, entity.GetComponentRef<ComponentInt16>(world).Value);
+        Assert.AreEqual(789, entity.GetComponentRef<ComponentInt16>().Value);
     }
 
     [TestMethod]
@@ -650,24 +650,24 @@ public class CommandBufferTests
             {
                 switch (rng.Next(18))
                 {
-                    case 0: Assert.IsTrue(entity.HasComponent<Component0>(world)); break;
-                    case 1: Assert.IsTrue(entity.HasComponent<Component1>(world)); break;
-                    case 2: Assert.IsTrue(entity.HasComponent<Component2>(world)); break;
-                    case 3: Assert.IsTrue(entity.HasComponent<Component3>(world)); break;
-                    case 4: Assert.IsTrue(entity.HasComponent<Component4>(world)); break;
-                    case 5: Assert.IsTrue(entity.HasComponent<Component5>(world)); break;
-                    case 6: Assert.IsTrue(entity.HasComponent<Component6>(world)); break;
-                    case 7: Assert.IsTrue(entity.HasComponent<Component7>(world)); break;
-                    case 8: Assert.IsTrue(entity.HasComponent<Component8>(world)); break;
-                    case 9: Assert.IsTrue(entity.HasComponent<Component9>(world)); break;
-                    case 10: Assert.IsTrue(entity.HasComponent<Component10>(world)); break;
-                    case 11: Assert.IsTrue(entity.HasComponent<Component11>(world)); break;
-                    case 12: Assert.IsTrue(entity.HasComponent<Component12>(world)); break;
-                    case 13: Assert.IsTrue(entity.HasComponent<Component13>(world)); break;
-                    case 14: Assert.IsTrue(entity.HasComponent<Component14>(world)); break;
-                    case 15: Assert.IsTrue(entity.HasComponent<Component15>(world)); break;
-                    case 16: Assert.IsTrue(entity.HasComponent<Component16>(world)); break;
-                    case 17: Assert.IsTrue(entity.HasComponent<Component17>(world)); break;
+                    case 0: Assert.IsTrue(entity.HasComponent<Component0>()); break;
+                    case 1: Assert.IsTrue(entity.HasComponent<Component1>()); break;
+                    case 2: Assert.IsTrue(entity.HasComponent<Component2>()); break;
+                    case 3: Assert.IsTrue(entity.HasComponent<Component3>()); break;
+                    case 4: Assert.IsTrue(entity.HasComponent<Component4>()); break;
+                    case 5: Assert.IsTrue(entity.HasComponent<Component5>()); break;
+                    case 6: Assert.IsTrue(entity.HasComponent<Component6>()); break;
+                    case 7: Assert.IsTrue(entity.HasComponent<Component7>()); break;
+                    case 8: Assert.IsTrue(entity.HasComponent<Component8>()); break;
+                    case 9: Assert.IsTrue(entity.HasComponent<Component9>()); break;
+                    case 10: Assert.IsTrue(entity.HasComponent<Component10>()); break;
+                    case 11: Assert.IsTrue(entity.HasComponent<Component11>()); break;
+                    case 12: Assert.IsTrue(entity.HasComponent<Component12>()); break;
+                    case 13: Assert.IsTrue(entity.HasComponent<Component13>()); break;
+                    case 14: Assert.IsTrue(entity.HasComponent<Component14>()); break;
+                    case 15: Assert.IsTrue(entity.HasComponent<Component15>()); break;
+                    case 16: Assert.IsTrue(entity.HasComponent<Component16>()); break;
+                    case 17: Assert.IsTrue(entity.HasComponent<Component17>()); break;
                 }
             }
         }

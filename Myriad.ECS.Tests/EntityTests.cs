@@ -11,9 +11,9 @@ public class EntityTests
     public void DefaultEntityIsNotAlive()
     {
         var w = new WorldBuilder().Build();
-        Assert.IsFalse(default(Entity).Exists(w));
-        Assert.IsFalse(default(Entity).IsAlive(w));
-        Assert.IsFalse(default(Entity).IsPhantom(w));
+        Assert.IsFalse(default(Entity).Exists());
+        Assert.IsFalse(default(Entity).IsAlive());
+        Assert.IsFalse(default(Entity).IsPhantom());
     }
 
     [TestMethod]
@@ -84,7 +84,7 @@ public class EntityTests
         using var resolver = b.Playback();
         var entity = e.Resolve();
 
-        ref var c = ref entity.GetComponentRef<ComponentInt16>(w);
+        ref var c = ref entity.GetComponentRef<ComponentInt16>();
         Assert.AreEqual(7, c.Value);
     }
 
@@ -99,15 +99,15 @@ public class EntityTests
         using var resolver = b.Playback();
         var entity = e.Resolve();
 
-        var c = (ComponentInt16)entity.GetBoxedComponent(w, ComponentID<ComponentInt16>.ID)!;
+        var c = (ComponentInt16)entity.GetBoxedComponent(ComponentID<ComponentInt16>.ID)!;
         Assert.AreEqual(7, c.Value);
 
-        Assert.IsNull(entity.GetBoxedComponent(w, ComponentID<ComponentInt32>.ID));
+        Assert.IsNull(entity.GetBoxedComponent(ComponentID<ComponentInt32>.ID));
 
         b.Delete(entity);
         b.Playback().Dispose();
 
-        Assert.IsNull(entity.GetBoxedComponent(w, ComponentID<ComponentInt16>.ID));
-        Assert.IsNull(entity.GetBoxedComponent(w, ComponentID<ComponentInt32>.ID));
+        Assert.IsNull(entity.GetBoxedComponent(ComponentID<ComponentInt16>.ID));
+        Assert.IsNull(entity.GetBoxedComponent(ComponentID<ComponentInt32>.ID));
     }
 }

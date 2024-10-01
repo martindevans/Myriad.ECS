@@ -116,7 +116,7 @@ public sealed partial class CommandBuffer
                 _setters.Dispose(mods.Sets, ref lazy);
 
             // Skip deleted entities
-            if (!delete.Exists(World))
+            if (!delete.Exists())
                 continue;
 
             var archetype = World.GetArchetype(delete);
@@ -169,7 +169,7 @@ public sealed partial class CommandBuffer
             foreach (var (entity, mod) in _entityModifications.Enumerable())
             {
                 // Skip entities that have been deleted since this was enqueued
-                if (!entity.Exists(World))
+                if (!entity.Exists())
                 {
                     _setters.Dispose(mod.Sets, ref lazy);
                     continue;

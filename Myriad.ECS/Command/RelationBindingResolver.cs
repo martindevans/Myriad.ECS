@@ -83,7 +83,7 @@ public partial class CommandBuffer
                 var setOn = setOnBuf.Resolve();
                 var tgt = tgtBuf.Resolve();
 
-                setOn.GetComponentRef<TComponent>(buffer.World).Target = tgt;
+                setOn.GetComponentRef<TComponent>().Target = tgt;
             }
         }
     }
@@ -97,7 +97,7 @@ public partial class CommandBuffer
             {
                 var tgt = tgtBuf.Resolve();
 
-                setOn.GetComponentRef<TComponent>(buffer.World).Target = tgt;
+                setOn.GetComponentRef<TComponent>().Target = tgt;
             }
         }
     }

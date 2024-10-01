@@ -40,8 +40,8 @@ public class DisposableComponentTests
 
         // Check the entity was disposed
         Assert.AreEqual(1, box.Value);
-        Assert.IsFalse(entity.IsPhantom(w));
-        Assert.IsFalse(entity.IsAlive(w));
+        Assert.IsFalse(entity.IsPhantom());
+        Assert.IsFalse(entity.IsAlive());
     }
 
     [TestMethod]
@@ -62,8 +62,8 @@ public class DisposableComponentTests
 
         // Entity should be a phantom, so disposal should not yet have run
         Assert.AreEqual(0, box.Value);
-        Assert.IsTrue(entity.IsPhantom(w));
-        Assert.IsFalse(entity.IsAlive(w));
+        Assert.IsTrue(entity.IsPhantom());
+        Assert.IsFalse(entity.IsAlive());
 
         // Delete it for real this time
         cmd.Delete(entity);
@@ -71,8 +71,8 @@ public class DisposableComponentTests
 
         // Check the entity was disposed
         Assert.AreEqual(1, box.Value);
-        Assert.IsFalse(entity.IsPhantom(w));
-        Assert.IsFalse(entity.IsAlive(w));
+        Assert.IsFalse(entity.IsPhantom());
+        Assert.IsFalse(entity.IsAlive());
     }
 
     [TestMethod]
@@ -93,8 +93,8 @@ public class DisposableComponentTests
 
         // Check the component was disposed
         Assert.AreEqual(1, box.Value);
-        Assert.IsFalse(entity.IsPhantom(w));
-        Assert.IsTrue(entity.IsAlive(w));
+        Assert.IsFalse(entity.IsPhantom());
+        Assert.IsTrue(entity.IsAlive());
     }
 
     [TestMethod]
@@ -137,8 +137,8 @@ public class DisposableComponentTests
         cmd.Delete(b);
         cmd.Playback().Dispose();
 
-        Assert.IsFalse(a.IsAlive(w));
-        Assert.IsFalse(b.IsAlive(w));
+        Assert.IsFalse(a.IsAlive());
+        Assert.IsFalse(b.IsAlive());
         Assert.AreEqual(1, box.Value);
     }
 

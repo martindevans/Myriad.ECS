@@ -5,7 +5,6 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 using Myriad.ECS.Collections;
-using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS;
 
@@ -19,13 +18,12 @@ public readonly partial record struct Entity
     var types = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
 #>
     /// <summary>
-    /// Declare a specific archetype that should be created ahead of time in this world. This
-    /// can prevent expensive structural changes in the world later.
+    /// Get a tuple of several components
     /// </summary>
-    public RefTuple<<#= types #>> GetComponentRef<<#= types #>>(World world)
+    public RefTuple<<#= types #>> GetComponentRef<<#= types #>>()
         where <#= Constraints(i, 8) #>
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        ref var entityInfo = ref World.GetEntityInfo(this);
 
         return new RefTuple<<#= types #>>(
             this,

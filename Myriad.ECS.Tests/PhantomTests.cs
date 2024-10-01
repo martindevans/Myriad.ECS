@@ -74,23 +74,23 @@ public class PhantomTests
         resolver.Dispose();
 
         // Is the entity valid
-        Assert.IsTrue(e.Exists(w));
-        Assert.IsFalse(e.IsPhantom(w));
+        Assert.IsTrue(e.Exists());
+        Assert.IsFalse(e.IsPhantom());
 
         // Delete it
         cmd.Delete(e);
         cmd.Playback().Dispose();
 
         // Is the entity valid but no longer alive
-        Assert.IsTrue(e.Exists(w));
-        Assert.IsTrue(e.IsPhantom(w));
+        Assert.IsTrue(e.Exists());
+        Assert.IsTrue(e.IsPhantom());
 
         // Delete it again
         cmd.Delete(e);
         cmd.Playback().Dispose();
 
         // Entity should no longer exist at all
-        Assert.IsFalse(e.Exists(w));
+        Assert.IsFalse(e.Exists());
     }
 
     [TestMethod]
@@ -106,26 +106,26 @@ public class PhantomTests
         resolver.Dispose();
 
         // Is the entity valid
-        Assert.IsTrue(e.Exists(w));
-        Assert.IsFalse(e.IsPhantom(w));
+        Assert.IsTrue(e.Exists());
+        Assert.IsFalse(e.IsPhantom());
 
         // Delete it
         cmd.Delete(e);
         cmd.Playback().Dispose();
 
         // Is the entity valid but no longer alive
-        Assert.IsTrue(e.Exists(w));
-        Assert.IsTrue(e.IsPhantom(w));
-        Assert.IsTrue(e.HasComponent<ComponentInt32>(w));
+        Assert.IsTrue(e.Exists());
+        Assert.IsTrue(e.IsPhantom());
+        Assert.IsTrue(e.HasComponent<ComponentInt32>());
 
         // Remove one of the non-phantom components
         cmd.Remove<ComponentInt32>(e);
         cmd.Playback().Dispose();
 
         // Is the entity valid but no longer alive
-        Assert.IsTrue(e.Exists(w));
-        Assert.IsTrue(e.IsPhantom(w));
-        Assert.IsFalse(e.HasComponent<ComponentInt32>(w));
+        Assert.IsTrue(e.Exists());
+        Assert.IsTrue(e.IsPhantom());
+        Assert.IsFalse(e.HasComponent<ComponentInt32>());
     }
 
     [TestMethod]
@@ -141,33 +141,33 @@ public class PhantomTests
         resolver.Dispose();
 
         // Is the entity valid
-        Assert.IsTrue(e.Exists(w));
-        Assert.IsFalse(e.IsPhantom(w));
+        Assert.IsTrue(e.Exists());
+        Assert.IsFalse(e.IsPhantom());
 
         // Delete it
         cmd.Delete(e);
         cmd.Playback().Dispose();
 
         // Is the entity valid but no longer alive
-        Assert.IsTrue(e.Exists(w));
-        Assert.IsTrue(e.IsPhantom(w));
-        Assert.IsTrue(e.HasComponent<ComponentInt32>(w));
+        Assert.IsTrue(e.Exists());
+        Assert.IsTrue(e.IsPhantom());
+        Assert.IsTrue(e.HasComponent<ComponentInt32>());
 
         // Remove one phantom component
         cmd.Remove<TestPhantom1>(e);
         cmd.Playback().Dispose();
 
         // Is the entity valid but no longer alive
-        Assert.IsTrue(e.Exists(w));
-        Assert.IsTrue(e.IsPhantom(w));
-        Assert.IsFalse(e.HasComponent<TestPhantom1>(w));
+        Assert.IsTrue(e.Exists());
+        Assert.IsTrue(e.IsPhantom());
+        Assert.IsFalse(e.HasComponent<TestPhantom1>());
 
         // Remove one more phantom component, this is the final one so it should be auto deleted.
         cmd.Remove<TestPhantom0>(e);
         cmd.Playback().Dispose();
 
         // Entity should no longer exist at all
-        Assert.IsFalse(e.Exists(w));
+        Assert.IsFalse(e.Exists());
     }
 
     [TestMethod]
@@ -183,8 +183,8 @@ public class PhantomTests
         resolver.Dispose();
 
         // Is the entity valid
-        Assert.IsTrue(e.Exists(w));
-        Assert.IsFalse(e.IsPhantom(w));
+        Assert.IsTrue(e.Exists());
+        Assert.IsFalse(e.IsPhantom());
 
         // Add a phantom component and then delete it
         cmd.Set(e, new TestPhantom0());
@@ -192,9 +192,9 @@ public class PhantomTests
         cmd.Playback().Dispose();
 
         // Is the entity valid but no longer alive
-        Assert.IsTrue(e.Exists(w));
-        Assert.IsTrue(e.IsPhantom(w));
-        Assert.IsTrue(e.HasComponent<ComponentFloat>(w));
+        Assert.IsTrue(e.Exists());
+        Assert.IsTrue(e.IsPhantom());
+        Assert.IsTrue(e.HasComponent<ComponentFloat>());
     }
 
     [TestMethod]
@@ -210,8 +210,8 @@ public class PhantomTests
         resolver.Dispose();
 
         // Is the entity valid
-        Assert.IsTrue(e.Exists(w));
-        Assert.IsFalse(e.IsPhantom(w));
+        Assert.IsTrue(e.Exists());
+        Assert.IsFalse(e.IsPhantom());
 
         // Delete it and also add a phantom component
         cmd.Delete(e);
@@ -219,8 +219,8 @@ public class PhantomTests
         cmd.Playback().Dispose();
 
         // Is the entity valid but no longer alive
-        Assert.IsTrue(e.Exists(w));
-        Assert.IsTrue(e.IsPhantom(w));
-        Assert.IsTrue(e.HasComponent<ComponentFloat>(w));
+        Assert.IsTrue(e.Exists());
+        Assert.IsTrue(e.IsPhantom());
+        Assert.IsTrue(e.HasComponent<ComponentFloat>());
     }
 }

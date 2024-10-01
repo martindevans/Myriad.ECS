@@ -11,46 +11,45 @@ public readonly partial record struct Entity
 {
     public readonly int ID;
     public readonly uint Version;
+    public readonly World World;
 
-    internal Entity(int id, uint version)
+    internal Entity(int id, uint version, World world)
     {
         ID = id;
         Version = version;
+        World = world;
     }
 
     /// <summary>
     /// Check if this Entity still exists.
     /// </summary>
-    /// <param name="world"></param>
     /// <returns></returns>
-    public bool Exists(World world)
+    public bool Exists()
     {
         return ID != 0
-            && world.GetVersion(ID) == Version;
+            && World.GetVersion(ID) == Version;
     }
 
     /// <summary>
     /// Check if this Entity still exists and is not a phantom.
     /// </summary>
-    /// <param name="world"></param>
     /// <returns></returns>
-    public bool IsAlive(World world)
+    public bool IsAlive()
     {
-        return Exists(world)
-            && !IsPhantom(world);
+        return Exists()
+            && !IsPhantom();
     }
 
     /// <summary>
     /// Check if this Entity is in a phantom state. i.e. automatically excluded from queries
     /// and automatically deleted when the last IPhantomComponent component is removed.
     /// </summary>
-    /// <param name="world"></param>
     /// <returns>true if this entity is a phantom. False is it does not exist or is not a phantom.</returns>
-    public bool IsPhantom(World world)
+    public bool IsPhantom()
     {
         return ID != 0
-            && Exists(world)
-            && world.GetArchetype(this).IsPhantom;
+            && Exists()
+            && World.GetArchetype(this).IsPhantom;
     }
 
     /// <inheritdoc />
@@ -102,11 +101,10 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get the set of components which this entity currently has
     /// </summary>
-    /// <param name="w"></param>
     /// <returns></returns>
-    public FrozenOrderedListSet<ComponentID> GetComponents(World w)
+    public FrozenOrderedListSet<ComponentID> GetComponents()
     {
-        var info = w.GetEntityInfo(this);
+        var info = World.GetEntityInfo(this);
         return info.Chunk.Archetype.Components;
     }
 
@@ -114,12 +112,11 @@ public readonly partial record struct Entity
     /// Check if this entity has a component
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <param name="w"></param>
     /// <returns></returns>
-    public bool HasComponent<T>(World w)
+    public bool HasComponent<T>()
         where T : IComponent
     {
-        return GetComponents(w).Contains(ComponentID<T>.ID);
+        return GetComponents().Contains(ComponentID<T>.ID);
     }
 
     /// <summary>
@@ -127,30 +124,28 @@ public readonly partial record struct Entity
     /// does not have this component an exception will be thrown.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <param name="world"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
-    public ref T GetComponentRef<T>(World world)
+    public ref T GetComponentRef<T>()
         where T : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        ref var entityInfo = ref World.GetEntityInfo(this);
         return ref entityInfo.Chunk.GetRef<T>(this, entityInfo.RowIndex);
     }
 
     /// <summary>
     /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!
     /// </summary>
-    /// <param name="world"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    public object? GetBoxedComponent(World world, ComponentID id)
+    public object? GetBoxedComponent(ComponentID id)
     {
-        if (!Exists(world))
+        if (!Exists())
             return null;
-        if (!GetComponents(world).Contains(id))
+        if (!GetComponents().Contains(id))
             return null;
 
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        ref var entityInfo = ref World.GetEntityInfo(this);
         return entityInfo.Chunk.GetComponentArray(id).GetValue(entityInfo.RowIndex);
     }
 }

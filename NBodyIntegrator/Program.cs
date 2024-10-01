@@ -214,7 +214,7 @@ static void WriteEnergyChart(World world, Entity baseline)
     endTime -= 100;
 
     // Find energy of min epsilon (baseline)
-    var (baselineEnergy, baselineSpeed, baselineAlt) = EnergySpeedAlt(ref baseline.GetComponentRef<PagedRail>(world), endTime);
+    var (baselineEnergy, baselineSpeed, baselineAlt) = EnergySpeedAlt(ref baseline.GetComponentRef<PagedRail>(), endTime);
 
     using (var writer = new StreamWriter(File.Create("energy.csv")))
     {

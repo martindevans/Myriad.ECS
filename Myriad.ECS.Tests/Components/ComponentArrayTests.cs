@@ -18,11 +18,11 @@ public class ComponentArrayTests
         using var resolver = b.Playback();
         var entity = e.Resolve();
 
-        var arr = entity.GetComponentRef<ComponentArray<int>>(w);
+        var arr = entity.GetComponentRef<ComponentArray<int>>();
         Assert.AreEqual(7, arr.Length);
         arr[0] = 12;
 
-        var arr2 = entity.GetComponentRef<ComponentArray<int>>(w);
+        var arr2 = entity.GetComponentRef<ComponentArray<int>>();
 
         Assert.AreEqual(12, arr2[0]);
         Assert.AreSame(arr.Array, arr2.Array);
@@ -39,11 +39,11 @@ public class ComponentArrayTests
         using var resolver = b.Playback();
         var entity = e.Resolve();
 
-        var list = entity.GetComponentRef<ComponentList<int>>(w);
+        var list = entity.GetComponentRef<ComponentList<int>>();
         Assert.AreEqual(7, list.Count);
         list[0] = 12;
 
-        var list2 = entity.GetComponentRef<ComponentList<int>>(w);
+        var list2 = entity.GetComponentRef<ComponentList<int>>();
 
         Assert.AreEqual(12, list2[0]);
         Assert.AreSame(list.List, list2.List);

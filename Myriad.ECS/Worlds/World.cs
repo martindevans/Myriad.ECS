@@ -180,12 +180,12 @@ public sealed partial class World
             if (v == 0)
                 v += 1;
 
-            entity = new Entity(prev.ID, v);
+            entity = new Entity(prev.ID, v, this);
         }
         else
         {
             // Allocate a new ID. This **must not** overflow!
-            entity = new Entity(checked(_nextEntityId++), 1);
+            entity = new Entity(checked(_nextEntityId++), 1, this);
 
             // Check if the collection of all entities needs to grow
             if (entity.ID >= _entities.TotalCapacity)
