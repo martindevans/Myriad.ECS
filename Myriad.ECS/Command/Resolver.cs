@@ -11,7 +11,7 @@ public sealed partial class CommandBuffer
     public sealed class Resolver
         : IDisposable
     {
-        internal SortedList<uint, Entity> Lookup { get; } = [];
+        internal SortedList<uint, EntityId> Lookup { get; } = [];
         internal CommandBuffer? Parent { get; private set; }
 
         public uint Version { get; private set; }
@@ -36,6 +36,6 @@ public sealed partial class CommandBuffer
             Pool.Return(this);
         }
 
-        public Entity this[int index] => Lookup.Values[index];
+        public Entity this[int index] => Lookup.Values[index].ToEntity(World);
     }
 }

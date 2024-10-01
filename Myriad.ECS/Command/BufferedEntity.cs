@@ -80,7 +80,6 @@ public sealed partial class CommandBuffer
         /// <summary>
         /// Resolve this buffered Entity into the real Entity that was constructed
         /// </summary>
-        /// <param name="resolver"></param>
         /// <returns></returns>
         public Entity Resolve()
         {
@@ -91,7 +90,7 @@ public sealed partial class CommandBuffer
             if (_resolver.Version != Version)
                 throw new ObjectDisposedException("Resolver has already been disposed");
 
-            return _resolver.Lookup[_id];
+            return _resolver.Lookup[_id].ToEntity(_resolver.World);
         }
     }
 }

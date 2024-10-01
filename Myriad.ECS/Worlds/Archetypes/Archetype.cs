@@ -137,7 +137,7 @@ public sealed partial class Archetype
                 _disposer.DisposeEntity(ref buffer, chunk, i);
     }
 
-    internal (Entity entity, Row slot) CreateEntity()
+    internal (EntityId entity, Row slot) CreateEntity()
     {
         // Allocate an entity in the world
         ref var info = ref World.AllocateEntity(out var entity);
@@ -154,7 +154,7 @@ public sealed partial class Archetype
     /// <param name="entity">Entity to add to a chunk</param>
     /// <param name="info">Info will be mutated to point to the new location</param>
     /// <returns></returns>
-    internal Row AddEntity(Entity entity, ref EntityInfo info)
+    internal Row AddEntity(EntityId entity, ref EntityInfo info)
     {
         // Increase archetype entity count
         EntityCount++;
@@ -190,7 +190,7 @@ public sealed partial class Archetype
         HandleChunkEntityRemoved(info.Chunk);
     }
 
-    internal Row MigrateTo(Entity entity, ref EntityInfo info, Archetype to, ref LazyCommandBuffer lazy)
+    internal Row MigrateTo(EntityId entity, ref EntityInfo info, Archetype to, ref LazyCommandBuffer lazy)
     {
         // Early exit if we're migrating to where we already are!
         if (to == this)

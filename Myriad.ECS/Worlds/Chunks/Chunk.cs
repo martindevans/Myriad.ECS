@@ -53,10 +53,10 @@ internal sealed class Chunk
     //    return ref GetRef<T>(entity, index);
     //}
 
-    internal ref T GetRef<T>(Entity entity, int rowIndex)
+    internal ref T GetRef<T>(EntityId entityId, int rowIndex)
         where T : IComponent
     {
-        Debug.Assert(_entities[rowIndex] == entity, "Mismatched entities in chunk");
+        Debug.Assert(_entities[rowIndex].ID == entityId, "Mismatched entities in chunk");
         return ref GetRef<T>(rowIndex);
     }
 
@@ -111,7 +111,7 @@ internal sealed class Chunk
     #region add/remove entity
     // Note that these must be called only from Archetype! The Archetype needs to do some bookeeping on create/destroy.
 
-    internal Row AddEntity(Entity entity, ref EntityInfo info)
+    internal Row AddEntity(EntityId entity, ref EntityInfo info)
     {
         // It is safe to only debug assert here. It should never happen if Myriad is working
         // correctly. If it does somehow go wrong you'll get an index out of range exception
@@ -122,7 +122,7 @@ internal sealed class Chunk
         var index = EntityCount++;
 
         // Occupy this row
-        _entities[index] = entity;
+        _entities[index] = entity.ToEntity(Archetype.World);
 
         // Update global entity info to refer to this location
         info.RowIndex = index;
@@ -157,7 +157,7 @@ internal sealed class Chunk
         {
             var lastEntity = _entities[EntityCount];
             var lastEntityIndex = EntityCount;
-            ref var lastInfo = ref Archetype.World.GetEntityInfo(lastEntity);
+            ref var lastInfo = ref Archetype.World.GetEntityInfo(lastEntity.ID);
             _entities[index] = lastEntity;
             _entities[lastEntityIndex] = default;
             lastInfo.RowIndex = index;
@@ -174,7 +174,7 @@ internal sealed class Chunk
         }
     }
 
-    internal Row MigrateTo(Entity entity, ref EntityInfo info, Archetype to)
+    internal Row MigrateTo(EntityId entity, ref EntityInfo info, Archetype to)
     {
         // Copy current entity info so we can use it later
         var oldInfo = info;

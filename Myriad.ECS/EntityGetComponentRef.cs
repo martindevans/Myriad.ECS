@@ -1,22 +1,23 @@
 ﻿using Myriad.ECS.Collections;
+using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS;
 
 /* dotcover disable */
 
-public readonly partial record struct Entity
+public readonly partial record struct EntityId
 {
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
-    public RefTuple<T0, T1> GetComponentRef<T0, T1>()
+    public RefTuple<T0, T1> GetComponentRef<T0, T1>(World world)
         where T0 : IComponent
         where T1 : IComponent
     {
-        ref var entityInfo = ref World.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetEntityInfo(this);
 
         return new RefTuple<T0, T1>(
-            this,
+            ToEntity(world),
 #if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
 #else
@@ -35,15 +36,15 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
-    public RefTuple<T0, T1, T2> GetComponentRef<T0, T1, T2>()
+    public RefTuple<T0, T1, T2> GetComponentRef<T0, T1, T2>(World world)
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
     {
-        ref var entityInfo = ref World.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetEntityInfo(this);
 
         return new RefTuple<T0, T1, T2>(
-            this,
+            ToEntity(world),
 #if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
 #else
@@ -68,16 +69,16 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
-    public RefTuple<T0, T1, T2, T3> GetComponentRef<T0, T1, T2, T3>()
+    public RefTuple<T0, T1, T2, T3> GetComponentRef<T0, T1, T2, T3>(World world)
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
         where T3 : IComponent
     {
-        ref var entityInfo = ref World.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetEntityInfo(this);
 
         return new RefTuple<T0, T1, T2, T3>(
-            this,
+            ToEntity(world),
 #if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
 #else
@@ -108,17 +109,17 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
-    public RefTuple<T0, T1, T2, T3, T4> GetComponentRef<T0, T1, T2, T3, T4>()
+    public RefTuple<T0, T1, T2, T3, T4> GetComponentRef<T0, T1, T2, T3, T4>(World world)
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
         where T3 : IComponent
         where T4 : IComponent
     {
-        ref var entityInfo = ref World.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetEntityInfo(this);
 
         return new RefTuple<T0, T1, T2, T3, T4>(
-            this,
+            ToEntity(world),
 #if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
 #else
@@ -155,7 +156,7 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
-    public RefTuple<T0, T1, T2, T3, T4, T5> GetComponentRef<T0, T1, T2, T3, T4, T5>()
+    public RefTuple<T0, T1, T2, T3, T4, T5> GetComponentRef<T0, T1, T2, T3, T4, T5>(World world)
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -163,10 +164,10 @@ public readonly partial record struct Entity
         where T4 : IComponent
         where T5 : IComponent
     {
-        ref var entityInfo = ref World.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetEntityInfo(this);
 
         return new RefTuple<T0, T1, T2, T3, T4, T5>(
-            this,
+            ToEntity(world),
 #if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
 #else
@@ -209,7 +210,7 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6> GetComponentRef<T0, T1, T2, T3, T4, T5, T6>()
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6> GetComponentRef<T0, T1, T2, T3, T4, T5, T6>(World world)
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -218,10 +219,10 @@ public readonly partial record struct Entity
         where T5 : IComponent
         where T6 : IComponent
     {
-        ref var entityInfo = ref World.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetEntityInfo(this);
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6>(
-            this,
+            ToEntity(world),
 #if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
 #else
@@ -270,7 +271,7 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7>()
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7>(World world)
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -280,10 +281,10 @@ public readonly partial record struct Entity
         where T6 : IComponent
         where T7 : IComponent
     {
-        ref var entityInfo = ref World.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetEntityInfo(this);
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7>(
-            this,
+            ToEntity(world),
 #if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
 #else
@@ -338,7 +339,7 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8>(World world)
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -349,10 +350,10 @@ public readonly partial record struct Entity
         where T7 : IComponent
         where T8 : IComponent
     {
-        ref var entityInfo = ref World.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetEntityInfo(this);
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
-            this,
+            ToEntity(world),
 #if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
 #else
@@ -413,7 +414,7 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(World world)
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -425,10 +426,10 @@ public readonly partial record struct Entity
         where T8 : IComponent
         where T9 : IComponent
     {
-        ref var entityInfo = ref World.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetEntityInfo(this);
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-            this,
+            ToEntity(world),
 #if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
 #else
@@ -495,7 +496,7 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(World world)
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -508,10 +509,10 @@ public readonly partial record struct Entity
         where T9 : IComponent
         where T10 : IComponent
     {
-        ref var entityInfo = ref World.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetEntityInfo(this);
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-            this,
+            ToEntity(world),
 #if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
 #else
@@ -584,7 +585,7 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(World world)
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -598,10 +599,10 @@ public readonly partial record struct Entity
         where T10 : IComponent
         where T11 : IComponent
     {
-        ref var entityInfo = ref World.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetEntityInfo(this);
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-            this,
+            ToEntity(world),
 #if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
 #else
@@ -680,7 +681,7 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(World world)
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -695,10 +696,10 @@ public readonly partial record struct Entity
         where T11 : IComponent
         where T12 : IComponent
     {
-        ref var entityInfo = ref World.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetEntityInfo(this);
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-            this,
+            ToEntity(world),
 #if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
 #else
@@ -783,7 +784,7 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(World world)
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -799,10 +800,10 @@ public readonly partial record struct Entity
         where T12 : IComponent
         where T13 : IComponent
     {
-        ref var entityInfo = ref World.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetEntityInfo(this);
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
-            this,
+            ToEntity(world),
 #if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
 #else
@@ -893,7 +894,7 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(World world)
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -910,10 +911,10 @@ public readonly partial record struct Entity
         where T13 : IComponent
         where T14 : IComponent
     {
-        ref var entityInfo = ref World.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetEntityInfo(this);
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
-            this,
+            ToEntity(world),
 #if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
 #else
@@ -1010,7 +1011,7 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(World world)
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1028,10 +1029,10 @@ public readonly partial record struct Entity
         where T14 : IComponent
         where T15 : IComponent
     {
-        ref var entityInfo = ref World.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetEntityInfo(this);
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
-            this,
+            ToEntity(world),
 #if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
 #else
@@ -1129,6 +1130,265 @@ public readonly partial record struct Entity
 #endif
 
         );
+    }
+
+}
+
+public readonly partial record struct Entity
+{
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public RefTuple<T0, T1> GetComponentRef<T0, T1>()
+        where T0 : IComponent
+        where T1 : IComponent
+    {
+        return ID.GetComponentRef<T0, T1>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public RefTuple<T0, T1, T2> GetComponentRef<T0, T1, T2>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+    {
+        return ID.GetComponentRef<T0, T1, T2>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public RefTuple<T0, T1, T2, T3> GetComponentRef<T0, T1, T2, T3>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+    {
+        return ID.GetComponentRef<T0, T1, T2, T3>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public RefTuple<T0, T1, T2, T3, T4> GetComponentRef<T0, T1, T2, T3, T4>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+    {
+        return ID.GetComponentRef<T0, T1, T2, T3, T4>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public RefTuple<T0, T1, T2, T3, T4, T5> GetComponentRef<T0, T1, T2, T3, T4, T5>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+    {
+        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6> GetComponentRef<T0, T1, T2, T3, T4, T5, T6>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+    {
+        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+    {
+        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+    {
+        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+    {
+        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+    {
+        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+    {
+        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+    {
+        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+    {
+        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+    {
+        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+    {
+        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(World);
     }
 
 }

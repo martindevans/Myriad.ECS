@@ -4,11 +4,11 @@ namespace Myriad.ECS.Worlds.Archetypes;
 
 internal readonly record struct Row
 {
-    public Entity Entity { get; }
+    public EntityId Entity { get; }
     public int RowIndex { get; }
     public Chunk Chunk { get; }
 
-    internal Row(Entity entity, int rowIndex, Chunk chunk)
+    internal Row(EntityId entity, int rowIndex, Chunk chunk)
     {
         Entity = entity;
         RowIndex = rowIndex;

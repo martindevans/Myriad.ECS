@@ -119,7 +119,7 @@ public sealed partial class CommandBuffer
             if (!delete.Exists())
                 continue;
 
-            var archetype = World.GetArchetype(delete);
+            var archetype = World.GetArchetype(delete.ID);
             if (archetype is { IsPhantom: false, HasPhantomComponents: true } || IsAddingPhantomComponent(delete))
             {
                 // It has phantom components and isn't yet a phantom. Add a Phantom component.
@@ -127,7 +127,7 @@ public sealed partial class CommandBuffer
             }
             else
             {
-                World.DeleteImmediate(delete, ref lazy);
+                World.DeleteImmediate(delete.ID, ref lazy);
 
                 // Return objects to pools
                 if (_entityModifications.Remove(delete, out var mod))
@@ -175,7 +175,7 @@ public sealed partial class CommandBuffer
                     continue;
                 }
 
-                var currentArchetype = World.GetArchetype(entity);
+                var currentArchetype = World.GetArchetype(entity.ID);
 
                 // Set all of the current archetype components
                 _tempComponentIdSet.Clear();
@@ -215,7 +215,7 @@ public sealed partial class CommandBuffer
                 var autodelete = currentArchetype.IsPhantom && !_tempComponentIdSet.Any(static a => a.IsPhantomComponent);
                 if (autodelete)
                 {
-                    World.DeleteImmediate(entity, ref lazy);
+                    World.DeleteImmediate(entity.ID, ref lazy);
                 }
                 else
                 {
@@ -227,11 +227,11 @@ public sealed partial class CommandBuffer
                         var newArchetype = World.GetOrCreateArchetype(_tempComponentIdSet, hash);
 
                         // Migrate the entity across
-                        row = World.MigrateEntity(entity, newArchetype, ref lazy);
+                        row = World.MigrateEntity(entity.ID, newArchetype, ref lazy);
                     }
                     else
                     {
-                        row = World.GetRow(entity);
+                        row = World.GetRow(entity.ID);
                     }
 
                     // Run all setters

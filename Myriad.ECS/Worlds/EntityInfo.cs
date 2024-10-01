@@ -20,7 +20,7 @@ internal struct EntityInfo
     /// </summary>
     public int RowIndex;
 
-    public readonly Row GetRow(Entity entity)
+    public readonly Row GetRow(EntityId entity)
     {
         return new Row(entity, RowIndex, Chunk);
     }
