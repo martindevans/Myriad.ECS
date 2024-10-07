@@ -68,8 +68,15 @@ public readonly partial record struct Entity
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
     public ref T GetComponentRef<T>() where T : IComponent => ref ID.GetComponentRef<T>(World);
+
+    /// <summary>
+    /// Get a reference to a component of the given type. If the entity
+    /// does not have this component an exception will be thrown.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public RefT<T> GetComponentRefT<T>() where T : IComponent => ID.GetComponentRefT<T>(World);
 
     /// <summary>
     /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!

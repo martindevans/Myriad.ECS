@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Myriad.ECS.Allocations;
+using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Archetypes;
 
@@ -58,6 +59,18 @@ internal sealed class Chunk
     {
         Debug.Assert(_entities[rowIndex].ID == entityId, "Mismatched entities in chunk");
         return ref GetRef<T>(rowIndex);
+    }
+
+    public RefT<T> GetRefT<T>(EntityId entityId, int rowIndex)
+        where T : IComponent
+    {
+        Debug.Assert(_entities[rowIndex].ID == entityId, "Mismatched entities in chunk");
+
+#if NET6_0_OR_GREATER
+        return new RefT<T>(ref GetRef<T>(rowIndex));
+#else
+        return new RefT<T>(GetComponentArray<T>(), rowIndex);
+#endif
     }
 
     internal ref T GetRef<T>(int rowIndex)

@@ -132,12 +132,24 @@ public readonly partial record struct EntityId
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
     public ref T GetComponentRef<T>(World world)
         where T : IComponent
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
         return ref entityInfo.Chunk.GetRef<T>(this, entityInfo.RowIndex);
+    }
+
+    /// <summary>
+    /// Get a reference to a component of the given type. If the entity
+    /// does not have this component an exception will be thrown.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public RefT<T> GetComponentRefT<T>(World world)
+        where T : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+        return entityInfo.Chunk.GetRefT<T>(this, entityInfo.RowIndex);
     }
 
     /// <summary>
