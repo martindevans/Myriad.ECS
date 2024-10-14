@@ -21,6 +21,18 @@ namespace Myriad.ECS.Worlds;
 public partial class World
 {
     /// <summary>
+    /// Count how many entities exist
+    /// </summary>
+    /// <returns></returns>
+    public int Count()
+    {
+        var count = 0;
+        foreach (var archetype in Archetypes)
+            count += archetype.EntityCount;
+        return count;
+    }
+
+    /// <summary>
     /// Count how many entities match this query
     /// </summary>
     /// <param name="query"></param>

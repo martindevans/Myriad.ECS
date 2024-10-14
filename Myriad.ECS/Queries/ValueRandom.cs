@@ -14,7 +14,7 @@ internal struct ValueRandom
 
     public int Next()
     {
-        Span<int> seed = stackalloc int[] { _seed };
+        Span<int> seed = [ _seed ];
 
         // Calculate hash of components, for fast rejection
         var byteSpan = MemoryMarshal.Cast<int, byte>(seed);

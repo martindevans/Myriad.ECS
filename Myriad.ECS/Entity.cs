@@ -12,6 +12,17 @@ public readonly partial record struct Entity
     public readonly World World;
     public readonly EntityId ID;
 
+    /// <summary>
+    /// Get the set of components which this entity currently has
+    /// </summary>
+    /// <returns></returns>
+    public FrozenOrderedListSet<ComponentID> ComponentTypes => ID.GetComponents(World);
+
+    /// <summary>
+    /// Get a boxed array of all components. <b>DO NOT</b> use this for anything other than debugging!
+    /// </summary>
+    public object[] BoxedComponents => ComponentTypes.LINQ().Select(GetBoxedComponent).ToArray()!;
+
     internal Entity(EntityId id, World world)
     {
         ID = id;
@@ -48,12 +59,6 @@ public readonly partial record struct Entity
     /// </summary>
     /// <returns></returns>
     public long UniqueID() => ID.UniqueID();
-
-    /// <summary>
-    /// Get the set of components which this entity currently has
-    /// </summary>
-    /// <returns></returns>
-    public FrozenOrderedListSet<ComponentID> GetComponents() => ID.GetComponents(World);
 
     /// <summary>
     /// Check if this entity has a component

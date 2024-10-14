@@ -5,4 +5,5 @@
 /// Recommended (but not required) to make this unique!
 /// </summary>
 /// <param name="Name"></param>
+// ReSharper disable once NotAccessedPositionalProperty.Global
 public record struct DebugDisplayName(string Name) : IComponent;

@@ -22,7 +22,7 @@ internal struct ComponentBloomFilter
 
     public void Add(ComponentID id)
     {
-        Span<int> value = stackalloc int[] { id.Value };
+        Span<int> value = [ id.Value ];
         var bytes = MemoryMarshal.Cast<int, byte>(value);
         
         // Set one random bit in each of the bitsets

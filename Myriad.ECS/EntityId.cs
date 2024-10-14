@@ -135,8 +135,7 @@ public readonly partial record struct EntityId
     public ref T GetComponentRef<T>(World world)
         where T : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
-        return ref entityInfo.Chunk.GetRef<T>(this, entityInfo.RowIndex);
+        return ref GetComponentRefT<T>(world).Ref;
     }
 
     /// <summary>
