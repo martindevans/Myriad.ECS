@@ -1,17 +1,64 @@
 ﻿using Myriad.ECS.Command;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
+using System;
 
 namespace Myriad.ECS.Tests.Components;
 
 [TestClass]
 public class RelationshipComponentTests
 {
+    private static Entity CreateEntity(World world)
+    {
+        var cmd = new CommandBuffer(world);
+
+        var buffered = cmd.Create();
+        using var resolver = cmd.Playback();
+
+        return buffered.Resolve();
+    }
+
     [TestMethod]
     public void ComponentIdFlag()
     {
         Assert.IsFalse(ComponentID<ComponentInt32>.ID.IsRelationComponent);
         Assert.IsTrue(ComponentID<Relational1>.ID.IsRelationComponent);
+    }
+
+    [TestMethod]
+    public void BindBufferedMixup()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer1 = new CommandBuffer(world);
+        var buffer2 = new CommandBuffer(world);
+
+        // Create entity in buffer 1
+        var ab = buffer1.Create().Set(new ComponentInt32(17));
+
+        // Try to bind a relation in buffer 2
+        Assert.ThrowsException<ArgumentException>(() =>
+        {
+            buffer2.Create().Set(new Relational1(), ab);
+        });
+    }
+
+    [TestMethod]
+    public void BindBufferedMixup2()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer1 = new CommandBuffer(world);
+        var buffer2 = new CommandBuffer(world);
+
+        var entity = CreateEntity(world);
+
+        // Create a buffered entity in cmd buffer 1
+        var b1 = buffer1.Create();
+
+        // Bind a relationship in buffer 2
+        Assert.ThrowsException<ArgumentException>(() =>
+        {
+            buffer2.Set(entity, new Relational1(), b1);
+        });
     }
 
     [TestMethod]

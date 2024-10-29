@@ -52,8 +52,17 @@ public class StructQueryTests
         {
             Entities.AddRange(e);
 
+            Assert.IsNotNull(chunk.Archetype);
             Assert.AreEqual(e.Length, chunk.Entities.Length);
             Assert.AreEqual(e.Length, chunk.EntityCount);
+
+            Assert.IsFalse(chunk.HasComponent<ComponentInt64>());
+            Assert.IsFalse(chunk.HasComponent<ComponentFloat>());
+            Assert.IsFalse(chunk.HasComponent<ComponentInt32>());
+
+            Assert.IsTrue(chunk.HasComponent<ComponentObject>());
+
+            Assert.AreEqual(1, chunk.GetComponentSpan<ComponentObject>().Length);
         }
     }
 

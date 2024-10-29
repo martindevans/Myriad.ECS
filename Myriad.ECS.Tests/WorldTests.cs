@@ -24,7 +24,9 @@ public class WorldTests
         Assert.AreEqual(2, w.Overwrite(new ComponentInt32(3)));
 
         Assert.AreEqual(3, a.GetComponentRef<ComponentInt32>().Value);
+        Assert.AreEqual(3, a.GetComponentRefT<ComponentInt32>().Ref.Value);
         Assert.AreEqual(3, b.GetComponentRef<ComponentInt32>().Value);
+        Assert.AreEqual(3, b.GetComponentRefT<ComponentInt32>().Ref.Value);
 
         Assert.AreEqual(10, b.GetComponentRef<ComponentFloat>().Value);
         Assert.AreEqual(10, c.GetComponentRef<ComponentFloat>().Value);

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Myriad.ECS.Command;
 using Myriad.ECS.IDs;
@@ -98,6 +99,7 @@ internal static class Disposer<T>
         }
     }
 
+    [ExcludeFromCodeCoverage]
     private class EmptyImpl
         : IDisposer
     {

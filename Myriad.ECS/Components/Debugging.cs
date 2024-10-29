@@ -1,4 +1,6 @@
-﻿namespace Myriad.ECS.Components;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Myriad.ECS.Components;
 
 /// <summary>
 /// Friendly name to use when displaying this entity for debugging purposes.
@@ -6,4 +8,5 @@
 /// </summary>
 /// <param name="Name"></param>
 // ReSharper disable once NotAccessedPositionalProperty.Global
+[ExcludeFromCodeCoverage]
 public record struct DebugDisplayName(string Name) : IComponent;

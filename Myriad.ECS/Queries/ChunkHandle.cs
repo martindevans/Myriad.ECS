@@ -49,7 +49,7 @@ public readonly ref struct ChunkHandle
     /// <returns></returns>
     private bool HasComponent(ComponentID id)
     {
-        return _chunk.Archetype.Components.Contains(id);
+        return Archetype.Components.Contains(id);
     }
 
     /// <summary>
