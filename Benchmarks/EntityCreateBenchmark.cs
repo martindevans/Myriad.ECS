@@ -27,11 +27,11 @@ public class EntityCreateBenchmark
         {
             switch (random.Next(0, 5))
             {
-                case 0: entity.Set(new ComponentByte((byte)i), true); break;
-                case 1: entity.Set(new ComponentInt16((short)i), true); break;
-                case 2: entity.Set(new ComponentFloat(i), true); break;
-                case 3: entity.Set(new ComponentInt32(i), true); break;
-                case 4: entity.Set(new ComponentInt64(i), true); break;
+                case 0: entity.Set(new ComponentByte((byte)i), CommandBuffer.DuplicateSet.Overwrite); break;
+                case 1: entity.Set(new ComponentInt16((short)i), CommandBuffer.DuplicateSet.Overwrite); break;
+                case 2: entity.Set(new ComponentFloat(i), CommandBuffer.DuplicateSet.Overwrite); break;
+                case 3: entity.Set(new ComponentInt32(i), CommandBuffer.DuplicateSet.Overwrite); break;
+                case 4: entity.Set(new ComponentInt64(i), CommandBuffer.DuplicateSet.Overwrite); break;
             }
         }
     }

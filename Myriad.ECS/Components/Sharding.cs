@@ -16,37 +16,37 @@ public static class Extensions
 		switch (index % 16)
 		{
 			case 0:
-				return buffered.Set(new Shard0(), true);
+				return buffered.Set(new Shard0(), CommandBuffer.DuplicateSet.Discard);
 			case 1:
-				return buffered.Set(new Shard1(), true);
+				return buffered.Set(new Shard1(), CommandBuffer.DuplicateSet.Discard);
 			case 2:
-				return buffered.Set(new Shard2(), true);
+				return buffered.Set(new Shard2(), CommandBuffer.DuplicateSet.Discard);
 			case 3:
-				return buffered.Set(new Shard3(), true);
+				return buffered.Set(new Shard3(), CommandBuffer.DuplicateSet.Discard);
 			case 4:
-				return buffered.Set(new Shard4(), true);
+				return buffered.Set(new Shard4(), CommandBuffer.DuplicateSet.Discard);
 			case 5:
-				return buffered.Set(new Shard5(), true);
+				return buffered.Set(new Shard5(), CommandBuffer.DuplicateSet.Discard);
 			case 6:
-				return buffered.Set(new Shard6(), true);
+				return buffered.Set(new Shard6(), CommandBuffer.DuplicateSet.Discard);
 			case 7:
-				return buffered.Set(new Shard7(), true);
+				return buffered.Set(new Shard7(), CommandBuffer.DuplicateSet.Discard);
 			case 8:
-				return buffered.Set(new Shard8(), true);
+				return buffered.Set(new Shard8(), CommandBuffer.DuplicateSet.Discard);
 			case 9:
-				return buffered.Set(new Shard9(), true);
+				return buffered.Set(new Shard9(), CommandBuffer.DuplicateSet.Discard);
 			case 10:
-				return buffered.Set(new Shard10(), true);
+				return buffered.Set(new Shard10(), CommandBuffer.DuplicateSet.Discard);
 			case 11:
-				return buffered.Set(new Shard11(), true);
+				return buffered.Set(new Shard11(), CommandBuffer.DuplicateSet.Discard);
 			case 12:
-				return buffered.Set(new Shard12(), true);
+				return buffered.Set(new Shard12(), CommandBuffer.DuplicateSet.Discard);
 			case 13:
-				return buffered.Set(new Shard13(), true);
+				return buffered.Set(new Shard13(), CommandBuffer.DuplicateSet.Discard);
 			case 14:
-				return buffered.Set(new Shard14(), true);
+				return buffered.Set(new Shard14(), CommandBuffer.DuplicateSet.Discard);
 			case 15:
-				return buffered.Set(new Shard15(), true);
+				return buffered.Set(new Shard15(), CommandBuffer.DuplicateSet.Discard);
 
 /* dotcover disable */
 			default:

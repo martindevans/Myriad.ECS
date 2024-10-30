@@ -19,11 +19,11 @@ public class ParallelQueryTests
             {
                 switch (r.Next(0, 5))
                 {
-                    case 0: eb.Set(new ComponentByte(0), true); break;
-                    case 1: eb.Set(new ComponentInt16(0), true); break;
-                    case 2: eb.Set(new ComponentFloat(0), true); break;
-                    case 3: eb.Set(new ComponentInt32(0), true); break;
-                    case 4: eb.Set(new ComponentInt64(0), true); break;
+                    case 0: eb.Set(new ComponentByte(0), CommandBuffer.DuplicateSet.Overwrite); break;
+                    case 1: eb.Set(new ComponentInt16(0), CommandBuffer.DuplicateSet.Overwrite); break;
+                    case 2: eb.Set(new ComponentFloat(0), CommandBuffer.DuplicateSet.Overwrite); break;
+                    case 3: eb.Set(new ComponentInt32(0), CommandBuffer.DuplicateSet.Overwrite); break;
+                    case 4: eb.Set(new ComponentInt64(0), CommandBuffer.DuplicateSet.Overwrite); break;
                 }
             }
         }

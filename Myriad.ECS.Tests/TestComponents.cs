@@ -41,6 +41,7 @@ public record struct Relational3(Entity Target, float y) : IEntityRelationCompon
 
 public class BoxedInt
 {
+    public string ID;
     public int Value;
 }
 

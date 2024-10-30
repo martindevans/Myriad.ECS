@@ -337,7 +337,7 @@ public sealed partial class CommandBuffer
         return new BufferedEntity(id, this, _nextResolver);
     }
 
-    private void SetBuffered<T>(uint id, T value, bool allowDuplicates = false)
+    private void SetBuffered<T>(uint id, T value, DuplicateSet duplicateMode)
         where T : IComponent
     {
         Debug.Assert(id < _bufferedSets.Count, "Unknown entity ID in SetBuffered");
@@ -353,10 +353,23 @@ public sealed partial class CommandBuffer
         var index =  setters.IndexOfKey(key);
         if (index != -1)
         {
-            if (!allowDuplicates)
-                throw new InvalidOperationException("Cannot set the same component twice onto a buffered entity");
+            switch (duplicateMode)
+            {
+                case DuplicateSet.Overwrite:
+                    _setters.Overwrite(setters.Values[index], value);
+                    break;
+                case DuplicateSet.Discard:
+                    if (key.IsDisposableComponent)
+                        _setters.Discard(value);
+                    break;
+                case DuplicateSet.Throw:
+                    throw new InvalidOperationException("Cannot set the same component twice onto a buffered entity");
 
-            _setters.Overwrite(setters.Values[index], value);
+                /* dotcover disable */
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(duplicateMode), duplicateMode, null);
+                /* dotcover enable */
+            }
         }
         else
         {
@@ -376,13 +389,13 @@ public sealed partial class CommandBuffer
         }
     }
 
-    private void SetBuffered<T>(uint id, T value, BufferedEntity relation, bool allowDuplicates = false)
+    private void SetBuffered<T>(uint id, T value, BufferedEntity relation, DuplicateSet duplicateMode)
         where T : IEntityRelationComponent
     {
         if (relation._buffer != this)
             throw new ArgumentException("Target of relation must be BufferedEntity from the same CommandBuffer", nameof(relation));
 
-        SetBuffered(id, value, allowDuplicates);
+        SetBuffered(id, value, duplicateMode);
         _bufferedRelationBindings.Create<T>(new BufferedEntity(id, this, _nextResolver), relation);
     }
 
@@ -631,4 +644,29 @@ public sealed partial class CommandBuffer
     }
 
     private record struct EntityModificationData(SortedList<ComponentID, ComponentSetterCollection.SetterId>? Sets, OrderedListSet<ComponentID>? Removes);
+
+    /// <summary>
+    /// Indicates how multiple Set operations enqueued for the same entity in this buffer should that be handled
+    /// </summary>
+    public enum DuplicateSet
+    {
+        /// <summary>
+        /// The later set value should overwrite the earlier one.<br />
+        /// <code>Set(A); Set(B);</code>
+        /// Would result in `B`
+        /// </summary>
+        Overwrite,
+
+        /// <summary>
+        /// The later set value should be discarded.<br />
+        /// <code>Set(A); Set(B);</code>
+        /// Would result in `A`
+        /// </summary>
+        Discard,
+
+        /// <summary>
+        /// The later set value should throw an exception.
+        /// </summary>
+        Throw,
+    }
 }

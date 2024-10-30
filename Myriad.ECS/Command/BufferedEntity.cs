@@ -34,13 +34,13 @@ public sealed partial class CommandBuffer
         /// </summary>
         /// <typeparam name="T">The type of component to add</typeparam>
         /// <param name="value">The value of the component to add</param>
-        /// <param name="overwrite">If this component has already been added to this entity it will either be overwritten or an exception will be thrown, depending on this parameter</param>
+        /// <param name="duplicateMode">Indicates how duplicates sets of this component for this entity in this buffer should be handled</param>
         /// <returns>this buffered entity</returns>
-        public BufferedEntity Set<T>(T value, bool overwrite = false)
+        public BufferedEntity Set<T>(T value, DuplicateSet duplicateMode = DuplicateSet.Throw)
             where T : IComponent
         {
             CheckIsMutable();
-            _buffer.SetBuffered(_id, value, overwrite);
+            _buffer.SetBuffered(_id, value, duplicateMode);
             return this;
         }
 
@@ -50,13 +50,13 @@ public sealed partial class CommandBuffer
         /// <typeparam name="T">The type of component to add</typeparam>
         /// <param name="value">The value of the component to add</param>
         /// <param name="relation">When the command buffer is played back the target entity will automatically be resolved and set into the relational component</param>
-        /// <param name="overwrite">If this component has already been added to this entity it will either be overwritten or an exception will be thrown, depending on this parameter</param>
+        /// <param name="duplicateMode">Indicates how duplicates sets of this component for this entity in this buffer should be handled</param>
         /// <returns>this buffered entity</returns>
-        public BufferedEntity Set<T>(T value, BufferedEntity relation, bool overwrite = false)
+        public BufferedEntity Set<T>(T value, BufferedEntity relation, DuplicateSet duplicateMode = DuplicateSet.Throw)
             where T : IEntityRelationComponent
         {
             CheckIsMutable();
-            _buffer.SetBuffered(_id, value, relation, overwrite);
+            _buffer.SetBuffered(_id, value, relation, duplicateMode);
             return this;
         }
 
@@ -66,14 +66,14 @@ public sealed partial class CommandBuffer
         /// <typeparam name="T">The type of component to add</typeparam>
         /// <param name="value">The value of the component to add</param>
         /// <param name="relation"></param>
-        /// <param name="overwrite">If this component has already been added to this entity it will either be overwritten or an exception will be thrown, depending on this parameter</param>
+        /// <param name="duplicateMode">Indicates how duplicates sets of this component for this entity in this buffer should be handled</param>
         /// <returns>this buffered entity</returns>
-        public BufferedEntity Set<T>(T value, Entity relation, bool overwrite = false)
+        public BufferedEntity Set<T>(T value, Entity relation, DuplicateSet duplicateMode = DuplicateSet.Throw)
             where T : IEntityRelationComponent
         {
             CheckIsMutable();
             value.Target = relation;
-            _buffer.SetBuffered(_id, value, overwrite);
+            _buffer.SetBuffered(_id, value, duplicateMode);
             return this;
         }
 

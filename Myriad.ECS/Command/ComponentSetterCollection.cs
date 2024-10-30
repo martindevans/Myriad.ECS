@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.Components;
 using Myriad.ECS.Extensions;
@@ -41,6 +42,12 @@ internal class ComponentSetterCollection
     {
         var id = ComponentID<T>.ID;
         ((GenericComponentList<T>)_components[id]).Overwrite(index, value);
+    }
+
+    public void Discard<T>(T value) where T : IComponent
+    {
+        var id = ComponentID<T>.ID;
+        ((GenericComponentList<T>)_components[id]).Discard(value);
     }
 
     public void Write(SetterId id, Row row)
@@ -140,6 +147,12 @@ internal class ComponentSetterCollection
                 _overwrittenDisposableValues.Add(_values[index.Index]);
 
             _values[index.Index] = value;
+        }
+
+        public void Discard(T value)
+        {
+            if (_disposer.Component.IsDisposableComponent)
+                _overwrittenDisposableValues.Add(value);
         }
 
         public void Recycle()
