@@ -7,6 +7,7 @@ using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Archetypes;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.Threading;
+using System.Diagnostics.CodeAnalysis;
 
 //using Parallel = System.Threading.Tasks.Parallel;
 //using Parallel = ParallelTasks.Parallel;
@@ -29,6 +30,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		
 		public int Execute<TQ, T0>(
 			QueryDescription? query = null
 		)
@@ -39,6 +41,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0>(ref q, query);
 		}
 
+		
 		public int Execute<TQ, T0>(
 			ref QueryDescription? query
 		)
@@ -49,6 +52,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0>(ref q, ref query);
 		}
 
+		
 		public int Execute<TQ, T0>(
 			TQ q,
 			QueryDescription? query = null
@@ -59,6 +63,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0>(ref q, query);
 		}
 
+		
 		public int Execute<TQ, T0>(
 			TQ q,
 			ref QueryDescription? query
@@ -69,6 +74,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0>(ref q, ref query);
 		}
 
+		
 		public int Execute<TQ, T0>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -79,6 +85,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0>(ref q, ref query);
 		}
 
+		
 		public int Execute<TQ, T0>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -109,7 +116,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -133,6 +140,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		
 		public int ExecuteParallel<TQ, T0>(
 			TQ q,
 			QueryDescription? query = null,
@@ -212,7 +220,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem1<TQ, T0>(
 							eMem,
@@ -283,6 +291,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		
 		private readonly struct WorkItem1<TQ, T0>
 			: IWorkItem
 			where T0 : IComponent
@@ -290,11 +299,11 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 
 			public WorkItem1(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				TQ q
 			)
@@ -336,6 +345,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1>(
 			QueryDescription? query = null
 		)
@@ -347,6 +357,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1>(
 			ref QueryDescription? query
 		)
@@ -358,6 +369,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1>(
 			TQ q,
 			QueryDescription? query = null
@@ -369,6 +381,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1>(
 			TQ q,
 			ref QueryDescription? query
@@ -380,6 +393,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -391,6 +405,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -423,7 +438,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -450,6 +465,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteParallel<TQ, T0, T1>(
 			TQ q,
 			QueryDescription? query = null,
@@ -532,7 +548,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem2<TQ, T0, T1>(
 							eMem,
@@ -604,6 +620,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct WorkItem2<TQ, T0, T1>
 			: IWorkItem
 			where T0 : IComponent
@@ -612,12 +629,12 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 			private readonly Memory<T1> _c1;
 
 			public WorkItem2(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				Memory<T1> c1,
 				TQ q
@@ -664,6 +681,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2>(
 			QueryDescription? query = null
 		)
@@ -676,6 +694,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2>(
 			ref QueryDescription? query
 		)
@@ -688,6 +707,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2>(
 			TQ q,
 			QueryDescription? query = null
@@ -700,6 +720,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2>(
 			TQ q,
 			ref QueryDescription? query
@@ -712,6 +733,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -724,6 +746,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -758,7 +781,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -788,6 +811,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteParallel<TQ, T0, T1, T2>(
 			TQ q,
 			QueryDescription? query = null,
@@ -873,7 +897,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem3<TQ, T0, T1, T2>(
 							eMem,
@@ -946,6 +970,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct WorkItem3<TQ, T0, T1, T2>
 			: IWorkItem
 			where T0 : IComponent
@@ -955,13 +980,13 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 			private readonly Memory<T1> _c1;
 			private readonly Memory<T2> _c2;
 
 			public WorkItem3(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				Memory<T1> c1,
 				Memory<T2> c2,
@@ -1013,6 +1038,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3>(
 			QueryDescription? query = null
 		)
@@ -1026,6 +1052,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3>(
 			ref QueryDescription? query
 		)
@@ -1039,6 +1066,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3>(
 			TQ q,
 			QueryDescription? query = null
@@ -1052,6 +1080,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3>(
 			TQ q,
 			ref QueryDescription? query
@@ -1065,6 +1094,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -1078,6 +1108,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -1114,7 +1145,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -1147,6 +1178,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteParallel<TQ, T0, T1, T2, T3>(
 			TQ q,
 			QueryDescription? query = null,
@@ -1235,7 +1267,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem4<TQ, T0, T1, T2, T3>(
 							eMem,
@@ -1309,6 +1341,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct WorkItem4<TQ, T0, T1, T2, T3>
 			: IWorkItem
 			where T0 : IComponent
@@ -1319,14 +1352,14 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 			private readonly Memory<T1> _c1;
 			private readonly Memory<T2> _c2;
 			private readonly Memory<T3> _c3;
 
 			public WorkItem4(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				Memory<T1> c1,
 				Memory<T2> c2,
@@ -1383,6 +1416,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4>(
 			QueryDescription? query = null
 		)
@@ -1397,6 +1431,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4>(
 			ref QueryDescription? query
 		)
@@ -1411,6 +1446,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
 			QueryDescription? query = null
@@ -1425,6 +1461,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
 			ref QueryDescription? query
@@ -1439,6 +1476,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -1453,6 +1491,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -1491,7 +1530,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -1527,6 +1566,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
 			QueryDescription? query = null,
@@ -1618,7 +1658,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem5<TQ, T0, T1, T2, T3, T4>(
 							eMem,
@@ -1693,6 +1733,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct WorkItem5<TQ, T0, T1, T2, T3, T4>
 			: IWorkItem
 			where T0 : IComponent
@@ -1704,7 +1745,7 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 			private readonly Memory<T1> _c1;
 			private readonly Memory<T2> _c2;
@@ -1712,7 +1753,7 @@ namespace Myriad.ECS.Worlds
 			private readonly Memory<T4> _c4;
 
 			public WorkItem5(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				Memory<T1> c1,
 				Memory<T2> c2,
@@ -1774,6 +1815,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
 			QueryDescription? query = null
 		)
@@ -1789,6 +1831,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
 			ref QueryDescription? query
 		)
@@ -1804,6 +1847,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
 			QueryDescription? query = null
@@ -1819,6 +1863,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
 			ref QueryDescription? query
@@ -1834,6 +1879,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -1849,6 +1895,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -1889,7 +1936,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -1928,6 +1975,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
 			QueryDescription? query = null,
@@ -2022,7 +2070,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem6<TQ, T0, T1, T2, T3, T4, T5>(
 							eMem,
@@ -2098,6 +2146,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct WorkItem6<TQ, T0, T1, T2, T3, T4, T5>
 			: IWorkItem
 			where T0 : IComponent
@@ -2110,7 +2159,7 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 			private readonly Memory<T1> _c1;
 			private readonly Memory<T2> _c2;
@@ -2119,7 +2168,7 @@ namespace Myriad.ECS.Worlds
 			private readonly Memory<T5> _c5;
 
 			public WorkItem6(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				Memory<T1> c1,
 				Memory<T2> c2,
@@ -2186,6 +2235,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			QueryDescription? query = null
 		)
@@ -2202,6 +2252,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			ref QueryDescription? query
 		)
@@ -2218,6 +2269,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
 			QueryDescription? query = null
@@ -2234,6 +2286,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
 			ref QueryDescription? query
@@ -2250,6 +2303,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -2266,6 +2320,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -2308,7 +2363,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -2350,6 +2405,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
 			QueryDescription? query = null,
@@ -2447,7 +2503,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>(
 							eMem,
@@ -2524,6 +2580,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct WorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>
 			: IWorkItem
 			where T0 : IComponent
@@ -2537,7 +2594,7 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 			private readonly Memory<T1> _c1;
 			private readonly Memory<T2> _c2;
@@ -2547,7 +2604,7 @@ namespace Myriad.ECS.Worlds
 			private readonly Memory<T6> _c6;
 
 			public WorkItem7(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				Memory<T1> c1,
 				Memory<T2> c2,
@@ -2619,6 +2676,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			QueryDescription? query = null
 		)
@@ -2636,6 +2694,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			ref QueryDescription? query
 		)
@@ -2653,6 +2712,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
 			QueryDescription? query = null
@@ -2670,6 +2730,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
 			ref QueryDescription? query
@@ -2687,6 +2748,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -2704,6 +2766,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -2748,7 +2811,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -2793,6 +2856,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
 			QueryDescription? query = null,
@@ -2893,7 +2957,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 							eMem,
@@ -2971,6 +3035,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct WorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>
 			: IWorkItem
 			where T0 : IComponent
@@ -2985,7 +3050,7 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 			private readonly Memory<T1> _c1;
 			private readonly Memory<T2> _c2;
@@ -2996,7 +3061,7 @@ namespace Myriad.ECS.Worlds
 			private readonly Memory<T7> _c7;
 
 			public WorkItem8(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				Memory<T1> c1,
 				Memory<T2> c2,
@@ -3073,6 +3138,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			QueryDescription? query = null
 		)
@@ -3091,6 +3157,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			ref QueryDescription? query
 		)
@@ -3109,6 +3176,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
 			QueryDescription? query = null
@@ -3127,6 +3195,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
 			ref QueryDescription? query
@@ -3145,6 +3214,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -3163,6 +3233,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -3209,7 +3280,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -3257,6 +3328,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
 			QueryDescription? query = null,
@@ -3360,7 +3432,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 							eMem,
@@ -3439,6 +3511,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct WorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>
 			: IWorkItem
 			where T0 : IComponent
@@ -3454,7 +3527,7 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 			private readonly Memory<T1> _c1;
 			private readonly Memory<T2> _c2;
@@ -3466,7 +3539,7 @@ namespace Myriad.ECS.Worlds
 			private readonly Memory<T8> _c8;
 
 			public WorkItem9(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				Memory<T1> c1,
 				Memory<T2> c2,
@@ -3548,6 +3621,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			QueryDescription? query = null
 		)
@@ -3567,6 +3641,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			ref QueryDescription? query
 		)
@@ -3586,6 +3661,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
 			QueryDescription? query = null
@@ -3605,6 +3681,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
 			ref QueryDescription? query
@@ -3624,6 +3701,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -3643,6 +3721,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -3691,7 +3770,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -3742,6 +3821,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
 			QueryDescription? query = null,
@@ -3848,7 +3928,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 							eMem,
@@ -3928,6 +4008,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct WorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 			: IWorkItem
 			where T0 : IComponent
@@ -3944,7 +4025,7 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 			private readonly Memory<T1> _c1;
 			private readonly Memory<T2> _c2;
@@ -3957,7 +4038,7 @@ namespace Myriad.ECS.Worlds
 			private readonly Memory<T9> _c9;
 
 			public WorkItem10(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				Memory<T1> c1,
 				Memory<T2> c2,
@@ -4044,6 +4125,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			QueryDescription? query = null
 		)
@@ -4064,6 +4146,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			ref QueryDescription? query
 		)
@@ -4084,6 +4167,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
 			QueryDescription? query = null
@@ -4104,6 +4188,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
 			ref QueryDescription? query
@@ -4124,6 +4209,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -4144,6 +4230,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -4194,7 +4281,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -4248,6 +4335,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
 			QueryDescription? query = null,
@@ -4357,7 +4445,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 							eMem,
@@ -4438,6 +4526,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct WorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 			: IWorkItem
 			where T0 : IComponent
@@ -4455,7 +4544,7 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 			private readonly Memory<T1> _c1;
 			private readonly Memory<T2> _c2;
@@ -4469,7 +4558,7 @@ namespace Myriad.ECS.Worlds
 			private readonly Memory<T10> _c10;
 
 			public WorkItem11(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				Memory<T1> c1,
 				Memory<T2> c2,
@@ -4561,6 +4650,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			QueryDescription? query = null
 		)
@@ -4582,6 +4672,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			ref QueryDescription? query
 		)
@@ -4603,6 +4694,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
 			QueryDescription? query = null
@@ -4624,6 +4716,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
 			ref QueryDescription? query
@@ -4645,6 +4738,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -4666,6 +4760,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -4718,7 +4813,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -4775,6 +4870,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
 			QueryDescription? query = null,
@@ -4887,7 +4983,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 							eMem,
@@ -4969,6 +5065,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct WorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 			: IWorkItem
 			where T0 : IComponent
@@ -4987,7 +5084,7 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 			private readonly Memory<T1> _c1;
 			private readonly Memory<T2> _c2;
@@ -5002,7 +5099,7 @@ namespace Myriad.ECS.Worlds
 			private readonly Memory<T11> _c11;
 
 			public WorkItem12(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				Memory<T1> c1,
 				Memory<T2> c2,
@@ -5099,6 +5196,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			QueryDescription? query = null
 		)
@@ -5121,6 +5219,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			ref QueryDescription? query
 		)
@@ -5143,6 +5242,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
 			QueryDescription? query = null
@@ -5165,6 +5265,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
 			ref QueryDescription? query
@@ -5187,6 +5288,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -5209,6 +5311,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -5263,7 +5366,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -5323,6 +5426,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
 			QueryDescription? query = null,
@@ -5438,7 +5542,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 							eMem,
@@ -5521,6 +5625,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct WorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 			: IWorkItem
 			where T0 : IComponent
@@ -5540,7 +5645,7 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 			private readonly Memory<T1> _c1;
 			private readonly Memory<T2> _c2;
@@ -5556,7 +5661,7 @@ namespace Myriad.ECS.Worlds
 			private readonly Memory<T12> _c12;
 
 			public WorkItem13(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				Memory<T1> c1,
 				Memory<T2> c2,
@@ -5658,6 +5763,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			QueryDescription? query = null
 		)
@@ -5681,6 +5787,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			ref QueryDescription? query
 		)
@@ -5704,6 +5811,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
 			QueryDescription? query = null
@@ -5727,6 +5835,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
 			ref QueryDescription? query
@@ -5750,6 +5859,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -5773,6 +5883,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -5829,7 +5940,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -5892,6 +6003,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
 			QueryDescription? query = null,
@@ -6010,7 +6122,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 							eMem,
@@ -6094,6 +6206,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct WorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 			: IWorkItem
 			where T0 : IComponent
@@ -6114,7 +6227,7 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 			private readonly Memory<T1> _c1;
 			private readonly Memory<T2> _c2;
@@ -6131,7 +6244,7 @@ namespace Myriad.ECS.Worlds
 			private readonly Memory<T13> _c13;
 
 			public WorkItem14(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				Memory<T1> c1,
 				Memory<T2> c2,
@@ -6238,6 +6351,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			QueryDescription? query = null
 		)
@@ -6262,6 +6376,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			ref QueryDescription? query
 		)
@@ -6286,6 +6401,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
 			QueryDescription? query = null
@@ -6310,6 +6426,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
 			ref QueryDescription? query
@@ -6334,6 +6451,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -6358,6 +6476,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -6416,7 +6535,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -6482,6 +6601,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
 			QueryDescription? query = null,
@@ -6603,7 +6723,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 							eMem,
@@ -6688,6 +6808,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct WorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 			: IWorkItem
 			where T0 : IComponent
@@ -6709,7 +6830,7 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 			private readonly Memory<T1> _c1;
 			private readonly Memory<T2> _c2;
@@ -6727,7 +6848,7 @@ namespace Myriad.ECS.Worlds
 			private readonly Memory<T14> _c14;
 
 			public WorkItem15(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				Memory<T1> c1,
 				Memory<T2> c2,
@@ -6839,6 +6960,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			QueryDescription? query = null
 		)
@@ -6864,6 +6986,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			ref QueryDescription? query
 		)
@@ -6889,6 +7012,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
 			QueryDescription? query = null
@@ -6914,6 +7038,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
 			ref QueryDescription? query
@@ -6939,6 +7064,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -6964,6 +7090,7 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -7024,7 +7151,7 @@ namespace Myriad.ECS.Worlds
 					var chunk = enumerator.Current;
 					Debug.Assert(chunk != null);
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -7093,6 +7220,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
 			QueryDescription? query = null,
@@ -7217,7 +7345,7 @@ namespace Myriad.ECS.Worlds
 						var start = b * batchSize;
 						var end = Math.Min(start + batchSize, entityCount);
 						var batchCount = end - start;
-						var eMem = chunk.GetEntitiesMemory(start, batchCount);
+						var eMem = chunk.Entities.Slice(start, batchCount);
 
 						var item = new WorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 							eMem,
@@ -7303,6 +7431,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct WorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 			: IWorkItem
 			where T0 : IComponent
@@ -7325,7 +7454,7 @@ namespace Myriad.ECS.Worlds
 		{
 			private readonly TQ _q;
 
-			private readonly Memory<Entity> _entities;
+			private readonly ReadOnlyMemory<Entity> _entities;
 			private readonly Memory<T0> _c0;
 			private readonly Memory<T1> _c1;
 			private readonly Memory<T2> _c2;
@@ -7344,7 +7473,7 @@ namespace Myriad.ECS.Worlds
 			private readonly Memory<T15> _c15;
 
 			public WorkItem16(
-				Memory<Entity> entities,
+				ReadOnlyMemory<Entity> entities,
 				Memory<T0> c0,
 				Memory<T1> c1,
 				Memory<T2> c2,

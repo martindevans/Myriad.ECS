@@ -22,7 +22,7 @@ public readonly struct ArchetypeEntityEnumerable
     internal int Count()
     {
         var count = 0;
-        foreach (var entity in this)
+        foreach (var _ in this)
             count++;
         return count;
     }
@@ -44,7 +44,7 @@ public struct ArchetypeEntityEnumerator
         _chunksEnumerator = archetype.GetChunkEnumerator();
     }
 
-    public readonly Entity Current => _chunk!.Entities[_entityIndex];
+    public readonly Entity Current => _chunk!.Entities.Span[_entityIndex];
 
     private bool NextChunk()
     {

@@ -5,6 +5,7 @@ using Myriad.ECS.IDs;
 using Myriad.ECS.Threading;
 using Myriad.ECS.Allocations;
 using System.Buffers;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -31,6 +32,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		
 		public int ExecuteChunk<TQ, T0>(
 			QueryDescription? query = null
 		)
@@ -49,6 +51,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		
 		public int ExecuteChunk<TQ, T0>(
 			ref QueryDescription? query
 		)
@@ -68,6 +71,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		
 		public int ExecuteChunk<TQ, T0>(
 			TQ q,
 			QueryDescription? query = null
@@ -87,6 +91,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		
 		public int ExecuteChunk<TQ, T0>(
 			TQ q,
 			ref QueryDescription? query
@@ -106,6 +111,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		
 		public int ExecuteChunk<TQ, T0>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -125,6 +131,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		
 		public int ExecuteChunk<TQ, T0>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -160,13 +167,14 @@ namespace Myriad.ECS.Worlds
 
 					var t0 = chunk.GetSpan<T0>(c0);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0);
 				}
 			}
 
 			return count;
 		}
 
+		
 		public int ExecuteChunkParallel<TQ, T0>(
 			TQ q,
 			QueryDescription? query = null
@@ -290,6 +298,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		
 		private readonly struct ChunkWorkItem1<TQ, T0>
 			: IWorkItem
 			where T0 : IComponent
@@ -307,7 +316,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 				);
 			}
@@ -338,6 +347,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1>(
 			QueryDescription? query = null
 		)
@@ -358,6 +368,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1>(
 			ref QueryDescription? query
 		)
@@ -379,6 +390,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1>(
 			TQ q,
 			QueryDescription? query = null
@@ -400,6 +412,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1>(
 			TQ q,
 			ref QueryDescription? query
@@ -421,6 +434,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -442,6 +456,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -480,13 +495,14 @@ namespace Myriad.ECS.Worlds
 					var t0 = chunk.GetSpan<T0>(c0);
 					var t1 = chunk.GetSpan<T1>(c1);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0, t1);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0, t1);
 				}
 			}
 
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1>(
 			TQ q,
 			QueryDescription? query = null
@@ -611,6 +627,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ChunkWorkItem2<TQ, T0, T1>
 			: IWorkItem
 			where T0 : IComponent
@@ -629,7 +646,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 				);
@@ -663,6 +680,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2>(
 			QueryDescription? query = null
 		)
@@ -685,6 +703,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2>(
 			ref QueryDescription? query
 		)
@@ -708,6 +727,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2>(
 			TQ q,
 			QueryDescription? query = null
@@ -731,6 +751,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2>(
 			TQ q,
 			ref QueryDescription? query
@@ -754,6 +775,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -777,6 +799,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -818,13 +841,14 @@ namespace Myriad.ECS.Worlds
 					var t1 = chunk.GetSpan<T1>(c1);
 					var t2 = chunk.GetSpan<T2>(c2);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0, t1, t2);
 				}
 			}
 
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2>(
 			TQ q,
 			QueryDescription? query = null
@@ -950,6 +974,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ChunkWorkItem3<TQ, T0, T1, T2>
 			: IWorkItem
 			where T0 : IComponent
@@ -969,7 +994,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -1006,6 +1031,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
 			QueryDescription? query = null
 		)
@@ -1030,6 +1056,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
 			ref QueryDescription? query
 		)
@@ -1055,6 +1082,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
 			TQ q,
 			QueryDescription? query = null
@@ -1080,6 +1108,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
 			TQ q,
 			ref QueryDescription? query
@@ -1105,6 +1134,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -1130,6 +1160,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -1174,13 +1205,14 @@ namespace Myriad.ECS.Worlds
 					var t2 = chunk.GetSpan<T2>(c2);
 					var t3 = chunk.GetSpan<T3>(c3);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0, t1, t2, t3);
 				}
 			}
 
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3>(
 			TQ q,
 			QueryDescription? query = null
@@ -1307,6 +1339,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ChunkWorkItem4<TQ, T0, T1, T2, T3>
 			: IWorkItem
 			where T0 : IComponent
@@ -1327,7 +1360,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -1367,6 +1400,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
 			QueryDescription? query = null
 		)
@@ -1393,6 +1427,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
 			ref QueryDescription? query
 		)
@@ -1420,6 +1455,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
 			QueryDescription? query = null
@@ -1447,6 +1483,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
 			ref QueryDescription? query
@@ -1474,6 +1511,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -1501,6 +1539,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -1548,13 +1587,14 @@ namespace Myriad.ECS.Worlds
 					var t3 = chunk.GetSpan<T3>(c3);
 					var t4 = chunk.GetSpan<T4>(c4);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0, t1, t2, t3, t4);
 				}
 			}
 
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
 			QueryDescription? query = null
@@ -1682,6 +1722,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ChunkWorkItem5<TQ, T0, T1, T2, T3, T4>
 			: IWorkItem
 			where T0 : IComponent
@@ -1703,7 +1744,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -1746,6 +1787,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
 			QueryDescription? query = null
 		)
@@ -1774,6 +1816,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
 			ref QueryDescription? query
 		)
@@ -1803,6 +1846,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
 			QueryDescription? query = null
@@ -1832,6 +1876,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
 			ref QueryDescription? query
@@ -1861,6 +1906,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -1890,6 +1936,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -1940,13 +1987,14 @@ namespace Myriad.ECS.Worlds
 					var t4 = chunk.GetSpan<T4>(c4);
 					var t5 = chunk.GetSpan<T5>(c5);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0, t1, t2, t3, t4, t5);
 				}
 			}
 
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
 			QueryDescription? query = null
@@ -2075,6 +2123,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ChunkWorkItem6<TQ, T0, T1, T2, T3, T4, T5>
 			: IWorkItem
 			where T0 : IComponent
@@ -2097,7 +2146,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -2143,6 +2192,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			QueryDescription? query = null
 		)
@@ -2173,6 +2223,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			ref QueryDescription? query
 		)
@@ -2204,6 +2255,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
 			QueryDescription? query = null
@@ -2235,6 +2287,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
 			ref QueryDescription? query
@@ -2266,6 +2319,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -2297,6 +2351,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -2350,13 +2405,14 @@ namespace Myriad.ECS.Worlds
 					var t5 = chunk.GetSpan<T5>(c5);
 					var t6 = chunk.GetSpan<T6>(c6);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0, t1, t2, t3, t4, t5, t6);
 				}
 			}
 
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
 			QueryDescription? query = null
@@ -2486,6 +2542,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ChunkWorkItem7<TQ, T0, T1, T2, T3, T4, T5, T6>
 			: IWorkItem
 			where T0 : IComponent
@@ -2509,7 +2566,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -2558,6 +2615,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			QueryDescription? query = null
 		)
@@ -2590,6 +2648,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			ref QueryDescription? query
 		)
@@ -2623,6 +2682,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
 			QueryDescription? query = null
@@ -2656,6 +2716,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
 			ref QueryDescription? query
@@ -2689,6 +2750,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -2722,6 +2784,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -2778,13 +2841,14 @@ namespace Myriad.ECS.Worlds
 					var t6 = chunk.GetSpan<T6>(c6);
 					var t7 = chunk.GetSpan<T7>(c7);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0, t1, t2, t3, t4, t5, t6, t7);
 				}
 			}
 
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
 			QueryDescription? query = null
@@ -2915,6 +2979,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ChunkWorkItem8<TQ, T0, T1, T2, T3, T4, T5, T6, T7>
 			: IWorkItem
 			where T0 : IComponent
@@ -2939,7 +3004,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -2991,6 +3056,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			QueryDescription? query = null
 		)
@@ -3025,6 +3091,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			ref QueryDescription? query
 		)
@@ -3060,6 +3127,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
 			QueryDescription? query = null
@@ -3095,6 +3163,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
 			ref QueryDescription? query
@@ -3130,6 +3199,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -3165,6 +3235,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -3224,13 +3295,14 @@ namespace Myriad.ECS.Worlds
 					var t7 = chunk.GetSpan<T7>(c7);
 					var t8 = chunk.GetSpan<T8>(c8);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0, t1, t2, t3, t4, t5, t6, t7, t8);
 				}
 			}
 
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
 			QueryDescription? query = null
@@ -3362,6 +3434,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ChunkWorkItem9<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>
 			: IWorkItem
 			where T0 : IComponent
@@ -3387,7 +3460,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -3442,6 +3515,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			QueryDescription? query = null
 		)
@@ -3478,6 +3552,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			ref QueryDescription? query
 		)
@@ -3515,6 +3590,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
 			QueryDescription? query = null
@@ -3552,6 +3628,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
 			ref QueryDescription? query
@@ -3589,6 +3666,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -3626,6 +3704,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -3688,13 +3767,14 @@ namespace Myriad.ECS.Worlds
 					var t8 = chunk.GetSpan<T8>(c8);
 					var t9 = chunk.GetSpan<T9>(c9);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
 				}
 			}
 
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
 			QueryDescription? query = null
@@ -3827,6 +3907,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ChunkWorkItem10<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 			: IWorkItem
 			where T0 : IComponent
@@ -3853,7 +3934,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -3911,6 +3992,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			QueryDescription? query = null
 		)
@@ -3949,6 +4031,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			ref QueryDescription? query
 		)
@@ -3988,6 +4071,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
 			QueryDescription? query = null
@@ -4027,6 +4111,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
 			ref QueryDescription? query
@@ -4066,6 +4151,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -4105,6 +4191,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -4170,13 +4257,14 @@ namespace Myriad.ECS.Worlds
 					var t9 = chunk.GetSpan<T9>(c9);
 					var t10 = chunk.GetSpan<T10>(c10);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
 				}
 			}
 
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
 			QueryDescription? query = null
@@ -4310,6 +4398,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ChunkWorkItem11<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 			: IWorkItem
 			where T0 : IComponent
@@ -4337,7 +4426,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -4398,6 +4487,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			QueryDescription? query = null
 		)
@@ -4438,6 +4528,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			ref QueryDescription? query
 		)
@@ -4479,6 +4570,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
 			QueryDescription? query = null
@@ -4520,6 +4612,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
 			ref QueryDescription? query
@@ -4561,6 +4654,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -4602,6 +4696,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -4670,13 +4765,14 @@ namespace Myriad.ECS.Worlds
 					var t10 = chunk.GetSpan<T10>(c10);
 					var t11 = chunk.GetSpan<T11>(c11);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
 				}
 			}
 
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
 			QueryDescription? query = null
@@ -4811,6 +4907,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ChunkWorkItem12<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 			: IWorkItem
 			where T0 : IComponent
@@ -4839,7 +4936,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -4903,6 +5000,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			QueryDescription? query = null
 		)
@@ -4945,6 +5043,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			ref QueryDescription? query
 		)
@@ -4988,6 +5087,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
 			QueryDescription? query = null
@@ -5031,6 +5131,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
 			ref QueryDescription? query
@@ -5074,6 +5175,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -5117,6 +5219,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -5188,13 +5291,14 @@ namespace Myriad.ECS.Worlds
 					var t11 = chunk.GetSpan<T11>(c11);
 					var t12 = chunk.GetSpan<T12>(c12);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
 				}
 			}
 
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
 			QueryDescription? query = null
@@ -5330,6 +5434,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ChunkWorkItem13<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 			: IWorkItem
 			where T0 : IComponent
@@ -5359,7 +5464,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -5426,6 +5531,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			QueryDescription? query = null
 		)
@@ -5470,6 +5576,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			ref QueryDescription? query
 		)
@@ -5515,6 +5622,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
 			QueryDescription? query = null
@@ -5560,6 +5668,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
 			ref QueryDescription? query
@@ -5605,6 +5714,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -5650,6 +5760,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -5724,13 +5835,14 @@ namespace Myriad.ECS.Worlds
 					var t12 = chunk.GetSpan<T12>(c12);
 					var t13 = chunk.GetSpan<T13>(c13);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
 				}
 			}
 
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
 			QueryDescription? query = null
@@ -5867,6 +5979,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ChunkWorkItem14<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 			: IWorkItem
 			where T0 : IComponent
@@ -5897,7 +6010,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -5967,6 +6080,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			QueryDescription? query = null
 		)
@@ -6013,6 +6127,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			ref QueryDescription? query
 		)
@@ -6060,6 +6175,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
 			QueryDescription? query = null
@@ -6107,6 +6223,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
 			ref QueryDescription? query
@@ -6154,6 +6271,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -6201,6 +6319,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -6278,13 +6397,14 @@ namespace Myriad.ECS.Worlds
 					var t13 = chunk.GetSpan<T13>(c13);
 					var t14 = chunk.GetSpan<T14>(c14);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
 				}
 			}
 
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
 			QueryDescription? query = null
@@ -6422,6 +6542,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ChunkWorkItem15<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 			: IWorkItem
 			where T0 : IComponent
@@ -6453,7 +6574,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()
@@ -6526,6 +6647,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			QueryDescription? query = null
 		)
@@ -6574,6 +6696,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			ref QueryDescription? query
 		)
@@ -6623,6 +6746,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
 			QueryDescription? query = null
@@ -6672,6 +6796,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
 			ref QueryDescription? query
@@ -6721,6 +6846,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			ref TQ q,
 			QueryDescription? query = null
@@ -6770,6 +6896,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -6850,13 +6977,14 @@ namespace Myriad.ECS.Worlds
 					var t14 = chunk.GetSpan<T14>(c14);
 					var t15 = chunk.GetSpan<T15>(c15);
 
-					q.Execute(new ChunkHandle(chunk), entities, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15);
+					q.Execute(new ChunkHandle(chunk), entities.Span, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15);
 				}
 			}
 
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
 			QueryDescription? query = null
@@ -6995,6 +7123,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ChunkWorkItem16<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 			: IWorkItem
 			where T0 : IComponent
@@ -7027,7 +7156,7 @@ namespace Myriad.ECS.Worlds
 			public void Execute()
 			{
 				_q.Execute(
-					new ChunkHandle(_chunk), _chunk.Entities
+					new ChunkHandle(_chunk), _chunk.Entities.Span
 					, _chunk.GetSpan<T0>()
 					, _chunk.GetSpan<T1>()
 					, _chunk.GetSpan<T2>()

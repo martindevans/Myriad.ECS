@@ -3,6 +3,7 @@ using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Collections;
 using Myriad.ECS.Worlds.Chunks;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -14,6 +15,7 @@ using Myriad.ECS.Worlds.Chunks;
 
 namespace Myriad.ECS.Queries
 {
+    
     public readonly struct QueryResultEnumerable0
         
     {
@@ -32,6 +34,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    
     public ref struct QueryResultEnumerator0
         
     {
@@ -61,7 +64,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
         }
 
         private bool NextArchetype()
@@ -132,6 +135,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    
     public readonly struct QueryResultEnumerable1<T0>
         where T0 : IComponent
     {
@@ -150,6 +154,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    
     public ref struct QueryResultEnumerator1<T0>
         where T0 : IComponent
     {
@@ -188,7 +193,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
         }
 
@@ -248,12 +253,14 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        
         public QueryResultEnumerable1<T0> Query<T0>(QueryDescription? query = null)
             where T0 : IComponent
         {
             return Query<T0>(ref query);
         }
 
+        
         public QueryResultEnumerable1<T0> Query<T0>(ref QueryDescription? query)
             where T0 : IComponent
         {
@@ -270,6 +277,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable2<T0, T1>
         where T0 : IComponent
         where T1 : IComponent
@@ -289,6 +297,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public ref struct QueryResultEnumerator2<T0, T1>
         where T0 : IComponent
         where T1 : IComponent
@@ -332,7 +341,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
         }
@@ -393,6 +402,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable2<T0, T1> Query<T0, T1>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
@@ -400,6 +410,7 @@ namespace Myriad.ECS.Worlds
             return Query<T0, T1>(ref query);
         }
 
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable2<T0, T1> Query<T0, T1>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
@@ -417,6 +428,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable3<T0, T1, T2>
         where T0 : IComponent
         where T1 : IComponent
@@ -437,6 +449,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public ref struct QueryResultEnumerator3<T0, T1, T2>
         where T0 : IComponent
         where T1 : IComponent
@@ -485,7 +498,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -547,6 +560,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable3<T0, T1, T2> Query<T0, T1, T2>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
@@ -555,6 +569,7 @@ namespace Myriad.ECS.Worlds
             return Query<T0, T1, T2>(ref query);
         }
 
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable3<T0, T1, T2> Query<T0, T1, T2>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
@@ -573,6 +588,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable4<T0, T1, T2, T3>
         where T0 : IComponent
         where T1 : IComponent
@@ -594,6 +610,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public ref struct QueryResultEnumerator4<T0, T1, T2, T3>
         where T0 : IComponent
         where T1 : IComponent
@@ -647,7 +664,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -710,6 +727,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable4<T0, T1, T2, T3> Query<T0, T1, T2, T3>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
@@ -719,6 +737,7 @@ namespace Myriad.ECS.Worlds
             return Query<T0, T1, T2, T3>(ref query);
         }
 
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable4<T0, T1, T2, T3> Query<T0, T1, T2, T3>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
@@ -738,6 +757,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable5<T0, T1, T2, T3, T4>
         where T0 : IComponent
         where T1 : IComponent
@@ -760,6 +780,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public ref struct QueryResultEnumerator5<T0, T1, T2, T3, T4>
         where T0 : IComponent
         where T1 : IComponent
@@ -818,7 +839,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -882,6 +903,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable5<T0, T1, T2, T3, T4> Query<T0, T1, T2, T3, T4>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
@@ -892,6 +914,7 @@ namespace Myriad.ECS.Worlds
             return Query<T0, T1, T2, T3, T4>(ref query);
         }
 
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable5<T0, T1, T2, T3, T4> Query<T0, T1, T2, T3, T4>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
@@ -912,6 +935,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable6<T0, T1, T2, T3, T4, T5>
         where T0 : IComponent
         where T1 : IComponent
@@ -935,6 +959,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public ref struct QueryResultEnumerator6<T0, T1, T2, T3, T4, T5>
         where T0 : IComponent
         where T1 : IComponent
@@ -998,7 +1023,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -1063,6 +1088,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable6<T0, T1, T2, T3, T4, T5> Query<T0, T1, T2, T3, T4, T5>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
@@ -1074,6 +1100,7 @@ namespace Myriad.ECS.Worlds
             return Query<T0, T1, T2, T3, T4, T5>(ref query);
         }
 
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable6<T0, T1, T2, T3, T4, T5> Query<T0, T1, T2, T3, T4, T5>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
@@ -1095,6 +1122,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable7<T0, T1, T2, T3, T4, T5, T6>
         where T0 : IComponent
         where T1 : IComponent
@@ -1119,6 +1147,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public ref struct QueryResultEnumerator7<T0, T1, T2, T3, T4, T5, T6>
         where T0 : IComponent
         where T1 : IComponent
@@ -1187,7 +1216,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -1253,6 +1282,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable7<T0, T1, T2, T3, T4, T5, T6> Query<T0, T1, T2, T3, T4, T5, T6>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
@@ -1265,6 +1295,7 @@ namespace Myriad.ECS.Worlds
             return Query<T0, T1, T2, T3, T4, T5, T6>(ref query);
         }
 
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable7<T0, T1, T2, T3, T4, T5, T6> Query<T0, T1, T2, T3, T4, T5, T6>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
@@ -1287,6 +1318,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable8<T0, T1, T2, T3, T4, T5, T6, T7>
         where T0 : IComponent
         where T1 : IComponent
@@ -1312,6 +1344,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public ref struct QueryResultEnumerator8<T0, T1, T2, T3, T4, T5, T6, T7>
         where T0 : IComponent
         where T1 : IComponent
@@ -1385,7 +1418,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -1452,6 +1485,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable8<T0, T1, T2, T3, T4, T5, T6, T7> Query<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
@@ -1465,6 +1499,7 @@ namespace Myriad.ECS.Worlds
             return Query<T0, T1, T2, T3, T4, T5, T6, T7>(ref query);
         }
 
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable8<T0, T1, T2, T3, T4, T5, T6, T7> Query<T0, T1, T2, T3, T4, T5, T6, T7>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
@@ -1488,6 +1523,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
         where T0 : IComponent
         where T1 : IComponent
@@ -1514,6 +1550,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public ref struct QueryResultEnumerator9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
         where T0 : IComponent
         where T1 : IComponent
@@ -1592,7 +1629,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -1660,6 +1697,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable9<T0, T1, T2, T3, T4, T5, T6, T7, T8> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
@@ -1674,6 +1712,7 @@ namespace Myriad.ECS.Worlds
             return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref query);
         }
 
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable9<T0, T1, T2, T3, T4, T5, T6, T7, T8> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
@@ -1698,6 +1737,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
         where T0 : IComponent
         where T1 : IComponent
@@ -1725,6 +1765,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public ref struct QueryResultEnumerator10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
         where T0 : IComponent
         where T1 : IComponent
@@ -1808,7 +1849,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -1877,6 +1918,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
@@ -1892,6 +1934,7 @@ namespace Myriad.ECS.Worlds
             return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref query);
         }
 
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
@@ -1917,6 +1960,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
         where T0 : IComponent
         where T1 : IComponent
@@ -1945,6 +1989,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public ref struct QueryResultEnumerator11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
         where T0 : IComponent
         where T1 : IComponent
@@ -2033,7 +2078,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -2103,6 +2148,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
@@ -2119,6 +2165,7 @@ namespace Myriad.ECS.Worlds
             return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref query);
         }
 
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
@@ -2145,6 +2192,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
         where T0 : IComponent
         where T1 : IComponent
@@ -2174,6 +2222,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public ref struct QueryResultEnumerator12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
         where T0 : IComponent
         where T1 : IComponent
@@ -2267,7 +2316,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -2338,6 +2387,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
@@ -2355,6 +2405,7 @@ namespace Myriad.ECS.Worlds
             return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref query);
         }
 
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
@@ -2382,6 +2433,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
         where T0 : IComponent
         where T1 : IComponent
@@ -2412,6 +2464,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public ref struct QueryResultEnumerator13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
         where T0 : IComponent
         where T1 : IComponent
@@ -2510,7 +2563,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -2582,6 +2635,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
@@ -2600,6 +2654,7 @@ namespace Myriad.ECS.Worlds
             return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref query);
         }
 
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
@@ -2628,6 +2683,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
         where T0 : IComponent
         where T1 : IComponent
@@ -2659,6 +2715,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public ref struct QueryResultEnumerator14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
         where T0 : IComponent
         where T1 : IComponent
@@ -2762,7 +2819,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -2835,6 +2892,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
@@ -2854,6 +2912,7 @@ namespace Myriad.ECS.Worlds
             return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref query);
         }
 
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
@@ -2883,6 +2942,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
         where T0 : IComponent
         where T1 : IComponent
@@ -2915,6 +2975,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public ref struct QueryResultEnumerator15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
         where T0 : IComponent
         where T1 : IComponent
@@ -3023,7 +3084,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -3097,6 +3158,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
@@ -3117,6 +3179,7 @@ namespace Myriad.ECS.Worlds
             return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref query);
         }
 
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent
@@ -3147,6 +3210,7 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+    [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
         where T0 : IComponent
         where T1 : IComponent
@@ -3180,6 +3244,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public ref struct QueryResultEnumerator16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
         where T0 : IComponent
         where T1 : IComponent
@@ -3293,7 +3358,7 @@ namespace Myriad.ECS.Queries
         {
             var chunk = _chunksEnumerator.Current!;
 
-            SpanEntities = chunk.Entities;
+            SpanEntities = chunk.Entities.Span;
             Components0 = chunk.GetComponentArray<T0>(C0);
             Components1 = chunk.GetComponentArray<T1>(C1);
             Components2 = chunk.GetComponentArray<T2>(C2);
@@ -3368,6 +3433,7 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(QueryDescription? query = null)
             where T0 : IComponent
             where T1 : IComponent
@@ -3389,6 +3455,7 @@ namespace Myriad.ECS.Worlds
             return Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref query);
         }
 
+        [ExcludeFromCodeCoverage]
         public QueryResultEnumerable16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref QueryDescription? query)
             where T0 : IComponent
             where T1 : IComponent

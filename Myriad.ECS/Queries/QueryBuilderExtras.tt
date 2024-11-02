@@ -7,6 +7,7 @@
 <#
 	const int PARAM_COUNT = 16;
 #>
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -26,6 +27,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<<#= type_params #>>()
 <# for (var j = 0; j < i; j++)
 {
@@ -58,6 +60,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<<#= type_params #>>()
 <# for (var j = 0; j < i; j++)
 {

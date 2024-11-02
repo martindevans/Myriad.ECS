@@ -1,5 +1,6 @@
 ﻿using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
+using System.Diagnostics.CodeAnalysis;
 
 //using Parallel = System.Threading.Tasks.Parallel;
 //using Parallel = ParallelTasks.Parallel;
@@ -27,6 +28,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -38,6 +40,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0>(initial, ref query);
 		}
 
+		
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -51,6 +54,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0>(ref q, ref r, initial, ref query);
 		}
 
+		
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0>(
 			TM q,
 			TR r,
@@ -76,6 +80,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0>(
 			ref TM q,
 			ref TR r,
@@ -107,7 +112,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -143,6 +148,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -155,6 +161,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1>(initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -169,6 +176,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1>(ref q, ref r, initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1>(
 			TM q,
 			TR r,
@@ -196,6 +204,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1>(
 			ref TM q,
 			ref TR r,
@@ -229,7 +238,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -267,6 +276,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -280,6 +290,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2>(initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -295,6 +306,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2>(ref q, ref r, initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2>(
 			TM q,
 			TR r,
@@ -324,6 +336,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2>(
 			ref TM q,
 			ref TR r,
@@ -359,7 +372,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -399,6 +412,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -413,6 +427,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3>(initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -429,6 +444,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3>(ref q, ref r, initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3>(
 			TM q,
 			TR r,
@@ -460,6 +476,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3>(
 			ref TM q,
 			ref TR r,
@@ -497,7 +514,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -539,6 +556,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -554,6 +572,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4>(initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -571,6 +590,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4>(ref q, ref r, initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4>(
 			TM q,
 			TR r,
@@ -604,6 +624,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4>(
 			ref TM q,
 			ref TR r,
@@ -643,7 +664,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -687,6 +708,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -703,6 +725,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5>(initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -721,6 +744,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5>(ref q, ref r, initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5>(
 			TM q,
 			TR r,
@@ -756,6 +780,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5>(
 			ref TM q,
 			ref TR r,
@@ -797,7 +822,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -843,6 +868,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -860,6 +886,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6>(initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -879,6 +906,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6>(ref q, ref r, initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6>(
 			TM q,
 			TR r,
@@ -916,6 +944,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6>(
 			ref TM q,
 			ref TR r,
@@ -959,7 +988,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -1007,6 +1036,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -1025,6 +1055,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -1045,6 +1076,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref r, initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TM q,
 			TR r,
@@ -1084,6 +1116,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
 			ref TM q,
 			ref TR r,
@@ -1129,7 +1162,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -1179,6 +1212,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -1198,6 +1232,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -1219,6 +1254,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref r, initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TM q,
 			TR r,
@@ -1260,6 +1296,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			ref TM q,
 			ref TR r,
@@ -1307,7 +1344,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -1359,6 +1396,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -1379,6 +1417,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -1401,6 +1440,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref r, initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TM q,
 			TR r,
@@ -1444,6 +1484,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			ref TM q,
 			ref TR r,
@@ -1493,7 +1534,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -1547,6 +1588,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -1568,6 +1610,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -1591,6 +1634,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref r, initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TM q,
 			TR r,
@@ -1636,6 +1680,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			ref TM q,
 			ref TR r,
@@ -1687,7 +1732,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -1743,6 +1788,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -1765,6 +1811,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -1789,6 +1836,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref r, initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TM q,
 			TR r,
@@ -1836,6 +1884,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			ref TM q,
 			ref TR r,
@@ -1889,7 +1938,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -1947,6 +1996,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -1970,6 +2020,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -1995,6 +2046,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref r, initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TM q,
 			TR r,
@@ -2044,6 +2096,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			ref TM q,
 			ref TR r,
@@ -2099,7 +2152,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -2159,6 +2212,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -2183,6 +2237,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -2209,6 +2264,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref r, initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TM q,
 			TR r,
@@ -2260,6 +2316,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			ref TM q,
 			ref TR r,
@@ -2317,7 +2374,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -2379,6 +2436,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -2404,6 +2462,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -2431,6 +2490,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref r, initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TM q,
 			TR r,
@@ -2484,6 +2544,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			ref TM q,
 			ref TR r,
@@ -2543,7 +2604,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 
@@ -2607,6 +2668,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -2633,6 +2695,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -2661,6 +2724,7 @@ namespace Myriad.ECS.Worlds
 			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref r, initial, ref query);
 		}
 
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TM q,
 			TR r,
@@ -2716,6 +2780,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
+		[ExcludeFromCodeCoverage]
 		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			ref TM q,
 			ref TR r,
@@ -2777,7 +2842,7 @@ namespace Myriad.ECS.Worlds
 				{
 					var chunk = chunks[c];
 
-					var entities = chunk.Entities;
+					var entities = chunk.Entities.Span;
 					if (entities.Length == 0)
 						continue;
 

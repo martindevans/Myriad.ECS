@@ -32,7 +32,7 @@ internal sealed class Chunk
     /// <summary>
     /// Get all of the entities in this chunk
     /// </summary>
-    public ReadOnlySpan<Entity> Entities => _entities.AsSpan(0, EntityCount);
+    public ReadOnlyMemory<Entity> Entities => _entities.AsMemory(0, EntityCount);
 
     internal Chunk(Archetype archetype, int size, int[] componentIndexLookup, IReadOnlyList<Type> componentTypes, IReadOnlyList<ComponentID> ids)
     {
@@ -76,7 +76,7 @@ internal sealed class Chunk
     internal ref T GetRef<T>(int rowIndex)
         where T : IComponent
     {
-        return ref GetSpan<T>(ComponentID<T>.ID)[rowIndex];
+        return ref GetRef<T>(rowIndex, ComponentID<T>.ID);
     }
 
     internal ref T GetRef<T>(int rowIndex, ComponentID id)
@@ -222,12 +222,4 @@ internal sealed class Chunk
         return destRow;
     }
 #endregion
-
-    public Memory<Entity> GetEntitiesMemory(int start, int count)
-    {
-        if (start + count > EntityCount)
-            throw new ArgumentException("start + count is more than the number of entities", nameof(count));
-
-        return _entities.AsMemory(start, count);
-    }
 }

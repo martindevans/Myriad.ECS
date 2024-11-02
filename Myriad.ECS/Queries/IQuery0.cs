@@ -41,7 +41,7 @@ namespace Myriad.ECS.Worlds
                 {
                     var chunk = chunks[c];
 
-                    var entities = chunk.Entities;
+                    var entities = chunk.Entities.Span;
                     if (entities.Length == 0)
                         continue;
 
@@ -80,7 +80,7 @@ namespace Myriad.ECS.Worlds
                 {
                     var chunk = chunks[c];
 
-                    var entities = chunk.Entities;
+                    var entities = chunk.Entities.Span;
                     if (entities.Length == 0)
                         continue;
 

@@ -129,12 +129,10 @@ public sealed partial class Archetype
 
     internal void Dispose(ref LazyCommandBuffer buffer)
     {
-        if (_disposer == null)
-            return;
-
-        foreach (var chunk in _chunks)
-            for (var i = 0; i < chunk.EntityCount; i++)
-                _disposer.DisposeEntity(ref buffer, chunk, i);
+        if (_disposer != null)
+            foreach (var chunk in _chunks)
+                for (var i = 0; i < chunk.EntityCount; i++)
+                    _disposer.DisposeEntity(ref buffer, chunk, i);
     }
 
     internal (EntityId entity, Row slot) CreateEntity()
@@ -183,9 +181,6 @@ public sealed partial class Archetype
         // Remove the entity from the chunk, component data is lost after this point
         info.Chunk.RemoveEntity(info);
 
-        // Decrease archetype entity count
-        EntityCount--;
-
         // Execute handler for when an entity is removed from a chunk
         HandleChunkEntityRemoved(info.Chunk);
     }
@@ -202,9 +197,6 @@ public sealed partial class Archetype
         var chunk = info.Chunk;
         var row = chunk.MigrateTo(entity, ref info, to);
 
-        // Decrease archetype entity count
-        EntityCount--;
-
         // Execute handler for when an entity is removed from a chunk
         HandleChunkEntityRemoved(chunk);
 
@@ -213,6 +205,9 @@ public sealed partial class Archetype
 
     private void HandleChunkEntityRemoved(Chunk chunk)
     {
+        // Decrease archetype entity count
+        EntityCount--;
+
         switch (chunk.EntityCount)
         {
             // If the chunk is empty remove it from this archetype entirely

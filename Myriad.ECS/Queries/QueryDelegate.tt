@@ -8,6 +8,7 @@
 	const int PARAM_COUNT = 16;
 #>
 using Myriad.ECS.Queries;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -42,6 +43,7 @@ namespace Myriad.ECS.Queries
 		<#= string.Join(", ", Enumerable.Range(0, i).Select(x => "ref T" + x + " t" + x)) #>
 	);
 
+	<#= CoverageAttribute(i) #>
 	internal readonly struct <#= delegate_wrapper_name #>E<<#= delegate_type_params #>>
 		: IQuery<<#= delegate_type_params #>>
 		where <#= Constraints(i, 12) #>
@@ -59,6 +61,7 @@ namespace Myriad.ECS.Queries
 		}
 	}
 
+	<#= CoverageAttribute(i) #>
 	internal readonly struct <#= delegate_wrapper_name #><<#= delegate_type_params #>>
 		: IQuery<<#= delegate_type_params #>>
 		where <#= Constraints(i, 12) #>
@@ -76,6 +79,7 @@ namespace Myriad.ECS.Queries
 		}
 	}
 
+	<#= CoverageAttribute(i) #>
 	internal readonly struct <#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>
 		: IQuery<<#= delegate_type_params #>>
 		where <#= Constraints(i, 12) #>
@@ -95,6 +99,7 @@ namespace Myriad.ECS.Queries
 		}
 	}
 
+	<#= CoverageAttribute(i) #>
 	internal readonly struct <#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>
 		: IQuery<<#= delegate_type_params #>>
 		where <#= Constraints(i, 12) #>
@@ -119,6 +124,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		<#= CoverageAttribute(i) #>
 		public void Query<<#= delegate_type_params #>>(QueryDelegateEntity<<#= delegate_type_params #>> @delegate, ref QueryDescription? query)
 			where <#= Constraints(i, 12) #>
 		{
@@ -128,6 +134,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		<#= CoverageAttribute(i) #>
 		public void Query<<#= delegate_type_params #>>(QueryDelegateEntity<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
@@ -137,6 +144,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		<#= CoverageAttribute(i) #>
 		public void QueryParallel<<#= delegate_type_params #>>(QueryDelegateEntity<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
@@ -146,6 +154,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		<#= CoverageAttribute(i) #>
 		public void Query<<#= delegate_type_params #>>(QueryDelegate<<#= delegate_type_params #>> @delegate, ref QueryDescription? query)
 			where <#= Constraints(i, 12) #>
 		{
@@ -155,6 +164,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		<#= CoverageAttribute(i) #>
 		public void Query<<#= delegate_type_params #>>(QueryDelegate<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
@@ -164,6 +174,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		<#= CoverageAttribute(i) #>
 		public void QueryParallel<<#= delegate_type_params #>>(QueryDelegate<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
@@ -175,6 +186,7 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		<#= CoverageAttribute(i) #>
 		public void Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateEntityData<TData, <#= delegate_type_params #>> @delegate, ref QueryDescription? query)
 			where <#= Constraints(i, 12) #>
 		{
@@ -184,6 +196,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		<#= CoverageAttribute(i) #>
 		public void Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateEntityData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
@@ -193,6 +206,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		<#= CoverageAttribute(i) #>
 		public void QueryParallel<TData, <#= delegate_type_params #>>(TData data, QueryDelegateEntityData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
@@ -202,6 +216,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		<#= CoverageAttribute(i) #>
 		public void Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateData<TData, <#= delegate_type_params #>> @delegate, ref QueryDescription? query)
 			where <#= Constraints(i, 12) #>
 		{
@@ -211,6 +226,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		<#= CoverageAttribute(i) #>
 		public void Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
@@ -220,6 +236,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		<#= CoverageAttribute(i) #>
 		public void QueryParallel<TData, <#= delegate_type_params #>>(TData data, QueryDelegateData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
@@ -237,6 +254,13 @@ namespace Myriad.ECS.Worlds
 
 
 <#+ 
+	static string CoverageAttribute(int index)
+	{
+		if (index < 2)
+			return "";
+		return "[ExcludeFromCodeCoverage]";
+	}
+
 	static string Constraints(int count, int spaces = 4)
     {
 		var prefix = new string(' ', spaces);

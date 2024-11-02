@@ -9,6 +9,7 @@
 #>
 using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -52,6 +53,7 @@ for (var i = 1; i <= PARAM_COUNT; i++)
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    <#= CoverageAttribute(i) #>
     public int Count<#= tparams #>()
         <#= Constraints(i, 8) #>
     {
@@ -63,6 +65,7 @@ for (var i = 1; i <= PARAM_COUNT; i++)
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    <#= CoverageAttribute(i) #>
     public int Count<#= tparams #>(ref QueryDescription? query)
         <#= Constraints(i, 8) #>
     {
@@ -100,6 +103,13 @@ for (var j = 0; j < i; j++)
 }
 
 <#+ 
+    static string CoverageAttribute(int index)
+	{
+		if (index < 3)
+			return "";
+		return "[ExcludeFromCodeCoverage]";
+	}
+
     static string Constraints(int count, int spaces = 4)
     {
         if (count == 0)

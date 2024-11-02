@@ -12,6 +12,7 @@ using Myriad.ECS.IDs;
 using Myriad.ECS.xxHash;
 using Myriad.ECS.Collections;
 using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
 
 #if NETSTANDARD2_1
 using Myriad.ECS.Extensions;
@@ -56,6 +57,10 @@ public partial class World
         _lock1.EnterWriteLock();
         try
         {
+            // Find query that matches this types
+            if (_queryCache1.TryGetValue(component, out var q))
+                return q;
+
             // Didn't find one, create it now
             var query = new QueryBuilder()
                 .Include<T0>()
@@ -112,6 +117,10 @@ public partial class World
         _lock2.EnterWriteLock();
         try
         {
+            // Find query that matches this types
+            if (_queryCache2.TryGetValue(key, out var q))
+                return q;
+
             // Didn't find one, create it now
             var query = new QueryBuilder()
                 .Include<T0>()
@@ -148,10 +157,11 @@ public partial class World
     }
 #>
 
-    // Cache of all queries with <#= i #> included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
-    // - the query itself
+    // Cache of all queries with <#= i #> included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this tuple item
+    // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache<#= i #> = [ ];
 
     private readonly ReaderWriterLockSlim _lock<#= i #> = new();
@@ -161,6 +171,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
+    <#= CoverageAttribute(i) #>
     private QueryDescription GetCachedQuery<#= tparams #>()
         <#= Constraints(i, 8) #>
     {
@@ -250,6 +261,13 @@ public partial class World
 
 
 <#+ 
+    static string CoverageAttribute(int index)
+	{
+		if (index < 4)
+			return "";
+		return "[ExcludeFromCodeCoverage]";
+	}
+
     static string Constraints(int count, int spaces = 4)
     {
         if (count == 0)

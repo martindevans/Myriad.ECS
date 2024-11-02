@@ -3,6 +3,9 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=68027c23_002Ddb6f_002D4fd8_002D93a6_002Dd93b53112754/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestMethod2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="C:\Users\Martin\Documents\dotnet\Myriad.ECS\Myriad.ECS.Tests" Presentation="&amp;lt;Myriad.ECS.Tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=cd4b50a2_002Dab24_002D4069_002Dabda_002D157f94d2b01b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;Myriad.ECS.Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="C:\Users\Martin\Documents\dotnet\Myriad.ECS\Myriad.ECS.Tests" Presentation="&amp;lt;Myriad.ECS.Tests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	
 	
 	

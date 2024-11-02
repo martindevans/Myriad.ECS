@@ -1,5 +1,6 @@
 ﻿using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -37,6 +38,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    
     public int Count<T0>()
         where T0 : IComponent
     {
@@ -48,6 +50,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    
     public int Count<T0>(ref QueryDescription? query)
         where T0 : IComponent
     {
@@ -76,6 +79,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    
     public int Count<T0, T1>()
         where T0 : IComponent
         where T1 : IComponent
@@ -88,6 +92,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    
     public int Count<T0, T1>(ref QueryDescription? query)
         where T0 : IComponent
         where T1 : IComponent
@@ -124,6 +129,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2>()
         where T0 : IComponent
         where T1 : IComponent
@@ -137,6 +143,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2>(ref QueryDescription? query)
         where T0 : IComponent
         where T1 : IComponent
@@ -181,6 +188,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3>()
         where T0 : IComponent
         where T1 : IComponent
@@ -195,6 +203,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3>(ref QueryDescription? query)
         where T0 : IComponent
         where T1 : IComponent
@@ -247,6 +256,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4>()
         where T0 : IComponent
         where T1 : IComponent
@@ -262,6 +272,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4>(ref QueryDescription? query)
         where T0 : IComponent
         where T1 : IComponent
@@ -322,6 +333,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5>()
         where T0 : IComponent
         where T1 : IComponent
@@ -338,6 +350,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5>(ref QueryDescription? query)
         where T0 : IComponent
         where T1 : IComponent
@@ -406,6 +419,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6>()
         where T0 : IComponent
         where T1 : IComponent
@@ -423,6 +437,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6>(ref QueryDescription? query)
         where T0 : IComponent
         where T1 : IComponent
@@ -499,6 +514,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7>()
         where T0 : IComponent
         where T1 : IComponent
@@ -517,6 +533,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7>(ref QueryDescription? query)
         where T0 : IComponent
         where T1 : IComponent
@@ -601,6 +618,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
         where T0 : IComponent
         where T1 : IComponent
@@ -620,6 +638,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref QueryDescription? query)
         where T0 : IComponent
         where T1 : IComponent
@@ -712,6 +731,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
         where T0 : IComponent
         where T1 : IComponent
@@ -732,6 +752,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref QueryDescription? query)
         where T0 : IComponent
         where T1 : IComponent
@@ -832,6 +853,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
         where T0 : IComponent
         where T1 : IComponent
@@ -853,6 +875,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref QueryDescription? query)
         where T0 : IComponent
         where T1 : IComponent
@@ -961,6 +984,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
         where T0 : IComponent
         where T1 : IComponent
@@ -983,6 +1007,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref QueryDescription? query)
         where T0 : IComponent
         where T1 : IComponent
@@ -1099,6 +1124,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1122,6 +1148,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref QueryDescription? query)
         where T0 : IComponent
         where T1 : IComponent
@@ -1246,6 +1273,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1270,6 +1298,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref QueryDescription? query)
         where T0 : IComponent
         where T1 : IComponent
@@ -1402,6 +1431,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1427,6 +1457,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref QueryDescription? query)
         where T0 : IComponent
         where T1 : IComponent
@@ -1567,6 +1598,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1593,6 +1625,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref QueryDescription? query)
         where T0 : IComponent
         where T1 : IComponent

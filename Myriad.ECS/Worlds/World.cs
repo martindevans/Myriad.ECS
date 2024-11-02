@@ -177,6 +177,8 @@ public sealed partial class World
             _deadEntities.RemoveAt(_deadEntities.Count - 1);
 
             var v = unchecked(prev.Version + 1);
+
+            // Ensure ID 0 is not assigned even after wrapping around 2^32 entities
             if (v == 0)
                 v += 1;
 

@@ -1,4 +1,5 @@
-﻿
+﻿using System.Diagnostics.CodeAnalysis;
+
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
 // ReSharper disable LoopCanBeConvertedToQuery
@@ -13,6 +14,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<T0, T1>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -27,6 +29,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<T0, T1, T2>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -43,6 +46,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<T0, T1, T2, T3>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -61,6 +65,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<T0, T1, T2, T3, T4>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -81,6 +86,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<T0, T1, T2, T3, T4, T5>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -103,6 +109,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<T0, T1, T2, T3, T4, T5, T6>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -127,6 +134,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<T0, T1, T2, T3, T4, T5, T6, T7>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -153,6 +161,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -181,6 +190,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -211,6 +221,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -243,6 +254,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -277,6 +289,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -313,6 +326,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -351,6 +365,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -391,6 +406,7 @@ public sealed partial class QueryBuilder
 	/// Include only entities which have all of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Include<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -434,6 +450,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<T0, T1>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -448,6 +465,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<T0, T1, T2>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -464,6 +482,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<T0, T1, T2, T3>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -482,6 +501,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<T0, T1, T2, T3, T4>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -502,6 +522,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<T0, T1, T2, T3, T4, T5>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -524,6 +545,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<T0, T1, T2, T3, T4, T5, T6>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -548,6 +570,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<T0, T1, T2, T3, T4, T5, T6, T7>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -574,6 +597,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -602,6 +626,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -632,6 +657,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -664,6 +690,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -698,6 +725,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -734,6 +762,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -772,6 +801,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
 		where T0 : IComponent
 		where T1 : IComponent
@@ -812,6 +842,7 @@ public sealed partial class QueryBuilder
 	/// Exclude entities which have any of these components
 	/// </summary>
 	/// <returns>The query builder</returns>
+	[ExcludeFromCodeCoverage]
 	public QueryBuilder Exclude<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
 		where T0 : IComponent
 		where T1 : IComponent

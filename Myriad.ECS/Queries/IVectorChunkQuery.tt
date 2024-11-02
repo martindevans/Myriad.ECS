@@ -9,6 +9,7 @@
 #>
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 
@@ -61,6 +62,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <param name="query">A query expressing which entities to execute this query over</param>
         /// <returns>The total number of entities processed</returns>
+		<#= CoverageAttribute(i) #>
 		public int ExecuteVectorChunk<TQ, <#= Generics(i) #>>(
 			TQ q,
 			QueryDescription? query = null
@@ -171,6 +173,13 @@ namespace Myriad.ECS.Worlds
 
 
 <#+ 
+	static string CoverageAttribute(int index)
+	{
+		if (index < 4)
+			return "";
+		return "[ExcludeFromCodeCoverage]";
+	}
+
 	static string Constraints(int count, int spaces = 4)
     {
         var prefix = new string(' ', spaces);

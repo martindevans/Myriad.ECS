@@ -7,11 +7,11 @@ namespace Myriad.ECS.Tests.Queries;
 [TestClass]
 public class ParallelQueryTests
 {
-    private void SetupRandomEntities(World world)
+    private void SetupRandomEntities(World world, int count = 1_000_000)
     {
         var b = new CommandBuffer(world);
         var r = new Random(3452);
-        for (var i = 0; i < 1_000_000; i++)
+        for (var i = 0; i < count; i++)
         {
             var eb = b.Create();
 
@@ -94,7 +94,7 @@ public class ParallelQueryTests
     public void ChunkExceptions()
     {
         var w = new WorldBuilder().Build();
-        SetupRandomEntities(w);
+        SetupRandomEntities(w, 10_000);
 
         // Increment just the int32s
         Assert.ThrowsException<AggregateException>(() =>

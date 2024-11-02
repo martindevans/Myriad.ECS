@@ -63,16 +63,16 @@ internal class ComponentSetterCollection
     /// <param name="buffer"></param>
     public void Dispose(SortedList<ComponentID, SetterId>? sets, ref LazyCommandBuffer buffer)
     {
-        if (sets == null)
-            return;
-
-        foreach (var (cid, sid) in sets)
+        if (sets != null)
         {
-            if (!cid.IsDisposableComponent)
-                continue;
+            foreach (var (cid, sid) in sets)
+            {
+                if (!cid.IsDisposableComponent)
+                    continue;
 
-            var list = _components[sid.ID];
-            list.Dispose(sid.Index, ref buffer);
+                var list = _components[sid.ID];
+                list.Dispose(sid.Index, ref buffer);
+            }
         }
     }
 

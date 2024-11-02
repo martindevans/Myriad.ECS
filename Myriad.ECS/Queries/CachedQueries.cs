@@ -3,6 +3,7 @@ using Myriad.ECS.IDs;
 using Myriad.ECS.xxHash;
 using Myriad.ECS.Collections;
 using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
 
 #if NETSTANDARD2_1
 using Myriad.ECS.Extensions;
@@ -47,6 +48,10 @@ public partial class World
         _lock1.EnterWriteLock();
         try
         {
+            // Find query that matches this types
+            if (_queryCache1.TryGetValue(component, out var q))
+                return q;
+
             // Didn't find one, create it now
             var query = new QueryBuilder()
                 .Include<T0>()
@@ -103,6 +108,10 @@ public partial class World
         _lock2.EnterWriteLock();
         try
         {
+            // Find query that matches this types
+            if (_queryCache2.TryGetValue(key, out var q))
+                return q;
+
             // Didn't find one, create it now
             var query = new QueryBuilder()
                 .Include<T0>()
@@ -121,10 +130,11 @@ public partial class World
     }
 
 
-    // Cache of all queries with 3 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
-    // - the query itself
+    // Cache of all queries with 3 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this tuple item
+    // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache3 = [ ];
 
     private readonly ReaderWriterLockSlim _lock3 = new();
@@ -134,6 +144,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
+    
     private QueryDescription GetCachedQuery<T0, T1, T2>()
         where T0 : IComponent
         where T1 : IComponent
@@ -204,10 +215,11 @@ public partial class World
     }
 
 
-    // Cache of all queries with 4 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
-    // - the query itself
+    // Cache of all queries with 4 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this tuple item
+    // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache4 = [ ];
 
     private readonly ReaderWriterLockSlim _lock4 = new();
@@ -217,6 +229,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
     private QueryDescription GetCachedQuery<T0, T1, T2, T3>()
         where T0 : IComponent
         where T1 : IComponent
@@ -290,10 +303,11 @@ public partial class World
     }
 
 
-    // Cache of all queries with 5 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
-    // - the query itself
+    // Cache of all queries with 5 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this tuple item
+    // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache5 = [ ];
 
     private readonly ReaderWriterLockSlim _lock5 = new();
@@ -303,6 +317,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4>()
         where T0 : IComponent
         where T1 : IComponent
@@ -379,10 +394,11 @@ public partial class World
     }
 
 
-    // Cache of all queries with 6 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
-    // - the query itself
+    // Cache of all queries with 6 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this tuple item
+    // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache6 = [ ];
 
     private readonly ReaderWriterLockSlim _lock6 = new();
@@ -392,6 +408,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5>()
         where T0 : IComponent
         where T1 : IComponent
@@ -471,10 +488,11 @@ public partial class World
     }
 
 
-    // Cache of all queries with 7 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
-    // - the query itself
+    // Cache of all queries with 7 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this tuple item
+    // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache7 = [ ];
 
     private readonly ReaderWriterLockSlim _lock7 = new();
@@ -484,6 +502,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>()
         where T0 : IComponent
         where T1 : IComponent
@@ -566,10 +585,11 @@ public partial class World
     }
 
 
-    // Cache of all queries with 8 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
-    // - the query itself
+    // Cache of all queries with 8 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this tuple item
+    // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache8 = [ ];
 
     private readonly ReaderWriterLockSlim _lock8 = new();
@@ -579,6 +599,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>()
         where T0 : IComponent
         where T1 : IComponent
@@ -664,10 +685,11 @@ public partial class World
     }
 
 
-    // Cache of all queries with 9 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
-    // - the query itself
+    // Cache of all queries with 9 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this tuple item
+    // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache9 = [ ];
 
     private readonly ReaderWriterLockSlim _lock9 = new();
@@ -677,6 +699,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
         where T0 : IComponent
         where T1 : IComponent
@@ -765,10 +788,11 @@ public partial class World
     }
 
 
-    // Cache of all queries with 10 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
-    // - the query itself
+    // Cache of all queries with 10 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this tuple item
+    // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache10 = [ ];
 
     private readonly ReaderWriterLockSlim _lock10 = new();
@@ -778,6 +802,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
         where T0 : IComponent
         where T1 : IComponent
@@ -869,10 +894,11 @@ public partial class World
     }
 
 
-    // Cache of all queries with 11 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
-    // - the query itself
+    // Cache of all queries with 11 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this tuple item
+    // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache11 = [ ];
 
     private readonly ReaderWriterLockSlim _lock11 = new();
@@ -882,6 +908,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
         where T0 : IComponent
         where T1 : IComponent
@@ -976,10 +1003,11 @@ public partial class World
     }
 
 
-    // Cache of all queries with 12 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
-    // - the query itself
+    // Cache of all queries with 12 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this tuple item
+    // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache12 = [ ];
 
     private readonly ReaderWriterLockSlim _lock12 = new();
@@ -989,6 +1017,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1086,10 +1115,11 @@ public partial class World
     }
 
 
-    // Cache of all queries with 13 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
-    // - the query itself
+    // Cache of all queries with 13 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this tuple item
+    // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache13 = [ ];
 
     private readonly ReaderWriterLockSlim _lock13 = new();
@@ -1099,6 +1129,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1199,10 +1230,11 @@ public partial class World
     }
 
 
-    // Cache of all queries with 14 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
-    // - the query itself
+    // Cache of all queries with 14 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this tuple item
+    // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache14 = [ ];
 
     private readonly ReaderWriterLockSlim _lock14 = new();
@@ -1212,6 +1244,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1315,10 +1348,11 @@ public partial class World
     }
 
 
-    // Cache of all queries with 15 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
-    // - the query itself
+    // Cache of all queries with 15 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this tuple item
+    // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache15 = [ ];
 
     private readonly ReaderWriterLockSlim _lock15 = new();
@@ -1328,6 +1362,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1434,10 +1469,11 @@ public partial class World
     }
 
 
-    // Cache of all queries with 16 included components. Tuple elements are:
-    // - hash of sorted component IDs
-    // - sorted array of component IDs
-    // - the query itself
+    // Cache of all queries with 16 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this tuple item
+    // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache16 = [ ];
 
     private readonly ReaderWriterLockSlim _lock16 = new();
@@ -1447,6 +1483,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
     private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
         where T0 : IComponent
         where T1 : IComponent
