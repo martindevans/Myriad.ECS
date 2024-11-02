@@ -36,7 +36,7 @@ public struct SystemDeclaration
     }
 
     /// <summary>
-    /// Declare that the given component is read during the update phase
+    /// Declare that the given component is written during the update phase
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public void Write<T>()
