@@ -11,6 +11,68 @@ namespace Myriad.ECS.Tests;
 public class QueryDescriptionTests
 {
     [TestMethod]
+    public void IsIncluded()
+    {
+        var w = new WorldBuilder().Build();
+
+        var q = new QueryBuilder()
+               .Include<ComponentFloat>()
+               .Build(w);
+
+        Assert.IsTrue(q.IsIncluded<ComponentFloat>());
+        Assert.IsTrue(q.IsIncluded(typeof(ComponentFloat)));
+        Assert.IsFalse(q.IsIncluded<ComponentInt32>());
+        Assert.IsFalse(q.IsIncluded(typeof(ComponentInt32)));
+    }
+
+    [TestMethod]
+    public void IsExcluded()
+    {
+        var w = new WorldBuilder().Build();
+
+        var q = new QueryBuilder()
+               .Exclude<ComponentFloat>()
+               .Build(w);
+
+        Assert.IsTrue(q.IsExcluded<ComponentFloat>());
+        Assert.IsTrue(q.IsExcluded(typeof(ComponentFloat)));
+        Assert.IsFalse(q.IsExcluded<ComponentInt32>());
+        Assert.IsFalse(q.IsExcluded(typeof(ComponentInt32)));
+    }
+
+    [TestMethod]
+    public void IsExactlyOneOf()
+    {
+        var w = new WorldBuilder().Build();
+
+        var q = new QueryBuilder()
+               .ExactlyOneOf<ComponentFloat>()
+               .ExactlyOneOf<ComponentByte>()
+               .Build(w);
+
+        Assert.IsTrue(q.IsExactlyOneOf<ComponentFloat>());
+        Assert.IsTrue(q.IsExactlyOneOf(typeof(ComponentFloat)));
+        Assert.IsFalse(q.IsExactlyOneOf<ComponentInt32>());
+        Assert.IsFalse(q.IsExactlyOneOf(typeof(ComponentInt32)));
+    }
+
+    [TestMethod]
+    public void IsAtLeastOneOf()
+    {
+        var w = new WorldBuilder().Build();
+
+        var q = new QueryBuilder()
+               .AtLeastOneOf<ComponentFloat>()
+               .AtLeastOneOf<ComponentByte>()
+               .Build(w);
+
+        Assert.IsTrue(q.IsAtLeastOneOf<ComponentFloat>());
+        Assert.IsTrue(q.IsAtLeastOneOf(typeof(ComponentFloat)));
+        Assert.IsFalse(q.IsAtLeastOneOf<ComponentInt32>());
+        Assert.IsFalse(q.IsAtLeastOneOf(typeof(ComponentInt32)));
+    }
+
+    [TestMethod]
     public void IncludeMatchNone()
     {
         var w = new WorldBuilder()
@@ -72,6 +134,7 @@ public class QueryDescriptionTests
            .WithArchetype(typeof(ComponentFloat))
            .Build();
 
+        // Query that matches just one of the archetypes in the world
         var q = new QueryBuilder()
            .Include<ComponentFloat>()
            .Build(w);
@@ -83,14 +146,25 @@ public class QueryDescriptionTests
         Assert.IsNull(a.LINQ().Single().AtLeastOne);
         Assert.IsNull(a.LINQ().Single().ExactlyOne);
 
-        // Add an archetype to the world
-        var c = new OrderedListSet<ComponentID>(new HashSet<ComponentID> { ComponentID<ComponentInt32>.ID, ComponentID<ComponentFloat>.ID });
-        w.GetOrCreateArchetype(c, ArchetypeHash.Create(c));
+        // Add an archetype to the world that the query should match
+        var c1 = new OrderedListSet<ComponentID>(new HashSet<ComponentID> { ComponentID<ComponentInt32>.ID, ComponentID<ComponentFloat>.ID });
+        w.GetOrCreateArchetype(c1, ArchetypeHash.Create(c1));
 
+        // Check it now matches 2 archetypes
         var b = q.GetArchetypes();
         Assert.IsNotNull(b);
         Assert.AreEqual(2, b.Count);
         Assert.IsTrue(a.LINQ().All(x => x.Archetype.Components.Contains(ComponentID<ComponentFloat>.ID)));
+
+        // Add an archetype to the world that the query should NOT match
+        var c2 = new OrderedListSet<ComponentID>(new HashSet<ComponentID> { ComponentID<ComponentInt32>.ID, ComponentID<ComponentByte>.ID });
+        w.GetOrCreateArchetype(c2, ArchetypeHash.Create(c2));
+
+        // Check it now matches 2 archetypes
+        var c = q.GetArchetypes();
+        Assert.IsNotNull(c);
+        Assert.AreEqual(2, c.Count);
+        Assert.IsTrue(c.LINQ().All(x => x.Archetype.Components.Contains(ComponentID<ComponentFloat>.ID)));
     }
 
     [TestMethod]

@@ -40,7 +40,7 @@ public interface ISystemGroup<TData>
     }
 }
 
-public class SystemGroupItem<TData>
+public sealed class SystemGroupItem<TData>
 {
     public bool Enabled { get; set; } = true;
 
@@ -58,7 +58,7 @@ public class SystemGroupItem<TData>
     /// <summary>
     /// Indicates if this system has a BeforeUpdate phase
     /// </summary>
-    public bool HasBeforeUpdate => SystemBefore != null;
+    public bool HasBeforeUpdate { get; }
 
     /// <summary>
     /// Time elapsed in last BeforeUpdate phase
@@ -73,7 +73,7 @@ public class SystemGroupItem<TData>
     /// <summary>
     /// Indicates if this system has a AfterUpdate phase
     /// </summary>
-    public bool HasAfterUpdate => SystemBefore != null;
+    public bool HasAfterUpdate { get; }
 
     /// <summary>
     /// Time elapsed in last AfterUpdate phase
@@ -85,6 +85,9 @@ public class SystemGroupItem<TData>
         SystemBefore = system as ISystemBefore<TData>;
         SystemAfter = system as ISystemAfter<TData>;
         System = system;
+
+        HasBeforeUpdate = SystemBefore != null;
+        HasAfterUpdate = SystemAfter != null;
 
         Type = system.GetType();
     }

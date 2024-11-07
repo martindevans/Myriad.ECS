@@ -115,7 +115,7 @@ public sealed class QueryDescription
 
     public bool IsAtLeastOneOf(Type type)
     {
-        return IsExcluded(ComponentID.Get(type));
+        return IsAtLeastOneOf(ComponentID.Get(type));
     }
 
     public bool IsAtLeastOneOf(ComponentID id)
@@ -184,7 +184,7 @@ public sealed class QueryDescription
             if (_result.Value.IsStale(World))
             {
                 // Lazy copy of the match set, in case there are no matches
-                var copy = (OrderedListSet<ArchetypeMatch>?)null;
+                var copy = default(OrderedListSet<ArchetypeMatch>?);
 
                 // Check every new archetype
                 for (var i = _result.Value.ArchetypeWatermark; i < World.Archetypes.Count; i++)
@@ -330,6 +330,28 @@ public sealed class QueryDescription
             if (archetype.Archetype.EntityCount > 0)
                 return true;
         return false;
+    }
+
+    /// <summary>
+    /// Get the first entity which this query matches (or null)
+    /// </summary>
+    /// <returns></returns>
+    public Entity? FirstOrDefault()
+    {
+        foreach (var archetype in GetArchetypes())
+        {
+            if (archetype.Archetype.EntityCount > 0)
+            {
+                for (var i = 0; i < archetype.Archetype.Chunks.Count; i++)
+                {
+                    var chunk = archetype.Archetype.Chunks[i];
+                    if (chunk.EntityCount > 0)
+                        return chunk.Entities.Span[0];
+                }
+            }
+        }
+
+        return default;
     }
 
     #region bulk write

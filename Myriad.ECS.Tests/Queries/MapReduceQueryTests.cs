@@ -38,14 +38,14 @@ namespace Myriad.ECS.Tests.Queries
 
             var cmd = new CommandBuffer(world);
             var sum = 0;
-            for (int i = 0; i < 9999; i++)
+            for (var i = 0; i < 9999; i++)
             {
                 sum += i;
                 cmd.Create().Set(new ComponentInt32(i));
             }
             cmd.Playback().Dispose();
 
-            var result = world.ExecuteMapReduce<MapGetInteger, MapReduceAdd, int, ComponentInt32>(new MapGetInteger(), new MapReduceAdd(), 0);
+            var result = world.ExecuteMapReduce<MapGetInteger, MapReduceAdd, int, ComponentInt32>(0);
 
             Assert.AreEqual(sum, result);
         }

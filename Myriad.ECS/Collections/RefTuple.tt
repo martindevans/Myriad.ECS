@@ -14,6 +14,7 @@
 // ReSharper disable CheckNamespace
 // ReSharper disable ArrangeAccessorOwnerBody
 
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Myriad.ECS.Collections;
@@ -83,6 +84,7 @@ public readonly struct RefT<T>
 	}
 #>
 
+<#= CoverageAttribute(i) #>
 public readonly ref struct RefTuple<<#= tparams #>>
 {
 	public readonly Entity Entity;
@@ -130,6 +132,13 @@ public readonly ref struct RefTuple<<#= tparams #>>
 
 
 <#+ 
+	static string CoverageAttribute(int index)
+	{
+		if (index < 3)
+			return "";
+		return "[ExcludeFromCodeCoverage]";
+	}
+
 	static string Constraints(int count, int spaces = 4)
     {
 		var prefix = new string(' ', spaces);

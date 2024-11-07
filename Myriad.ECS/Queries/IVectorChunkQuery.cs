@@ -150,7 +150,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <param name="query">A query expressing which entities to execute this query over</param>
         /// <returns>The total number of entities processed</returns>
-		
+		[ExcludeFromCodeCoverage]
 		public int ExecuteVectorChunk<TQ, T0, TV0, T1, TV1>(
 			TQ q,
 			QueryDescription? query = null
@@ -281,7 +281,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <param name="query">A query expressing which entities to execute this query over</param>
         /// <returns>The total number of entities processed</returns>
-		
+		[ExcludeFromCodeCoverage]
 		public int ExecuteVectorChunk<TQ, T0, TV0, T1, TV1, T2, TV2>(
 			TQ q,
 			QueryDescription? query = null

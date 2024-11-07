@@ -5,6 +5,7 @@
 // ReSharper disable CheckNamespace
 // ReSharper disable ArrangeAccessorOwnerBody
 
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Myriad.ECS.Collections;
@@ -63,6 +64,7 @@ public readonly struct RefT<T>
 #endif
 
 
+
 public readonly ref struct RefTuple<T0>
 {
 	public readonly Entity Entity;
@@ -86,6 +88,7 @@ public readonly ref struct RefTuple<T0>
 		item0 = _item0;
 	}
 }
+
 
 public readonly ref struct RefTuple<T0, T1>
 {
@@ -120,6 +123,7 @@ public readonly ref struct RefTuple<T0, T1>
 	}
 }
 
+[ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2>
 {
 	public readonly Entity Entity;
@@ -162,6 +166,7 @@ public readonly ref struct RefTuple<T0, T1, T2>
 	}
 }
 
+[ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3>
 {
 	public readonly Entity Entity;
@@ -213,6 +218,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3>
 	}
 }
 
+[ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4>
 {
 	public readonly Entity Entity;
@@ -273,6 +279,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4>
 	}
 }
 
+[ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5>
 {
 	public readonly Entity Entity;
@@ -342,6 +349,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5>
 	}
 }
 
+[ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6>
 {
 	public readonly Entity Entity;
@@ -420,6 +428,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6>
 	}
 }
 
+[ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7>
 {
 	public readonly Entity Entity;
@@ -507,6 +516,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7>
 	}
 }
 
+[ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 {
 	public readonly Entity Entity;
@@ -603,6 +613,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 	}
 }
 
+[ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 {
 	public readonly Entity Entity;
@@ -708,6 +719,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 	}
 }
 
+[ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 {
 	public readonly Entity Entity;
@@ -822,6 +834,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 	}
 }
 
+[ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 {
 	public readonly Entity Entity;
@@ -945,6 +958,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 	}
 }
 
+[ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 {
 	public readonly Entity Entity;
@@ -1077,6 +1091,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 	}
 }
 
+[ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 {
 	public readonly Entity Entity;
@@ -1218,6 +1233,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 	}
 }
 
+[ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 {
 	public readonly Entity Entity;
@@ -1368,6 +1384,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 	}
 }
 
+[ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 {
 	public readonly Entity Entity;
