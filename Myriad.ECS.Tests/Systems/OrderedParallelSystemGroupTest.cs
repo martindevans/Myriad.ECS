@@ -21,7 +21,7 @@ public class OrderedParallelSystemGroupTest
             new PhasedParallelSystemGroupTest.SystemWriteComponent<Component2>(),
             new PhasedParallelSystemGroupTest.SystemWriteComponent<Component3>(),
             new PhasedParallelSystemGroupTest.SystemWriteComponent<Component3>(),
-            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component4>(),
+            new PhasedParallelSystemGroupTest.SystemWriteComponent<Component4>()
         );
 
         var values = new ConcurrentDictionary<int, SemaphoreSlim>();
