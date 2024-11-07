@@ -1,5 +1,4 @@
-﻿using Myriad.ECS.Command;
-using Myriad.ECS.Queries;
+﻿using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Tests.Queries;

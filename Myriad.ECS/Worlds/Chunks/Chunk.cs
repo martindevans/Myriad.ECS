@@ -124,6 +124,21 @@ internal sealed class Chunk
     #region add/remove entity
     // Note that these must be called only from Archetype! The Archetype needs to do some bookeeping on create/destroy.
 
+    internal void Clear()
+    {
+        Debug.Assert(!Archetype.HasPhantomComponents);
+
+        // Clear out the components. This prevents chunks holding 
+        // onto references to dead managed components, and keeping them in memory.
+        foreach (var component in _components)
+            Array.Clear(component, 0, component.Length);
+
+        // Not strictly necessary, clean up all the IDs so they're default instead of some invalid value.
+        Array.Clear(_entities, 0, _entities.Length);
+
+        EntityCount = 0;
+    }
+
     internal Row AddEntity(EntityId entity, ref EntityInfo info)
     {
         // It is safe to only debug assert here. It should never happen if Myriad is working

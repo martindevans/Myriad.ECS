@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.Collections;
+﻿using System.Diagnostics;
+using Myriad.ECS.Collections;
 using Myriad.ECS.Command;
 using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
@@ -56,6 +57,11 @@ public sealed partial class Archetype
     private readonly ComponentID[] _componentIDs;
     private readonly Type[] _componentTypes;
     private readonly ArchetypeComponentDisposal? _disposer;
+
+    /// <summary>
+    /// The archetype that entities should be moved to when deleted. Only non-null if `HasPhantomComponents && !IsPhantom`
+    /// </summary>
+    private readonly Archetype? _phantomDestination;
 
     /// <summary>
     /// The total number of entities in this archetype
@@ -125,6 +131,14 @@ public sealed partial class Archetype
         // Create a disposer if it's needed
         if (HasDisposableComponents)
             _disposer = new ArchetypeComponentDisposal(components);
+
+        // Get the destination archetype for deleted entities, if they become phantoms
+        if (HasPhantomComponents && !IsPhantom)
+        {
+            var c = new OrderedListSet<ComponentID>(components);
+            c.Add(ComponentID<Phantom>.ID);
+            _phantomDestination = World.GetOrCreateArchetype(c);
+        }
     }
 
     internal void Dispose(ref LazyCommandBuffer buffer)
@@ -144,6 +158,60 @@ public sealed partial class Archetype
         var row = AddEntity(entity, ref info);
 
         return (entity, row);
+    }
+
+    /// <summary>
+    /// Delete every Entity in this archetype
+    /// </summary>
+    /// <param name="lazy"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    internal void Clear(ref LazyCommandBuffer lazy)
+    {
+        if (HasPhantomComponents && !IsPhantom)
+        {
+            Debug.Assert(_phantomDestination != null);
+
+            // Migrate all entities in all chunks to the new archetype. Doing this does all of the bookeeping like chunk management and entity count.
+            // This could be better, at the moment it just does the work on a per-entity basis, instead of doing it all in one batch.
+            while (_chunks.Count > 0)
+            {
+                var chunk = _chunks[^1];
+
+                while (chunk.EntityCount > 0)
+                {
+                    var entity = chunk.Entities.Span[^1].ID;
+                    ref var info = ref World.GetEntityInfo(entity);
+
+                    MigrateTo(entity, ref info, _phantomDestination, ref lazy);
+                }
+            }
+        }
+        else
+        {
+            // Dispose all disposables on any entity in this archetype
+            if (HasDisposableComponents)
+                Dispose(ref lazy);
+
+            // Clear all the chunks
+            foreach (var chunk in _chunks)
+                chunk.Clear();
+
+            // Move some chunks to hot spares and then delete the rest
+            foreach (var chunk in _chunks)
+            {
+                if (_spareChunks.Count < CHUNK_HOT_SPARES)
+                    _spareChunks.Push(chunk);
+                else
+                    break;
+            }
+            _chunksWithSpace.Clear();
+            _chunks.Clear();
+
+            // Done! No entities left.
+            EntityCount = 0;
+        }
+
+        Debug.Assert(EntityCount == 0);
     }
 
     /// <summary>
@@ -176,7 +244,8 @@ public sealed partial class Archetype
     internal void RemoveEntity(EntityInfo info, ref LazyCommandBuffer lazy)
     {
         // Run disposal for all IDisposableComponent components
-        _disposer?.DisposeEntity(ref lazy, info);
+        if (HasDisposableComponents)
+            _disposer?.DisposeEntity(ref lazy, info);
 
         // Remove the entity from the chunk, component data is lost after this point
         info.Chunk.RemoveEntity(info);
@@ -215,7 +284,7 @@ public sealed partial class Archetype
             {
                 _chunksWithSpace.Remove(chunk);
                 _chunks.Remove(chunk);
-                if (_spareChunks.Count < 4)
+                if (_spareChunks.Count < CHUNK_HOT_SPARES)
                     _spareChunks.Push(chunk);
                 break;
             }

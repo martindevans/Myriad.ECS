@@ -5,6 +5,7 @@ using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Threading;
 using Myriad.ECS.Worlds.Archetypes;
+using Myriad.ECS.Extensions;
 
 namespace Myriad.ECS.Worlds;
 
@@ -95,14 +96,37 @@ public sealed partial class World
         if (entityInfo.Version != delete.Version)
             return;
 
-        // Increment version, this will invalid the handle
-        entityInfo.Version++;
-
         // Notify archetype this entity is dead
         entityInfo.Chunk.Archetype.RemoveEntity(entityInfo, ref lazy);
 
+        // Increment version, this will invalid the handle
+        entityInfo.Version++;
+
         // Store this ID for re-use later
         _deadEntities.Add(delete);
+    }
+
+    internal void DeleteImmediate(Archetype archetype, ref LazyCommandBuffer lazy)
+    {
+        // Mark all of the IDs as dead (as long as they haven't become phantoms)
+        if (archetype is { HasPhantomComponents: false, IsPhantom: false })
+        {
+            _deadEntities.EnsureCapacity(_deadEntities.Count + archetype.EntityCount);
+            foreach (var entity in archetype.Entities)
+            {
+                // Get the entityinfo for this entity
+                ref var entityInfo = ref _entities[entity.ID.ID];
+
+                // Increment version, this will invalidate the handle
+                entityInfo.Version++;
+
+                // Store this ID for re-use later
+                _deadEntities.Add(entity.ID);
+            }
+        }
+
+        // Clear the archetype
+        archetype.Clear(ref lazy);
     }
 
     internal Archetype GetArchetype(EntityId entity)

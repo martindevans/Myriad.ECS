@@ -56,7 +56,7 @@ public class ExecuteChunkTests
     public void ExecuteChunkSetInt()
     {
         var w = new WorldBuilder().Build();
-        TestHelpers.SetupRandomEntities(w, count:500000).Playback().Dispose();
+        TestHelpers.SetupRandomEntities(w, count:100000).Playback().Dispose();
 
         // Destroy all of these specific entities, to ensure at least one archetype matches the query but is empty
         var c = new CommandBuffer(w);

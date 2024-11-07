@@ -1,5 +1,9 @@
-﻿using Myriad.ECS.Command;
+﻿using Myriad.ECS.Collections;
+using Myriad.ECS.Command;
+using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Queries;
+using Myriad.ECS.Tests.Queries;
 using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Tests;
@@ -387,6 +391,154 @@ public class CommandBufferTests
         Assert.IsTrue(entities[2].Exists());
 
         Assert.AreEqual(3, entities[2].GetComponentRef<ComponentFloat>().Value);
+    }
+
+    [TestMethod]
+    public void DeleteByQuery()
+    {
+        var world = new WorldBuilder().Build();
+
+        TestHelpers.SetupRandomEntities(world, count: 100000).Playback().Dispose();
+
+        // Get the archetypes we're about to delete
+        var deleting = (from archetype in world.Archetypes
+                        where archetype.Components.Contains(ComponentID<Component0>.ID)
+                        where archetype.Components.Contains(ComponentID<Component1>.ID)
+                        where !archetype.Components.Contains(ComponentID<ComponentInt32>.ID)
+                        select archetype).ToArray();
+
+        // Get all other archetypes
+        var others = (from archetype in world.Archetypes
+                      where !deleting.Contains(archetype)
+                      select (archetype, archetype.EntityCount)).ToArray();
+
+        // Query to delete
+        var q = new QueryBuilder().Include<Component0, Component1>().Exclude<ComponentInt32>().Build(world);
+
+        // Get an entity we're going to delete
+        var dead = q.FirstOrDefault()!.Value;
+
+        // Delete it
+        var buffer = new CommandBuffer(world);
+        buffer.Delete(q);
+        buffer.Playback().Dispose();
+
+        // Check the archetypes
+        foreach (var archetype in deleting)
+            Assert.AreEqual(0, archetype.EntityCount);
+        foreach (var (archetype, count) in others)
+            Assert.AreEqual(count, archetype.EntityCount);
+
+        // Check it's dead
+        Assert.IsFalse(dead.IsAlive());
+    }
+
+    [TestMethod]
+    public void DeleteByQueryWithDisposable()
+    {
+        var world = new WorldBuilder().Build();
+
+        TestHelpers.SetupRandomEntities(world, count: 100000).Playback().Dispose();
+
+        // Attach a disposable thing to a load of entities, some we're deleting and some we're not
+        var shouldDispose = new List<BoxedInt>();
+        var shouldNotDispose = new List<BoxedInt>();
+        var buffer = new CommandBuffer(world);
+        foreach (var (e, _, _) in world.Query<Component0, Component1>())
+        {
+            var box = new BoxedInt();
+            if (e.HasComponent<ComponentInt32>())
+                shouldNotDispose.Add(box);
+            else
+                shouldDispose.Add(box);
+
+            buffer.Set(e, new TestDisposable(box));
+        }
+        buffer.Playback().Dispose();
+
+        // Get the archetypes we're about to delete
+        var deleting = (from archetype in world.Archetypes
+                        where archetype.Components.Contains(ComponentID<Component0>.ID)
+                        where archetype.Components.Contains(ComponentID<Component1>.ID)
+                        where !archetype.Components.Contains(ComponentID<ComponentInt32>.ID)
+                        select archetype).ToArray();
+
+        // Get all other archetypes
+        var others = (from archetype in world.Archetypes
+                      where !deleting.Contains(archetype)
+                      select (archetype, archetype.EntityCount)).ToArray();
+
+        // Delete it
+        buffer.Delete(new QueryBuilder().Include<Component0, Component1>().Exclude<ComponentInt32>().Build(world));
+        buffer.Playback().Dispose();
+
+        // Check the archetypes
+        foreach (var archetype in deleting)
+            Assert.AreEqual(0, archetype.EntityCount);
+        foreach (var (archetype, count) in others)
+            Assert.AreEqual(count, archetype.EntityCount);
+
+        // Check the disposables
+        foreach (var boxedInt in shouldNotDispose)
+            Assert.AreEqual(0, boxedInt.Value);
+        foreach (var boxedInt in shouldDispose)
+            Assert.AreEqual(1, boxedInt.Value);
+    }
+
+    [TestMethod]
+    public void DeleteByQueryWithPhantom()
+    {
+        var world = new WorldBuilder().Build();
+
+        TestHelpers.SetupRandomEntities(world, count: 100000).Playback().Dispose();
+
+        // Attach a phantom to a load of entities
+        var buffer = new CommandBuffer(world);
+        foreach (var (e, _, _) in world.Query<Component0, Component1>())
+            buffer.Set(e, new TestPhantom0());
+        buffer.Playback().Dispose();
+
+        // Get the archetypes we're about to delete
+        var deleting = (from archetype in world.Archetypes
+                        where archetype.Components.Contains(ComponentID<Component0>.ID)
+                        where archetype.Components.Contains(ComponentID<Component1>.ID)
+                        where !archetype.Components.Contains(ComponentID<ComponentInt32>.ID)
+                        where !archetype.Components.Contains(ComponentID<Phantom>.ID)
+                        select archetype).ToArray();
+
+        // Get all other archetypes
+        var others = (from archetype in world.Archetypes
+                      where !deleting.Contains(archetype)
+                      where !archetype.Components.Contains(ComponentID<Phantom>.ID)
+                      select (archetype, archetype.EntityCount)).ToList();
+
+        // Get archetypes that are being deleted, and add their phantom partners to the list to check
+        var phantomsDeleting = (from archetype in world.Archetypes
+                                where archetype.Components.Contains(ComponentID<Component0>.ID)
+                                where archetype.Components.Contains(ComponentID<Component1>.ID)
+                                where archetype.Components.Contains(ComponentID<TestPhantom0>.ID)
+                                where !archetype.Components.Contains(ComponentID<ComponentInt32>.ID)
+                                where !archetype.Components.Contains(ComponentID<Phantom>.ID)
+                                select archetype).ToArray();
+        foreach (var archetype in phantomsDeleting)
+        {
+            var c = new OrderedListSet<ComponentID>(archetype.Components);
+            c.Add(ComponentID<Phantom>.ID);
+            var pa = world.GetOrCreateArchetype(c);
+
+            // All entities from the original archetype should be transferred to the phantom one.
+            others.Add((pa, archetype.EntityCount));
+        }
+
+        // Delete it
+        buffer.Delete(new QueryBuilder().Include<Component0, Component1>().Exclude<ComponentInt32>().Build(world));
+        buffer.Playback().Dispose();
+
+        // Check the archetypes
+        foreach (var archetype in deleting)
+            Assert.AreEqual(0, archetype.EntityCount);
+        foreach (var (archetype, count) in others)
+            Assert.AreEqual(count, archetype.EntityCount);
     }
 
     [TestMethod]

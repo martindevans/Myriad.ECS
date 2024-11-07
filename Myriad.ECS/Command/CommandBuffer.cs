@@ -5,6 +5,7 @@ using Myriad.ECS.Collections;
 using Myriad.ECS.Components;
 using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Worlds.Archetypes;
 
@@ -33,6 +34,7 @@ public sealed partial class CommandBuffer
 
     private readonly SortedList<Entity, EntityModificationData> _entityModifications = [ ];
     private readonly List<Entity> _deletes = [ ];
+    private readonly List<QueryDescription> _archetypeDeletes = [ ];
     private readonly OrderedListSet<Entity> _maybeAddingPhantomComponent = new();
 
     private readonly OrderedListSet<ComponentID> _tempComponentIdSet = new();
@@ -109,6 +111,18 @@ public sealed partial class CommandBuffer
 
     private void DeleteEntities(ref LazyCommandBuffer lazy)
     {
+        foreach (var query in _archetypeDeletes)
+        {
+            foreach (var match in query.GetArchetypes())
+            {
+                if (match.Archetype.EntityCount == 0)
+                    continue;
+
+                World.DeleteImmediate(match.Archetype, ref lazy);
+            }
+        }
+        _archetypeDeletes.Clear();
+
         foreach (var delete in _deletes)
         {
             // If there are any modifications enqueue for this entity, delete them
@@ -516,6 +530,18 @@ public sealed partial class CommandBuffer
 
         foreach (var entity in entities)
             Delete(entity);
+    }
+
+    /// <summary>
+    /// Bulk delete all entities which match the given query
+    /// </summary>
+    /// <param name="entities"></param>
+    public void Delete(QueryDescription entities)
+    {
+        if (entities.World != World)
+            throw new ArgumentException("Cannot use QueryDescription from one World with CommandBuffer for another World");
+
+        _archetypeDeletes.Add(entities);
     }
 
     private EntityModificationData GetModificationData(Entity entity, bool ensureSet, bool ensureRemove)
