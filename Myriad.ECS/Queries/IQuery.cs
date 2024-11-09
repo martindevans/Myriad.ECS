@@ -103,8 +103,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -190,8 +188,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -202,9 +198,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create
@@ -421,8 +414,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -513,8 +504,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -525,9 +514,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create
@@ -760,8 +746,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -857,8 +841,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -869,9 +851,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create
@@ -1120,8 +1099,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -1222,8 +1199,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -1234,9 +1209,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create
@@ -1501,8 +1473,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -1608,8 +1578,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -1620,9 +1588,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create
@@ -1903,8 +1868,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -2015,8 +1978,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -2027,9 +1988,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create
@@ -2326,8 +2284,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -2443,8 +2399,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -2455,9 +2409,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create
@@ -2770,8 +2721,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -2892,8 +2841,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -2904,9 +2851,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create
@@ -3235,8 +3179,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -3362,8 +3304,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -3374,9 +3314,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create
@@ -3721,8 +3658,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -3853,8 +3788,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -3865,9 +3798,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create
@@ -4228,8 +4158,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -4365,8 +4293,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -4377,9 +4303,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create
@@ -4756,8 +4679,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -4898,8 +4819,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -4910,9 +4829,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create
@@ -5305,8 +5221,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -5452,8 +5366,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -5464,9 +5376,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create
@@ -5875,8 +5784,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -6027,8 +5934,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -6039,9 +5944,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create
@@ -6466,8 +6368,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -6623,8 +6523,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -6635,9 +6533,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create
@@ -7078,8 +6973,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -7240,8 +7133,6 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
 
 				count += archetype.EntityCount;
 
@@ -7252,9 +7143,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entityCount = chunk.EntityCount;
-					if (entityCount == 0)
-						continue;
-
 					var numBatches = (int)Math.Ceiling(entityCount / (float)batchSize);
 
 					// Inrement work counter for all of the batches we're about to create

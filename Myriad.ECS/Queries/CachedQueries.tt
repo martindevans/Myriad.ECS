@@ -57,10 +57,6 @@ public partial class World
         _lock1.EnterWriteLock();
         try
         {
-            // Find query that matches this types
-            if (_queryCache1.TryGetValue(component, out var q))
-                return q;
-
             // Didn't find one, create it now
             var query = new QueryBuilder()
                 .Include<T0>()
@@ -117,10 +113,6 @@ public partial class World
         _lock2.EnterWriteLock();
         try
         {
-            // Find query that matches this types
-            if (_queryCache2.TryGetValue(key, out var q))
-                return q;
-
             // Didn't find one, create it now
             var query = new QueryBuilder()
                 .Include<T0>()
@@ -160,7 +152,7 @@ public partial class World
     // Cache of all queries with <#= i #> included components. 
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
-    // - The actual components for this tuple item
+    // - The actual components for this item (sorted)
     // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache<#= i #> = [ ];
 
@@ -200,20 +192,14 @@ public partial class World
         _lock<#= i #>.EnterReadLock();
         try
         {
-            // Get the list of items with this hash
+            // Hash collisions are possible but very unlikely. Use the hash to get a list of all queries with this hash
+            // and then perform a linear search over the list to find a query with exactly the same set of components.
+            // The list of components has been sorted into order (and is stored in order) so we can just do a direct span
+            // equality check, which should be very fast (SIMD accelerated).
             if (_queryCache<#= i #>.TryGetValue(hash, out var list))
-            {
-                // Find query that matches these types
                 foreach (var (c, q) in list)
-                {
-                    // Since the sequences are sorted by component ID these should be identical
-                    // Comparing two int spans should be very fast (SIMD accelerated)
-                    if (!orderedComponents.SequenceEqual(c))
-                        continue;
-
-                    return q;
-                }
-            }
+                    if (orderedComponents.SequenceEqual(c))
+                        return q;
         }
         finally
         {

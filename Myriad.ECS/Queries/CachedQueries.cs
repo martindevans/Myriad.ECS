@@ -48,10 +48,6 @@ public partial class World
         _lock1.EnterWriteLock();
         try
         {
-            // Find query that matches this types
-            if (_queryCache1.TryGetValue(component, out var q))
-                return q;
-
             // Didn't find one, create it now
             var query = new QueryBuilder()
                 .Include<T0>()
@@ -108,10 +104,6 @@ public partial class World
         _lock2.EnterWriteLock();
         try
         {
-            // Find query that matches this types
-            if (_queryCache2.TryGetValue(key, out var q))
-                return q;
-
             // Didn't find one, create it now
             var query = new QueryBuilder()
                 .Include<T0>()
@@ -133,7 +125,7 @@ public partial class World
     // Cache of all queries with 3 included components. 
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
-    // - The actual components for this tuple item
+    // - The actual components for this item (sorted)
     // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache3 = [ ];
 
@@ -165,20 +157,14 @@ public partial class World
         _lock3.EnterReadLock();
         try
         {
-            // Get the list of items with this hash
+            // Hash collisions are possible but very unlikely. Use the hash to get a list of all queries with this hash
+            // and then perform a linear search over the list to find a query with exactly the same set of components.
+            // The list of components has been sorted into order (and is stored in order) so we can just do a direct span
+            // equality check, which should be very fast (SIMD accelerated).
             if (_queryCache3.TryGetValue(hash, out var list))
-            {
-                // Find query that matches these types
                 foreach (var (c, q) in list)
-                {
-                    // Since the sequences are sorted by component ID these should be identical
-                    // Comparing two int spans should be very fast (SIMD accelerated)
-                    if (!orderedComponents.SequenceEqual(c))
-                        continue;
-
-                    return q;
-                }
-            }
+                    if (orderedComponents.SequenceEqual(c))
+                        return q;
         }
         finally
         {
@@ -218,7 +204,7 @@ public partial class World
     // Cache of all queries with 4 included components. 
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
-    // - The actual components for this tuple item
+    // - The actual components for this item (sorted)
     // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache4 = [ ];
 
@@ -252,20 +238,14 @@ public partial class World
         _lock4.EnterReadLock();
         try
         {
-            // Get the list of items with this hash
+            // Hash collisions are possible but very unlikely. Use the hash to get a list of all queries with this hash
+            // and then perform a linear search over the list to find a query with exactly the same set of components.
+            // The list of components has been sorted into order (and is stored in order) so we can just do a direct span
+            // equality check, which should be very fast (SIMD accelerated).
             if (_queryCache4.TryGetValue(hash, out var list))
-            {
-                // Find query that matches these types
                 foreach (var (c, q) in list)
-                {
-                    // Since the sequences are sorted by component ID these should be identical
-                    // Comparing two int spans should be very fast (SIMD accelerated)
-                    if (!orderedComponents.SequenceEqual(c))
-                        continue;
-
-                    return q;
-                }
-            }
+                    if (orderedComponents.SequenceEqual(c))
+                        return q;
         }
         finally
         {
@@ -306,7 +286,7 @@ public partial class World
     // Cache of all queries with 5 included components. 
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
-    // - The actual components for this tuple item
+    // - The actual components for this item (sorted)
     // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache5 = [ ];
 
@@ -342,20 +322,14 @@ public partial class World
         _lock5.EnterReadLock();
         try
         {
-            // Get the list of items with this hash
+            // Hash collisions are possible but very unlikely. Use the hash to get a list of all queries with this hash
+            // and then perform a linear search over the list to find a query with exactly the same set of components.
+            // The list of components has been sorted into order (and is stored in order) so we can just do a direct span
+            // equality check, which should be very fast (SIMD accelerated).
             if (_queryCache5.TryGetValue(hash, out var list))
-            {
-                // Find query that matches these types
                 foreach (var (c, q) in list)
-                {
-                    // Since the sequences are sorted by component ID these should be identical
-                    // Comparing two int spans should be very fast (SIMD accelerated)
-                    if (!orderedComponents.SequenceEqual(c))
-                        continue;
-
-                    return q;
-                }
-            }
+                    if (orderedComponents.SequenceEqual(c))
+                        return q;
         }
         finally
         {
@@ -397,7 +371,7 @@ public partial class World
     // Cache of all queries with 6 included components. 
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
-    // - The actual components for this tuple item
+    // - The actual components for this item (sorted)
     // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache6 = [ ];
 
@@ -435,20 +409,14 @@ public partial class World
         _lock6.EnterReadLock();
         try
         {
-            // Get the list of items with this hash
+            // Hash collisions are possible but very unlikely. Use the hash to get a list of all queries with this hash
+            // and then perform a linear search over the list to find a query with exactly the same set of components.
+            // The list of components has been sorted into order (and is stored in order) so we can just do a direct span
+            // equality check, which should be very fast (SIMD accelerated).
             if (_queryCache6.TryGetValue(hash, out var list))
-            {
-                // Find query that matches these types
                 foreach (var (c, q) in list)
-                {
-                    // Since the sequences are sorted by component ID these should be identical
-                    // Comparing two int spans should be very fast (SIMD accelerated)
-                    if (!orderedComponents.SequenceEqual(c))
-                        continue;
-
-                    return q;
-                }
-            }
+                    if (orderedComponents.SequenceEqual(c))
+                        return q;
         }
         finally
         {
@@ -491,7 +459,7 @@ public partial class World
     // Cache of all queries with 7 included components. 
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
-    // - The actual components for this tuple item
+    // - The actual components for this item (sorted)
     // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache7 = [ ];
 
@@ -531,20 +499,14 @@ public partial class World
         _lock7.EnterReadLock();
         try
         {
-            // Get the list of items with this hash
+            // Hash collisions are possible but very unlikely. Use the hash to get a list of all queries with this hash
+            // and then perform a linear search over the list to find a query with exactly the same set of components.
+            // The list of components has been sorted into order (and is stored in order) so we can just do a direct span
+            // equality check, which should be very fast (SIMD accelerated).
             if (_queryCache7.TryGetValue(hash, out var list))
-            {
-                // Find query that matches these types
                 foreach (var (c, q) in list)
-                {
-                    // Since the sequences are sorted by component ID these should be identical
-                    // Comparing two int spans should be very fast (SIMD accelerated)
-                    if (!orderedComponents.SequenceEqual(c))
-                        continue;
-
-                    return q;
-                }
-            }
+                    if (orderedComponents.SequenceEqual(c))
+                        return q;
         }
         finally
         {
@@ -588,7 +550,7 @@ public partial class World
     // Cache of all queries with 8 included components. 
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
-    // - The actual components for this tuple item
+    // - The actual components for this item (sorted)
     // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache8 = [ ];
 
@@ -630,20 +592,14 @@ public partial class World
         _lock8.EnterReadLock();
         try
         {
-            // Get the list of items with this hash
+            // Hash collisions are possible but very unlikely. Use the hash to get a list of all queries with this hash
+            // and then perform a linear search over the list to find a query with exactly the same set of components.
+            // The list of components has been sorted into order (and is stored in order) so we can just do a direct span
+            // equality check, which should be very fast (SIMD accelerated).
             if (_queryCache8.TryGetValue(hash, out var list))
-            {
-                // Find query that matches these types
                 foreach (var (c, q) in list)
-                {
-                    // Since the sequences are sorted by component ID these should be identical
-                    // Comparing two int spans should be very fast (SIMD accelerated)
-                    if (!orderedComponents.SequenceEqual(c))
-                        continue;
-
-                    return q;
-                }
-            }
+                    if (orderedComponents.SequenceEqual(c))
+                        return q;
         }
         finally
         {
@@ -688,7 +644,7 @@ public partial class World
     // Cache of all queries with 9 included components. 
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
-    // - The actual components for this tuple item
+    // - The actual components for this item (sorted)
     // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache9 = [ ];
 
@@ -732,20 +688,14 @@ public partial class World
         _lock9.EnterReadLock();
         try
         {
-            // Get the list of items with this hash
+            // Hash collisions are possible but very unlikely. Use the hash to get a list of all queries with this hash
+            // and then perform a linear search over the list to find a query with exactly the same set of components.
+            // The list of components has been sorted into order (and is stored in order) so we can just do a direct span
+            // equality check, which should be very fast (SIMD accelerated).
             if (_queryCache9.TryGetValue(hash, out var list))
-            {
-                // Find query that matches these types
                 foreach (var (c, q) in list)
-                {
-                    // Since the sequences are sorted by component ID these should be identical
-                    // Comparing two int spans should be very fast (SIMD accelerated)
-                    if (!orderedComponents.SequenceEqual(c))
-                        continue;
-
-                    return q;
-                }
-            }
+                    if (orderedComponents.SequenceEqual(c))
+                        return q;
         }
         finally
         {
@@ -791,7 +741,7 @@ public partial class World
     // Cache of all queries with 10 included components. 
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
-    // - The actual components for this tuple item
+    // - The actual components for this item (sorted)
     // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache10 = [ ];
 
@@ -837,20 +787,14 @@ public partial class World
         _lock10.EnterReadLock();
         try
         {
-            // Get the list of items with this hash
+            // Hash collisions are possible but very unlikely. Use the hash to get a list of all queries with this hash
+            // and then perform a linear search over the list to find a query with exactly the same set of components.
+            // The list of components has been sorted into order (and is stored in order) so we can just do a direct span
+            // equality check, which should be very fast (SIMD accelerated).
             if (_queryCache10.TryGetValue(hash, out var list))
-            {
-                // Find query that matches these types
                 foreach (var (c, q) in list)
-                {
-                    // Since the sequences are sorted by component ID these should be identical
-                    // Comparing two int spans should be very fast (SIMD accelerated)
-                    if (!orderedComponents.SequenceEqual(c))
-                        continue;
-
-                    return q;
-                }
-            }
+                    if (orderedComponents.SequenceEqual(c))
+                        return q;
         }
         finally
         {
@@ -897,7 +841,7 @@ public partial class World
     // Cache of all queries with 11 included components. 
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
-    // - The actual components for this tuple item
+    // - The actual components for this item (sorted)
     // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache11 = [ ];
 
@@ -945,20 +889,14 @@ public partial class World
         _lock11.EnterReadLock();
         try
         {
-            // Get the list of items with this hash
+            // Hash collisions are possible but very unlikely. Use the hash to get a list of all queries with this hash
+            // and then perform a linear search over the list to find a query with exactly the same set of components.
+            // The list of components has been sorted into order (and is stored in order) so we can just do a direct span
+            // equality check, which should be very fast (SIMD accelerated).
             if (_queryCache11.TryGetValue(hash, out var list))
-            {
-                // Find query that matches these types
                 foreach (var (c, q) in list)
-                {
-                    // Since the sequences are sorted by component ID these should be identical
-                    // Comparing two int spans should be very fast (SIMD accelerated)
-                    if (!orderedComponents.SequenceEqual(c))
-                        continue;
-
-                    return q;
-                }
-            }
+                    if (orderedComponents.SequenceEqual(c))
+                        return q;
         }
         finally
         {
@@ -1006,7 +944,7 @@ public partial class World
     // Cache of all queries with 12 included components. 
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
-    // - The actual components for this tuple item
+    // - The actual components for this item (sorted)
     // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache12 = [ ];
 
@@ -1056,20 +994,14 @@ public partial class World
         _lock12.EnterReadLock();
         try
         {
-            // Get the list of items with this hash
+            // Hash collisions are possible but very unlikely. Use the hash to get a list of all queries with this hash
+            // and then perform a linear search over the list to find a query with exactly the same set of components.
+            // The list of components has been sorted into order (and is stored in order) so we can just do a direct span
+            // equality check, which should be very fast (SIMD accelerated).
             if (_queryCache12.TryGetValue(hash, out var list))
-            {
-                // Find query that matches these types
                 foreach (var (c, q) in list)
-                {
-                    // Since the sequences are sorted by component ID these should be identical
-                    // Comparing two int spans should be very fast (SIMD accelerated)
-                    if (!orderedComponents.SequenceEqual(c))
-                        continue;
-
-                    return q;
-                }
-            }
+                    if (orderedComponents.SequenceEqual(c))
+                        return q;
         }
         finally
         {
@@ -1118,7 +1050,7 @@ public partial class World
     // Cache of all queries with 13 included components. 
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
-    // - The actual components for this tuple item
+    // - The actual components for this item (sorted)
     // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache13 = [ ];
 
@@ -1170,20 +1102,14 @@ public partial class World
         _lock13.EnterReadLock();
         try
         {
-            // Get the list of items with this hash
+            // Hash collisions are possible but very unlikely. Use the hash to get a list of all queries with this hash
+            // and then perform a linear search over the list to find a query with exactly the same set of components.
+            // The list of components has been sorted into order (and is stored in order) so we can just do a direct span
+            // equality check, which should be very fast (SIMD accelerated).
             if (_queryCache13.TryGetValue(hash, out var list))
-            {
-                // Find query that matches these types
                 foreach (var (c, q) in list)
-                {
-                    // Since the sequences are sorted by component ID these should be identical
-                    // Comparing two int spans should be very fast (SIMD accelerated)
-                    if (!orderedComponents.SequenceEqual(c))
-                        continue;
-
-                    return q;
-                }
-            }
+                    if (orderedComponents.SequenceEqual(c))
+                        return q;
         }
         finally
         {
@@ -1233,7 +1159,7 @@ public partial class World
     // Cache of all queries with 14 included components. 
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
-    // - The actual components for this tuple item
+    // - The actual components for this item (sorted)
     // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache14 = [ ];
 
@@ -1287,20 +1213,14 @@ public partial class World
         _lock14.EnterReadLock();
         try
         {
-            // Get the list of items with this hash
+            // Hash collisions are possible but very unlikely. Use the hash to get a list of all queries with this hash
+            // and then perform a linear search over the list to find a query with exactly the same set of components.
+            // The list of components has been sorted into order (and is stored in order) so we can just do a direct span
+            // equality check, which should be very fast (SIMD accelerated).
             if (_queryCache14.TryGetValue(hash, out var list))
-            {
-                // Find query that matches these types
                 foreach (var (c, q) in list)
-                {
-                    // Since the sequences are sorted by component ID these should be identical
-                    // Comparing two int spans should be very fast (SIMD accelerated)
-                    if (!orderedComponents.SequenceEqual(c))
-                        continue;
-
-                    return q;
-                }
-            }
+                    if (orderedComponents.SequenceEqual(c))
+                        return q;
         }
         finally
         {
@@ -1351,7 +1271,7 @@ public partial class World
     // Cache of all queries with 15 included components. 
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
-    // - The actual components for this tuple item
+    // - The actual components for this item (sorted)
     // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache15 = [ ];
 
@@ -1407,20 +1327,14 @@ public partial class World
         _lock15.EnterReadLock();
         try
         {
-            // Get the list of items with this hash
+            // Hash collisions are possible but very unlikely. Use the hash to get a list of all queries with this hash
+            // and then perform a linear search over the list to find a query with exactly the same set of components.
+            // The list of components has been sorted into order (and is stored in order) so we can just do a direct span
+            // equality check, which should be very fast (SIMD accelerated).
             if (_queryCache15.TryGetValue(hash, out var list))
-            {
-                // Find query that matches these types
                 foreach (var (c, q) in list)
-                {
-                    // Since the sequences are sorted by component ID these should be identical
-                    // Comparing two int spans should be very fast (SIMD accelerated)
-                    if (!orderedComponents.SequenceEqual(c))
-                        continue;
-
-                    return q;
-                }
-            }
+                    if (orderedComponents.SequenceEqual(c))
+                        return q;
         }
         finally
         {
@@ -1472,7 +1386,7 @@ public partial class World
     // Cache of all queries with 16 included components. 
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
-    // - The actual components for this tuple item
+    // - The actual components for this item (sorted)
     // - The query itself
     private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache16 = [ ];
 
@@ -1530,20 +1444,14 @@ public partial class World
         _lock16.EnterReadLock();
         try
         {
-            // Get the list of items with this hash
+            // Hash collisions are possible but very unlikely. Use the hash to get a list of all queries with this hash
+            // and then perform a linear search over the list to find a query with exactly the same set of components.
+            // The list of components has been sorted into order (and is stored in order) so we can just do a direct span
+            // equality check, which should be very fast (SIMD accelerated).
             if (_queryCache16.TryGetValue(hash, out var list))
-            {
-                // Find query that matches these types
                 foreach (var (c, q) in list)
-                {
-                    // Since the sequences are sorted by component ID these should be identical
-                    // Comparing two int spans should be very fast (SIMD accelerated)
-                    if (!orderedComponents.SequenceEqual(c))
-                        continue;
-
-                    return q;
-                }
-            }
+                    if (orderedComponents.SequenceEqual(c))
+                        return q;
         }
         finally
         {
