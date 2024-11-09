@@ -96,8 +96,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 
@@ -117,8 +115,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -154,7 +150,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -417,8 +413,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
@@ -439,8 +433,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -480,7 +472,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -759,8 +751,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
@@ -782,8 +772,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -827,7 +815,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -1122,8 +1110,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
@@ -1146,8 +1132,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -1195,7 +1179,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -1506,8 +1490,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
@@ -1531,8 +1513,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -1584,7 +1564,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -1911,8 +1891,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
@@ -1937,8 +1915,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -1994,7 +1970,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -2337,8 +2313,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
@@ -2364,8 +2338,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -2425,7 +2397,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -2784,8 +2756,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
@@ -2812,8 +2782,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -2877,7 +2845,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -3252,8 +3220,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
@@ -3281,8 +3247,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -3350,7 +3314,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -3741,8 +3705,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
@@ -3771,8 +3733,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -3844,7 +3804,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -4251,8 +4211,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
@@ -4282,8 +4240,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -4359,7 +4315,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -4782,8 +4738,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
@@ -4814,8 +4768,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -4895,7 +4847,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -5334,8 +5286,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
@@ -5367,8 +5317,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -5452,7 +5400,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -5907,8 +5855,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
@@ -5941,8 +5887,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -6030,7 +5974,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -6501,8 +6445,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
@@ -6536,8 +6478,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -6629,7 +6569,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);
@@ -7116,8 +7056,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
@@ -7152,8 +7090,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					Debug.Assert(t0.Length == entities.Length);
@@ -7249,7 +7185,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);

@@ -109,8 +109,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<<#= queryConstraints #>>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return 0;
 
 <# for (var k = 0; k < i; k++)
 {
@@ -136,8 +134,6 @@ namespace Myriad.ECS.Worlds
 					Debug.Assert(chunk != null);
 
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 <# for (var k = 0; k < i; k++)
 {
@@ -185,7 +181,7 @@ namespace Myriad.ECS.Worlds
 			var archetypes = query.GetArchetypes();
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
+			if (!query.Any())
 				return 0;
 
 			batchSize = Math.Clamp(batchSize, 1, Archetype.CHUNK_SIZE);

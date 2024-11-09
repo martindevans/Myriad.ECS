@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Command;
+using Myriad.ECS.Components;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds;
 
@@ -43,6 +44,44 @@ public class StructQueryTests
         Assert.AreEqual(1, l.Count);
     }
 
+    [TestMethod]
+    public void ExecuteWithQueryDescription()
+    {
+        var w = new WorldBuilder().Build();
+        TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
+
+        w.Execute<SetComponentInt32, ComponentInt32>();
+
+        // Check all have been set
+        foreach (var (_, i) in w.Query<ComponentInt32>())
+        {
+            Assert.AreEqual(42, i.Ref.Value);
+        }
+    }
+
+    [TestMethod]
+    public void ExecuteWithRefQueryDescription()
+    {
+        var w = new WorldBuilder().Build();
+        TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
+
+        var q = default(QueryDescription);
+        w.Execute<SetComponentInt32, ComponentInt32>(ref q);
+
+        // Check all have been set
+        foreach (var (_, i) in w.Query<ComponentInt32>())
+            Assert.AreEqual(42, i.Ref.Value);
+
+        // Check the returned query is correct
+        Assert.IsNotNull(q);
+        Assert.IsTrue(q.IsIncluded<ComponentInt32>());
+        Assert.AreEqual(1, q.Include.Count);
+        Assert.IsTrue(q.IsExcluded<Phantom>());
+        Assert.AreEqual(1, q.Exclude.Count);
+        Assert.AreEqual(0, q.ExactlyOneOf.Count);
+        Assert.AreEqual(0, q.AtLeastOneOf.Count);
+    }
+
     private readonly struct PutEntitiesInList0(List<Entity> entities)
         : IChunkQuery
     {
@@ -75,6 +114,15 @@ public class StructQueryTests
         public void Execute(Entity e, ref T t0)
         {
             Entities.Add(e);
+        }
+    }
+
+    private readonly struct SetComponentInt32
+        : IQuery<ComponentInt32>
+    {
+        public void Execute(Entity e, ref ComponentInt32 t0)
+        {
+            t0.Value = 42;
         }
     }
 }

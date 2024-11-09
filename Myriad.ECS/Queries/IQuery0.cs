@@ -24,8 +24,6 @@ namespace Myriad.ECS.Worlds
             where TQ : IQuery
         {
             var archetypes = query.GetArchetypes();
-            if (archetypes.Count == 0)
-                return 0;
 
             var count = 0;
             foreach (var archetypeMatch in archetypes)
@@ -40,10 +38,7 @@ namespace Myriad.ECS.Worlds
                 for (var c = chunks.Count - 1; c >= 0; c--)
                 {
                     var chunk = chunks[c];
-
                     var entities = chunk.Entities.Span;
-                    if (entities.Length == 0)
-                        continue;
 
                     for (var i = entities.Length - 1; i >= 0; i--)
                         q.Execute(entities[i]);
@@ -63,8 +58,6 @@ namespace Myriad.ECS.Worlds
             where TQ : IChunkQuery
         {
             var archetypes = query.GetArchetypes();
-            if (archetypes.Count == 0)
-                return 0;
 
             var count = 0;
             foreach (var archetypeMatch in archetypes)
@@ -79,10 +72,7 @@ namespace Myriad.ECS.Worlds
                 for (var c = chunks.Count - 1; c >= 0; c--)
                 {
                     var chunk = chunks[c];
-
                     var entities = chunk.Entities.Span;
-                    if (entities.Length == 0)
-                        continue;
 
                     q.Execute(new ChunkHandle(chunk), entities);
                 }

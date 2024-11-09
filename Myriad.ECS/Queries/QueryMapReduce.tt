@@ -114,8 +114,6 @@ namespace Myriad.ECS.Worlds
 			query ??= GetCachedQuery<<#= generics #>>();
 
 			var archetypes = query.GetArchetypes();
-			if (archetypes.Count == 0)
-				return initial;
 
 <# for (var k = 0; k < sumij; k++)
 {
@@ -137,10 +135,7 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
-
 					var entities = chunk.Entities.Span;
-					if (entities.Length == 0)
-						continue;
 
 <# for (var k = 0; k < sumij; k++)
 {
