@@ -16,14 +16,18 @@ internal struct ValueRandom
     {
         Span<int> seed = [ _seed ];
 
-        // Calculate hash of components, for fast rejection
+        // Hash the state, to generate 64 bits
         var byteSpan = MemoryMarshal.Cast<int, byte>(seed);
         var hash = xxHash64.ComputeHash(byteSpan, seed: 568456);
 
+        // Take the low bits and the high bits as two 32 bit values
         var low = (uint)(hash & 0xFFFF_FFFF);
         var hi = (uint)((hash >> 32) & 0xFFFF_FFFF);
 
+        // Next state is the high bits
         _seed = unchecked((int)hi);
+
+        // Result is the low bits
         return unchecked((int)low);
     }
 }

@@ -143,6 +143,11 @@ public sealed partial class Archetype
 
     internal void Dispose(ref LazyCommandBuffer buffer)
     {
+        DisposeAllDisposableComponents(ref buffer);
+    }
+
+    private void DisposeAllDisposableComponents(ref LazyCommandBuffer buffer)
+    {
         if (_disposer != null)
             foreach (var chunk in _chunks)
                 for (var i = 0; i < chunk.EntityCount; i++)
@@ -190,7 +195,7 @@ public sealed partial class Archetype
         {
             // Dispose all disposables on any entity in this archetype
             if (HasDisposableComponents)
-                Dispose(ref lazy);
+                DisposeAllDisposableComponents(ref lazy);
 
             // Clear all the chunks
             foreach (var chunk in _chunks)

@@ -20,7 +20,7 @@ namespace Myriad.ECS.Worlds;
 public partial class World
 {
     // Cache of all queries with 1 included components.
-    private readonly SortedList<int, QueryDescription> _queryCache1 = [ ];
+    private readonly Dictionary<int, QueryDescription> _queryCache1 = [ ];
     private readonly ReaderWriterLockSlim _lock1 = new();
 
     /// <summary>
@@ -65,7 +65,7 @@ public partial class World
     }
 
     // Cache of all queries with 2 included components. Key is the 2 component IDs combined together
-    private readonly SortedList<long, QueryDescription> _queryCache2 = [ ];
+    private readonly Dictionary<long, QueryDescription> _queryCache2 = [ ];
     private readonly ReaderWriterLockSlim _lock2 = new();
 
     /// <summary>
@@ -127,7 +127,7 @@ public partial class World
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
     // - The query itself
-    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache3 = [ ];
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache3 = [ ];
 
     private readonly ReaderWriterLockSlim _lock3 = new();
 
@@ -206,7 +206,7 @@ public partial class World
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
     // - The query itself
-    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache4 = [ ];
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache4 = [ ];
 
     private readonly ReaderWriterLockSlim _lock4 = new();
 
@@ -288,7 +288,7 @@ public partial class World
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
     // - The query itself
-    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache5 = [ ];
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache5 = [ ];
 
     private readonly ReaderWriterLockSlim _lock5 = new();
 
@@ -373,7 +373,7 @@ public partial class World
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
     // - The query itself
-    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache6 = [ ];
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache6 = [ ];
 
     private readonly ReaderWriterLockSlim _lock6 = new();
 
@@ -461,7 +461,7 @@ public partial class World
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
     // - The query itself
-    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache7 = [ ];
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache7 = [ ];
 
     private readonly ReaderWriterLockSlim _lock7 = new();
 
@@ -552,7 +552,7 @@ public partial class World
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
     // - The query itself
-    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache8 = [ ];
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache8 = [ ];
 
     private readonly ReaderWriterLockSlim _lock8 = new();
 
@@ -646,7 +646,7 @@ public partial class World
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
     // - The query itself
-    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache9 = [ ];
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache9 = [ ];
 
     private readonly ReaderWriterLockSlim _lock9 = new();
 
@@ -743,7 +743,7 @@ public partial class World
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
     // - The query itself
-    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache10 = [ ];
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache10 = [ ];
 
     private readonly ReaderWriterLockSlim _lock10 = new();
 
@@ -843,7 +843,7 @@ public partial class World
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
     // - The query itself
-    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache11 = [ ];
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache11 = [ ];
 
     private readonly ReaderWriterLockSlim _lock11 = new();
 
@@ -946,7 +946,7 @@ public partial class World
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
     // - The query itself
-    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache12 = [ ];
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache12 = [ ];
 
     private readonly ReaderWriterLockSlim _lock12 = new();
 
@@ -1052,7 +1052,7 @@ public partial class World
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
     // - The query itself
-    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache13 = [ ];
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache13 = [ ];
 
     private readonly ReaderWriterLockSlim _lock13 = new();
 
@@ -1161,7 +1161,7 @@ public partial class World
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
     // - The query itself
-    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache14 = [ ];
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache14 = [ ];
 
     private readonly ReaderWriterLockSlim _lock14 = new();
 
@@ -1273,7 +1273,7 @@ public partial class World
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
     // - The query itself
-    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache15 = [ ];
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache15 = [ ];
 
     private readonly ReaderWriterLockSlim _lock15 = new();
 
@@ -1388,7 +1388,7 @@ public partial class World
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
     // - The query itself
-    private readonly SortedList<ulong, List<(int[], QueryDescription)>> _queryCache16 = [ ];
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache16 = [ ];
 
     private readonly ReaderWriterLockSlim _lock16 = new();
 

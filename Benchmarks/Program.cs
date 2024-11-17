@@ -8,7 +8,11 @@ using Benchmarks;
 //e.Setup();
 //e.ParallelQuery();
 
-var summary = BenchmarkRunner.Run<QueryBenchmark>();
-//var summary = BenchmarkRunner.Run<EntityCreateBenchmark>();
+//var c = new EntityCreateBenchmark();
+//c.Setup();
+//c.CreateBuffered();
+
+//var summary = BenchmarkRunner.Run<QueryBenchmark>();
+var summary = BenchmarkRunner.Run<EntityCreateBenchmark>();
 //var summary = BenchmarkRunner.Run<EntityModifyBenchmark>();
 //var summary = BenchmarkRunner.Run<EntityChurnBenchmark>();

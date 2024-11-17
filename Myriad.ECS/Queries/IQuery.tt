@@ -125,38 +125,40 @@ namespace Myriad.ECS.Worlds
 
 				count += archetype.EntityCount;
 
-				using var enumerator = archetype.GetChunkEnumerator();
-                while (enumerator.MoveNext())
+				using (var enumerator = archetype.GetChunkEnumerator())
 				{
-					var chunk = enumerator.Current;
-					Debug.Assert(chunk != null);
-
-					var entities = chunk.Entities.Span;
-
-<# for (var k = 0; k < i; k++)
-{
-#>
-					var t<#= k #> = chunk.GetSpan<T<#= k #>>(c<#= k #>);
-					Debug.Assert(t<#= k #>.Length == entities.Length);
-<#
-}
-#>
-
-					unsafe
+					while (enumerator.MoveNext())
 					{
-						#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-						fixed (Entity* eptr = entities)
+						var chunk = enumerator.Current;
+						Debug.Assert(chunk != null);
+
+						var entities = chunk.Entities.Span;
+
 <# for (var k = 0; k < i; k++)
 {
 #>
-						fixed (T<#= k #>* t<#= k #>ptr = t<#= k #>)
+						var t<#= k #> = chunk.GetSpan<T<#= k #>>(c<#= k #>);
+						Debug.Assert(t<#= k #>.Length == entities.Length);
 <#
 }
 #>
-						#pragma warning restore CS8500
+
+						unsafe
 						{
-							for (var i = 0; i < entities.Length; i++)
-								q.Execute(eptr[i], <#= CallParametersPtr(i) #>);
+							#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+							fixed (Entity* eptr = entities)
+<# for (var k = 0; k < i; k++)
+{
+#>
+							fixed (T<#= k #>* t<#= k #>ptr = t<#= k #>)
+<#
+}
+#>
+							#pragma warning restore CS8500
+							{
+								for (var i = 0; i < entities.Length; i++)
+									q.Execute(eptr[i], <#= CallParametersPtr(i) #>);
+							}
 						}
 					}
 				}
