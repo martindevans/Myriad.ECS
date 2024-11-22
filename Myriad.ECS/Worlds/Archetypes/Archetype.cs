@@ -154,15 +154,13 @@ public sealed partial class Archetype
                     _disposer.DisposeEntity(ref buffer, chunk, i);
     }
 
-    internal (EntityId entity, Row slot) CreateEntity()
+    internal Row CreateEntity()
     {
         // Allocate an entity in the world
         ref var info = ref World.AllocateEntity(out var entity);
 
         // Add it to this archetype, find a row to put components into
-        var row = AddEntity(entity, ref info);
-
-        return (entity, row);
+        return AddEntity(entity, ref info);
     }
 
     /// <summary>

@@ -12,7 +12,12 @@ using Benchmarks;
 //c.Setup();
 //c.CreateBuffered();
 
+var m = new EntityModifyBenchmark();
+m.Setup();
+m.IterationSetup();
+m.Playback();
+
 //var summary = BenchmarkRunner.Run<QueryBenchmark>();
-var summary = BenchmarkRunner.Run<EntityCreateBenchmark>();
+//var summary = BenchmarkRunner.Run<EntityCreateBenchmark>();
 //var summary = BenchmarkRunner.Run<EntityModifyBenchmark>();
 //var summary = BenchmarkRunner.Run<EntityChurnBenchmark>();

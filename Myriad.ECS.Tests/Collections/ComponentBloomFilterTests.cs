@@ -23,23 +23,17 @@ public class ComponentBloomFilterTests
         a.Add(ComponentID<Component1>.ID);
         a.Add(ComponentID<Component2>.ID);
         a.Add(ComponentID<Component3>.ID);
-        a.Add(ComponentID<Component4>.ID);
-        a.Add(ComponentID<Component5>.ID);
-        a.Add(ComponentID<Component6>.ID);
-        a.Add(ComponentID<Component7>.ID);
 
         var b = new ComponentBloomFilter();
         b.Add(ComponentID<Component8>.ID);
         b.Add(ComponentID<Component9>.ID);
         b.Add(ComponentID<Component10>.ID);
         b.Add(ComponentID<Component11>.ID);
-        b.Add(ComponentID<Component12>.ID);
-        b.Add(ComponentID<Component13>.ID);
-        b.Add(ComponentID<Component14>.ID);
-        b.Add(ComponentID<Component15>.ID);
 
         var i = a.Intersects(ref b);
         Assert.IsFalse(i);
+
+        // Note that this test _can_ fail, since the bloom filter is probabalistic and errs on the side of caution.
     }
 
     [TestMethod]

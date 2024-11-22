@@ -281,10 +281,10 @@ public sealed partial class CommandBuffer
 
                 var archetype = GetArchetype(bufferedData, archetypeLookup);
 
-                var (entity, slot) = archetype.CreateEntity();
+                var slot = archetype.CreateEntity();
 
                 // Store the new ID in the resolver so it can be retrieved later
-                resolver.Lookup.Add(bufferedData.Id, entity);
+                resolver.Lookup.Add(bufferedData.Id, slot.Entity);
 
                 // Write the components into the entity
                 foreach (var (_, setter) in components.Enumerable())
@@ -316,6 +316,7 @@ public sealed partial class CommandBuffer
 
         // Build a set of components on this new entity
         _tempComponentIdSet.Clear();
+        _tempComponentIdSet.EnsureCapacity(entityData.Setters.Count);
         foreach (var (compId, _) in entityData.Setters.Enumerable())
             _tempComponentIdSet.Add(compId);
 

@@ -23,6 +23,11 @@ public class FrozenOrderedListSet<TItem>
     }
     #endregion
 
+    public void CopyTo(List<TItem> dest)
+    {
+        _items.CopyTo(dest);
+    }
+
     /// <summary>
     /// Get a collection which can be queried by LINQ (only use this for tests)
     /// </summary>

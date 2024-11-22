@@ -163,19 +163,16 @@ internal sealed class Chunk
     {
         var index = info.RowIndex;
 
+        // Clear out the components. This prevents chunks holding 
+        // onto references to dead managed components, and keeping them in memory.
+        foreach (var component in _components)
+            Array.Clear(component, index, 1);
+
         // No work to do if there are no other entities
         EntityCount -= 1;
         if (EntityCount == 0)
         {
             _entities[index] = default;
-
-            foreach (var component in _components)
-            {
-                // Clear out the components. This prevents chunks holding 
-                // onto references to dead managed components, and keeping them in memory.
-                Array.Clear(component, index, 1);
-            }
-
             return;
         }
 
@@ -236,5 +233,5 @@ internal sealed class Chunk
 
         return destRow;
     }
-#endregion
+    #endregion
 }

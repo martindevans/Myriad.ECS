@@ -46,7 +46,17 @@ internal class OrderedListSet<TItem>
     }
     #endregion
 
+    internal void CopyTo(List<TItem> dest)
+    {
+        dest.AddRange(_items);
+    }
+
     #region add
+    internal void EnsureCapacity(int capacity)
+    {
+        _items.EnsureCapacity(capacity);
+    }
+
     public bool Add(TItem item)
     {
         var index = _items.BinarySearch(item);
@@ -59,18 +69,16 @@ internal class OrderedListSet<TItem>
     #endregion
 
     #region unionwith
-    internal void UnionWith(FrozenOrderedListSet<TItem> items)
+    internal void UnionWith(FrozenOrderedListSet<TItem> set)
     {
         if (_items.Count == 0)
         {
-            _items.EnsureCapacity(items.Count);
-            foreach (var item in items)
-                _items.Add(item);
+            set.CopyTo(_items);
         }
         else
         {
-            _items.EnsureCapacity(_items.Count + items.Count);
-            foreach (var item in items)
+            _items.EnsureCapacity(_items.Count + set.Count);
+            foreach (var item in set)
                 Add(item);
         }
     }
