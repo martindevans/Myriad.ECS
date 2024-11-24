@@ -12,10 +12,14 @@ using Benchmarks;
 //c.Setup();
 //c.CreateBuffered();
 
-var m = new EntityModifyBenchmark();
-m.Setup();
-m.IterationSetup();
-m.Playback();
+for (var i = 0; i < 10; i++)
+{
+    var m = new EntityModifyBenchmark();
+    m.Setup();
+    m.IterationSetup();
+    m.Playback();
+    GC.Collect();
+}
 
 //var summary = BenchmarkRunner.Run<QueryBenchmark>();
 //var summary = BenchmarkRunner.Run<EntityCreateBenchmark>();

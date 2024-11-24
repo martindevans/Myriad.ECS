@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Linq;
+using System.Runtime.InteropServices;
+using Myriad.ECS.Command;
 using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 
@@ -66,6 +68,24 @@ internal class OrderedListSet<TItem>
         _items.Insert(~index, item);
         return true;
     }
+
+    public void AddRange<TValue>(Dictionary<TItem, TValue>.KeyCollection keys)
+    {
+        EnsureCapacity(Count + keys.Count);
+
+        if (_items.Count == 0)
+        {
+            // Since this is a key collection we know all the items must be
+            // unique, therefore we can just add and sort
+            _items.AddRange(keys);
+            _items.Sort();
+        }
+        else
+        {
+            foreach (var key in keys)
+                Add(key);
+        }
+    }
     #endregion
 
     #region unionwith
@@ -112,7 +132,7 @@ internal class OrderedListSet<TItem>
     /// <returns></returns>
     public FrozenOrderedListSet<TItem> Freeze()
     {
-        return new FrozenOrderedListSet<TItem>(this);
+        return FrozenOrderedListSet<TItem>.Create(this);
     }
 
     #region GetEnumerator
@@ -192,7 +212,7 @@ internal class OrderedListSet<TItem>
     #region SetEquals
     public bool SetEquals(HashSet<TItem> other)
     {
-        // Try to get the count, if possible. This allows a possible early exit without any work.
+        // Can't be equal if counts are different
         if (other.Count != Count)
             return false;
 
@@ -230,6 +250,20 @@ internal class OrderedListSet<TItem>
 
         return true;
 #endif
+    }
+
+    public bool SetEquals<TV>(Dictionary<TItem, TV> other)
+    {
+        // Can't be equal if counts are different
+        if (other.Count != Count)
+            return false;
+
+        // Ensure every item in this is in other
+        foreach (var item in other.Keys)
+            if (_items.BinarySearch(item) < 0)
+                return false;
+
+        return true;
     }
     #endregion
 

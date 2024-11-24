@@ -149,6 +149,7 @@ public sealed partial class World
         return _entities[entityId].Version;
     }
 
+    #region Get/Create Archetype
     /// <summary>
     /// Find an archetype with the given set of components, using a precomputed archetype hash.
     /// </summary>
@@ -170,7 +171,32 @@ public sealed partial class World
                 return archetype;
 
         // Didn't find one, create the new archetype
-        var a = new Archetype(this, new FrozenOrderedListSet<ComponentID>(components));
+        var a = new Archetype(this, FrozenOrderedListSet<ComponentID>.Create(components));
+
+        // Add it to the relevant lists
+        _archetypes.Add(a);
+        candidates.Add(a);
+
+        return a;
+    }
+
+    internal Archetype GetOrCreateArchetype<TV>(Dictionary<ComponentID, TV> components, ArchetypeHash hash)
+    {
+        // Get list of all archetypes with this hash
+        if (!_archetypesByHash.TryGetValue(hash, out var candidates))
+        {
+            candidates = [];
+            _archetypesByHash.Add(hash, candidates);
+        }
+
+        // Check if any of the candidates are the one we need
+        foreach (var archetype in candidates)
+            if (archetype.SetEquals(components))
+                return archetype;
+
+        // Didn't find one, create the new archetype
+        var set = FrozenOrderedListSet<ComponentID>.Create(components);
+        var a = new Archetype(this, set);
 
         // Add it to the relevant lists
         _archetypes.Add(a);
@@ -181,11 +207,14 @@ public sealed partial class World
 
     internal Archetype GetOrCreateArchetype(OrderedListSet<ComponentID> components)
     {
-        // Build archetype hash to accelerate querying
-        var hash = ArchetypeHash.Create(components);
-
-        return GetOrCreateArchetype(components, hash);
+        return GetOrCreateArchetype(components, ArchetypeHash.Create(components));
     }
+
+    internal Archetype GetOrCreateArchetype<TV>(Dictionary<ComponentID, TV> components)
+    {
+        return GetOrCreateArchetype(components, ArchetypeHash.Create(components));
+    }
+    #endregion
 
     internal Row MigrateEntity(EntityId entity, Archetype to, ref LazyCommandBuffer lazy)
     {

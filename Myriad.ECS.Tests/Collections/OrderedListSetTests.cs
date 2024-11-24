@@ -41,7 +41,7 @@ public class OrderedListSetTests
         ints.Add(2);
         ints.Add(3);
         ints.Add(4);
-        var frozen = new FrozenOrderedListSet<int>(ints);
+        var frozen = FrozenOrderedListSet<int>.Create(ints);
         set.UnionWith(frozen);
 
         Assert.AreEqual(4, set.Count);

@@ -317,5 +317,10 @@ public sealed partial class Archetype
         return Components.SetEquals(query);
     }
 
+    internal bool SetEquals<TV>(Dictionary<ComponentID, TV> query)
+    {
+        return Components.SetEquals(query);
+    }
+
     public ArchetypeEntityEnumerable Entities => new ArchetypeEntityEnumerable(this);
 }

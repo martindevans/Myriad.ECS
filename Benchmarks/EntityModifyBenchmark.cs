@@ -7,7 +7,7 @@ using Myriad.ECS.Worlds;
 namespace Benchmarks;
 
 [MemoryDiagnoser]
-[ShortRunJob]
+//[ShortRunJob]
 public class EntityModifyBenchmark
 {
     private const int COUNT = 1_000_000;

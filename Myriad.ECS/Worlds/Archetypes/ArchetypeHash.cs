@@ -52,6 +52,15 @@ internal readonly record struct ArchetypeHash
         return new ArchetypeHash { Value = l };
     }
 
+    public static ArchetypeHash Create<TV>(Dictionary<ComponentID, TV> componentIds)
+    {
+        long l = 0;
+        foreach (var componentId in componentIds.Keys)
+            l = Toggle(l, componentId);
+
+        return new ArchetypeHash { Value = l };
+    }
+
     public int CompareTo(ArchetypeHash other)
     {
         return Value.CompareTo(other.Value);

@@ -287,7 +287,7 @@ public sealed partial class CommandBuffer
                 resolver.Lookup.Add(bufferedData.Id, slot.Entity);
 
                 // Write the components into the entity
-                foreach (var (_, setter) in components.Enumerable())
+                foreach (var setter in components.Values)
                     _setters.Write(setter, slot);
 
                 // Recycle
@@ -314,14 +314,8 @@ public sealed partial class CommandBuffer
                 return a;
         }
 
-        // Build a set of components on this new entity
-        _tempComponentIdSet.Clear();
-        _tempComponentIdSet.EnsureCapacity(entityData.Setters.Count);
-        foreach (var (compId, _) in entityData.Setters.Enumerable())
-            _tempComponentIdSet.Add(compId);
-
         // Get the archetype
-        var archetype = World.GetOrCreateArchetype(_tempComponentIdSet);
+        var archetype = World.GetOrCreateArchetype(entityData.Setters);
 
         // If the node ID is positive, cache it
         if (entityData.Node >= 0)
@@ -341,7 +335,7 @@ public sealed partial class CommandBuffer
         }
 
         // Get a set to hold all of the component setters
-        var set = Pool<SortedList<ComponentID, ComponentSetterCollection.SetterId>>.Get();
+        var set = Pool<Dictionary<ComponentID, ComponentSetterCollection.SetterId>>.Get();
         set.Clear();
 
         // Store this entity in the collection of entities
@@ -363,15 +357,14 @@ public sealed partial class CommandBuffer
         var bufferedData = _bufferedSets[(int)id];
         var setters = bufferedData.Setters;
 
-        // Try to find this component in the set
         var key = ComponentID<T>.ID;
-        var index =  setters.IndexOfKey(key);
-        if (index != -1)
+
+        if (setters.TryGetValue(key, out var existing))
         {
             switch (duplicateMode)
             {
                 case DuplicateSet.Overwrite:
-                    _setters.Overwrite(setters.Values[index], value);
+                    _setters.Overwrite(existing, value);
                     break;
                 case DuplicateSet.Discard:
                     if (key.IsDisposableComponent)
@@ -604,7 +597,7 @@ public sealed partial class CommandBuffer
         public uint Id { get; }
 
         /// <summary>All setters to be run on this entity</summary>
-        public SortedList<ComponentID, ComponentSetterCollection.SetterId> Setters { get; }
+        public Dictionary<ComponentID, ComponentSetterCollection.SetterId> Setters { get; }
 
         /// <summary>The "Node ID" of this entity, all buffered entities with the same node ID are in the same archetype (except -1)</summary>
         public int Node { get; set; }
@@ -614,7 +607,7 @@ public sealed partial class CommandBuffer
         /// </summary>
         /// <param name="id">ID of this buffered entity, used in resolver to get actual entity</param>
         /// <param name="setters">All setters to be run on this entity</param>
-        public BufferedEntityData(uint id, SortedList<ComponentID, ComponentSetterCollection.SetterId> setters)
+        public BufferedEntityData(uint id, Dictionary<ComponentID, ComponentSetterCollection.SetterId> setters)
         {
             Id = id;
             Setters = setters;

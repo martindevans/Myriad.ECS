@@ -174,7 +174,7 @@ public sealed class QueryDescription
                         matches.Add(m);
 
                 // Store result for next time
-                _result = new MatchResult(World.Archetypes.Count, new FrozenOrderedListSet<ArchetypeMatch>(matches));
+                _result = new MatchResult(World.Archetypes.Count, FrozenOrderedListSet<ArchetypeMatch>.Create(matches));
 
                 // Return matches
                 return _result.Value.Archetypes;
@@ -208,7 +208,7 @@ public sealed class QueryDescription
                 else
                 {
                     // Create a new match result
-                    _result = new MatchResult(World.Archetypes.Count, new FrozenOrderedListSet<ArchetypeMatch>(copy));
+                    _result = new MatchResult(World.Archetypes.Count, FrozenOrderedListSet<ArchetypeMatch>.Create(copy));
                 }
             }
 
@@ -382,7 +382,7 @@ public sealed class QueryDescription
             while (chunks.MoveNext())
             {
                 var chunk = chunks.Current;
-                var arr = chunk.GetSpan<T>(id);
+                var arr = chunk!.GetSpan<T>(id);
                 arr.Fill(item);
             }
         }

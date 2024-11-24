@@ -300,7 +300,7 @@ public sealed partial class QueryBuilder
             if (_frozenCache != null)
                 return _frozenCache;
 
-            _frozenCache = new FrozenOrderedListSet<ComponentID>(_items);
+            _frozenCache = FrozenOrderedListSet<ComponentID>.Create(_items);
             return _frozenCache;
         }
 

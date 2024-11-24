@@ -7,19 +7,31 @@ public class FrozenOrderedListSet<TItem>
     public int Count => _items.Count;
 
     #region constructors
-    internal FrozenOrderedListSet(List<TItem> items)
+    private FrozenOrderedListSet(OrderedListSet<TItem> dangerousItems)
     {
-        _items = new OrderedListSet<TItem>(items);
+        _items = dangerousItems;
     }
 
-    internal FrozenOrderedListSet(HashSet<TItem> items)
+    internal static FrozenOrderedListSet<TItem> Create(List<TItem> items)
     {
-        _items = new OrderedListSet<TItem>(items);
+        return new FrozenOrderedListSet<TItem>(new OrderedListSet<TItem>(items));
     }
 
-    internal FrozenOrderedListSet(OrderedListSet<TItem> items)
+    internal static FrozenOrderedListSet<TItem> Create(HashSet<TItem> items)
     {
-        _items = new OrderedListSet<TItem>(items);
+        return new FrozenOrderedListSet<TItem>(new OrderedListSet<TItem>(items));
+    }
+
+    internal static FrozenOrderedListSet<TItem> Create(OrderedListSet<TItem> items)
+    {
+        return new FrozenOrderedListSet<TItem>(new OrderedListSet<TItem>(items));
+    }
+
+    internal static FrozenOrderedListSet<TItem> Create<TV>(Dictionary<TItem, TV> items)
+    {
+        var set = new OrderedListSet<TItem>();
+        set.AddRange(items.Keys);
+        return new FrozenOrderedListSet<TItem>(set);
     }
     #endregion
 
@@ -121,6 +133,11 @@ public class FrozenOrderedListSet<TItem>
     public bool SetEquals(FrozenOrderedListSet<TItem> other)
     {
         return SetEquals(other._items);
+    }
+
+    public bool SetEquals<TV>(Dictionary<TItem, TV> other)
+    {
+        return _items.SetEquals(other);
     }
     #endregion
 }
