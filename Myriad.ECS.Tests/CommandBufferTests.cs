@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.Collections;
+﻿using System.Diagnostics.CodeAnalysis;
+using Myriad.ECS.Collections;
 using Myriad.ECS.Command;
 using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
@@ -80,7 +81,7 @@ public class CommandBufferTests
     }
 
     [TestMethod]
-    public void ChurnManyEntities()
+    public void ChurnCreateDestroy()
     {
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
@@ -149,6 +150,72 @@ public class CommandBufferTests
 
             // Check archetypes
             Assert.AreEqual(alive.Count, world.Archetypes.Select(a => a.EntityCount).Sum());
+        }
+    }
+
+    [TestMethod]
+    public void ChurnStructural()
+    {
+        var world = new WorldBuilder().Build();
+        var entities = new List<Entity>();
+        using (var setupResolver = TestHelpers.SetupRandomEntities(world, 10_000).Playback())
+        {
+            for (var i = 0; i < setupResolver.Count; i++)
+                entities.Add(setupResolver[i]);
+        }
+
+        var buffer = new CommandBuffer(world);
+        var rng = new Random(551514);
+        for (var i = 0; i < 16; i++)
+        {
+            foreach (var entity in entities)
+            {
+                // Apply to 10% of entities
+                if (rng.NextSingle() > 0.1f)
+                    continue;
+
+                // Do some random ops
+                var count = rng.Next(1, 5);
+                var update = rng.NextSingle() > 0.5;
+                for (var j = 0; j < count; j++)
+                {
+                    switch (rng.Next(7))
+                    {
+                        case 0:
+                            ChangeComponent<ComponentByte>(entity, buffer, update);
+                            break;
+                        case 1:
+                            ChangeComponent<ComponentInt16>(entity, buffer, update);
+                            break;
+                        case 2:
+                            ChangeComponent<ComponentFloat>(entity, buffer, update);
+                            break;
+                        case 3:
+                            ChangeComponent<ComponentInt32>(entity, buffer, update);
+                            break;
+                        case 4:
+                            ChangeComponent<ComponentInt64>(entity, buffer, update);
+                            break;
+                        case 5:
+                            ChangeComponent<Component0>(entity, buffer, update);
+                            break;
+                        case 6:
+                            ChangeComponent<Component1>(entity, buffer, update);
+                            break;
+                    }
+                }
+            }
+
+            buffer.Playback().Dispose();
+        }
+
+        void ChangeComponent<T>(Entity e, CommandBuffer b, bool update)
+            where T : struct, IComponent
+        {
+            if (e.HasComponent<T>() && !update)
+                b.Remove<T>(e);
+            else
+                b.Set(e, default(T));
         }
     }
 
@@ -823,5 +890,63 @@ public class CommandBufferTests
                 }
             }
         }
+    }
+
+    [TestMethod]
+    public void StructuralChanges()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        // Create some entities
+        buffer.Create().Set(new Component0()).Set(new Component1()).Set(new Component2());
+        buffer.Create().Set(new Component0()).Set(new Component1()).Set(new Component2());
+        buffer.Create().Set(new Component0()).Set(new Component1()).Set(new Component2());
+        buffer.Create().Set(new Component0()).Set(new Component1()).Set(new Component2());
+        var resolver = buffer.Playback();
+        var entity0 = resolver[0];
+        var entity1 = resolver[1];
+        var entity2 = resolver[2];
+        var entity3 = resolver[3];
+        resolver.Dispose();
+
+        // Add component to 0
+        buffer.Set(entity0, new Component3());
+
+        // Remove component from 1
+        buffer.Remove<Component0>(entity1);
+
+        // Add and remove 2
+        buffer.Remove<Component0>(entity2);
+        buffer.Set(entity2, new Component4());
+
+        // Do nothing to 3
+
+        // Apply all that
+        buffer.Playback().Dispose();
+
+        // Check 1 has everything expected
+        Assert.AreEqual(4, entity0.ComponentTypes.Count);
+        entity0.GetComponentRef<Component0>();
+        entity0.GetComponentRef<Component1>();
+        entity0.GetComponentRef<Component2>();
+        entity0.GetComponentRef<Component3>();
+
+        // Check 2 has everything expected
+        Assert.AreEqual(2, entity1.ComponentTypes.Count);
+        entity1.GetComponentRef<Component1>();
+        entity1.GetComponentRef<Component2>();
+
+        // Check 3 has everything expected
+        Assert.AreEqual(3, entity2.ComponentTypes.Count);
+        entity2.GetComponentRef<Component1>();
+        entity2.GetComponentRef<Component2>();
+        entity2.GetComponentRef<Component4>();
+
+        // Check other is unchanged
+        Assert.AreEqual(3, entity3.ComponentTypes.Count);
+        entity3.GetComponentRef<Component0>();
+        entity3.GetComponentRef<Component1>();
+        entity3.GetComponentRef<Component2>();
     }
 }
