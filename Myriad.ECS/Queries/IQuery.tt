@@ -48,8 +48,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 <# for (var k = 0; k < i; k++)
@@ -98,8 +96,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 <# for (var k = 0; k < i; k++)
@@ -150,8 +146,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 <# for (var k = 0; k < i; k++)
@@ -181,8 +175,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 <# for (var k = 0; k < i; k++)

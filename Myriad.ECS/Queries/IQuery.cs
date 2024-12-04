@@ -35,8 +35,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -90,8 +88,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -139,8 +135,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -172,8 +166,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -449,8 +441,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -508,8 +498,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -561,8 +549,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -596,8 +582,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -890,8 +874,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -953,8 +935,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -1010,8 +990,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -1047,8 +1025,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -1358,8 +1334,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -1425,8 +1399,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -1486,8 +1458,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -1525,8 +1495,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -1853,8 +1821,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -1924,8 +1890,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -1989,8 +1953,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -2030,8 +1992,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -2375,8 +2335,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -2450,8 +2408,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -2519,8 +2475,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -2562,8 +2516,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -2924,8 +2876,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -3003,8 +2953,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -3076,8 +3024,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -3121,8 +3067,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -3500,8 +3444,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -3583,8 +3525,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -3660,8 +3600,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -3707,8 +3645,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -4103,8 +4039,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -4190,8 +4124,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -4271,8 +4203,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -4320,8 +4250,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -4733,8 +4661,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -4824,8 +4750,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -4909,8 +4833,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -4960,8 +4882,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -5390,8 +5310,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -5485,8 +5403,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -5574,8 +5490,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -5627,8 +5541,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -6074,8 +5986,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -6173,8 +6083,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -6266,8 +6174,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -6321,8 +6227,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -6785,8 +6689,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -6888,8 +6790,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -6985,8 +6885,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -7042,8 +6940,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -7523,8 +7419,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -7630,8 +7524,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -7731,8 +7623,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -7790,8 +7680,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -8288,8 +8176,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -8399,8 +8285,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -8504,8 +8388,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -8565,8 +8447,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -9080,8 +8960,6 @@ namespace Myriad.ECS.Worlds
 	{
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -9195,8 +9073,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -9304,8 +9180,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
@@ -9367,8 +9241,6 @@ namespace Myriad.ECS.Worlds
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
-		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
-		/// the component types specified in this Execute call!
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
