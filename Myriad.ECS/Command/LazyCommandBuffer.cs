@@ -3,6 +3,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Myriad.ECS.Command;
 
+/// <summary>
+/// Provides a CommandBuffer, which is lazily created the first time it is accessed
+/// </summary>
 public struct LazyCommandBuffer
 {
     private CommandBuffer? _buffer;
@@ -16,7 +19,7 @@ public struct LazyCommandBuffer
     }
 
     /// <summary>
-    /// Get the buffer, constructing one if it does not yet exist
+    /// Get the buffer (constructing one if it does not yet exist)
     /// </summary>
     public CommandBuffer CommandBuffer
     {

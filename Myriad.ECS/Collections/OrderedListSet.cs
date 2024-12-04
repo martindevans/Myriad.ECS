@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Runtime.InteropServices;
-using Myriad.ECS.Command;
+﻿using System.Runtime.InteropServices;
 using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 

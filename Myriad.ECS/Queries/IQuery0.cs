@@ -17,6 +17,13 @@ namespace Myriad.ECS.Worlds
 {
     public partial class World
     {
+        /// <summary>
+        /// Execute a query, selecting entities which match the given <see cref="QueryDescription"/>
+        /// </summary>
+        /// <typeparam name="TQ"></typeparam>
+        /// <param name="q"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public int Execute<TQ>(
             TQ q,
             QueryDescription query
@@ -49,6 +56,13 @@ namespace Myriad.ECS.Worlds
 
     public partial class World
     {
+        /// <summary>
+        /// Execute a query, selecting entities which match the given <see cref="QueryDescription"/>
+        /// </summary>
+        /// <typeparam name="TQ"></typeparam>
+        /// <param name="q"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public int ExecuteChunk<TQ>(
             TQ q,
             QueryDescription query

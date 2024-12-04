@@ -32,6 +32,9 @@ using System.Diagnostics.CodeAnalysis;
 #>
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts <#= i #> components
+	/// </summary>
 	public interface IQuery<<#= queryConstraints #>>
 		where <#= Constraints(i, 8) #>
 	{
@@ -43,6 +46,21 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+<# for (var k = 0; k < i; k++)
+{
+#>
+		/// <typeparam name="T<#= k #>">Component <#= k #> to include in query</typeparam>
+<#
+}
+#>
+		<#= DocsQueryDescription() #>
+		/// <returns>The number of entities discovered by this query</returns>
 		<#= CoverageAttribute(i) #>
 		public int Execute<TQ, <#= queryConstraints #>>(
 			QueryDescription? query = null
@@ -54,6 +72,19 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, <#= queryConstraints #>>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+<# for (var k = 0; k < i; k++)
+{
+#>
+		/// <typeparam name="T<#= k #>">Component <#= k #> to include in query</typeparam>
+<#
+}
+#>
+		<#= DocsRefQueryDescription() #>
+		/// <returns>The number of entities discovered by this query</returns>
 		<#= CoverageAttribute(i) #>
 		public int Execute<TQ, <#= queryConstraints #>>(
 			ref QueryDescription? query
@@ -65,6 +96,22 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, <#= queryConstraints #>>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+<# for (var k = 0; k < i; k++)
+{
+#>
+		/// <typeparam name="T<#= k #>">Component <#= k #> to include in query</typeparam>
+<#
+}
+#>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		<#= CoverageAttribute(i) #>
 		public int Execute<TQ, <#= queryConstraints #>>(
 			TQ q,
@@ -76,6 +123,20 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, <#= queryConstraints #>>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+<# for (var k = 0; k < i; k++)
+{
+#>
+		/// <typeparam name="T<#= k #>">Component <#= k #> to include in query</typeparam>
+<#
+}
+#>
+		<#= DocsRefQueryDescription() #>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		<#= CoverageAttribute(i) #>
 		public int Execute<TQ, <#= queryConstraints #>>(
 			TQ q,
@@ -87,6 +148,26 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, <#= queryConstraints #>>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+<# for (var k = 0; k < i; k++)
+{
+#>
+		/// <typeparam name="T<#= k #>">Component <#= k #> to include in query</typeparam>
+<#
+}
+#>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		<#= DocsQueryDescription() #>
+		/// <returns>The number of entities discovered by this query</returns>
 		<#= CoverageAttribute(i) #>
 		public int Execute<TQ, <#= queryConstraints #>>(
 			ref TQ q,
@@ -98,6 +179,26 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, <#= queryConstraints #>>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+<# for (var k = 0; k < i; k++)
+{
+#>
+		/// <typeparam name="T<#= k #>">Component <#= k #> to include in query</typeparam>
+<#
+}
+#>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		<#= DocsRefQueryDescription() #>
+		/// <returns>The number of entities discovered by this query</returns>
 		<#= CoverageAttribute(i) #>
 		public int Execute<TQ, <#= queryConstraints #>>(
 			ref TQ q,
@@ -339,6 +440,33 @@ namespace Myriad.ECS.Worlds
 		if (index < 2)
 			return "";
 		return "[ExcludeFromCodeCoverage]";
+	}
+
+	static string DocsQueryDescription()
+	{
+		return @"
+		/// <param name=""query\"">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		";
+	}
+
+	static string DocsRefQueryDescription()
+	{
+		return @"
+		/// <param name=""query\"">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		";
 	}
 
 	static string Constraints(int count, int spaces = 4)

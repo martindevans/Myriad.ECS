@@ -32,7 +32,7 @@ public sealed partial class CommandBuffer
     private int _aggregateNodesCount;
     private readonly BufferedAggregateNode[] _bufferedAggregateNodes = new BufferedAggregateNode[512];
 
-    private readonly SortedList<Entity, EntityModificationData> _entityModifications = [ ];
+    private readonly Dictionary<Entity, EntityModificationData> _entityModifications = [ ];
     private readonly List<Entity> _deletes = [ ];
     private readonly List<QueryDescription> _archetypeDeletes = [ ];
     private readonly OrderedListSet<Entity> _maybeAddingPhantomComponent = new();
@@ -180,7 +180,7 @@ public sealed partial class CommandBuffer
         if (_entityModifications.Count > 0)
         {
             // Calculate the new archetype for the entity
-            foreach (var (entity, mod) in _entityModifications.Enumerable())
+            foreach (var (entity, mod) in _entityModifications)
             {
                 // Skip entities that have been deleted since this was enqueued
                 if (!entity.Exists())
@@ -540,11 +540,8 @@ public sealed partial class CommandBuffer
 
     private EntityModificationData GetModificationData(Entity entity, bool ensureSet, bool ensureRemove)
     {
-        // Get the index of this entity in the modifications lookup
-        var idx = _entityModifications.IndexOfKey(entity);
-
         // Add it if it's missing
-        if (idx == -1)
+        if (!_entityModifications.TryGetValue(entity, out var existing))
         {
             var mod = new EntityModificationData(
                 ensureSet ? Pool<SortedList<ComponentID, ComponentSetterCollection.SetterId>>.Get() : null,
@@ -560,7 +557,7 @@ public sealed partial class CommandBuffer
         else
         {
             // Found it, now modify it (if necessary)
-            var mod = _entityModifications.Values[idx];
+            var mod = existing;
 
             var overwrite = false;
             if (mod.Sets == null && ensureSet)
@@ -576,13 +573,7 @@ public sealed partial class CommandBuffer
             }
 
             if (overwrite)
-            {
-#if NET8_0_OR_GREATER
-                _entityModifications.SetValueAtIndex(idx, mod);
-#else
                 _entityModifications[entity] = mod;
-#endif
-            }
 
             return mod;
         }

@@ -19,6 +19,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 1 components
+	/// </summary>
 	public interface IQuery<T0>
 		where T0 : IComponent
 	{
@@ -30,6 +33,23 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		
 		public int Execute<TQ, T0>(
 			QueryDescription? query = null
@@ -41,6 +61,22 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		
 		public int Execute<TQ, T0>(
 			ref QueryDescription? query
@@ -52,6 +88,16 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		
 		public int Execute<TQ, T0>(
 			TQ q,
@@ -63,6 +109,23 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		
 		public int Execute<TQ, T0>(
 			TQ q,
@@ -74,6 +137,28 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		
 		public int Execute<TQ, T0>(
 			ref TQ q,
@@ -85,6 +170,29 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		
 		public int Execute<TQ, T0>(
 			ref TQ q,
@@ -324,6 +432,9 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 2 components
+	/// </summary>
 	public interface IQuery<T0, T1>
 		where T0 : IComponent
         where T1 : IComponent
@@ -336,6 +447,24 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1>(
 			QueryDescription? query = null
@@ -348,6 +477,23 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1>(
 			ref QueryDescription? query
@@ -360,6 +506,17 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1>(
 			TQ q,
@@ -372,6 +529,24 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1>(
 			TQ q,
@@ -384,6 +559,29 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1>(
 			ref TQ q,
@@ -396,6 +594,30 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1>(
 			ref TQ q,
@@ -650,6 +872,9 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 3 components
+	/// </summary>
 	public interface IQuery<T0, T1, T2>
 		where T0 : IComponent
         where T1 : IComponent
@@ -663,6 +888,25 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2>(
 			QueryDescription? query = null
@@ -676,6 +920,24 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2>(
 			ref QueryDescription? query
@@ -689,6 +951,18 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2>(
 			TQ q,
@@ -702,6 +976,25 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2>(
 			TQ q,
@@ -715,6 +1008,30 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2>(
 			ref TQ q,
@@ -728,6 +1045,31 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2>(
 			ref TQ q,
@@ -997,6 +1339,9 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 4 components
+	/// </summary>
 	public interface IQuery<T0, T1, T2, T3>
 		where T0 : IComponent
         where T1 : IComponent
@@ -1011,6 +1356,26 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3>(
 			QueryDescription? query = null
@@ -1025,6 +1390,25 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3>(
 			ref QueryDescription? query
@@ -1039,6 +1423,19 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3>(
 			TQ q,
@@ -1053,6 +1450,26 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3>(
 			TQ q,
@@ -1067,6 +1484,31 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3>(
 			ref TQ q,
@@ -1081,6 +1523,32 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3>(
 			ref TQ q,
@@ -1365,6 +1833,9 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 5 components
+	/// </summary>
 	public interface IQuery<T0, T1, T2, T3, T4>
 		where T0 : IComponent
         where T1 : IComponent
@@ -1380,6 +1851,27 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4>(
 			QueryDescription? query = null
@@ -1395,6 +1887,26 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4>(
 			ref QueryDescription? query
@@ -1410,6 +1922,20 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
@@ -1425,6 +1951,27 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
@@ -1440,6 +1987,32 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4>(
 			ref TQ q,
@@ -1455,6 +2028,33 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4>(
 			ref TQ q,
@@ -1754,6 +2354,9 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 6 components
+	/// </summary>
 	public interface IQuery<T0, T1, T2, T3, T4, T5>
 		where T0 : IComponent
         where T1 : IComponent
@@ -1770,6 +2373,28 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
 			QueryDescription? query = null
@@ -1786,6 +2411,27 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
 			ref QueryDescription? query
@@ -1802,6 +2448,21 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
@@ -1818,6 +2479,28 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
@@ -1834,6 +2517,33 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
 			ref TQ q,
@@ -1850,6 +2560,34 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
 			ref TQ q,
@@ -2164,6 +2902,9 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 7 components
+	/// </summary>
 	public interface IQuery<T0, T1, T2, T3, T4, T5, T6>
 		where T0 : IComponent
         where T1 : IComponent
@@ -2181,6 +2922,29 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			QueryDescription? query = null
@@ -2198,6 +2962,28 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			ref QueryDescription? query
@@ -2215,6 +3001,22 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
@@ -2232,6 +3034,29 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
@@ -2249,6 +3074,34 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			ref TQ q,
@@ -2266,6 +3119,35 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			ref TQ q,
@@ -2595,6 +3477,9 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 8 components
+	/// </summary>
 	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		where T0 : IComponent
         where T1 : IComponent
@@ -2613,6 +3498,30 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			QueryDescription? query = null
@@ -2631,6 +3540,29 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			ref QueryDescription? query
@@ -2649,6 +3581,23 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
@@ -2667,6 +3616,30 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
@@ -2685,6 +3658,35 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			ref TQ q,
@@ -2703,6 +3705,36 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			ref TQ q,
@@ -3047,6 +4079,9 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 9 components
+	/// </summary>
 	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		where T0 : IComponent
         where T1 : IComponent
@@ -3066,6 +4101,31 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			QueryDescription? query = null
@@ -3085,6 +4145,30 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			ref QueryDescription? query
@@ -3104,6 +4188,24 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
@@ -3123,6 +4225,31 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
@@ -3142,6 +4269,36 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			ref TQ q,
@@ -3161,6 +4318,37 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			ref TQ q,
@@ -3520,6 +4708,9 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 10 components
+	/// </summary>
 	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		where T0 : IComponent
         where T1 : IComponent
@@ -3540,6 +4731,32 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			QueryDescription? query = null
@@ -3560,6 +4777,31 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			ref QueryDescription? query
@@ -3580,6 +4822,25 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
@@ -3600,6 +4861,32 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
@@ -3620,6 +4907,37 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			ref TQ q,
@@ -3640,6 +4958,38 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			ref TQ q,
@@ -4014,6 +5364,9 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 11 components
+	/// </summary>
 	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		where T0 : IComponent
         where T1 : IComponent
@@ -4035,6 +5388,33 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			QueryDescription? query = null
@@ -4056,6 +5436,32 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			ref QueryDescription? query
@@ -4077,6 +5483,26 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
@@ -4098,6 +5524,33 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
@@ -4119,6 +5572,38 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			ref TQ q,
@@ -4140,6 +5625,39 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			ref TQ q,
@@ -4529,6 +6047,9 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 12 components
+	/// </summary>
 	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		where T0 : IComponent
         where T1 : IComponent
@@ -4551,6 +6072,34 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			QueryDescription? query = null
@@ -4573,6 +6122,33 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			ref QueryDescription? query
@@ -4595,6 +6171,27 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
@@ -4617,6 +6214,34 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
@@ -4639,6 +6264,39 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			ref TQ q,
@@ -4661,6 +6319,40 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			ref TQ q,
@@ -5065,6 +6757,9 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 13 components
+	/// </summary>
 	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		where T0 : IComponent
         where T1 : IComponent
@@ -5088,6 +6783,35 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			QueryDescription? query = null
@@ -5111,6 +6835,34 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			ref QueryDescription? query
@@ -5134,6 +6886,28 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
@@ -5157,6 +6931,35 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
@@ -5180,6 +6983,40 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			ref TQ q,
@@ -5203,6 +7040,41 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			ref TQ q,
@@ -5622,6 +7494,9 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 14 components
+	/// </summary>
 	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		where T0 : IComponent
         where T1 : IComponent
@@ -5646,6 +7521,36 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			QueryDescription? query = null
@@ -5670,6 +7575,35 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			ref QueryDescription? query
@@ -5694,6 +7628,29 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
@@ -5718,6 +7675,36 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
@@ -5742,6 +7729,41 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			ref TQ q,
@@ -5766,6 +7788,42 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			ref TQ q,
@@ -6200,6 +8258,9 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 15 components
+	/// </summary>
 	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		where T0 : IComponent
         where T1 : IComponent
@@ -6225,6 +8286,37 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		/// <typeparam name="T14">Component 14 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			QueryDescription? query = null
@@ -6250,6 +8342,36 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		/// <typeparam name="T14">Component 14 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			ref QueryDescription? query
@@ -6275,6 +8397,30 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		/// <typeparam name="T14">Component 14 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
@@ -6300,6 +8446,37 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		/// <typeparam name="T14">Component 14 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
@@ -6325,6 +8502,42 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		/// <typeparam name="T14">Component 14 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			ref TQ q,
@@ -6350,6 +8563,43 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		/// <typeparam name="T14">Component 14 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			ref TQ q,
@@ -6799,6 +9049,9 @@ namespace Myriad.ECS.Worlds
 }
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A query which accepts 16 components
+	/// </summary>
 	public interface IQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		where T0 : IComponent
         where T1 : IComponent
@@ -6825,6 +9078,38 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		/// <typeparam name="T14">Component 14 to include in query</typeparam>
+		/// <typeparam name="T15">Component 15 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			QueryDescription? query = null
@@ -6851,6 +9136,37 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		/// <typeparam name="T14">Component 14 to include in query</typeparam>
+		/// <typeparam name="T15">Component 15 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			ref QueryDescription? query
@@ -6877,6 +9193,31 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		/// <typeparam name="T14">Component 14 to include in query</typeparam>
+		/// <typeparam name="T15">Component 15 to include in query</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
@@ -6903,6 +9244,38 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		/// <typeparam name="T14">Component 14 to include in query</typeparam>
+		/// <typeparam name="T15">Component 15 to include in query</typeparam>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
@@ -6929,6 +9302,43 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		/// <typeparam name="T14">Component 14 to include in query</typeparam>
+		/// <typeparam name="T15">Component 15 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			ref TQ q,
@@ -6955,6 +9365,44 @@ namespace Myriad.ECS.Worlds
 			return Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
 		}
 
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// If the <see cref="QueryDescription"/> is non-null it **must** Include all of
+		/// the component types specified in this Execute call!
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <typeparam name="T0">Component 0 to include in query</typeparam>
+		/// <typeparam name="T1">Component 1 to include in query</typeparam>
+		/// <typeparam name="T2">Component 2 to include in query</typeparam>
+		/// <typeparam name="T3">Component 3 to include in query</typeparam>
+		/// <typeparam name="T4">Component 4 to include in query</typeparam>
+		/// <typeparam name="T5">Component 5 to include in query</typeparam>
+		/// <typeparam name="T6">Component 6 to include in query</typeparam>
+		/// <typeparam name="T7">Component 7 to include in query</typeparam>
+		/// <typeparam name="T8">Component 8 to include in query</typeparam>
+		/// <typeparam name="T9">Component 9 to include in query</typeparam>
+		/// <typeparam name="T10">Component 10 to include in query</typeparam>
+		/// <typeparam name="T11">Component 11 to include in query</typeparam>
+		/// <typeparam name="T12">Component 12 to include in query</typeparam>
+		/// <typeparam name="T13">Component 13 to include in query</typeparam>
+		/// <typeparam name="T14">Component 14 to include in query</typeparam>
+		/// <typeparam name="T15">Component 15 to include in query</typeparam>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		
+		/// <param name="query\">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		
+		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			ref TQ q,

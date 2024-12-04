@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.Components;
 using Myriad.ECS.Extensions;
