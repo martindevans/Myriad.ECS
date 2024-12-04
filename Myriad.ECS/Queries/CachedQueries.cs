@@ -28,7 +28,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
-    private QueryDescription GetCachedQuery<T0>()
+    public QueryDescription GetCachedQuery<T0>()
         where T0 : IComponent
     {
         var component = ComponentID<T0>.ID.Value;
@@ -73,7 +73,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
-    private QueryDescription GetCachedQuery<T0, T1>()
+    public QueryDescription GetCachedQuery<T0, T1>()
         where T0 : IComponent
         where T1 : IComponent
     {
@@ -137,7 +137,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     
-    private QueryDescription GetCachedQuery<T0, T1, T2>()
+    public QueryDescription GetCachedQuery<T0, T1, T2>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -216,7 +216,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery<T0, T1, T2, T3>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -298,7 +298,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -383,7 +383,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -471,7 +471,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -562,7 +562,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -656,7 +656,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -753,7 +753,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -853,7 +853,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -956,7 +956,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1062,7 +1062,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1171,7 +1171,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1283,7 +1283,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1398,7 +1398,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent

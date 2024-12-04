@@ -37,7 +37,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
-    private QueryDescription GetCachedQuery<T0>()
+    public QueryDescription GetCachedQuery<T0>()
         where T0 : IComponent
     {
         var component = ComponentID<T0>.ID.Value;
@@ -82,7 +82,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
-    private QueryDescription GetCachedQuery<T0, T1>()
+    public QueryDescription GetCachedQuery<T0, T1>()
         where T0 : IComponent
         where T1 : IComponent
     {
@@ -164,7 +164,7 @@ public partial class World
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     <#= CoverageAttribute(i) #>
-    private QueryDescription GetCachedQuery<#= tparams #>()
+    public QueryDescription GetCachedQuery<#= tparams #>()
         <#= Constraints(i, 8) #>
     {
         // Accumulate all components in ascending order
