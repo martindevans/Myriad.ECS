@@ -1,6 +1,5 @@
 ﻿using Myriad.ECS.Allocations;
 using Myriad.ECS.Components;
-using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 
 namespace Myriad.ECS.Command;
@@ -26,7 +25,7 @@ public partial class CommandBuffer
             concrete.Add(key, relation);
         }
 
-        protected abstract void Apply<TComponent>(Resolver buffer, SortedList<TKey, BufferedEntity> bindings)
+        protected abstract void Apply<TComponent>(Resolver buffer, Dictionary<TKey, BufferedEntity> bindings)
             where TComponent : IEntityRelationComponent;
 
         public void Apply(Resolver resolver)
@@ -46,7 +45,7 @@ public partial class CommandBuffer
             : IInternalResolver
             where TComponent : IEntityRelationComponent
         {
-            private readonly SortedList<TKey, BufferedEntity> _relationships = [];
+            private readonly Dictionary<TKey, BufferedEntity> _relationships = [];
 
             public void Add(TKey key, BufferedEntity relation)
             {
@@ -76,9 +75,9 @@ public partial class CommandBuffer
     private class BufferedRelationBinder
         : BaseRelationBinder<BufferedEntity>
     {
-        protected override void Apply<TComponent>(Resolver buffer, SortedList<BufferedEntity, BufferedEntity> bindings)
+        protected override void Apply<TComponent>(Resolver buffer, Dictionary<BufferedEntity, BufferedEntity> bindings)
         {
-            foreach (var (setOnBuf, tgtBuf) in bindings.Enumerable())
+            foreach (var (setOnBuf, tgtBuf) in bindings)
             {
                 var setOn = setOnBuf.Resolve();
                 var tgt = tgtBuf.Resolve();
@@ -91,9 +90,9 @@ public partial class CommandBuffer
     private class UnbufferedRelationBinder
         : BaseRelationBinder<Entity>
     {
-        protected override void Apply<TComponent>(Resolver buffer, SortedList<Entity, BufferedEntity> bindings)
+        protected override void Apply<TComponent>(Resolver buffer, Dictionary<Entity, BufferedEntity> bindings)
         {
-            foreach (var (setOn, tgtBuf) in bindings.Enumerable())
+            foreach (var (setOn, tgtBuf) in bindings)
             {
                 var tgt = tgtBuf.Resolve();
 

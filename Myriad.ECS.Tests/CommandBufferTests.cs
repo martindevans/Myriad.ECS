@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Myriad.ECS.Collections;
+﻿using Myriad.ECS.Collections;
 using Myriad.ECS.Command;
 using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
@@ -948,5 +947,20 @@ public class CommandBufferTests
         entity3.GetComponentRef<Component0>();
         entity3.GetComponentRef<Component1>();
         entity3.GetComponentRef<Component2>();
+    }
+
+    [TestMethod]
+    public void AvrilRelationalBug()
+    {
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+
+        var p1 = cmd.Create();
+        cmd.Create().Set(default(Relational1), p1);
+
+        var p2 = cmd.Create();
+        cmd.Create().Set(default(Relational1), p2);
+
+        cmd.Playback().Dispose();
     }
 }
