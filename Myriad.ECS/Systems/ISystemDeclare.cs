@@ -78,24 +78,28 @@ public sealed class DeclareSystemGroup<TData>(string name, params ISystemDeclare
     // ReSharper disable once CoVariantArrayConversion
     : BaseSystemGroup<TData>(name, systems), ISystemDeclare<TData>
 {
+    /// <inheritdoc />
     protected override void BeforeUpdateInternal(List<SystemGroupItem<TData>> systems, TData data)
     {
         foreach (var item in systems)
             item.BeforeUpdate(data);
     }
 
+    /// <inheritdoc />
     protected override void UpdateInternal(List<SystemGroupItem<TData>> systems, TData data)
     {
         foreach (var item in systems)
             item.Update(data);
     }
 
+    /// <inheritdoc />
     protected override void AfterUpdateInternal(List<SystemGroupItem<TData>> systems, TData data)
     {
         foreach (var item in systems)
             item.AfterUpdate(data);
     }
 
+    /// <inheritdoc />
     public void Declare(ref SystemDeclaration declaration)
     {
         for (var i = 0; i < Systems.Count; i++)
@@ -123,18 +127,25 @@ public sealed class PhasedParallelSystemGroup<TData>
     /// </summary>
     public int Phases { get; private set; }
 
+    /// <summary>
+    /// Create a new <see cref="PhasedParallelSystemGroup{TData}"/>
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="systems"></param>
     public PhasedParallelSystemGroup(string name, params ISystemDeclare<TData>[] systems)
         // ReSharper disable once CoVariantArrayConversion
         : base(name, systems)
     {
     }
 
+    /// <inheritdoc />
     protected override void BeforeUpdateInternal(List<SystemGroupItem<TData>> systems, TData data)
     {
         foreach (var item in systems)
             item.BeforeUpdate(data);
     }
 
+    /// <inheritdoc />
     protected override void UpdateInternal(List<SystemGroupItem<TData>> systems, TData data)
     {
         // Ensure arrays are large enough
@@ -188,6 +199,7 @@ public sealed class PhasedParallelSystemGroup<TData>
         Phases = phaseCount;
     }
 
+    /// <inheritdoc />
     protected override void AfterUpdateInternal(List<SystemGroupItem<TData>> systems, TData data)
     {
         foreach (var item in systems)
@@ -212,18 +224,25 @@ public sealed class OrderedParallelSystemGroup<TData>
     /// </summary>
     public int MaxDependencyChain { get; private set; }
 
+    /// <summary>
+    /// Create a new <see cref="OrderedParallelSystemGroup{TData}"/>
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="systems"></param>
     public OrderedParallelSystemGroup(string name, params ISystemDeclare<TData>[] systems)
         // ReSharper disable once CoVariantArrayConversion
         : base(name, systems)
     {
     }
 
+    /// <inheritdoc />
     protected override void BeforeUpdateInternal(List<SystemGroupItem<TData>> systems, TData data)
     {
         foreach (var item in systems)
             item.BeforeUpdate(data);
     }
 
+    /// <inheritdoc />
     protected override void UpdateInternal(List<SystemGroupItem<TData>> systems, TData data)
     {
         // Ensure arrays are large enough
@@ -278,6 +297,7 @@ public sealed class OrderedParallelSystemGroup<TData>
         await Task.Run(() => system.Update(data)).ConfigureAwait(false);
     }
 
+    /// <inheritdoc />
     protected override void AfterUpdateInternal(List<SystemGroupItem<TData>> systems, TData data)
     {
         foreach (var item in systems)

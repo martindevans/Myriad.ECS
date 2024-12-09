@@ -40,12 +40,22 @@ public interface ISystemGroup<TData>
     }
 }
 
+/// <summary>
+/// A single item in a <see cref="SystemGroup{TData}"/>
+/// </summary>
 public sealed class SystemGroupItem<TData>
 {
+    /// <summary>
+    /// Indicates if update calls will be made to this system.
+    /// </summary>
     public bool Enabled { get; set; } = true;
 
     private ISystemBefore<TData>? SystemBefore { get; }
     private ISystemAfter<TData>? SystemAfter { get; }
+
+    /// <summary>
+    /// Get the system that this item represents
+    /// </summary>
     public ISystem<TData> System { get; }
 
     /// <summary>
@@ -80,6 +90,10 @@ public sealed class SystemGroupItem<TData>
     /// </summary>
     public TimeSpan AfterUpdateTime { get; private set; }
 
+    /// <summary>
+    /// Create a new <see cref="SystemGroupItem{TData}"/> wrapping the given system
+    /// </summary>
+    /// <param name="system"></param>
     public SystemGroupItem(ISystem<TData> system)
     {
         SystemBefore = system as ISystemBefore<TData>;
@@ -117,11 +131,21 @@ public sealed class SystemGroupItem<TData>
     }
 }
 
+/// <summary>
+/// Base class for a group of systems executed together
+/// </summary>
+/// <typeparam name="TData"></typeparam>
 public abstract class BaseSystemGroup<TData>
     : ISystemGroup<TData>
 {
+    /// <summary>
+    /// The name of this group
+    /// </summary>
     public string Name { get; }
 
+    /// <summary>
+    /// Total time consumed in this system in the previous update call
+    /// </summary>
     public TimeSpan TotalExecutionTime { get; private set; }
 
     private readonly Stopwatch _timer = new();
@@ -130,6 +154,11 @@ public abstract class BaseSystemGroup<TData>
     private readonly List<SystemGroupItem<TData>> _systems;
     private readonly List<SystemGroupItem<TData>> _afterSystems;
 
+    /// <summary>
+    /// Create a new system group
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="systems"></param>
     protected BaseSystemGroup(string name, params ISystem<TData>[] systems)
     {
         Name = name;
@@ -141,12 +170,16 @@ public abstract class BaseSystemGroup<TData>
         _afterSystems = sys.Where(a => a.System is ISystemAfter<TData>).ToList();
     }
 
+    /// <summary>
+    /// Call Init on all systems in this group which implement <see cref="ISystemInit{TData}"/>
+    /// </summary>
     public void Init()
     {
         foreach (var system in _systems)
             (system.System as ISystemInit<TData>)?.Init();
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         foreach (var system in _systems.Select(a => a.System as IDisposable))
@@ -155,6 +188,11 @@ public abstract class BaseSystemGroup<TData>
         GC.SuppressFinalize(this);
     }
 
+    /// <summary>
+    /// Add a new system to the end of this group
+    /// </summary>
+    /// <param name="system"></param>
+    /// <returns></returns>
     protected SystemGroupItem<TData> Add(ISystem<TData> system)
     {
         var item = new SystemGroupItem<TData>(system);
@@ -169,6 +207,11 @@ public abstract class BaseSystemGroup<TData>
         return item;
     }
 
+    /// <summary>
+    /// Remove a system from this group
+    /// </summary>
+    /// <param name="system"></param>
+    /// <returns></returns>
     protected bool Remove(ISystem<TData> system)
     {
         for (var i = 0; i < _systems.Count; i++)
@@ -185,6 +228,10 @@ public abstract class BaseSystemGroup<TData>
         return false;
     }
 
+    /// <summary>
+    /// Call BeforeUpdate on all systems in this group
+    /// </summary>
+    /// <param name="data"></param>
     public void BeforeUpdate(TData data)
     {
         _timer.Reset();
@@ -194,8 +241,17 @@ public abstract class BaseSystemGroup<TData>
         _timer.Stop();
     }
 
+    /// <summary>
+    /// Called by BeforeUpdate, should implement the actual call to the systems
+    /// </summary>
+    /// <param name="systems"></param>
+    /// <param name="data"></param>
     protected abstract void BeforeUpdateInternal(List<SystemGroupItem<TData>> systems, TData data);
 
+    /// <summary>
+    /// Call Update on all systems in this group
+    /// </summary>
+    /// <param name="data"></param>
     public void Update(TData data)
     {
         _timer.Start();
@@ -203,8 +259,17 @@ public abstract class BaseSystemGroup<TData>
         _timer.Stop();
     }
 
+    /// <summary>
+    /// Called by Update, should implement the actual call to the systems
+    /// </summary>
+    /// <param name="systems"></param>
+    /// <param name="data"></param>
     protected abstract void UpdateInternal(List<SystemGroupItem<TData>> systems, TData data);
 
+    /// <summary>
+    /// Call AfterUpdate on all systems in this group
+    /// </summary>
+    /// <param name="data"></param>
     public void AfterUpdate(TData data)
     {
         _timer.Start();
@@ -214,12 +279,24 @@ public abstract class BaseSystemGroup<TData>
         TotalExecutionTime = _timer.Elapsed;
     }
 
+    /// <summary>
+    /// Called by AfterUpdate, should implement the actual call to the systems
+    /// </summary>
+    /// <param name="systems"></param>
+    /// <param name="data"></param>
     protected abstract void AfterUpdateInternal(List<SystemGroupItem<TData>> systems, TData data);
 
+    /// <summary>
+    /// All the systems in this group
+    /// </summary>
     public IReadOnlyList<SystemGroupItem<TData>> Systems => _systems;
 
     IEnumerable<SystemGroupItem<TData>> ISystemGroup<TData>.Systems => _systems;
 
+    /// <summary>
+    /// All the systems in this group, if any of the systems are a group they are expanded to their inner
+    /// systems recursively.
+    /// </summary>
     public IEnumerable<SystemGroupItem<TData>> RecursiveSystems
     {
         get

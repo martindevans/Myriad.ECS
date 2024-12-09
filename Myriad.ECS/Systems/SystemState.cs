@@ -6,8 +6,8 @@ using Myriad.ECS.Worlds;
 namespace Myriad.ECS.Systems;
 
 /// <summary>
-/// Automatically attaches <see cref="TAssociated"/> component to any entity which has <see cref="TComponent"/>. Automatically removes
-/// <see cref="TAssociated"/> component from any entity which has <see cref="TAssociated"/> and does not have <see cref="TComponent"/>.
+/// Automatically attaches <typeparamref name="TAssociated"/> component to any entity which has <typeparamref name="TComponent"/>. Automatically removes
+/// <typeparamref name="TAssociated"/> component from any entity which has <typeparamref name="TAssociated"/> and does not have <typeparamref name="TComponent"/>.
 /// </summary>
 /// <typeparam name="TComponent"></typeparam>
 /// <typeparam name="TAssociated"></typeparam>
@@ -20,22 +20,31 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
     private readonly QueryDescription _removeQueryPhantom = new QueryBuilder().Include<TAssociated>().Include<Phantom>().Build(world);
 
     /// <summary>
-    /// Indicates if <see cref="TAssociated"/> is an <see cref="IPhantomComponent"/>
+    /// Indicates if <typeparamref name="TAssociated"/> is an <see cref="IPhantomComponent"/>
     /// </summary>
     public bool AssociatedIsPhantom { get; } = typeof(IPhantomComponent).IsAssignableFrom(typeof(TAssociated));
 
+    /// <summary>
+    /// Apply changes
+    /// </summary>
+    /// <param name="cmd"></param>
     public void Update(CommandBuffer cmd)
     {
         world.Execute(new Attach(this, cmd), _addQuery);
         world.Execute<Detach, TAssociated>(new Detach(this, cmd), AssociatedIsPhantom ? _removeQueryPhantom : _removeQuery);
     }
 
+    /// <summary>
+    /// Create an instance of <typeparamref name="TAssociated" /> for the given entity
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns></returns>
     protected abstract TAssociated Create(Entity entity);
 
     /// <summary>
-    /// Called when an Entity is found that has <see cref="TComponent"/> but does not have <see cref="TAssociated"/>.
+    /// Called when an Entity is found that has <typeparamref name="TComponent"/> but does not have <typeparamref name="TAssociated"/>.
     ///
-    /// Call base.OnAttach to attach default <see cref="TAssociated"/>, or attach it yourself and do not call base.OnAttach.
+    /// Call base.OnAttach to attach default <typeparamref name="TAssociated"/>, or attach it yourself and do not call base.OnAttach.
     /// </summary>
     /// <param name="e"></param>
     /// <param name="c"></param>
@@ -45,9 +54,9 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
     }
 
     /// <summary>
-    /// Called when an Entity is found that has <see cref="TAssociated"/> but does not have <see cref="TComponent"/>.
+    /// Called when an Entity is found that has <typeparamref name="TAssociated"/> but does not have <typeparamref name="TComponent"/>.
     /// 
-    /// Call base.OnDetach to detach <see cref="TAssociated"/>.
+    /// Call base.OnDetach to detach <typeparamref name="TAssociated"/>.
     /// </summary>
     /// <param name="e"></param>
     /// <param name="c"></param>
@@ -76,11 +85,19 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
     }
 }
 
+/// <summary>
+/// A <see cref="SystemState{TComponent,TAssociated}"/> which creates the associated component with a factory function
+/// </summary>
+/// <typeparam name="TComponent"></typeparam>
+/// <typeparam name="TAssociated"></typeparam>
+/// <param name="world"></param>
+/// <param name="factory"></param>
 public class FactorySystemState<TComponent, TAssociated>(World world, Func<Entity, TAssociated> factory)
     : SystemState<TComponent, TAssociated>(world)
     where TComponent : IComponent
     where TAssociated : IComponent
 {
+    /// <inheritdoc />
     protected override TAssociated Create(Entity entity)
     {
         return factory(entity);

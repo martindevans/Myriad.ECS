@@ -6,13 +6,11 @@
 /// <typeparam name="TData"></typeparam>
 public interface ISystem<in TData>
 {
+    /// <summary>
+    /// Called one per tick
+    /// </summary>
+    /// <param name="data"></param>
     public void Update(TData data);
-}
-
-public abstract class BaseSystem<TData>
-    : ISystem<TData>
-{
-    public abstract void Update(TData data);
 }
 
 /// <summary>
@@ -35,6 +33,10 @@ public interface ISystemInit<in TData>
 public interface ISystemBefore<in TData>
     : ISystem<TData>
 {
+    /// <summary>
+    /// Called one per tick, before the normal Update call
+    /// </summary>
+    /// <param name="data"></param>
     public void BeforeUpdate(TData data);
 }
 
@@ -45,5 +47,9 @@ public interface ISystemBefore<in TData>
 public interface ISystemAfter<in TData>
     : ISystem<TData>
 {
+    /// <summary>
+    /// Called one per tick, after the normal Update call
+    /// </summary>
+    /// <param name="data"></param>
     public void AfterUpdate(TData data);
 }

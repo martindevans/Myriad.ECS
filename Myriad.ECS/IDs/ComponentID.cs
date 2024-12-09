@@ -16,7 +16,14 @@ public readonly record struct ComponentID
     internal const int IsRelationComponentMask   = 0b010;
     internal const int IsDisposableComponentMask = 0b100;
 
+    /// <summary>
+    /// Get the raw value of this ID
+    /// </summary>
     public int Value { get; }
+
+    /// <summary>
+    /// The <see cref="System.Type"/> of the component this ID is for
+    /// </summary>
     public Type Type => ComponentRegistry.Get(this);
 
     /// <summary>
@@ -56,7 +63,7 @@ public readonly record struct ComponentID
     /// Get the component ID for the given type
     /// </summary>
     /// <param name="type"></param>
-    /// <exception cref="ArgumentException">Thrown if <see cref="type"/> does not implement <see cref="IComponent"/></exception>
+    /// <exception cref="ArgumentException">Thrown if 'type' does not implement <see cref="IComponent"/></exception>
     /// <returns></returns>
     public static ComponentID Get(Type type)
     {
@@ -67,9 +74,12 @@ public readonly record struct ComponentID
 /// <summary>
 /// Retrieve the component ID for a type
 /// </summary>
-/// <typeparam name="T"></typeparam>
-public static class ComponentID<T>
-    where T : IComponent
+/// <typeparam name="TComponent"></typeparam>
+public static class ComponentID<TComponent>
+    where TComponent : IComponent
 {
-    public static readonly ComponentID ID = ComponentRegistry.Get<T>();
+    /// <summary>
+    /// The ID for <typeparamref name="TComponent" />
+    /// </summary>
+    public static readonly ComponentID ID = ComponentRegistry.Get<TComponent>();
 }

@@ -260,6 +260,14 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+		/// Execute a query in parallel over entities, blocks until complete.
+		/// </summary>
+		/// <param name="q"></param>
+		/// <param name="query"></param>
+		/// <param name="batchSize"></param>
+		/// <returns></returns>
+		/// <exception cref="AggregateException"></exception>
 		<#= CoverageAttribute(i) #>
 		public int ExecuteParallel<TQ, <#= queryConstraints #>>(
 			TQ q,
@@ -437,7 +445,7 @@ namespace Myriad.ECS.Worlds
 	static string DocsQueryDescription()
 	{
 		return @"
-		/// <param name=""query\"">
+		/// <param name=""query"">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
 		/// <br /><br />
@@ -450,7 +458,7 @@ namespace Myriad.ECS.Worlds
 	static string DocsRefQueryDescription()
 	{
 		return @"
-		/// <param name=""query\"">
+		/// <param name=""query"">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
 		/// <br /><br />

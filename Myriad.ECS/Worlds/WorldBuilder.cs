@@ -4,6 +4,9 @@ using Myriad.ECS.Threading;
 
 namespace Myriad.ECS.Worlds;
 
+/// <summary>
+/// A builder to create a new <see cref="World"/>
+/// </summary>
 public sealed partial class WorldBuilder
 {
     private readonly List<OrderedListSet<ComponentID>> _archetypes = [ ];
@@ -50,6 +53,10 @@ public sealed partial class WorldBuilder
         return this;
     }
 
+    /// <summary>
+    /// Create a new <see cref="World"/> using the configuration in this <see cref="WorldBuilder"/>.
+    /// </summary>
+    /// <returns></returns>
     public World Build()
     {
         var w = new World(

@@ -24,11 +24,21 @@ public readonly record struct ComponentArray<T>
     /// <returns></returns>
     public ref T this[int Index] => ref Array[Index];
 
+    /// <summary>
+    /// Create a new <see cref="ComponentArray{T}"/>
+    /// </summary>
+    /// <param name="array"></param>
     public ComponentArray(T[] array)
     {
         Array = array;
     }
 
+    /// <summary>
+    /// Factory to create a new <see cref="ComponentArray{T}"/>, filling the array with copies of the same object
+    /// </summary>
+    /// <param name="length"></param>
+    /// <param name="template"></param>
+    /// <returns></returns>
     public static ComponentArray<T> Create(int length, T template)
     {
         var arr = new ComponentArray<T>(new T[length]);
@@ -65,11 +75,21 @@ public readonly record struct ComponentList<T>
         set => List[Index] = value;
     }
 
+    /// <summary>
+    /// Create a new <see cref="ComponentList{T}"/>
+    /// </summary>
+    /// <param name="list"></param>
     public ComponentList(List<T> list)
     {
         List = list;
     }
 
+    /// <summary>
+    /// Factory to create a new <see cref="ComponentList{T}"/>, filling the list with copies of the same object
+    /// </summary>
+    /// <param name="length"></param>
+    /// <param name="template"></param>
+    /// <returns></returns>
     public static ComponentList<T> Create(int length, T template)
     {
         var l = new List<T>(length);

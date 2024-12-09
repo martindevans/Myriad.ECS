@@ -2,6 +2,9 @@
 
 namespace Myriad.ECS.Components;
 
+/// <summary>
+/// Extensions related to sharding
+/// </summary>
 public static class Extensions
 {
 	/// <summary>

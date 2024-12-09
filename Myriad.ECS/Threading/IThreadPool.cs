@@ -17,12 +17,18 @@ public interface IThreadPool
     void QueueUserWorkItem(IThreadPoolWork callback);
 }
 
+/// <summary>
+/// A item of work that can be added to an <see cref="IThreadPool"/>
+/// </summary>
 public interface IThreadPoolWork
 #if NET8_0_OR_GREATER
     : IThreadPoolWorkItem
 #endif
 {
 #if !NET8_0_OR_GREATER
+    /// <summary>
+    /// Run this work.
+    /// </summary>
     void Execute();
 #endif
 }

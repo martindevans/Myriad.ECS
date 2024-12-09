@@ -2,13 +2,28 @@
 
 namespace Myriad.ECS.Queries
 {
+    /// <summary>
+    /// Interface for query handlers which operate over entities
+    /// </summary>
     public interface IQuery
     {
+        /// <summary>
+        /// Execute this query handler for an entity
+        /// </summary>
+        /// <param name="e"></param>
         public void Execute(Entity e);
     }
 
+    /// <summary>
+    /// Interface for query handlers which operate over entire chunks of entities
+    /// </summary>
     public interface IChunkQuery
     {
+        /// <summary>
+        /// Execute this query handler for a chunk of entities
+        /// </summary>
+        /// <param name="chunk"></param>
+        /// <param name="e"></param>
         public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e);
     }
 }

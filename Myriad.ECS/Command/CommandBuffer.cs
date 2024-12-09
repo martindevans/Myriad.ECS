@@ -11,10 +11,16 @@ using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Command;
 
+/// <summary>
+/// Buffers up modifications to entities and replays them all at once.
+/// </summary>
 public sealed partial class CommandBuffer
 {
     private uint _version;
 
+    /// <summary>
+    /// The <see cref="World"/> this <see cref="CommandBuffer"/> is modifying
+    /// </summary>
     public World World { get; }
 
     /// <summary>
@@ -44,6 +50,10 @@ public sealed partial class CommandBuffer
 
     private Resolver _nextResolver;
 
+    /// <summary>
+    /// Create a new <see cref="CommandBuffer"/> for the given <see cref="World"/>
+    /// </summary>
+    /// <param name="world"></param>
     public CommandBuffer(World world)
     {
         World = world;
@@ -325,6 +335,10 @@ public sealed partial class CommandBuffer
     }
     #endregion
 
+    /// <summary>
+    /// Create a new <see cref="Entity"/> in the world.
+    /// </summary>
+    /// <returns></returns>
     public BufferedEntity Create()
     {
         // Ensure the root aggregation node exists

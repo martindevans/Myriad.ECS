@@ -8,20 +8,32 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
 	public delegate void QueryDelegate<T0>(
 		ref T0 t0
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntity<T0>(
 		Entity entity,
 		ref T0 t0
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateData<in TData, T0>(
 		TData data,
 		ref T0 t0
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntityData<in TData, T0>(
 		TData data,
 		Entity entity,
@@ -109,6 +121,11 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		
 		public void Query<T0>(QueryDelegateEntity<T0> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -119,6 +136,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		
 		public void Query<T0>(QueryDelegateEntity<T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -129,6 +151,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		
 		public void QueryParallel<T0>(QueryDelegateEntity<T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -139,6 +166,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		
 		public void Query<T0>(QueryDelegate<T0> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -149,6 +181,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		
 		public void Query<T0>(QueryDelegate<T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -159,6 +196,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		
 		public void QueryParallel<T0>(QueryDelegate<T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -171,6 +213,12 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		
 		public void Query<TData, T0>(TData data, QueryDelegateEntityData<TData, T0> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -181,6 +229,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		
 		public void Query<TData, T0>(TData data, QueryDelegateEntityData<TData, T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -191,6 +245,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		
 		public void QueryParallel<TData, T0>(TData data, QueryDelegateEntityData<TData, T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -201,6 +261,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		
 		public void Query<TData, T0>(TData data, QueryDelegateData<TData, T0> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -211,6 +277,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		
 		public void Query<TData, T0>(TData data, QueryDelegateData<TData, T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -221,6 +293,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		
 		public void QueryParallel<TData, T0>(TData data, QueryDelegateData<TData, T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -235,20 +313,32 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
 	public delegate void QueryDelegate<T0, T1>(
 		ref T0 t0, ref T1 t1
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntity<T0, T1>(
 		Entity entity,
 		ref T0 t0, ref T1 t1
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateData<in TData, T0, T1>(
 		TData data,
 		ref T0 t0, ref T1 t1
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntityData<in TData, T0, T1>(
 		TData data,
 		Entity entity,
@@ -340,6 +430,11 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1>(QueryDelegateEntity<T0, T1> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -351,6 +446,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1>(QueryDelegateEntity<T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -362,6 +462,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1>(QueryDelegateEntity<T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -373,6 +478,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1>(QueryDelegate<T0, T1> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -384,6 +494,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1>(QueryDelegate<T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -395,6 +510,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1>(QueryDelegate<T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -408,6 +528,12 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1>(TData data, QueryDelegateEntityData<TData, T0, T1> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -419,6 +545,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1>(TData data, QueryDelegateEntityData<TData, T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -430,6 +562,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1>(TData data, QueryDelegateEntityData<TData, T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -441,6 +579,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1>(TData data, QueryDelegateData<TData, T0, T1> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -452,6 +596,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1>(TData data, QueryDelegateData<TData, T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -463,6 +613,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1>(TData data, QueryDelegateData<TData, T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -478,20 +634,32 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
 	public delegate void QueryDelegate<T0, T1, T2>(
 		ref T0 t0, ref T1 t1, ref T2 t2
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntity<T0, T1, T2>(
 		Entity entity,
 		ref T0 t0, ref T1 t1, ref T2 t2
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateData<in TData, T0, T1, T2>(
 		TData data,
 		ref T0 t0, ref T1 t1, ref T2 t2
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntityData<in TData, T0, T1, T2>(
 		TData data,
 		Entity entity,
@@ -587,6 +755,11 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2>(QueryDelegateEntity<T0, T1, T2> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -599,6 +772,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2>(QueryDelegateEntity<T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -611,6 +789,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2>(QueryDelegateEntity<T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -623,6 +806,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2>(QueryDelegate<T0, T1, T2> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -635,6 +823,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2>(QueryDelegate<T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -647,6 +840,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2>(QueryDelegate<T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -661,6 +859,12 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2>(TData data, QueryDelegateEntityData<TData, T0, T1, T2> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -673,6 +877,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2>(TData data, QueryDelegateEntityData<TData, T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -685,6 +895,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2>(TData data, QueryDelegateEntityData<TData, T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -697,6 +913,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2>(TData data, QueryDelegateData<TData, T0, T1, T2> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -709,6 +931,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2>(TData data, QueryDelegateData<TData, T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -721,6 +949,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2>(TData data, QueryDelegateData<TData, T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -737,20 +971,32 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
 	public delegate void QueryDelegate<T0, T1, T2, T3>(
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntity<T0, T1, T2, T3>(
 		Entity entity,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateData<in TData, T0, T1, T2, T3>(
 		TData data,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntityData<in TData, T0, T1, T2, T3>(
 		TData data,
 		Entity entity,
@@ -850,6 +1096,11 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3>(QueryDelegateEntity<T0, T1, T2, T3> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -863,6 +1114,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3>(QueryDelegateEntity<T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -876,6 +1132,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3>(QueryDelegateEntity<T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -889,6 +1150,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3>(QueryDelegate<T0, T1, T2, T3> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -902,6 +1168,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3>(QueryDelegate<T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -915,6 +1186,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3>(QueryDelegate<T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -930,6 +1206,12 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -943,6 +1225,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -956,6 +1244,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -969,6 +1263,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3>(TData data, QueryDelegateData<TData, T0, T1, T2, T3> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -982,6 +1282,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3>(TData data, QueryDelegateData<TData, T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -995,6 +1301,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3>(TData data, QueryDelegateData<TData, T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1012,20 +1324,32 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
 	public delegate void QueryDelegate<T0, T1, T2, T3, T4>(
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntity<T0, T1, T2, T3, T4>(
 		Entity entity,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateData<in TData, T0, T1, T2, T3, T4>(
 		TData data,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntityData<in TData, T0, T1, T2, T3, T4>(
 		TData data,
 		Entity entity,
@@ -1129,6 +1453,11 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4>(QueryDelegateEntity<T0, T1, T2, T3, T4> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -1143,6 +1472,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4>(QueryDelegateEntity<T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1157,6 +1491,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4>(QueryDelegateEntity<T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1171,6 +1510,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4>(QueryDelegate<T0, T1, T2, T3, T4> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -1185,6 +1529,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4>(QueryDelegate<T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1199,6 +1548,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4>(QueryDelegate<T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1215,6 +1569,12 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -1229,6 +1589,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1243,6 +1609,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1257,6 +1629,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -1271,6 +1649,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1285,6 +1669,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1303,20 +1693,32 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
 	public delegate void QueryDelegate<T0, T1, T2, T3, T4, T5>(
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntity<T0, T1, T2, T3, T4, T5>(
 		Entity entity,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateData<in TData, T0, T1, T2, T3, T4, T5>(
 		TData data,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntityData<in TData, T0, T1, T2, T3, T4, T5>(
 		TData data,
 		Entity entity,
@@ -1424,6 +1826,11 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -1439,6 +1846,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1454,6 +1866,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1469,6 +1886,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5>(QueryDelegate<T0, T1, T2, T3, T4, T5> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -1484,6 +1906,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5>(QueryDelegate<T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1499,6 +1926,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5>(QueryDelegate<T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1516,6 +1948,12 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -1531,6 +1969,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1546,6 +1990,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1561,6 +2011,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -1576,6 +2032,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1591,6 +2053,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1610,20 +2078,32 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
 	public delegate void QueryDelegate<T0, T1, T2, T3, T4, T5, T6>(
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6>(
 		Entity entity,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateData<in TData, T0, T1, T2, T3, T4, T5, T6>(
 		TData data,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntityData<in TData, T0, T1, T2, T3, T4, T5, T6>(
 		TData data,
 		Entity entity,
@@ -1735,6 +2215,11 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -1751,6 +2236,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1767,6 +2257,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1783,6 +2278,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -1799,6 +2299,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1815,6 +2320,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1833,6 +2343,12 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -1849,6 +2365,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1865,6 +2387,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1881,6 +2409,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -1897,6 +2431,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1913,6 +2453,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -1933,20 +2479,32 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
 	public delegate void QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7>(
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7>(
 		Entity entity,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateData<in TData, T0, T1, T2, T3, T4, T5, T6, T7>(
 		TData data,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntityData<in TData, T0, T1, T2, T3, T4, T5, T6, T7>(
 		TData data,
 		Entity entity,
@@ -2062,6 +2620,11 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -2079,6 +2642,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2096,6 +2664,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2113,6 +2686,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -2130,6 +2708,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2147,6 +2730,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2166,6 +2754,12 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -2183,6 +2777,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2200,6 +2800,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2217,6 +2823,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -2234,6 +2846,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2251,6 +2869,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2272,20 +2896,32 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
 	public delegate void QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 		Entity entity,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateData<in TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 		TData data,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntityData<in TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 		TData data,
 		Entity entity,
@@ -2405,6 +3041,11 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -2423,6 +3064,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2441,6 +3087,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2459,6 +3110,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -2477,6 +3133,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2495,6 +3156,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2515,6 +3181,12 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -2533,6 +3205,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2551,6 +3229,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2569,6 +3253,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -2587,6 +3277,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2605,6 +3301,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2627,20 +3329,32 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
 	public delegate void QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 		Entity entity,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateData<in TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 		TData data,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntityData<in TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 		TData data,
 		Entity entity,
@@ -2764,6 +3478,11 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -2783,6 +3502,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2802,6 +3526,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2821,6 +3550,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -2840,6 +3574,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2859,6 +3598,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2880,6 +3624,12 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -2899,6 +3649,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2918,6 +3674,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2937,6 +3699,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -2956,6 +3724,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2975,6 +3749,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -2998,20 +3778,32 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
 	public delegate void QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 		Entity entity,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateData<in TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 		TData data,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntityData<in TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 		TData data,
 		Entity entity,
@@ -3139,6 +3931,11 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -3159,6 +3956,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3179,6 +3981,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3199,6 +4006,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -3219,6 +4031,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3239,6 +4056,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3261,6 +4083,12 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -3281,6 +4109,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3301,6 +4135,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3321,6 +4161,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -3341,6 +4187,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3361,6 +4213,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3385,20 +4243,32 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
 	public delegate void QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 		Entity entity,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateData<in TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 		TData data,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntityData<in TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 		TData data,
 		Entity entity,
@@ -3530,6 +4400,11 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -3551,6 +4426,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3572,6 +4452,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3593,6 +4478,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -3614,6 +4504,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3635,6 +4530,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3658,6 +4558,12 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -3679,6 +4585,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3700,6 +4612,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3721,6 +4639,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -3742,6 +4666,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3763,6 +4693,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3788,20 +4724,32 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
 	public delegate void QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 		Entity entity,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateData<in TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 		TData data,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntityData<in TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 		TData data,
 		Entity entity,
@@ -3937,6 +4885,11 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -3959,6 +4912,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -3981,6 +4939,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4003,6 +4966,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -4025,6 +4993,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4047,6 +5020,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4071,6 +5049,12 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -4093,6 +5077,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4115,6 +5105,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4137,6 +5133,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -4159,6 +5161,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4181,6 +5189,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4207,20 +5221,32 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
 	public delegate void QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 		Entity entity,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateData<in TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 		TData data,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntityData<in TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 		TData data,
 		Entity entity,
@@ -4360,6 +5386,11 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -4383,6 +5414,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4406,6 +5442,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4429,6 +5470,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -4452,6 +5498,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4475,6 +5526,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4500,6 +5556,12 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -4523,6 +5585,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4546,6 +5614,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4569,6 +5643,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -4592,6 +5672,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4615,6 +5701,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4642,20 +5734,32 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
 	public delegate void QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13, ref T14 t14
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 		Entity entity,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13, ref T14 t14
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateData<in TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 		TData data,
 		ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13, ref T14 t14
 	);
 
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
 	public delegate void QueryDelegateEntityData<in TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 		TData data,
 		Entity entity,
@@ -4799,6 +5903,11 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -4823,6 +5932,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4847,6 +5961,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4871,6 +5990,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -4895,6 +6019,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4919,6 +6048,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4945,6 +6079,12 @@ namespace Myriad.ECS.Worlds
 
 		// --- //
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -4969,6 +6109,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -4993,6 +6139,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -5017,6 +6169,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
@@ -5041,6 +6199,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
@@ -5065,6 +6229,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
 		public void QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent

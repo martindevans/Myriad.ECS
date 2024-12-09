@@ -12,17 +12,32 @@ namespace Myriad.ECS.Queries;
 public sealed partial class QueryBuilder
 {
     private readonly ComponentSet _include;
+    /// <summary>
+    /// An Entity must include all of these components to be matched by this query
+    /// </summary>
     public IEnumerable<ComponentID> Included => _include.Items;
 
     private readonly ComponentSet _exclude;
+    /// <summary>
+    /// Entities with these components will not be matched by this query
+    /// </summary>
     public IEnumerable<ComponentID> Excluded => _exclude.Items;
 
     private readonly ComponentSet _atLeastOne;
+    /// <summary>
+    /// At least one of all these components must be on an Entity for it to be matched by this query
+    /// </summary>
     public IEnumerable<ComponentID> AtLeastOnes => _atLeastOne.Items;
 
     private readonly ComponentSet _exactlyOne;
+    /// <summary>
+    /// Exactly one of all these components must be on an Entity for it to be matched by this query
+    /// </summary>
     public IEnumerable<ComponentID> ExactlyOnes => _exactlyOne.Items;
 
+    /// <summary>
+    /// Create a new <see cref="QueryBuilder"/>
+    /// </summary>
     public QueryBuilder()
     {
         _include = new(ContainsComponent, 0);
@@ -165,17 +180,30 @@ public sealed partial class QueryBuilder
         return this;
     }
 
+    /// <summary>
+    /// Check if the given component is excluded
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public bool IsExcluded(Type type)
     {
         return _exclude.Contains(type);
     }
 
+    /// <summary>
+    /// Check if the given component is excluded
+    /// </summary>
+    /// <returns></returns>
     public bool IsExcluded<T>()
         where T : IComponent
     {
         return _exclude.Contains<T>();
     }
 
+    /// <summary>
+    /// Check if the given component is excluded
+    /// </summary>
+    /// <returns></returns>
     public bool IsExcluded(ComponentID id)
     {
         return _exclude.Contains(id);
@@ -217,17 +245,29 @@ public sealed partial class QueryBuilder
         return this;
     }
 
+    /// <summary>
+    /// Check if the given component is one of the components which entities must have at least one of
+    /// </summary>
+    /// <returns></returns>
     public bool IsAtLeastOneOf(Type type)
     {
         return _atLeastOne.Contains(type);
     }
 
+    /// <summary>
+    /// Check if the given component is one of the components which entities must have at least one of
+    /// </summary>
+    /// <returns></returns>
     public bool IsAtLeastOneOf<T>()
         where T : IComponent
     {
         return _atLeastOne.Contains<T>();
     }
 
+    /// <summary>
+    /// Check if the given component is one of the components which entities must have at least one of
+    /// </summary>
+    /// <returns></returns>
     public bool IsAtLeastOneOf(ComponentID id)
     {
         return _atLeastOne.Contains(id);
@@ -269,17 +309,29 @@ public sealed partial class QueryBuilder
         return this;
     }
 
+    /// <summary>
+    /// Check if the given component is one of the components which entities must have exactly one of
+    /// </summary>
+    /// <returns></returns>
     public bool IsExactlyOneOf(Type type)
     {
         return _exactlyOne.Contains(type);
     }
 
+    /// <summary>
+    /// Check if the given component is one of the components which entities must have exactly one of
+    /// </summary>
+    /// <returns></returns>
     public bool IsExactlyOneOf<T>()
         where T : IComponent
     {
         return _exactlyOne.Contains<T>();
     }
 
+    /// <summary>
+    /// Check if the given component is one of the components which entities must have exactly one of
+    /// </summary>
+    /// <returns></returns>
     public bool IsExactlyOneOf(ComponentID id)
     {
         return _exactlyOne.Contains(id);

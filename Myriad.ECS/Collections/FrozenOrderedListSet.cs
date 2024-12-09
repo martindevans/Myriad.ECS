@@ -1,9 +1,17 @@
 ﻿namespace Myriad.ECS.Collections;
 
+/// <summary>
+/// A frozen (i.e. completely immutable) set of objects.
+/// </summary>
+/// <typeparam name="TItem"></typeparam>
 public class FrozenOrderedListSet<TItem>
     where TItem : struct, IComparable<TItem>, IEquatable<TItem>
 {
     private readonly OrderedListSet<TItem> _items;
+
+    /// <summary>
+    /// Get the number of items in this set
+    /// </summary>
     public int Count => _items.Count;
 
     #region constructors
@@ -35,6 +43,10 @@ public class FrozenOrderedListSet<TItem>
     }
     #endregion
 
+    /// <summary>
+    /// Copy this set to the given list
+    /// </summary>
+    /// <param name="dest"></param>
     public void CopyTo(List<TItem> dest)
     {
         _items.CopyTo(dest);
@@ -50,6 +62,10 @@ public class FrozenOrderedListSet<TItem>
     }
 
     #region GetEnumerator
+    /// <summary>
+    /// Get an enumerator over the items in this set
+    /// </summary>
+    /// <returns></returns>
     public List<TItem>.Enumerator GetEnumerator()
     {
         // ReSharper disable once NotDisposedResourceIsReturned
@@ -57,6 +73,11 @@ public class FrozenOrderedListSet<TItem>
     }
     #endregion
 
+    /// <summary>
+    /// Check if this set contains the given item
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
     public bool Contains(TItem item)
     {
         return _items.Contains(item);
@@ -101,11 +122,21 @@ public class FrozenOrderedListSet<TItem>
     //#endregion
 
     #region IsSupersetOf
+    /// <summary>
+    /// Check if this set is a superset of another set. i.e. contains all the items in the other set.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
     internal bool IsSupersetOf(OrderedListSet<TItem> other)
     {
         return _items.IsSupersetOf(other);
     }
 
+    /// <summary>
+    /// Check if this set is a superset of another set. i.e. contains all the items in the other set.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
     public bool IsSupersetOf(FrozenOrderedListSet<TItem> other)
     {
         return IsSupersetOf(other._items);
@@ -113,11 +144,21 @@ public class FrozenOrderedListSet<TItem>
     #endregion
 
     #region Overlaps
+    /// <summary>
+    /// Check if this set overlaps another set. i.e. contains at least one item which is in the other set.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
     internal bool Overlaps(OrderedListSet<TItem> other)
     {
         return _items.Overlaps(other);
     }
 
+    /// <summary>
+    /// Check if this set overlaps another set. i.e. contains at least one item which is in the other set.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
     public bool Overlaps(FrozenOrderedListSet<TItem> other)
     {
         return Overlaps(other._items);
@@ -125,16 +166,31 @@ public class FrozenOrderedListSet<TItem>
     #endregion
 
     #region SetEquals
+    /// <summary>
+    /// Check if this set contains exactly the same items as another set
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
     internal bool SetEquals(OrderedListSet<TItem> other)
     {
         return _items.SetEquals(other);
     }
 
+    /// <summary>
+    /// Check if this set contains exactly the same items as another set
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
     public bool SetEquals(FrozenOrderedListSet<TItem> other)
     {
         return SetEquals(other._items);
     }
 
+    /// <summary>
+    /// Check if this set contains exactly the same items as another set
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
     public bool SetEquals<TV>(Dictionary<TItem, TV> other)
     {
         return _items.SetEquals(other);

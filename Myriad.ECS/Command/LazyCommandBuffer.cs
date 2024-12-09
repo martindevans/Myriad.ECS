@@ -4,14 +4,21 @@ using System.Diagnostics.CodeAnalysis;
 namespace Myriad.ECS.Command;
 
 /// <summary>
-/// Provides a CommandBuffer, which is lazily created the first time it is accessed
+/// Provides a <see cref="CommandBuffer"/>, which is lazily created the first time it is accessed
 /// </summary>
 public struct LazyCommandBuffer
 {
     private CommandBuffer? _buffer;
 
+    /// <summary>
+    /// The <see cref="World"/> which this <see cref="LazyCommandBuffer"/> is for
+    /// </summary>
     public World World { get; private set; }
 
+    /// <summary>
+    /// Create a new <see cref="LazyCommandBuffer"/> for the given <see cref="World"/>
+    /// </summary>
+    /// <param name="world"></param>
     public LazyCommandBuffer(World world)
     {
         World = world;

@@ -7,13 +7,24 @@ namespace Myriad.ECS.Worlds.Archetypes;
 /// </summary>
 public readonly struct ArchetypeEntityEnumerable
 {
+    /// <summary>
+    /// The <see cref="Archetype"/> this enumerable is over
+    /// </summary>
     public Archetype Archetype { get; }
 
+    /// <summary>
+    /// Create a new enumerable for the given archetype
+    /// </summary>
+    /// <param name="archetype"></param>
     public ArchetypeEntityEnumerable(Archetype archetype)
     {
         Archetype = archetype;
     }
 
+    /// <summary>
+    /// Get an enumerator from this enumerable
+    /// </summary>
+    /// <returns></returns>
     public ArchetypeEntityEnumerator GetEnumerator()
     {
         return new ArchetypeEntityEnumerator(Archetype);
@@ -44,6 +55,9 @@ public struct ArchetypeEntityEnumerator
         _chunksEnumerator = archetype.GetChunkEnumerator();
     }
 
+    /// <summary>
+    /// Get the current item from this enumerator
+    /// </summary>
     public readonly Entity Current => _chunk!.Entities.Span[_entityIndex];
 
     private bool NextChunk()
@@ -56,6 +70,10 @@ public struct ArchetypeEntityEnumerator
         return true;
     }
 
+    /// <summary>
+    /// Move to the next item
+    /// </summary>
+    /// <returns></returns>
     public bool MoveNext()
     {
         _entityIndex++;
@@ -68,6 +86,7 @@ public struct ArchetypeEntityEnumerator
         return true;
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         _chunksEnumerator.Dispose();

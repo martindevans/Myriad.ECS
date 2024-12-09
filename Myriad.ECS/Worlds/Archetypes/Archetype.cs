@@ -7,6 +7,9 @@ using Myriad.ECS.Worlds.Chunks;
 
 namespace Myriad.ECS.Worlds.Archetypes;
 
+/// <summary>
+/// An archetype contains all entities which share exactly the same set of components.
+/// </summary>
 public sealed partial class Archetype
 {
     /// <summary>
@@ -59,7 +62,7 @@ public sealed partial class Archetype
     private readonly ArchetypeComponentDisposal? _disposer;
 
     /// <summary>
-    /// The archetype that entities should be moved to when deleted. Only non-null if `HasPhantomComponents && !IsPhantom`
+    /// The archetype that entities should be moved to when deleted. Only non-null if <code>HasPhantomComponents &amp; !IsPhantom</code>
     /// </summary>
     private readonly Archetype? _phantomDestination;
 
@@ -299,6 +302,7 @@ public sealed partial class Archetype
         }
     }
 
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         return Hash.GetHashCode();
@@ -322,5 +326,8 @@ public sealed partial class Archetype
         return Components.SetEquals(query);
     }
 
+    /// <summary>
+    /// Get an enumerable of all entities in this <see cref="Archetype"/>, in an arbitrary order.
+    /// </summary>
     public ArchetypeEntityEnumerable Entities => new ArchetypeEntityEnumerable(this);
 }

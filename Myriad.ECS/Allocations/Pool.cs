@@ -27,6 +27,10 @@ public static class Pool<T>
         }
     }
 
+    /// <summary>
+    /// Get an item from this pool, creates a new one if there are none in the pool
+    /// </summary>
+    /// <returns></returns>
     public static T Get()
     {
         Init();
@@ -48,11 +52,19 @@ public static class Pool<T>
         return item;
     }
 
+    /// <summary>
+    /// Get an item from this pool, creates a new one if there are none in the pool
+    /// </summary>
+    /// <returns>A <see cref="Rental"/> contains the borrowed object and will return it when disposed</returns>
     public static Rental Rent()
     {
         return new Rental(Get());
     }
 
+    /// <summary>
+    /// Return an item to the pool
+    /// </summary>
+    /// <param name="item"></param>
     public static void Return(T item)
     {
         Init();
@@ -68,11 +80,19 @@ public static class Pool<T>
             _items.Add(item);
     }
 
+    /// <summary>
+    /// Contains an object borrowed from a pool, returns it when disposed
+    /// </summary>
+    /// <param name="value"></param>
     public readonly struct Rental(T value)
         : IDisposable
     {
+        /// <summary>
+        /// The borrowed object
+        /// </summary>
         public T Value { get; } = value;
-        
+
+        /// <inheritdoc />
         public void Dispose()
         {
             Return(Value);
@@ -85,6 +105,11 @@ public static class Pool<T>
 /// </summary>
 public static class Pool
 {
+    /// <summary>
+    /// Return an item to the pool
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="item"></param>
     public static void Return<T>(T item)
         where T : class, new()
     {

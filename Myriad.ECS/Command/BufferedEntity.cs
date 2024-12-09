@@ -10,22 +10,23 @@ public sealed partial class CommandBuffer
     public readonly record struct BufferedEntity
     {
         private readonly uint _id;
-        internal readonly uint Version;
+        private readonly uint _version;
+
         internal readonly CommandBuffer _buffer;
         private readonly Resolver _resolver;
 
-        public BufferedEntity(uint id, CommandBuffer buffer, Resolver resolver)
+        internal BufferedEntity(uint id, CommandBuffer buffer, Resolver resolver)
         {
             _id = id;
             _buffer = buffer;
             _resolver = resolver;
 
-            Version = buffer._version;
+            _version = buffer._version;
         }
 
         private void CheckIsMutable()
         {
-            if (Version != _buffer._version)
+            if (_version != _buffer._version)
                 throw new InvalidOperationException("Cannot use `BufferedEntity` after `CommandBuffer` has been played");
         }
 
@@ -87,7 +88,7 @@ public sealed partial class CommandBuffer
                 throw new ObjectDisposedException("Resolver has already been disposed");
             if (_resolver.Parent != _buffer)
                 throw new InvalidOperationException("Cannot use a resolver from one CommandBuffer with BufferedEntity from another");
-            if (_resolver.Version != Version)
+            if (_resolver.Version != _version)
                 throw new ObjectDisposedException("Resolver has already been disposed");
 
             return _resolver.Lookup[_id].ToEntity(_resolver.World);

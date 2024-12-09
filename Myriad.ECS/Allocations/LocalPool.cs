@@ -11,17 +11,27 @@ public readonly struct LocalPool<T>
     private readonly List<T> _items = Pool<List<T>>.Get();
     private readonly int _maxSize;
 
+    /// <summary>
+    /// Create a new <see cref="LocalPool{T}"/>
+    /// </summary>
     public LocalPool()
         : this(16)
     {
     }
 
+    /// <summary>
+    /// Create a new <see cref="LocalPool{T}"/>
+    /// </summary>
     public LocalPool(int maxSize)
     {
         _items = Pool<List<T>>.Get();
         _maxSize = maxSize;
     }
 
+    /// <summary>
+    /// Get al item from this pool, fetches from the global pool if none are available
+    /// </summary>
+    /// <returns></returns>
     public T Get()
     {
         if (_items.Count == 0)
@@ -32,6 +42,10 @@ public readonly struct LocalPool<T>
         return item;
     }
 
+    /// <summary>
+    /// Return an item to this pool
+    /// </summary>
+    /// <param name="item"></param>
     public void Return(T item)
     {
         if (_items.Count < _maxSize)
@@ -40,6 +54,7 @@ public readonly struct LocalPool<T>
             Pool<T>.Return(item);
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         foreach (var item in _items)

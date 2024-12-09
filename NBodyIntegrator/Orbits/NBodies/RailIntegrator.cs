@@ -11,7 +11,7 @@ using NBodyIntegrator.Units;
 namespace NBodyIntegrator.Orbits.NBodies;
 
 public sealed class RailIntegrator(World world)
-    : BaseSystem<GameTime>, ISystemInit<GameTime>, ISystemDeclare<GameTime>
+    : ISystemInit<GameTime>, ISystemDeclare<GameTime>
 {
     private const int MaxWorkPerPoint = 8;
 
@@ -30,7 +30,7 @@ public sealed class RailIntegrator(World world)
         declaration.Read<Mass>();
     }
 
-    public override void Update(GameTime time)
+    public void Update(GameTime time)
     {
         world.ExecuteParallel<Integrate, NBody, PagedRail, EngineBurnSchedule, Mass>(
             new Integrate(_keplerMasses),

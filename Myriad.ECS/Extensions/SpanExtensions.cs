@@ -1,6 +1,6 @@
 ﻿namespace Myriad.ECS.Extensions;
 
-public static class SpanExtensions
+internal static class SpanExtensions
 {
 #if !NET6_0_OR_GREATER
     internal static void Sort<TItem>(this Span<TItem> span)

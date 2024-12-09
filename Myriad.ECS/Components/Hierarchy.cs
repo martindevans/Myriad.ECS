@@ -9,8 +9,12 @@ namespace Myriad.ECS.Components;
 public readonly struct ChildEntities(List<Entity> children)
     : IDisposableComponent
 {
+    /// <summary>
+    /// A list of entities that will be destroyed when this component is disposed
+    /// </summary>
     public readonly List<Entity> Children = children;
 
+    /// <inheritdoc />
     public void Dispose(ref LazyCommandBuffer buffer)
     {
         foreach (var entity in Children)

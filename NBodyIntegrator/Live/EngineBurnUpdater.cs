@@ -7,9 +7,9 @@ using NBodyIntegrator.Orbits.NBodies;
 namespace NBodyIntegrator.Live;
 
 public class EngineBurnUpdater(World world)
-    : BaseSystem<GameTime>, ISystemDeclare<GameTime>
+    : ISystemDeclare<GameTime>
 {
-    public override void Update(GameTime time)
+    public void Update(GameTime time)
     {
         world.Execute<UpdateMassFromBurn, EngineBurnSchedule, Mass>(
             new UpdateMassFromBurn(time.Time, time.DeltaTime)

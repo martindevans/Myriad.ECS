@@ -8,9 +8,9 @@ using NBodyIntegrator.Units;
 namespace NBodyIntegrator.Live;
 
 public class SetWorldPositionFromRail(World world)
-    : BaseSystem<GameTime>, ISystemDeclare<GameTime>
+    : ISystemDeclare<GameTime>
 {
-    public override void Update(GameTime time)
+    public void Update(GameTime time)
     {
         world.Execute<UpdatePosition, PagedRail, WorldPosition>(
             new UpdatePosition(time.Time)

@@ -5,11 +5,21 @@ using System.Diagnostics;
 
 namespace Myriad.ECS;
 
+/// <summary>
+/// The ID of an <see cref="Entity"/> (not carrying a reference to a <see cref="World"/>)
+/// </summary>
 [DebuggerDisplay("{ID}v{Version}")]
 public readonly partial record struct EntityId
     : IComparable<EntityId>
 {
+    /// <summary>
+    /// The <see cref="Entity"/> of an entity, may be re-used very quickly once an <see cref="Entity"/> is destroyed.
+    /// </summary>
     public readonly int ID;
+
+    /// <summary>
+    /// The version number of this ID, may also be re-used but only after the full 32 bit counter has been overflowed for this specific ID.
+    /// </summary>
     public readonly uint Version;
 
     internal EntityId(int id, uint version)
@@ -60,6 +70,7 @@ public readonly partial record struct EntityId
             && world.GetArchetype(this).IsPhantom;
     }
 
+    /// <inheritdoc />
     public int CompareTo(EntityId other)
     {
         var idc = ID.CompareTo(other.ID);

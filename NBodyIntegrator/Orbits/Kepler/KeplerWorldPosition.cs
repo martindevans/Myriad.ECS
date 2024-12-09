@@ -11,7 +11,7 @@ namespace NBodyIntegrator.Orbits.Kepler;
 /// </summary>
 /// <param name="world"></param>
 public sealed class KeplerWorldPosition(World world)
-    : BaseSystem<GameTime>, ISystemInit<GameTime>, ISystemDeclare<GameTime>
+    : ISystemInit<GameTime>, ISystemDeclare<GameTime>
 {
     private KeplerObject[] _keplerMasses = [];
 
@@ -25,7 +25,7 @@ public sealed class KeplerWorldPosition(World world)
         declaration.Write<WorldPosition>();
     }
 
-    public override void Update(GameTime time)
+    public void Update(GameTime time)
     {
         // calculate the position of every kepler body
         Span<Metre3> positions = stackalloc Metre3[_keplerMasses.Length];

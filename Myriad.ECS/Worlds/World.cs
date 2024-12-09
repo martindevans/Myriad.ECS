@@ -9,6 +9,9 @@ using Myriad.ECS.Extensions;
 
 namespace Myriad.ECS.Worlds;
 
+/// <summary>
+/// A world contains all entities.
+/// </summary>
 public sealed partial class World
     : IDisposable
 {
@@ -23,6 +26,9 @@ public sealed partial class World
 
     private readonly SegmentedList<EntityInfo> _entities = new(1024);
 
+    /// <summary>
+    /// Get a list of all archetypes in this <see cref="World"/>
+    /// </summary>
     public IReadOnlyList<Archetype> Archetypes => _archetypes;
     internal int ArchetypesCount => _archetypes.Count;
 
@@ -33,6 +39,7 @@ public sealed partial class World
         ThreadPool = pool;
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         var lazy = new LazyCommandBuffer(this);
