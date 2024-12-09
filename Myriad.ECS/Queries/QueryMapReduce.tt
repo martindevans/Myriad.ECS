@@ -26,14 +26,29 @@ using System.Diagnostics.CodeAnalysis;
 #>
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Map from a set of components to a single value
+	/// </summary>
 	public interface IQueryMap<out TR, <#= generics #>>
 		where <#= Constraints(sumij, 8) #>
 	{
+		/// <summary>
+		/// Extract a value from the given entity and components
+		/// </summary>
 		public TR Execute(Entity e, <#= Refs(0, i) #>);
 	}
 
+	/// <summary>
+	/// Reduce intermediate values
+	/// </summary>
 	public interface <#= NameReducer(i) #><TValue>
 	{
+		/// <summary>
+		/// Reduce two intermediate value to one
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
 		public TValue Reduce(TValue a, TValue b);
 	}
 }

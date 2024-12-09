@@ -23,6 +23,12 @@ using Myriad.ECS.IDs;
 #>
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
+	/// depends on the exact alignment of the types selected to the component and the vector. For example if
+	/// a component is a Vector3 and the vector is float then the values in the vector will be the individual
+	/// vector elements in sequence.
+	/// </summary>
 	public interface <#= Name(i) #><<#= VectorGenerics(i) #>>
 		where <#= VectorConstraints(sumij, 8) #>
 	{

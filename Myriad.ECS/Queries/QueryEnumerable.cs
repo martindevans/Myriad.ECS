@@ -11,6 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable CheckNamespace
 // ReSharper disable ArrangeAccessorOwnerBody
 #pragma warning disable CA1822 // Mark members as static
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 
 namespace Myriad.ECS.Queries

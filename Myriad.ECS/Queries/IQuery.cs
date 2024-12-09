@@ -25,6 +25,9 @@ namespace Myriad.ECS.Queries
 	public interface IQuery<T0>
 		where T0 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0);
 	}
 }
@@ -439,6 +442,9 @@ namespace Myriad.ECS.Queries
 		where T0 : IComponent
         where T1 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0, ref T1 t1);
 	}
 }
@@ -880,6 +886,9 @@ namespace Myriad.ECS.Queries
         where T1 : IComponent
         where T2 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2);
 	}
 }
@@ -1348,6 +1357,9 @@ namespace Myriad.ECS.Queries
         where T2 : IComponent
         where T3 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3);
 	}
 }
@@ -1843,6 +1855,9 @@ namespace Myriad.ECS.Queries
         where T3 : IComponent
         where T4 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4);
 	}
 }
@@ -2365,6 +2380,9 @@ namespace Myriad.ECS.Queries
         where T4 : IComponent
         where T5 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5);
 	}
 }
@@ -2914,6 +2932,9 @@ namespace Myriad.ECS.Queries
         where T5 : IComponent
         where T6 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6);
 	}
 }
@@ -3490,6 +3511,9 @@ namespace Myriad.ECS.Queries
         where T6 : IComponent
         where T7 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7);
 	}
 }
@@ -4093,6 +4117,9 @@ namespace Myriad.ECS.Queries
         where T7 : IComponent
         where T8 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8);
 	}
 }
@@ -4723,6 +4750,9 @@ namespace Myriad.ECS.Queries
         where T8 : IComponent
         where T9 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9);
 	}
 }
@@ -5380,6 +5410,9 @@ namespace Myriad.ECS.Queries
         where T9 : IComponent
         where T10 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10);
 	}
 }
@@ -6064,6 +6097,9 @@ namespace Myriad.ECS.Queries
         where T10 : IComponent
         where T11 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11);
 	}
 }
@@ -6775,6 +6811,9 @@ namespace Myriad.ECS.Queries
         where T11 : IComponent
         where T12 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12);
 	}
 }
@@ -7513,6 +7552,9 @@ namespace Myriad.ECS.Queries
         where T12 : IComponent
         where T13 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13);
 	}
 }
@@ -8278,6 +8320,9 @@ namespace Myriad.ECS.Queries
         where T13 : IComponent
         where T14 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13, ref T14 t14);
 	}
 }
@@ -9070,6 +9115,9 @@ namespace Myriad.ECS.Queries
         where T14 : IComponent
         where T15 : IComponent
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13, ref T14 t14, ref T15 t15);
 	}
 }

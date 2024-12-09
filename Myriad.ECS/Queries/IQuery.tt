@@ -38,6 +38,9 @@ namespace Myriad.ECS.Queries
 	public interface IQuery<<#= queryConstraints #>>
 		where <#= Constraints(i, 8) #>
 	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
 		public void Execute(Entity e, <#= Refs(0, i) #>);
 	}
 }

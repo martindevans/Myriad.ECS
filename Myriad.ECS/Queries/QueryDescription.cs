@@ -73,68 +73,120 @@ public sealed class QueryDescription
     }
 
     #region is in query
+    /// <summary>
+    /// Check if this query requires the given component
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public bool IsIncluded<T>()
         where T : IComponent
     {
         return IsIncluded(ComponentID<T>.ID);
     }
 
+    /// <summary>
+    /// Check if this query requires the given component
+    /// </summary>
+    /// <returns></returns>
     public bool IsIncluded(Type type)
     {
         return IsIncluded(ComponentID.Get(type));
     }
 
+    /// <summary>
+    /// Check if this query requires the given component
+    /// </summary>
+    /// <returns></returns>
     public bool IsIncluded(ComponentID id)
     {
         return Include.Contains(id);
     }
 
 
+    /// <summary>
+    /// Check if this query excludes entities with the given component
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public bool IsExcluded<T>()
         where T : IComponent
     {
         return IsExcluded(ComponentID<T>.ID);
     }
 
+    /// <summary>
+    /// Check if this query excludes entities with the given component
+    /// </summary>
+    /// <returns></returns>
     public bool IsExcluded(Type type)
     {
         return IsExcluded(ComponentID.Get(type));
     }
 
+    /// <summary>
+    /// Check if this query excludes entities with the given component
+    /// </summary>
+    /// <returns></returns>
     public bool IsExcluded(ComponentID id)
     {
         return Exclude.Contains(id);
     }
 
 
+    /// <summary>
+    /// Check if the given component is one of the components which at least one of must be on the entity
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public bool IsAtLeastOneOf<T>()
         where T : IComponent
     {
         return IsAtLeastOneOf(ComponentID<T>.ID);
     }
 
+    /// <summary>
+    /// Check if the given component is one of the components which at least one of must be on the entity
+    /// </summary>
+    /// <returns></returns>
     public bool IsAtLeastOneOf(Type type)
     {
         return IsAtLeastOneOf(ComponentID.Get(type));
     }
 
+    /// <summary>
+    /// Check if the given component is one of the components which at least one of must be on the entity
+    /// </summary>
+    /// <returns></returns>
     public bool IsAtLeastOneOf(ComponentID id)
     {
         return AtLeastOneOf.Contains(id);
     }
 
 
+    /// <summary>
+    /// Check if the given component is one of the components which exactly one of must be on the entity
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public bool IsExactlyOneOf<T>()
         where T : IComponent
     {
         return IsExactlyOneOf(ComponentID<T>.ID);
     }
 
+    /// <summary>
+    /// Check if the given component is one of the components which exactly one of must be on the entity
+    /// </summary>
+    /// <returns></returns>
     public bool IsExactlyOneOf(Type type)
     {
         return IsExactlyOneOf(ComponentID.Get(type));
     }
 
+    /// <summary>
+    /// Check if the given component is one of the components which exactly one of must be on the entity
+    /// </summary>
+    /// <returns></returns>
     public bool IsExactlyOneOf(ComponentID id)
     {
         return ExactlyOneOf.Contains(id);
@@ -301,6 +353,7 @@ public sealed class QueryDescription
     public readonly record struct ArchetypeMatch(Archetype Archetype, FrozenOrderedListSet<ComponentID>? AtLeastOne, ComponentID? ExactlyOne)
         : IComparable<ArchetypeMatch>
     {
+        /// <inheritdoc />
         public int CompareTo(ArchetypeMatch other)
         {
             return Archetype.Hash.CompareTo(other.Archetype.Hash);
