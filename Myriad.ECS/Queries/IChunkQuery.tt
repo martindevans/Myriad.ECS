@@ -27,9 +27,15 @@ using System.Diagnostics.CodeAnalysis;
 #>
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		where <#= Constraints(i, 8) #>
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, <#= Refs(0, i) #>);
 	}
 }
@@ -229,6 +235,22 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+        /// <typeparam name="T<#= k #>">Type of component <#= k #> to retrieve</typeparam>
+<#
+}
+#>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		<#= CoverageAttribute(i) #>
 		public int ExecuteChunkParallel<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
 			TQ q,

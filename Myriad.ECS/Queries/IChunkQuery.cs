@@ -13,9 +13,15 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0>
 		where T0 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0);
 	}
 }
@@ -167,6 +173,16 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		
 		public int ExecuteChunkParallel<TQ, T0>(
 			TQ q,
@@ -319,10 +335,16 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0, T1>
 		where T0 : IComponent
         where T1 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1);
 	}
 }
@@ -488,6 +510,17 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1>(
 			TQ q,
@@ -643,11 +676,17 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0, T1, T2>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2);
 	}
 }
@@ -827,6 +866,18 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2>(
 			TQ q,
@@ -985,12 +1036,18 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0, T1, T2, T3>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
         where T3 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3);
 	}
 }
@@ -1184,6 +1241,19 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3>(
 			TQ q,
@@ -1345,6 +1415,9 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0, T1, T2, T3, T4>
 		where T0 : IComponent
         where T1 : IComponent
@@ -1352,6 +1425,9 @@ namespace Myriad.ECS.Queries
         where T3 : IComponent
         where T4 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4);
 	}
 }
@@ -1559,6 +1635,20 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
@@ -1723,6 +1813,9 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0, T1, T2, T3, T4, T5>
 		where T0 : IComponent
         where T1 : IComponent
@@ -1731,6 +1824,9 @@ namespace Myriad.ECS.Queries
         where T4 : IComponent
         where T5 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5);
 	}
 }
@@ -1952,6 +2048,21 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
@@ -2119,6 +2230,9 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0, T1, T2, T3, T4, T5, T6>
 		where T0 : IComponent
         where T1 : IComponent
@@ -2128,6 +2242,9 @@ namespace Myriad.ECS.Queries
         where T5 : IComponent
         where T6 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6);
 	}
 }
@@ -2363,6 +2480,22 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
@@ -2533,6 +2666,9 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		where T0 : IComponent
         where T1 : IComponent
@@ -2543,6 +2679,9 @@ namespace Myriad.ECS.Queries
         where T6 : IComponent
         where T7 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7);
 	}
 }
@@ -2792,6 +2931,23 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
@@ -2965,6 +3121,9 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		where T0 : IComponent
         where T1 : IComponent
@@ -2976,6 +3135,9 @@ namespace Myriad.ECS.Queries
         where T7 : IComponent
         where T8 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8);
 	}
 }
@@ -3239,6 +3401,24 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
@@ -3415,6 +3595,9 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		where T0 : IComponent
         where T1 : IComponent
@@ -3427,6 +3610,9 @@ namespace Myriad.ECS.Queries
         where T8 : IComponent
         where T9 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9);
 	}
 }
@@ -3704,6 +3890,25 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
@@ -3883,6 +4088,9 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		where T0 : IComponent
         where T1 : IComponent
@@ -3896,6 +4104,9 @@ namespace Myriad.ECS.Queries
         where T9 : IComponent
         where T10 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10);
 	}
 }
@@ -4187,6 +4398,26 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
@@ -4369,6 +4600,9 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		where T0 : IComponent
         where T1 : IComponent
@@ -4383,6 +4617,9 @@ namespace Myriad.ECS.Queries
         where T10 : IComponent
         where T11 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11);
 	}
 }
@@ -4688,6 +4925,27 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
@@ -4873,6 +5131,9 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		where T0 : IComponent
         where T1 : IComponent
@@ -4888,6 +5149,9 @@ namespace Myriad.ECS.Queries
         where T11 : IComponent
         where T12 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12);
 	}
 }
@@ -5207,6 +5471,28 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
@@ -5395,6 +5681,9 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		where T0 : IComponent
         where T1 : IComponent
@@ -5411,6 +5700,9 @@ namespace Myriad.ECS.Queries
         where T12 : IComponent
         where T13 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12, Span<T13> t13);
 	}
 }
@@ -5744,6 +6036,29 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
@@ -5935,6 +6250,9 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		where T0 : IComponent
         where T1 : IComponent
@@ -5952,6 +6270,9 @@ namespace Myriad.ECS.Queries
         where T13 : IComponent
         where T14 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12, Span<T13> t13, Span<T14> t14);
 	}
 }
@@ -6299,6 +6620,30 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
@@ -6493,6 +6838,9 @@ namespace Myriad.ECS.Worlds
 
 namespace Myriad.ECS.Queries
 {
+	/// <summary>
+	/// Process entire chunks of entities together.
+	/// </summary>
 	public interface IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		where T0 : IComponent
         where T1 : IComponent
@@ -6511,6 +6859,9 @@ namespace Myriad.ECS.Queries
         where T14 : IComponent
         where T15 : IComponent
 	{
+		/// <summary>
+		/// Process a chunk of entities all together. Items for the same entity are at the same index in all spans.
+		/// </summary>
 		public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12, Span<T13> t13, Span<T14> t14, Span<T15> t15);
 	}
 }
@@ -6872,6 +7223,31 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
+		/// <summary>
+        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
+		/// level.
+        /// </summary>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <typeparam name="T15">Type of component 15 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunkParallel<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
