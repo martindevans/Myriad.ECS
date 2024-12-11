@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.Components;
-using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Archetypes;
 
@@ -12,11 +11,11 @@ namespace Myriad.ECS.Command;
 /// </summary>
 internal class ComponentSetterCollection
 {
-    private readonly SortedList<ComponentID, IComponentList> _components = [ ];
+    private readonly Dictionary<ComponentID, IComponentList> _components = [ ];
 
     public void Clear()
     {
-        foreach (var (_, value) in _components.Enumerable())
+        foreach (var (_, value) in _components)
             value.Recycle();
         _components.Clear();
     }
@@ -60,7 +59,7 @@ internal class ComponentSetterCollection
     /// </summary>
     /// <param name="sets"></param>
     /// <param name="buffer"></param>
-    public void Dispose(SortedList<ComponentID, SetterId>? sets, ref LazyCommandBuffer buffer)
+    public void Dispose(Dictionary<ComponentID, SetterId>? sets, ref LazyCommandBuffer buffer)
     {
         if (sets != null)
         {

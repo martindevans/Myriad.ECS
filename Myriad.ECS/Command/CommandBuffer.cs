@@ -177,7 +177,7 @@ public sealed partial class CommandBuffer
         bool IsAddingPhantomComponent(Entity entity)
         {
             if (_maybeAddingPhantomComponent.Contains(entity) && _entityModifications.TryGetValue(entity, out var mod) && mod.Sets != null)
-                foreach (var (key, _) in mod.Sets.Enumerable())
+                foreach (var key in mod.Sets.Keys)
                     if (key.IsPhantomComponent)
                         return true;
 
@@ -210,7 +210,7 @@ public sealed partial class CommandBuffer
                 var hash = currentArchetype.Hash;
                 if (mod.Sets != null)
                 {
-                    foreach (var (id, _) in mod.Sets.Enumerable())
+                    foreach (var id in mod.Sets.Keys)
                     {
                         if (_tempComponentIdSet.Add(id))
                         {
@@ -260,7 +260,7 @@ public sealed partial class CommandBuffer
 
                     // Run all setters
                     if (mod.Sets != null)
-                        foreach (var (_, set) in mod.Sets.Enumerable())
+                        foreach (var set in mod.Sets.Values)
                             _setters.Write(set, row);
                 }
 
@@ -558,7 +558,7 @@ public sealed partial class CommandBuffer
         if (!_entityModifications.TryGetValue(entity, out var existing))
         {
             var mod = new EntityModificationData(
-                ensureSet ? Pool<SortedList<ComponentID, ComponentSetterCollection.SetterId>>.Get() : null,
+                ensureSet ? Pool<Dictionary<ComponentID, ComponentSetterCollection.SetterId>>.Get() : null,
                 ensureRemove ? Pool<OrderedListSet<ComponentID>>.Get() : null
             );
             mod.Sets?.Clear();
@@ -576,7 +576,7 @@ public sealed partial class CommandBuffer
             var overwrite = false;
             if (mod.Sets == null && ensureSet)
             {
-                mod.Sets = Pool<SortedList<ComponentID, ComponentSetterCollection.SetterId>>.Get();
+                mod.Sets = Pool<Dictionary<ComponentID, ComponentSetterCollection.SetterId>>.Get();
                 overwrite = true;
             }
 
@@ -668,7 +668,7 @@ public sealed partial class CommandBuffer
         }
     }
 
-    private record struct EntityModificationData(SortedList<ComponentID, ComponentSetterCollection.SetterId>? Sets, OrderedListSet<ComponentID>? Removes);
+    private record struct EntityModificationData(Dictionary<ComponentID, ComponentSetterCollection.SetterId>? Sets, OrderedListSet<ComponentID>? Removes);
 
     /// <summary>
     /// Indicates how multiple Set operations enqueued for the same entity in this buffer should that be handled

@@ -15,6 +15,18 @@ public sealed partial class CommandBuffer
         internal readonly CommandBuffer _buffer;
         private readonly Resolver _resolver;
 
+        /// <summary>
+        /// Get the <see cref="CommandBuffer"/> which this <see cref="BufferedEntity"/> is from.
+        /// </summary>
+        public CommandBuffer CommandBuffer
+        {
+            get
+            {
+                CheckIsMutable();
+                return _buffer;
+            }
+        }
+
         internal BufferedEntity(uint id, CommandBuffer buffer, Resolver resolver)
         {
             _id = id;
