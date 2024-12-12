@@ -40,7 +40,15 @@ internal struct ComponentBloomFilter
         }
     }
 
-    public readonly bool Intersects(ref readonly ComponentBloomFilter other)
+    /// <summary>
+    /// Check if this bloom filter <b>might</b> intersect with another.
+    /// <br /><br />
+    /// False positives are possible (i.e. If Intersects returns true, then there <b>might</b> be an overlap).<br />
+    /// False negatives are <b>not</b> possible (i.e. If Intersects return false, then there <b>definitely</b> is no overlap).<br />
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    public readonly bool MaybeIntersects(ref readonly ComponentBloomFilter other)
     {
         // The same items have been added to all 6 sets, with different hashes.
         // Therefore if _any_ of the sets do not intersect, then the overall
@@ -55,9 +63,10 @@ internal struct ComponentBloomFilter
                 || (_f & other._f) == 0;
 #else
         // Bitwise & each matching element in the two sets together
-        var abcd = System.Runtime.Intrinsics.Vector256.Create([ _a, _b, _c, _d ])
-                 & System.Runtime.Intrinsics.Vector256.Create([ other._a, other._b, other._c, other._d ]);
-        var ef = System.Runtime.Intrinsics.Vector128.Create([ _e, _f ]) & System.Runtime.Intrinsics.Vector128.Create([other._e, other._f]);
+        var abcd = System.Runtime.Intrinsics.Vector256.Create(_a, _b, _c, _d)
+                 & System.Runtime.Intrinsics.Vector256.Create(other._a, other._b, other._c, other._d);
+        var ef = System.Runtime.Intrinsics.Vector128.Create(_e, _f)
+               & System.Runtime.Intrinsics.Vector128.Create(other._e, other._f);
 
         // Check if any of the elements had any matching bits
         var abz = System.Runtime.Intrinsics.Vector256.EqualsAny(abcd, System.Runtime.Intrinsics.Vector256<ulong>.Zero);

@@ -2,6 +2,7 @@
 using Myriad.ECS.Collections;
 using Myriad.ECS.Command;
 using Myriad.ECS.Components;
+using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Chunks;
 
@@ -31,6 +32,11 @@ public sealed partial class Archetype
     /// The components of entities in this archetype
     /// </summary>
     public FrozenOrderedListSet<ComponentID> Components { get; }
+
+    /// <summary>
+    /// A bloom filter of all the components in this archetype
+    /// </summary>
+    internal readonly ComponentBloomFilter ComponentsBloomFilter;
 
     /// <summary>
     /// The hash of all components IDs in this archetype
@@ -95,6 +101,7 @@ public sealed partial class Archetype
     {
         World = world;
         Components = components;
+        ComponentsBloomFilter = components.ToBloomFilter();
 
         // Create arrays to fills in below
         _componentTypes = new Type[components.Count];

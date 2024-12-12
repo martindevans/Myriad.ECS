@@ -1,4 +1,6 @@
-﻿using Myriad.ECS.Collections;
+﻿
+using Myriad.ECS.Collections;
+using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Worlds.Archetypes;
@@ -14,6 +16,9 @@ public sealed class QueryDescription
     private MatchResult? _result;
     private readonly ReaderWriterLockSlim _resultLock = new();
     private readonly OrderedListSet<ComponentID> _temporarySet = new();
+
+    private readonly ComponentBloomFilter _includeBloom;
+    private readonly ComponentBloomFilter _excludeBloom;
 
     /// <summary>
     /// The World that this query is for
@@ -46,10 +51,14 @@ public sealed class QueryDescription
     public QueryDescription(World world, FrozenOrderedListSet<ComponentID> include, FrozenOrderedListSet<ComponentID> exclude, FrozenOrderedListSet<ComponentID> atLeastOne, FrozenOrderedListSet<ComponentID> exactlyOne)
     {
         World = world;
+
         Include = include;
         Exclude = exclude;
         AtLeastOneOf = atLeastOne;
         ExactlyOneOf = exactlyOne;
+
+        _includeBloom = include.ToBloomFilter();
+        _excludeBloom = exclude.ToBloomFilter();
     }
 
     /// <summary>
@@ -274,13 +283,22 @@ public sealed class QueryDescription
 
     private ArchetypeMatch? TryMatch(Archetype archetype)
     {
-        var components = archetype.Components;
-
-        if (!components.IsSupersetOf(Include))
+        // Quick bloom filter test if the included components intersects with the archetype.
+        // If this returns false there is definitely no overlap at all and we can early exit.
+        if (Include.Count > 0 && !archetype.ComponentsBloomFilter.MaybeIntersects(in _includeBloom))
             return null;
 
-        if (components.Overlaps(Exclude))
+        // Do the full set check for included components
+        if (!archetype.Components.IsSupersetOf(Include))
             return null;
+
+        // If this is false it means there is definitely _not_ an intersection, which means we can skip
+        // the inner check.
+        if (Exclude.Count > 0 && _excludeBloom.MaybeIntersects(in archetype.ComponentsBloomFilter))
+        {
+            if (archetype.Components.Overlaps(Exclude))
+                return null;
+        }
 
         // Use the temp hashset to do this
         var set = _temporarySet;
@@ -291,7 +309,7 @@ public sealed class QueryDescription
         if (ExactlyOneOf.Count > 0)
         {
             set.Clear();
-            set.UnionWith(components);
+            set.UnionWith(archetype.Components);
             set.IntersectWith(ExactlyOneOf);
             if (set.Count != 1)
             {
@@ -307,7 +325,7 @@ public sealed class QueryDescription
         if (AtLeastOneOf.Count > 0)
         {
             set.Clear();
-            set.UnionWith(components);
+            set.UnionWith(archetype.Components);
             set.IntersectWith(AtLeastOneOf);
             if (set.Count == 0)
             {

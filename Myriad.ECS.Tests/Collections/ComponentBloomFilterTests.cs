@@ -12,7 +12,7 @@ public class ComponentBloomFilterTests
         var a = new ComponentBloomFilter();
         var b = new ComponentBloomFilter();
 
-        Assert.IsFalse(a.Intersects(ref b));
+        Assert.IsFalse(a.MaybeIntersects(ref b));
     }
 
     [TestMethod]
@@ -30,7 +30,7 @@ public class ComponentBloomFilterTests
         b.Add(ComponentID<Component10>.ID);
         b.Add(ComponentID<Component11>.ID);
 
-        var i = a.Intersects(ref b);
+        var i = a.MaybeIntersects(ref b);
         Assert.IsFalse(i);
 
         // Note that this test _can_ fail, since the bloom filter is probabalistic and errs on the side of caution.
@@ -49,7 +49,7 @@ public class ComponentBloomFilterTests
         b.Add(ComponentID<Component3>.ID);
         b.Add(ComponentID<Component4>.ID);
 
-        Assert.IsTrue(a.Intersects(ref b));
+        Assert.IsTrue(a.MaybeIntersects(ref b));
     }
 
     [TestMethod]
@@ -68,14 +68,14 @@ public class ComponentBloomFilterTests
         var c = new ComponentBloomFilter();
         c.Add(ComponentID<Component0>.ID);
 
-        Assert.IsFalse(a.Intersects(ref b));
-        Assert.IsFalse(b.Intersects(ref c));
-        Assert.IsTrue(a.Intersects(ref c));
+        Assert.IsFalse(a.MaybeIntersects(ref b));
+        Assert.IsFalse(b.MaybeIntersects(ref c));
+        Assert.IsTrue(a.MaybeIntersects(ref c));
 
         var d = new ComponentBloomFilter();
         d.Union(ref b);
         d.Union(ref c);
 
-        Assert.IsTrue(a.Intersects(ref d));
+        Assert.IsTrue(a.MaybeIntersects(ref d));
     }
 }

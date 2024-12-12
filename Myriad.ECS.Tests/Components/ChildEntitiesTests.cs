@@ -26,9 +26,12 @@ public class ChildEntitiesTests
 
         // Mark them as children of parent
         using (var resolver = cmd.Playback())
+        {
+            ref var childEntities = ref parent.GetComponentRef<ChildEntities>();
             for (var i = 0; i < resolver.Count; i++)
-                parent.GetComponentRef<ChildEntities>().Children.Add(resolver[i]);
-        
+                childEntities.Children.Add(resolver[i]);
+        }
+
         // Delete parent
         cmd.Delete(parent);
         cmd.Playback().Dispose();

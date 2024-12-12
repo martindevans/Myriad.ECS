@@ -48,13 +48,13 @@ public struct SystemDeclaration
     internal readonly bool Intersects(ref readonly SystemDeclaration other)
     {
         // Cannot read something that is being written
-        if (_reads.Intersects(in other._writes))
+        if (_reads.MaybeIntersects(in other._writes))
             return true;
 
         // Cannot write something that is being read or written
-        if (_writes.Intersects(in other._reads))
+        if (_writes.MaybeIntersects(in other._reads))
             return true;
-        if (_writes.Intersects(in other._writes))
+        if (_writes.MaybeIntersects(in other._writes))
             return true;
 
         return false;
