@@ -27,6 +27,13 @@ internal class OrderedListSet<TItem>
             Add(item);
     }
 
+    public OrderedListSet(ReadOnlySpan<TItem> items)
+    {
+        _items.EnsureCapacity(items.Length);
+        foreach (var item in items)
+            Add(item);
+    }
+
     internal OrderedListSet(HashSet<TItem> items)
     {
         _items.AddRange(items);

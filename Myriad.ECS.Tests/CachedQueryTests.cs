@@ -38,6 +38,11 @@ public class CachedQueryTests
         Assert.AreNotSame(q1, q3);
         Check(q1, typeof(Component0));
         Check(q3, typeof(Component1));
+
+        Assert.IsTrue(q1!.IsIncluded<Component0>());
+        Assert.AreEqual(1, q1.Include.Count);
+        Assert.IsTrue(q1!.IsExcluded<Phantom>());
+        Assert.AreEqual(1, q1.Exclude.Count);
     }
 
     [TestMethod]

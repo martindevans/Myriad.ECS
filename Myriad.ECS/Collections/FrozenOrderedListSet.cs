@@ -7,6 +7,11 @@
 public class FrozenOrderedListSet<TItem>
     where TItem : struct, IComparable<TItem>, IEquatable<TItem>
 {
+    /// <summary>
+    /// An empty frozen set
+    /// </summary>
+    public static readonly FrozenOrderedListSet<TItem> Empty = new(new OrderedListSet<TItem>());
+
     private readonly OrderedListSet<TItem> _items;
 
     /// <summary>
@@ -22,21 +27,41 @@ public class FrozenOrderedListSet<TItem>
 
     internal static FrozenOrderedListSet<TItem> Create(List<TItem> items)
     {
+        if (items.Count == 0)
+            return Empty;
+
+        return new FrozenOrderedListSet<TItem>(new OrderedListSet<TItem>(items));
+    }
+
+    internal static FrozenOrderedListSet<TItem> Create(ReadOnlySpan<TItem> items)
+    {
+        if (items.Length == 0)
+            return Empty;
+
         return new FrozenOrderedListSet<TItem>(new OrderedListSet<TItem>(items));
     }
 
     internal static FrozenOrderedListSet<TItem> Create(HashSet<TItem> items)
     {
+        if (items.Count == 0)
+            return Empty;
+
         return new FrozenOrderedListSet<TItem>(new OrderedListSet<TItem>(items));
     }
 
     internal static FrozenOrderedListSet<TItem> Create(OrderedListSet<TItem> items)
     {
+        if (items.Count == 0)
+            return Empty;
+
         return new FrozenOrderedListSet<TItem>(new OrderedListSet<TItem>(items));
     }
 
     internal static FrozenOrderedListSet<TItem> Create<TV>(Dictionary<TItem, TV> items)
     {
+        if (items.Count == 0)
+            return Empty;
+
         var set = new OrderedListSet<TItem>();
         set.AddRange(items.Keys);
         return new FrozenOrderedListSet<TItem>(set);

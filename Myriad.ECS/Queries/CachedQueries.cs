@@ -2,6 +2,7 @@
 using Myriad.ECS.IDs;
 using Myriad.ECS.xxHash;
 using Myriad.ECS.Collections;
+using Myriad.ECS.Components;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
 
@@ -19,25 +20,22 @@ namespace Myriad.ECS.Worlds;
 
 public partial class World
 {
+    internal static FrozenOrderedListSet<ComponentID> ExcludePhantom = FrozenOrderedListSet<ComponentID>.Create(
+        (ReadOnlySpan<ComponentID>)[ ComponentID<Phantom>.ID ]
+    );
+
     // Cache of all queries with 1 included components.
     private readonly Dictionary<int, QueryDescription> _queryCache1 = [ ];
     private readonly ReaderWriterLockSlim _lock1 = new();
 
-    /// <summary>
-    /// Get a query that finds entities which include all of the given types. This query
-    /// will be shared with other requests for the same set of types.
-    /// </summary>
-    /// <returns>A query that finds entities which include all of the given types</returns>
-    public QueryDescription GetCachedQuery<T0>()
-        where T0 : IComponent
+    private QueryDescription GetCachedQuery(ComponentID id0)
     {
-        var component = ComponentID<T0>.ID.Value;
-
+        // Try to find query
         _lock1.EnterReadLock();
         try
         {
             // Find query that matches this types
-            if (_queryCache1.TryGetValue(component, out var q))
+            if (_queryCache1.TryGetValue(id0.Value, out var q))
                 return q;
         }
         finally
@@ -45,16 +43,20 @@ public partial class World
             _lock1.ExitReadLock();
         }
 
+        // Didn't find one, create it now
         _lock1.EnterWriteLock();
         try
         {
-            // Didn't find one, create it now
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] { id0 }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
-            _queryCache1[component] = query;
+            _queryCache1[id0.Value] = query;
 
             return query;
         }
@@ -64,35 +66,34 @@ public partial class World
         }
     }
 
-    // Cache of all queries with 2 included components. Key is the 2 component IDs combined together
-    private readonly Dictionary<long, QueryDescription> _queryCache2 = [ ];
-    private readonly ReaderWriterLockSlim _lock2 = new();
-
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
-    public QueryDescription GetCachedQuery<T0, T1>()
+    public QueryDescription GetCachedQuery<T0>()
         where T0 : IComponent
-        where T1 : IComponent
+    {
+        return GetCachedQuery(ComponentID<T0>.ID);
+    }
+
+    // Cache of all queries with 2 included components. Key is the 2 component IDs combined together
+    private readonly Dictionary<long, QueryDescription> _queryCache2 = [ ];
+    private readonly ReaderWriterLockSlim _lock2 = new();
+
+    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1)
     {
         var u = new Union64
         {
-            I0 = ComponentID<T0>.ID.Value,
-            I1 = ComponentID<T1>.ID.Value,
+            I0 = Math.Min(id0.Value, id1.Value),
+            I1 = Math.Max(id0.Value, id1.Value),
         };
-
-        // Sort them into order
-        if (u.I0 > u.I1)
-            (u.I0, u.I1) = (u.I1, u.I0);
-
         var key = u.Long;
 
+        // Find query that matches these types
         _lock2.EnterReadLock();
         try
         {
-            // Find query that matches this types
             if (_queryCache2.TryGetValue(key, out var q))
                 return q;
         }
@@ -101,14 +102,17 @@ public partial class World
             _lock2.ExitReadLock();
         }
 
+        // Didn't find one, create it now
         _lock2.EnterWriteLock();
         try
         {
-            // Didn't find one, create it now
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Include<T1>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] { id0, id1 }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
             _queryCache2[key] = query;
@@ -121,6 +125,18 @@ public partial class World
         }
     }
 
+    /// <summary>
+    /// Get a query that finds entities which include all of the given types. This query
+    /// will be shared with other requests for the same set of types.
+    /// </summary>
+    /// <returns>A query that finds entities which include all of the given types</returns>
+    public QueryDescription GetCachedQuery<T0, T1>()
+        where T0 : IComponent
+        where T1 : IComponent
+    {
+        return GetCachedQuery(ComponentID<T0>.ID, ComponentID<T1>.ID);
+    }
+
 
     // Cache of all queries with 3 included components. 
     // Key is the hash of the sorted component IDs.
@@ -131,23 +147,15 @@ public partial class World
 
     private readonly ReaderWriterLockSlim _lock3 = new();
 
-    /// <summary>
-    /// Get a query that finds entities which include all of the given types. This query
-    /// will be shared with other requests for the same set of types.
-    /// </summary>
-    /// <returns>A query that finds entities which include all of the given types</returns>
     
-    public QueryDescription GetCachedQuery<T0, T1, T2>()
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
+    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2)
     {
         // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-            ComponentID<T1>.ID.Value,
-            ComponentID<T2>.ID.Value,
-        ];
+        Span<int> orderedComponents = stackalloc int[] {
+            id0.Value,
+            id1.Value,
+            id2.Value,
+        };
         orderedComponents.Sort();
 
         // Calculate hash of components, for fast rejection
@@ -182,12 +190,17 @@ public partial class World
                 _queryCache3.Add(hash, list);
             }
             
-            // Create query
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Include<T1>()
-                .Include<T2>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+                    id0,
+                    id1,
+                    id2,
+                }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -200,6 +213,24 @@ public partial class World
         }
     }
 
+    /// <summary>
+    /// Get a query that finds entities which include all of the given types. This query
+    /// will be shared with other requests for the same set of types.
+    /// </summary>
+    /// <returns>A query that finds entities which include all of the given types</returns>
+    
+    public QueryDescription GetCachedQuery<T0, T1, T2>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+    {
+        return GetCachedQuery(
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID
+        );
+    }
+
 
     // Cache of all queries with 4 included components. 
     // Key is the hash of the sorted component IDs.
@@ -210,25 +241,16 @@ public partial class World
 
     private readonly ReaderWriterLockSlim _lock4 = new();
 
-    /// <summary>
-    /// Get a query that finds entities which include all of the given types. This query
-    /// will be shared with other requests for the same set of types.
-    /// </summary>
-    /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    public QueryDescription GetCachedQuery<T0, T1, T2, T3>()
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
+    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3)
     {
         // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-            ComponentID<T1>.ID.Value,
-            ComponentID<T2>.ID.Value,
-            ComponentID<T3>.ID.Value,
-        ];
+        Span<int> orderedComponents = stackalloc int[] {
+            id0.Value,
+            id1.Value,
+            id2.Value,
+            id3.Value,
+        };
         orderedComponents.Sort();
 
         // Calculate hash of components, for fast rejection
@@ -263,13 +285,18 @@ public partial class World
                 _queryCache4.Add(hash, list);
             }
             
-            // Create query
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Include<T1>()
-                .Include<T2>()
-                .Include<T3>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+                    id0,
+                    id1,
+                    id2,
+                    id3,
+                }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -282,6 +309,26 @@ public partial class World
         }
     }
 
+    /// <summary>
+    /// Get a query that finds entities which include all of the given types. This query
+    /// will be shared with other requests for the same set of types.
+    /// </summary>
+    /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+    {
+        return GetCachedQuery(
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID
+        );
+    }
+
 
     // Cache of all queries with 5 included components. 
     // Key is the hash of the sorted component IDs.
@@ -292,27 +339,17 @@ public partial class World
 
     private readonly ReaderWriterLockSlim _lock5 = new();
 
-    /// <summary>
-    /// Get a query that finds entities which include all of the given types. This query
-    /// will be shared with other requests for the same set of types.
-    /// </summary>
-    /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4>()
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
+    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4)
     {
         // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-            ComponentID<T1>.ID.Value,
-            ComponentID<T2>.ID.Value,
-            ComponentID<T3>.ID.Value,
-            ComponentID<T4>.ID.Value,
-        ];
+        Span<int> orderedComponents = stackalloc int[] {
+            id0.Value,
+            id1.Value,
+            id2.Value,
+            id3.Value,
+            id4.Value,
+        };
         orderedComponents.Sort();
 
         // Calculate hash of components, for fast rejection
@@ -347,14 +384,19 @@ public partial class World
                 _queryCache5.Add(hash, list);
             }
             
-            // Create query
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Include<T1>()
-                .Include<T2>()
-                .Include<T3>()
-                .Include<T4>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+                    id0,
+                    id1,
+                    id2,
+                    id3,
+                    id4,
+                }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -367,6 +409,28 @@ public partial class World
         }
     }
 
+    /// <summary>
+    /// Get a query that finds entities which include all of the given types. This query
+    /// will be shared with other requests for the same set of types.
+    /// </summary>
+    /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+    {
+        return GetCachedQuery(
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID
+        );
+    }
+
 
     // Cache of all queries with 6 included components. 
     // Key is the hash of the sorted component IDs.
@@ -377,29 +441,18 @@ public partial class World
 
     private readonly ReaderWriterLockSlim _lock6 = new();
 
-    /// <summary>
-    /// Get a query that finds entities which include all of the given types. This query
-    /// will be shared with other requests for the same set of types.
-    /// </summary>
-    /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5>()
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
+    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5)
     {
         // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-            ComponentID<T1>.ID.Value,
-            ComponentID<T2>.ID.Value,
-            ComponentID<T3>.ID.Value,
-            ComponentID<T4>.ID.Value,
-            ComponentID<T5>.ID.Value,
-        ];
+        Span<int> orderedComponents = stackalloc int[] {
+            id0.Value,
+            id1.Value,
+            id2.Value,
+            id3.Value,
+            id4.Value,
+            id5.Value,
+        };
         orderedComponents.Sort();
 
         // Calculate hash of components, for fast rejection
@@ -434,15 +487,20 @@ public partial class World
                 _queryCache6.Add(hash, list);
             }
             
-            // Create query
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Include<T1>()
-                .Include<T2>()
-                .Include<T3>()
-                .Include<T4>()
-                .Include<T5>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+                    id0,
+                    id1,
+                    id2,
+                    id3,
+                    id4,
+                    id5,
+                }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -455,6 +513,30 @@ public partial class World
         }
     }
 
+    /// <summary>
+    /// Get a query that finds entities which include all of the given types. This query
+    /// will be shared with other requests for the same set of types.
+    /// </summary>
+    /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+    {
+        return GetCachedQuery(
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID
+        );
+    }
+
 
     // Cache of all queries with 7 included components. 
     // Key is the hash of the sorted component IDs.
@@ -465,31 +547,19 @@ public partial class World
 
     private readonly ReaderWriterLockSlim _lock7 = new();
 
-    /// <summary>
-    /// Get a query that finds entities which include all of the given types. This query
-    /// will be shared with other requests for the same set of types.
-    /// </summary>
-    /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>()
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
+    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6)
     {
         // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-            ComponentID<T1>.ID.Value,
-            ComponentID<T2>.ID.Value,
-            ComponentID<T3>.ID.Value,
-            ComponentID<T4>.ID.Value,
-            ComponentID<T5>.ID.Value,
-            ComponentID<T6>.ID.Value,
-        ];
+        Span<int> orderedComponents = stackalloc int[] {
+            id0.Value,
+            id1.Value,
+            id2.Value,
+            id3.Value,
+            id4.Value,
+            id5.Value,
+            id6.Value,
+        };
         orderedComponents.Sort();
 
         // Calculate hash of components, for fast rejection
@@ -524,16 +594,21 @@ public partial class World
                 _queryCache7.Add(hash, list);
             }
             
-            // Create query
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Include<T1>()
-                .Include<T2>()
-                .Include<T3>()
-                .Include<T4>()
-                .Include<T5>()
-                .Include<T6>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+                    id0,
+                    id1,
+                    id2,
+                    id3,
+                    id4,
+                    id5,
+                    id6,
+                }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -546,6 +621,32 @@ public partial class World
         }
     }
 
+    /// <summary>
+    /// Get a query that finds entities which include all of the given types. This query
+    /// will be shared with other requests for the same set of types.
+    /// </summary>
+    /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+    {
+        return GetCachedQuery(
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID
+        );
+    }
+
 
     // Cache of all queries with 8 included components. 
     // Key is the hash of the sorted component IDs.
@@ -556,33 +657,20 @@ public partial class World
 
     private readonly ReaderWriterLockSlim _lock8 = new();
 
-    /// <summary>
-    /// Get a query that finds entities which include all of the given types. This query
-    /// will be shared with other requests for the same set of types.
-    /// </summary>
-    /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>()
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
+    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7)
     {
         // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-            ComponentID<T1>.ID.Value,
-            ComponentID<T2>.ID.Value,
-            ComponentID<T3>.ID.Value,
-            ComponentID<T4>.ID.Value,
-            ComponentID<T5>.ID.Value,
-            ComponentID<T6>.ID.Value,
-            ComponentID<T7>.ID.Value,
-        ];
+        Span<int> orderedComponents = stackalloc int[] {
+            id0.Value,
+            id1.Value,
+            id2.Value,
+            id3.Value,
+            id4.Value,
+            id5.Value,
+            id6.Value,
+            id7.Value,
+        };
         orderedComponents.Sort();
 
         // Calculate hash of components, for fast rejection
@@ -617,17 +705,22 @@ public partial class World
                 _queryCache8.Add(hash, list);
             }
             
-            // Create query
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Include<T1>()
-                .Include<T2>()
-                .Include<T3>()
-                .Include<T4>()
-                .Include<T5>()
-                .Include<T6>()
-                .Include<T7>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+                    id0,
+                    id1,
+                    id2,
+                    id3,
+                    id4,
+                    id5,
+                    id6,
+                    id7,
+                }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -640,6 +733,34 @@ public partial class World
         }
     }
 
+    /// <summary>
+    /// Get a query that finds entities which include all of the given types. This query
+    /// will be shared with other requests for the same set of types.
+    /// </summary>
+    /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+    {
+        return GetCachedQuery(
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID
+        );
+    }
+
 
     // Cache of all queries with 9 included components. 
     // Key is the hash of the sorted component IDs.
@@ -650,35 +771,21 @@ public partial class World
 
     private readonly ReaderWriterLockSlim _lock9 = new();
 
-    /// <summary>
-    /// Get a query that finds entities which include all of the given types. This query
-    /// will be shared with other requests for the same set of types.
-    /// </summary>
-    /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
+    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8)
     {
         // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-            ComponentID<T1>.ID.Value,
-            ComponentID<T2>.ID.Value,
-            ComponentID<T3>.ID.Value,
-            ComponentID<T4>.ID.Value,
-            ComponentID<T5>.ID.Value,
-            ComponentID<T6>.ID.Value,
-            ComponentID<T7>.ID.Value,
-            ComponentID<T8>.ID.Value,
-        ];
+        Span<int> orderedComponents = stackalloc int[] {
+            id0.Value,
+            id1.Value,
+            id2.Value,
+            id3.Value,
+            id4.Value,
+            id5.Value,
+            id6.Value,
+            id7.Value,
+            id8.Value,
+        };
         orderedComponents.Sort();
 
         // Calculate hash of components, for fast rejection
@@ -713,18 +820,23 @@ public partial class World
                 _queryCache9.Add(hash, list);
             }
             
-            // Create query
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Include<T1>()
-                .Include<T2>()
-                .Include<T3>()
-                .Include<T4>()
-                .Include<T5>()
-                .Include<T6>()
-                .Include<T7>()
-                .Include<T8>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+                    id0,
+                    id1,
+                    id2,
+                    id3,
+                    id4,
+                    id5,
+                    id6,
+                    id7,
+                    id8,
+                }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -737,6 +849,36 @@ public partial class World
         }
     }
 
+    /// <summary>
+    /// Get a query that finds entities which include all of the given types. This query
+    /// will be shared with other requests for the same set of types.
+    /// </summary>
+    /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+    {
+        return GetCachedQuery(
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID
+        );
+    }
+
 
     // Cache of all queries with 10 included components. 
     // Key is the hash of the sorted component IDs.
@@ -747,37 +889,22 @@ public partial class World
 
     private readonly ReaderWriterLockSlim _lock10 = new();
 
-    /// <summary>
-    /// Get a query that finds entities which include all of the given types. This query
-    /// will be shared with other requests for the same set of types.
-    /// </summary>
-    /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
+    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8, ComponentID id9)
     {
         // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-            ComponentID<T1>.ID.Value,
-            ComponentID<T2>.ID.Value,
-            ComponentID<T3>.ID.Value,
-            ComponentID<T4>.ID.Value,
-            ComponentID<T5>.ID.Value,
-            ComponentID<T6>.ID.Value,
-            ComponentID<T7>.ID.Value,
-            ComponentID<T8>.ID.Value,
-            ComponentID<T9>.ID.Value,
-        ];
+        Span<int> orderedComponents = stackalloc int[] {
+            id0.Value,
+            id1.Value,
+            id2.Value,
+            id3.Value,
+            id4.Value,
+            id5.Value,
+            id6.Value,
+            id7.Value,
+            id8.Value,
+            id9.Value,
+        };
         orderedComponents.Sort();
 
         // Calculate hash of components, for fast rejection
@@ -812,19 +939,24 @@ public partial class World
                 _queryCache10.Add(hash, list);
             }
             
-            // Create query
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Include<T1>()
-                .Include<T2>()
-                .Include<T3>()
-                .Include<T4>()
-                .Include<T5>()
-                .Include<T6>()
-                .Include<T7>()
-                .Include<T8>()
-                .Include<T9>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+                    id0,
+                    id1,
+                    id2,
+                    id3,
+                    id4,
+                    id5,
+                    id6,
+                    id7,
+                    id8,
+                    id9,
+                }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -837,23 +969,13 @@ public partial class World
         }
     }
 
-
-    // Cache of all queries with 11 included components. 
-    // Key is the hash of the sorted component IDs.
-    // The value has a list of tuples, containing:
-    // - The actual components for this item (sorted)
-    // - The query itself
-    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache11 = [ ];
-
-    private readonly ReaderWriterLockSlim _lock11 = new();
-
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -864,22 +986,48 @@ public partial class World
         where T7 : IComponent
         where T8 : IComponent
         where T9 : IComponent
-        where T10 : IComponent
+    {
+        return GetCachedQuery(
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID
+        );
+    }
+
+
+    // Cache of all queries with 11 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this item (sorted)
+    // - The query itself
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache11 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock11 = new();
+
+    [ExcludeFromCodeCoverage]
+    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8, ComponentID id9, ComponentID id10)
     {
         // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-            ComponentID<T1>.ID.Value,
-            ComponentID<T2>.ID.Value,
-            ComponentID<T3>.ID.Value,
-            ComponentID<T4>.ID.Value,
-            ComponentID<T5>.ID.Value,
-            ComponentID<T6>.ID.Value,
-            ComponentID<T7>.ID.Value,
-            ComponentID<T8>.ID.Value,
-            ComponentID<T9>.ID.Value,
-            ComponentID<T10>.ID.Value,
-        ];
+        Span<int> orderedComponents = stackalloc int[] {
+            id0.Value,
+            id1.Value,
+            id2.Value,
+            id3.Value,
+            id4.Value,
+            id5.Value,
+            id6.Value,
+            id7.Value,
+            id8.Value,
+            id9.Value,
+            id10.Value,
+        };
         orderedComponents.Sort();
 
         // Calculate hash of components, for fast rejection
@@ -914,20 +1062,25 @@ public partial class World
                 _queryCache11.Add(hash, list);
             }
             
-            // Create query
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Include<T1>()
-                .Include<T2>()
-                .Include<T3>()
-                .Include<T4>()
-                .Include<T5>()
-                .Include<T6>()
-                .Include<T7>()
-                .Include<T8>()
-                .Include<T9>()
-                .Include<T10>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+                    id0,
+                    id1,
+                    id2,
+                    id3,
+                    id4,
+                    id5,
+                    id6,
+                    id7,
+                    id8,
+                    id9,
+                    id10,
+                }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -940,23 +1093,13 @@ public partial class World
         }
     }
 
-
-    // Cache of all queries with 12 included components. 
-    // Key is the hash of the sorted component IDs.
-    // The value has a list of tuples, containing:
-    // - The actual components for this item (sorted)
-    // - The query itself
-    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache12 = [ ];
-
-    private readonly ReaderWriterLockSlim _lock12 = new();
-
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -968,23 +1111,50 @@ public partial class World
         where T8 : IComponent
         where T9 : IComponent
         where T10 : IComponent
-        where T11 : IComponent
+    {
+        return GetCachedQuery(
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID
+        );
+    }
+
+
+    // Cache of all queries with 12 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this item (sorted)
+    // - The query itself
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache12 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock12 = new();
+
+    [ExcludeFromCodeCoverage]
+    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8, ComponentID id9, ComponentID id10, ComponentID id11)
     {
         // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-            ComponentID<T1>.ID.Value,
-            ComponentID<T2>.ID.Value,
-            ComponentID<T3>.ID.Value,
-            ComponentID<T4>.ID.Value,
-            ComponentID<T5>.ID.Value,
-            ComponentID<T6>.ID.Value,
-            ComponentID<T7>.ID.Value,
-            ComponentID<T8>.ID.Value,
-            ComponentID<T9>.ID.Value,
-            ComponentID<T10>.ID.Value,
-            ComponentID<T11>.ID.Value,
-        ];
+        Span<int> orderedComponents = stackalloc int[] {
+            id0.Value,
+            id1.Value,
+            id2.Value,
+            id3.Value,
+            id4.Value,
+            id5.Value,
+            id6.Value,
+            id7.Value,
+            id8.Value,
+            id9.Value,
+            id10.Value,
+            id11.Value,
+        };
         orderedComponents.Sort();
 
         // Calculate hash of components, for fast rejection
@@ -1019,21 +1189,26 @@ public partial class World
                 _queryCache12.Add(hash, list);
             }
             
-            // Create query
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Include<T1>()
-                .Include<T2>()
-                .Include<T3>()
-                .Include<T4>()
-                .Include<T5>()
-                .Include<T6>()
-                .Include<T7>()
-                .Include<T8>()
-                .Include<T9>()
-                .Include<T10>()
-                .Include<T11>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+                    id0,
+                    id1,
+                    id2,
+                    id3,
+                    id4,
+                    id5,
+                    id6,
+                    id7,
+                    id8,
+                    id9,
+                    id10,
+                    id11,
+                }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -1046,23 +1221,13 @@ public partial class World
         }
     }
 
-
-    // Cache of all queries with 13 included components. 
-    // Key is the hash of the sorted component IDs.
-    // The value has a list of tuples, containing:
-    // - The actual components for this item (sorted)
-    // - The query itself
-    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache13 = [ ];
-
-    private readonly ReaderWriterLockSlim _lock13 = new();
-
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1075,24 +1240,52 @@ public partial class World
         where T9 : IComponent
         where T10 : IComponent
         where T11 : IComponent
-        where T12 : IComponent
+    {
+        return GetCachedQuery(
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID
+        );
+    }
+
+
+    // Cache of all queries with 13 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this item (sorted)
+    // - The query itself
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache13 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock13 = new();
+
+    [ExcludeFromCodeCoverage]
+    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8, ComponentID id9, ComponentID id10, ComponentID id11, ComponentID id12)
     {
         // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-            ComponentID<T1>.ID.Value,
-            ComponentID<T2>.ID.Value,
-            ComponentID<T3>.ID.Value,
-            ComponentID<T4>.ID.Value,
-            ComponentID<T5>.ID.Value,
-            ComponentID<T6>.ID.Value,
-            ComponentID<T7>.ID.Value,
-            ComponentID<T8>.ID.Value,
-            ComponentID<T9>.ID.Value,
-            ComponentID<T10>.ID.Value,
-            ComponentID<T11>.ID.Value,
-            ComponentID<T12>.ID.Value,
-        ];
+        Span<int> orderedComponents = stackalloc int[] {
+            id0.Value,
+            id1.Value,
+            id2.Value,
+            id3.Value,
+            id4.Value,
+            id5.Value,
+            id6.Value,
+            id7.Value,
+            id8.Value,
+            id9.Value,
+            id10.Value,
+            id11.Value,
+            id12.Value,
+        };
         orderedComponents.Sort();
 
         // Calculate hash of components, for fast rejection
@@ -1127,22 +1320,27 @@ public partial class World
                 _queryCache13.Add(hash, list);
             }
             
-            // Create query
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Include<T1>()
-                .Include<T2>()
-                .Include<T3>()
-                .Include<T4>()
-                .Include<T5>()
-                .Include<T6>()
-                .Include<T7>()
-                .Include<T8>()
-                .Include<T9>()
-                .Include<T10>()
-                .Include<T11>()
-                .Include<T12>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+                    id0,
+                    id1,
+                    id2,
+                    id3,
+                    id4,
+                    id5,
+                    id6,
+                    id7,
+                    id8,
+                    id9,
+                    id10,
+                    id11,
+                    id12,
+                }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -1155,23 +1353,13 @@ public partial class World
         }
     }
 
-
-    // Cache of all queries with 14 included components. 
-    // Key is the hash of the sorted component IDs.
-    // The value has a list of tuples, containing:
-    // - The actual components for this item (sorted)
-    // - The query itself
-    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache14 = [ ];
-
-    private readonly ReaderWriterLockSlim _lock14 = new();
-
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1185,25 +1373,54 @@ public partial class World
         where T10 : IComponent
         where T11 : IComponent
         where T12 : IComponent
-        where T13 : IComponent
+    {
+        return GetCachedQuery(
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID
+        );
+    }
+
+
+    // Cache of all queries with 14 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this item (sorted)
+    // - The query itself
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache14 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock14 = new();
+
+    [ExcludeFromCodeCoverage]
+    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8, ComponentID id9, ComponentID id10, ComponentID id11, ComponentID id12, ComponentID id13)
     {
         // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-            ComponentID<T1>.ID.Value,
-            ComponentID<T2>.ID.Value,
-            ComponentID<T3>.ID.Value,
-            ComponentID<T4>.ID.Value,
-            ComponentID<T5>.ID.Value,
-            ComponentID<T6>.ID.Value,
-            ComponentID<T7>.ID.Value,
-            ComponentID<T8>.ID.Value,
-            ComponentID<T9>.ID.Value,
-            ComponentID<T10>.ID.Value,
-            ComponentID<T11>.ID.Value,
-            ComponentID<T12>.ID.Value,
-            ComponentID<T13>.ID.Value,
-        ];
+        Span<int> orderedComponents = stackalloc int[] {
+            id0.Value,
+            id1.Value,
+            id2.Value,
+            id3.Value,
+            id4.Value,
+            id5.Value,
+            id6.Value,
+            id7.Value,
+            id8.Value,
+            id9.Value,
+            id10.Value,
+            id11.Value,
+            id12.Value,
+            id13.Value,
+        };
         orderedComponents.Sort();
 
         // Calculate hash of components, for fast rejection
@@ -1238,23 +1455,28 @@ public partial class World
                 _queryCache14.Add(hash, list);
             }
             
-            // Create query
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Include<T1>()
-                .Include<T2>()
-                .Include<T3>()
-                .Include<T4>()
-                .Include<T5>()
-                .Include<T6>()
-                .Include<T7>()
-                .Include<T8>()
-                .Include<T9>()
-                .Include<T10>()
-                .Include<T11>()
-                .Include<T12>()
-                .Include<T13>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+                    id0,
+                    id1,
+                    id2,
+                    id3,
+                    id4,
+                    id5,
+                    id6,
+                    id7,
+                    id8,
+                    id9,
+                    id10,
+                    id11,
+                    id12,
+                    id13,
+                }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -1267,23 +1489,13 @@ public partial class World
         }
     }
 
-
-    // Cache of all queries with 15 included components. 
-    // Key is the hash of the sorted component IDs.
-    // The value has a list of tuples, containing:
-    // - The actual components for this item (sorted)
-    // - The query itself
-    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache15 = [ ];
-
-    private readonly ReaderWriterLockSlim _lock15 = new();
-
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1298,26 +1510,56 @@ public partial class World
         where T11 : IComponent
         where T12 : IComponent
         where T13 : IComponent
-        where T14 : IComponent
+    {
+        return GetCachedQuery(
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID,
+            ComponentID<T13>.ID
+        );
+    }
+
+
+    // Cache of all queries with 15 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this item (sorted)
+    // - The query itself
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache15 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock15 = new();
+
+    [ExcludeFromCodeCoverage]
+    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8, ComponentID id9, ComponentID id10, ComponentID id11, ComponentID id12, ComponentID id13, ComponentID id14)
     {
         // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-            ComponentID<T1>.ID.Value,
-            ComponentID<T2>.ID.Value,
-            ComponentID<T3>.ID.Value,
-            ComponentID<T4>.ID.Value,
-            ComponentID<T5>.ID.Value,
-            ComponentID<T6>.ID.Value,
-            ComponentID<T7>.ID.Value,
-            ComponentID<T8>.ID.Value,
-            ComponentID<T9>.ID.Value,
-            ComponentID<T10>.ID.Value,
-            ComponentID<T11>.ID.Value,
-            ComponentID<T12>.ID.Value,
-            ComponentID<T13>.ID.Value,
-            ComponentID<T14>.ID.Value,
-        ];
+        Span<int> orderedComponents = stackalloc int[] {
+            id0.Value,
+            id1.Value,
+            id2.Value,
+            id3.Value,
+            id4.Value,
+            id5.Value,
+            id6.Value,
+            id7.Value,
+            id8.Value,
+            id9.Value,
+            id10.Value,
+            id11.Value,
+            id12.Value,
+            id13.Value,
+            id14.Value,
+        };
         orderedComponents.Sort();
 
         // Calculate hash of components, for fast rejection
@@ -1352,24 +1594,29 @@ public partial class World
                 _queryCache15.Add(hash, list);
             }
             
-            // Create query
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Include<T1>()
-                .Include<T2>()
-                .Include<T3>()
-                .Include<T4>()
-                .Include<T5>()
-                .Include<T6>()
-                .Include<T7>()
-                .Include<T8>()
-                .Include<T9>()
-                .Include<T10>()
-                .Include<T11>()
-                .Include<T12>()
-                .Include<T13>()
-                .Include<T14>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+                    id0,
+                    id1,
+                    id2,
+                    id3,
+                    id4,
+                    id5,
+                    id6,
+                    id7,
+                    id8,
+                    id9,
+                    id10,
+                    id11,
+                    id12,
+                    id13,
+                    id14,
+                }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -1382,23 +1629,13 @@ public partial class World
         }
     }
 
-
-    // Cache of all queries with 16 included components. 
-    // Key is the hash of the sorted component IDs.
-    // The value has a list of tuples, containing:
-    // - The actual components for this item (sorted)
-    // - The query itself
-    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache16 = [ ];
-
-    private readonly ReaderWriterLockSlim _lock16 = new();
-
     /// <summary>
     /// Get a query that finds entities which include all of the given types. This query
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
     [ExcludeFromCodeCoverage]
-    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1414,27 +1651,58 @@ public partial class World
         where T12 : IComponent
         where T13 : IComponent
         where T14 : IComponent
-        where T15 : IComponent
+    {
+        return GetCachedQuery(
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID,
+            ComponentID<T13>.ID,
+            ComponentID<T14>.ID
+        );
+    }
+
+
+    // Cache of all queries with 16 included components. 
+    // Key is the hash of the sorted component IDs.
+    // The value has a list of tuples, containing:
+    // - The actual components for this item (sorted)
+    // - The query itself
+    private readonly Dictionary<ulong, List<(int[], QueryDescription)>> _queryCache16 = [ ];
+
+    private readonly ReaderWriterLockSlim _lock16 = new();
+
+    [ExcludeFromCodeCoverage]
+    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8, ComponentID id9, ComponentID id10, ComponentID id11, ComponentID id12, ComponentID id13, ComponentID id14, ComponentID id15)
     {
         // Accumulate all components in ascending order
-        Span<int> orderedComponents = [
-            ComponentID<T0>.ID.Value,
-            ComponentID<T1>.ID.Value,
-            ComponentID<T2>.ID.Value,
-            ComponentID<T3>.ID.Value,
-            ComponentID<T4>.ID.Value,
-            ComponentID<T5>.ID.Value,
-            ComponentID<T6>.ID.Value,
-            ComponentID<T7>.ID.Value,
-            ComponentID<T8>.ID.Value,
-            ComponentID<T9>.ID.Value,
-            ComponentID<T10>.ID.Value,
-            ComponentID<T11>.ID.Value,
-            ComponentID<T12>.ID.Value,
-            ComponentID<T13>.ID.Value,
-            ComponentID<T14>.ID.Value,
-            ComponentID<T15>.ID.Value,
-        ];
+        Span<int> orderedComponents = stackalloc int[] {
+            id0.Value,
+            id1.Value,
+            id2.Value,
+            id3.Value,
+            id4.Value,
+            id5.Value,
+            id6.Value,
+            id7.Value,
+            id8.Value,
+            id9.Value,
+            id10.Value,
+            id11.Value,
+            id12.Value,
+            id13.Value,
+            id14.Value,
+            id15.Value,
+        };
         orderedComponents.Sort();
 
         // Calculate hash of components, for fast rejection
@@ -1469,25 +1737,30 @@ public partial class World
                 _queryCache16.Add(hash, list);
             }
             
-            // Create query
-            var query = new QueryBuilder()
-                .Include<T0>()
-                .Include<T1>()
-                .Include<T2>()
-                .Include<T3>()
-                .Include<T4>()
-                .Include<T5>()
-                .Include<T6>()
-                .Include<T7>()
-                .Include<T8>()
-                .Include<T9>()
-                .Include<T10>()
-                .Include<T11>()
-                .Include<T12>()
-                .Include<T13>()
-                .Include<T14>()
-                .Include<T15>()
-                .Build(this);
+            var query = new QueryDescription(
+                this,
+                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+                    id0,
+                    id1,
+                    id2,
+                    id3,
+                    id4,
+                    id5,
+                    id6,
+                    id7,
+                    id8,
+                    id9,
+                    id10,
+                    id11,
+                    id12,
+                    id13,
+                    id14,
+                    id15,
+                }),
+                QueryBuilder.SetWithJustPhantom,
+                FrozenOrderedListSet<ComponentID>.Empty,
+                FrozenOrderedListSet<ComponentID>.Empty
+            );
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -1498,6 +1771,50 @@ public partial class World
         {
             _lock16.ExitWriteLock();
         }
+    }
+
+    /// <summary>
+    /// Get a query that finds entities which include all of the given types. This query
+    /// will be shared with other requests for the same set of types.
+    /// </summary>
+    /// <returns>A query that finds entities which include all of the given types</returns>
+    [ExcludeFromCodeCoverage]
+    public QueryDescription GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+    {
+        return GetCachedQuery(
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID,
+            ComponentID<T13>.ID,
+            ComponentID<T14>.ID,
+            ComponentID<T15>.ID
+        );
     }
 
 

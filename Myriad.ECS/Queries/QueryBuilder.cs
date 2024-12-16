@@ -11,6 +11,10 @@ namespace Myriad.ECS.Queries;
 /// </summary>
 public sealed partial class QueryBuilder
 {
+    internal static FrozenOrderedListSet<ComponentID> SetWithJustPhantom = FrozenOrderedListSet<ComponentID>.Create(
+        (ReadOnlySpan<ComponentID>)[ComponentID<Phantom>.ID]
+    );
+
     private readonly ComponentSet _include;
     /// <summary>
     /// An Entity must include all of these components to be matched by this query
@@ -351,6 +355,12 @@ public sealed partial class QueryBuilder
         {
             if (_frozenCache != null)
                 return _frozenCache;
+
+            if (_items.Count == 0)
+                return FrozenOrderedListSet<ComponentID>.Empty;
+
+            if (_items.Count == 1 && _items.Contains(ComponentID<Phantom>.ID))
+                return SetWithJustPhantom;
 
             _frozenCache = FrozenOrderedListSet<ComponentID>.Create(_items);
             return _frozenCache;

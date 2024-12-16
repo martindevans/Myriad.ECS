@@ -48,7 +48,7 @@ public sealed class QueryDescription
     /// <summary>
     /// Describes a query for entities, bound to a world.
     /// </summary>
-    public QueryDescription(World world, FrozenOrderedListSet<ComponentID> include, FrozenOrderedListSet<ComponentID> exclude, FrozenOrderedListSet<ComponentID> atLeastOne, FrozenOrderedListSet<ComponentID> exactlyOne)
+    internal QueryDescription(World world, FrozenOrderedListSet<ComponentID> include, FrozenOrderedListSet<ComponentID> exclude, FrozenOrderedListSet<ComponentID> atLeastOne, FrozenOrderedListSet<ComponentID> exactlyOne)
     {
         World = world;
 
