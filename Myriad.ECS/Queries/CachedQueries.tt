@@ -33,6 +33,21 @@ public partial class World
         (ReadOnlySpan<ComponentID>)[ ComponentID<Phantom>.ID ]
     );
 
+    internal QueryDescription? TryGetCachedQuery(OrderedListSet<ComponentID> components)
+    {
+        return components.Count switch
+        {
+<# for (var i = 1; i <= PARAM_COUNT; i++) { #>
+            <#= i #> => GetCachedQuery(
+<# for (var j = 0; j < i; j++) { #>
+                components[<#= j #>]<#= j != i - 1 ? "," : "" #>
+<# } #>
+            ),
+<# } #>
+            _ => null,
+        };
+    }
+
     // Cache of all queries with 1 included components.
     private readonly Dictionary<int, QueryDescription> _queryCache1 = [ ];
     private readonly ReaderWriterLockSlim _lock1 = new();
@@ -56,10 +71,15 @@ public partial class World
         _lock1.EnterWriteLock();
         try
         {
+            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] { id0 });
+            var exclude = include.Contains(ComponentID<Phantom>.ID)
+                ? FrozenOrderedListSet<ComponentID>.Empty
+                : QueryBuilder.SetWithJustPhantom;
+
             var query = new QueryDescription(
                 this,
-                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] { id0 }),
-                QueryBuilder.SetWithJustPhantom,
+                include,
+                exclude,
                 FrozenOrderedListSet<ComponentID>.Empty,
                 FrozenOrderedListSet<ComponentID>.Empty
             );
@@ -115,10 +135,15 @@ public partial class World
         _lock2.EnterWriteLock();
         try
         {
+            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] { id0, id1 });
+            var exclude = include.Contains(ComponentID<Phantom>.ID)
+                ? FrozenOrderedListSet<ComponentID>.Empty
+                : QueryBuilder.SetWithJustPhantom;
+
             var query = new QueryDescription(
                 this,
-                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] { id0, id1 }),
-                QueryBuilder.SetWithJustPhantom,
+                include,
+                exclude,
                 FrozenOrderedListSet<ComponentID>.Empty,
                 FrozenOrderedListSet<ComponentID>.Empty
             );
@@ -229,18 +254,25 @@ public partial class World
                 _queryCache<#= i #>.Add(hash, list);
             }
             
-            var query = new QueryDescription(
-                this,
-                FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
 <# for (var k = 0; k < i; k++)
 {
 #>
-                    <#= "id" + k #>,
+                <#= "id" + k #>,
 <#
 }
 #>
-                }),
-                QueryBuilder.SetWithJustPhantom,
+            });
+
+            // Auto exclude phantoms, unless specifically included
+            var exclude = include.Contains(ComponentID<Phantom>.ID)
+                ? FrozenOrderedListSet<ComponentID>.Empty
+                : QueryBuilder.SetWithJustPhantom;
+
+            var query = new QueryDescription(
+                this,
+                include,
+                exclude,
                 FrozenOrderedListSet<ComponentID>.Empty,
                 FrozenOrderedListSet<ComponentID>.Empty
             );

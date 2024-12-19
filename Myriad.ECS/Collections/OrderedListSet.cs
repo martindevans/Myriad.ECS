@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Collections;
+using System.Runtime.InteropServices;
 using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 
@@ -9,10 +10,13 @@ namespace Myriad.ECS.Collections;
 /// </summary>
 /// <typeparam name="TItem"></typeparam>
 internal class OrderedListSet<TItem>
-    where TItem : struct, IComparable<TItem>, IEquatable<TItem>
+    : IReadOnlyList<TItem>
+    where TItem : struct, IComparable<TItem>, IEquatable<TItem> 
 {
     private readonly List<TItem> _items = [ ];
     public int Count => _items.Count;
+
+    public TItem this[int i] => _items[i];
 
     #region constructors
     public OrderedListSet()
@@ -142,6 +146,16 @@ internal class OrderedListSet<TItem>
 
     #region GetEnumerator
     public List<TItem>.Enumerator GetEnumerator()
+    {
+        return _items.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return _items.GetEnumerator();
+    }
+
+    IEnumerator<TItem> IEnumerable<TItem>.GetEnumerator()
     {
         return _items.GetEnumerator();
     }
