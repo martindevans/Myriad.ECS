@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Runtime.InteropServices;
-using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 
 namespace Myriad.ECS.Collections;

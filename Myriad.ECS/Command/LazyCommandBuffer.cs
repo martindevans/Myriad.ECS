@@ -13,7 +13,7 @@ public struct LazyCommandBuffer
     /// <summary>
     /// The <see cref="World"/> which this <see cref="LazyCommandBuffer"/> is for
     /// </summary>
-    public World World { get; private set; }
+    public World World { get; }
 
     /// <summary>
     /// Create a new <see cref="LazyCommandBuffer"/> for the given <see cref="World"/>

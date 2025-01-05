@@ -166,7 +166,7 @@ public abstract class BaseSystemGroup<TData>
         var sys = systems.Select(a => new SystemGroupItem<TData>(a)).ToArray();
 
         _beforeSystems = sys.Where(a => a.System is ISystemBefore<TData>).ToList();
-        _systems = sys.ToList();
+        _systems = [.. sys];
         _afterSystems = sys.Where(a => a.System is ISystemAfter<TData>).ToList();
     }
 

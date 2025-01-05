@@ -10,7 +10,7 @@ public class FrozenOrderedListSet<TItem>
     /// <summary>
     /// An empty frozen set
     /// </summary>
-    public static readonly FrozenOrderedListSet<TItem> Empty = new(new OrderedListSet<TItem>());
+    public static readonly FrozenOrderedListSet<TItem> Empty = new([ ]);
 
     private readonly OrderedListSet<TItem> _items;
 

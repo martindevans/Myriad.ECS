@@ -354,7 +354,7 @@ public sealed partial class QueryBuilder
     {
         public int Index { get; } = Index;
 
-        public readonly OrderedListSet<ComponentID> Items = new();
+        public readonly OrderedListSet<ComponentID> Items = [ ];
 
         private FrozenOrderedListSet<ComponentID>? _frozenCache;
 
@@ -363,14 +363,18 @@ public sealed partial class QueryBuilder
             if (_frozenCache != null)
                 return _frozenCache;
 
-            if (Items.Count == 0)
-                return FrozenOrderedListSet<ComponentID>.Empty;
+            switch (Items.Count)
+            {
+                case 0:
+                    return FrozenOrderedListSet<ComponentID>.Empty;
 
-            if (Items.Count == 1 && Items.Contains(ComponentID<Phantom>.ID))
-                return SetWithJustPhantom;
+                case 1 when Items.Contains(ComponentID<Phantom>.ID):
+                    return SetWithJustPhantom;
 
-            _frozenCache = FrozenOrderedListSet<ComponentID>.Create(Items);
-            return _frozenCache;
+                default:
+                    _frozenCache = FrozenOrderedListSet<ComponentID>.Create(Items);
+                    return _frozenCache;
+            }
         }
 
         public bool Add(ComponentID id, [CallerMemberName] string caller = "")

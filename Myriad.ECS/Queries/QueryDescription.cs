@@ -1,6 +1,5 @@
 ﻿
 using Myriad.ECS.Collections;
-using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Worlds.Archetypes;
@@ -15,7 +14,7 @@ public sealed class QueryDescription
     // Cache of result from last time TryMatch was called
     private MatchResult? _result;
     private readonly ReaderWriterLockSlim _resultLock = new();
-    private readonly OrderedListSet<ComponentID> _temporarySet = new();
+    private readonly OrderedListSet<ComponentID> _temporarySet = [];
 
     private readonly ComponentBloomFilter _includeBloom;
     private readonly ComponentBloomFilter _excludeBloom;

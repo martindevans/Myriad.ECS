@@ -2,7 +2,6 @@
 using Myriad.ECS.Collections;
 using Myriad.ECS.Command;
 using Myriad.ECS.Components;
-using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Chunks;
 
@@ -145,8 +144,10 @@ public sealed partial class Archetype
         // Get the destination archetype for deleted entities, if they become phantoms
         if (HasPhantomComponents && !IsPhantom)
         {
-            var c = new OrderedListSet<ComponentID>(components);
-            c.Add(ComponentID<Phantom>.ID);
+            var c = new OrderedListSet<ComponentID>(components)
+            {
+                ComponentID<Phantom>.ID
+            };
             _phantomDestination = World.GetOrCreateArchetype(c);
         }
     }
@@ -336,5 +337,5 @@ public sealed partial class Archetype
     /// <summary>
     /// Get an enumerable of all entities in this <see cref="Archetype"/>, in an arbitrary order.
     /// </summary>
-    public ArchetypeEntityEnumerable Entities => new ArchetypeEntityEnumerable(this);
+    public ArchetypeEntityEnumerable Entities => new(this);
 }

@@ -3,7 +3,6 @@ using System.Diagnostics;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.Collections;
 using Myriad.ECS.Components;
-using Myriad.ECS.Extensions;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds;
@@ -41,9 +40,9 @@ public sealed partial class CommandBuffer
     private readonly Dictionary<Entity, EntityModificationData> _entityModifications = [ ];
     private readonly List<Entity> _deletes = [ ];
     private readonly List<QueryDescription> _archetypeDeletes = [ ];
-    private readonly OrderedListSet<Entity> _maybeAddingPhantomComponent = new();
+    private readonly OrderedListSet<Entity> _maybeAddingPhantomComponent = [ ];
 
-    private readonly OrderedListSet<ComponentID> _tempComponentIdSet = new();
+    private readonly OrderedListSet<ComponentID> _tempComponentIdSet = [ ];
 
     private readonly BufferedRelationBinder _bufferedRelationBindings = new();
     private readonly UnbufferedRelationBinder _unbufferedRelationBindings = new();
