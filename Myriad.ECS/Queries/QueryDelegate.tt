@@ -142,10 +142,10 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		<#= CoverageAttribute(i) #>
-		public void Query<<#= delegate_type_params #>>(QueryDelegateEntity<<#= delegate_type_params #>> @delegate, ref QueryDescription? query)
+		public int Query<<#= delegate_type_params #>>(QueryDelegateEntity<<#= delegate_type_params #>> @delegate, ref QueryDescription? query)
 			where <#= Constraints(i, 12) #>
 		{
-			Execute<<#= delegate_wrapper_name #>E<<#= delegate_type_params #>>, <#= delegate_type_params #>>(
+			return Execute<<#= delegate_wrapper_name #>E<<#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #>E<<#= delegate_type_params #>>(@delegate),
 				ref query
 			);
@@ -157,10 +157,10 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		<#= CoverageAttribute(i) #>
-		public void Query<<#= delegate_type_params #>>(QueryDelegateEntity<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+		public int Query<<#= delegate_type_params #>>(QueryDelegateEntity<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
-			Execute<<#= delegate_wrapper_name #>E<<#= delegate_type_params #>>, <#= delegate_type_params #>>(
+			return Execute<<#= delegate_wrapper_name #>E<<#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #>E<<#= delegate_type_params #>>(@delegate),
 				ref query
 			);
@@ -172,10 +172,10 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		<#= CoverageAttribute(i) #>
-		public void QueryParallel<<#= delegate_type_params #>>(QueryDelegateEntity<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+		public int QueryParallel<<#= delegate_type_params #>>(QueryDelegateEntity<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
-			ExecuteParallel<<#= delegate_wrapper_name #>E<<#= delegate_type_params #>>, <#= delegate_type_params #>>(
+			return ExecuteParallel<<#= delegate_wrapper_name #>E<<#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #>E<<#= delegate_type_params #>>(@delegate),
 				query
 			);
@@ -187,10 +187,10 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		<#= CoverageAttribute(i) #>
-		public void Query<<#= delegate_type_params #>>(QueryDelegate<<#= delegate_type_params #>> @delegate, ref QueryDescription? query)
+		public int Query<<#= delegate_type_params #>>(QueryDelegate<<#= delegate_type_params #>> @delegate, ref QueryDescription? query)
 			where <#= Constraints(i, 12) #>
 		{
-			Execute<<#= delegate_wrapper_name #><<#= delegate_type_params #>>, <#= delegate_type_params #>>(
+			return Execute<<#= delegate_wrapper_name #><<#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #><<#= delegate_type_params #>>(@delegate),
 				ref query
 			);
@@ -217,10 +217,10 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		<#= CoverageAttribute(i) #>
-		public void QueryParallel<<#= delegate_type_params #>>(QueryDelegate<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+		public int QueryParallel<<#= delegate_type_params #>>(QueryDelegate<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
-			ExecuteParallel<<#= delegate_wrapper_name #><<#= delegate_type_params #>>, <#= delegate_type_params #>>(
+			return ExecuteParallel<<#= delegate_wrapper_name #><<#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #><<#= delegate_type_params #>>(@delegate),
 				query
 			);
@@ -235,10 +235,10 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		<#= CoverageAttribute(i) #>
-		public void Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateEntityData<TData, <#= delegate_type_params #>> @delegate, ref QueryDescription? query)
+		public int Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateEntityData<TData, <#= delegate_type_params #>> @delegate, ref QueryDescription? query)
 			where <#= Constraints(i, 12) #>
 		{
-			Execute<<#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
+			return Execute<<#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>(data, @delegate),
 				ref query
 			);
@@ -251,10 +251,10 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		<#= CoverageAttribute(i) #>
-		public void Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateEntityData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+		public int Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateEntityData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
-			Execute<<#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
+			return Execute<<#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>(data, @delegate),
 				ref query
 			);
@@ -267,10 +267,10 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		<#= CoverageAttribute(i) #>
-		public void QueryParallel<TData, <#= delegate_type_params #>>(TData data, QueryDelegateEntityData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+		public int QueryParallel<TData, <#= delegate_type_params #>>(TData data, QueryDelegateEntityData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
-			ExecuteParallel<<#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
+			return ExecuteParallel<<#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>(data, @delegate),
 				query
 			);
@@ -283,10 +283,10 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		<#= CoverageAttribute(i) #>
-		public void Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateData<TData, <#= delegate_type_params #>> @delegate, ref QueryDescription? query)
+		public int Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateData<TData, <#= delegate_type_params #>> @delegate, ref QueryDescription? query)
 			where <#= Constraints(i, 12) #>
 		{
-			Execute<<#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
+			return Execute<<#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>(data, @delegate),
 				ref query
 			);
@@ -299,10 +299,10 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		<#= CoverageAttribute(i) #>
-		public void Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+		public int Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
-			Execute<<#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
+			return Execute<<#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>(data, @delegate),
 				ref query
 			);
@@ -315,10 +315,10 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		<#= CoverageAttribute(i) #>
-		public void QueryParallel<TData, <#= delegate_type_params #>>(TData data, QueryDelegateData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+		public int QueryParallel<TData, <#= delegate_type_params #>>(TData data, QueryDelegateData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
-			ExecuteParallel<<#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
+			return ExecuteParallel<<#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>(data, @delegate),
 				query
 			);

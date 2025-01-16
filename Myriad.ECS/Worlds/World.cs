@@ -50,6 +50,10 @@ public sealed partial class World
             buffer.Playback().Dispose();
     }
 
+    /// <summary>
+    /// Get a <see cref="CommandBuffer"/> from the pool or create a new one
+    /// </summary>
+    /// <returns></returns>
     internal CommandBuffer GetPooledCommandBuffer()
     {
         if (!_commandBufferPool.TryTake(out var buffer))
@@ -57,8 +61,14 @@ public sealed partial class World
         return buffer;
     }
 
+    /// <summary>
+    /// Return a <see cref="CommandBuffer"/> to the internal pool
+    /// </summary>
+    /// <param name="buffer"></param>
     internal void ReturnPooledCommandBuffer(CommandBuffer buffer)
     {
+        //todo: buffer.Clear(); -- this must be implemented before this method can be made public!
+
         if (_commandBufferPool.Count < 32)
             _commandBufferPool.Add(buffer);
     }
