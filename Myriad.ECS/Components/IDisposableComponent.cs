@@ -24,19 +24,20 @@ public interface IDisposableComponent
 /// <summary>
 /// A basic container for disposable objects which will automatically be disposed when the entity is destroyed
 /// </summary>
-public struct Disposable
+public struct GenericDisposable<TDisposable>
     : IDisposableComponent
+    where TDisposable : IDisposable
 {
     /// <summary>
     /// The object that will be disposed
     /// </summary>
-    public IDisposable? IDisposable;
+    public TDisposable? IDisposable;
 
     /// <summary>
-    /// Create a new <see cref="Disposable"/> component
+    /// Create a new <see cref="GenericDisposable{TDisposable}"/> component
     /// </summary>
     /// <param name="disposable"></param>
-    public Disposable(IDisposable disposable)
+    public GenericDisposable(TDisposable disposable)
     {
         IDisposable = disposable;
     }
@@ -45,7 +46,7 @@ public struct Disposable
     public void Dispose(ref LazyCommandBuffer buffer)
     {
         IDisposable?.Dispose();
-        IDisposable = null;
+        IDisposable = default;
     }
 }
 
