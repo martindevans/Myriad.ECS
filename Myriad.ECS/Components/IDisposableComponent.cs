@@ -24,7 +24,9 @@ public interface IDisposableComponent
 /// <summary>
 /// A basic container for disposable objects which will automatically be disposed when the entity is destroyed
 /// </summary>
-public struct GenericDisposable<TDisposable>
+/// <typeparam name="TDisposable">The generic type of the thing being disposed</typeparam>
+/// <typeparam name="TTag">A "tag" which means you can use multiple of this component, each with distinct types</typeparam>
+public struct GenericDisposable<TDisposable, TTag>
     : IDisposableComponent
     where TDisposable : IDisposable
 {
@@ -34,7 +36,7 @@ public struct GenericDisposable<TDisposable>
     public TDisposable? IDisposable;
 
     /// <summary>
-    /// Create a new <see cref="GenericDisposable{TDisposable}"/> component
+    /// Create a new <see cref="GenericDisposable{TDisposable, TTag}"/> component
     /// </summary>
     /// <param name="disposable"></param>
     public GenericDisposable(TDisposable disposable)
