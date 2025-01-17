@@ -21,6 +21,34 @@ public interface IDisposableComponent
     public void Dispose(ref LazyCommandBuffer buffer);
 }
 
+/// <summary>
+/// A basic container for disposable objects which will automatically be disposed when the entity is destroyed
+/// </summary>
+public struct Disposable
+    : IDisposableComponent
+{
+    /// <summary>
+    /// The object that will be disposed
+    /// </summary>
+    public IDisposable? IDisposable;
+
+    /// <summary>
+    /// Create a new <see cref="Disposable"/> component
+    /// </summary>
+    /// <param name="disposable"></param>
+    public Disposable(IDisposable disposable)
+    {
+        IDisposable = disposable;
+    }
+
+    /// <inheritdoc />
+    public void Dispose(ref LazyCommandBuffer buffer)
+    {
+        IDisposable?.Dispose();
+        IDisposable = null;
+    }
+}
+
 internal static class Disposer
 {
     [ThreadStatic] private static Dictionary<ComponentID, IDisposer>? _disposerCache;
