@@ -20,6 +20,18 @@ internal class ComponentSetterCollection
         _components.Clear();
     }
 
+    public void ClearAndDispose(ref LazyCommandBuffer buffer)
+    {
+        foreach (var (cid, components) in _components)
+        {
+            if (!cid.IsDisposableComponent)
+                continue;
+            components.DisposeAll(ref buffer);
+        }
+
+        Clear();
+    }
+
     public SetterId Add<T>(T value)
         where T : IComponent
     {
@@ -115,6 +127,8 @@ internal class ComponentSetterCollection
         void Dispose(int index, ref LazyCommandBuffer buffer);
 
         void DisposeAllOverwritten(ref LazyCommandBuffer lazy);
+
+        void DisposeAll(ref LazyCommandBuffer lazy);
     }
 
     [DebuggerDisplay("Count = {_values.Count}")]
@@ -172,6 +186,12 @@ internal class ComponentSetterCollection
         {
             _disposer.DisposeAll(_overwrittenDisposableValues, ref lazy);
             _overwrittenDisposableValues.Clear();
+        }
+
+        public void DisposeAll(ref LazyCommandBuffer lazy)
+        {
+            _disposer.DisposeAll(_values, ref lazy);
+            _disposer.DisposeAll(_overwrittenDisposableValues, ref lazy);
         }
     }
     #endregion

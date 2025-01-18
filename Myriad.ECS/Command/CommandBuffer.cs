@@ -107,7 +107,7 @@ public sealed partial class CommandBuffer
         if (lazy.TryGetBuffer(out var lazyBuffer))
         {
             lazyBuffer.Playback().Dispose();
-            World.ReturnPooledCommandBuffer(lazyBuffer);
+            World.ReturnCommandBuffer(lazyBuffer);
         }
 
         // Create a resolver ready to use in the future
@@ -331,6 +331,60 @@ public sealed partial class CommandBuffer
             archetypeLookup[entityData.Node] = archetype;
 
         return archetype;
+    }
+    #endregion
+
+    #region clear
+    /// <summary>
+    /// Clear this <see cref="CommandBuffer"/>
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
+    public void Clear()
+    {
+        // We can't actually make any changes, but we do still need the lazy buffer
+        var lazy = new LazyCommandBuffer(World);
+
+        _setters.ClearAndDispose(ref lazy);
+
+        for (var i = 0; i < _bufferedSets.Count; i++)
+        {
+            var setters = _bufferedSets[i].Setters;
+            setters.Clear();
+            Pool.Return(setters);
+        }
+        _bufferedSets.Clear();
+
+        foreach (var (_, data) in _entityModifications)
+        {
+            if (data.Removes != null)
+            {
+                data.Removes.Clear();
+                Pool.Return(data.Removes);
+            }
+
+            if (data.Sets != null)
+            {
+                data.Sets.Clear();
+                Pool.Return(data.Sets);
+            }
+        }
+        _entityModifications.Clear();
+
+        _aggregateNodesCount = 0;
+
+        _deletes.Clear();
+        _archetypeDeletes.Clear();
+        _maybeAddingPhantomComponent.Clear();
+        _tempComponentIdSet.Clear();
+        _bufferedRelationBindings.Clear();
+        _unbufferedRelationBindings.Clear();
+
+        _nextResolver.Dispose();
+        _nextResolver = Pool<Resolver>.Get();
+        _nextResolver.Configure(this);
+
+        if (lazy.TryGetBuffer(out var cmd))
+            cmd.Clear();
     }
     #endregion
 

@@ -963,4 +963,139 @@ public class CommandBufferTests
 
         cmd.Playback().Dispose();
     }
+
+    [TestMethod]
+    public void ClearBufferSet()
+    {
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+
+        // Create an entity
+        var eb = cmd.Create().Set(new Component0());
+        var r = cmd.Playback();
+        var e = eb.Resolve();
+        r.Dispose();
+
+        // Set value, then clear buffer
+        cmd.Set(e, new Component1());
+        cmd.Clear();
+        cmd.Playback().Dispose();
+
+        Assert.IsTrue(e.HasComponent<Component0>());
+        Assert.IsFalse(e.HasComponent<Component1>());
+    }
+
+    [TestMethod]
+    public void ClearBufferSetDisposable()
+    {
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+
+        // Create an entity
+        var eb = cmd.Create().Set(new Component0());
+        var r = cmd.Playback();
+        var e = eb.Resolve();
+        r.Dispose();
+
+        // Set value, then clear buffer
+        var counter = new BoxedInt();
+        cmd.Set(e, new TestDisposable(counter));
+        cmd.Clear();
+        cmd.Playback().Dispose();
+
+        Assert.IsTrue(e.HasComponent<Component0>());
+        Assert.IsFalse(e.HasComponent<Component1>());
+        Assert.AreEqual(1, counter.Value);
+    }
+
+    [TestMethod]
+    public void ClearBufferSetOverwriteDisposable()
+    {
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+
+        // Create an entity
+        var eb = cmd.Create().Set(new Component0());
+        var r = cmd.Playback();
+        var e = eb.Resolve();
+        r.Dispose();
+
+        // Set value, then overwrite with another of the same value, then clear
+        var counter1 = new BoxedInt();
+        cmd.Set(e, new TestDisposable(counter1));
+        var counter2 = new BoxedInt();
+        cmd.Set(e, new TestDisposable(counter2));
+        cmd.Clear();
+        cmd.Playback().Dispose();
+
+        Assert.IsTrue(e.HasComponent<Component0>());
+        Assert.IsFalse(e.HasComponent<Component1>());
+        Assert.AreEqual(1, counter1.Value);
+        Assert.AreEqual(1, counter2.Value);
+    }
+
+    [TestMethod]
+    public void ClearBufferRemove()
+    {
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+
+        // Create an entity
+        var eb = cmd.Create().Set(new Component0()).Set(new Component1());
+        var r = cmd.Playback();
+        var e = eb.Resolve();
+        r.Dispose();
+
+        // Remove value, then clear buffer
+        cmd.Remove<Component1>(e);
+        cmd.Clear();
+        cmd.Playback().Dispose();
+
+        Assert.IsTrue(e.HasComponent<Component0>());
+        Assert.IsTrue(e.HasComponent<Component1>());
+    }
+
+    [TestMethod]
+    public void ClearBufferDelete()
+    {
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+
+        // Create an entity
+        var eb = cmd.Create().Set(new Component0()).Set(new Component1());
+        var r = cmd.Playback();
+        var e = eb.Resolve();
+        r.Dispose();
+
+        // Delete entity, then clear buffer
+        cmd.Delete(e);
+        cmd.Clear();
+        cmd.Playback().Dispose();
+
+        Assert.IsTrue(e.IsAlive());
+        Assert.IsTrue(e.HasComponent<Component0>());
+        Assert.IsTrue(e.HasComponent<Component1>());
+    }
+
+    [TestMethod]
+    public void ClearBufferDeleteArchetype()
+    {
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+
+        // Create an entity
+        var eb = cmd.Create().Set(new Component0()).Set(new Component1());
+        var r = cmd.Playback();
+        var e = eb.Resolve();
+        r.Dispose();
+
+        // Delete archetypes, then clear buffer
+        cmd.Delete(new QueryBuilder().Include<Component0>().Build(world));
+        cmd.Clear();
+        cmd.Playback().Dispose();
+
+        Assert.IsTrue(e.IsAlive());
+        Assert.IsTrue(e.HasComponent<Component0>());
+        Assert.IsTrue(e.HasComponent<Component1>());
+    }
 }
