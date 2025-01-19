@@ -35,7 +35,7 @@ public sealed partial class CommandBuffer
     // buffered entity with the same node ID therefore has the same archetype. Except for node=-1, which
     // indicates unknown.
     private int _aggregateNodesCount;
-    private readonly BufferedAggregateNode[] _bufferedAggregateNodes = new BufferedAggregateNode[512];
+    private readonly BufferedAggregateNode[] _bufferedAggregateNodes = new BufferedAggregateNode[128];
 
     private readonly Dictionary<Entity, EntityModificationData> _entityModifications = [ ];
     private readonly List<Entity> _deletes = [ ];
@@ -672,23 +672,28 @@ public sealed partial class CommandBuffer
         }
     }
 
+    /// <summary>
+    /// Buffered entities store a node ID, all buffered entities with the same node ID have exactly the same set of components. Initially
+    /// new buffered entities start in node 0 (no components). Each aggregate node stores 16 edges, leadiong out to other nodes. Each node
+    /// represents a component being added to a buffered entity.
+    /// </summary>
     private struct BufferedAggregateNode
     {
-        private const int MaxEdges = 16;
+        private const byte MaxEdges = 16;
 
-        private int _edgeCount;
         private unsafe fixed int _componentIdBuffer[MaxEdges];
-        private unsafe fixed int _nodeIdBuffer[MaxEdges];
+        private unsafe fixed short _nodeIdBuffer[MaxEdges];
+        private byte _edgeCount;
 
         public int GetNodeIndex(ComponentID component, BufferedAggregateNode[] nodesArr, ref int nodesCount)
         {
             unsafe
             {
                 fixed (int* componentIdBufferPtr = _componentIdBuffer)
-                fixed (int* nodeIdBufferPtr = _nodeIdBuffer)
+                fixed (short* nodeIdBufferPtr = _nodeIdBuffer)
                 {
                     var componentIds = new Span<int>(componentIdBufferPtr, MaxEdges);
-                    var nodeIds = new Span<int>(nodeIdBufferPtr, MaxEdges);
+                    var nodeIds = new Span<short>(nodeIdBufferPtr, MaxEdges);
 
                     // Find the index of the edge for this component
                     var idx = componentIds[.._edgeCount].IndexOf(component.Value);
@@ -707,9 +712,9 @@ public sealed partial class CommandBuffer
 
                     // Create a new node
                     nodesArr[nodesCount] = new BufferedAggregateNode();
-                    var newNodeId = nodesCount++;
+                    var newNodeId = (short)nodesCount++;
 
-                    // Create an edge point to a new node
+                    // Create an edge pointing to a new node
                     componentIds[_edgeCount] = component.Value;
                     nodeIds[_edgeCount] = newNodeId;
                     _edgeCount++;

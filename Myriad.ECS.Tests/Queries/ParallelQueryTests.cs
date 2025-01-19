@@ -15,7 +15,7 @@ public class ParallelQueryTests
     public void IncrementValues()
     {
         var w = new WorldBuilder().Build();
-        SetupRandomEntities(w, count:150_000);
+        SetupRandomEntities(w, count:100_000);
 
         // Increment just the int32s
         for (var i = 0; i < 128; i++)
