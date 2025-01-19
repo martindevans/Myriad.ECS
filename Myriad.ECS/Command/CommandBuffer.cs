@@ -84,7 +84,7 @@ public sealed partial class CommandBuffer
         _setters.Clear();
         _entityModifications.Clear();
         _tempComponentIdSet.Clear();
-        _aggregateNodesCount = 0;
+        _archetypeEdges.Clear();
 
         // Update the version of this buffer, invalidating all buffered entities for further modification
         unchecked { _version++; }
@@ -269,9 +269,9 @@ public sealed partial class CommandBuffer
     {
         _tempComponentIdSet.Clear();
 
-        // Keep a map from node ID -> archetype. This means we only need to calculate it once
-        // per node ID.
-        var archetypeLookup = ArrayPool<Archetype>.Shared.Rent(_aggregateNodesCount);
+        // Keep a map from archetype key -> archetype. This means we only need to calculate it once
+        // per archetype key.
+        var archetypeLookup = ArrayPool<Archetype>.Shared.Rent(_archetypeEdges.Count + 1);
         Array.Clear(archetypeLookup, 0, archetypeLookup.Length);
         try
         {
@@ -308,9 +308,9 @@ public sealed partial class CommandBuffer
     private Archetype GetArchetype(BufferedEntityData entityData, Archetype?[] archetypeLookup)
     {
         // Check the cache
-        if (entityData.Node >= 0)
+        if (entityData.ArchetypeKey >= 0)
         {
-            var a = archetypeLookup[entityData.Node];
+            var a = archetypeLookup[entityData.ArchetypeKey];
             if (a != null)
                 return a;
         }
@@ -319,8 +319,8 @@ public sealed partial class CommandBuffer
         var archetype = World.GetOrCreateArchetype(entityData.Setters);
 
         // If the node ID is positive, cache it
-        if (entityData.Node >= 0)
-            archetypeLookup[entityData.Node] = archetype;
+        if (entityData.ArchetypeKey >= 0)
+            archetypeLookup[entityData.ArchetypeKey] = archetype;
 
         return archetype;
     }
@@ -362,7 +362,7 @@ public sealed partial class CommandBuffer
         }
         _entityModifications.Clear();
 
-        _aggregateNodesCount = 0;
+        _archetypeEdges.Clear();
 
         _deletes.Clear();
         _archetypeDeletes.Clear();
@@ -386,13 +386,6 @@ public sealed partial class CommandBuffer
     /// <returns></returns>
     public BufferedEntity Create()
     {
-        // Ensure the root aggregation node exists
-        if (_aggregateNodesCount == 0)
-        {
-            _aggregateNodesCount++;
-            _bufferedAggregateNodes[0] = new BufferedAggregateNode();
-        }
-
         // Get a set to hold all of the component setters
         var set = Pool<Dictionary<ComponentID, ComponentSetterCollection.SetterId>>.Get();
         set.Clear();
@@ -448,9 +441,9 @@ public sealed partial class CommandBuffer
 
             // Update node id. Skip it if it's in node -1, once an entity is
             // marked as node -1 it's been opted out of aggregation.
-            if (bufferedData.Node != -1)
+            if (bufferedData.ArchetypeKey != -1)
             {
-                bufferedData.Node = _bufferedAggregateNodes[bufferedData.Node].GetNodeIndex(key, _bufferedAggregateNodes, ref _aggregateNodesCount);
+                bufferedData.ArchetypeKey = GetArchetypeKey(bufferedData.ArchetypeKey, key);
                 _bufferedSets[(int)id] = bufferedData;
             }
         }
@@ -650,7 +643,7 @@ public sealed partial class CommandBuffer
         public Dictionary<ComponentID, ComponentSetterCollection.SetterId> Setters { get; }
 
         /// <summary>The "Node ID" of this entity, all buffered entities with the same node ID are in the same archetype (except -1)</summary>
-        public int Node { get; set; }
+        public int ArchetypeKey { get; set; }
 
         /// <summary>
         /// Data about a new entity being created

@@ -21,4 +21,11 @@ internal struct Union64
     [FieldOffset(5)] public byte B5;
     [FieldOffset(6)] public byte B6;
     [FieldOffset(7)] public byte B7;
+
+    public override int GetHashCode()
+    {
+        // Because the data is all overlapped it doesn't really matter which fields are used here, so long as **all** the ones
+        // from the **same** group are used.
+        return HashCode.Combine(I0, I1).GetHashCode();
+    }
 }
