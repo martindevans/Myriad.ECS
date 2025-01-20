@@ -26,6 +26,7 @@ public interface IDisposableComponent
 /// </summary>
 /// <typeparam name="TDisposable">The generic type of the thing being disposed</typeparam>
 /// <typeparam name="TTag">A "tag" which means you can use multiple of this component, each with distinct types</typeparam>
+[ExcludeFromCodeCoverage]
 public struct GenericDisposable<TDisposable, TTag>
     : IDisposableComponent
     where TDisposable : IDisposable

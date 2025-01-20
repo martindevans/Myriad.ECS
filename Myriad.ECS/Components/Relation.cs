@@ -11,3 +11,15 @@ public interface IEntityRelationComponent : IComponent
     /// </summary>
     public Entity Target { get; set; }
 }
+
+/// <summary>
+/// Contains a reference to the entity it is attached to
+/// </summary>
+public struct SelfReference
+    : IEntityRelationComponent
+{
+    /// <summary>
+    /// The entity this component is attached to
+    /// </summary>
+    public Entity Target { get; set; }
+}
