@@ -223,4 +223,26 @@ public class PhantomTests
         Assert.IsTrue(e.IsPhantom());
         Assert.IsTrue(e.HasComponent<ComponentFloat>());
     }
+
+    [TestMethod]
+    public void SimultaneousRemoveAndDelete()
+    {
+        var w = new WorldBuilder().Build();
+
+        // Create an entity with a phantom component
+        var cmd = new CommandBuffer(w);
+        var eb = cmd.Create().Set(new ComponentFloat(42)).Set(new TestPhantom0());
+        var resolver = cmd.Playback();
+        var e = eb.Resolve();
+        resolver.Dispose();
+
+        // Delete entity and remove phantom in one go
+        cmd.Remove<TestPhantom0>(e);
+        cmd.Delete(e);
+        cmd.Playback().Dispose();
+
+        Assert.IsFalse(e.IsAlive());
+        Assert.IsFalse(e.Exists());
+        Assert.IsFalse(e.IsPhantom());
+    }
 }

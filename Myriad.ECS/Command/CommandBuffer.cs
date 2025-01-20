@@ -68,7 +68,7 @@ public sealed partial class CommandBuffer
 
         // Lazy command buffer accumulates any changes caused by applying this command buffer
         var lazy = new LazyCommandBuffer(World);
-        
+
         // Delete entities, this must occur before structural changes because it may trigger new structural changes
         // by adding a new phantom component.
         DeleteEntities(ref lazy);
@@ -226,8 +226,11 @@ public sealed partial class CommandBuffer
                     Pool.Return(mod.Removes);
                 }
 
-                // If it's already a phantom then it will be autodeleted if the last phantom component has been removed.
-                var autodelete = currentArchetype.IsPhantom && !_tempComponentIdSet.Any(static a => a.IsPhantomComponent);
+                // Check if the entity will have any phantom components after this change
+                var destHasPhantomComponents = _tempComponentIdSet.Any(static a => a.IsPhantomComponent);
+
+                // Entity must be auto deleted if, after the change, it will be a `Phantom` but not have any phantom components
+                var autodelete = _tempComponentIdSet.Contains(ComponentID<Phantom>.ID) && !destHasPhantomComponents;
                 if (autodelete)
                 {
                     World.DeleteImmediate(entity.ID, ref lazy);
