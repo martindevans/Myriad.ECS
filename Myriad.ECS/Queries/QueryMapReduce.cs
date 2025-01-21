@@ -15,13 +15,13 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0>
+	public interface IQueryMap<out TReducer, T0>
 		where T0 : IComponent
 	{
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0);
+		public TReducer Execute(Entity e, ref T0 t0);
 	}
 
 	/// <summary>
@@ -52,15 +52,15 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
 			where T0 : IComponent
-			where TM : IQueryMap<TOutput, T0>, new()
-			where TR : IQueryReduce1<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0>, new()
+			where TReducer : IQueryReduce1<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(initial, ref query);
 		}
 
 		/// <summary>
@@ -72,17 +72,17 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
 			where T0 : IComponent
-			where TM : IQueryMap<TOutput, T0>, new()
-			where TR : IQueryReduce1<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0>, new()
+			where TReducer : IQueryReduce1<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -96,25 +96,25 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
 			where T0 : IComponent
-			where TM : IQueryMap<TOutput, T0>
-			where TR : IQueryReduce1<TOutput>
+			where TMapper : IQueryMap<TOutput, T0>
+			where TReducer : IQueryReduce1<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <param name="q">query, which produces a value per entity</param>
@@ -123,15 +123,15 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
 			where T0 : IComponent
-			where TM : IQueryMap<TOutput, T0>
-			where TR : IQueryReduce1<TOutput>
+			where TMapper : IQueryMap<TOutput, T0>
+			where TReducer : IQueryReduce1<TOutput>
 		{
 			query ??= GetCachedQuery<T0>();
 
@@ -168,14 +168,14 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0, T1>
+	public interface IQueryMap<out TReducer, T0, T1>
 		where T0 : IComponent
         where T1 : IComponent
 	{
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0, ref T1 t1);
+		public TReducer Execute(Entity e, ref T0 t0, ref T1 t1);
 	}
 
 	/// <summary>
@@ -206,16 +206,16 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1>, new()
-			where TR : IQueryReduce2<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1>, new()
+			where TReducer : IQueryReduce2<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1>(initial, ref query);
 		}
 
 		/// <summary>
@@ -227,18 +227,18 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1>, new()
-			where TR : IQueryReduce2<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1>, new()
+			where TReducer : IQueryReduce2<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -252,26 +252,26 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1>
-			where TR : IQueryReduce2<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1>
+			where TReducer : IQueryReduce2<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <typeparam name="T1">Component 1 to pass into mapper</typeparam>
@@ -281,16 +281,16 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1>
-			where TR : IQueryReduce2<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1>
+			where TReducer : IQueryReduce2<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1>();
 
@@ -329,7 +329,7 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0, T1, T2>
+	public interface IQueryMap<out TReducer, T0, T1, T2>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -337,7 +337,7 @@ namespace Myriad.ECS.Queries
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2);
+		public TReducer Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2);
 	}
 
 	/// <summary>
@@ -368,17 +368,17 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2>, new()
-			where TR : IQueryReduce3<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2>, new()
+			where TReducer : IQueryReduce3<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2>(initial, ref query);
 		}
 
 		/// <summary>
@@ -390,19 +390,19 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2>, new()
-			where TR : IQueryReduce3<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2>, new()
+			where TReducer : IQueryReduce3<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -416,27 +416,27 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2>
-			where TR : IQueryReduce3<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2>
+			where TReducer : IQueryReduce3<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <typeparam name="T1">Component 1 to pass into mapper</typeparam>
@@ -447,17 +447,17 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2>
-			where TR : IQueryReduce3<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2>
+			where TReducer : IQueryReduce3<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2>();
 
@@ -498,7 +498,7 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0, T1, T2, T3>
+	public interface IQueryMap<out TReducer, T0, T1, T2, T3>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -507,7 +507,7 @@ namespace Myriad.ECS.Queries
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3);
+		public TReducer Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3);
 	}
 
 	/// <summary>
@@ -538,7 +538,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -546,10 +546,10 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3>, new()
-			where TR : IQueryReduce4<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3>, new()
+			where TReducer : IQueryReduce4<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3>(initial, ref query);
 		}
 
 		/// <summary>
@@ -561,7 +561,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -569,12 +569,12 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3>, new()
-			where TR : IQueryReduce4<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3>, new()
+			where TReducer : IQueryReduce4<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -588,9 +588,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -598,18 +598,18 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3>
-			where TR : IQueryReduce4<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3>
+			where TReducer : IQueryReduce4<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <typeparam name="T1">Component 1 to pass into mapper</typeparam>
@@ -621,9 +621,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -631,8 +631,8 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3>
-			where TR : IQueryReduce4<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3>
+			where TReducer : IQueryReduce4<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3>();
 
@@ -675,7 +675,7 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0, T1, T2, T3, T4>
+	public interface IQueryMap<out TReducer, T0, T1, T2, T3, T4>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -685,7 +685,7 @@ namespace Myriad.ECS.Queries
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4);
+		public TReducer Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4);
 	}
 
 	/// <summary>
@@ -716,7 +716,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -725,10 +725,10 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4>, new()
-			where TR : IQueryReduce5<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4>, new()
+			where TReducer : IQueryReduce5<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4>(initial, ref query);
 		}
 
 		/// <summary>
@@ -740,7 +740,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -749,12 +749,12 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4>, new()
-			where TR : IQueryReduce5<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4>, new()
+			where TReducer : IQueryReduce5<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -768,9 +768,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -779,18 +779,18 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4>
-			where TR : IQueryReduce5<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4>
+			where TReducer : IQueryReduce5<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <typeparam name="T1">Component 1 to pass into mapper</typeparam>
@@ -803,9 +803,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -814,8 +814,8 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4>
-			where TR : IQueryReduce5<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4>
+			where TReducer : IQueryReduce5<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4>();
 
@@ -860,7 +860,7 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5>
+	public interface IQueryMap<out TReducer, T0, T1, T2, T3, T4, T5>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -871,7 +871,7 @@ namespace Myriad.ECS.Queries
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5);
+		public TReducer Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5);
 	}
 
 	/// <summary>
@@ -902,7 +902,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -912,10 +912,10 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>, new()
-			where TR : IQueryReduce6<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>, new()
+			where TReducer : IQueryReduce6<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5>(initial, ref query);
 		}
 
 		/// <summary>
@@ -927,7 +927,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -937,12 +937,12 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>, new()
-			where TR : IQueryReduce6<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>, new()
+			where TReducer : IQueryReduce6<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -956,9 +956,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -968,18 +968,18 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>
-			where TR : IQueryReduce6<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>
+			where TReducer : IQueryReduce6<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <typeparam name="T1">Component 1 to pass into mapper</typeparam>
@@ -993,9 +993,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -1005,8 +1005,8 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>
-			where TR : IQueryReduce6<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>
+			where TReducer : IQueryReduce6<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5>();
 
@@ -1053,7 +1053,7 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6>
+	public interface IQueryMap<out TReducer, T0, T1, T2, T3, T4, T5, T6>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1065,7 +1065,7 @@ namespace Myriad.ECS.Queries
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6);
+		public TReducer Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6);
 	}
 
 	/// <summary>
@@ -1096,7 +1096,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -1107,10 +1107,10 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>, new()
-			where TR : IQueryReduce7<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>, new()
+			where TReducer : IQueryReduce7<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(initial, ref query);
 		}
 
 		/// <summary>
@@ -1122,7 +1122,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -1133,12 +1133,12 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>, new()
-			where TR : IQueryReduce7<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>, new()
+			where TReducer : IQueryReduce7<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -1152,9 +1152,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -1165,18 +1165,18 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>
-			where TR : IQueryReduce7<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>
+			where TReducer : IQueryReduce7<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <typeparam name="T1">Component 1 to pass into mapper</typeparam>
@@ -1191,9 +1191,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -1204,8 +1204,8 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>
-			where TR : IQueryReduce7<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>
+			where TReducer : IQueryReduce7<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
 
@@ -1254,7 +1254,7 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7>
+	public interface IQueryMap<out TReducer, T0, T1, T2, T3, T4, T5, T6, T7>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1267,7 +1267,7 @@ namespace Myriad.ECS.Queries
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7);
+		public TReducer Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7);
 	}
 
 	/// <summary>
@@ -1298,7 +1298,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -1310,10 +1310,10 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>, new()
-			where TR : IQueryReduce8<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>, new()
+			where TReducer : IQueryReduce8<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(initial, ref query);
 		}
 
 		/// <summary>
@@ -1325,7 +1325,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -1337,12 +1337,12 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>, new()
-			where TR : IQueryReduce8<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>, new()
+			where TReducer : IQueryReduce8<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -1356,9 +1356,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -1370,18 +1370,18 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>
-			where TR : IQueryReduce8<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>
+			where TReducer : IQueryReduce8<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <typeparam name="T1">Component 1 to pass into mapper</typeparam>
@@ -1397,9 +1397,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -1411,8 +1411,8 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>
-			where TR : IQueryReduce8<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>
+			where TReducer : IQueryReduce8<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
 
@@ -1463,7 +1463,7 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8>
+	public interface IQueryMap<out TReducer, T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1477,7 +1477,7 @@ namespace Myriad.ECS.Queries
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8);
+		public TReducer Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8);
 	}
 
 	/// <summary>
@@ -1508,7 +1508,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -1521,10 +1521,10 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
-			where TR : IQueryReduce9<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
+			where TReducer : IQueryReduce9<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(initial, ref query);
 		}
 
 		/// <summary>
@@ -1536,7 +1536,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -1549,12 +1549,12 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
-			where TR : IQueryReduce9<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
+			where TReducer : IQueryReduce9<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -1568,9 +1568,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -1583,18 +1583,18 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>
-			where TR : IQueryReduce9<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>
+			where TReducer : IQueryReduce9<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <typeparam name="T1">Component 1 to pass into mapper</typeparam>
@@ -1611,9 +1611,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -1626,8 +1626,8 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>
-			where TR : IQueryReduce9<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>
+			where TReducer : IQueryReduce9<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
 
@@ -1680,7 +1680,7 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+	public interface IQueryMap<out TReducer, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1695,7 +1695,7 @@ namespace Myriad.ECS.Queries
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9);
+		public TReducer Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9);
 	}
 
 	/// <summary>
@@ -1726,7 +1726,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -1740,10 +1740,10 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
-			where TR : IQueryReduce10<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
+			where TReducer : IQueryReduce10<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(initial, ref query);
 		}
 
 		/// <summary>
@@ -1755,7 +1755,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -1769,12 +1769,12 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
-			where TR : IQueryReduce10<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
+			where TReducer : IQueryReduce10<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -1788,9 +1788,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -1804,18 +1804,18 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
-			where TR : IQueryReduce10<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+			where TReducer : IQueryReduce10<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <typeparam name="T1">Component 1 to pass into mapper</typeparam>
@@ -1833,9 +1833,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -1849,8 +1849,8 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
-			where TR : IQueryReduce10<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+			where TReducer : IQueryReduce10<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>();
 
@@ -1905,7 +1905,7 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+	public interface IQueryMap<out TReducer, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -1921,7 +1921,7 @@ namespace Myriad.ECS.Queries
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10);
+		public TReducer Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10);
 	}
 
 	/// <summary>
@@ -1952,7 +1952,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -1967,10 +1967,10 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
-			where TR : IQueryReduce11<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
+			where TReducer : IQueryReduce11<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(initial, ref query);
 		}
 
 		/// <summary>
@@ -1982,7 +1982,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -1997,12 +1997,12 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
-			where TR : IQueryReduce11<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
+			where TReducer : IQueryReduce11<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -2016,9 +2016,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -2033,18 +2033,18 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
-			where TR : IQueryReduce11<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+			where TReducer : IQueryReduce11<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <typeparam name="T1">Component 1 to pass into mapper</typeparam>
@@ -2063,9 +2063,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -2080,8 +2080,8 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
-			where TR : IQueryReduce11<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+			where TReducer : IQueryReduce11<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
 
@@ -2138,7 +2138,7 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+	public interface IQueryMap<out TReducer, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -2155,7 +2155,7 @@ namespace Myriad.ECS.Queries
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11);
+		public TReducer Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11);
 	}
 
 	/// <summary>
@@ -2186,7 +2186,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -2202,10 +2202,10 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
-			where TR : IQueryReduce12<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
+			where TReducer : IQueryReduce12<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(initial, ref query);
 		}
 
 		/// <summary>
@@ -2217,7 +2217,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -2233,12 +2233,12 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
-			where TR : IQueryReduce12<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
+			where TReducer : IQueryReduce12<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -2252,9 +2252,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -2270,18 +2270,18 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
-			where TR : IQueryReduce12<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+			where TReducer : IQueryReduce12<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <typeparam name="T1">Component 1 to pass into mapper</typeparam>
@@ -2301,9 +2301,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -2319,8 +2319,8 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
-			where TR : IQueryReduce12<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+			where TReducer : IQueryReduce12<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>();
 
@@ -2379,7 +2379,7 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+	public interface IQueryMap<out TReducer, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -2397,7 +2397,7 @@ namespace Myriad.ECS.Queries
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12);
+		public TReducer Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12);
 	}
 
 	/// <summary>
@@ -2428,7 +2428,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -2445,10 +2445,10 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
-			where TR : IQueryReduce13<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
+			where TReducer : IQueryReduce13<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(initial, ref query);
 		}
 
 		/// <summary>
@@ -2460,7 +2460,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -2477,12 +2477,12 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
-			where TR : IQueryReduce13<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
+			where TReducer : IQueryReduce13<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -2496,9 +2496,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -2515,18 +2515,18 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
-			where TR : IQueryReduce13<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+			where TReducer : IQueryReduce13<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <typeparam name="T1">Component 1 to pass into mapper</typeparam>
@@ -2547,9 +2547,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -2566,8 +2566,8 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
-			where TR : IQueryReduce13<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+			where TReducer : IQueryReduce13<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>();
 
@@ -2628,7 +2628,7 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+	public interface IQueryMap<out TReducer, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -2647,7 +2647,7 @@ namespace Myriad.ECS.Queries
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13);
+		public TReducer Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13);
 	}
 
 	/// <summary>
@@ -2678,7 +2678,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -2696,10 +2696,10 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
-			where TR : IQueryReduce14<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
+			where TReducer : IQueryReduce14<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(initial, ref query);
 		}
 
 		/// <summary>
@@ -2711,7 +2711,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -2729,12 +2729,12 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
-			where TR : IQueryReduce14<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
+			where TReducer : IQueryReduce14<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -2748,9 +2748,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -2768,18 +2768,18 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
-			where TR : IQueryReduce14<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+			where TReducer : IQueryReduce14<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <typeparam name="T1">Component 1 to pass into mapper</typeparam>
@@ -2801,9 +2801,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -2821,8 +2821,8 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
-			where TR : IQueryReduce14<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+			where TReducer : IQueryReduce14<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>();
 
@@ -2885,7 +2885,7 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+	public interface IQueryMap<out TReducer, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -2905,7 +2905,7 @@ namespace Myriad.ECS.Queries
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13, ref T14 t14);
+		public TReducer Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13, ref T14 t14);
 	}
 
 	/// <summary>
@@ -2936,7 +2936,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -2955,10 +2955,10 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
-			where TR : IQueryReduce15<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
+			where TReducer : IQueryReduce15<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(initial, ref query);
 		}
 
 		/// <summary>
@@ -2970,7 +2970,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -2989,12 +2989,12 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
-			where TR : IQueryReduce15<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
+			where TReducer : IQueryReduce15<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -3008,9 +3008,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -3029,18 +3029,18 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
-			where TR : IQueryReduce15<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+			where TReducer : IQueryReduce15<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <typeparam name="T1">Component 1 to pass into mapper</typeparam>
@@ -3063,9 +3063,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -3084,8 +3084,8 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
-			where TR : IQueryReduce15<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+			where TReducer : IQueryReduce15<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>();
 
@@ -3150,7 +3150,7 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+	public interface IQueryMap<out TReducer, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
@@ -3171,7 +3171,7 @@ namespace Myriad.ECS.Queries
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13, ref T14 t14, ref T15 t15);
+		public TReducer Execute(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13, ref T14 t14, ref T15 t15);
 	}
 
 	/// <summary>
@@ -3202,7 +3202,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -3222,10 +3222,10 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
-			where TR : IQueryReduce16<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
+			where TReducer : IQueryReduce16<TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(initial, ref query);
 		}
 
 		/// <summary>
@@ -3237,7 +3237,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -3257,12 +3257,12 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
-			where TR : IQueryReduce16<TOutput>, new()
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
+			where TReducer : IQueryReduce16<TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -3276,9 +3276,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
@@ -3298,18 +3298,18 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
-			where TR : IQueryReduce16<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+			where TReducer : IQueryReduce16<TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 		/// <typeparam name="T0">Component 0 to pass into mapper</typeparam>
 		/// <typeparam name="T1">Component 1 to pass into mapper</typeparam>
@@ -3333,9 +3333,9 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
@@ -3355,8 +3355,8 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TM : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
-			where TR : IQueryReduce16<TOutput>
+			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+			where TReducer : IQueryReduce16<TOutput>
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
 

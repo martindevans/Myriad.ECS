@@ -29,13 +29,13 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public interface IQueryMap<out TR, <#= generics #>>
+	public interface IQueryMap<out TReducer, <#= generics #>>
 		where <#= Constraints(sumij, 8) #>
 	{
 		/// <summary>
 		/// Extract a value from the given entity and components
 		/// </summary>
-		public TR Execute(Entity e, <#= Refs(0, i) #>);
+		public TReducer Execute(Entity e, <#= Refs(0, i) #>);
 	}
 
 	/// <summary>
@@ -66,15 +66,15 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		<#= CoverageAttribute(i) #>
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, <#= generics #>>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, <#= generics #>>(
 			TOutput initial,
 			QueryDescription? query = null
 		)
 			where <#= Constraints(sumij, 12) #>
-			where TM : IQueryMap<TOutput, <#= generics #>>, new()
-			where TR : <#= NameReducer(i) #><TOutput>, new()
+			where TMapper : IQueryMap<TOutput, <#= generics #>>, new()
+			where TReducer : <#= NameReducer(i) #><TOutput>, new()
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, <#= generics #>>(initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, <#= generics #>>(initial, ref query);
 		}
 
 		/// <summary>
@@ -86,17 +86,17 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		<#= CoverageAttribute(i) #>
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, <#= generics #>>(
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, <#= generics #>>(
 			TOutput initial,
 			ref QueryDescription? query
 		)
 			where <#= Constraints(sumij, 12) #>
-			where TM : IQueryMap<TOutput, <#= generics #>>, new()
-			where TR : <#= NameReducer(i) #><TOutput>, new()
+			where TMapper : IQueryMap<TOutput, <#= generics #>>, new()
+			where TReducer : <#= NameReducer(i) #><TOutput>, new()
 		{
-			var q = new TM();
-			var r = new TR();
-			return ExecuteMapReduce<TM, TR, TOutput, <#= generics #>>(ref q, ref r, initial, ref query);
+			var q = new TMapper();
+			var r = new TReducer();
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, <#= generics #>>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
@@ -110,25 +110,25 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		<#= CoverageAttribute(i) #>
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, <#= generics #>>(
-			TM q,
-			TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, <#= generics #>>(
+			TMapper q,
+			TReducer r,
 			TOutput initial,
 			QueryDescription? query = null
 		)
 			where <#= Constraints(sumij, 12) #>
-			where TM : IQueryMap<TOutput, <#= generics #>>
-			where TR : <#= NameReducer(i) #><TOutput>
+			where TMapper : IQueryMap<TOutput, <#= generics #>>
+			where TReducer : <#= NameReducer(i) #><TOutput>
 		{
-			return ExecuteMapReduce<TM, TR, TOutput, <#= generics #>>(ref q, ref r, initial, ref query);
+			return ExecuteMapReduce<TMapper, TReducer, TOutput, <#= generics #>>(ref q, ref r, initial, ref query);
 		}
 
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
 		/// </summary>
-		/// <typeparam name="TM">Type of mapper</typeparam>
-		/// <typeparam name="TR">Type of reducer</typeparam>
+		/// <typeparam name="TMapper">Type of mapper</typeparam>
+		/// <typeparam name="TReducer">Type of reducer</typeparam>
 		/// <typeparam name="TOutput">Type of value returned</typeparam>
 <# for (var k = 0; k < sumij; k++)
 {
@@ -143,15 +143,15 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		<#= CoverageAttribute(i) #>
-		public TOutput ExecuteMapReduce<TM, TR, TOutput, <#= generics #>>(
-			ref TM q,
-			ref TR r,
+		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, <#= generics #>>(
+			ref TMapper q,
+			ref TReducer r,
 			TOutput initial,
 			ref QueryDescription? query
 		)
 			where <#= Constraints(sumij, 12) #>
-			where TM : IQueryMap<TOutput, <#= generics #>>
-			where TR : <#= NameReducer(i) #><TOutput>
+			where TMapper : IQueryMap<TOutput, <#= generics #>>
+			where TReducer : <#= NameReducer(i) #><TOutput>
 		{
 			query ??= GetCachedQuery<<#= generics #>>();
 
@@ -221,7 +221,7 @@ namespace Myriad.ECS.Worlds
 
 	static string NameMapper(int count)
 	{
-		return "IQueryMap" + count;
+		return "IQueryMap";
 	}
 
 	static string NameReducer(int count)
