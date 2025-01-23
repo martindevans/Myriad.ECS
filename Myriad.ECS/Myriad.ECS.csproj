@@ -10,7 +10,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Myriad.ECS</Title>
     <Authors>Martin Evans</Authors>
-    <Version>34.0.0</Version>
+    <Version>34.1.0</Version>
     <Description>Myriad.ECS is a high performance Entity Component System (ECS).</Description>
     <PackageProjectUrl>https://github.com/martindevans/Myriad.ECS</PackageProjectUrl>
     <RepositoryUrl>https://github.com/martindevans/Myriad.ECS</RepositoryUrl>
@@ -52,6 +52,11 @@
     </Compile>
     <Compile Update="Queries\CachedQueries.cs">
       <DependentUpon>CachedQueries.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Queries\QueryMapReduceReducers.cs">
+      <DependentUpon>QueryMapReduceReducers.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -100,6 +105,10 @@
   <ItemGroup>
     <None Update="Collections\RefTuple.tt">
       <LastGenOutput>RefTuple.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Queries\QueryMapReduceReducers.tt">
+      <LastGenOutput>QueryMapReduceReducers.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="Queries\TemplateHeaders\ParallelWorkLoopSetup.t4">

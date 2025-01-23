@@ -19,6 +19,23 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable ConvertToPrimaryConstructor
 
+namespace Myriad.ECS.Queries
+{
+    /// <summary>
+	/// Reduce intermediate values
+	/// </summary>
+	public interface IQueryReduce<TValue>
+	{
+		/// <summary>
+		/// Reduce two intermediate value to one
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		public TValue Reduce(TValue a, TValue b);
+	}
+}
+
 <# for (var i = 1; i <= PARAM_COUNT; i++)
 {
 	var sumij = i;
@@ -36,20 +53,6 @@ namespace Myriad.ECS.Queries
 		/// Extract a value from the given entity and components
 		/// </summary>
 		public TReducer Execute(Entity e, <#= Refs(0, i) #>);
-	}
-
-	/// <summary>
-	/// Reduce intermediate values
-	/// </summary>
-	public interface <#= NameReducer(i) #><TValue>
-	{
-		/// <summary>
-		/// Reduce two intermediate value to one
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		public TValue Reduce(TValue a, TValue b);
 	}
 }
 
@@ -72,7 +75,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where <#= Constraints(sumij, 12) #>
 			where TMapper : IQueryMap<TOutput, <#= generics #>>, new()
-			where TReducer : <#= NameReducer(i) #><TOutput>, new()
+			where TReducer : IQueryReduce<TOutput>, new()
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, <#= generics #>>(initial, ref query);
 		}
@@ -92,7 +95,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where <#= Constraints(sumij, 12) #>
 			where TMapper : IQueryMap<TOutput, <#= generics #>>, new()
-			where TReducer : <#= NameReducer(i) #><TOutput>, new()
+			where TReducer : IQueryReduce<TOutput>, new()
 		{
 			var q = new TMapper();
 			var r = new TReducer();
@@ -118,7 +121,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where <#= Constraints(sumij, 12) #>
 			where TMapper : IQueryMap<TOutput, <#= generics #>>
-			where TReducer : <#= NameReducer(i) #><TOutput>
+			where TReducer : IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, <#= generics #>>(ref q, ref r, initial, ref query);
 		}
@@ -151,7 +154,7 @@ namespace Myriad.ECS.Worlds
 		)
 			where <#= Constraints(sumij, 12) #>
 			where TMapper : IQueryMap<TOutput, <#= generics #>>
-			where TReducer : <#= NameReducer(i) #><TOutput>
+			where TReducer : IQueryReduce<TOutput>
 		{
 			query ??= GetCachedQuery<<#= generics #>>();
 
@@ -222,11 +225,6 @@ namespace Myriad.ECS.Worlds
 	static string NameMapper(int count)
 	{
 		return "IQueryMap";
-	}
-
-	static string NameReducer(int count)
-	{
-		return "IQueryReduce" + count;
 	}
 
 	static string Refs(int start, int count)

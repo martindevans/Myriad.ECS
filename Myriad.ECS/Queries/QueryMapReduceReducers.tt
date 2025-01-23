@@ -1,0 +1,154 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+
+//using Parallel = System.Threading.Tasks.Parallel;
+//using Parallel = ParallelTasks.Parallel;
+
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedParameter.Global
+// ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable ConvertToPrimaryConstructor
+
+<# foreach (var type in Types)
+{
+#>
+// ReSharper disable once CheckNamespace
+namespace Myriad.ECS.Queries
+{
+    /// <summary>Standard reducers for Map/Reduce queries</summary>
+    public static partial class Reduce
+    {
+	    /// <summary>Container class for reducer of <#= type.Name #></summary>
+	    public static class <#= type.Container #>
+	    {
+<# if (type.Arithmetic)
+{
+#>
+		    /// <summary>Get the minimum of 2 values</summary>
+		    public struct Min
+                : IQueryReduce<<#= type.Name #>>
+            {
+			    /// <inheritdoc />
+                public <#= type.Name #> Reduce(<#= type.Name #> a, <#= type.Name #> b)
+                {
+                    return Math.Min(a, b);
+                }
+            }
+
+		    /// <summary>Get the maximum of 2 values</summary>
+		    public struct Max
+                : IQueryReduce<<#= type.Name #>>
+            {
+			    /// <inheritdoc />
+                public <#= type.Name #> Reduce(<#= type.Name #> a, <#= type.Name #> b)
+                {
+                    return Math.Max(a, b);
+                }
+            }
+
+		    /// <summary>Add the 2 values</summary>
+		    public struct Add
+                : IQueryReduce<<#= type.Name #>>
+            {
+			    /// <inheritdoc />
+                public <#= type.Name #> Reduce(<#= type.Name #> a, <#= type.Name #> b)
+                {
+                    return a + b;
+                }
+            }
+
+		    /// <summary>Multiply the 2 values</summary>
+		    public struct Mul
+                : IQueryReduce<<#= type.Name #>>
+            {
+			    /// <inheritdoc />
+                public <#= type.Name #> Reduce(<#= type.Name #> a, <#= type.Name #> b)
+                {
+                    return a * b;
+                }
+            }
+<#
+}
+#>
+
+<# if (type.Bitwise)
+{
+#>
+		    /// <summary>XOR the 2 values</summary>
+		    public struct Xor
+                : IQueryReduce<<#= type.Name #>>
+            {
+			    /// <inheritdoc />
+                public <#= type.Name #> Reduce(<#= type.Name #> a, <#= type.Name #> b)
+                {
+                    return a ^ b;
+                }
+            }
+
+		    /// <summary>AND the 2 values</summary>
+		    public struct And
+                : IQueryReduce<<#= type.Name #>>
+            {
+			    /// <inheritdoc />
+                public <#= type.Name #> Reduce(<#= type.Name #> a, <#= type.Name #> b)
+                {
+                    return a & b;
+                }
+            }
+
+		    /// <summary>OR the 2 values</summary>
+		    public struct Or
+                : IQueryReduce<<#= type.Name #>>
+            {
+			    /// <inheritdoc />
+                public <#= type.Name #> Reduce(<#= type.Name #> a, <#= type.Name #> b)
+                {
+                    return a | b;
+                }
+            }
+<#
+}
+#>
+	    }
+    }
+}
+
+<#
+}
+#>
+
+
+<#+ 
+	class TypeDef
+	{
+		public readonly string Name;
+		public readonly string Container;
+
+		public readonly bool Bitwise;
+        public readonly bool Arithmetic;
+
+		public TypeDef(string name, string container, bool bitwise = false, bool arithmetic = true)
+		{
+			Name = name;
+			Container = container;
+			Bitwise = bitwise;
+            Arithmetic = arithmetic;
+		}
+	}
+
+	IReadOnlyList<TypeDef> Types = new TypeDef[] {
+		new("int", "I32", bitwise:true),
+		new("uint", "U32", bitwise:true),
+		new("long", "I64", bitwise:true),
+		new("ulong", "U64", bitwise:true),
+
+		new("float", "F32"),
+		new("double", "F64"),
+
+        new("bool", "Boolean", bitwise:true, arithmetic:false),
+	};
+#>

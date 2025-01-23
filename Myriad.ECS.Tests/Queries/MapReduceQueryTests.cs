@@ -12,7 +12,7 @@ namespace Myriad.ECS.Tests.Queries
         {
             var world = new WorldBuilder().Build();
 
-            var result = world.ExecuteMapReduce<MapGetInteger, MapReduceMultiply, int, ComponentInt32>(new MapGetInteger(), new MapReduceMultiply(), 2);
+            var result = world.ExecuteMapReduce<MapGetInteger, Reduce.I32.Mul, int, ComponentInt32>(new MapGetInteger(), new Reduce.I32.Mul(), 2);
 
             Assert.AreEqual(2, result);
         }
@@ -26,7 +26,7 @@ namespace Myriad.ECS.Tests.Queries
             cmd.Create().Set(new ComponentInt32(7));
             cmd.Playback().Dispose();
 
-            var result = world.ExecuteMapReduce<MapGetInteger, MapReduceMultiply, int, ComponentInt32>(new MapGetInteger(), new MapReduceMultiply(), 2);
+            var result = world.ExecuteMapReduce<MapGetInteger, Reduce.I32.Mul, int, ComponentInt32>(new MapGetInteger(), new Reduce.I32.Mul(), 2);
 
             Assert.AreEqual(14, result);
         }
@@ -45,7 +45,7 @@ namespace Myriad.ECS.Tests.Queries
             }
             cmd.Playback().Dispose();
 
-            var result = world.ExecuteMapReduce<MapGetInteger, MapReduceAdd, int, ComponentInt32>(0);
+            var result = world.ExecuteMapReduce<MapGetInteger, Reduce.I32.Add, int, ComponentInt32>(0);
 
             Assert.AreEqual(sum, result);
         }
@@ -56,24 +56,6 @@ namespace Myriad.ECS.Tests.Queries
             public readonly int Execute(Entity e, ref ComponentInt32 t0)
             {
                 return t0.Value;
-            }
-        }
-
-        private readonly struct MapReduceMultiply
-            : IQueryReduce1<int>
-        {
-            public int Reduce(int a, int b)
-            {
-                return a * b;
-            }
-        }
-
-        private readonly struct MapReduceAdd
-            : IQueryReduce1<int>
-        {
-            public int Reduce(int a, int b)
-            {
-                return a + b;
             }
         }
     }
