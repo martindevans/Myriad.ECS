@@ -264,6 +264,141 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>. Using a cursor to early exit
+		/// and resume execution.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+<# for (var k = 0; k < i; k++)
+{
+#>
+		/// <typeparam name="T<#= k #>">Component <#= k #> to include in query</typeparam>
+<#
+}
+#>
+		/// <param name="q">
+		/// The instance to execute over every entity. Passed by ref, so changes to the query
+		/// struct will be persistent. This can allow values from one entity to be accessed by
+		/// the next entity, or after the entire Execute call is complete.
+		/// </param>
+		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
+		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
+		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
+		<#= DocsRefQueryDescription() #>
+		/// <returns>The number of entities discovered by this query</returns>
+		<#= CoverageAttribute(i) #>
+		public int Execute<TQ, <#= queryConstraints #>>(
+			ref TQ q,
+			ref QueryDescription? query,
+			Cursor cursor
+		)
+			where <#= Constraints(i, 12) #>
+			where TQ : IQuery<<#= queryConstraints #>>
+		{
+			query ??= GetCachedQuery<<#= queryConstraints #>>();
+
+			var archetypes = query.GetArchetypes();
+
+<# for (var k = 0; k < i; k++)
+{
+#>
+			var c<#= k #> = ComponentID<T<#= k #>>.ID;
+<#
+}
+#>
+
+			var chunkCount = 0;
+			var entityCount = 0;
+			var lastCompletedArchetype = default(Archetype);
+
+			using (var archetypesEnumerator = archetypes.GetEnumerator())
+			{
+				// Search forward until the archetype is found
+				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
+				{
+					if (!archetypesEnumerator.MoveNext())
+					{
+						cursor.Reset();
+						return entityCount;
+					}
+				}
+
+				// Loop over archetypes processing chunks
+				while (archetypesEnumerator.MoveNext())
+				{
+					var archetype = archetypesEnumerator.Current.Archetype;
+					chunkCount = 0;
+
+					var chunks = archetype.GetChunkEnumerator();
+					try
+					{
+						// Skip over chunks
+						if (!chunks.Skip(cursor.Chunks))
+						{
+							cursor.Reset();
+							return entityCount;
+						}
+						cursor.Chunks = 0;
+
+						// Process remaining chunks
+						while (chunks.MoveNext())
+						{
+							chunkCount++;
+
+							var chunk = chunks.Current;
+							Debug.Assert(chunk != null);
+
+							var entities = chunk.Entities.Span;
+							entityCount += entities.Length;
+
+<# for (var k = 0; k < i; k++)
+{
+#>
+							var t<#= k #> = chunk.GetSpan<T<#= k #>>(c<#= k #>);
+							Debug.Assert(t<#= k #>.Length == entities.Length);
+<#
+}
+#>
+
+							unsafe
+							{
+								#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+								fixed (Entity* eptr = entities)
+<# for (var k = 0; k < i; k++)
+{
+#>
+								fixed (T<#= k #>* t<#= k #>ptr = t<#= k #>)
+<#
+}
+#>
+								#pragma warning restore CS8500
+								{
+									for (var i = 0; i < entities.Length; i++)
+										q.Execute(eptr[i], <#= CallParametersPtr(i) #>);
+								}
+							}
+
+							if (entityCount >= cursor.EntityBudget)
+							{
+								cursor.LastArchetype = lastCompletedArchetype;
+								cursor.Chunks = chunkCount;
+								return entityCount;
+							}
+						}
+					}
+					finally
+					{
+						chunks.Dispose();
+					}
+
+					lastCompletedArchetype = archetype;
+				}
+			}
+
+			cursor.Reset();
+			return entityCount;
+		}
+
+		/// <summary>
 		/// Execute a query in parallel over entities, blocks until complete.
 		/// </summary>
 		/// <param name="q"></param>
