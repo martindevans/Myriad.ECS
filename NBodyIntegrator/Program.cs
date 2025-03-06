@@ -132,7 +132,7 @@ const long ticks = 100_000;
 var tickMin = TimeSpan.MaxValue;
 var tickTotal = TimeSpan.Zero;
 var tickMax = TimeSpan.MinValue;
-var gt = new GameTime(1 / 10f);
+var gt = new GameTime();
 var maxMem = 0L;
 
 AnsiConsole
@@ -147,7 +147,7 @@ AnsiConsole
             systems.BeforeUpdate(gt);
             systems.Update(gt);
             systems.AfterUpdate(gt);
-            gt.Tick();
+            gt.Tick(1 / 10f);
 
             if (systems.TotalExecutionTime < tickMin)
                 tickMin = systems.TotalExecutionTime;
