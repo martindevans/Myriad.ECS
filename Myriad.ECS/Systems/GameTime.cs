@@ -30,4 +30,17 @@ public class GameTime
         DeltaTime = dt;
         Frame++;
     }
+
+    /// <summary>
+    /// Overwrite properties
+    /// </summary>
+    /// <param name="time"></param>
+    /// <param name="deltaTime"></param>
+    /// <param name="frameCount"></param>
+    public void Set(double time = 0, double deltaTime = 0, ulong frameCount = 0)
+    {
+        Time = time;
+        DeltaTime = deltaTime;
+        Frame = frameCount;
+    }
 }
