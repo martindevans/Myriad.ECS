@@ -60,18 +60,19 @@ public class QueryBenchmark
         }
     }
 
-    //[Benchmark]
-    //public void Query()
-    //{
-    //    var q = new QueryAction();
-    //    _world.Execute<QueryAction, Position, Velocity>(ref q, _query);
-    //}
+    [Benchmark]
+    public void Query()
+    {
+        var q = new QueryAction();
+        _world.Execute<QueryAction, Position, Velocity>(ref q, _query);
+    }
 
-    //[Benchmark]
-    //public void ChunkQuery()
-    //{
-    //    _world.ExecuteChunk<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
-    //}
+    [Benchmark]
+    public void ChunkQuery()
+    {
+        var q = new ChunkQueryAction();
+        _world.ExecuteChunk<ChunkQueryAction, Position, Velocity>(ref q, _query);
+    }
 
     //[Benchmark]
     //public void SimdChunkQuery()
@@ -79,17 +80,17 @@ public class QueryBenchmark
     //    _world.ExecuteVectorChunk<SimdChunkQueryAction2, Position, float, Velocity, float>(new SimdChunkQueryAction2(), _query);
     //}
 
-    [Benchmark]
-    public void ParallelQuery()
-    {
-        _world.ExecuteParallel<QueryAction, Position, Velocity>(new QueryAction(), _query);
-    }
+    //[Benchmark]
+    //public void ParallelQuery()
+    //{
+    //    _world.ExecuteParallel<QueryAction, Position, Velocity>(new QueryAction(), _query);
+    //}
 
-    [Benchmark]
-    public void ParallelChunkQuery()
-    {
-        _world.ExecuteChunkParallel<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
-    }
+    //[Benchmark]
+    //public void ParallelChunkQuery()
+    //{
+    //    _world.ExecuteChunkParallel<ChunkQueryAction, Position, Velocity>(new ChunkQueryAction(), _query);
+    //}
 
     //[Benchmark]
     //public void QueryEnumerable()
@@ -127,11 +128,13 @@ public class QueryBenchmark
         {
             for (var i = 0; i < pos.Length; i++)
             {
-                pos[i].Value += vel[i].Value;
+                ref var posi = ref pos[i];
 
-                pos[i].Value += new Vector2(
-                    (float)Math.Sqrt(Math.Abs(Math.Tanh(pos[i].Value.X))),
-                    (float)Math.Tanh(pos[i].Value.Y)
+                posi.Value += vel[i].Value;
+
+                posi.Value += new Vector2(
+                    (float)Math.Sqrt(Math.Abs(Math.Tanh(posi.Value.X))),
+                    (float)Math.Tanh(posi.Value.Y)
                 );
             }
         }

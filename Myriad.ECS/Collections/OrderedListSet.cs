@@ -203,11 +203,33 @@ internal class OrderedListSet<TItem>
         if (other.Count > Count)
             return false;
 
-        foreach (var item in other._items)
-            if (_items.BinarySearch(item) < 0)
-                return false;
+        // Move forward through both lists, checking that all items in `other` are in `this`
+        var i = 0;
+        var j = 0;
+        while (i < _items.Count && j < other.Count)
+        {
+            var cmp = _items[i].CompareTo(other._items[j]);
 
-        return true;
+            if (cmp < 0)
+            {
+                // Item in `this` < `other`. That's acceptable, it means the item is in the superset and not in the subset.
+                // Move to the next item in the superset.
+                i++;
+            }
+            else if (cmp == 0)
+            {
+                // Items are equal, move to the next item in both
+                i++;
+                j++;
+            }
+            else
+            {
+                // Item in `other` < `this`. That means `other` is not a subset!
+                return false;
+            }
+        }
+
+        return j == other.Count;
     }
     #endregion
 
@@ -219,9 +241,20 @@ internal class OrderedListSet<TItem>
         if (other.Count == 0)
             return false;
 
-        foreach (var item in other._items)
-            if (Contains(item))
+        // Move forward through both lists, checking if any item in `other` is in `this`
+        var i = 0;
+        var j = 0;
+        while (i < _items.Count && j < other.Count)
+        {
+            var cmp = _items[i].CompareTo(other._items[j]);
+
+            if (cmp < 0)
+                i++;
+            else if (cmp > 0)
+                j++;
+            else
                 return true;
+        }
 
         return false;
     }
@@ -262,8 +295,10 @@ internal class OrderedListSet<TItem>
 
         return a.SequenceEqual(b);
 #else
-        for (var i = other._items.Count - 1; i >= 0; i--)
-            if (!_items[i].Equals(other._items[i]))
+
+        // Both sets are in order, so lists should be identical
+        for (var i = 0; i < _items.Count; i++)
+            if (_items[i].CompareTo(other._items[i]) != 0)
                 return false;
 
         return true;

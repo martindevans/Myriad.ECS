@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Myriad.ECS.IDs;
 using Myriad.ECS.xxHash;
 
@@ -33,6 +35,7 @@ internal struct ComponentBloomFilter
         SetRandomBit(bytes, 703121798, ref _e);
         SetRandomBit(bytes, 133703782, ref _f);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static void SetRandomBit(Span<byte> bytes, ulong seed, ref ulong output)
         {
             var hash = xxHash64.ComputeHash(bytes, seed) & 0b0011_1111;
