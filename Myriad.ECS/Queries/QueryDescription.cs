@@ -424,6 +424,35 @@ public sealed class QueryDescription
         return default;
     }
 
+    /// <summary>
+    /// Get a single entity which this query matches, otherwise throws if none or multiple are found.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException">If none or multiple entities were found.</exception>
+    public Entity Single()
+    {
+        Entity? result = default;
+
+        foreach (var archetype in GetArchetypes())
+        {
+            if (archetype.Archetype.EntityCount > 0)
+            {
+                for (var i = 0; i < archetype.Archetype.Chunks.Count; i++)
+                {
+                    var chunk = archetype.Archetype.Chunks[i];
+                    if (chunk.EntityCount == 1 && result is null)
+                        result = chunk.Entities.Span[0];
+                    else if (chunk.EntityCount > 0)
+                        throw new InvalidOperationException("Multiple entities found");
+                }
+            }
+        }
+
+        if (result is null)
+            throw new InvalidOperationException("No entities found");
+        return result.Value;
+    }
+
     #region bulk write
     /// <summary>
     /// Overwrite a component for every entity which matches this query
