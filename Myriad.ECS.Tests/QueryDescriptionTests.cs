@@ -335,49 +335,269 @@ public class QueryDescriptionTests
     }
 
     [TestMethod]
-    public void FirstOrDefault()
+    public void First_ThrowsNoMatch()
     {
         var w = new WorldBuilder()
-            .Build();
-        var buffer = new CommandBuffer(w);
+           .Build();
 
         var q = new QueryBuilder()
-            .Include<Component0>()
-            .Build(w);
+               .Include<Component0>()
+               .Build(w);
 
-        var notFound = q.FirstOrDefault();
-        Assert.IsNull(notFound);
-
-        var e = buffer.Create().Set(new Component0());
-        using var resolver = buffer.Playback();
-
-        var found = q.FirstOrDefault();
-        Assert.IsNotNull(found);
-        Assert.AreEqual(found, e.Resolve());
+        Assert.ThrowsException<InvalidOperationException>(() => q.First());
     }
 
     [TestMethod]
-    public void Single()
+    public void First_MatchSingle()
     {
         var w = new WorldBuilder()
-            .Build();
-        var buffer = new CommandBuffer(w);
+           .Build();
 
         var q = new QueryBuilder()
-            .Include<Component0>()
-            .Build(w);
+               .Include<Component0>()
+               .Build(w);
 
-        Assert.ThrowsException<InvalidOperationException>(() => q.Single(), "Expected throw for no matches.");
+        var c = new CommandBuffer(w);
+        var eb = c.Create().Set(new Component0());
+        using var _ = c.Playback();
+        var e = eb.Resolve();
 
-        var e0 = buffer.Create().Set(new Component0());
-        using var resolver0 = buffer.Playback();
+        Assert.AreEqual(e, q.First());
+    }
 
-        var found = q.Single();
-        Assert.AreEqual(found, e0.Resolve());
+    [TestMethod]
+    public void First_MatchMultiple()
+    {
+        var w = new WorldBuilder()
+           .Build();
 
-        var e1 = buffer.Create().Set(new Component0()).Set(new Component1());
-        buffer.Playback();
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
 
-        Assert.ThrowsException<InvalidOperationException>(() => q.Single(), "Expected throw due to multiple matched entities.");
+        var c = new CommandBuffer(w);
+        var eb1 = c.Create().Set(new Component0());
+        var eb2 = c.Create().Set(new Component0());
+        using var _ = c.Playback();
+        var e1 = eb1.Resolve();
+        var e2 = eb2.Resolve();
+
+        Assert.IsTrue(new[] { e1, e2 }.Contains(q.First()));
+    }
+
+    [TestMethod]
+    public void FirstOrDefault_NullNoMatch()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        Assert.IsNull(q.FirstOrDefault());
+    }
+
+    [TestMethod]
+    public void FirstOrDefault_MatchSingle()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        var c = new CommandBuffer(w);
+        var eb = c.Create().Set(new Component0());
+        using var _ = c.Playback();
+        var e = eb.Resolve();
+
+        Assert.AreEqual(e, q.FirstOrDefault());
+    }
+
+    [TestMethod]
+    public void FirstOrDefault_MatchMultiple()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        var c = new CommandBuffer(w);
+        var eb1 = c.Create().Set(new Component0());
+        var eb2 = c.Create().Set(new Component0());
+        using var _ = c.Playback();
+        var e1 = eb1.Resolve();
+        var e2 = eb2.Resolve();
+
+        Assert.IsTrue(new[] { e1, e2 }.Contains(q.FirstOrDefault()!.Value));
+    }
+
+    [TestMethod]
+    public void SingleOrDefault_NullNoMatch()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        Assert.IsNull(q.SingleOrDefault());
+    }
+
+    [TestMethod]
+    public void SingleOrDefault_ThrowsMultipleMatch()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        var c = new CommandBuffer(w);
+        c.Create().Set(new Component0());
+        c.Create().Set(new Component0());
+        c.Playback().Dispose();
+
+        Assert.ThrowsException<InvalidOperationException>(() => q.SingleOrDefault());
+    }
+
+    [TestMethod]
+    public void SingleOrDefault_MatchSingle()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        var c = new CommandBuffer(w);
+        var eb = c.Create().Set(new Component0());
+        using var _ = c.Playback();
+        var e = eb.Resolve();
+
+        Assert.AreEqual(e, q.SingleOrDefault()!.Value);
+    }
+
+    [TestMethod]
+    public void Single_ThrowsMultipleMatch()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        var c = new CommandBuffer(w);
+        c.Create().Set(new Component0());
+        c.Create().Set(new Component0());
+        c.Playback().Dispose();
+
+        Assert.ThrowsException<InvalidOperationException>(() => q.Single());
+    }
+
+    [TestMethod]
+    public void Single_ThrowsNoMatch()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        Assert.ThrowsException<InvalidOperationException>(() => q.Single());
+    }
+
+    [TestMethod]
+    public void Single_MatchSingle()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        var c = new CommandBuffer(w);
+        var eb = c.Create().Set(new Component0());
+        using var _ = c.Playback();
+        var e = eb.Resolve();
+
+        Assert.AreEqual(e, q.Single());
+    }
+
+    [TestMethod]
+    public void Any_True()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        var c = new CommandBuffer(w);
+        var eb = c.Create().Set(new Component0());
+        using var _ = c.Playback();
+        var e = eb.Resolve();
+
+        Assert.IsTrue(q.Any());
+    }
+
+    [TestMethod]
+    public void Any_False()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        Assert.IsFalse(q.Any());
+    }
+
+    [TestMethod]
+    public void Contains_True()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        var c = new CommandBuffer(w);
+        var eb = c.Create().Set(new Component0());
+        using var _ = c.Playback();
+        var e = eb.Resolve();
+
+        Assert.IsTrue(q.Contains(e));
+    }
+
+    [TestMethod]
+    public void Contains_False()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        var c = new CommandBuffer(w);
+        var eb = c.Create();
+        using var _ = c.Playback();
+        var e = eb.Resolve();
+
+        Assert.IsFalse(q.Contains(e));
     }
 }

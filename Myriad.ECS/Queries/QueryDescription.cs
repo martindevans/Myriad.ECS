@@ -378,6 +378,7 @@ public sealed class QueryDescription
     }
     #endregion
 
+    #region LINQish
     /// <summary>
     /// Count how many entities match this query
     /// </summary>
@@ -403,6 +404,18 @@ public sealed class QueryDescription
     }
 
     /// <summary>
+    /// Check if this query description matches the given entity
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    public bool Contains(Entity entity)
+    {
+        var info = entity.World.GetEntityInfo(entity.ID);
+        var archetype = new ArchetypeMatch(info.Chunk.Archetype, null, null);
+        return GetArchetypes().Contains(archetype);
+    }
+
+    /// <summary>
     /// Get the first entity which this query matches (or null)
     /// </summary>
     /// <returns></returns>
@@ -410,14 +423,14 @@ public sealed class QueryDescription
     {
         foreach (var archetype in GetArchetypes())
         {
-            if (archetype.Archetype.EntityCount > 0)
+            if (archetype.Archetype.EntityCount == 0)
+                continue;
+            
+            for (var i = 0; i < archetype.Archetype.Chunks.Count; i++)
             {
-                for (var i = 0; i < archetype.Archetype.Chunks.Count; i++)
-                {
-                    var chunk = archetype.Archetype.Chunks[i];
-                    if (chunk.EntityCount > 0)
-                        return chunk.Entities.Span[0];
-                }
+                var chunk = archetype.Archetype.Chunks[i];
+                if (chunk.EntityCount > 0)
+                    return chunk.Entities.Span[0];
             }
         }
 
@@ -425,33 +438,58 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Get a single entity which this query matches, otherwise throws if none or multiple are found.
+    /// Get the first entity which this query matches (or throw if there are none)
     /// </summary>
     /// <returns></returns>
-    /// <exception cref="InvalidOperationException">If none or multiple entities were found.</exception>
-    public Entity Single()
+    /// <exception cref="InvalidOperationException">Thrown if there are no matches</exception>
+    public Entity First()
+    {
+        return FirstOrDefault()
+            ?? throw new InvalidOperationException("QueryDescription.First() found no matching entities");
+    }
+
+    /// <summary>
+    /// Get the single entity which this query matches (or null if there are none).
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException">Thrown if there are more than one matches</exception>
+    public Entity? SingleOrDefault()
     {
         Entity? result = default;
 
         foreach (var archetype in GetArchetypes())
         {
-            if (archetype.Archetype.EntityCount > 0)
+            if (archetype.Archetype.EntityCount == 0)
+                continue;
+            
+            for (var i = 0; i < archetype.Archetype.Chunks.Count; i++)
             {
-                for (var i = 0; i < archetype.Archetype.Chunks.Count; i++)
-                {
-                    var chunk = archetype.Archetype.Chunks[i];
-                    if (chunk.EntityCount == 1 && result is null)
-                        result = chunk.Entities.Span[0];
-                    else if (chunk.EntityCount > 0)
-                        throw new InvalidOperationException("Multiple entities found");
-                }
+                var chunk = archetype.Archetype.Chunks[i];
+                if (chunk.EntityCount == 0)
+                    continue;
+
+                if (chunk.EntityCount > 1 || result.HasValue)
+                    throw new InvalidOperationException("QueryDescription.SingleOrDefault() found more than one matching entity");
+
+                result = chunk.Entities.Span[0];
             }
+            
         }
 
-        if (result is null)
-            throw new InvalidOperationException("No entities found");
-        return result.Value;
+        return result;
     }
+
+    /// <summary>
+    /// Get a single entity which this query matches (throws if there is not exactly one match)
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException">If none or multiple entities were found.</exception>
+    public Entity Single()
+    {
+        return SingleOrDefault()
+            ?? throw new InvalidOperationException("QueryDescription.SingleOrDefault() found no matching entities");
+    }
+    #endregion
 
     #region bulk write
     /// <summary>
