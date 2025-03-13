@@ -1,4 +1,4 @@
-﻿using Myriad.ECS.Collections;
+using Myriad.ECS.Collections;
 using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
@@ -331,5 +331,27 @@ public class QueryDescriptionTests
 
             Assert.IsTrue(match.Archetype.Components.Contains(ComponentID<ComponentInt32>.ID));
         }
+    }
+
+    [TestMethod]
+    public void FirstOrDefault()
+    {
+        var w = new WorldBuilder()
+            .Build();
+        var buffer = new CommandBuffer(w);
+
+        var q = new QueryBuilder()
+            .Include<Component0>()
+            .Build(w);
+
+        var notFound = q.FirstOrDefault();
+        Assert.IsNull(notFound);
+
+        var e = buffer.Create().Set(new Component0());
+        using var resolver = buffer.Playback();
+
+        var found = q.FirstOrDefault();
+        Assert.IsNotNull(found);
+        Assert.AreEqual(found, e.Resolve());
     }
 }
