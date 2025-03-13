@@ -1,4 +1,5 @@
-using Myriad.ECS.Collections;
+﻿using Myriad.ECS.Collections;
+using Myriad.ECS.Command;
 using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
@@ -353,5 +354,30 @@ public class QueryDescriptionTests
         var found = q.FirstOrDefault();
         Assert.IsNotNull(found);
         Assert.AreEqual(found, e.Resolve());
+    }
+
+    [TestMethod]
+    public void Single()
+    {
+        var w = new WorldBuilder()
+            .Build();
+        var buffer = new CommandBuffer(w);
+
+        var q = new QueryBuilder()
+            .Include<Component0>()
+            .Build(w);
+
+        Assert.ThrowsException<InvalidOperationException>(() => q.Single(), "Expected throw for no matches.");
+
+        var e0 = buffer.Create().Set(new Component0());
+        using var resolver0 = buffer.Playback();
+
+        var found = q.Single();
+        Assert.AreEqual(found, e0.Resolve());
+
+        var e1 = buffer.Create().Set(new Component0()).Set(new Component1());
+        buffer.Playback();
+
+        Assert.ThrowsException<InvalidOperationException>(() => q.Single(), "Expected throw due to multiple matched entities.");
     }
 }
