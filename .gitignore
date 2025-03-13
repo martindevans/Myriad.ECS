@@ -1,5 +1,6 @@
 /TestResults
 /.vs
+/.idea
 /Myriad.ECS/obj
 /Myriad.ECS/bin
 /Myriad.ECS.Tests/obj
