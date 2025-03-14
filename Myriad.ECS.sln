@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myriad.ECS.Tests", "Myriad.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{680E8964-CA4A-4640-9A83-CCB38C32E028}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NBodyIntegrator", "NBodyIntegrator\NBodyIntegrator.csproj", "{90BEC8BE-67A3-484D-9CFF-91D3199D48DD}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D92C09B4-A191-46FE-AB1B-0C7E618F658E}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -36,10 +34,6 @@ Global
 		{680E8964-CA4A-4640-9A83-CCB38C32E028}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{680E8964-CA4A-4640-9A83-CCB38C32E028}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{680E8964-CA4A-4640-9A83-CCB38C32E028}.Release|Any CPU.Build.0 = Release|Any CPU
-		{90BEC8BE-67A3-484D-9CFF-91D3199D48DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{90BEC8BE-67A3-484D-9CFF-91D3199D48DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{90BEC8BE-67A3-484D-9CFF-91D3199D48DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{90BEC8BE-67A3-484D-9CFF-91D3199D48DD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FB7D000F-9BE2-44F7-B66D-B945F8331033}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FB7D000F-9BE2-44F7-B66D-B945F8331033}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB7D000F-9BE2-44F7-B66D-B945F8331033}.Release|Any CPU.ActiveCfg = Release|Any CPU
