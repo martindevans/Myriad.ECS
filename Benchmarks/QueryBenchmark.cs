@@ -9,12 +9,12 @@ using Myriad.ECS.Worlds;
 namespace Benchmarks;
 
 //[HardwareCounters(HardwareCounter.BranchMispredictions, HardwareCounter.BranchInstructions)]
-[ThreadingDiagnoser]
+//[ThreadingDiagnoser]
 //[MemoryDiagnoser]
-[ShortRunJob]
+//[ShortRunJob]
 public class QueryBenchmark
 {
-    [Params(100_000, 10_000_000)]
+    [Params(100_000, 1_000_000)]
     public int EntityCount = 1_000_000;
 
     private World _world = null!;
@@ -114,10 +114,10 @@ public class QueryBenchmark
         public readonly void Execute(Entity e, ref Position pos, ref Velocity vel)
         {
             pos.Value += vel.Value;
-            pos.Value += new Vector2(
-                (float)Math.Sqrt(Math.Abs(Math.Tanh(pos.Value.X))),
-                (float)Math.Tanh(pos.Value.Y)
-            );
+            //pos.Value += new Vector2(
+            //    (float)Math.Sqrt(Math.Abs(Math.Tanh(pos.Value.X))),
+            //    (float)Math.Tanh(pos.Value.Y)
+            //);
         }
     }
 
@@ -132,10 +132,10 @@ public class QueryBenchmark
 
                 posi.Value += vel[i].Value;
 
-                posi.Value += new Vector2(
-                    (float)Math.Sqrt(Math.Abs(Math.Tanh(posi.Value.X))),
-                    (float)Math.Tanh(posi.Value.Y)
-                );
+                //posi.Value += new Vector2(
+                //    (float)Math.Sqrt(Math.Abs(Math.Tanh(posi.Value.X))),
+                //    (float)Math.Tanh(posi.Value.Y)
+                //);
             }
         }
     }

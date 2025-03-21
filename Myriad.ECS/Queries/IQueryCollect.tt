@@ -1,0 +1,331 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+	const int PARAM_COUNT = 16;
+#>
+using Myriad.ECS.Queries;
+using System.Diagnostics.CodeAnalysis;
+
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedParameter.Global
+// ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable ConvertToPrimaryConstructor
+
+<# for (var i = 1; i <= PARAM_COUNT; i++)
+{
+	var queryConstraints = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
+#>
+namespace Myriad.ECS.Queries
+{
+	/// <summary>
+	/// A query which collects entities
+	/// </summary>
+	public interface IQueryCollector<<#= queryConstraints #>>
+		where <#= Constraints(i, 8) #>
+	{
+		/// <summary>
+		/// Execute the query for a single entity
+		/// </summary>
+		public void Add(Entity e, <#= Ins(0, i) #>);
+
+		/// <summary>
+		/// Expand the collection
+		/// </summary>
+		public void AddCapacity(int capacity);
+	}
+}
+
+namespace Myriad.ECS.Worlds
+{
+	public partial class World
+	{
+		private readonly struct CollectorAdapter<TQ, <#= queryConstraints #>>
+			: IChunkQuery<<#= queryConstraints #>>
+			where <#= Constraints(i, 12) #>
+			where TQ : IQueryCollector<<#= queryConstraints #>>
+		{
+			private readonly TQ _collector;
+
+            public CollectorAdapter(TQ collector)
+            {
+                _collector = collector;
+            }
+
+            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, <#= Refs(0, i) #>)
+            {
+                _collector.AddCapacity(e.Length);
+
+                for (var i = e.Length - 1; i >= 0; i--)
+                    _collector.Add(e[i], <#= CallParameters(i) #>);
+            }
+		}
+
+		private readonly struct ListCollectorEntityOnly<<#= queryConstraints #>>
+			: IQueryCollector<<#= queryConstraints #>>
+			where <#= Constraints(i, 12) #>
+		{
+			private readonly List<Entity> _list;
+
+            public ListCollectorEntityOnly(List<Entity> list)
+            {
+                _list = list;
+            }
+
+            public void Add(Entity e, <#= Ins(0, i) #>)
+            {
+                _list.Add(e);
+            }
+
+            public void AddCapacity(int capacity)
+            {
+                _list.Capacity += capacity;
+            }
+		}
+
+		/// <summary>
+		/// Collect all entities which match the query into a list
+		/// </summary>
+<# for (var k = 0; k < i; k++)
+{
+#>
+		/// <typeparam name="T<#= k #>">Component <#= k #> to include in query</typeparam>
+<#
+}
+#>
+		/// <param name="output">The list to add entities to.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
+		<#= CoverageAttribute(i) #>
+		public int Collect<<#= queryConstraints #>>(
+			List<Entity> output,
+			QueryDescription? query = null
+		)
+			where <#= Constraints(i, 12) #>
+		{
+			return Collect<
+				ListCollectorEntityOnly<<#= queryConstraints #>>,
+				<#= queryConstraints #>
+			>(
+				new ListCollectorEntityOnly<<#= queryConstraints #>>(output)
+			);
+		}
+
+		private readonly struct ListCollectorWithComponents<<#= queryConstraints #>>
+			: IQueryCollector<<#= queryConstraints #>>
+			where <#= Constraints(i, 12) #>
+		{
+			private readonly List<(Entity, <#= queryConstraints #>)> _list;
+
+            public ListCollectorWithComponents(List<(Entity, <#= queryConstraints #>)> list)
+            {
+                _list = list;
+            }
+
+            public void Add(Entity e, <#= Ins(0, i) #>)
+            {
+                _list.Add((e, <#= TupleComponents(0, i) #>));
+            }
+
+            public void AddCapacity(int capacity)
+            {
+                _list.Capacity += capacity;
+            }
+		}
+
+		/// <summary>
+		/// Collect all entities which match the query into a list
+		/// </summary>
+<# for (var k = 0; k < i; k++)
+{
+#>
+		/// <typeparam name="T<#= k #>">Component <#= k #> to include in query</typeparam>
+<#
+}
+#>
+		/// <param name="output">The list to add entities to.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
+		<#= CoverageAttribute(i) #>
+		public int Collect<<#= queryConstraints #>>(
+			List<(Entity, <#= queryConstraints #>)> output,
+			QueryDescription? query = null
+		)
+			where <#= Constraints(i, 12) #>
+		{
+			return Collect<
+				ListCollectorWithComponents<<#= queryConstraints #>>,
+				<#= queryConstraints #>
+			>(
+				new ListCollectorWithComponents<<#= queryConstraints #>>(output)
+			);
+		}
+
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+<# for (var k = 0; k < i; k++)
+{
+#>
+		/// <typeparam name="T<#= k #>">Component <#= k #> to include in query</typeparam>
+<#
+}
+#>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
+		<#= CoverageAttribute(i) #>
+		public int Collect<TQ, <#= queryConstraints #>>(
+			TQ q,
+			QueryDescription? query = null
+		)
+			where <#= Constraints(i, 12) #>
+			where TQ : IQueryCollector<<#= queryConstraints #>>
+		{
+			var ca = new CollectorAdapter<TQ, <#= queryConstraints #>>(q);
+			return ExecuteChunk
+			<
+				CollectorAdapter<TQ, <#= queryConstraints #>>,
+				<#= queryConstraints #>
+			>(
+				ca,
+				query
+			);
+		}
+
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+<# for (var k = 0; k < i; k++)
+{
+#>
+		/// <typeparam name="T<#= k #>">Component <#= k #> to include in query</typeparam>
+<#
+}
+#>
+		<#= DocsRefQueryDescription() #>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <returns>The number of entities discovered by this query</returns>
+		<#= CoverageAttribute(i) #>
+		public int Collect<TQ, <#= queryConstraints #>>(
+			TQ q,
+			ref QueryDescription? query
+		)
+			where <#= Constraints(i, 12) #>
+			where TQ : IQueryCollector<<#= queryConstraints #>>
+		{
+			return ExecuteChunk
+			<
+				CollectorAdapter<TQ, <#= queryConstraints #>>,
+				<#= queryConstraints #>
+			>(
+				new CollectorAdapter<TQ, <#= queryConstraints #>>(q),
+				ref query
+			);
+		}
+	}
+}
+<#
+}
+#>
+
+
+<#+ 
+	static string CoverageAttribute(int index)
+	{
+		if (index < 2)
+			return "";
+		return "[ExcludeFromCodeCoverage]";
+	}
+
+	static string DocsQueryDescription()
+	{
+		return @"
+		/// <param name=""query"">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		";
+	}
+
+	static string DocsRefQueryDescription()
+	{
+		return @"
+		/// <param name=""query"">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		";
+	}
+
+	static string Constraints(int count, int spaces = 4)
+    {
+		var prefix = new string(' ', spaces);
+        var str = string.Join(
+			$"\r\n{prefix}where ",
+			Enumerable.Range(0, count).Select(x => $"T{x} : IComponent")
+		);
+
+		return str;
+    }
+
+	static string Refs(int start, int count)
+	{
+		var str = string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"Span<T{x}> t{x}")
+		);
+
+		return str;
+	}
+
+	static string TupleComponents(int start, int count)
+	{
+		var str = string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"t{x}")
+		);
+
+		return str;
+	}
+
+	static string Ins(int start, int count)
+	{
+		return string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"ref T{x} t{x}")
+		);
+	}
+
+    static string CallParameters(int count)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(0, count).Select(x => $"ref t{x}[i]")
+        );
+
+        return str;
+    }
+
+	static string CallParametersPtr(int count)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(0, count).Select(x => $"ref t{x}ptr[i]")
+        );
+
+        return str;
+    }
+#>
