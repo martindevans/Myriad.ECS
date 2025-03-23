@@ -89,6 +89,7 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
         _world = world;
         _queryRoot = new QueryBuilder().Include<TLocalTransform, TWorldTransform>().Exclude<TransformParent>().Build(world);
         _query     = new QueryBuilder().Include<TLocalTransform, TWorldTransform>().Include<TransformParent>().Build(world);
+        _phase = DateTime.UtcNow.Millisecond;
     }
 
     /// <inheritdoc />
@@ -101,7 +102,16 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
         _world.Execute<RootUpdate, TLocalTransform, TWorldTransform>(new RootUpdate(_phase), _queryRoot);
 
         // Recursively update children (walking up tree from entities to parent)
-        _world.Execute<RecursiveUpdate, TLocalTransform, TWorldTransform, TransformParent>(new RecursiveUpdate(_phase), _query);
+        _world.Execute<RecursiveUpdate, TLocalTransform, TWorldTransform, TransformParent>(new RecursiveUpdate(this, _phase), _query);
+    }
+
+    /// <summary>
+    /// This will be called when a loop is detected. As soon as a loop is detected the last entity in the loop (arbitrary order) is treated
+    /// as the root.
+    /// </summary>
+    /// <param name="entity">One of the entities in the loop</param>
+    protected virtual void LoopDetected(Entity entity)
+    {
     }
 
     private static void Update(int phaseDone, ref TLocalTransform local, ref TWorldTransform world)
@@ -113,7 +123,7 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
         world.Phase = phaseDone;
     }
 
-    private static void Update(int phaseDone, int phaseWip, ref TLocalTransform local, ref TWorldTransform world, ref TransformParent parent)
+    private void Update(int phaseDone, int phaseWip, Entity entity, ref TLocalTransform local, ref TWorldTransform world, ref TransformParent parent)
     {
         // Early exit if this has already been updated in this phase
         if (world.Phase == phaseDone)
@@ -121,7 +131,11 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
 
         // Detect loops and early exit
         if (world.Phase == phaseWip)
+        {
+            world.Phase = phaseDone;
+            LoopDetected(entity);
             return;
+        }
 
         // Mark this object with the WIP flag, to detect and break loops later
         world.Phase = phaseWip;
@@ -141,9 +155,9 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
             {
                 ref var pLocalTrans = ref parent.Target.GetComponentRef<TLocalTransform>();
 
-                // Recursively update parent
+                // Update parent before using its transform
                 if (parent.Target.HasComponent<TransformParent>())
-                    Update(phaseDone, phaseWip, ref pLocalTrans, ref pWorldTrans, ref parent.Target.GetComponentRef<TransformParent>());
+                    Update(phaseDone, phaseWip, parent.Target, ref pLocalTrans, ref pWorldTrans, ref parent.Target.GetComponentRef<TransformParent>());
                 else
                     Update(phaseDone, ref pLocalTrans, ref pWorldTrans);
             }
@@ -180,11 +194,13 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
     private readonly struct RecursiveUpdate
         : IQuery<TLocalTransform, TWorldTransform, TransformParent>
     {
+        private readonly BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransform, TWorldTransform> _system;
         private readonly int _phaseDone;
         private readonly int _phaseWip;
 
-        public RecursiveUpdate(int phase)
+        public RecursiveUpdate(BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransform, TWorldTransform> system, int phase)
         {
+            _system = system;
             _phaseDone = phase;
 
             // Create another number that's different from the phase number. Doesn't really matter what, as long as it's
@@ -194,7 +210,7 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
 
         public void Execute(Entity e, ref TLocalTransform local, ref TWorldTransform world, ref TransformParent parent)
         {
-            Update(_phaseDone, _phaseWip, ref local, ref world, ref parent);
+            _system.Update(_phaseDone, _phaseWip, e, ref local, ref world, ref parent);
         }
     }
 }
