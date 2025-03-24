@@ -289,4 +289,31 @@ public sealed partial class World
 
         return ref info;
     }
+
+    /// <summary>
+    /// Get the info for the given entity, if the entity is dead returns a reference to dummy
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="dummy"></param>
+    /// <param name="isDummy"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    internal ref EntityInfo GetEntityInfo(EntityId entity, ref EntityInfo dummy, out bool isDummy)
+    {
+        if (entity.ID <= 0 || entity.ID >= _entities.TotalCapacity)
+        {
+            isDummy = true;
+            return ref dummy;
+        }
+
+        ref var info = ref _entities[entity.ID];
+        if (info.Version != entity.Version)
+        {
+            isDummy = true;
+            return ref dummy;
+        }
+
+        isDummy = false;
+        return ref info;
+    }
 }

@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.Queries;
+﻿using Myriad.ECS.IDs;
+using Myriad.ECS.Queries;
 using Myriad.ECS.Systems;
 using Myriad.ECS.Worlds;
 
@@ -74,6 +75,9 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
     where TWorldTransform : IWorldTransform<TTransform>
     where TTransform : ITransform<TTransform>
 {
+    private static readonly ComponentID WorldTransformID = ComponentID<TWorldTransform>.ID;
+    private static readonly ComponentID LocalTransformID = ComponentID<TLocalTransform>.ID;
+
     private readonly World _world;
     private readonly QueryDescription _queryRoot;
     private readonly QueryDescription _query;
@@ -140,35 +144,52 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
         // Mark this object with the WIP flag, to detect and break loops later
         world.Phase = phaseWip;
 
-        // Check status of parent entity
-        var parentHasWorld = parent.Target.IsAlive() && parent.Target.HasComponent<TWorldTransform>();
+        // Check if the parent is alive
+        var dummy = default(EntityInfo);
+        ref var parentInfo = ref _world.GetEntityInfo(parent.Target.ID, ref dummy, out var parentIsDead);
 
-        // If the parent doesn't exist or doesn't have a transform, treat this entity as a root
-        if (!parentHasWorld)
+        // Since we're not using the normal APIs, we need to manually handle phantom checks
+        var parentIsPhantom = !parentIsDead && parentInfo.Chunk.Archetype.IsPhantom;
+
+        if (parentIsDead || parentIsPhantom)
         {
+            // Parent is dead, just update this entity as if it is the root
             Update(phaseDone, ref local, ref world);
         }
         else
         {
-            ref var pWorldTrans = ref parent.Target.GetComponentRef<TWorldTransform>();
-            if (parent.Target.HasComponent<TLocalTransform>())
-            {
-                ref var pLocalTrans = ref parent.Target.GetComponentRef<TLocalTransform>();
+            // Check status of parent entity
+            var parentHasWorld = parentInfo.Chunk.Archetype.Components.Contains(WorldTransformID);
 
-                // Update parent before using its transform
-                if (parent.Target.HasComponent<TransformParent>())
-                    Update(phaseDone, phaseWip, parent.Target, ref pLocalTrans, ref pWorldTrans, ref parent.Target.GetComponentRef<TransformParent>());
-                else
-                    Update(phaseDone, ref pLocalTrans, ref pWorldTrans);
+            // If the parent doesn't exist or doesn't have a transform, treat this entity as a root
+            if (!parentHasWorld)
+            {
+                Update(phaseDone, ref local, ref world);
             }
             else
             {
-                // Parent has no local transform. Just mark it as done and transform relative to it.
-                pWorldTrans.Phase = phaseDone;
-            }
+                // Get reference to world transform for parent (directly accessing on chunk)
+                ref var pWorldTrans = ref parentInfo.Chunk.GetRef<TWorldTransform>(parentInfo.RowIndex, WorldTransformID);
 
-            // Transform relative to parent
-            world.Transform = pWorldTrans.Transform.Compose(local.Transform);
+                var parentHasLocal = parentInfo.Chunk.Archetype.Components.Contains(LocalTransformID);
+                if (parentHasLocal)
+                {
+                    // Get reference to local transform for parent (directly accessing on chunk)
+                    ref var pLocalTrans = ref parentInfo.Chunk.GetRef<TLocalTransform>(parentInfo.RowIndex, LocalTransformID);
+
+                    // Update parent before using its transform. Roots have already been updated, so this is only necessary for non-roots.
+                    if (parent.Target.HasComponent<TransformParent>())
+                        Update(phaseDone, phaseWip, parent.Target, ref pLocalTrans, ref pWorldTrans, ref parent.Target.GetComponentRef<TransformParent>());
+                }
+                else
+                {
+                    // Parent has no local transform. Just mark it as done and transform relative to it.
+                    pWorldTrans.Phase = phaseDone;
+                }
+
+                // Transform relative to parent
+                world.Transform = pWorldTrans.Transform.Compose(local.Transform);
+            }
         }
 
         // Mark this entity as done

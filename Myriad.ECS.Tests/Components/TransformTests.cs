@@ -118,6 +118,35 @@ public class TransformTests
     }
 
     [TestMethod]
+    public void DestroyedPhantomParent()
+    {
+        var w = new WorldBuilder().Build();
+        var c = new CommandBuffer(w);
+
+        var eb1 = c.Create()
+                   .Set(new Vector2LocalTransform { Transform = new(Vector2.UnitX) })
+                   .Set(new Vector2WorldTransform { Transform = new(new(10, 20)) })
+                   .Set(new TestPhantom0());
+
+        var eb2 = c.Create()
+                   .Set(new Vector2LocalTransform { Transform = new(Vector2.UnitY) })
+                   .Set(new Vector2WorldTransform())
+                   .Set(new TransformParent(), eb1);
+
+        using var _ = c.Playback();
+        var parent = eb1.Resolve();
+        var child = eb2.Resolve();
+
+        c.Delete(parent);
+        c.Playback().Dispose();
+
+        new TransformAddIntegers(w).Update(new GameTime());
+
+        Assert.AreEqual(Vector2.UnitY, child.GetComponentRef<Vector2LocalTransform>().Transform.Value);
+        Assert.AreEqual(Vector2.UnitY, child.GetComponentRef<Vector2WorldTransform>().Transform.Value);
+    }
+
+    [TestMethod]
     public void TwoChildrenParentEntityTransform()
     {
         var w = new WorldBuilder().Build();
