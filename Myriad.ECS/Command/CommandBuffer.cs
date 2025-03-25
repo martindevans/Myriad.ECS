@@ -374,6 +374,7 @@ public sealed partial class CommandBuffer
         _bufferedRelationBindings.Clear();
         _unbufferedRelationBindings.Clear();
 
+        unchecked { _version++; }
         _nextResolver.Dispose();
         _nextResolver = Pool<Resolver>.Get();
         _nextResolver.Configure(this);

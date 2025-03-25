@@ -30,6 +30,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		
 		private readonly struct CollectorAdapter<TQ, T0>
 			: IChunkQuery<T0>
 			where T0 : IComponent
@@ -51,6 +52,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		
 		private readonly struct ListCollectorEntityOnly<T0>
 			: IQueryCollector<T0>
 			where T0 : IComponent
@@ -95,6 +97,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		
 		private readonly struct ListCollectorWithComponents<T0>
 			: IQueryCollector<T0>
 			where T0 : IComponent
@@ -227,6 +230,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		private readonly struct CollectorAdapter<TQ, T0, T1>
 			: IChunkQuery<T0, T1>
 			where T0 : IComponent
@@ -249,6 +253,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorEntityOnly<T0, T1>
 			: IQueryCollector<T0, T1>
 			where T0 : IComponent
@@ -296,6 +301,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorWithComponents<T0, T1>
 			: IQueryCollector<T0, T1>
 			where T0 : IComponent
@@ -436,6 +442,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		private readonly struct CollectorAdapter<TQ, T0, T1, T2>
 			: IChunkQuery<T0, T1, T2>
 			where T0 : IComponent
@@ -459,6 +466,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorEntityOnly<T0, T1, T2>
 			: IQueryCollector<T0, T1, T2>
 			where T0 : IComponent
@@ -509,6 +517,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorWithComponents<T0, T1, T2>
 			: IQueryCollector<T0, T1, T2>
 			where T0 : IComponent
@@ -657,6 +666,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		private readonly struct CollectorAdapter<TQ, T0, T1, T2, T3>
 			: IChunkQuery<T0, T1, T2, T3>
 			where T0 : IComponent
@@ -681,6 +691,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorEntityOnly<T0, T1, T2, T3>
 			: IQueryCollector<T0, T1, T2, T3>
 			where T0 : IComponent
@@ -734,6 +745,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorWithComponents<T0, T1, T2, T3>
 			: IQueryCollector<T0, T1, T2, T3>
 			where T0 : IComponent
@@ -890,6 +902,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		private readonly struct CollectorAdapter<TQ, T0, T1, T2, T3, T4>
 			: IChunkQuery<T0, T1, T2, T3, T4>
 			where T0 : IComponent
@@ -915,6 +928,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorEntityOnly<T0, T1, T2, T3, T4>
 			: IQueryCollector<T0, T1, T2, T3, T4>
 			where T0 : IComponent
@@ -971,6 +985,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorWithComponents<T0, T1, T2, T3, T4>
 			: IQueryCollector<T0, T1, T2, T3, T4>
 			where T0 : IComponent
@@ -1135,6 +1150,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		private readonly struct CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5>
 			: IChunkQuery<T0, T1, T2, T3, T4, T5>
 			where T0 : IComponent
@@ -1161,6 +1177,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5>
 			where T0 : IComponent
@@ -1220,6 +1237,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorWithComponents<T0, T1, T2, T3, T4, T5>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5>
 			where T0 : IComponent
@@ -1392,6 +1410,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		private readonly struct CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6>
 			: IChunkQuery<T0, T1, T2, T3, T4, T5, T6>
 			where T0 : IComponent
@@ -1419,6 +1438,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6>
 			where T0 : IComponent
@@ -1481,6 +1501,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6>
 			where T0 : IComponent
@@ -1661,6 +1682,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		private readonly struct CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7>
 			: IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 			where T0 : IComponent
@@ -1689,6 +1711,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7>
 			where T0 : IComponent
@@ -1754,6 +1777,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7>
 			where T0 : IComponent
@@ -1942,6 +1966,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		private readonly struct CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>
 			: IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 			where T0 : IComponent
@@ -1971,6 +1996,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 			where T0 : IComponent
@@ -2039,6 +2065,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 			where T0 : IComponent
@@ -2235,6 +2262,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		private readonly struct CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 			: IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 			where T0 : IComponent
@@ -2265,6 +2293,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 			where T0 : IComponent
@@ -2336,6 +2365,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 			where T0 : IComponent
@@ -2540,6 +2570,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		private readonly struct CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 			: IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 			where T0 : IComponent
@@ -2571,6 +2602,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 			where T0 : IComponent
@@ -2645,6 +2677,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 			where T0 : IComponent
@@ -2857,6 +2890,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		private readonly struct CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 			: IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 			where T0 : IComponent
@@ -2889,6 +2923,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 			where T0 : IComponent
@@ -2966,6 +3001,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 			where T0 : IComponent
@@ -3186,6 +3222,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		private readonly struct CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 			: IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 			where T0 : IComponent
@@ -3219,6 +3256,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 			where T0 : IComponent
@@ -3299,6 +3337,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 			where T0 : IComponent
@@ -3527,6 +3566,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		private readonly struct CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 			: IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 			where T0 : IComponent
@@ -3561,6 +3601,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 			where T0 : IComponent
@@ -3644,6 +3685,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 			where T0 : IComponent
@@ -3880,6 +3922,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		private readonly struct CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 			: IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 			where T0 : IComponent
@@ -3915,6 +3958,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 			where T0 : IComponent
@@ -4001,6 +4045,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 			where T0 : IComponent
@@ -4245,6 +4290,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		[ExcludeFromCodeCoverage]
 		private readonly struct CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 			: IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 			where T0 : IComponent
@@ -4281,6 +4327,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 			where T0 : IComponent
@@ -4370,6 +4417,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 			: IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 			where T0 : IComponent

@@ -39,6 +39,12 @@ public readonly partial record struct Entity
         World = world;
     }
 
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        return ID.ToString();
+    }
+
     /// <summary>
     /// Check if this Entity still exists.
     /// </summary>

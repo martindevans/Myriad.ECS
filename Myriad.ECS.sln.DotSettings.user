@@ -4,12 +4,7 @@
   &lt;Project Location="C:\Users\Martin\Documents\dotnet\Myriad.ECS\Myriad.ECS.Tests" Presentation="&amp;lt;Myriad.ECS.Tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=886ec060_002Dc925_002D46e4_002D8107_002D9ec6364d4adb/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;And&gt;&#xD;
-    &lt;Project Location="C:\Users\Martin\Documents\dotnet\Myriad.ECS\Myriad.ECS.Tests" Presentation="&amp;lt;Myriad.ECS.Tests&amp;gt;" /&gt;&#xD;
-    &lt;TestAncestor&gt;&#xD;
-      &lt;TestId&gt;MSTest::6DD3CD1E-78C3-4A77-9652-75C8C136D788::net8.0::Myriad.ECS.Tests.Components.TransformTests&lt;/TestId&gt;&#xD;
-    &lt;/TestAncestor&gt;&#xD;
-  &lt;/And&gt;&#xD;
+  &lt;Project Location="C:\Users\Martin\Documents\dotnet\Myriad.ECS\Myriad.ECS.Tests" Presentation="&amp;lt;Myriad.ECS.Tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	
 	

@@ -41,6 +41,7 @@ public class CommandBufferTests
         var buffer = new CommandBuffer(world);
 
         var eb = buffer.Create();
+        Assert.AreEqual(buffer, eb.CommandBuffer);
 
         using var resolver = buffer.Playback();
         var entity = eb.Resolve();
@@ -457,6 +458,22 @@ public class CommandBufferTests
         Assert.IsTrue(entities[2].Exists());
 
         Assert.AreEqual(3, entities[2].GetComponentRef<ComponentFloat>().Value);
+    }
+
+    [TestMethod]
+    public void DeleteByQueryMixedWorlds()
+    {
+        var world1 = new WorldBuilder().Build();
+        var world2 = new WorldBuilder().Build();
+
+        var cmd = new CommandBuffer(world1);
+
+        var q = new QueryBuilder().Include<Component0>().Build(world2);
+
+        Assert.ThrowsException<ArgumentException>(() =>
+        {
+            cmd.Delete(q);
+        });
     }
 
     [TestMethod]
@@ -965,7 +982,7 @@ public class CommandBufferTests
     }
 
     [TestMethod]
-    public void ClearBufferSet()
+    public void ClearSet()
     {
         var world = new WorldBuilder().Build();
         var cmd = new CommandBuffer(world);
@@ -983,6 +1000,43 @@ public class CommandBufferTests
 
         Assert.IsTrue(e.HasComponent<Component0>());
         Assert.IsFalse(e.HasComponent<Component1>());
+    }
+
+    [TestMethod]
+    public void ClearBufferedSet()
+    {
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+
+        // Create an entity
+        var eb = cmd.Create().Set(new Component0());
+        var r = cmd.Playback();
+        var e = eb.Resolve();
+        r.Dispose();
+
+        // Create another entity then clear
+        cmd.Create().Set(new Component0());
+        cmd.Clear();
+        cmd.Playback().Dispose();
+
+        Assert.AreEqual(1, new QueryBuilder().Include<Component0>().Build(world).Count());
+    }
+
+    [TestMethod]
+    public void ResolveClearedEntity()
+    {
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+
+        // Create an entity
+        var eb = cmd.Create().Set(new Component0());
+        cmd.Clear();
+        cmd.Playback();
+
+        Assert.ThrowsException<ObjectDisposedException>(() =>
+        {
+            eb.Resolve();
+        });
     }
 
     [TestMethod]

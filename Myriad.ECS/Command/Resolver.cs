@@ -39,6 +39,11 @@ public sealed partial class CommandBuffer
             if (Parent == null)
                 throw new ObjectDisposedException(nameof(Resolver));
 
+            unchecked
+            {
+                Version--;
+            }
+
             Parent = null;
             Lookup.Clear();
 

@@ -28,6 +28,12 @@ public readonly partial record struct EntityId
         Version = version;
     }
 
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        return $"{ID}v{Version}";
+    }
+
     /// <summary>
     /// Create a new <see cref="Entity"/> struct that represents this Entity
     /// </summary>

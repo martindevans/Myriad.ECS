@@ -53,6 +53,11 @@ public sealed partial class CommandBuffer
             where T : IComponent
         {
             CheckIsMutable();
+
+            // Redirect to bind to self
+            if (typeof(T) == typeof(SelfReference))
+                return Set(new SelfReference(), this, duplicateMode);
+
             _buffer.SetBuffered(_id, value, duplicateMode);
             return this;
         }
@@ -71,10 +76,8 @@ public sealed partial class CommandBuffer
             CheckIsMutable();
 
             if (typeof(T) == typeof(SelfReference))
-            {
                 if (relation != this)
                     throw new InvalidOperationException("Cannot bind `SelfReference` to another Entity");
-            }
 
             _buffer.SetBuffered(_id, value, relation, duplicateMode);
             return this;

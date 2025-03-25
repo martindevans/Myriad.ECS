@@ -43,6 +43,7 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		<#= CoverageAttribute(i) #>
 		private readonly struct CollectorAdapter<TQ, <#= queryConstraints #>>
 			: IChunkQuery<<#= queryConstraints #>>
 			where <#= Constraints(i, 12) #>
@@ -64,6 +65,7 @@ namespace Myriad.ECS.Worlds
             }
 		}
 
+		<#= CoverageAttribute(i) #>
 		private readonly struct ListCollectorEntityOnly<<#= queryConstraints #>>
 			: IQueryCollector<<#= queryConstraints #>>
 			where <#= Constraints(i, 12) #>
@@ -114,6 +116,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		<#= CoverageAttribute(i) #>
 		private readonly struct ListCollectorWithComponents<<#= queryConstraints #>>
 			: IQueryCollector<<#= queryConstraints #>>
 			where <#= Constraints(i, 12) #>
