@@ -600,4 +600,67 @@ public class QueryDescriptionTests
 
         Assert.IsFalse(q.Contains(e));
     }
+
+    [TestMethod]
+    public void Random_NullNoMatch()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        var rng = new Random(123);
+
+        Assert.IsNull(q.RandomOrDefault(rng));
+    }
+
+    [TestMethod]
+    public void Random_MatchSingle()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        var c = new CommandBuffer(w);
+        var eb = c.Create().Set(new Component0());
+        using var _ = c.Playback();
+        var e = eb.Resolve();
+
+        var r = new Random(123);
+
+        Assert.AreEqual(e, q.RandomOrDefault(r));
+    }
+
+    [TestMethod]
+    public void Random_MatchRandom()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<ComponentInt32>()
+               .Build(w);
+
+        var c = new CommandBuffer(w);
+        for (var i = 0; i < 10000; i++)
+            c.Create().Set(new ComponentInt32(i));
+        for (var i = 0; i < 10000; i++)
+            c.Create().Set(new ComponentInt32(i)).Set(new Component0());
+        for (var i = 0; i < 10000; i++)
+            c.Create().Set(new ComponentInt32(i)).Set(new Component1());
+        using var resolver = c.Playback();
+        var entities = new List<Entity>();
+        for (var i = 0; i < resolver.Count; i++)
+            entities.Add(resolver[i]);
+
+        var r = new Random(123);
+
+        for (var i = 0; i < 1000; i++)
+            Assert.IsTrue(entities.Contains(q.RandomOrDefault(r)!.Value));
+    }
 }

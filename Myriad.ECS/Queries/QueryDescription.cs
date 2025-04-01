@@ -489,6 +489,54 @@ public sealed class QueryDescription
         return SingleOrDefault()
             ?? throw new InvalidOperationException("QueryDescription.SingleOrDefault() found no matching entities");
     }
+
+    /// <summary>
+    /// Get a random entity matched by this query (or null if there are none).
+    /// </summary>
+    /// <param name="random"></param>
+    /// <returns></returns>
+    public Entity? RandomOrDefault(Random random)
+    {
+        // Get total entity count
+        var count = Count();
+        if (count == 0)
+            return default;
+
+        // Choose the index of the entity
+        var choice = random.Next(0, count);
+
+        // Find that entity
+        foreach (var archetype in GetArchetypes())
+        {
+            // Check if it's within this archetype, if not move to the next archetype
+            if (choice - archetype.Archetype.EntityCount >= 0)
+            {
+                choice -= archetype.Archetype.EntityCount;
+            }
+            else
+            {
+                // Step through chunks
+                var chunks = archetype.Archetype.Chunks;
+                for (var i = 0; i < chunks.Count; i++)
+                {
+                    var chunk = chunks[i];
+
+                    // Check if it's within this chunk, if not move to next chunk
+                    if (choice - chunk.EntityCount >= 0)
+                    {
+                        choice -= chunk.EntityCount;
+                    }
+                    else
+                    {
+                        return chunk.Entities.Span[choice];
+                    }
+                }
+            }
+        }
+
+        // This shouldn't happen
+        return default;
+    }
     #endregion
 
     #region bulk write
