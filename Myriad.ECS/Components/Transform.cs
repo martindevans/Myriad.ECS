@@ -77,12 +77,12 @@ public interface IWorldTransform<TTransform>
 /// <typeparam name="TLocalTransform">Component type of local transforms</typeparam>
 /// <typeparam name="TWorldTransform">Component type of world transforms</typeparam>
 /// <typeparam name="TTransform">Component type of transforms (e.g. a Matrix)</typeparam>
-/// <typeparam name="TParentTransform">Component which indicates the parent transform of an entity</typeparam>
-public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransform, TWorldTransform, TParentTransform>
+/// <typeparam name="TTransformParent">Component which indicates the parent transform of an entity</typeparam>
+public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransform, TWorldTransform, TTransformParent>
     : ISystem<TData>
     where TLocalTransform : ILocalTransform<TTransform>
     where TWorldTransform : IWorldTransform<TTransform>
-    where TParentTransform : ITransformParent
+    where TTransformParent : ITransformParent
     where TTransform : ITransform<TTransform>
 {
     private static readonly ComponentID WorldTransformID = ComponentID<TWorldTransform>.ID;
@@ -101,8 +101,8 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
     public BaseUpdateTransformHierarchySystem(World world)
     {
         _world = world;
-        _queryRoot = new QueryBuilder().Include<TLocalTransform, TWorldTransform>().Exclude<TParentTransform>().Build(world);
-        _query     = new QueryBuilder().Include<TLocalTransform, TWorldTransform>().Include<TParentTransform>().Build(world);
+        _queryRoot = new QueryBuilder().Include<TLocalTransform, TWorldTransform>().Exclude<TTransformParent>().Build(world);
+        _query     = new QueryBuilder().Include<TLocalTransform, TWorldTransform>().Include<TTransformParent>().Build(world);
         _phase = DateTime.UtcNow.Millisecond;
     }
 
@@ -116,7 +116,7 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
         _world.Execute<RootUpdate, TLocalTransform, TWorldTransform>(new RootUpdate(_phase), _queryRoot);
 
         // Recursively update children (walking up tree from entities to parent)
-        _world.Execute<RecursiveUpdate, TLocalTransform, TWorldTransform, TParentTransform>(new RecursiveUpdate(this, _phase), _query);
+        _world.Execute<RecursiveUpdate, TLocalTransform, TWorldTransform, TTransformParent>(new RecursiveUpdate(this, _phase), _query);
     }
 
     /// <summary>
@@ -134,7 +134,7 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
         world.Phase = phaseDone;
     }
 
-    private void Update(int phaseDone, int phaseWip, Entity entity, ref TLocalTransform local, ref TWorldTransform world, ref TParentTransform parent)
+    private void Update(int phaseDone, int phaseWip, Entity entity, ref TLocalTransform local, ref TWorldTransform world, ref TTransformParent parent)
     {
         // Early exit if this has already been updated in this phase
         if (world.Phase == phaseDone)
@@ -179,8 +179,8 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
                 ref var pLocalTrans = ref parentInfo.Chunk.GetRef<TLocalTransform>(parentInfo.RowIndex, LocalTransformID);
 
                 // Update parent before using its transform. Roots have already been updated, so this is only necessary for non-roots.
-                if (parent.Target.HasComponent<TParentTransform>())
-                    Update(phaseDone, phaseWip, parent.Target, ref pLocalTrans, ref pWorldTrans, ref parent.Target.GetComponentRef<TParentTransform>());
+                if (parent.Target.HasComponent<TTransformParent>())
+                    Update(phaseDone, phaseWip, parent.Target, ref pLocalTrans, ref pWorldTrans, ref parent.Target.GetComponentRef<TTransformParent>());
             }
             else
             {
@@ -213,13 +213,13 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
     }
 
     private readonly struct RecursiveUpdate
-        : IQuery<TLocalTransform, TWorldTransform, TParentTransform>
+        : IQuery<TLocalTransform, TWorldTransform, TTransformParent>
     {
-        private readonly BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransform, TWorldTransform, TParentTransform> _system;
+        private readonly BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransform, TWorldTransform, TTransformParent> _system;
         private readonly int _phaseDone;
         private readonly int _phaseWip;
 
-        public RecursiveUpdate(BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransform, TWorldTransform, TParentTransform> system, int phase)
+        public RecursiveUpdate(BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransform, TWorldTransform, TTransformParent> system, int phase)
         {
             _system = system;
             _phaseDone = phase;
@@ -229,7 +229,7 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
             _phaseWip = phase ^ 0b1010101010101010101010101010101;
         }
 
-        public void Execute(Entity e, ref TLocalTransform local, ref TWorldTransform world, ref TParentTransform parent)
+        public void Execute(Entity e, ref TLocalTransform local, ref TWorldTransform world, ref TTransformParent parent)
         {
             _system.Update(_phaseDone, _phaseWip, e, ref local, ref world, ref parent);
         }
