@@ -276,7 +276,7 @@ public class TransformTests
     }
 
     private class TransformAddIntegers
-        : BaseUpdateTransformHierarchySystem<GameTime, Vector2Transform, Vector2LocalTransform, Vector2WorldTransform>
+        : BaseUpdateTransformHierarchySystem<GameTime, Vector2Transform, Vector2LocalTransform, Vector2WorldTransform, TransformParent>
     {
         public int LoopCount;
 
