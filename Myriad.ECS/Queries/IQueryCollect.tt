@@ -16,6 +16,101 @@ using System.Runtime.CompilerServices;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable ConvertToPrimaryConstructor
 
+namespace Myriad.ECS.Worlds
+{
+	public partial class World
+	{
+		/// <summary>
+		/// A query which collects entities
+		/// </summary>
+		public interface IQueryCollector
+		{
+			/// <summary>
+			/// Execute the query for a single entity
+			/// </summary>
+			public void Add(Entity e);
+
+			/// <summary>
+			/// Expand the collection
+			/// </summary>
+			public void AddCapacity(int capacity);
+		}
+		
+		private readonly struct CollectorAdapter<TQ>
+			: IChunkQuery
+			where TQ : IQueryCollector
+		{
+			private readonly TQ _collector;
+
+            public CollectorAdapter(TQ collector)
+            {
+                _collector = collector;
+            }
+
+            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e)
+            {
+                _collector.AddCapacity(e.Length);
+
+                for (var i = e.Length - 1; i >= 0; i--)
+                    _collector.Add(e[i]);
+            }
+		}
+
+		private readonly struct ListCollectorEntityOnly
+			: IQueryCollector
+		{
+			private readonly List<Entity> _list;
+
+            public ListCollectorEntityOnly(List<Entity> list)
+            {
+                _list = list;
+            }
+
+            public void Add(Entity e)
+            {
+                _list.Add(e);
+            }
+
+            public void AddCapacity(int capacity)
+            {
+                _list.Capacity += capacity;
+            }
+		}
+
+		/// <summary>
+		/// Collect all entities which match the query into a list
+		/// </summary>
+		/// <param name="output">The list to add entities to.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int Collect(
+			List<Entity> output,
+			QueryDescription query
+		)
+		{
+			return Collect(new ListCollectorEntityOnly(output), query);
+		}
+
+		/// <summary>
+		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
+		/// </summary>
+		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
+		/// <param name="q">The instance to execute over every entity.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int Collect<TQ>(
+			TQ q,
+			QueryDescription query
+		)
+			where TQ : IQueryCollector
+		{
+			return ExecuteChunk(new CollectorAdapter<TQ>(q), query);
+		}
+	}
+}
+
 <# for (var i = 1; i <= PARAM_COUNT; i++)
 {
 	var queryConstraints = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
