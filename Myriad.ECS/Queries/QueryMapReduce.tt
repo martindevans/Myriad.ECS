@@ -58,7 +58,13 @@ namespace Myriad.ECS.Queries
 	/// <summary>
 	/// Map from a set of components to a single value
 	/// </summary>
-	public delegate TOutput MapperDelegate<out TOutput, <#= generics #>>(Entity entity, <#= Refs(0, i) #>)
+	public delegate TOutput MapperDelegate<out TOutput, <#= generics #>>(<#= Refs(0, i) #>)
+		where <#= Constraints(sumij, 8) #>;
+
+	/// <summary>
+	/// Map from a set of components to a single value
+	/// </summary>
+	public delegate TOutput MapperDelegateEntity<out TOutput, <#= generics #>>(Entity entity, <#= Refs(0, i) #>)
 		where <#= Constraints(sumij, 8) #>;
 }
 
@@ -66,6 +72,52 @@ namespace Myriad.ECS.Worlds
 {
 	public partial class World
 	{
+		/// <summary>
+		/// Execute a query, mapping every result to a value and then reducing those values to
+		/// one final output value.
+		/// </summary>
+		/// <param name="initial">Initial value to seed the reducer. If no entities are
+		/// matched this is returned.</param>
+		/// <param name="mapper">Delegate to extract values from entities</param>
+		/// <param name="query">Query to select matched entities</param>
+		/// <returns>A value calculated by reducing all intermediate values</returns>
+		<#= CoverageAttribute(i) #>
+		public TOutput ExecuteMapReduce<TReducer, TOutput, <#= generics #>>(
+			TOutput initial,
+			MapperDelegateEntity<TOutput, <#= generics #>> mapper,
+			QueryDescription? query = null
+		)
+			where <#= Constraints(sumij, 12) #>
+			where TReducer : IQueryReduce<TOutput>, new()
+		{
+			var mapperWrapper = new EntityDelegateStructMapper<TOutput, <#= generics #>>(mapper);
+            var reducer = new TReducer();
+
+			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, <#= generics #>>, TReducer, TOutput, <#= generics #>>(
+				ref mapperWrapper,
+				ref reducer,
+				initial,
+				ref query
+			);
+		}
+
+		private readonly struct EntityDelegateStructMapper<TOutput, <#= generics #>>
+			: IQueryMap<TOutput, <#= generics #>>
+			where <#= Constraints(sumij, 8) #>
+		{
+			private readonly MapperDelegateEntity<TOutput, <#= generics #>> _mapper;
+
+            public EntityDelegateStructMapper(MapperDelegateEntity<TOutput, <#= generics #>> mapper)
+            {
+                _mapper = mapper;
+            }
+
+            public TOutput Execute(Entity e, <#= Refs(0, sumij) #>)
+            {
+                return _mapper.Invoke(e, <#= DelegateCallParameters(sumij) #>);
+            }
+		}
+
 		/// <summary>
 		/// Execute a query, mapping every result to a value and then reducing those values to
 		/// one final output value.
@@ -108,7 +160,7 @@ namespace Myriad.ECS.Worlds
 
             public TOutput Execute(Entity e, <#= Refs(0, sumij) #>)
             {
-                return _mapper.Invoke(e, <#= DelegateCallParameters(sumij) #>);
+                return _mapper.Invoke(<#= DelegateCallParameters(sumij) #>);
             }
 		}
 

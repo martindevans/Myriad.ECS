@@ -53,6 +53,8 @@ public class EntityTests
         Assert.AreNotEqual(c1, c2);
         Assert.AreNotEqual(0, c1);
         Assert.AreNotEqual(0, c2);
+
+        Assert.AreNotEqual(entity1.ToString(), entity2.ToString());
     }
 
     [TestMethod]

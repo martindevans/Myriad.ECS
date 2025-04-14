@@ -22,7 +22,7 @@ public class TransformTests
         var e = eb.Resolve();
 
         // Run update and check
-        new TransformAddIntegers(w).Update(new GameTime());
+        new TransformVector2(w).Update(new GameTime());
         Assert.AreEqual(Vector2.One, e.GetComponentRef<Vector2LocalTransform>().Transform.Value);
         Assert.AreEqual(Vector2.One, e.GetComponentRef<Vector2WorldTransform>().Transform.Value);
 
@@ -30,7 +30,7 @@ public class TransformTests
         e.GetComponentRef<Vector2LocalTransform>().Transform = new Vector2Transform(new(3, 4));
 
         // Run update and check
-        new TransformAddIntegers(w).Update(new GameTime());
+        new TransformVector2(w).Update(new GameTime());
         Assert.AreEqual(new Vector2(3, 4), e.GetComponentRef<Vector2LocalTransform>().Transform.Value);
         Assert.AreEqual(new Vector2(3, 4), e.GetComponentRef<Vector2WorldTransform>().Transform.Value);
     }
@@ -54,7 +54,7 @@ public class TransformTests
         var parent = eb1.Resolve();
         var child = eb2.Resolve();
 
-        new TransformAddIntegers(w).Update(new GameTime());
+        new TransformVector2(w).Update(new GameTime());
 
         Assert.AreEqual(Vector2.UnitX, parent.GetComponentRef<Vector2LocalTransform>().Transform.Value);
         Assert.AreEqual(Vector2.UnitX, parent.GetComponentRef<Vector2WorldTransform>().Transform.Value);
@@ -81,7 +81,7 @@ public class TransformTests
         var parent = eb1.Resolve();
         var child = eb2.Resolve();
 
-        new TransformAddIntegers(w).Update(new GameTime());
+        new TransformVector2(w).Update(new GameTime());
 
         Assert.AreEqual(Vector2.UnitX, parent.GetComponentRef<Vector2WorldTransform>().Transform.Value);
 
@@ -111,7 +111,7 @@ public class TransformTests
         c.Delete(parent);
         c.Playback().Dispose();
 
-        new TransformAddIntegers(w).Update(new GameTime());
+        new TransformVector2(w).Update(new GameTime());
 
         Assert.AreEqual(Vector2.UnitY, child.GetComponentRef<Vector2LocalTransform>().Transform.Value);
         Assert.AreEqual(Vector2.UnitY, child.GetComponentRef<Vector2WorldTransform>().Transform.Value);
@@ -140,7 +140,7 @@ public class TransformTests
         c.Delete(parent);
         c.Playback().Dispose();
 
-        new TransformAddIntegers(w).Update(new GameTime());
+        new TransformVector2(w).Update(new GameTime());
 
         Assert.AreEqual(Vector2.UnitY, child.GetComponentRef<Vector2LocalTransform>().Transform.Value);
         Assert.AreEqual(Vector2.UnitY, child.GetComponentRef<Vector2WorldTransform>().Transform.Value);
@@ -171,7 +171,7 @@ public class TransformTests
         var child2 = eb2.Resolve();
         var child3 = eb3.Resolve();
 
-        new TransformAddIntegers(w).Update(new GameTime());
+        new TransformVector2(w).Update(new GameTime());
 
         Assert.AreEqual(Vector2.UnitX, parent.GetComponentRef<Vector2LocalTransform>().Transform.Value);
         Assert.AreEqual(Vector2.UnitX, parent.GetComponentRef<Vector2WorldTransform>().Transform.Value);
@@ -208,7 +208,7 @@ public class TransformTests
         var child2 = eb2.Resolve();
         var child3 = eb3.Resolve();
 
-        new TransformAddIntegers(w).Update(new GameTime());
+        new TransformVector2(w).Update(new GameTime());
 
         Assert.AreEqual(Vector2.UnitX, parent.GetComponentRef<Vector2LocalTransform>().Transform.Value);
         Assert.AreEqual(Vector2.UnitX, parent.GetComponentRef<Vector2WorldTransform>().Transform.Value);
@@ -247,7 +247,7 @@ public class TransformTests
         var e2 = eb2.Resolve();
         var e3 = eb3.Resolve();
 
-        var sys = new TransformAddIntegers(w);
+        var sys = new TransformVector2(w);
         sys.Update(new GameTime());
         Assert.AreEqual(1, sys.LoopCount);
 
@@ -275,12 +275,12 @@ public class TransformTests
         Assert.AreEqual(3 * Vector2.UnitX, wtransforms[(root + 2) % wtransforms.Length]);
     }
 
-    private class TransformAddIntegers
+    private class TransformVector2
         : BaseUpdateTransformHierarchySystem<GameTime, Vector2Transform, Vector2LocalTransform, Vector2WorldTransform, TransformParent>
     {
         public int LoopCount;
 
-        public TransformAddIntegers(World world)
+        public TransformVector2(World world)
             : base(world)
         {
         }
