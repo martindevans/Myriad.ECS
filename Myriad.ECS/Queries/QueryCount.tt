@@ -9,6 +9,7 @@
 #>
 using Myriad.ECS.Queries;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -37,6 +38,7 @@ public partial class World
     /// </summary>
     /// <param name="query"></param>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count(QueryDescription query)
     {
         return query.Count();
@@ -53,6 +55,7 @@ for (var i = 1; i <= PARAM_COUNT; i++)
     /// </summary>
     /// <returns></returns>
     <#= CoverageAttribute(i) #>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<#= tparams #>()
         <#= Constraints(i, 8) #>
     {
@@ -66,6 +69,7 @@ for (var i = 1; i <= PARAM_COUNT; i++)
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     <#= CoverageAttribute(i) #>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<#= tparams #>(ref QueryDescription? cache)
         <#= Constraints(i, 8) #>
     {

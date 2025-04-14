@@ -1,5 +1,6 @@
 ﻿using Myriad.ECS.Queries;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -28,6 +29,7 @@ public partial class World
     /// </summary>
     /// <param name="query"></param>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count(QueryDescription query)
     {
         return query.Count();
@@ -38,6 +40,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0>()
         where T0 : IComponent
     {
@@ -51,6 +54,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0>(ref QueryDescription? cache)
         where T0 : IComponent
     {
@@ -63,6 +67,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1>()
         where T0 : IComponent
         where T1 : IComponent
@@ -77,6 +82,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1>(ref QueryDescription? cache)
         where T0 : IComponent
         where T1 : IComponent
@@ -90,6 +96,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2>()
         where T0 : IComponent
         where T1 : IComponent
@@ -105,6 +112,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2>(ref QueryDescription? cache)
         where T0 : IComponent
         where T1 : IComponent
@@ -119,6 +127,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3>()
         where T0 : IComponent
         where T1 : IComponent
@@ -135,6 +144,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3>(ref QueryDescription? cache)
         where T0 : IComponent
         where T1 : IComponent
@@ -150,6 +160,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4>()
         where T0 : IComponent
         where T1 : IComponent
@@ -167,6 +178,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4>(ref QueryDescription? cache)
         where T0 : IComponent
         where T1 : IComponent
@@ -183,6 +195,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5>()
         where T0 : IComponent
         where T1 : IComponent
@@ -201,6 +214,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5>(ref QueryDescription? cache)
         where T0 : IComponent
         where T1 : IComponent
@@ -218,6 +232,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6>()
         where T0 : IComponent
         where T1 : IComponent
@@ -237,6 +252,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6>(ref QueryDescription? cache)
         where T0 : IComponent
         where T1 : IComponent
@@ -255,6 +271,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7>()
         where T0 : IComponent
         where T1 : IComponent
@@ -275,6 +292,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7>(ref QueryDescription? cache)
         where T0 : IComponent
         where T1 : IComponent
@@ -294,6 +312,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
         where T0 : IComponent
         where T1 : IComponent
@@ -315,6 +334,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref QueryDescription? cache)
         where T0 : IComponent
         where T1 : IComponent
@@ -335,6 +355,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
         where T0 : IComponent
         where T1 : IComponent
@@ -357,6 +378,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref QueryDescription? cache)
         where T0 : IComponent
         where T1 : IComponent
@@ -378,6 +400,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
         where T0 : IComponent
         where T1 : IComponent
@@ -401,6 +424,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref QueryDescription? cache)
         where T0 : IComponent
         where T1 : IComponent
@@ -423,6 +447,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
         where T0 : IComponent
         where T1 : IComponent
@@ -447,6 +472,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref QueryDescription? cache)
         where T0 : IComponent
         where T1 : IComponent
@@ -470,6 +496,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
         where T0 : IComponent
         where T1 : IComponent
@@ -495,6 +522,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref QueryDescription? cache)
         where T0 : IComponent
         where T1 : IComponent
@@ -519,6 +547,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
         where T0 : IComponent
         where T1 : IComponent
@@ -545,6 +574,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref QueryDescription? cache)
         where T0 : IComponent
         where T1 : IComponent
@@ -570,6 +600,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
         where T0 : IComponent
         where T1 : IComponent
@@ -597,6 +628,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref QueryDescription? cache)
         where T0 : IComponent
         where T1 : IComponent
@@ -623,6 +655,7 @@ public partial class World
     /// </summary>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
         where T0 : IComponent
         where T1 : IComponent
@@ -651,6 +684,7 @@ public partial class World
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref QueryDescription? cache)
         where T0 : IComponent
         where T1 : IComponent

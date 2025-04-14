@@ -10,6 +10,7 @@
 using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 //using Parallel = System.Threading.Tasks.Parallel;
 //using Parallel = ParallelTasks.Parallel;
@@ -82,6 +83,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, <#= generics #>>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, <#= generics #>> mapper,
@@ -128,6 +130,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, <#= generics #>>(
 			TOutput initial,
 			MapperDelegate<TOutput, <#= generics #>> mapper,
@@ -173,6 +176,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, <#= generics #>>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -193,6 +197,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, <#= generics #>>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -217,6 +222,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, <#= generics #>>(
 			TMapper q,
 			TReducer r,

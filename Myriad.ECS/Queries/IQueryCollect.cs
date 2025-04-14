@@ -1,5 +1,6 @@
 ﻿using Myriad.ECS.Queries;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -83,6 +84,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -128,6 +130,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0>(
 			List<(Entity, T0)> output,
 			QueryDescription? query = null
@@ -151,6 +154,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0>(
 			TQ q,
 			QueryDescription? query = null
@@ -187,6 +191,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0>(
 			TQ q,
 			ref QueryDescription? query
@@ -286,6 +291,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -334,6 +340,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1>(
 			List<(Entity, T0, T1)> output,
 			QueryDescription? query = null
@@ -359,6 +366,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1>(
 			TQ q,
 			QueryDescription? query = null
@@ -397,6 +405,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1>(
 			TQ q,
 			ref QueryDescription? query
@@ -501,6 +510,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -552,6 +562,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2>(
 			List<(Entity, T0, T1, T2)> output,
 			QueryDescription? query = null
@@ -579,6 +590,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2>(
 			TQ q,
 			QueryDescription? query = null
@@ -619,6 +631,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2>(
 			TQ q,
 			ref QueryDescription? query
@@ -728,6 +741,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -782,6 +796,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3>(
 			List<(Entity, T0, T1, T2, T3)> output,
 			QueryDescription? query = null
@@ -811,6 +826,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3>(
 			TQ q,
 			QueryDescription? query = null
@@ -853,6 +869,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3>(
 			TQ q,
 			ref QueryDescription? query
@@ -967,6 +984,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -1024,6 +1042,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4>(
 			List<(Entity, T0, T1, T2, T3, T4)> output,
 			QueryDescription? query = null
@@ -1055,6 +1074,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
 			QueryDescription? query = null
@@ -1099,6 +1119,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
 			ref QueryDescription? query
@@ -1218,6 +1239,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -1278,6 +1300,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5>(
 			List<(Entity, T0, T1, T2, T3, T4, T5)> output,
 			QueryDescription? query = null
@@ -1311,6 +1334,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
 			QueryDescription? query = null
@@ -1357,6 +1381,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
 			ref QueryDescription? query
@@ -1481,6 +1506,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -1544,6 +1570,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6>(
 			List<(Entity, T0, T1, T2, T3, T4, T5, T6)> output,
 			QueryDescription? query = null
@@ -1579,6 +1606,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
 			QueryDescription? query = null
@@ -1627,6 +1655,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
 			ref QueryDescription? query
@@ -1756,6 +1785,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -1822,6 +1852,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7>(
 			List<(Entity, T0, T1, T2, T3, T4, T5, T6, T7)> output,
 			QueryDescription? query = null
@@ -1859,6 +1890,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
 			QueryDescription? query = null
@@ -1909,6 +1941,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
 			ref QueryDescription? query
@@ -2043,6 +2076,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -2112,6 +2146,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			List<(Entity, T0, T1, T2, T3, T4, T5, T6, T7, T8)> output,
 			QueryDescription? query = null
@@ -2151,6 +2186,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
 			QueryDescription? query = null
@@ -2203,6 +2239,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
 			ref QueryDescription? query
@@ -2342,6 +2379,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -2414,6 +2452,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			List<(Entity, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)> output,
 			QueryDescription? query = null
@@ -2455,6 +2494,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
 			QueryDescription? query = null
@@ -2509,6 +2549,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
 			ref QueryDescription? query
@@ -2653,6 +2694,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -2728,6 +2770,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			List<(Entity, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)> output,
 			QueryDescription? query = null
@@ -2771,6 +2814,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
 			QueryDescription? query = null
@@ -2827,6 +2871,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
 			ref QueryDescription? query
@@ -2976,6 +3021,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -3054,6 +3100,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			List<(Entity, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)> output,
 			QueryDescription? query = null
@@ -3099,6 +3146,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
 			QueryDescription? query = null
@@ -3157,6 +3205,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
 			ref QueryDescription? query
@@ -3311,6 +3360,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -3392,6 +3442,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			List<(Entity, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)> output,
 			QueryDescription? query = null
@@ -3439,6 +3490,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
 			QueryDescription? query = null
@@ -3499,6 +3551,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
 			ref QueryDescription? query
@@ -3658,6 +3711,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -3742,6 +3796,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			List<(Entity, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13)> output,
 			QueryDescription? query = null
@@ -3791,6 +3846,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
 			QueryDescription? query = null
@@ -3853,6 +3909,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
 			ref QueryDescription? query
@@ -4017,6 +4074,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -4104,6 +4162,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			List<(Entity, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14)> output,
 			QueryDescription? query = null
@@ -4155,6 +4214,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
 			QueryDescription? query = null
@@ -4219,6 +4279,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
 			ref QueryDescription? query
@@ -4388,6 +4449,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			List<Entity> output,
 			QueryDescription? query = null
@@ -4478,6 +4540,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			List<(Entity, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)> output,
 			QueryDescription? query = null
@@ -4531,6 +4594,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
 			QueryDescription? query = null
@@ -4597,6 +4661,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
 			ref QueryDescription? query

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using static Myriad.ECS.Extensions.EnumeratorExtensions;
 
 namespace Myriad.ECS.Extensions;
 

@@ -16,6 +16,7 @@ using Myriad.ECS.Worlds.Archetypes;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.Threading;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -60,6 +61,7 @@ namespace Myriad.ECS.Worlds
 		<#= DocsQueryDescription() #>
 		/// <returns>The number of entities discovered by this query</returns>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Execute<TQ, <#= queryConstraints #>>(
 			QueryDescription? query = null
 		)
@@ -84,6 +86,7 @@ namespace Myriad.ECS.Worlds
 		<#= DocsRefQueryDescription() #>
 		/// <returns>The number of entities discovered by this query</returns>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Execute<TQ, <#= queryConstraints #>>(
 			ref QueryDescription? query
 		)
@@ -109,6 +112,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Execute<TQ, <#= queryConstraints #>>(
 			TQ q,
 			QueryDescription? query = null
@@ -134,6 +138,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Execute<TQ, <#= queryConstraints #>>(
 			TQ q,
 			ref QueryDescription? query
@@ -163,6 +168,7 @@ namespace Myriad.ECS.Worlds
 		<#= DocsQueryDescription() #>
 		/// <returns>The number of entities discovered by this query</returns>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Execute<TQ, <#= queryConstraints #>>(
 			ref TQ q,
 			QueryDescription? query = null

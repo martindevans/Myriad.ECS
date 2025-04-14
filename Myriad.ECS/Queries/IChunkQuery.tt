@@ -14,6 +14,7 @@ using Myriad.ECS.Threading;
 using Myriad.ECS.Allocations;
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -59,6 +60,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
 			QueryDescription? query = null
 		)
@@ -84,6 +86,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
 			ref QueryDescription? query
 		)
@@ -110,6 +113,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
 			TQ q,
 			QueryDescription? query = null
@@ -136,6 +140,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
 			TQ q,
 			ref QueryDescription? query
@@ -162,6 +167,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
 			ref TQ q,
 			QueryDescription? query = null

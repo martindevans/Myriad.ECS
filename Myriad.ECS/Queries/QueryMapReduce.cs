@@ -1,6 +1,7 @@
 ﻿using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 //using Parallel = System.Threading.Tasks.Parallel;
 //using Parallel = ParallelTasks.Parallel;
@@ -68,6 +69,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0> mapper,
@@ -114,6 +116,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0> mapper,
@@ -159,6 +162,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -179,6 +183,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -203,6 +208,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			TMapper q,
 			TReducer r,
@@ -314,6 +320,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0, T1> mapper,
@@ -362,6 +369,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0, T1> mapper,
@@ -409,6 +417,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -430,6 +439,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -455,6 +465,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1>(
 			TMapper q,
 			TReducer r,
@@ -574,6 +585,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0, T1, T2> mapper,
@@ -624,6 +636,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0, T1, T2> mapper,
@@ -673,6 +686,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -695,6 +709,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -721,6 +736,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2>(
 			TMapper q,
 			TReducer r,
@@ -848,6 +864,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0, T1, T2, T3> mapper,
@@ -900,6 +917,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0, T1, T2, T3> mapper,
@@ -951,6 +969,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -974,6 +993,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -1001,6 +1021,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3>(
 			TMapper q,
 			TReducer r,
@@ -1136,6 +1157,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0, T1, T2, T3, T4> mapper,
@@ -1190,6 +1212,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0, T1, T2, T3, T4> mapper,
@@ -1243,6 +1266,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -1267,6 +1291,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -1295,6 +1320,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4>(
 			TMapper q,
 			TReducer r,
@@ -1438,6 +1464,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0, T1, T2, T3, T4, T5> mapper,
@@ -1494,6 +1521,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5> mapper,
@@ -1549,6 +1577,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -1574,6 +1603,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -1603,6 +1633,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5>(
 			TMapper q,
 			TReducer r,
@@ -1754,6 +1785,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0, T1, T2, T3, T4, T5, T6> mapper,
@@ -1812,6 +1844,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6> mapper,
@@ -1869,6 +1902,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -1895,6 +1929,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -1925,6 +1960,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(
 			TMapper q,
 			TReducer r,
@@ -2084,6 +2120,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0, T1, T2, T3, T4, T5, T6, T7> mapper,
@@ -2144,6 +2181,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7> mapper,
@@ -2203,6 +2241,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -2230,6 +2269,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -2261,6 +2301,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TMapper q,
 			TReducer r,
@@ -2428,6 +2469,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8> mapper,
@@ -2490,6 +2532,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8> mapper,
@@ -2551,6 +2594,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -2579,6 +2623,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -2611,6 +2656,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TMapper q,
 			TReducer r,
@@ -2786,6 +2832,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> mapper,
@@ -2850,6 +2897,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> mapper,
@@ -2913,6 +2961,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -2942,6 +2991,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -2975,6 +3025,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TMapper q,
 			TReducer r,
@@ -3158,6 +3209,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> mapper,
@@ -3224,6 +3276,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> mapper,
@@ -3289,6 +3342,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -3319,6 +3373,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -3353,6 +3408,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TMapper q,
 			TReducer r,
@@ -3544,6 +3600,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> mapper,
@@ -3612,6 +3669,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> mapper,
@@ -3679,6 +3737,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -3710,6 +3769,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -3745,6 +3805,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TMapper q,
 			TReducer r,
@@ -3944,6 +4005,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> mapper,
@@ -4014,6 +4076,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> mapper,
@@ -4083,6 +4146,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -4115,6 +4179,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -4151,6 +4216,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TMapper q,
 			TReducer r,
@@ -4358,6 +4424,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> mapper,
@@ -4430,6 +4497,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> mapper,
@@ -4501,6 +4569,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -4534,6 +4603,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -4571,6 +4641,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TMapper q,
 			TReducer r,
@@ -4786,6 +4857,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> mapper,
@@ -4860,6 +4932,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> mapper,
@@ -4933,6 +5006,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -4967,6 +5041,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -5005,6 +5080,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TMapper q,
 			TReducer r,
@@ -5228,6 +5304,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TOutput initial,
 			MapperDelegateEntity<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> mapper,
@@ -5304,6 +5381,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TOutput initial,
 			MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> mapper,
@@ -5379,6 +5457,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TOutput initial,
 			QueryDescription? query = null
@@ -5414,6 +5493,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TOutput initial,
 			ref QueryDescription? query
@@ -5453,6 +5533,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TMapper q,
 			TReducer r,

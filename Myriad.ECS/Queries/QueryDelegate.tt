@@ -9,6 +9,7 @@
 #>
 using Myriad.ECS.Queries;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -142,6 +143,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<<#= delegate_type_params #>>(QueryDelegateEntity<<#= delegate_type_params #>> @delegate, ref QueryDescription? query)
 			where <#= Constraints(i, 12) #>
 		{
@@ -157,6 +159,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<<#= delegate_type_params #>>(QueryDelegateEntity<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
@@ -172,6 +175,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<<#= delegate_type_params #>>(QueryDelegateEntity<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
@@ -187,6 +191,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<<#= delegate_type_params #>>(QueryDelegate<<#= delegate_type_params #>> @delegate, ref QueryDescription? query)
 			where <#= Constraints(i, 12) #>
 		{
@@ -202,6 +207,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<<#= delegate_type_params #>>(QueryDelegate<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
@@ -217,6 +223,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<<#= delegate_type_params #>>(QueryDelegate<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
@@ -235,6 +242,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateEntityData<TData, <#= delegate_type_params #>> @delegate, ref QueryDescription? query)
 			where <#= Constraints(i, 12) #>
 		{
@@ -251,6 +259,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateEntityData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
@@ -267,6 +276,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, <#= delegate_type_params #>>(TData data, QueryDelegateEntityData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
@@ -283,6 +293,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateData<TData, <#= delegate_type_params #>> @delegate, ref QueryDescription? query)
 			where <#= Constraints(i, 12) #>
 		{
@@ -299,6 +310,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
@@ -315,6 +327,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, <#= delegate_type_params #>>(TData data, QueryDelegateData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{

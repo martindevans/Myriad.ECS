@@ -1,5 +1,6 @@
 ﻿using Myriad.ECS.Queries;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -127,6 +128,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0>(QueryDelegateEntity<T0> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
 		{
@@ -142,6 +144,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0>(QueryDelegateEntity<T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
 		{
@@ -157,6 +160,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0>(QueryDelegateEntity<T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
 		{
@@ -172,6 +176,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0>(QueryDelegate<T0> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
 		{
@@ -187,6 +192,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<T0>(QueryDelegate<T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
 		{
@@ -202,6 +208,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0>(QueryDelegate<T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
 		{
@@ -220,6 +227,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0>(TData data, QueryDelegateEntityData<TData, T0> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
 		{
@@ -236,6 +244,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0>(TData data, QueryDelegateEntityData<TData, T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
 		{
@@ -252,6 +261,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0>(TData data, QueryDelegateEntityData<TData, T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
 		{
@@ -268,6 +278,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0>(TData data, QueryDelegateData<TData, T0> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
 		{
@@ -284,6 +295,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0>(TData data, QueryDelegateData<TData, T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
 		{
@@ -300,6 +312,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0>(TData data, QueryDelegateData<TData, T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
 		{
@@ -436,6 +449,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1>(QueryDelegateEntity<T0, T1> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -452,6 +466,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1>(QueryDelegateEntity<T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -468,6 +483,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1>(QueryDelegateEntity<T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -484,6 +500,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1>(QueryDelegate<T0, T1> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -500,6 +517,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<T0, T1>(QueryDelegate<T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -516,6 +534,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1>(QueryDelegate<T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -535,6 +554,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1>(TData data, QueryDelegateEntityData<TData, T0, T1> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -552,6 +572,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1>(TData data, QueryDelegateEntityData<TData, T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -569,6 +590,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1>(TData data, QueryDelegateEntityData<TData, T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -586,6 +608,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1>(TData data, QueryDelegateData<TData, T0, T1> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -603,6 +626,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1>(TData data, QueryDelegateData<TData, T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -620,6 +644,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1>(TData data, QueryDelegateData<TData, T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -761,6 +786,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2>(QueryDelegateEntity<T0, T1, T2> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -778,6 +804,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2>(QueryDelegateEntity<T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -795,6 +822,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2>(QueryDelegateEntity<T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -812,6 +840,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2>(QueryDelegate<T0, T1, T2> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -829,6 +858,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<T0, T1, T2>(QueryDelegate<T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -846,6 +876,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2>(QueryDelegate<T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -866,6 +897,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2>(TData data, QueryDelegateEntityData<TData, T0, T1, T2> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -884,6 +916,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2>(TData data, QueryDelegateEntityData<TData, T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -902,6 +935,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2>(TData data, QueryDelegateEntityData<TData, T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -920,6 +954,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2>(TData data, QueryDelegateData<TData, T0, T1, T2> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -938,6 +973,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2>(TData data, QueryDelegateData<TData, T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -956,6 +992,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2>(TData data, QueryDelegateData<TData, T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1102,6 +1139,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3>(QueryDelegateEntity<T0, T1, T2, T3> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1120,6 +1158,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3>(QueryDelegateEntity<T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1138,6 +1177,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3>(QueryDelegateEntity<T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1156,6 +1196,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3>(QueryDelegate<T0, T1, T2, T3> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1174,6 +1215,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<T0, T1, T2, T3>(QueryDelegate<T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1192,6 +1234,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3>(QueryDelegate<T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1213,6 +1256,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1232,6 +1276,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1251,6 +1296,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1270,6 +1316,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3>(TData data, QueryDelegateData<TData, T0, T1, T2, T3> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1289,6 +1336,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3>(TData data, QueryDelegateData<TData, T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1308,6 +1356,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3>(TData data, QueryDelegateData<TData, T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1459,6 +1508,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4>(QueryDelegateEntity<T0, T1, T2, T3, T4> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1478,6 +1528,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4>(QueryDelegateEntity<T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1497,6 +1548,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4>(QueryDelegateEntity<T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1516,6 +1568,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4>(QueryDelegate<T0, T1, T2, T3, T4> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1535,6 +1588,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<T0, T1, T2, T3, T4>(QueryDelegate<T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1554,6 +1608,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4>(QueryDelegate<T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1576,6 +1631,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1596,6 +1652,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1616,6 +1673,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1636,6 +1694,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1656,6 +1715,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1676,6 +1736,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1832,6 +1893,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1852,6 +1914,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1872,6 +1935,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1892,6 +1956,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5>(QueryDelegate<T0, T1, T2, T3, T4, T5> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1912,6 +1977,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<T0, T1, T2, T3, T4, T5>(QueryDelegate<T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1932,6 +1998,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5>(QueryDelegate<T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1955,6 +2022,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1976,6 +2044,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1997,6 +2066,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2018,6 +2088,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2039,6 +2110,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2060,6 +2132,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2221,6 +2294,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2242,6 +2316,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2263,6 +2338,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2284,6 +2360,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2305,6 +2382,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<T0, T1, T2, T3, T4, T5, T6>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2326,6 +2404,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2350,6 +2429,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2372,6 +2452,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2394,6 +2475,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2416,6 +2498,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2438,6 +2521,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2460,6 +2544,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2626,6 +2711,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2648,6 +2734,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2670,6 +2757,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2692,6 +2780,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2714,6 +2803,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2736,6 +2826,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2761,6 +2852,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2784,6 +2876,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2807,6 +2900,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2830,6 +2924,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2853,6 +2948,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2876,6 +2972,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3047,6 +3144,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3070,6 +3168,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3093,6 +3192,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3116,6 +3216,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3139,6 +3240,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3162,6 +3264,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3188,6 +3291,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3212,6 +3316,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3236,6 +3341,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3260,6 +3366,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3284,6 +3391,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3308,6 +3416,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3484,6 +3593,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3508,6 +3618,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3532,6 +3643,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3556,6 +3668,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3580,6 +3693,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3604,6 +3718,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3631,6 +3746,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3656,6 +3772,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3681,6 +3798,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3706,6 +3824,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3731,6 +3850,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3756,6 +3876,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3937,6 +4058,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3962,6 +4084,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3987,6 +4110,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4012,6 +4136,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4037,6 +4162,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4062,6 +4188,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4090,6 +4217,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4116,6 +4244,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4142,6 +4271,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4168,6 +4298,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4194,6 +4325,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4220,6 +4352,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4406,6 +4539,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4432,6 +4566,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4458,6 +4593,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4484,6 +4620,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4510,6 +4647,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4536,6 +4674,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4565,6 +4704,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4592,6 +4732,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4619,6 +4760,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4646,6 +4788,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4673,6 +4816,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4700,6 +4844,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4891,6 +5036,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4918,6 +5064,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4945,6 +5092,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4972,6 +5120,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4999,6 +5148,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5026,6 +5176,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5056,6 +5207,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5084,6 +5236,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5112,6 +5265,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5140,6 +5294,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5168,6 +5323,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5196,6 +5352,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5392,6 +5549,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5420,6 +5578,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5448,6 +5607,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5476,6 +5636,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5504,6 +5665,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5532,6 +5694,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5563,6 +5726,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5592,6 +5756,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5621,6 +5786,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5650,6 +5816,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5679,6 +5846,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5708,6 +5876,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5909,6 +6078,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5938,6 +6108,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5967,6 +6138,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegateEntity<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -5996,6 +6168,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -6025,6 +6198,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -6054,6 +6228,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="delegate"></param>
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -6086,6 +6261,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -6116,6 +6292,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -6146,6 +6323,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(TData data, QueryDelegateEntityData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -6176,6 +6354,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, ref QueryDescription? query)
 			where T0 : IComponent
             where T1 : IComponent
@@ -6206,6 +6385,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Query<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
@@ -6236,6 +6416,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		/// <param name="data">The object passed into every call</param>
 		[ExcludeFromCodeCoverage]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(TData data, QueryDelegateData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
