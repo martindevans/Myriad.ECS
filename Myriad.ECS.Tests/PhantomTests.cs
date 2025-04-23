@@ -268,6 +268,15 @@ public class PhantomTests
         Assert.IsFalse(e.IsPhantom());
         Assert.AreEqual(0, list.Count);
 
+        // Triggering a migration, without becoming a phantom
+        cmd.Set(e, new ComponentInt32());
+        cmd.Playback().Dispose();
+
+        // Is the entity valid and non-notified
+        Assert.IsTrue(e.Exists());
+        Assert.IsTrue(e.IsAlive());
+        Assert.AreEqual(0, list.Count);
+
         // Delete it
         cmd.Delete(e);
         cmd.Playback().Dispose();

@@ -289,7 +289,8 @@ public sealed partial class Archetype
         _disposer?.DisposeRemoved(ref lazy, info, to.Components);
 
         // Inform entity it is becoming a phantom
-        _phantomNotifier?.Notify(entity, info);
+        if (to.IsPhantom)
+            _phantomNotifier?.Notify(entity, info);
 
         // Do the actual copying
         var chunk = info.Chunk;
