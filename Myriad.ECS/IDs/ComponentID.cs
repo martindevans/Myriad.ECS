@@ -10,11 +10,12 @@ namespace Myriad.ECS.IDs;
 public readonly record struct ComponentID
     : IComparable<ComponentID>
 {
-    internal const int SpecialBitsCount          = 3;
-    internal const int SpecialBitsMask           = ~(~0 << SpecialBitsCount);
-    internal const int IsPhantomComponentMask    = 0b001;
-    internal const int IsRelationComponentMask   = 0b010;
-    internal const int IsDisposableComponentMask = 0b100;
+    internal const int SpecialBitsCount = 4;
+    internal const int SpecialBitsMask  = ~(~0 << SpecialBitsCount);
+    internal const int IsPhantomComponentMask         = 0b0001;
+    internal const int IsRelationComponentMask        = 0b0010;
+    internal const int IsDisposableComponentMask      = 0b0100;
+    internal const int IsPhantomNotifierComponentMask = 0b1000;
 
     /// <summary>
     /// Get the raw value of this ID
@@ -41,6 +42,11 @@ public readonly record struct ComponentID
     /// </summary>
     public bool IsDisposableComponent => (Value & IsDisposableComponentMask) == IsDisposableComponentMask;
 
+    /// <summary>
+    /// Indicates if this component implements <see cref="IDisposableComponent"/>
+    /// </summary>
+    public bool IsPhantomNotifierComponent => (Value & IsPhantomNotifierComponentMask) == IsPhantomNotifierComponentMask;
+
     internal ComponentID(int value)
     {
         Value = value;
@@ -56,7 +62,8 @@ public readonly record struct ComponentID
     public override string ToString()
     {
         var p = IsPhantomComponent ? " (phantom)" : "";
-        return $"C{Value}{p}";
+        var d = IsDisposableComponent ? " (dispose)" : "";
+        return $"C{Value}{p}{d}";
     }
 
     /// <summary>

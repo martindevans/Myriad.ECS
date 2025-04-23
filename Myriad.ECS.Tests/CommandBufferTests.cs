@@ -399,6 +399,35 @@ public class CommandBufferTests
     }
 
     [TestMethod]
+    public void DeleteEntityTwice_Phantom()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        var buffered = buffer.Create().Set(new TestPhantom0());
+        using var resolver = buffer.Playback();
+        var entity = buffered.Resolve();
+        Assert.IsTrue(entity.Exists());
+
+        buffer.Delete(entity);
+        buffer.Delete(entity);
+        buffer.Delete(entity);
+        buffer.Delete(entity);
+        buffer.Delete(entity);
+        buffer.Playback().Dispose();
+
+        Assert.IsTrue(entity.IsPhantom());
+
+        buffer.Delete(entity);
+        buffer.Delete(entity);
+        buffer.Delete(entity);
+        buffer.Playback().Dispose();
+
+        Assert.IsFalse(entity.IsPhantom());
+        Assert.IsFalse(entity.Exists());
+    }
+
+    [TestMethod]
     public void DeleteDeadEntity()
     {
         var world = new WorldBuilder().Build();

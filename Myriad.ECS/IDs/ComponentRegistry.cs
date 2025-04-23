@@ -105,6 +105,10 @@ internal static class ComponentRegistry
                 if (typeof(IDisposableComponent).IsAssignableFrom(type))
                     id |= ComponentID.IsDisposableComponentMask;
 
+                // Set the bit indicating that this component implements IPhantomNotifierComponent
+                if (typeof(IPhantomNotifierComponent).IsAssignableFrom(type))
+                    id |= ComponentID.IsPhantomNotifierComponentMask;
+
                 // Store it for future lookups
                 value = new ComponentID(id);
                 IDLookup[type] = value;

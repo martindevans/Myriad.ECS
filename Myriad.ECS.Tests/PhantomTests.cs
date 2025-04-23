@@ -1,5 +1,6 @@
 ﻿using Myriad.ECS.Command;
 using Myriad.ECS.Components;
+using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Tests;
@@ -244,5 +245,81 @@ public class PhantomTests
         Assert.IsFalse(e.IsAlive());
         Assert.IsFalse(e.Exists());
         Assert.IsFalse(e.IsPhantom());
+    }
+
+    [TestMethod]
+    public void PhantomNotification()
+    {
+        var w = new WorldBuilder().Build();
+
+        Assert.IsTrue(ComponentID<PhantomNotifier>.ID.IsPhantomNotifierComponent);
+        Assert.IsFalse(ComponentID<PhantomNotifier>.ID.IsPhantomComponent);
+
+        // Create an entity with a phantom component
+        var list = new List<EntityId>();
+        var cmd = new CommandBuffer(w);
+        var eb = cmd.Create().Set(new TestPhantom0()).Set(new PhantomNotifier { CalledWith = list });
+        var resolver = cmd.Playback();
+        var e = eb.Resolve();
+        resolver.Dispose();
+
+        // Is the entity valid
+        Assert.IsTrue(e.Exists());
+        Assert.IsFalse(e.IsPhantom());
+        Assert.AreEqual(0, list.Count);
+
+        // Delete it
+        cmd.Delete(e);
+        cmd.Playback().Dispose();
+
+        // Is the entity valid but no longer alive
+        Assert.IsTrue(e.Exists());
+        Assert.IsTrue(e.IsPhantom());
+        Assert.AreEqual(1, list.Count);
+        Assert.AreEqual(e.ID, list.Single());
+
+        // Delete it again
+        cmd.Delete(e);
+        cmd.Playback().Dispose();
+
+        // Entity should no longer exist at all
+        Assert.IsFalse(e.Exists());
+        Assert.AreEqual(1, list.Count);
+        Assert.AreEqual(e.ID, list.Single());
+    }
+
+    [TestMethod]
+    public void NoNotification()
+    {
+        var w = new WorldBuilder().Build();
+
+        Assert.IsTrue(ComponentID<PhantomNotifier>.ID.IsPhantomNotifierComponent);
+        Assert.IsFalse(ComponentID<PhantomNotifier>.ID.IsPhantomComponent);
+
+        // Create an entity **without** a phantom component
+        var list = new List<EntityId>();
+        var cmd = new CommandBuffer(w);
+        var eb = cmd.Create().Set(new ComponentInt32()).Set(new PhantomNotifier { CalledWith = list });
+        var resolver = cmd.Playback();
+        var e = eb.Resolve();
+        resolver.Dispose();
+
+        // Is the entity valid
+        Assert.IsTrue(e.Exists());
+        Assert.IsFalse(e.IsPhantom());
+        Assert.AreEqual(0, list.Count);
+
+        // Delete it
+        cmd.Delete(e);
+        cmd.Playback().Dispose();
+
+        // Is the entity dead
+        Assert.IsFalse(e.Exists());
+        Assert.IsFalse(e.IsPhantom());
+        Assert.AreEqual(0, list.Count);
+
+        // Delete it again
+        cmd.Delete(e);
+        cmd.Playback().Dispose();
     }
 }

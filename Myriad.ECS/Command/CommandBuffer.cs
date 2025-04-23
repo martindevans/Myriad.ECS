@@ -576,10 +576,7 @@ public sealed partial class CommandBuffer
     /// <param name="entities"></param>
     public void Delete(List<Entity> entities)
     {
-        _deletes.EnsureCapacity(_deletes.Count + entities.Capacity);
-
-        foreach (var entity in entities)
-            Delete(entity);
+        _deletes.AddRange(entities);
     }
 
     /// <summary>

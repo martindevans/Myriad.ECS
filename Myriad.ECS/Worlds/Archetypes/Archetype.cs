@@ -65,6 +65,7 @@ public sealed partial class Archetype
     private readonly ComponentID[] _componentIDs;
     private readonly Type[] _componentTypes;
     private readonly ArchetypeComponentDisposal? _disposer;
+    private readonly ArchetypePhantomComponentNotifier? _phantomNotifier;
 
     /// <summary>
     /// The archetype that entities should be moved to when deleted. Only non-null if <code>HasPhantomComponents &amp; !IsPhantom</code>
@@ -87,14 +88,19 @@ public sealed partial class Archetype
     public bool IsPhantom { get; }
 
     /// <summary>
-    /// Indicates if ant of the components in this Archetype im[lement <see cref="IEntityRelationComponent"/>
+    /// Indicates if any of the components in this Archetype im[lement <see cref="IEntityRelationComponent"/>
     /// </summary>
     public bool HasRelationComponents { get; }
 
     /// <summary>
-    /// Indicates if ant of the components in this Archetype im[lement <see cref="IDisposableComponent"/>
+    /// Indicates if any of the components in this Archetype im[lement <see cref="IDisposableComponent"/>
     /// </summary>
     public bool HasDisposableComponents { get; }
+
+    /// <summary>
+    /// Indicates if any of the components in this Archetype im[lement <see cref="IPhantomNotifierComponent"/>
+    /// </summary>
+    public bool HasPhantomNotifierComponents { get; }
 
     internal Archetype(World world, FrozenOrderedListSet<ComponentID> components)
     {
@@ -135,11 +141,16 @@ public sealed partial class Archetype
             HasPhantomComponents |= component.IsPhantomComponent;
             HasRelationComponents |= component.IsRelationComponent;
             HasDisposableComponents |= component.IsDisposableComponent;
+            HasPhantomNotifierComponents |= component.IsPhantomNotifierComponent;
         }
 
         // Create a disposer if it's needed
         if (HasDisposableComponents)
             _disposer = new ArchetypeComponentDisposal(components);
+
+        // Create a notifier if it's needed
+        if (HasPhantomNotifierComponents)
+            _phantomNotifier = new ArchetypePhantomComponentNotifier(components);
 
         // Get the destination archetype for deleted entities, if they become phantoms
         if (HasPhantomComponents && !IsPhantom)
@@ -277,6 +288,10 @@ public sealed partial class Archetype
         // Handle disposable components which are being removed
         _disposer?.DisposeRemoved(ref lazy, info, to.Components);
 
+        // Inform entity it is becoming a phantom
+        _phantomNotifier?.Notify(entity, info);
+
+        // Do the actual copying
         var chunk = info.Chunk;
         var row = chunk.MigrateTo(entity, ref info, to);
 
