@@ -258,7 +258,7 @@ public class PhantomTests
         // Create an entity with a phantom component
         var list = new List<EntityId>();
         var cmd = new CommandBuffer(w);
-        var eb = cmd.Create().Set(new TestPhantom0()).Set(new PhantomNotifier { CalledWith = list });
+        var eb = cmd.Create().Set(new TestPhantom0()).Set(new TestPhantom1()).Set(new PhantomNotifier { CalledWith = list });
         var resolver = cmd.Playback();
         var e = eb.Resolve();
         resolver.Dispose();
@@ -273,6 +273,16 @@ public class PhantomTests
         cmd.Playback().Dispose();
 
         // Is the entity valid but no longer alive
+        Assert.IsTrue(e.Exists());
+        Assert.IsTrue(e.IsPhantom());
+        Assert.AreEqual(1, list.Count);
+        Assert.AreEqual(e.ID, list.Single());
+
+        // Remove a component, triggering a migration
+        cmd.Remove<TestPhantom1>(e);
+        cmd.Playback().Dispose();
+
+        // Check that it did not receive a second notification
         Assert.IsTrue(e.Exists());
         Assert.IsTrue(e.IsPhantom());
         Assert.AreEqual(1, list.Count);

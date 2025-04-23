@@ -149,7 +149,7 @@ public sealed partial class Archetype
             _disposer = new ArchetypeComponentDisposal(components);
 
         // Create a notifier if it's needed
-        if (HasPhantomNotifierComponents)
+        if (HasPhantomNotifierComponents && !IsPhantom)
             _phantomNotifier = new ArchetypePhantomComponentNotifier(components);
 
         // Get the destination archetype for deleted entities, if they become phantoms
