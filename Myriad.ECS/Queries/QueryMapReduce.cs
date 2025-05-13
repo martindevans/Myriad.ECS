@@ -89,6 +89,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		
 		private readonly struct EntityDelegateStructMapper<TOutput, T0>
 			: IQueryMap<TOutput, T0>
 			where T0 : IComponent
@@ -136,6 +137,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		
 		private readonly struct DelegateStructMapper<TOutput, T0>
 			: IQueryMap<TOutput, T0>
 			where T0 : IComponent
@@ -341,6 +343,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct EntityDelegateStructMapper<TOutput, T0, T1>
 			: IQueryMap<TOutput, T0, T1>
 			where T0 : IComponent
@@ -390,10 +393,11 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct DelegateStructMapper<TOutput, T0, T1>
 			: IQueryMap<TOutput, T0, T1>
 			where T0 : IComponent
-        where T1 : IComponent
+            where T1 : IComponent
 		{
 			private readonly MapperDelegate<TOutput, T0, T1> _mapper;
 
@@ -607,6 +611,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct EntityDelegateStructMapper<TOutput, T0, T1, T2>
 			: IQueryMap<TOutput, T0, T1, T2>
 			where T0 : IComponent
@@ -658,11 +663,12 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct DelegateStructMapper<TOutput, T0, T1, T2>
 			: IQueryMap<TOutput, T0, T1, T2>
 			where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
 		{
 			private readonly MapperDelegate<TOutput, T0, T1, T2> _mapper;
 
@@ -887,6 +893,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct EntityDelegateStructMapper<TOutput, T0, T1, T2, T3>
 			: IQueryMap<TOutput, T0, T1, T2, T3>
 			where T0 : IComponent
@@ -940,12 +947,13 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct DelegateStructMapper<TOutput, T0, T1, T2, T3>
 			: IQueryMap<TOutput, T0, T1, T2, T3>
 			where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
 		{
 			private readonly MapperDelegate<TOutput, T0, T1, T2, T3> _mapper;
 
@@ -1181,6 +1189,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4>
 			where T0 : IComponent
@@ -1236,13 +1245,14 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct DelegateStructMapper<TOutput, T0, T1, T2, T3, T4>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4>
 			where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
 		{
 			private readonly MapperDelegate<TOutput, T0, T1, T2, T3, T4> _mapper;
 
@@ -1489,6 +1499,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>
 			where T0 : IComponent
@@ -1546,14 +1557,15 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>
 			where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
 		{
 			private readonly MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5> _mapper;
 
@@ -1811,6 +1823,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>
 			where T0 : IComponent
@@ -1870,15 +1883,16 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>
 			where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
 		{
 			private readonly MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6> _mapper;
 
@@ -2147,6 +2161,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>
 			where T0 : IComponent
@@ -2208,16 +2223,17 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>
 			where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
 		{
 			private readonly MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7> _mapper;
 
@@ -2497,6 +2513,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>
 			where T0 : IComponent
@@ -2560,17 +2577,18 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>
 			where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
 		{
 			private readonly MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8> _mapper;
 
@@ -2861,6 +2879,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 			where T0 : IComponent
@@ -2926,18 +2945,19 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 			where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
 		{
 			private readonly MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> _mapper;
 
@@ -3239,6 +3259,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 			where T0 : IComponent
@@ -3306,19 +3327,20 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 			where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
 		{
 			private readonly MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> _mapper;
 
@@ -3631,6 +3653,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 			where T0 : IComponent
@@ -3700,20 +3723,21 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 			where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
-        where T11 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
 		{
 			private readonly MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> _mapper;
 
@@ -4037,6 +4061,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 			where T0 : IComponent
@@ -4108,21 +4133,22 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 			where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
-        where T11 : IComponent
-        where T12 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
 		{
 			private readonly MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> _mapper;
 
@@ -4457,6 +4483,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 			where T0 : IComponent
@@ -4530,22 +4557,23 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 			where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
-        where T11 : IComponent
-        where T12 : IComponent
-        where T13 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
 		{
 			private readonly MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> _mapper;
 
@@ -4891,6 +4919,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 			where T0 : IComponent
@@ -4966,23 +4995,24 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 			where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
-        where T11 : IComponent
-        where T12 : IComponent
-        where T13 : IComponent
-        where T14 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
 		{
 			private readonly MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> _mapper;
 
@@ -5339,6 +5369,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 			where T0 : IComponent
@@ -5416,24 +5447,25 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		[ExcludeFromCodeCoverage]
 		private readonly struct DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 			: IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 			where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
-        where T11 : IComponent
-        where T12 : IComponent
-        where T13 : IComponent
-        where T14 : IComponent
-        where T15 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+            where T15 : IComponent
 		{
 			private readonly MapperDelegate<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> _mapper;
 

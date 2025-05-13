@@ -103,6 +103,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		<#= CoverageAttribute(i) #>
 		private readonly struct EntityDelegateStructMapper<TOutput, <#= generics #>>
 			: IQueryMap<TOutput, <#= generics #>>
 			where <#= Constraints(sumij, 8) #>
@@ -150,9 +151,10 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
+		<#= CoverageAttribute(i) #>
 		private readonly struct DelegateStructMapper<TOutput, <#= generics #>>
 			: IQueryMap<TOutput, <#= generics #>>
-			where <#= Constraints(sumij, 8) #>
+			where <#= Constraints(sumij, 12) #>
 		{
 			private readonly MapperDelegate<TOutput, <#= generics #>> _mapper;
 

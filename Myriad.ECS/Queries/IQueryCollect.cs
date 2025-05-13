@@ -257,15 +257,7 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
 			where TQ : IQueryCollector<T0>
 		{
-			var ca = new CollectorAdapter<TQ, T0>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0>,
-				T0
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0>(q, ref query);
 		}
 
 		/// <summary>
@@ -470,15 +462,7 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
 			where TQ : IQueryCollector<T0, T1>
 		{
-			var ca = new CollectorAdapter<TQ, T0, T1>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0, T1>,
-				T0, T1
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0, T1>(q, ref query);
 		}
 
 		/// <summary>
@@ -695,15 +679,7 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2>
 		{
-			var ca = new CollectorAdapter<TQ, T0, T1, T2>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0, T1, T2>,
-				T0, T1, T2
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0, T1, T2>(q, ref query);
 		}
 
 		/// <summary>
@@ -932,15 +908,7 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3>
 		{
-			var ca = new CollectorAdapter<TQ, T0, T1, T2, T3>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0, T1, T2, T3>,
-				T0, T1, T2, T3
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0, T1, T2, T3>(q, ref query);
 		}
 
 		/// <summary>
@@ -1181,15 +1149,7 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4>
 		{
-			var ca = new CollectorAdapter<TQ, T0, T1, T2, T3, T4>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0, T1, T2, T3, T4>,
-				T0, T1, T2, T3, T4
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0, T1, T2, T3, T4>(q, ref query);
 		}
 
 		/// <summary>
@@ -1442,15 +1402,7 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5>
 		{
-			var ca = new CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5>,
-				T0, T1, T2, T3, T4, T5
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0, T1, T2, T3, T4, T5>(q, ref query);
 		}
 
 		/// <summary>
@@ -1715,15 +1667,7 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6>
 		{
-			var ca = new CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6>,
-				T0, T1, T2, T3, T4, T5, T6
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0, T1, T2, T3, T4, T5, T6>(q, ref query);
 		}
 
 		/// <summary>
@@ -2000,15 +1944,7 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
-			var ca = new CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7>,
-				T0, T1, T2, T3, T4, T5, T6, T7
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(q, ref query);
 		}
 
 		/// <summary>
@@ -2297,15 +2233,7 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
-			var ca = new CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>,
-				T0, T1, T2, T3, T4, T5, T6, T7, T8
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(q, ref query);
 		}
 
 		/// <summary>
@@ -2606,15 +2534,7 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
-			var ca = new CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>,
-				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(q, ref query);
 		}
 
 		/// <summary>
@@ -2927,15 +2847,7 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
-			var ca = new CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>,
-				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(q, ref query);
 		}
 
 		/// <summary>
@@ -3260,15 +3172,7 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
-			var ca = new CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>,
-				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(q, ref query);
 		}
 
 		/// <summary>
@@ -3605,15 +3509,7 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
-			var ca = new CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>,
-				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(q, ref query);
 		}
 
 		/// <summary>
@@ -3962,15 +3858,7 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
-			var ca = new CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>,
-				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(q, ref query);
 		}
 
 		/// <summary>
@@ -4331,15 +4219,7 @@ namespace Myriad.ECS.Worlds
             where T14 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
-			var ca = new CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>,
-				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(q, ref query);
 		}
 
 		/// <summary>
@@ -4712,15 +4592,7 @@ namespace Myriad.ECS.Worlds
             where T15 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
-			var ca = new CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>,
-				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(q, ref query);
 		}
 
 		/// <summary>

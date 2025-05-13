@@ -43,7 +43,7 @@ public readonly record struct ComponentID
     public bool IsDisposableComponent => (Value & IsDisposableComponentMask) == IsDisposableComponentMask;
 
     /// <summary>
-    /// Indicates if this component implements <see cref="IDisposableComponent"/>
+    /// Indicates if this component implements <see cref="IPhantomNotifierComponent"/>
     /// </summary>
     public bool IsPhantomNotifierComponent => (Value & IsPhantomNotifierComponentMask) == IsPhantomNotifierComponentMask;
 

@@ -51,6 +51,44 @@ namespace Myriad.ECS.Tests.Queries
         }
 
         [TestMethod]
+        public void MapReduceManyAddDelegate()
+        {
+            var world = new WorldBuilder().Build();
+
+            var cmd = new CommandBuffer(world);
+            var sum = 0;
+            for (var i = 0; i < 9999; i++)
+            {
+                sum += i;
+                cmd.Create().Set(new ComponentInt32(i));
+            }
+            cmd.Playback().Dispose();
+
+            var result = world.ExecuteMapReduce<Reduce.I32.Add, int, ComponentInt32>(0, (ref ComponentInt32 c) => c.Value);
+
+            Assert.AreEqual(sum, result);
+        }
+
+        [TestMethod]
+        public void MapReduceManyAddDelegateEntity()
+        {
+            var world = new WorldBuilder().Build();
+
+            var cmd = new CommandBuffer(world);
+            var sum = 0;
+            for (var i = 0; i < 9999; i++)
+            {
+                sum += i;
+                cmd.Create().Set(new ComponentInt32(i));
+            }
+            cmd.Playback().Dispose();
+
+            var result = world.ExecuteMapReduce<Reduce.I32.Add, int, ComponentInt32>(0, (Entity e, ref ComponentInt32 c) => c.Value);
+
+            Assert.AreEqual(sum, result);
+        }
+
+        [TestMethod]
         public void MapReduceManyMul()
         {
             var world = new WorldBuilder().Build();

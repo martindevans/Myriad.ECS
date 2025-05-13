@@ -15,7 +15,7 @@
 public interface IPhantomComponent : IComponent;
 
 /// <summary>
-/// This component received a notification when the entity it is attached to becomes a phantom.
+/// This component receives a notification when the entity it is attached to becomes a phantom.
 /// </summary>
 /// <remarks>Note that this component is <b>not</b> an <see cref="IPhantomComponent"/>.</remarks>
 public interface IPhantomNotifierComponent : IComponent

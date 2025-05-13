@@ -11,7 +11,7 @@ internal class ArchetypePhantomComponentNotifier
 
     public ArchetypePhantomComponentNotifier(FrozenOrderedListSet<ComponentID> components)
     {
-        // Get a disposer for each disposable component
+        // Get a disposer for each notifier component
         foreach (var component in components)
         {
             if (!component.IsPhantomNotifierComponent)

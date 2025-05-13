@@ -20,10 +20,6 @@ namespace Myriad.ECS.Worlds;
 
 public partial class World
 {
-    internal static FrozenOrderedListSet<ComponentID> ExcludePhantom = FrozenOrderedListSet<ComponentID>.Create(
-        (ReadOnlySpan<ComponentID>)[ ComponentID<Phantom>.ID ]
-    );
-
     internal QueryDescription? TryGetCachedQuery(OrderedListSet<ComponentID> components)
     {
         return components.Count switch
@@ -220,21 +216,25 @@ public partial class World
         }
 
         // Didn't find one, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] { id0 });
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock1.EnterWriteLock();
         try
         {
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] { id0 });
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check if it's already in the cache (due to a race). If so, return the shared one.
+            if (_queryCache1.TryGetValue(id0.Value, out var existingQuery))
+                return existingQuery;
 
             // Add query to the cache
             _queryCache1[id0.Value] = query;
@@ -284,21 +284,25 @@ public partial class World
         }
 
         // Didn't find one, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] { id0, id1 });
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock2.EnterWriteLock();
         try
         {
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] { id0, id1 });
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check if it's already in the cache (due to a race). If so, return the shared one.
+            if (_queryCache2.TryGetValue(key, out var existingQuery))
+                return existingQuery;
 
             // Add query to the cache
             _queryCache2[key] = query;
@@ -366,6 +370,25 @@ public partial class World
         }
 
         // Didn't find query, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            id0,
+            id1,
+            id2,
+        });
+
+        // Auto exclude phantoms, unless specifically included
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock3.EnterWriteLock();
         try
         {
@@ -375,25 +398,11 @@ public partial class World
                 list = [ ];
                 _queryCache3.Add(hash, list);
             }
-            
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
-                id0,
-                id1,
-                id2,
-            });
 
-            // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check again if a matching query has been added (in case of a race)
+            foreach (var (c, q) in list)
+                if (orderedComponents.SequenceEqual(c))
+                    return q;
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -468,6 +477,26 @@ public partial class World
         }
 
         // Didn't find query, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            id0,
+            id1,
+            id2,
+            id3,
+        });
+
+        // Auto exclude phantoms, unless specifically included
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock4.EnterWriteLock();
         try
         {
@@ -477,26 +506,11 @@ public partial class World
                 list = [ ];
                 _queryCache4.Add(hash, list);
             }
-            
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
-                id0,
-                id1,
-                id2,
-                id3,
-            });
 
-            // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check again if a matching query has been added (in case of a race)
+            foreach (var (c, q) in list)
+                if (orderedComponents.SequenceEqual(c))
+                    return q;
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -574,6 +588,27 @@ public partial class World
         }
 
         // Didn't find query, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            id0,
+            id1,
+            id2,
+            id3,
+            id4,
+        });
+
+        // Auto exclude phantoms, unless specifically included
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock5.EnterWriteLock();
         try
         {
@@ -583,27 +618,11 @@ public partial class World
                 list = [ ];
                 _queryCache5.Add(hash, list);
             }
-            
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
-                id0,
-                id1,
-                id2,
-                id3,
-                id4,
-            });
 
-            // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check again if a matching query has been added (in case of a race)
+            foreach (var (c, q) in list)
+                if (orderedComponents.SequenceEqual(c))
+                    return q;
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -684,6 +703,28 @@ public partial class World
         }
 
         // Didn't find query, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            id0,
+            id1,
+            id2,
+            id3,
+            id4,
+            id5,
+        });
+
+        // Auto exclude phantoms, unless specifically included
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock6.EnterWriteLock();
         try
         {
@@ -693,28 +734,11 @@ public partial class World
                 list = [ ];
                 _queryCache6.Add(hash, list);
             }
-            
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
-                id0,
-                id1,
-                id2,
-                id3,
-                id4,
-                id5,
-            });
 
-            // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check again if a matching query has been added (in case of a race)
+            foreach (var (c, q) in list)
+                if (orderedComponents.SequenceEqual(c))
+                    return q;
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -798,6 +822,29 @@ public partial class World
         }
 
         // Didn't find query, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            id0,
+            id1,
+            id2,
+            id3,
+            id4,
+            id5,
+            id6,
+        });
+
+        // Auto exclude phantoms, unless specifically included
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock7.EnterWriteLock();
         try
         {
@@ -807,29 +854,11 @@ public partial class World
                 list = [ ];
                 _queryCache7.Add(hash, list);
             }
-            
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
-                id0,
-                id1,
-                id2,
-                id3,
-                id4,
-                id5,
-                id6,
-            });
 
-            // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check again if a matching query has been added (in case of a race)
+            foreach (var (c, q) in list)
+                if (orderedComponents.SequenceEqual(c))
+                    return q;
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -916,6 +945,30 @@ public partial class World
         }
 
         // Didn't find query, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            id0,
+            id1,
+            id2,
+            id3,
+            id4,
+            id5,
+            id6,
+            id7,
+        });
+
+        // Auto exclude phantoms, unless specifically included
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock8.EnterWriteLock();
         try
         {
@@ -925,30 +978,11 @@ public partial class World
                 list = [ ];
                 _queryCache8.Add(hash, list);
             }
-            
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
-                id0,
-                id1,
-                id2,
-                id3,
-                id4,
-                id5,
-                id6,
-                id7,
-            });
 
-            // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check again if a matching query has been added (in case of a race)
+            foreach (var (c, q) in list)
+                if (orderedComponents.SequenceEqual(c))
+                    return q;
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -1038,6 +1072,31 @@ public partial class World
         }
 
         // Didn't find query, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            id0,
+            id1,
+            id2,
+            id3,
+            id4,
+            id5,
+            id6,
+            id7,
+            id8,
+        });
+
+        // Auto exclude phantoms, unless specifically included
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock9.EnterWriteLock();
         try
         {
@@ -1047,31 +1106,11 @@ public partial class World
                 list = [ ];
                 _queryCache9.Add(hash, list);
             }
-            
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
-                id0,
-                id1,
-                id2,
-                id3,
-                id4,
-                id5,
-                id6,
-                id7,
-                id8,
-            });
 
-            // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check again if a matching query has been added (in case of a race)
+            foreach (var (c, q) in list)
+                if (orderedComponents.SequenceEqual(c))
+                    return q;
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -1164,6 +1203,32 @@ public partial class World
         }
 
         // Didn't find query, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            id0,
+            id1,
+            id2,
+            id3,
+            id4,
+            id5,
+            id6,
+            id7,
+            id8,
+            id9,
+        });
+
+        // Auto exclude phantoms, unless specifically included
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock10.EnterWriteLock();
         try
         {
@@ -1173,32 +1238,11 @@ public partial class World
                 list = [ ];
                 _queryCache10.Add(hash, list);
             }
-            
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
-                id0,
-                id1,
-                id2,
-                id3,
-                id4,
-                id5,
-                id6,
-                id7,
-                id8,
-                id9,
-            });
 
-            // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check again if a matching query has been added (in case of a race)
+            foreach (var (c, q) in list)
+                if (orderedComponents.SequenceEqual(c))
+                    return q;
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -1294,6 +1338,33 @@ public partial class World
         }
 
         // Didn't find query, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            id0,
+            id1,
+            id2,
+            id3,
+            id4,
+            id5,
+            id6,
+            id7,
+            id8,
+            id9,
+            id10,
+        });
+
+        // Auto exclude phantoms, unless specifically included
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock11.EnterWriteLock();
         try
         {
@@ -1303,33 +1374,11 @@ public partial class World
                 list = [ ];
                 _queryCache11.Add(hash, list);
             }
-            
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
-                id0,
-                id1,
-                id2,
-                id3,
-                id4,
-                id5,
-                id6,
-                id7,
-                id8,
-                id9,
-                id10,
-            });
 
-            // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check again if a matching query has been added (in case of a race)
+            foreach (var (c, q) in list)
+                if (orderedComponents.SequenceEqual(c))
+                    return q;
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -1428,6 +1477,34 @@ public partial class World
         }
 
         // Didn't find query, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            id0,
+            id1,
+            id2,
+            id3,
+            id4,
+            id5,
+            id6,
+            id7,
+            id8,
+            id9,
+            id10,
+            id11,
+        });
+
+        // Auto exclude phantoms, unless specifically included
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock12.EnterWriteLock();
         try
         {
@@ -1437,34 +1514,11 @@ public partial class World
                 list = [ ];
                 _queryCache12.Add(hash, list);
             }
-            
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
-                id0,
-                id1,
-                id2,
-                id3,
-                id4,
-                id5,
-                id6,
-                id7,
-                id8,
-                id9,
-                id10,
-                id11,
-            });
 
-            // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check again if a matching query has been added (in case of a race)
+            foreach (var (c, q) in list)
+                if (orderedComponents.SequenceEqual(c))
+                    return q;
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -1566,6 +1620,35 @@ public partial class World
         }
 
         // Didn't find query, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            id0,
+            id1,
+            id2,
+            id3,
+            id4,
+            id5,
+            id6,
+            id7,
+            id8,
+            id9,
+            id10,
+            id11,
+            id12,
+        });
+
+        // Auto exclude phantoms, unless specifically included
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock13.EnterWriteLock();
         try
         {
@@ -1575,35 +1658,11 @@ public partial class World
                 list = [ ];
                 _queryCache13.Add(hash, list);
             }
-            
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
-                id0,
-                id1,
-                id2,
-                id3,
-                id4,
-                id5,
-                id6,
-                id7,
-                id8,
-                id9,
-                id10,
-                id11,
-                id12,
-            });
 
-            // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check again if a matching query has been added (in case of a race)
+            foreach (var (c, q) in list)
+                if (orderedComponents.SequenceEqual(c))
+                    return q;
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -1708,6 +1767,36 @@ public partial class World
         }
 
         // Didn't find query, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            id0,
+            id1,
+            id2,
+            id3,
+            id4,
+            id5,
+            id6,
+            id7,
+            id8,
+            id9,
+            id10,
+            id11,
+            id12,
+            id13,
+        });
+
+        // Auto exclude phantoms, unless specifically included
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock14.EnterWriteLock();
         try
         {
@@ -1717,36 +1806,11 @@ public partial class World
                 list = [ ];
                 _queryCache14.Add(hash, list);
             }
-            
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
-                id0,
-                id1,
-                id2,
-                id3,
-                id4,
-                id5,
-                id6,
-                id7,
-                id8,
-                id9,
-                id10,
-                id11,
-                id12,
-                id13,
-            });
 
-            // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check again if a matching query has been added (in case of a race)
+            foreach (var (c, q) in list)
+                if (orderedComponents.SequenceEqual(c))
+                    return q;
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -1854,6 +1918,37 @@ public partial class World
         }
 
         // Didn't find query, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            id0,
+            id1,
+            id2,
+            id3,
+            id4,
+            id5,
+            id6,
+            id7,
+            id8,
+            id9,
+            id10,
+            id11,
+            id12,
+            id13,
+            id14,
+        });
+
+        // Auto exclude phantoms, unless specifically included
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock15.EnterWriteLock();
         try
         {
@@ -1863,37 +1958,11 @@ public partial class World
                 list = [ ];
                 _queryCache15.Add(hash, list);
             }
-            
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
-                id0,
-                id1,
-                id2,
-                id3,
-                id4,
-                id5,
-                id6,
-                id7,
-                id8,
-                id9,
-                id10,
-                id11,
-                id12,
-                id13,
-                id14,
-            });
 
-            // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check again if a matching query has been added (in case of a race)
+            foreach (var (c, q) in list)
+                if (orderedComponents.SequenceEqual(c))
+                    return q;
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));
@@ -2004,6 +2073,38 @@ public partial class World
         }
 
         // Didn't find query, create it now
+        var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            id0,
+            id1,
+            id2,
+            id3,
+            id4,
+            id5,
+            id6,
+            id7,
+            id8,
+            id9,
+            id10,
+            id11,
+            id12,
+            id13,
+            id14,
+            id15,
+        });
+
+        // Auto exclude phantoms, unless specifically included
+        var exclude = include.Contains(ComponentID<Phantom>.ID)
+            ? FrozenOrderedListSet<ComponentID>.Empty
+            : QueryBuilder.SetWithJustPhantom;
+
+        var query = new QueryDescription(
+            this,
+            include,
+            exclude,
+            FrozenOrderedListSet<ComponentID>.Empty,
+            FrozenOrderedListSet<ComponentID>.Empty
+        );
+
         _lock16.EnterWriteLock();
         try
         {
@@ -2013,38 +2114,11 @@ public partial class World
                 list = [ ];
                 _queryCache16.Add(hash, list);
             }
-            
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
-                id0,
-                id1,
-                id2,
-                id3,
-                id4,
-                id5,
-                id6,
-                id7,
-                id8,
-                id9,
-                id10,
-                id11,
-                id12,
-                id13,
-                id14,
-                id15,
-            });
 
-            // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
-                : QueryBuilder.SetWithJustPhantom;
-
-            var query = new QueryDescription(
-                this,
-                include,
-                exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
-            );
+            // Check again if a matching query has been added (in case of a race)
+            foreach (var (c, q) in list)
+                if (orderedComponents.SequenceEqual(c))
+                    return q;
 
             // Add query to the cache
             list.Add((orderedComponents.ToArray(), query));

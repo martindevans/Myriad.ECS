@@ -288,15 +288,7 @@ namespace Myriad.ECS.Worlds
 			where <#= Constraints(i, 12) #>
 			where TQ : IQueryCollector<<#= queryConstraints #>>
 		{
-			var ca = new CollectorAdapter<TQ, <#= queryConstraints #>>(q);
-			return ExecuteChunk
-			<
-				CollectorAdapter<TQ, <#= queryConstraints #>>,
-				<#= queryConstraints #>
-			>(
-				ca,
-				query
-			);
+			return Collect<TQ, <#= queryConstraints #>>(q, ref query);
 		}
 
 		/// <summary>
