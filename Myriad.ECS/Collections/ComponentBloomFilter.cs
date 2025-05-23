@@ -57,12 +57,16 @@ internal struct ComponentBloomFilter
         // set does not intersect.
 
 #if NETSTANDARD2_1
-        var fail = (_a & other._a) == 0
-                || (_b & other._b) == 0
-                || (_c & other._c) == 0
-                || (_d & other._d) == 0
-                || (_e & other._e) == 0
-                || (_f & other._f) == 0;
+        var mask =
+            IsNonZero(_a & other._a) &
+            IsNonZero(_b & other._b) &
+            IsNonZero(_c & other._c) &
+            IsNonZero(_d & other._d) &
+            IsNonZero(_e & other._e) &
+            IsNonZero(_f & other._f);
+
+        // If any were zero the final bit will be zero.
+        var fail = mask != 1;
 #else
         // Bitwise & each matching element in the two sets together
         var abcd = System.Runtime.Intrinsics.Vector256.Create(_a, _b, _c, _d)
@@ -78,6 +82,10 @@ internal struct ComponentBloomFilter
 #endif
 
         return !fail;
+
+        // Returns 1 if x is non-zero
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static ulong IsNonZero(ulong x) => (x | (~x + 1)) >> 63;
     }
 
     public void Union(ref readonly ComponentBloomFilter other)
