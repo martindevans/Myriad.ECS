@@ -208,10 +208,10 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		<#= CoverageAttribute(i) #>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<<#= delegate_type_params #>>(QueryDelegate<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+		public int Query<<#= delegate_type_params #>>(QueryDelegate<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
-			Execute<<#= delegate_wrapper_name #><<#= delegate_type_params #>>, <#= delegate_type_params #>>(
+			return Execute<<#= delegate_wrapper_name #><<#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #><<#= delegate_type_params #>>(@delegate),
 				ref query
 			);
@@ -233,7 +233,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.

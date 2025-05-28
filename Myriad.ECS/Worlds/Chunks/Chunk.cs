@@ -19,7 +19,7 @@ internal sealed class Chunk
     /// <summary>
     /// Map from index to component ID
     /// </summary>
-    private readonly IReadOnlyList<ComponentID> _componentIdLookup;
+    private readonly ReadOnlyMemory<ComponentID> _componentIdLookup;
 
     private readonly Entity[] _entities;
     private readonly Array[] _components;
@@ -34,14 +34,14 @@ internal sealed class Chunk
     /// </summary>
     public ReadOnlyMemory<Entity> Entities => _entities.AsMemory(0, EntityCount);
 
-    internal Chunk(Archetype archetype, int size, int[] componentIndexLookup, IReadOnlyList<Type> componentTypes, IReadOnlyList<ComponentID> ids)
+    internal Chunk(Archetype archetype, int size, int[] componentIndexLookup, ReadOnlySpan<Type> componentTypes, ReadOnlyMemory<ComponentID> ids)
     {
         Archetype = archetype;
         _componentIndexLookup = componentIndexLookup;
         _entities = new Entity[size];
         _componentIdLookup = ids;
 
-        _components = new Array[componentTypes.Count];
+        _components = new Array[componentTypes.Length];
         for (var i = 0; i < _components.Length; i++)
             _components[i] = ArrayFactory.Create(componentTypes[i], size);
     }
@@ -212,9 +212,10 @@ internal sealed class Chunk
         var destChunk = destRow.Chunk;
 
         // Copy across everything that exists in the destination archetype
+        var componentIdLookupSpan = _componentIdLookup.Span;
         for (var i = 0; i < _components.Length; i++)
         {
-            var id = _componentIdLookup[i].Value;
+            var id = componentIdLookupSpan[i].Value;
 
             // Check if the component is not in the destination, in which case just don't copy it
             if (id >= destChunk._componentIndexLookup.Length || destChunk._componentIndexLookup[id] == -1)

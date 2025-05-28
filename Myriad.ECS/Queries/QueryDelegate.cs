@@ -193,10 +193,10 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<T0>(QueryDelegate<T0> @delegate, QueryDescription? query = null)
+		public int Query<T0>(QueryDelegate<T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
 		{
-			Execute<QueryDelegateWrapper1<T0>, T0>(
+			return Execute<QueryDelegateWrapper1<T0>, T0>(
 				new QueryDelegateWrapper1<T0>(@delegate),
 				ref query
 			);
@@ -218,7 +218,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
@@ -518,11 +518,11 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<T0, T1>(QueryDelegate<T0, T1> @delegate, QueryDescription? query = null)
+		public int Query<T0, T1>(QueryDelegate<T0, T1> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
 		{
-			Execute<QueryDelegateWrapper2<T0, T1>, T0, T1>(
+			return Execute<QueryDelegateWrapper2<T0, T1>, T0, T1>(
 				new QueryDelegateWrapper2<T0, T1>(@delegate),
 				ref query
 			);
@@ -545,7 +545,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
@@ -859,12 +859,12 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<T0, T1, T2>(QueryDelegate<T0, T1, T2> @delegate, QueryDescription? query = null)
+		public int Query<T0, T1, T2>(QueryDelegate<T0, T1, T2> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
 		{
-			Execute<QueryDelegateWrapper3<T0, T1, T2>, T0, T1, T2>(
+			return Execute<QueryDelegateWrapper3<T0, T1, T2>, T0, T1, T2>(
 				new QueryDelegateWrapper3<T0, T1, T2>(@delegate),
 				ref query
 			);
@@ -888,7 +888,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
@@ -1216,13 +1216,13 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<T0, T1, T2, T3>(QueryDelegate<T0, T1, T2, T3> @delegate, QueryDescription? query = null)
+		public int Query<T0, T1, T2, T3>(QueryDelegate<T0, T1, T2, T3> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
 		{
-			Execute<QueryDelegateWrapper4<T0, T1, T2, T3>, T0, T1, T2, T3>(
+			return Execute<QueryDelegateWrapper4<T0, T1, T2, T3>, T0, T1, T2, T3>(
 				new QueryDelegateWrapper4<T0, T1, T2, T3>(@delegate),
 				ref query
 			);
@@ -1247,7 +1247,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
@@ -1589,14 +1589,14 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<T0, T1, T2, T3, T4>(QueryDelegate<T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
+		public int Query<T0, T1, T2, T3, T4>(QueryDelegate<T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
 		{
-			Execute<QueryDelegateWrapper5<T0, T1, T2, T3, T4>, T0, T1, T2, T3, T4>(
+			return Execute<QueryDelegateWrapper5<T0, T1, T2, T3, T4>, T0, T1, T2, T3, T4>(
 				new QueryDelegateWrapper5<T0, T1, T2, T3, T4>(@delegate),
 				ref query
 			);
@@ -1622,7 +1622,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
@@ -1978,7 +1978,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<T0, T1, T2, T3, T4, T5>(QueryDelegate<T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
+		public int Query<T0, T1, T2, T3, T4, T5>(QueryDelegate<T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -1986,7 +1986,7 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
 		{
-			Execute<QueryDelegateWrapper6<T0, T1, T2, T3, T4, T5>, T0, T1, T2, T3, T4, T5>(
+			return Execute<QueryDelegateWrapper6<T0, T1, T2, T3, T4, T5>, T0, T1, T2, T3, T4, T5>(
 				new QueryDelegateWrapper6<T0, T1, T2, T3, T4, T5>(@delegate),
 				ref query
 			);
@@ -2013,7 +2013,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
@@ -2383,7 +2383,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<T0, T1, T2, T3, T4, T5, T6>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
+		public int Query<T0, T1, T2, T3, T4, T5, T6>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2392,7 +2392,7 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
 		{
-			Execute<QueryDelegateWrapper7<T0, T1, T2, T3, T4, T5, T6>, T0, T1, T2, T3, T4, T5, T6>(
+			return Execute<QueryDelegateWrapper7<T0, T1, T2, T3, T4, T5, T6>, T0, T1, T2, T3, T4, T5, T6>(
 				new QueryDelegateWrapper7<T0, T1, T2, T3, T4, T5, T6>(@delegate),
 				ref query
 			);
@@ -2420,7 +2420,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
@@ -2804,7 +2804,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
+		public int Query<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -2814,7 +2814,7 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
 		{
-			Execute<QueryDelegateWrapper8<T0, T1, T2, T3, T4, T5, T6, T7>, T0, T1, T2, T3, T4, T5, T6, T7>(
+			return Execute<QueryDelegateWrapper8<T0, T1, T2, T3, T4, T5, T6, T7>, T0, T1, T2, T3, T4, T5, T6, T7>(
 				new QueryDelegateWrapper8<T0, T1, T2, T3, T4, T5, T6, T7>(@delegate),
 				ref query
 			);
@@ -2843,7 +2843,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
@@ -3241,7 +3241,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
+		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -3252,7 +3252,7 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
 		{
-			Execute<QueryDelegateWrapper9<T0, T1, T2, T3, T4, T5, T6, T7, T8>, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+			return Execute<QueryDelegateWrapper9<T0, T1, T2, T3, T4, T5, T6, T7, T8>, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 				new QueryDelegateWrapper9<T0, T1, T2, T3, T4, T5, T6, T7, T8>(@delegate),
 				ref query
 			);
@@ -3282,7 +3282,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
@@ -3694,7 +3694,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
+		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -3706,7 +3706,7 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
 		{
-			Execute<QueryDelegateWrapper10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+			return Execute<QueryDelegateWrapper10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 				new QueryDelegateWrapper10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(@delegate),
 				ref query
 			);
@@ -3737,7 +3737,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
@@ -4163,7 +4163,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
+		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -4176,7 +4176,7 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
 		{
-			Execute<QueryDelegateWrapper11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+			return Execute<QueryDelegateWrapper11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 				new QueryDelegateWrapper11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(@delegate),
 				ref query
 			);
@@ -4208,7 +4208,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
@@ -4648,7 +4648,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
+		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -4662,7 +4662,7 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
 		{
-			Execute<QueryDelegateWrapper12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+			return Execute<QueryDelegateWrapper12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 				new QueryDelegateWrapper12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(@delegate),
 				ref query
 			);
@@ -4695,7 +4695,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
@@ -5149,7 +5149,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
+		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -5164,7 +5164,7 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
 		{
-			Execute<QueryDelegateWrapper13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+			return Execute<QueryDelegateWrapper13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 				new QueryDelegateWrapper13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(@delegate),
 				ref query
 			);
@@ -5198,7 +5198,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
@@ -5666,7 +5666,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
+		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -5682,7 +5682,7 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
 		{
-			Execute<QueryDelegateWrapper14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+			return Execute<QueryDelegateWrapper14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 				new QueryDelegateWrapper14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(@delegate),
 				ref query
 			);
@@ -5717,7 +5717,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
@@ -6199,7 +6199,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="query"></param>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
+		public int Query<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
@@ -6216,7 +6216,7 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
 		{
-			Execute<QueryDelegateWrapper15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+			return Execute<QueryDelegateWrapper15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 				new QueryDelegateWrapper15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(@delegate),
 				ref query
 			);
@@ -6252,7 +6252,7 @@ namespace Myriad.ECS.Worlds
 			);
 		}
 
-		// --- //
+		// vv-- TData variants --vv //
 
 		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
