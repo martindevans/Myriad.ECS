@@ -36,6 +36,16 @@ public struct SystemDeclaration
     }
 
     /// <summary>
+    /// Declare that all of the given components are read during the update phase
+    /// </summary>
+    /// <param name="components"></param>
+    public void Read(FrozenOrderedListSet<ComponentID> components)
+    {
+        foreach (var component in components)
+            _reads.Add(component);
+    }
+
+    /// <summary>
     /// Declare that the given component is written during the update phase
     /// </summary>
     /// <typeparam name="T"></typeparam>
@@ -43,6 +53,16 @@ public struct SystemDeclaration
         where T : IComponent
     {
         _writes.Add(ComponentID<T>.ID);
+    }
+
+    /// <summary>
+    /// Declare that all of the given components are written during the update phase
+    /// </summary>
+    /// <param name="components"></param>
+    public void Write(FrozenOrderedListSet<ComponentID> components)
+    {
+        foreach (var component in components)
+            _writes.Add(component);
     }
 
     internal readonly bool Intersects(ref readonly SystemDeclaration other)
