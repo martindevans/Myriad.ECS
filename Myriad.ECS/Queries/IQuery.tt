@@ -309,7 +309,6 @@ namespace Myriad.ECS.Worlds
 }
 #>
 
-			var chunkCount = 0;
 			var entityCount = 0;
 			var lastCompletedArchetype = default(Archetype);
 
@@ -329,8 +328,6 @@ namespace Myriad.ECS.Worlds
 				while (archetypesEnumerator.MoveNext())
 				{
 					var archetype = archetypesEnumerator.Current.Archetype;
-					chunkCount = 0;
-
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
@@ -340,12 +337,11 @@ namespace Myriad.ECS.Worlds
 							cursor.Reset();
 							return entityCount;
 						}
-						cursor.Chunks = 0;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
 						{
-							chunkCount++;
+							cursor.Chunks++;
 
 							var chunk = chunks.Current;
 							Debug.Assert(chunk != null);
@@ -383,7 +379,6 @@ namespace Myriad.ECS.Worlds
 							if (entityCount >= cursor.EntityBudget)
 							{
 								cursor.LastArchetype = lastCompletedArchetype;
-								cursor.Chunks = chunkCount;
 								return entityCount;
 							}
 						}

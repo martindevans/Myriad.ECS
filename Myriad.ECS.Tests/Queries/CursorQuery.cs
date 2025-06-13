@@ -13,13 +13,17 @@ public class CursorQuery
     {
         var w = new WorldBuilder().Build();
 
-        // Create 2 chunks worth of entities
+        // Create 3 chunks worth of entities, 
         var c = new CommandBuffer(w);
-        for (var i = 0; i < Archetype.CHUNK_SIZE * 2; i++)
+        for (var i = 0; i < Archetype.CHUNK_SIZE * 3; i++)
             c.Create().Set(new ComponentInt32());
+
+        // Plus some other unrelated entities
+        for (var i = 0; i < Archetype.CHUNK_SIZE; i++)
+            c.Create().Set(new Component0());
         c.Playback().Dispose();
 
-        // Create a cursor with budget to process one chunks
+        // Create a cursor with budget to process one chunk
         var cursor = new Cursor
         {
             EntityBudget = Archetype.CHUNK_SIZE,
@@ -33,16 +37,15 @@ public class CursorQuery
         // Check that exactly 1 chunk of entities has been processed
         var incremented = 0;
         foreach (var (e, ci32) in w.Query<ComponentInt32>())
-        {
             if (ci32.Ref.Value > 0)
                 incremented++;
-        }
         Assert.AreEqual(Archetype.CHUNK_SIZE, incremented);
 
-        // Now run it again, with the cursor
+        // Now run it twice again, with the cursor
+        Assert.AreEqual(Archetype.CHUNK_SIZE, w.Execute<Increment, ComponentInt32>(ref inc, ref q, cursor));
         Assert.AreEqual(Archetype.CHUNK_SIZE, w.Execute<Increment, ComponentInt32>(ref inc, ref q, cursor));
 
-        // Check that all entities have been processed once
+        // Check that all entities have been processed exactly once
         foreach (var (_, ci32) in w.Query<ComponentInt32>())
             Assert.AreEqual(1, ci32.Ref.Value);
     }
