@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Collections;
+using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Worlds.Archetypes;
@@ -69,8 +70,13 @@ public sealed class QueryDescription
 
         foreach (var id in Include)
             builder.Include(id);
+
+        // Phantom gets auto excluded when the QueryDescription is built. Undo that now by not
+        // explicitly excluding it.
         foreach (var id in Exclude)
-            builder.Exclude(id);
+            if (id != ComponentID<Phantom>.ID)
+                builder.Exclude(id);
+
         foreach (var id in AtLeastOneOf)
             builder.AtLeastOneOf(id);
         foreach (var id in ExactlyOneOf)
