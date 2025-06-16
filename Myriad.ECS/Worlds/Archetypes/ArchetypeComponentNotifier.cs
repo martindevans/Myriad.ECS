@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.Collections;
+﻿using System.Diagnostics;
+using Myriad.ECS.Collections;
 using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
 using System.Reflection;
@@ -64,9 +65,7 @@ internal class ArchetypePhantomComponentNotifier
         private static IPhantomNotifier GetInstance()
         {
             var id = ComponentID<T>.ID;
-            if (!id.IsPhantomNotifierComponent)
-                throw new ArgumentException("Cannot get notifier for component which does not implement IPhantomNotifierComponent");
-
+            Debug.Assert(id.IsPhantomNotifierComponent, "Cannot get notifier for component which does not implement IPhantomNotifierComponent");
             return (IPhantomNotifier)Activator.CreateInstance(typeof(NotifierImpl<>).MakeGenericType(typeof(T), typeof(T)))!;
         }
 

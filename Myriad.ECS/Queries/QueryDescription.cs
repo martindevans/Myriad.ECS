@@ -397,6 +397,24 @@ public sealed class QueryDescription
     }
 
     /// <summary>
+    /// Check if the count of entities matching this query is greater than a given value
+    /// </summary>
+    /// <returns></returns>
+    public bool IsCountGreaterThan(int threshold)
+    {
+        var count = 0;
+        foreach (var archetype in GetArchetypes())
+        {
+            count += archetype.Archetype.EntityCount;
+
+            if (count > threshold)
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Check if this query matches any entities
     /// </summary>
     /// <returns></returns>
