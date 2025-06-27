@@ -16,7 +16,7 @@ Myriad.ECS supports netstandard2.0, and is compatible with Unity. There is a Uni
 
 Detailed documentation can be found in the [wiki](https://github.com/martindevans/Myriad.ECS/wiki).
 
-## Guide
+## Introduction
 
 Everything in Myriad happens in a `World`, created with a `WorldBuilder`.
 
