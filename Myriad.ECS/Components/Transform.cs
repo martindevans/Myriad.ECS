@@ -107,7 +107,7 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
     }
 
     /// <inheritdoc />
-    public void Update(TData data)
+    public virtual void Update(TData data)
     {
         // Move to the next phase
         unchecked { _phase++; }

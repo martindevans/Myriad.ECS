@@ -287,7 +287,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -304,12 +304,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
@@ -844,7 +842,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -861,12 +859,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
@@ -1434,7 +1430,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -1451,12 +1447,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
@@ -2057,7 +2051,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -2074,12 +2068,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
@@ -2713,7 +2705,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -2730,12 +2722,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
@@ -3402,7 +3392,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -3419,12 +3409,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
@@ -4124,7 +4112,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -4141,12 +4129,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
@@ -4879,7 +4865,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -4896,12 +4882,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
@@ -5667,7 +5651,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -5684,12 +5668,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
@@ -6488,7 +6470,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -6505,12 +6487,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
@@ -7342,7 +7322,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -7359,12 +7339,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
@@ -8229,7 +8207,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -8246,12 +8224,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
@@ -9149,7 +9125,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -9166,12 +9142,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
@@ -10102,7 +10076,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -10119,12 +10093,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
@@ -11088,7 +11060,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -11105,12 +11077,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())
@@ -12107,7 +12077,7 @@ namespace Myriad.ECS.Worlds
 
 			using (var archetypesEnumerator = archetypes.GetEnumerator())
 			{
-				// Search forward until the archetype is found
+				// If we get to the end of the archetype enumerator it means we couldn't find the archetype. Just reset the cursor.
 				while (cursor.LastArchetype != null && cursor.LastArchetype != archetypesEnumerator.Current.Archetype)
 				{
 					if (!archetypesEnumerator.MoveNext())
@@ -12124,12 +12094,10 @@ namespace Myriad.ECS.Worlds
 					var chunks = archetype.GetChunkEnumerator();
 					try
 					{
-						// Skip over chunks
+						// Skip over chunks. If this reaches the end it's because chunks have been removed
+						// since the last run. In that case just move to the next archetype.
 						if (!chunks.Skip(cursor.Chunks))
-						{
-							cursor.Reset();
-							return entityCount;
-						}
+							continue;
 
 						// Process remaining chunks
 						while (chunks.MoveNext())

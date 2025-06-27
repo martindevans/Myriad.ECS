@@ -36,14 +36,17 @@ public class CursorQuery
 
         // Check that exactly 1 chunk of entities has been processed
         var incremented = 0;
-        foreach (var (e, ci32) in w.Query<ComponentInt32>())
+        foreach (var (_, ci32) in w.Query<ComponentInt32>())
             if (ci32.Ref.Value > 0)
                 incremented++;
         Assert.AreEqual(Archetype.CHUNK_SIZE, incremented);
 
-        // Now run it twice again, with the cursor
+        // Now run it twice more, each time processing entities
         Assert.AreEqual(Archetype.CHUNK_SIZE, w.Execute<Increment, ComponentInt32>(ref inc, ref q, cursor));
         Assert.AreEqual(Archetype.CHUNK_SIZE, w.Execute<Increment, ComponentInt32>(ref inc, ref q, cursor));
+
+        // This final time should process none, because the query has reached the end
+        Assert.AreEqual(0, w.Execute<Increment, ComponentInt32>(ref inc, ref q, cursor));
 
         // Check that all entities have been processed exactly once
         foreach (var (_, ci32) in w.Query<ComponentInt32>())
