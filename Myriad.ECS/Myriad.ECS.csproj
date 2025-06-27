@@ -16,7 +16,6 @@
     <RepositoryUrl>https://github.com/martindevans/Myriad.ECS</RepositoryUrl>
     <PackageTags>games, simulation, ECS</PackageTags>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
