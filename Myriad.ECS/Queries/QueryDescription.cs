@@ -510,7 +510,7 @@ public sealed class QueryDescription
     public Entity Single()
     {
         return SingleOrDefault()
-            ?? throw new InvalidOperationException("QueryDescription.SingleOrDefault() found no matching entities");
+            ?? throw new InvalidOperationException("QueryDescription.Single() found no matching entities");
     }
 
     /// <summary>
@@ -559,6 +559,18 @@ public sealed class QueryDescription
 
         // This shouldn't happen
         return default;
+    }
+
+    /// <summary>
+    /// Get a random entity matched by this query (throws if there are none)
+    /// </summary>
+    /// <param name="random"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException">If none were found.</exception>
+    public Entity Random(Random random)
+    {
+        return RandomOrDefault(random)
+            ?? throw new InvalidOperationException("QueryDescription.Random() found no matching entities");
     }
     #endregion
 

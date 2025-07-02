@@ -57,7 +57,7 @@ A phantom entity can be destroyed in two ways:
 
 Phantom components are useful for tracking per-entity state. For example if there is some event that needs to run when an entity is destroyed you can attach a component when the entity is created (`DoTheThing : IPhantomComponent`) and then query for `Include<DoTheThing, Phantom>()`. When you have done whatever is needed you should remove the `DoTheThing` component. Once all of the phantoms have been handled and removed, the entity will be automatically destroyed.
 
-One common case for this is resource disposal, for this you can use `IDisposableComponent` and `DisposableComponentSystem`. Run a `DisposableComponentSystem` every frame for every type of disposable component and it will ensure resources are correctly disposed (even when the world is destroyed).
+One common case for this is resource disposal, for this you can use `IDisposableComponent`. When an `IDisposableComponent` is destroyed it's `Dispose` method will be called.
 
 ### Querying
 
@@ -68,8 +68,8 @@ Myriad.ECS has several different querying systems. These have different trade-of
 Queries can be filtered based on the components an Entity has. This is done with a `QueryDescription`, created with a `QueryBuilder`. Filtering like this is very fast, so as much as possible should be encoded into query descriptions. There are 4 types filtering a query can do:
  - Include: Entities **must** include this component.
  - Exclude: Entities **must not** include this component.
- - At Least One: Entities must contain one or more of the listed components.
- - Exactly One: Entities must contain exactly one of the listed components.
+ - At Least One: Entities must contain **one or more** of the listed components.
+ - Exactly One: Entities must contain **exactly one** of the listed components.
 
 #### ChunkQuery
 
@@ -77,7 +77,7 @@ A "Chunk Query" runs a bit of code for every chunk of entities. The method call 
 
 ```csharp
 // Method signature
-public int ExecuteChunk<TQ, T0, T1, ...etc>(TQ q, QueryDescription? query = null)
+public int ExecuteChunk<TQ, T0, T1, ...etc>(TQ q, QueryDescription? query = null);
 
 // Method call
 _world.ExecuteChunk<IntegrateChunk, Position, Velocity>(new IntegrateChunk(), query);
@@ -86,7 +86,7 @@ _world.ExecuteChunk<IntegrateChunk, Position, Velocity>(new IntegrateChunk(), qu
 private struct IntegrateChunk
     : IChunkQuery2<Position, Velocity>
 {
-    public readonly void Execute(ReadOnlySpan<Entity> e, Span<Position> pos, Span<Velocity> vel)
+    public readonly void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<Position> pos, Span<Velocity> vel)
     {
         for (var i = 0; i < pos.Length; i++)
             pos[i].Value += vel[i].Value;
@@ -100,7 +100,7 @@ A "Query" is the same as a chunk query, except that the inner loop over individu
 
 ```csharp
 // Method signature
-public int Execute<TQ, T0, T1, ...etc>(TQ q, QueryDescription? query = null)
+public int Execute<TQ, T0, T1, ...etc>(TQ q, QueryDescription? query = null);
 
 // Method call
 _world.Execute<Integrate, Position, Velocity>(new Integrate(), query);
@@ -118,11 +118,11 @@ private struct IntegrateChunk
 
 #### Query Delegate
 
-A delegate query does not require creating an entire struct to wrap your code.
+A delegate query does not require creating a struct to wrap your code and the generic parameters can be inferred.
 
 ```csharp
 // Method signature
-public void Query<T0, T1, ...etc>(QueryDelegate<T0> @delegate, QueryDescription? query = null)
+public void Query<T0, T1, ...etc>(QueryDelegate<T0> @delegate, QueryDescription? query = null);
 
 // Method call
 _world.Query(static (ref Position pos, ref Velocity vel) => {
@@ -131,17 +131,17 @@ _world.Query(static (ref Position pos, ref Velocity vel) => {
 
 // Method call with state (first arg to query is passed to delegate)
 _world.Query(gametime, static (GameTime gametime, ref Position pos, ref Velocity vel) => {
-    pos.Value += vel.Value;
+    pos.Value += vel.Value * gametime.DeltaTime;
 });
 ```
 
 #### Query Enumerable
 
-An enumerable query simply returns results as an enumerable of tuples.
+An enumerable query returns results as an enumerable of tuples.
 
 ```csharp
 // Method signature
-public QueryResultEnumerable2<T0, T1> Query<T0, T1, ...etc>(QueryDescription query)
+public QueryResultEnumerable2<T0, T1> Query<T0, T1, ...etc>(QueryDescription query);
 
 // Method call
 foreach (var (e, p, v) in world.Query<Position, Velocity>())
@@ -240,8 +240,8 @@ Is a simple serial system group which implement `ISystemDeclare` and groups toge
 
 This discovers groups of systems which do not "overlap" in the components they write and executes items in the group in parallel. Groups are executed serially. The order of execution of each group is undefined. The only guarantee is that a system will not run in parallel with a another system that is modifying the same component as this one is reading or writing.
 
-Discovering the phasee groups is very quick, but this can only be used when the order of execution of the systems is completely unimportant.
+Discovering the phase groups is very quick, but this can only be used when the order of execution of the systems is completely unimportant.
 
 #### `OrderedParallelSystemGroup`
 
-Runs all the systems in the group "in order", but with parallelism where it cannot be "observed". Systems which read a component wait for earlier systems which write that component. Systems which write a component wait for earlier systems which write or read that component. As long as systems only read and write components and do not access any external state this should be identical to running the systems serially.
+Runs all the systems in the group "in order", but with parallelism where it cannot be observed. Systems which read a component wait for earlier systems which write that component. Systems which write a component wait for earlier systems which write or read that component. As long as systems only read and write components and do not access any external state this should be identical to running the systems serially.

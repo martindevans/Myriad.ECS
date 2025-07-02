@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Myriad.ECS.Allocations;
 using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
@@ -47,6 +48,7 @@ internal sealed class Chunk
     }
 
     #region get component
+    //[MethodImpl(MethodImplOptions.AggressiveInlining)]
     //public ref T GetRef<T>(Entity entity)
     //    where T : IComponent
     //{
@@ -54,6 +56,7 @@ internal sealed class Chunk
     //    return ref GetRef<T>(entity, index);
     //}
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ref T GetRef<T>(EntityId entityId, int rowIndex)
         where T : IComponent
     {
@@ -61,6 +64,7 @@ internal sealed class Chunk
         return ref GetRef<T>(rowIndex);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public RefT<T> GetRefT<T>(EntityId entityId, int rowIndex)
         where T : IComponent
     {
@@ -73,30 +77,35 @@ internal sealed class Chunk
 #endif
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ref T GetRef<T>(int rowIndex)
         where T : IComponent
     {
         return ref GetRef<T>(rowIndex, ComponentID<T>.ID);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ref T GetRef<T>(int rowIndex, ComponentID id)
         where T : IComponent
     {
         return ref GetSpan<T>(id)[rowIndex];
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal Span<T> GetSpan<T>()
         where T : IComponent
     {
         return GetSpan<T>(ComponentID<T>.ID);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal Span<T> GetSpan<T>(ComponentID id)
         where T : IComponent
     {
         return GetComponentArray<T>(id).AsSpan(0, EntityCount);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal T[] GetComponentArray<T>()
         where T : IComponent
     {
@@ -109,12 +118,14 @@ internal sealed class Chunk
     /// <typeparam name="T"></typeparam>
     /// <param name="id"></param>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal T[] GetComponentArray<T>(ComponentID id)
         where T : IComponent
     {
         return (GetComponentArray(id) as T[])!;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal Array GetComponentArray(ComponentID id)
     {
         return _components[_componentIndexLookup[id.Value]];
