@@ -1,0 +1,97 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+    const int PARAM_COUNT = 16;
+#>
+using System.Diagnostics.CodeAnalysis;
+using Myriad.ECS.Components;
+using Myriad.ECS.IDs;
+using Myriad.ECS.Worlds;
+
+// ReSharper disable UnusedType.Global
+
+namespace Myriad.ECS.Paths;
+
+<# for (var i = 1; i <= PARAM_COUNT; i++)
+{
+    var tparams = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
+    if (i > 0)
+        tparams = $"<{tparams}>";
+
+#>
+
+/// <summary>
+/// Construct a path that follows a path entirely of relational components
+/// </summary>
+<# for (var j = 0; j < i; j++) { #>
+/// <typeparam name="T<#= j #>"></typeparam>
+<# } #>
+<#= CoverageAttribute(i) #>
+public readonly struct Path<#= tparams #>
+    : IPath
+    <#= Constraints(i) #>
+{
+    /// <inheritdoc />
+    public Entity? TryFollow(Entity entity)
+    {
+<# for (var j = 0; j < i; j++) { #>
+        if (!TryFollow<T<#= j #>>(ref entity))
+            return null;
+<# } #>
+
+        if (!entity.IsAlive())
+            return default;
+
+        return entity;
+    }
+
+    private static bool TryFollow<T>(ref Entity entity)
+        where T : IEntityRelationComponent
+    {
+        // Try to get entity info for this entity
+        var dummy = default(EntityInfo);
+        ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+        // Can't follow a path through a dead entity!
+        if (isDead)
+            return false;
+
+        // Check if the component is present
+        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+            return false;
+
+        // Follow link
+        entity = entity.GetComponentRef<T>().Target;
+        return true;
+    }
+}
+
+<# } #>
+
+
+<#+ 
+    static string CoverageAttribute(int index)
+	{
+		if (index < 3)
+			return "";
+		return "[ExcludeFromCodeCoverage]";
+	}
+
+    static string Constraints(int count, int spaces = 4)
+    {
+        if (count == 0)
+            return "";
+
+        var prefix = new string(' ', spaces);
+        var str = "where " + string.Join(
+            $"\r\n{prefix}where ",
+            Enumerable.Range(0, count).Select(x => $"T{x} : IEntityRelationComponent")
+        );
+
+        return str;
+    }
+#>

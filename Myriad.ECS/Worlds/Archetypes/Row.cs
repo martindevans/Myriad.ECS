@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.Worlds.Chunks;
+﻿using Myriad.ECS.IDs;
+using Myriad.ECS.Worlds.Chunks;
 
 namespace Myriad.ECS.Worlds.Archetypes;
 
@@ -19,5 +20,11 @@ internal readonly record struct Row
         where T : IComponent
     {
         return ref Chunk.GetRef<T>(Entity, RowIndex);
+    }
+
+    internal ref T GetMutable<T>(ComponentID id)
+        where T : IComponent
+    {
+        return ref Chunk.GetRef<T>(RowIndex, id);
     }
 }

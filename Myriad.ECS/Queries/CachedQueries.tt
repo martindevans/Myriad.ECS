@@ -345,37 +345,4 @@ public partial class World
 
         return str;
     }
-
-    static string Name(int mutable)
-    {
-        return "IQuery" + mutable;
-    }
-
-    static string Refs(int start, int count)
-    {
-        var str = string.Join(
-            ", ",
-            Enumerable.Range(start, count).Select(x => $"ref T{x} t{x}")
-        );
-
-        return str;
-    }
-
-    static string Ins(int start, int count)
-    {
-        return string.Join(
-            ", ",
-            Enumerable.Range(start, count).Select(x => $"ref readonly T{x} t{x}")
-        );
-    }
-
-    static string CallParameters(int count)
-    {
-        var str = string.Join(
-            ", ",
-            Enumerable.Range(0, count).Select(x => $"ref t{x}[i]")
-        );
-
-        return str;
-    }
 #>

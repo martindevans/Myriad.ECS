@@ -166,6 +166,16 @@ public class FrozenOrderedListSet<TItem>
     {
         return IsSupersetOf(other._items);
     }
+
+    /// <summary>
+    /// Check if this set is a superset of a sorted span. i.e. contains all the items in the span
+    /// </summary>
+    /// <param name="span"></param>
+    /// <returns></returns>
+    internal bool IsSupersetOfSortedSpan(ReadOnlySpan<TItem> span)
+    {
+        return _items.IsSupersetOfSortedSpan(span);
+    }
     #endregion
 
     #region Overlaps

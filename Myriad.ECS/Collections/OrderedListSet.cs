@@ -231,6 +231,45 @@ internal class OrderedListSet<TItem>
 
         return j == other.Count;
     }
+
+    /// <summary>
+    /// Check if this set is a superset of a sorted span. i.e. contains all the items in the span
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    internal bool IsSupersetOfSortedSpan(ReadOnlySpan<TItem> other)
+    {
+        if (other.Length > Count)
+            return false;
+
+        // Move forward through both lists, checking that all items in `other` are in `this`
+        var i = 0;
+        var j = 0;
+        while (i < _items.Count && j < other.Length)
+        {
+            var cmp = _items[i].CompareTo(other[j]);
+
+            if (cmp < 0)
+            {
+                // Item in `this` < `other`. That's acceptable, it means the item is in the superset and not in the subset.
+                // Move to the next item in the superset.
+                i++;
+            }
+            else if (cmp == 0)
+            {
+                // Items are equal, move to the next item in both
+                i++;
+                j++;
+            }
+            else
+            {
+                // Item in `other` < `this`. That means `other` is not a subset!
+                return false;
+            }
+        }
+
+        return j == other.Length;
+    }
     #endregion
 
     #region Overlaps

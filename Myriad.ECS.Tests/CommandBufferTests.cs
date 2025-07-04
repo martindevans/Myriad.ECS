@@ -704,6 +704,33 @@ public class CommandBufferTests
     }
 
     [TestMethod]
+    public void RemoveFromDeadEntity()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        // Create an entity with 2 components
+        var eb = buffer
+                .Create()
+                .Set(new ComponentFloat(123))
+                .Set(new ComponentInt16(456));
+        using var resolver = buffer.Playback();
+        var entity = eb.Resolve();
+
+        // Delete entity
+        buffer.Delete(entity);
+        buffer.Playback().Dispose();
+
+        // Remove a component
+        buffer.Remove<ComponentInt16>(entity);
+        buffer.Playback();
+
+        // Check it's dead
+        Assert.IsFalse(entity.IsAlive());
+        Assert.IsFalse(entity.Exists());
+    }
+
+    [TestMethod]
     public void AddToEntity()
     {
         var world = new WorldBuilder().Build();
@@ -817,7 +844,7 @@ public class CommandBufferTests
         using var resolver = buffer.Playback();
         var entity = eb.Resolve();
 
-        // Remove a component
+        // Remove a component that isn't on the entity
         buffer.Remove<ComponentInt32>(entity);
 
         buffer.Playback();

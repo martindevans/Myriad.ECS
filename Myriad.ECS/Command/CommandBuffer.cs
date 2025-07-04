@@ -541,7 +541,8 @@ public sealed partial class CommandBuffer
     }
 
     /// <summary>
-    /// Remove a component attached to an entity
+    /// Remove a component attached to an entity.
+    /// Removing a component that the entity does not have, or from a dead entity, is <b>valid</b>, it's just a no-op.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="entity"></param>
