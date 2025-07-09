@@ -89,6 +89,11 @@ public readonly ref struct RefTuple<T0>
 		entity = Entity;
 		item0 = _item0;
 	}
+
+	public void Deconstruct(out RefT<T0> item0)
+	{
+		item0 = _item0;
+	}
 }
 
 
@@ -120,6 +125,12 @@ public readonly ref struct RefTuple<T0, T1>
 	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1)
 	{
 		entity = Entity;
+		item0 = _item0;
+		item1 = _item1;
+	}
+
+	public void Deconstruct(out RefT<T0> item0, out RefT<T1> item1)
+	{
 		item0 = _item0;
 		item1 = _item1;
 	}
@@ -162,6 +173,13 @@ public readonly ref struct RefTuple<T0, T1, T2>
 	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2)
 	{
 		entity = Entity;
+		item0 = _item0;
+		item1 = _item1;
+		item2 = _item2;
+	}
+
+	public void Deconstruct(out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2)
+	{
 		item0 = _item0;
 		item1 = _item1;
 		item2 = _item2;
@@ -213,6 +231,14 @@ public readonly ref struct RefTuple<T0, T1, T2, T3>
 	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3)
 	{
 		entity = Entity;
+		item0 = _item0;
+		item1 = _item1;
+		item2 = _item2;
+		item3 = _item3;
+	}
+
+	public void Deconstruct(out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3)
+	{
 		item0 = _item0;
 		item1 = _item1;
 		item2 = _item2;
@@ -273,6 +299,15 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4>
 	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4)
 	{
 		entity = Entity;
+		item0 = _item0;
+		item1 = _item1;
+		item2 = _item2;
+		item3 = _item3;
+		item4 = _item4;
+	}
+
+	public void Deconstruct(out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4)
+	{
 		item0 = _item0;
 		item1 = _item1;
 		item2 = _item2;
@@ -342,6 +377,16 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5>
 	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5)
 	{
 		entity = Entity;
+		item0 = _item0;
+		item1 = _item1;
+		item2 = _item2;
+		item3 = _item3;
+		item4 = _item4;
+		item5 = _item5;
+	}
+
+	public void Deconstruct(out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5)
+	{
 		item0 = _item0;
 		item1 = _item1;
 		item2 = _item2;
@@ -420,6 +465,17 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6>
 	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6)
 	{
 		entity = Entity;
+		item0 = _item0;
+		item1 = _item1;
+		item2 = _item2;
+		item3 = _item3;
+		item4 = _item4;
+		item5 = _item5;
+		item6 = _item6;
+	}
+
+	public void Deconstruct(out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6)
+	{
 		item0 = _item0;
 		item1 = _item1;
 		item2 = _item2;
@@ -507,6 +563,18 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7>
 	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7)
 	{
 		entity = Entity;
+		item0 = _item0;
+		item1 = _item1;
+		item2 = _item2;
+		item3 = _item3;
+		item4 = _item4;
+		item5 = _item5;
+		item6 = _item6;
+		item7 = _item7;
+	}
+
+	public void Deconstruct(out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7)
+	{
 		item0 = _item0;
 		item1 = _item1;
 		item2 = _item2;
@@ -613,6 +681,19 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		item7 = _item7;
 		item8 = _item8;
 	}
+
+	public void Deconstruct(out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8)
+	{
+		item0 = _item0;
+		item1 = _item1;
+		item2 = _item2;
+		item3 = _item3;
+		item4 = _item4;
+		item5 = _item5;
+		item6 = _item6;
+		item7 = _item7;
+		item8 = _item8;
+	}
 }
 
 [ExcludeFromCodeCoverage]
@@ -708,6 +789,20 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9)
 	{
 		entity = Entity;
+		item0 = _item0;
+		item1 = _item1;
+		item2 = _item2;
+		item3 = _item3;
+		item4 = _item4;
+		item5 = _item5;
+		item6 = _item6;
+		item7 = _item7;
+		item8 = _item8;
+		item9 = _item9;
+	}
+
+	public void Deconstruct(out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9)
+	{
 		item0 = _item0;
 		item1 = _item1;
 		item2 = _item2;
@@ -834,6 +929,21 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		item9 = _item9;
 		item10 = _item10;
 	}
+
+	public void Deconstruct(out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10)
+	{
+		item0 = _item0;
+		item1 = _item1;
+		item2 = _item2;
+		item3 = _item3;
+		item4 = _item4;
+		item5 = _item5;
+		item6 = _item6;
+		item7 = _item7;
+		item8 = _item8;
+		item9 = _item9;
+		item10 = _item10;
+	}
 }
 
 [ExcludeFromCodeCoverage]
@@ -945,6 +1055,22 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11)
 	{
 		entity = Entity;
+		item0 = _item0;
+		item1 = _item1;
+		item2 = _item2;
+		item3 = _item3;
+		item4 = _item4;
+		item5 = _item5;
+		item6 = _item6;
+		item7 = _item7;
+		item8 = _item8;
+		item9 = _item9;
+		item10 = _item10;
+		item11 = _item11;
+	}
+
+	public void Deconstruct(out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11)
+	{
 		item0 = _item0;
 		item1 = _item1;
 		item2 = _item2;
@@ -1091,6 +1217,23 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 		item11 = _item11;
 		item12 = _item12;
 	}
+
+	public void Deconstruct(out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11, out RefT<T12> item12)
+	{
+		item0 = _item0;
+		item1 = _item1;
+		item2 = _item2;
+		item3 = _item3;
+		item4 = _item4;
+		item5 = _item5;
+		item6 = _item6;
+		item7 = _item7;
+		item8 = _item8;
+		item9 = _item9;
+		item10 = _item10;
+		item11 = _item11;
+		item12 = _item12;
+	}
 }
 
 [ExcludeFromCodeCoverage]
@@ -1218,6 +1361,24 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11, out RefT<T12> item12, out RefT<T13> item13)
 	{
 		entity = Entity;
+		item0 = _item0;
+		item1 = _item1;
+		item2 = _item2;
+		item3 = _item3;
+		item4 = _item4;
+		item5 = _item5;
+		item6 = _item6;
+		item7 = _item7;
+		item8 = _item8;
+		item9 = _item9;
+		item10 = _item10;
+		item11 = _item11;
+		item12 = _item12;
+		item13 = _item13;
+	}
+
+	public void Deconstruct(out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11, out RefT<T12> item12, out RefT<T13> item13)
+	{
 		item0 = _item0;
 		item1 = _item1;
 		item2 = _item2;
@@ -1384,6 +1545,25 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 		item13 = _item13;
 		item14 = _item14;
 	}
+
+	public void Deconstruct(out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11, out RefT<T12> item12, out RefT<T13> item13, out RefT<T14> item14)
+	{
+		item0 = _item0;
+		item1 = _item1;
+		item2 = _item2;
+		item3 = _item3;
+		item4 = _item4;
+		item5 = _item5;
+		item6 = _item6;
+		item7 = _item7;
+		item8 = _item8;
+		item9 = _item9;
+		item10 = _item10;
+		item11 = _item11;
+		item12 = _item12;
+		item13 = _item13;
+		item14 = _item14;
+	}
 }
 
 [ExcludeFromCodeCoverage]
@@ -1527,6 +1707,26 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11, out RefT<T12> item12, out RefT<T13> item13, out RefT<T14> item14, out RefT<T15> item15)
 	{
 		entity = Entity;
+		item0 = _item0;
+		item1 = _item1;
+		item2 = _item2;
+		item3 = _item3;
+		item4 = _item4;
+		item5 = _item5;
+		item6 = _item6;
+		item7 = _item7;
+		item8 = _item8;
+		item9 = _item9;
+		item10 = _item10;
+		item11 = _item11;
+		item12 = _item12;
+		item13 = _item13;
+		item14 = _item14;
+		item15 = _item15;
+	}
+
+	public void Deconstruct(out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11, out RefT<T12> item12, out RefT<T13> item13, out RefT<T14> item14, out RefT<T15> item15)
+	{
 		item0 = _item0;
 		item1 = _item1;
 		item2 = _item2;

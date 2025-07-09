@@ -105,6 +105,28 @@ public class EntityTests
     }
 
     [TestMethod]
+    public void GetComponentsTuple()
+    {
+        var w = new WorldBuilder().Build();
+        var b = new CommandBuffer(w);
+
+        var e = b.Create().Set(new ComponentInt16(7)).Set(new Component1()).Set(new ComponentInt32());
+        using var resolver = b.Playback();
+        var entity = e.Resolve();
+
+        Assert.AreEqual(3, entity.ComponentTypes.Count);
+        Assert.IsTrue(entity.ComponentTypes.Contains(ComponentID<ComponentInt16>.ID));
+
+        var tuple = entity.GetComponentRef<ComponentInt16, ComponentInt32>();
+        var (t1_e, t1_16, t1_32) = tuple;
+        var (t2_16, t2_32) = tuple;
+
+        Assert.AreEqual(entity, t1_e);
+        Assert.AreEqual(7, t1_16.Ref.Value);
+        Assert.AreEqual(7, t2_16.Ref.Value);
+    }
+
+    [TestMethod]
     public void GetComponentDead()
     {
         var w = new WorldBuilder().Build();

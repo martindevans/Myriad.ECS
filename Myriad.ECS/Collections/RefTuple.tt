@@ -127,6 +127,17 @@ public readonly ref struct RefTuple<<#= tparams #>>
 }
 #>
 	}
+
+	public void Deconstruct(<#= string.Join(", ", Enumerable.Range(0, i).Select(x => "out RefT<T" + x + "> item" + x)) #>)
+	{
+<# for (var k = 0; k < i; k++)
+{
+#>
+		item<#= k #> = _item<#= k #>;
+<#
+}
+#>
+	}
 }
 <#
 }
