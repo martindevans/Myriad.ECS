@@ -333,7 +333,6 @@ public sealed partial class CommandBuffer
     /// <summary>
     /// Clear this <see cref="CommandBuffer"/>
     /// </summary>
-    /// <exception cref="NotImplementedException"></exception>
     public void Clear()
     {
         // We can't actually make any changes, but we do still need the lazy buffer

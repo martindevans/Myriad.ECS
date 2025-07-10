@@ -1208,4 +1208,84 @@ public class CommandBufferTests
         Assert.IsTrue(e.HasComponent<Component0>());
         Assert.IsTrue(e.HasComponent<Component1>());
     }
+
+    [TestMethod]
+    public void RelationshipWithDeadEntity()
+    {
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+
+        // Create an entity
+        cmd.Create();
+        var dead = cmd.Playback()[0];
+        cmd.Delete(dead);
+        cmd.Playback();
+
+        // Create an entity, set a relation to a dead entity
+        var eb = cmd.Create().Set(new Relational1(), dead);
+        cmd.Playback();
+        var e = eb.Resolve();
+
+        Assert.IsFalse(e.GetComponentRef<Relational1>().Target.IsAlive());
+    }
+
+    [TestMethod]
+    public void RelationshipWithDefaultEntity()
+    {
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+
+        // Create an entity, set a relation to a dead entity
+        var eb = cmd.Create().Set(new Relational1(), default);
+        cmd.Playback();
+        var e = eb.Resolve();
+
+        Assert.IsFalse(e.GetComponentRef<Relational1>().Target.IsAlive());
+    }
+
+    [TestMethod]
+    public void RelationshipFromDeadEntity()
+    {
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+
+        // Create 2 entities
+        cmd.Create();
+        cmd.Create();
+        var resolver = cmd.Playback();
+        var a = resolver[0];
+        var b = resolver[1];
+        cmd.Playback();
+
+        // Create relation from a -> b
+        cmd.Set(a, new Relational1(), b);
+
+        // Delete A in the same pass
+        cmd.Delete(a);
+
+        // This should not throw
+        cmd.Playback();
+    }
+
+    [TestMethod]
+    public void RelationshipWithDeadEntityDeletedInBuffer()
+    {
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+
+        // Create an entity
+        cmd.Create();
+        var dead = cmd.Playback()[0];
+
+        // Create an entity
+        var eb = cmd.Create().Set(new Relational1(), dead);
+
+        // Delete the entity we're referring to in the same buffer
+        cmd.Delete(dead);
+
+        cmd.Playback();
+        var e = eb.Resolve();
+
+        Assert.IsFalse(e.GetComponentRef<Relational1>().Target.IsAlive());
+    }
 }
