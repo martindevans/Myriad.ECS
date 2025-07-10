@@ -5,6 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 using Myriad.ECS.Collections;
+using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS;
@@ -44,6 +45,30 @@ public readonly partial record struct EntityId
         );
     }
 
+    /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<<#= types #>>(World world)
+        where <#= Constraints(i, 8) #>
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+<# for (var j = 0; j < i; j++)
+{
+    var comma = (j == (i - 1)) ? "" : ",";
+#>
+            ComponentID<T<#= j #>>.ID,
+<#
+}
+#>
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+    }
+
 <#
 }
 #>
@@ -63,6 +88,15 @@ public readonly partial record struct Entity
         where <#= Constraints(i, 8) #>
     {
         return ID.GetComponentRef<<#= types #>>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public bool HasComponent<<#= types #>>()
+        where <#= Constraints(i, 8) #>
+    {
+        return ID.HasComponent<<#= types #>>(World);
     }
 
 <#

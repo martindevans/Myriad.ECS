@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Collections;
+using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS;
@@ -34,6 +35,25 @@ public readonly partial record struct EntityId
     }
 
     /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1>(World world)
+        where T0 : IComponent
+        where T1 : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+    }
+
+    /// <summary>
     /// Get a tuple of several components
     /// </summary>
     public RefTuple<T0, T1, T2> GetComponentRef<T0, T1, T2>(World world)
@@ -64,6 +84,27 @@ public readonly partial record struct EntityId
 #endif
 
         );
+    }
+
+    /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2>(World world)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
     }
 
     /// <summary>
@@ -104,6 +145,29 @@ public readonly partial record struct EntityId
 #endif
 
         );
+    }
+
+    /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3>(World world)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
     }
 
     /// <summary>
@@ -151,6 +215,31 @@ public readonly partial record struct EntityId
 #endif
 
         );
+    }
+
+    /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4>(World world)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
     }
 
     /// <summary>
@@ -205,6 +294,33 @@ public readonly partial record struct EntityId
 #endif
 
         );
+    }
+
+    /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5>(World world)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
     }
 
     /// <summary>
@@ -266,6 +382,35 @@ public readonly partial record struct EntityId
 #endif
 
         );
+    }
+
+    /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6>(World world)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
     }
 
     /// <summary>
@@ -334,6 +479,37 @@ public readonly partial record struct EntityId
 #endif
 
         );
+    }
+
+    /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7>(World world)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
     }
 
     /// <summary>
@@ -409,6 +585,39 @@ public readonly partial record struct EntityId
 #endif
 
         );
+    }
+
+    /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8>(World world)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
     }
 
     /// <summary>
@@ -491,6 +700,41 @@ public readonly partial record struct EntityId
 #endif
 
         );
+    }
+
+    /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(World world)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
     }
 
     /// <summary>
@@ -580,6 +824,43 @@ public readonly partial record struct EntityId
 #endif
 
         );
+    }
+
+    /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(World world)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
     }
 
     /// <summary>
@@ -676,6 +957,45 @@ public readonly partial record struct EntityId
 #endif
 
         );
+    }
+
+    /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(World world)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
     }
 
     /// <summary>
@@ -779,6 +1099,47 @@ public readonly partial record struct EntityId
 #endif
 
         );
+    }
+
+    /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(World world)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID,
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
     }
 
     /// <summary>
@@ -889,6 +1250,49 @@ public readonly partial record struct EntityId
 #endif
 
         );
+    }
+
+    /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(World world)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID,
+            ComponentID<T13>.ID,
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
     }
 
     /// <summary>
@@ -1006,6 +1410,51 @@ public readonly partial record struct EntityId
 #endif
 
         );
+    }
+
+    /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(World world)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID,
+            ComponentID<T13>.ID,
+            ComponentID<T14>.ID,
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
     }
 
     /// <summary>
@@ -1132,6 +1581,53 @@ public readonly partial record struct EntityId
         );
     }
 
+    /// <summary>
+    /// Check if this entity contains a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(World world)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+    {
+        ref var entityInfo = ref world.GetEntityInfo(this);
+
+        Span<ComponentID> components = stackalloc ComponentID[]
+        {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID,
+            ComponentID<T13>.ID,
+            ComponentID<T14>.ID,
+            ComponentID<T15>.ID,
+        };
+        components.Sort();
+
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+    }
+
 }
 
 public readonly partial record struct Entity
@@ -1149,12 +1645,33 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
+    public bool HasComponent<T0, T1>()
+        where T0 : IComponent
+        where T1 : IComponent
+    {
+        return ID.HasComponent<T0, T1>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
     public RefTuple<T0, T1, T2> GetComponentRef<T0, T1, T2>()
         where T0 : IComponent
         where T1 : IComponent
         where T2 : IComponent
     {
         return ID.GetComponentRef<T0, T1, T2>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+    {
+        return ID.HasComponent<T0, T1, T2>(World);
     }
 
     /// <summary>
@@ -1167,6 +1684,18 @@ public readonly partial record struct Entity
         where T3 : IComponent
     {
         return ID.GetComponentRef<T0, T1, T2, T3>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+    {
+        return ID.HasComponent<T0, T1, T2, T3>(World);
     }
 
     /// <summary>
@@ -1185,6 +1714,19 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+    {
+        return ID.HasComponent<T0, T1, T2, T3, T4>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
     public RefTuple<T0, T1, T2, T3, T4, T5> GetComponentRef<T0, T1, T2, T3, T4, T5>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1194,6 +1736,20 @@ public readonly partial record struct Entity
         where T5 : IComponent
     {
         return ID.GetComponentRef<T0, T1, T2, T3, T4, T5>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+    {
+        return ID.HasComponent<T0, T1, T2, T3, T4, T5>(World);
     }
 
     /// <summary>
@@ -1214,6 +1770,21 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+    {
+        return ID.HasComponent<T0, T1, T2, T3, T4, T5, T6>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
     public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1225,6 +1796,22 @@ public readonly partial record struct Entity
         where T7 : IComponent
     {
         return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+    {
+        return ID.HasComponent<T0, T1, T2, T3, T4, T5, T6, T7>(World);
     }
 
     /// <summary>
@@ -1247,6 +1834,23 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+    {
+        return ID.HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
     public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1260,6 +1864,24 @@ public readonly partial record struct Entity
         where T9 : IComponent
     {
         return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+    {
+        return ID.HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(World);
     }
 
     /// <summary>
@@ -1284,6 +1906,25 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+    {
+        return ID.HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
     public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1299,6 +1940,26 @@ public readonly partial record struct Entity
         where T11 : IComponent
     {
         return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+    {
+        return ID.HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(World);
     }
 
     /// <summary>
@@ -1325,6 +1986,27 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+    {
+        return ID.HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
     public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1342,6 +2024,28 @@ public readonly partial record struct Entity
         where T13 : IComponent
     {
         return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+    {
+        return ID.HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(World);
     }
 
     /// <summary>
@@ -1370,6 +2074,29 @@ public readonly partial record struct Entity
     /// <summary>
     /// Get a tuple of several components
     /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+    {
+        return ID.HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
     public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1389,6 +2116,30 @@ public readonly partial record struct Entity
         where T15 : IComponent
     {
         return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(World);
+    }
+
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    public bool HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+    {
+        return ID.HasComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(World);
     }
 
 }
