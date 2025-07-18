@@ -87,7 +87,7 @@ public class ExecuteChunkTests
     private struct InstantFail
         : IChunkQuery<Component0>
     {
-        public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<Component0> t0)
+        public void Execute(ChunkHandle chunk, Span<Component0> t0)
         {
             Assert.Fail();
         }
@@ -96,7 +96,7 @@ public class ExecuteChunkTests
     private struct SetValueToOne
         : IChunkQuery<ComponentInt32>
     {
-        public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<ComponentInt32> t0)
+        public void Execute(ChunkHandle chunk, Span<ComponentInt32> t0)
         {
             for (var i = 0; i < t0.Length; i++)
                 t0[i].Value = 1;

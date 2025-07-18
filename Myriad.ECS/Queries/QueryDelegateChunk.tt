@@ -1,0 +1,409 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+	const int PARAM_COUNT = 16;
+#>
+using Myriad.ECS.Queries;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedParameter.Global
+// ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable ConvertToPrimaryConstructor
+
+<# for (var i = 1; i < PARAM_COUNT; i++)
+{
+	var delegate_type_params = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
+	var delegate_wrapper_name = "QueryDelegateChunkWrapper" + i;
+	var delegate_call_params = string.Join(", ", Enumerable.Range(0, i).Select(x => $"t{x}"));
+	var delegate_def_params = string.Join(", ", Enumerable.Range(0, i).Select(x => $"Span<T{x}> t{x}"));
+#>
+namespace Myriad.ECS.Queries
+{
+	/// <summary>
+	/// A delegate called for entities in a query. Receives just the components requested.
+	/// </summary>
+	public delegate void QueryDelegateChunk<<#= delegate_type_params #>>(
+		<#= delegate_def_params #>
+	);
+
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity and the components requested.
+	/// </summary>
+	public delegate void QueryDelegateChunkHandle<<#= delegate_type_params #>>(
+		ChunkHandle chunk,
+		<#= delegate_def_params #>
+	);
+
+	/// <summary>
+	/// A delegate called for entities in a query. Receives a data object passed into the query and the components requested.
+	/// </summary>
+	public delegate void QueryDelegateChunkData<in TData, <#= delegate_type_params #>>(
+		TData data,
+		<#= delegate_def_params #>
+	);
+
+	/// <summary>
+	/// A delegate called for entities in a query. Receives the entity, a data object passed into the query and the components requested.
+	/// </summary>
+	public delegate void QueryDelegateChunkHandleData<in TData, <#= delegate_type_params #>>(
+		TData data,
+		ChunkHandle chunk,
+		<#= delegate_def_params #>
+	);
+
+	<#= CoverageAttribute(i) #>
+	internal readonly struct <#= delegate_wrapper_name #>E<<#= delegate_type_params #>>
+		: IChunkQuery<<#= delegate_type_params #>>
+		where <#= Constraints(i, 12) #>
+	{
+		private readonly QueryDelegateChunkHandle<<#= delegate_type_params #>> _delegate;
+
+		public <#= delegate_wrapper_name #>E(QueryDelegateChunkHandle<<#= delegate_type_params #>> @delegate)
+        {
+            _delegate = @delegate;
+        }
+
+		public void Execute(ChunkHandle chunk, <#= Spans(0, i) #>)
+		{
+			_delegate(chunk, <#= delegate_call_params #>);
+		}
+	}
+
+	<#= CoverageAttribute(i) #>
+	internal readonly struct <#= delegate_wrapper_name #><<#= delegate_type_params #>>
+		: IChunkQuery<<#= delegate_type_params #>>
+		where <#= Constraints(i, 12) #>
+	{
+		private readonly QueryDelegateChunk<<#= delegate_type_params #>> _delegate;
+
+		public <#= delegate_wrapper_name #>(QueryDelegateChunk<<#= delegate_type_params #>> @delegate)
+        {
+            _delegate = @delegate;
+        }
+
+		public void Execute(ChunkHandle chunk, <#= Spans(0, i) #>)
+		{
+			_delegate(<#= delegate_call_params #>);
+		}
+	}
+
+	<#= CoverageAttribute(i) #>
+	internal readonly struct <#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>
+		: IChunkQuery<<#= delegate_type_params #>>
+		where <#= Constraints(i, 12) #>
+	{
+		private readonly QueryDelegateChunkHandleData<TData, <#= delegate_type_params #>> _delegate;
+		private readonly TData _data;
+
+		public <#= delegate_wrapper_name #>ED(TData data, QueryDelegateChunkHandleData<TData, <#= delegate_type_params #>> @delegate)
+        {
+			_data = data;
+            _delegate = @delegate;
+        }
+
+		public void Execute(ChunkHandle chunk, <#= Spans(0, i) #>)
+		{
+			_delegate(_data, chunk, <#= delegate_call_params #>);
+		}
+	}
+
+	<#= CoverageAttribute(i) #>
+	internal readonly struct <#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>
+		: IChunkQuery<<#= delegate_type_params #>>
+		where <#= Constraints(i, 12) #>
+	{
+		private readonly QueryDelegateChunkData<TData, <#= delegate_type_params #>> _delegate;
+		private readonly TData _data;
+
+		public <#= delegate_wrapper_name #>D(TData data, QueryDelegateChunkData<TData, <#= delegate_type_params #>> @delegate)
+        {
+			_data = data;
+            _delegate = @delegate;
+        }
+
+		public void Execute(ChunkHandle chunk, <#= Spans(0, i) #>)
+		{
+			_delegate(_data, <#= delegate_call_params #>);
+		}
+	}
+}
+
+namespace Myriad.ECS.Worlds
+{
+	public partial class World
+	{
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int Query<<#= delegate_type_params #>>(QueryDelegateChunkHandle<<#= delegate_type_params #>> @delegate, ref QueryDescription? query)
+			where <#= Constraints(i, 12) #>
+		{
+			return ExecuteChunk<<#= delegate_wrapper_name #>E<<#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #>E<<#= delegate_type_params #>>(@delegate),
+				ref query
+			);
+		}
+
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int Query<<#= delegate_type_params #>>(QueryDelegateChunkHandle<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+			where <#= Constraints(i, 12) #>
+		{
+			return ExecuteChunk<<#= delegate_wrapper_name #>E<<#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #>E<<#= delegate_type_params #>>(@delegate),
+				ref query
+			);
+		}
+
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int QueryParallel<<#= delegate_type_params #>>(QueryDelegateChunkHandle<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+			where <#= Constraints(i, 12) #>
+		{
+			return ExecuteChunkParallel<<#= delegate_wrapper_name #>E<<#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #>E<<#= delegate_type_params #>>(@delegate),
+				query
+			);
+		}
+
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int Query<<#= delegate_type_params #>>(QueryDelegateChunk<<#= delegate_type_params #>> @delegate, ref QueryDescription? query)
+			where <#= Constraints(i, 12) #>
+		{
+			return ExecuteChunk<<#= delegate_wrapper_name #><<#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #><<#= delegate_type_params #>>(@delegate),
+				ref query
+			);
+		}
+
+		/// <summary>
+		/// Execute a delegate for every entity in a query.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int Query<<#= delegate_type_params #>>(QueryDelegateChunk<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+			where <#= Constraints(i, 12) #>
+		{
+			return ExecuteChunk<<#= delegate_wrapper_name #><<#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #><<#= delegate_type_params #>>(@delegate),
+				ref query
+			);
+		}
+
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int QueryParallel<<#= delegate_type_params #>>(QueryDelegateChunk<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+			where <#= Constraints(i, 12) #>
+		{
+			return ExecuteChunkParallel<<#= delegate_wrapper_name #><<#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #><<#= delegate_type_params #>>(@delegate),
+				query
+			);
+		}
+
+		// vv-- TData variants --vv //
+
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
+		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateChunkHandleData<TData, <#= delegate_type_params #>> @delegate, ref QueryDescription? query)
+			where <#= Constraints(i, 12) #>
+		{
+			return ExecuteChunk<<#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>(data, @delegate),
+				ref query
+			);
+		}
+
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
+		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateChunkHandleData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+			where <#= Constraints(i, 12) #>
+		{
+			return ExecuteChunk<<#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>(data, @delegate),
+				ref query
+			);
+		}
+
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
+		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int QueryParallel<TData, <#= delegate_type_params #>>(TData data, QueryDelegateChunkHandleData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+			where <#= Constraints(i, 12) #>
+		{
+			return ExecuteChunkParallel<<#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>(data, @delegate),
+				query
+			);
+		}
+
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
+		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateChunkData<TData, <#= delegate_type_params #>> @delegate, ref QueryDescription? query)
+			where <#= Constraints(i, 12) #>
+		{
+			return ExecuteChunk<<#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>(data, @delegate),
+				ref query
+			);
+		}
+
+		/// <summary>
+		/// Execute a delegate for every entity in a query. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
+		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateChunkData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+			where <#= Constraints(i, 12) #>
+		{
+			return ExecuteChunk<<#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>(data, @delegate),
+				ref query
+			);
+		}
+
+		/// <summary>
+		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <param name="query"></param>
+		/// <param name="data">The object passed into every call</param>
+		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int QueryParallel<TData, <#= delegate_type_params #>>(TData data, QueryDelegateChunkData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
+			where <#= Constraints(i, 12) #>
+		{
+			return ExecuteChunkParallel<<#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
+				new <#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>(data, @delegate),
+				query
+			);
+		}
+	}
+}
+
+<#
+}
+#>
+
+
+<#+ 
+	static string CoverageAttribute(int index)
+	{
+		if (index < 2)
+			return "";
+		return "[ExcludeFromCodeCoverage]";
+	}
+
+	static string Constraints(int count, int spaces = 4)
+    {
+		var prefix = new string(' ', spaces);
+        var str = string.Join(
+			$"\r\n{prefix}where ",
+			Enumerable.Range(0, count).Select(x => $"T{x} : IComponent")
+		);
+
+		return str;
+    }
+
+	static string Name(int mutable)
+	{
+		return "IQuery" + mutable;
+	}
+
+	static string Refs(int start, int count)
+	{
+		var str = string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"ref T{x} t{x}")
+		);
+
+		return str;
+	}
+
+	static string Spans(int start, int count)
+	{
+		var str = string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"Span<T{x}> t{x}")
+		);
+
+		return str;
+	}
+
+	static string Ins(int start, int count)
+	{
+		return string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"ref readonly T{x} t{x}")
+		);
+	}
+
+    static string CallParameters(int count)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(0, count).Select(x => $"ref t{x}[i]")
+        );
+
+        return str;
+    }
+#>

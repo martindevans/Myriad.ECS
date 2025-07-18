@@ -152,8 +152,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, <#= Refs(0, i) #>)
+            public void Execute(ChunkHandle chunk, <#= Refs(0, i) #>)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)

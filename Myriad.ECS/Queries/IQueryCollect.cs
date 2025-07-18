@@ -139,8 +139,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0)
+            public void Execute(ChunkHandle chunk, Span<T0> t0)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
@@ -336,8 +338,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1)
+            public void Execute(ChunkHandle chunk, Span<T0> t0, Span<T1> t1)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
@@ -545,8 +549,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2)
+            public void Execute(ChunkHandle chunk, Span<T0> t0, Span<T1> t1, Span<T2> t2)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
@@ -766,8 +772,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3)
+            public void Execute(ChunkHandle chunk, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
@@ -999,8 +1007,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4)
+            public void Execute(ChunkHandle chunk, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
@@ -1244,8 +1254,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5)
+            public void Execute(ChunkHandle chunk, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
@@ -1501,8 +1513,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6)
+            public void Execute(ChunkHandle chunk, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
@@ -1770,8 +1784,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7)
+            public void Execute(ChunkHandle chunk, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
@@ -2051,8 +2067,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8)
+            public void Execute(ChunkHandle chunk, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
@@ -2344,8 +2362,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9)
+            public void Execute(ChunkHandle chunk, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
@@ -2649,8 +2669,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10)
+            public void Execute(ChunkHandle chunk, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
@@ -2966,8 +2988,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11)
+            public void Execute(ChunkHandle chunk, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
@@ -3295,8 +3319,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12)
+            public void Execute(ChunkHandle chunk, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
@@ -3636,8 +3662,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12, Span<T13> t13)
+            public void Execute(ChunkHandle chunk, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12, Span<T13> t13)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
@@ -3989,8 +4017,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12, Span<T13> t13, Span<T14> t14)
+            public void Execute(ChunkHandle chunk, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12, Span<T13> t13, Span<T14> t14)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
@@ -4354,8 +4384,10 @@ namespace Myriad.ECS.Worlds
                 _collector = collector;
             }
 
-            public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12, Span<T13> t13, Span<T14> t14, Span<T15> t15)
+            public void Execute(ChunkHandle chunk, Span<T0> t0, Span<T1> t1, Span<T2> t2, Span<T3> t3, Span<T4> t4, Span<T5> t5, Span<T6> t6, Span<T7> t7, Span<T8> t8, Span<T9> t9, Span<T10> t10, Span<T11> t11, Span<T12> t12, Span<T13> t13, Span<T14> t14, Span<T15> t15)
             {
+				var e = chunk.Entities.Span;
+
                 _collector.AddCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)

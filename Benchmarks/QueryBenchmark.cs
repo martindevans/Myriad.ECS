@@ -131,7 +131,7 @@ public class QueryBenchmark
     private struct ChunkQueryAction
         : IChunkQuery<Position, Velocity>
     {
-        public readonly void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<Position> pos, Span<Velocity> vel)
+        public readonly void Execute(ChunkHandle chunk, Span<Position> pos, Span<Velocity> vel)
         {
             for (var i = 0; i < pos.Length; i++)
             {
