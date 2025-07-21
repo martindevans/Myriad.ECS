@@ -19,7 +19,7 @@ public readonly ref struct ChunkHandle
     /// <summary>
     /// Get the total number of entities in this chunk
     /// </summary>
-    public int EntityCount => _chunk.EntityCount;
+    public readonly int EntityCount;
 
     /// <summary>
     /// Get the entities in this chunk
@@ -29,6 +29,8 @@ public readonly ref struct ChunkHandle
     internal ChunkHandle(Chunk chunk)
     {
         _chunk = chunk;
+
+        EntityCount = _chunk.EntityCount;
     }
 
     /// <summary>
