@@ -40,6 +40,12 @@ public readonly partial record struct Entity
     }
 
     /// <inheritdoc />
+    public override int GetHashCode()
+    {
+        return ID.GetHashCode();
+    }
+
+    /// <inheritdoc />
     public override string ToString()
     {
         return ID.ToString();

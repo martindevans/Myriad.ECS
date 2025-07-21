@@ -29,6 +29,12 @@ public readonly partial record struct EntityId
     }
 
     /// <inheritdoc />
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(ID, Version);
+    }
+
+    /// <inheritdoc />
     public override string ToString()
     {
         return $"{ID}v{Version}";
