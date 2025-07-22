@@ -30,6 +30,11 @@ public interface ISystemGroup<TData>
     IEnumerable<SystemGroupItem<TData>> RecursiveSystems { get; }
 
     /// <summary>
+    /// Enable or disable this system. Disables systems will not receive any update calls (including early and late)
+    /// </summary>
+    bool Enabled { get; set; }
+
+    /// <summary>
     /// Get a system of the given type
     /// </summary>
     /// <typeparam name="TSys"></typeparam>
@@ -154,6 +159,9 @@ public abstract class BaseSystemGroup<TData>
     private readonly List<SystemGroupItem<TData>> _systems;
     private readonly List<SystemGroupItem<TData>> _afterSystems;
 
+    /// <inheritdoc />
+    public bool Enabled { get; set; } = true;
+
     /// <summary>
     /// Create a new system group
     /// </summary>
@@ -236,6 +244,9 @@ public abstract class BaseSystemGroup<TData>
     {
         _timer.Reset();
 
+        if (!Enabled)
+            return;
+
         _timer.Start();
         BeforeUpdateInternal(_beforeSystems, data);
         _timer.Stop();
@@ -254,6 +265,9 @@ public abstract class BaseSystemGroup<TData>
     /// <param name="data"></param>
     public void Update(TData data)
     {
+        if (!Enabled)
+            return;
+
         _timer.Start();
         UpdateInternal(_systems, data);
         _timer.Stop();
@@ -272,6 +286,9 @@ public abstract class BaseSystemGroup<TData>
     /// <param name="data"></param>
     public void AfterUpdate(TData data)
     {
+        if (!Enabled)
+            return;
+
         _timer.Start();
         AfterUpdateInternal(_afterSystems, data);
         _timer.Stop();
