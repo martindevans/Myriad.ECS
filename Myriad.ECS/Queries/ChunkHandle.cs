@@ -89,7 +89,7 @@ public readonly ref struct ChunkHandle
         /// Get the raw array storing component data. Accessing beyond the entity count will be junk data.
         /// </summary>
         /// <returns></returns>
-        public Span<T> GetComponentArray<T>()
+        public T[] GetComponentArray<T>()
             where T : IComponent
         {
             return _chunk.GetComponentArray<T>();
