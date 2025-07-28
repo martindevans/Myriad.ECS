@@ -246,4 +246,9 @@ internal sealed class Chunk
         return destRow;
     }
     #endregion
+
+    internal Entity[] GetEntityArray()
+    {
+        return _entities;
+    }
 }

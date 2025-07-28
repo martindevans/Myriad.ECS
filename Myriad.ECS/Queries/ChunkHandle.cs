@@ -94,5 +94,14 @@ public readonly ref struct ChunkHandle
         {
             return _chunk.GetComponentArray<T>();
         }
+
+        /// <summary>
+        /// Get the raw array storing entity data. Accessing beyond the entity count will be junk data.
+        /// </summary>
+        /// <returns></returns>
+        public Entity[] GetEntityArray()
+        {
+            return _chunk.GetEntityArray();
+        }
     }
 }
