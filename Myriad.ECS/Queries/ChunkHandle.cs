@@ -93,8 +93,6 @@ public readonly ref struct ChunkHandle
             where T : IComponent
         {
             return _chunk.GetComponentArray<T>();
-
-            _chunk.Entities
         }
     }
 }
