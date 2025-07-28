@@ -63,4 +63,38 @@ public readonly ref struct ChunkHandle
     {
         return _chunk.GetSpan<T>();
     }
+
+    /// <summary>
+    /// Unlock unsafe access to the chunk
+    /// </summary>
+    /// <returns></returns>
+    public Unsafe Danger()
+    {
+        return new Unsafe(_chunk);
+    }
+
+    /// <summary>
+    /// Unsafe things to do with a chunk handle
+    /// </summary>
+    public readonly struct Unsafe
+    {
+        private readonly Chunk _chunk;
+
+        internal Unsafe(Chunk chunk)
+        {
+            _chunk = chunk;
+        }
+
+        /// <summary>
+        /// Get the raw array storing component data. Accessing beyond the entity count will be junk data.
+        /// </summary>
+        /// <returns></returns>
+        public Span<T> GetComponentArray<T>()
+            where T : IComponent
+        {
+            return _chunk.GetComponentArray<T>();
+
+            _chunk.Entities
+        }
+    }
 }
