@@ -51,22 +51,44 @@ public readonly partial record struct EntityId
     public bool HasComponent<<#= types #>>(World world)
         where <#= Constraints(i, 8) #>
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<<#= types #>>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<<#= types #>>
+        where <#= Constraints(i, 8) #>
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
+            var components = new[]
+            {
 <# for (var j = 0; j < i; j++)
 {
     var comma = (j == (i - 1)) ? "" : ",";
 #>
-            ComponentID<T<#= j #>>.ID,
+                ComponentID<T<#= j #>>.ID,
 <#
 }
 #>
-        };
-        components.Sort();
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
 <#

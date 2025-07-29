@@ -239,7 +239,7 @@ internal class OrderedListSet<TItem>
     /// <returns></returns>
     internal bool IsSupersetOfSortedSpan(ReadOnlySpan<TItem> other)
     {
-        if (other.Length > Count)
+        if (other.Length > _items.Count)
             return false;
 
         // Move forward through both lists, checking that all items in `other` are in `this`
@@ -249,22 +249,23 @@ internal class OrderedListSet<TItem>
         {
             var cmp = _items[i].CompareTo(other[j]);
 
-            if (cmp < 0)
+            switch (cmp)
             {
-                // Item in `this` < `other`. That's acceptable, it means the item is in the superset and not in the subset.
-                // Move to the next item in the superset.
-                i++;
-            }
-            else if (cmp == 0)
-            {
-                // Items are equal, move to the next item in both
-                i++;
-                j++;
-            }
-            else
-            {
-                // Item in `other` < `this`. That means `other` is not a subset!
-                return false;
+                case < 0:
+                    // Item in `this` < `other`. That's acceptable, it means the item is in the superset and not in the subset.
+                    // Move to the next item in the superset.
+                    i++;
+                    break;
+
+                case 0:
+                    // Items are equal, move to the next item in both
+                    i++;
+                    j++;
+                    break;
+
+                default:
+                    // Item in `other` < `this`. That means `other` is not a subset!
+                    return false;
             }
         }
 

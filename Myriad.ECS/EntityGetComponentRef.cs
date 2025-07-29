@@ -41,16 +41,39 @@ public readonly partial record struct EntityId
         where T0 : IComponent
         where T1 : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<T0, T1>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<T0, T1>
+        where T0 : IComponent
+        where T1 : IComponent
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-        };
-        components.Sort();
+            var components = new[]
+            {
+                ComponentID<T0>.ID,
+                ComponentID<T1>.ID,
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
     /// <summary>
@@ -94,17 +117,41 @@ public readonly partial record struct EntityId
         where T1 : IComponent
         where T2 : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<T0, T1, T2>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<T0, T1, T2>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-        };
-        components.Sort();
+            var components = new[]
+            {
+                ComponentID<T0>.ID,
+                ComponentID<T1>.ID,
+                ComponentID<T2>.ID,
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
     /// <summary>
@@ -156,18 +203,43 @@ public readonly partial record struct EntityId
         where T2 : IComponent
         where T3 : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<T0, T1, T2, T3>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<T0, T1, T2, T3>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-        };
-        components.Sort();
+            var components = new[]
+            {
+                ComponentID<T0>.ID,
+                ComponentID<T1>.ID,
+                ComponentID<T2>.ID,
+                ComponentID<T3>.ID,
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
     /// <summary>
@@ -227,19 +299,45 @@ public readonly partial record struct EntityId
         where T3 : IComponent
         where T4 : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<T0, T1, T2, T3, T4>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<T0, T1, T2, T3, T4>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-        };
-        components.Sort();
+            var components = new[]
+            {
+                ComponentID<T0>.ID,
+                ComponentID<T1>.ID,
+                ComponentID<T2>.ID,
+                ComponentID<T3>.ID,
+                ComponentID<T4>.ID,
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
     /// <summary>
@@ -307,20 +405,47 @@ public readonly partial record struct EntityId
         where T4 : IComponent
         where T5 : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<T0, T1, T2, T3, T4, T5>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<T0, T1, T2, T3, T4, T5>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-            ComponentID<T5>.ID,
-        };
-        components.Sort();
+            var components = new[]
+            {
+                ComponentID<T0>.ID,
+                ComponentID<T1>.ID,
+                ComponentID<T2>.ID,
+                ComponentID<T3>.ID,
+                ComponentID<T4>.ID,
+                ComponentID<T5>.ID,
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
     /// <summary>
@@ -396,21 +521,49 @@ public readonly partial record struct EntityId
         where T5 : IComponent
         where T6 : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-            ComponentID<T5>.ID,
-            ComponentID<T6>.ID,
-        };
-        components.Sort();
+            var components = new[]
+            {
+                ComponentID<T0>.ID,
+                ComponentID<T1>.ID,
+                ComponentID<T2>.ID,
+                ComponentID<T3>.ID,
+                ComponentID<T4>.ID,
+                ComponentID<T5>.ID,
+                ComponentID<T6>.ID,
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
     /// <summary>
@@ -494,22 +647,51 @@ public readonly partial record struct EntityId
         where T6 : IComponent
         where T7 : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-            ComponentID<T5>.ID,
-            ComponentID<T6>.ID,
-            ComponentID<T7>.ID,
-        };
-        components.Sort();
+            var components = new[]
+            {
+                ComponentID<T0>.ID,
+                ComponentID<T1>.ID,
+                ComponentID<T2>.ID,
+                ComponentID<T3>.ID,
+                ComponentID<T4>.ID,
+                ComponentID<T5>.ID,
+                ComponentID<T6>.ID,
+                ComponentID<T7>.ID,
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
     /// <summary>
@@ -601,23 +783,53 @@ public readonly partial record struct EntityId
         where T7 : IComponent
         where T8 : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-            ComponentID<T5>.ID,
-            ComponentID<T6>.ID,
-            ComponentID<T7>.ID,
-            ComponentID<T8>.ID,
-        };
-        components.Sort();
+            var components = new[]
+            {
+                ComponentID<T0>.ID,
+                ComponentID<T1>.ID,
+                ComponentID<T2>.ID,
+                ComponentID<T3>.ID,
+                ComponentID<T4>.ID,
+                ComponentID<T5>.ID,
+                ComponentID<T6>.ID,
+                ComponentID<T7>.ID,
+                ComponentID<T8>.ID,
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
     /// <summary>
@@ -717,24 +929,55 @@ public readonly partial record struct EntityId
         where T8 : IComponent
         where T9 : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-            ComponentID<T5>.ID,
-            ComponentID<T6>.ID,
-            ComponentID<T7>.ID,
-            ComponentID<T8>.ID,
-            ComponentID<T9>.ID,
-        };
-        components.Sort();
+            var components = new[]
+            {
+                ComponentID<T0>.ID,
+                ComponentID<T1>.ID,
+                ComponentID<T2>.ID,
+                ComponentID<T3>.ID,
+                ComponentID<T4>.ID,
+                ComponentID<T5>.ID,
+                ComponentID<T6>.ID,
+                ComponentID<T7>.ID,
+                ComponentID<T8>.ID,
+                ComponentID<T9>.ID,
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
     /// <summary>
@@ -842,25 +1085,57 @@ public readonly partial record struct EntityId
         where T9 : IComponent
         where T10 : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-            ComponentID<T5>.ID,
-            ComponentID<T6>.ID,
-            ComponentID<T7>.ID,
-            ComponentID<T8>.ID,
-            ComponentID<T9>.ID,
-            ComponentID<T10>.ID,
-        };
-        components.Sort();
+            var components = new[]
+            {
+                ComponentID<T0>.ID,
+                ComponentID<T1>.ID,
+                ComponentID<T2>.ID,
+                ComponentID<T3>.ID,
+                ComponentID<T4>.ID,
+                ComponentID<T5>.ID,
+                ComponentID<T6>.ID,
+                ComponentID<T7>.ID,
+                ComponentID<T8>.ID,
+                ComponentID<T9>.ID,
+                ComponentID<T10>.ID,
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
     /// <summary>
@@ -976,26 +1251,59 @@ public readonly partial record struct EntityId
         where T10 : IComponent
         where T11 : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-            ComponentID<T5>.ID,
-            ComponentID<T6>.ID,
-            ComponentID<T7>.ID,
-            ComponentID<T8>.ID,
-            ComponentID<T9>.ID,
-            ComponentID<T10>.ID,
-            ComponentID<T11>.ID,
-        };
-        components.Sort();
+            var components = new[]
+            {
+                ComponentID<T0>.ID,
+                ComponentID<T1>.ID,
+                ComponentID<T2>.ID,
+                ComponentID<T3>.ID,
+                ComponentID<T4>.ID,
+                ComponentID<T5>.ID,
+                ComponentID<T6>.ID,
+                ComponentID<T7>.ID,
+                ComponentID<T8>.ID,
+                ComponentID<T9>.ID,
+                ComponentID<T10>.ID,
+                ComponentID<T11>.ID,
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
     /// <summary>
@@ -1119,27 +1427,61 @@ public readonly partial record struct EntityId
         where T11 : IComponent
         where T12 : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-            ComponentID<T5>.ID,
-            ComponentID<T6>.ID,
-            ComponentID<T7>.ID,
-            ComponentID<T8>.ID,
-            ComponentID<T9>.ID,
-            ComponentID<T10>.ID,
-            ComponentID<T11>.ID,
-            ComponentID<T12>.ID,
-        };
-        components.Sort();
+            var components = new[]
+            {
+                ComponentID<T0>.ID,
+                ComponentID<T1>.ID,
+                ComponentID<T2>.ID,
+                ComponentID<T3>.ID,
+                ComponentID<T4>.ID,
+                ComponentID<T5>.ID,
+                ComponentID<T6>.ID,
+                ComponentID<T7>.ID,
+                ComponentID<T8>.ID,
+                ComponentID<T9>.ID,
+                ComponentID<T10>.ID,
+                ComponentID<T11>.ID,
+                ComponentID<T12>.ID,
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
     /// <summary>
@@ -1271,28 +1613,63 @@ public readonly partial record struct EntityId
         where T12 : IComponent
         where T13 : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-            ComponentID<T5>.ID,
-            ComponentID<T6>.ID,
-            ComponentID<T7>.ID,
-            ComponentID<T8>.ID,
-            ComponentID<T9>.ID,
-            ComponentID<T10>.ID,
-            ComponentID<T11>.ID,
-            ComponentID<T12>.ID,
-            ComponentID<T13>.ID,
-        };
-        components.Sort();
+            var components = new[]
+            {
+                ComponentID<T0>.ID,
+                ComponentID<T1>.ID,
+                ComponentID<T2>.ID,
+                ComponentID<T3>.ID,
+                ComponentID<T4>.ID,
+                ComponentID<T5>.ID,
+                ComponentID<T6>.ID,
+                ComponentID<T7>.ID,
+                ComponentID<T8>.ID,
+                ComponentID<T9>.ID,
+                ComponentID<T10>.ID,
+                ComponentID<T11>.ID,
+                ComponentID<T12>.ID,
+                ComponentID<T13>.ID,
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
     /// <summary>
@@ -1432,29 +1809,65 @@ public readonly partial record struct EntityId
         where T13 : IComponent
         where T14 : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-            ComponentID<T5>.ID,
-            ComponentID<T6>.ID,
-            ComponentID<T7>.ID,
-            ComponentID<T8>.ID,
-            ComponentID<T9>.ID,
-            ComponentID<T10>.ID,
-            ComponentID<T11>.ID,
-            ComponentID<T12>.ID,
-            ComponentID<T13>.ID,
-            ComponentID<T14>.ID,
-        };
-        components.Sort();
+            var components = new[]
+            {
+                ComponentID<T0>.ID,
+                ComponentID<T1>.ID,
+                ComponentID<T2>.ID,
+                ComponentID<T3>.ID,
+                ComponentID<T4>.ID,
+                ComponentID<T5>.ID,
+                ComponentID<T6>.ID,
+                ComponentID<T7>.ID,
+                ComponentID<T8>.ID,
+                ComponentID<T9>.ID,
+                ComponentID<T10>.ID,
+                ComponentID<T11>.ID,
+                ComponentID<T12>.ID,
+                ComponentID<T13>.ID,
+                ComponentID<T14>.ID,
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
     /// <summary>
@@ -1602,30 +2015,67 @@ public readonly partial record struct EntityId
         where T14 : IComponent
         where T15 : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
 
-        Span<ComponentID> components = stackalloc ComponentID[]
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+            return false;
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>.Components;
+
+        // Check if they are all in the components set
+        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+
+    private static class SortedListOfComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
+    {
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly ReadOnlyMemory<ComponentID> Components;
+
+        static SortedListOfComponents()
         {
-            ComponentID<T0>.ID,
-            ComponentID<T1>.ID,
-            ComponentID<T2>.ID,
-            ComponentID<T3>.ID,
-            ComponentID<T4>.ID,
-            ComponentID<T5>.ID,
-            ComponentID<T6>.ID,
-            ComponentID<T7>.ID,
-            ComponentID<T8>.ID,
-            ComponentID<T9>.ID,
-            ComponentID<T10>.ID,
-            ComponentID<T11>.ID,
-            ComponentID<T12>.ID,
-            ComponentID<T13>.ID,
-            ComponentID<T14>.ID,
-            ComponentID<T15>.ID,
-        };
-        components.Sort();
+            var components = new[]
+            {
+                ComponentID<T0>.ID,
+                ComponentID<T1>.ID,
+                ComponentID<T2>.ID,
+                ComponentID<T3>.ID,
+                ComponentID<T4>.ID,
+                ComponentID<T5>.ID,
+                ComponentID<T6>.ID,
+                ComponentID<T7>.ID,
+                ComponentID<T8>.ID,
+                ComponentID<T9>.ID,
+                ComponentID<T10>.ID,
+                ComponentID<T11>.ID,
+                ComponentID<T12>.ID,
+                ComponentID<T13>.ID,
+                ComponentID<T14>.ID,
+                ComponentID<T15>.ID,
+            };
+            Array.Sort(components);
 
-        return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components);
+            Components = components;
+        }
     }
 
 }

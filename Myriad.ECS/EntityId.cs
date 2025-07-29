@@ -146,7 +146,16 @@ public readonly partial record struct EntityId
     public bool HasComponent<T>(World world)
         where T : IComponent
     {
-        return GetComponents(world).Contains(ComponentID<T>.ID);
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var info = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
+
+        // If it doesn't exist it doesn't have the component!
+        if (isNotExists)
+            return false;
+
+        // Check for component
+        return info.Chunk.Archetype.Components.Contains(ComponentID<T>.ID);
     }
 
     /// <summary>
