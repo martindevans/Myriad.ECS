@@ -26,7 +26,7 @@ public readonly partial record struct Entity
     /// Get the set of components which this entity currently has
     /// </summary>
     /// <returns></returns>
-    public FrozenOrderedListSet<ComponentID> ComponentTypes => ID.GetComponents(World);
+    public FrozenOrderedListSet<ComponentID> ComponentTypes => World == null ? FrozenOrderedListSet<ComponentID>.Empty : ID.GetComponents(World);
 
     /// <summary>
     /// Get a boxed array of all components. <b>DO NOT</b> use this for anything other than debugging!
@@ -55,20 +55,20 @@ public readonly partial record struct Entity
     /// Check if this Entity still exists.
     /// </summary>
     /// <returns></returns>
-    public bool Exists() => ID.Exists(World);
+    public bool Exists() => World != null && ID.Exists(World);
 
     /// <summary>
     /// Check if this Entity still exists and is not a phantom.
     /// </summary>
     /// <returns></returns>
-    public bool IsAlive() => ID.IsAlive(World);
+    public bool IsAlive() => World != null && ID.IsAlive(World);
 
     /// <summary>
     /// Check if this Entity is in a phantom state. i.e. automatically excluded from queries
     /// and automatically deleted when the last IPhantomComponent component is removed.
     /// </summary>
     /// <returns>true if this entity is a phantom. False is it does not exist or is not a phantom.</returns>
-    public bool IsPhantom() => ID.IsPhantom(World);
+    public bool IsPhantom() => World != null && ID.IsPhantom(World);
 
     /// <inheritdoc />
     public int CompareTo(Entity other)
@@ -87,7 +87,7 @@ public readonly partial record struct Entity
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public bool HasComponent<T>() where T : IComponent => ID.HasComponent<T>(World);
+    public bool HasComponent<T>() where T : IComponent => World != null && ID.HasComponent<T>(World);
 
     /// <summary>
     /// Get a reference to a component of the given type. If the entity
