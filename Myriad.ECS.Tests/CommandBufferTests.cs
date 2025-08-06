@@ -1288,4 +1288,34 @@ public class CommandBufferTests
 
         Assert.IsFalse(e.GetComponentRef<Relational1>().Target.IsAlive());
     }
+
+    [TestMethod]
+    public void DelayedResolveBufferedEntity()
+    {
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+
+        var list0 = new List<Entity>();
+        var list1 = new List<Entity>();
+        var list2 = new List<Entity>();
+
+        var ab = cmd.Create();
+        ab.DelayedResolve(list0);
+        ab.DelayedResolve(list1);
+
+        var bb = cmd.Create();
+        bb.DelayedResolve(list1);
+        bb.DelayedResolve(list2);
+
+        using var _ = cmd.Playback();
+
+        Assert.AreEqual(1, list0.Count);
+        Assert.AreEqual(2, list1.Count);
+        Assert.AreEqual(1, list2.Count);
+
+        Assert.IsTrue(list0.Contains(ab.Resolve()));
+        Assert.IsTrue(list1.Contains(ab.Resolve()));
+        Assert.IsTrue(list1.Contains(bb.Resolve()));
+        Assert.IsTrue(list2.Contains(bb.Resolve()));
+    }
 }

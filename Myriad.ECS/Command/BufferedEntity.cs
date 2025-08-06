@@ -119,5 +119,17 @@ public sealed partial class CommandBuffer
 
             return _resolver.Lookup[_id].ToEntity(_resolver.World);
         }
+
+        /// <summary>
+        /// When the <see cref="BufferedEntity"/> is converted into a real <see cref="Entity"/> by playing back the <see cref="CommandBuffer"/> the
+        /// <see cref="Entity"/> will be added to the "output" collection.
+        /// </summary>
+        /// <param name="output"></param>
+        public void DelayedResolve(ICollection<Entity> output)
+        {
+            CheckIsMutable();
+
+            _buffer.BindDelayedResolve(_id, output);
+        }
     }
 }

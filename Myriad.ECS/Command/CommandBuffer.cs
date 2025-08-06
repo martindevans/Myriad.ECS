@@ -297,6 +297,16 @@ public sealed partial class CommandBuffer
                 // Recycle
                 components.Clear();
                 Pool.Return(components);
+
+                // Add to output lists for delayed resolve
+                if (bufferedData.DelayedResolves is List<ICollection<Entity>> delayed)
+                {
+                    foreach (var item in delayed)
+                        item.Add(slot.Entity.ToEntity(World));
+
+                    delayed.Clear();
+                    Pool.Return(delayed);
+                }
             }
 
             _bufferedSets.Clear();
@@ -460,6 +470,21 @@ public sealed partial class CommandBuffer
 
         SetBuffered(id, value, duplicateMode);
         _bufferedRelationBindings.Create<T>(new BufferedEntity(id, this, _nextResolver), relation);
+    }
+
+    private void BindDelayedResolve(uint id, ICollection<Entity> output)
+    {
+        Debug.Assert(id < _bufferedSets.Count, "Unknown entity ID in BindDelayedResolve");
+
+        var bufferedData = _bufferedSets[(int)id];
+
+        if (bufferedData.DelayedResolves == null)
+        {
+            bufferedData.DelayedResolves = Pool<List<ICollection<Entity>>>.Get();
+            _bufferedSets[(int)id] = bufferedData;
+        }
+
+        bufferedData.DelayedResolves.Add(output);
     }
 
     /// <summary>
@@ -647,6 +672,11 @@ public sealed partial class CommandBuffer
         public int ArchetypeKey { get; set; }
 
         /// <summary>
+        /// Collections to add this entity to when it's created
+        /// </summary>
+        public List<ICollection<Entity>>? DelayedResolves;
+
+        /// <summary>
         /// Data about a new entity being created
         /// </summary>
         /// <param name="id">ID of this buffered entity, used in resolver to get actual entity</param>
@@ -655,6 +685,7 @@ public sealed partial class CommandBuffer
         {
             Id = id;
             Setters = setters;
+            DelayedResolves = null;
         }
     }
 
