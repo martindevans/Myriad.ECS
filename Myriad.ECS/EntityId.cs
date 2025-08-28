@@ -22,7 +22,12 @@ public readonly partial record struct EntityId
     /// </summary>
     public readonly uint Version;
 
-    internal EntityId(int id, uint version)
+    /// <summary>
+    /// Construct an entity ID from raw values. This does **not** create a new entity in the world, it will just refer to an existing entity (if one exists).
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="version"></param>
+    public EntityId(int id, uint version)
     {
         ID = id;
         Version = version;

@@ -397,6 +397,18 @@ public sealed class QueryDescription
     }
 
     /// <summary>
+    /// Count how many chunks hold entities which match this query
+    /// </summary>
+    /// <returns></returns>
+    public int CountChunks()
+    {
+        var chunks = 0;
+        foreach (var archetype in GetArchetypes())
+            chunks += archetype.Archetype.Chunks.Count;
+        return chunks;
+    }
+
+    /// <summary>
     /// Check if the count of entities matching this query is greater than a given value
     /// </summary>
     /// <returns></returns>
