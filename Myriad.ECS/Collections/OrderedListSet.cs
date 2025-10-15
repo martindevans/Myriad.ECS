@@ -86,7 +86,12 @@ internal class OrderedListSet<TItem>
         {
             // Since this is a key collection we know all the items must be
             // unique, therefore we can just add and sort
-            _items.AddRange(keys);
+
+            // Explicit loop instead of AddRange, to avoid IEnumerable box
+            _items.EnsureCapacity(keys.Count);
+            foreach (var key in keys)
+                _items.Add(key);
+
             _items.Sort();
         }
         else

@@ -89,7 +89,7 @@ public readonly partial struct Path
     }
 
     /// <summary>
-    /// Try to follow a component, extracting an entity from it
+    /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="T0"></typeparam>
@@ -222,7 +222,7 @@ public readonly partial struct Path
     }
 
     /// <summary>
-    /// Try to follow a component, extracting an entity from it
+    /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="T0"></typeparam>
@@ -366,7 +366,7 @@ public readonly partial struct Path
     }
 
     /// <summary>
-    /// Try to follow a component, extracting an entity from it
+    /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="T0"></typeparam>
@@ -521,7 +521,7 @@ public readonly partial struct Path
     }
 
     /// <summary>
-    /// Try to follow a component, extracting an entity from it
+    /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="T0"></typeparam>
@@ -687,7 +687,7 @@ public readonly partial struct Path
     }
 
     /// <summary>
-    /// Try to follow a component, extracting an entity from it
+    /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="T0"></typeparam>
@@ -864,7 +864,7 @@ public readonly partial struct Path
     }
 
     /// <summary>
-    /// Try to follow a component, extracting an entity from it
+    /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="T0"></typeparam>
@@ -1052,7 +1052,7 @@ public readonly partial struct Path
     }
 
     /// <summary>
-    /// Try to follow a component, extracting an entity from it
+    /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="T0"></typeparam>
@@ -1251,7 +1251,7 @@ public readonly partial struct Path
     }
 
     /// <summary>
-    /// Try to follow a component, extracting an entity from it
+    /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="T0"></typeparam>
@@ -1461,7 +1461,7 @@ public readonly partial struct Path
     }
 
     /// <summary>
-    /// Try to follow a component, extracting an entity from it
+    /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="T0"></typeparam>
@@ -1682,7 +1682,7 @@ public readonly partial struct Path
     }
 
     /// <summary>
-    /// Try to follow a component, extracting an entity from it
+    /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="T0"></typeparam>
@@ -1914,7 +1914,7 @@ public readonly partial struct Path
     }
 
     /// <summary>
-    /// Try to follow a component, extracting an entity from it
+    /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="T0"></typeparam>
@@ -2157,7 +2157,7 @@ public readonly partial struct Path
     }
 
     /// <summary>
-    /// Try to follow a component, extracting an entity from it
+    /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="T0"></typeparam>
@@ -2411,7 +2411,7 @@ public readonly partial struct Path
     }
 
     /// <summary>
-    /// Try to follow a component, extracting an entity from it
+    /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="T0"></typeparam>
@@ -2676,7 +2676,7 @@ public readonly partial struct Path
     }
 
     /// <summary>
-    /// Try to follow a component, extracting an entity from it
+    /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="T0"></typeparam>
@@ -2952,7 +2952,7 @@ public readonly partial struct Path
     }
 
     /// <summary>
-    /// Try to follow a component, extracting an entity from it
+    /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="T0"></typeparam>

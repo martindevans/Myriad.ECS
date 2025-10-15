@@ -80,6 +80,24 @@ public class OrderedListSetTests
     }
 
     [TestMethod]
+    public void AddRange_Duplicates_Dictionary()
+    {
+        var set = new OrderedListSet<int>();
+        set.Add(1);
+        set.Add(2);
+        set.Add(3);
+
+        set.AddRange(new Dictionary<int, bool>
+        {
+            { 1, true },
+            { 4, true },
+            { 5, true },
+        }.Keys);
+
+        Assert.AreEqual(5, set.Count);
+    }
+
+    [TestMethod]
     public void SetEquals_True()
     {
         var a = new OrderedListSet<int>();
@@ -90,6 +108,21 @@ public class OrderedListSetTests
         b.Add(3);
         b.Add(2);
         b.Add(1);
+
+        Assert.IsTrue(a.SetEquals(b));
+    }
+
+    [TestMethod]
+    public void SetEquals_True_Dictionary()
+    {
+        var a = new OrderedListSet<int>();
+        a.Add(1);
+        a.Add(2);
+        a.Add(3);
+        var b = new Dictionary<int, bool>();
+        b.Add(3, true);
+        b.Add(2, true);
+        b.Add(1, true);
 
         Assert.IsTrue(a.SetEquals(b));
     }
@@ -107,6 +140,35 @@ public class OrderedListSetTests
         b.Add(0);
 
         Assert.IsFalse(a.Freeze().SetEquals(b.Freeze()));
+    }
+
+    [TestMethod]
+    public void SetEquals_False_SameCount_Dictionary()
+    {
+        var a = new OrderedListSet<int>();
+        a.Add(1);
+        a.Add(2);
+        a.Add(3);
+        var b = new Dictionary<int, bool>();
+        b.Add(2, true);
+        b.Add(1, true);
+        b.Add(0, true);
+
+        Assert.IsFalse(a.Freeze().SetEquals(b));
+    }
+
+    [TestMethod]
+    public void SetEquals_False_Dictionary()
+    {
+        var a = new OrderedListSet<int>();
+        a.Add(1);
+        a.Add(2);
+        a.Add(3);
+        var b = new Dictionary<int, bool>();
+        b.Add(2, true);
+        b.Add(1, true);
+
+        Assert.IsFalse(a.Freeze().SetEquals(b));
     }
 
     [TestMethod]

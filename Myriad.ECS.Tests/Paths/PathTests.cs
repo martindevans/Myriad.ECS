@@ -23,9 +23,172 @@ public class PathTests
     }
 
     [TestMethod]
+    public void StartFromDeadEntity()
+    {
+        // Create 2 entities, with a link from 1 to 2
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+        var eb1 = cmd.Create();
+        var eb2 = cmd.Create();
+        eb1.Set<Relational1>(new(), eb2);
+        using var _ = cmd.Playback();
+        var e1 = eb1.Resolve();
+        var e2 = eb2.Resolve();
+
+        // Delete e1
+        cmd.Delete(e1);
+        using var __ = cmd.Playback();
+
+        // Now ensure following a path from e1 fails
+        var path = new Path([
+            new Path.Follow<GetEntityMapper, Relational1>(new GetEntityMapper())
+        ]);
+        Assert.AreEqual(default, path.TryFollow(e1));
+    }
+
+    [TestMethod]
+    public void EndAtDeadEntity()
+    {
+        // Create 2 entities, with a link from 1 to 2
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+        var eb1 = cmd.Create();
+        var eb2 = cmd.Create();
+        eb1.Set<Relational1>(new(), eb2);
+        using var _ = cmd.Playback();
+        var e1 = eb1.Resolve();
+        var e2 = eb2.Resolve();
+
+        // Delete e2
+        cmd.Delete(e2);
+        using var __ = cmd.Playback();
+
+        // Now ensure following a path from e1 fails
+        var path = new Path([
+            new Path.Follow<GetEntityMapper, Relational1>(new GetEntityMapper())
+        ]);
+        Assert.AreEqual(default, path.TryFollow(e1));
+    }
+
+    [TestMethod]
+    public void FollowWithMapper()
+    {
+        // Create 2 entities, with a link from 1 to 2
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+        var eb1 = cmd.Create();
+        var eb2 = cmd.Create();
+        eb1.Set<Relational1>(new(), eb2);
+        cmd.Playback();
+        var e1 = eb1.Resolve();
+        var e2 = eb2.Resolve();
+
+        // Follow path from 1 to 2
+        var path = new Path([
+            new Path.Follow<GetEntityMapper, Relational1>(new GetEntityMapper())
+        ]);
+        Assert.AreEqual(e2, path.TryFollow(e1));
+
+        // Fail to follow path from 2
+        Assert.AreEqual(default, path.TryFollow(e2));
+    }
+
+    private struct GetEntityMapper
+        : IQueryMap<Entity, Relational1>
+    {
+        public Entity Execute(Entity e, ref Relational1 t0)
+        {
+            return t0.Target;
+        }
+    }
+
+    [TestMethod]
+    public void StartFromDeadEntity2()
+    {
+        // Create 2 entities, with a link from 1 to 2
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+        var eb1 = cmd.Create();
+        var eb2 = cmd.Create();
+        eb1.Set<Relational1>(new(), eb2);
+        eb1.Set<Component0>(new());
+        using var _ = cmd.Playback();
+        var e1 = eb1.Resolve();
+        var e2 = eb2.Resolve();
+
+        // Delete e1
+        cmd.Delete(e1);
+        using var __ = cmd.Playback();
+
+        // Now ensure following a path from e1 fails
+        var path = new Path([
+            new Path.Follow<GetEntityMapper2, Relational1, Component0>(new GetEntityMapper2())
+        ]);
+        Assert.AreEqual(default, path.TryFollow(e1));
+    }
+
+    [TestMethod]
+    public void EndAtDeadEntity2()
+    {
+        // Create 2 entities, with a link from 1 to 2
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+        var eb1 = cmd.Create();
+        var eb2 = cmd.Create();
+        eb1.Set<Relational1>(new(), eb2);
+        eb1.Set<Component0>(new());
+        using var _ = cmd.Playback();
+        var e1 = eb1.Resolve();
+        var e2 = eb2.Resolve();
+
+        // Delete e2
+        cmd.Delete(e2);
+        using var __ = cmd.Playback();
+
+        // Now ensure following a path from e1 fails
+        var path = new Path([
+            new Path.Follow<GetEntityMapper2, Relational1, Component0>(new GetEntityMapper2())
+        ]);
+        Assert.AreEqual(default, path.TryFollow(e1));
+    }
+
+    [TestMethod]
+    public void FollowWithMapper2()
+    {
+        // Create 2 entities, with a link from 1 to 2
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+        var eb1 = cmd.Create();
+        var eb2 = cmd.Create();
+        eb1.Set<Relational1>(new(), eb2);
+        eb1.Set<Component0>(new());
+        cmd.Playback();
+        var e1 = eb1.Resolve();
+        var e2 = eb2.Resolve();
+
+        // Follow path from 1 to 2
+        var path = new Path([
+            new Path.Follow<GetEntityMapper2, Relational1, Component0>(new GetEntityMapper2())
+        ]);
+        Assert.AreEqual(e2, path.TryFollow(e1));
+
+        // Fail to follow path from 2
+        Assert.AreEqual(default, path.TryFollow(e2));
+    }
+
+    private struct GetEntityMapper2
+        : IQueryMap<Entity, Relational1, Component0>
+    {
+        public Entity Execute(Entity e, ref Relational1 t0, ref Component0 t1)
+        {
+            return t0.Target;
+        }
+    }
+
+    [TestMethod]
     public void OneRelationalStep()
     {
-        // Create A -> B -> C
+        // Create A -> B (Relation1) & A -> C (Relational2)
         var world = new WorldBuilder().Build();
         var cmd = new CommandBuffer(world);
         var eb1 = cmd.Create();
@@ -48,6 +211,11 @@ public class PathTests
         var pathR = new Path<Relational1>();
         var endR = pathR.TryFollow(e1);
         Assert.AreEqual(e2, endR);
+
+        // Try to follow a link that doesn't exist
+        var pathR2 = new Path<Relational3>();
+        var endR2 = pathR2.TryFollow(e1);
+        Assert.AreEqual(default, endR2);
     }
 
     [TestMethod]
@@ -108,6 +276,43 @@ public class PathTests
 
         // Follow with specialised relational path
         var pathR = new Path<Relational1, Relational1>();
+        var endR = pathR.TryFollow(e1);
+        Assert.IsFalse(endR.HasValue);
+    }
+
+    [TestMethod]
+    public void TwoRelationalSteps_StartDeadEntity()
+    {
+        // Create A -> B -> C
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+        var eb1 = cmd.Create();
+        var eb2 = cmd.Create();
+        var eb3 = cmd.Create();
+        eb1.Set(new Relational1(), eb2);
+        eb2.Set(new Relational2(), eb3);
+        cmd.Playback();
+        var e1 = eb1.Resolve();
+        var e2 = eb2.Resolve();
+        var e3 = eb3.Resolve();
+
+        // Delete A
+        cmd.Delete(e1);
+        cmd.Playback();
+
+        // Follow A -> B -> C
+        // Nest steps to mix things up a bit
+        var path = new Path(
+            Path.Nested.Create(new Path<Relational1>()),
+            Path.Nested.Create(new Path<Relational2>())
+        );
+
+        // Check that it failed
+        var end = path.TryFollow(e1);
+        Assert.IsFalse(end.HasValue);
+
+        // Follow with specialised relational path
+        var pathR = new Path<Relational1, Relational2>();
         var endR = pathR.TryFollow(e1);
         Assert.IsFalse(endR.HasValue);
     }

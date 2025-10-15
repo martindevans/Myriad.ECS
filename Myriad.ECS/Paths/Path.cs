@@ -26,8 +26,8 @@ public readonly partial struct Path
     /// </summary>
     /// <param name="steps"></param>
     public Path(params IStep[] steps)
+        : this(steps.AsMemory())
     {
-        _steps = steps;
     }
 
     /// <summary>
