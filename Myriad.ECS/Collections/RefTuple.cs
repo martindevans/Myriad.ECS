@@ -90,10 +90,6 @@ public readonly ref struct RefTuple<T0>
 		item0 = _item0;
 	}
 
-	public void Deconstruct(out RefT<T0> item0)
-	{
-		item0 = _item0;
-	}
 }
 
 

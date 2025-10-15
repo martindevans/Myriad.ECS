@@ -24,8 +24,8 @@ internal struct Union64
 
     public override int GetHashCode()
     {
-        // Because the data is all overlapped it doesn't really matter which fields are used here, so long as **all** the ones
-        // from the **same** group are used.
-        return HashCode.Combine(I0, I1).GetHashCode();
+        // Because the data is all overlapped it doesn't really matter which fields are
+        // used here, so long as **all** the ones from the **same** group are used.
+        return Long.GetHashCode();
     }
 }

@@ -76,6 +76,37 @@ public class EntityTests
     }
 
     [TestMethod]
+    public void HasComponent()
+    {
+        var w = new WorldBuilder().Build();
+        var b = new CommandBuffer(w);
+
+        var e = b.Create().Set(new ComponentInt16(7));
+        using var resolver = b.Playback();
+        var entity = e.Resolve();
+
+        Assert.IsTrue(entity.HasComponent<ComponentInt16>());
+        Assert.IsFalse(entity.HasComponent<ComponentInt32>());
+
+        Assert.IsFalse(entity.HasComponent<ComponentInt16, ComponentInt32>());
+        Assert.IsFalse(entity.HasComponent<ComponentInt32, ComponentInt32>());
+        Assert.IsTrue(entity.HasComponent<ComponentInt16, ComponentInt16>());
+        Assert.IsFalse(entity.HasComponent<ComponentInt16, ComponentInt32, ComponentInt64>());
+    }
+
+    [TestMethod]
+    public void HasComponentNoEntity()
+    {
+        var w = new WorldBuilder().Build();
+        var entity = new Entity(new EntityId(23, 4), w);
+
+        Assert.IsFalse(entity.HasComponent<ComponentInt16>());
+        Assert.IsFalse(entity.HasComponent<ComponentInt32>());
+        Assert.IsFalse(entity.HasComponent<ComponentInt16, ComponentInt32>());
+        Assert.IsFalse(entity.HasComponent<ComponentInt16, ComponentInt32, ComponentInt64>());
+    }
+
+    [TestMethod]
     public void GetComponent()
     {
         var w = new WorldBuilder().Build();

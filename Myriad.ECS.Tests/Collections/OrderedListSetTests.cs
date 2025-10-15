@@ -248,4 +248,14 @@ public class OrderedListSetTests
         Assert.IsFalse(a.Overlaps(b));
         Assert.IsFalse(b.Overlaps(a));
     }
+
+    [TestMethod]
+    public void Single_Throws()
+    {
+        var a = new OrderedListSet<int>();
+        a.Add(1);
+        a.Add(2);
+
+        Assert.ThrowsException<InvalidOperationException>(() => a.Single());
+    }
 }

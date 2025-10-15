@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Myriad.ECS.IDs;
 
@@ -149,6 +150,7 @@ internal class OrderedListSet<TItem>
         return _items.GetEnumerator();
     }
 
+    [ExcludeFromCodeCoverage]
     IEnumerator IEnumerable.GetEnumerator()
     {
         return _items.GetEnumerator();

@@ -5,6 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 using Myriad.ECS.IDs;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Myriad.ECS.Worlds;
 
@@ -19,6 +20,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    <#= CoverageAttribute(i) #>
     public WorldBuilder WithArchetype<<#= string.Join(", ", Enumerable.Range(0, i).Select(i => "T" + i)) #>>()
         <#= string.Join("\r\n        ", Enumerable.Range(0, i).Select(i => $"where T{i} : IComponent")) #>
     {
@@ -42,3 +44,12 @@ public sealed partial class WorldBuilder
 }
 #>
 }
+
+<#+ 
+    static string CoverageAttribute(int index)
+	{
+		if (index < 3)
+			return "";
+		return "[ExcludeFromCodeCoverage]";
+	}
+#>

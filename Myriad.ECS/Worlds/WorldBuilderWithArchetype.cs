@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.IDs;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Myriad.ECS.Worlds;
 
@@ -10,6 +11,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    
     public WorldBuilder WithArchetype<T0>()
         where T0 : IComponent
     {
@@ -27,6 +29,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    
     public WorldBuilder WithArchetype<T0, T1>()
         where T0 : IComponent
         where T1 : IComponent
@@ -47,6 +50,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2>()
         where T0 : IComponent
         where T1 : IComponent
@@ -70,6 +74,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3>()
         where T0 : IComponent
         where T1 : IComponent
@@ -96,6 +101,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4>()
         where T0 : IComponent
         where T1 : IComponent
@@ -125,6 +131,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5>()
         where T0 : IComponent
         where T1 : IComponent
@@ -157,6 +164,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6>()
         where T0 : IComponent
         where T1 : IComponent
@@ -192,6 +200,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7>()
         where T0 : IComponent
         where T1 : IComponent
@@ -230,6 +239,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8>()
         where T0 : IComponent
         where T1 : IComponent
@@ -271,6 +281,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
         where T0 : IComponent
         where T1 : IComponent
@@ -315,6 +326,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
         where T0 : IComponent
         where T1 : IComponent
@@ -362,6 +374,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>()
         where T0 : IComponent
         where T1 : IComponent
@@ -412,6 +425,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
         where T0 : IComponent
         where T1 : IComponent
@@ -465,6 +479,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>()
         where T0 : IComponent
         where T1 : IComponent
@@ -521,6 +536,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
         where T0 : IComponent
         where T1 : IComponent
@@ -580,6 +596,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
         where T0 : IComponent
         where T1 : IComponent
@@ -642,6 +659,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>()
         where T0 : IComponent
         where T1 : IComponent
@@ -707,6 +725,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>()
         where T0 : IComponent
         where T1 : IComponent
@@ -775,6 +794,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>()
         where T0 : IComponent
         where T1 : IComponent
@@ -846,6 +866,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>()
         where T0 : IComponent
         where T1 : IComponent
@@ -920,6 +941,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>()
         where T0 : IComponent
         where T1 : IComponent
@@ -997,6 +1019,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1077,6 +1100,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1160,6 +1184,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1246,6 +1271,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1335,6 +1361,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1427,6 +1454,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1522,6 +1550,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1620,6 +1649,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1721,6 +1751,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1825,6 +1856,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30>()
         where T0 : IComponent
         where T1 : IComponent
@@ -1932,6 +1964,7 @@ public sealed partial class WorldBuilder
     /// Declare a specific archetype that should be created ahead of time in this world. This
     /// can prevent expensive structural changes in the world later.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public WorldBuilder WithArchetype<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31>()
         where T0 : IComponent
         where T1 : IComponent
@@ -2039,3 +2072,4 @@ public sealed partial class WorldBuilder
     }
 
 }
+

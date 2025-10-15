@@ -125,11 +125,14 @@ public sealed partial class CommandBuffer
         /// <see cref="Entity"/> will be added to the "output" collection.
         /// </summary>
         /// <param name="output"></param>
-        public void DelayedResolve(ICollection<Entity> output)
+        /// <returns>this buffered entity</returns>
+        public BufferedEntity DelayedResolve(ICollection<Entity> output)
         {
             CheckIsMutable();
 
             _buffer.BindDelayedResolve(_id, output);
+
+            return this;
         }
     }
 }
