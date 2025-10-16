@@ -3,6 +3,7 @@ using Myriad.ECS.Command;
 using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
+using Myriad.ECS.Tests.Queries;
 using Myriad.ECS.Worlds;
 using Myriad.ECS.Worlds.Archetypes;
 
@@ -417,6 +418,39 @@ public class QueryDescriptionTests
     }
 
     [TestMethod]
+    public void FirstOrDefault_SkipsEmptyArchetypes()
+    {
+        // Create some random entities
+        var w = new WorldBuilder().Build();
+        TestHelpers.SetupRandomEntities(w).Playback().Dispose();
+
+        // Create a query for entities to count
+        var qc = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        // Get count before deleting
+        var count1 = qc.Count();
+
+        // Get the archetypes which this query matches, we'll delete all entities in the
+        // first archetype
+        var archetypes = qc.GetArchetypes();
+
+        // Create a query for entities to delete
+        var qdb = new QueryBuilder();
+        foreach (var archetypeComponent in archetypes.LINQ().First().Archetype.Components)
+            qdb.Include(archetypeComponent);
+        var qd = qdb.Build(w);
+
+        // Delete them
+        var deleted = qd.Count();
+        Assert.AreNotEqual(0, deleted);
+
+        // Now get the first matched
+        Assert.IsNotNull(qc.FirstOrDefault());
+    }
+
+    [TestMethod]
     public void FirstOrDefault_MatchMultiple()
     {
         var w = new WorldBuilder()
@@ -602,7 +636,7 @@ public class QueryDescriptionTests
     }
 
     [TestMethod]
-    public void Random_NullNoMatch()
+    public void RandomOrDefault_NullNoMatch()
     {
         var w = new WorldBuilder()
            .Build();
@@ -614,6 +648,24 @@ public class QueryDescriptionTests
         var rng = new Random(123);
 
         Assert.IsNull(q.RandomOrDefault(rng));
+    }
+
+    [TestMethod]
+    public void Random_ThrowNoMatch()
+    {
+        var w = new WorldBuilder()
+           .Build();
+
+        var q = new QueryBuilder()
+               .Include<Component0>()
+               .Build(w);
+
+        var rng = new Random(123);
+
+        Assert.ThrowsException<InvalidOperationException>(() =>
+        {
+            q.Random(rng);
+        });
     }
 
     [TestMethod]
@@ -662,5 +714,78 @@ public class QueryDescriptionTests
 
         for (var i = 0; i < 1000; i++)
             Assert.IsTrue(entities.Contains(q.RandomOrDefault(r)!.Value));
+    }
+
+    [TestMethod]
+    public void IsCountGreaterThan_True()
+    {
+        var w = new WorldBuilder().Build();
+        TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
+
+        var q = new QueryBuilder().Include<Component0>().Include<Component1>().Build(w);
+
+        // Count entities with a query
+        var actual = 0;
+        w.Query((ChunkHandle h, Span<Component0> _) =>
+        {
+            actual += h.EntityCount;
+        }, q);
+
+        // Check count
+        Assert.AreEqual(actual, q.Count());
+
+        // Check threshold
+        Assert.IsTrue(q.IsCountGreaterThan(actual - 1));
+        Assert.IsTrue(q.IsCountGreaterThan(0));
+    }
+
+    [TestMethod]
+    public void IsCountGreaterThan_False()
+    {
+        var w = new WorldBuilder().Build();
+        TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
+
+        var q = new QueryBuilder().Include<Component0>().Include<Component1>().Build(w);
+
+        // Count entities with a query
+        var actual = 0;
+        w.Query((ChunkHandle h, Span<Component0> _) =>
+        {
+            actual += h.EntityCount;
+        }, q);
+
+        // Check count
+        Assert.AreEqual(actual, q.Count());
+
+        // Check threshold
+        Assert.IsFalse(q.IsCountGreaterThan(actual + 1));
+
+        var q2 = new QueryBuilder()
+                .Include<Component0>()
+                .Include<NotUsedComponent>().Build(w);
+
+        Assert.IsFalse(q2.IsCountGreaterThan(0));
+        Assert.IsFalse(q2.Any());
+    }
+
+    private struct NotUsedComponent : IComponent;
+
+    [TestMethod]
+    public void CountChunks()
+    {
+        var w = new WorldBuilder().Build();
+        TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
+
+        var q = new QueryBuilder().Include<Component0>().Include<Component1>().Build(w);
+
+        // Count chunks with a query
+        var actual = 0;
+        w.Query((ChunkHandle h, Span<Component0> _) =>
+        {
+            actual++;
+        }, q);
+
+        // Check count
+        Assert.AreEqual(actual, q.CountChunks());
     }
 }

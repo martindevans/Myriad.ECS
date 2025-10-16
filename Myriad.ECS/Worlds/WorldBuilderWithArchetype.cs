@@ -15,10 +15,11 @@ public sealed partial class WorldBuilder
     public WorldBuilder WithArchetype<T0>()
         where T0 : IComponent
     {
-        var set = new HashSet<ComponentID>(1);
+        var set = new HashSet<ComponentID>(1)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
 
         AddArchetype(set);
 
@@ -34,10 +35,11 @@ public sealed partial class WorldBuilder
         where T0 : IComponent
         where T1 : IComponent
     {
-        var set = new HashSet<ComponentID>(2);
+        var set = new HashSet<ComponentID>(2)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
 
@@ -56,10 +58,11 @@ public sealed partial class WorldBuilder
         where T1 : IComponent
         where T2 : IComponent
     {
-        var set = new HashSet<ComponentID>(3);
+        var set = new HashSet<ComponentID>(3)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -81,10 +84,11 @@ public sealed partial class WorldBuilder
         where T2 : IComponent
         where T3 : IComponent
     {
-        var set = new HashSet<ComponentID>(4);
+        var set = new HashSet<ComponentID>(4)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -109,10 +113,11 @@ public sealed partial class WorldBuilder
         where T3 : IComponent
         where T4 : IComponent
     {
-        var set = new HashSet<ComponentID>(5);
+        var set = new HashSet<ComponentID>(5)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -140,10 +145,11 @@ public sealed partial class WorldBuilder
         where T4 : IComponent
         where T5 : IComponent
     {
-        var set = new HashSet<ComponentID>(6);
+        var set = new HashSet<ComponentID>(6)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -174,10 +180,11 @@ public sealed partial class WorldBuilder
         where T5 : IComponent
         where T6 : IComponent
     {
-        var set = new HashSet<ComponentID>(7);
+        var set = new HashSet<ComponentID>(7)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -211,10 +218,11 @@ public sealed partial class WorldBuilder
         where T6 : IComponent
         where T7 : IComponent
     {
-        var set = new HashSet<ComponentID>(8);
+        var set = new HashSet<ComponentID>(8)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -251,10 +259,11 @@ public sealed partial class WorldBuilder
         where T7 : IComponent
         where T8 : IComponent
     {
-        var set = new HashSet<ComponentID>(9);
+        var set = new HashSet<ComponentID>(9)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -294,10 +303,11 @@ public sealed partial class WorldBuilder
         where T8 : IComponent
         where T9 : IComponent
     {
-        var set = new HashSet<ComponentID>(10);
+        var set = new HashSet<ComponentID>(10)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -340,10 +350,11 @@ public sealed partial class WorldBuilder
         where T9 : IComponent
         where T10 : IComponent
     {
-        var set = new HashSet<ComponentID>(11);
+        var set = new HashSet<ComponentID>(11)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -389,10 +400,11 @@ public sealed partial class WorldBuilder
         where T10 : IComponent
         where T11 : IComponent
     {
-        var set = new HashSet<ComponentID>(12);
+        var set = new HashSet<ComponentID>(12)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -441,10 +453,11 @@ public sealed partial class WorldBuilder
         where T11 : IComponent
         where T12 : IComponent
     {
-        var set = new HashSet<ComponentID>(13);
+        var set = new HashSet<ComponentID>(13)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -496,10 +509,11 @@ public sealed partial class WorldBuilder
         where T12 : IComponent
         where T13 : IComponent
     {
-        var set = new HashSet<ComponentID>(14);
+        var set = new HashSet<ComponentID>(14)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -554,10 +568,11 @@ public sealed partial class WorldBuilder
         where T13 : IComponent
         where T14 : IComponent
     {
-        var set = new HashSet<ComponentID>(15);
+        var set = new HashSet<ComponentID>(15)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -615,10 +630,11 @@ public sealed partial class WorldBuilder
         where T14 : IComponent
         where T15 : IComponent
     {
-        var set = new HashSet<ComponentID>(16);
+        var set = new HashSet<ComponentID>(16)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -679,10 +695,11 @@ public sealed partial class WorldBuilder
         where T15 : IComponent
         where T16 : IComponent
     {
-        var set = new HashSet<ComponentID>(17);
+        var set = new HashSet<ComponentID>(17)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -746,10 +763,11 @@ public sealed partial class WorldBuilder
         where T16 : IComponent
         where T17 : IComponent
     {
-        var set = new HashSet<ComponentID>(18);
+        var set = new HashSet<ComponentID>(18)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -816,10 +834,11 @@ public sealed partial class WorldBuilder
         where T17 : IComponent
         where T18 : IComponent
     {
-        var set = new HashSet<ComponentID>(19);
+        var set = new HashSet<ComponentID>(19)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -889,10 +908,11 @@ public sealed partial class WorldBuilder
         where T18 : IComponent
         where T19 : IComponent
     {
-        var set = new HashSet<ComponentID>(20);
+        var set = new HashSet<ComponentID>(20)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -965,10 +985,11 @@ public sealed partial class WorldBuilder
         where T19 : IComponent
         where T20 : IComponent
     {
-        var set = new HashSet<ComponentID>(21);
+        var set = new HashSet<ComponentID>(21)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -1044,10 +1065,11 @@ public sealed partial class WorldBuilder
         where T20 : IComponent
         where T21 : IComponent
     {
-        var set = new HashSet<ComponentID>(22);
+        var set = new HashSet<ComponentID>(22)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -1126,10 +1148,11 @@ public sealed partial class WorldBuilder
         where T21 : IComponent
         where T22 : IComponent
     {
-        var set = new HashSet<ComponentID>(23);
+        var set = new HashSet<ComponentID>(23)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -1211,10 +1234,11 @@ public sealed partial class WorldBuilder
         where T22 : IComponent
         where T23 : IComponent
     {
-        var set = new HashSet<ComponentID>(24);
+        var set = new HashSet<ComponentID>(24)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -1299,10 +1323,11 @@ public sealed partial class WorldBuilder
         where T23 : IComponent
         where T24 : IComponent
     {
-        var set = new HashSet<ComponentID>(25);
+        var set = new HashSet<ComponentID>(25)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -1390,10 +1415,11 @@ public sealed partial class WorldBuilder
         where T24 : IComponent
         where T25 : IComponent
     {
-        var set = new HashSet<ComponentID>(26);
+        var set = new HashSet<ComponentID>(26)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -1484,10 +1510,11 @@ public sealed partial class WorldBuilder
         where T25 : IComponent
         where T26 : IComponent
     {
-        var set = new HashSet<ComponentID>(27);
+        var set = new HashSet<ComponentID>(27)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -1581,10 +1608,11 @@ public sealed partial class WorldBuilder
         where T26 : IComponent
         where T27 : IComponent
     {
-        var set = new HashSet<ComponentID>(28);
+        var set = new HashSet<ComponentID>(28)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -1681,10 +1709,11 @@ public sealed partial class WorldBuilder
         where T27 : IComponent
         where T28 : IComponent
     {
-        var set = new HashSet<ComponentID>(29);
+        var set = new HashSet<ComponentID>(29)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -1784,10 +1813,11 @@ public sealed partial class WorldBuilder
         where T28 : IComponent
         where T29 : IComponent
     {
-        var set = new HashSet<ComponentID>(30);
+        var set = new HashSet<ComponentID>(30)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -1890,10 +1920,11 @@ public sealed partial class WorldBuilder
         where T29 : IComponent
         where T30 : IComponent
     {
-        var set = new HashSet<ComponentID>(31);
+        var set = new HashSet<ComponentID>(31)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))
@@ -1999,10 +2030,11 @@ public sealed partial class WorldBuilder
         where T30 : IComponent
         where T31 : IComponent
     {
-        var set = new HashSet<ComponentID>(32);
+        var set = new HashSet<ComponentID>(32)
+        {
+            ComponentID<T0>.ID
+        };
 
-        if (!set.Add(ComponentID<T0>.ID))
-            throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
         if (!set.Add(ComponentID<T1>.ID))
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
         if (!set.Add(ComponentID<T2>.ID))

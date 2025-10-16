@@ -569,7 +569,8 @@ public sealed class QueryDescription
             }
         }
 
-        // This shouldn't happen
+        // This shouldn't happen. We picked an index from the count of entities, and then searched
+        // for that entity. This only happens if we didn't find an entity with that index.
         return default;
     }
 

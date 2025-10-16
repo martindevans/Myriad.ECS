@@ -148,10 +148,7 @@ namespace Myriad.ECS.Worlds
 		public int Query<T0>(QueryDelegateChunkHandle<T0> @delegate, QueryDescription? query = null)
 			where T0 : IComponent
 		{
-			return ExecuteChunk<QueryDelegateChunkWrapper1E<T0>, T0>(
-				new QueryDelegateChunkWrapper1E<T0>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>
@@ -471,10 +468,7 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
 		{
-			return ExecuteChunk<QueryDelegateChunkWrapper2E<T0, T1>, T0, T1>(
-				new QueryDelegateChunkWrapper2E<T0, T1>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>
@@ -810,10 +804,7 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
 		{
-			return ExecuteChunk<QueryDelegateChunkWrapper3E<T0, T1, T2>, T0, T1, T2>(
-				new QueryDelegateChunkWrapper3E<T0, T1, T2>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>
@@ -1165,10 +1156,7 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
 		{
-			return ExecuteChunk<QueryDelegateChunkWrapper4E<T0, T1, T2, T3>, T0, T1, T2, T3>(
-				new QueryDelegateChunkWrapper4E<T0, T1, T2, T3>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>
@@ -1536,10 +1524,7 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
 		{
-			return ExecuteChunk<QueryDelegateChunkWrapper5E<T0, T1, T2, T3, T4>, T0, T1, T2, T3, T4>(
-				new QueryDelegateChunkWrapper5E<T0, T1, T2, T3, T4>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>
@@ -1923,10 +1908,7 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
 		{
-			return ExecuteChunk<QueryDelegateChunkWrapper6E<T0, T1, T2, T3, T4, T5>, T0, T1, T2, T3, T4, T5>(
-				new QueryDelegateChunkWrapper6E<T0, T1, T2, T3, T4, T5>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>
@@ -2326,10 +2308,7 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
 		{
-			return ExecuteChunk<QueryDelegateChunkWrapper7E<T0, T1, T2, T3, T4, T5, T6>, T0, T1, T2, T3, T4, T5, T6>(
-				new QueryDelegateChunkWrapper7E<T0, T1, T2, T3, T4, T5, T6>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>
@@ -2745,10 +2724,7 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
 		{
-			return ExecuteChunk<QueryDelegateChunkWrapper8E<T0, T1, T2, T3, T4, T5, T6, T7>, T0, T1, T2, T3, T4, T5, T6, T7>(
-				new QueryDelegateChunkWrapper8E<T0, T1, T2, T3, T4, T5, T6, T7>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>
@@ -3180,10 +3156,7 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
 		{
-			return ExecuteChunk<QueryDelegateChunkWrapper9E<T0, T1, T2, T3, T4, T5, T6, T7, T8>, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
-				new QueryDelegateChunkWrapper9E<T0, T1, T2, T3, T4, T5, T6, T7, T8>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>
@@ -3631,10 +3604,7 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
 		{
-			return ExecuteChunk<QueryDelegateChunkWrapper10E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-				new QueryDelegateChunkWrapper10E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>
@@ -4098,10 +4068,7 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
 		{
-			return ExecuteChunk<QueryDelegateChunkWrapper11E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-				new QueryDelegateChunkWrapper11E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>
@@ -4581,10 +4548,7 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
 		{
-			return ExecuteChunk<QueryDelegateChunkWrapper12E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-				new QueryDelegateChunkWrapper12E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>
@@ -5080,10 +5044,7 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
 		{
-			return ExecuteChunk<QueryDelegateChunkWrapper13E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-				new QueryDelegateChunkWrapper13E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>
@@ -5595,10 +5556,7 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
 		{
-			return ExecuteChunk<QueryDelegateChunkWrapper14E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
-				new QueryDelegateChunkWrapper14E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>
@@ -6126,10 +6084,7 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
 		{
-			return ExecuteChunk<QueryDelegateChunkWrapper15E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
-				new QueryDelegateChunkWrapper15E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>

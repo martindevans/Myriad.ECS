@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Command;
+using Myriad.ECS.Tests.Queries;
 using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Tests;
@@ -36,5 +37,17 @@ public class ArchetypeTests
         }
 
         Assert.AreEqual(10000, count);
+    }
+
+    [TestMethod]
+    public void ArchetypeHashesDiffer()
+    {
+        var w = new WorldBuilder().Build();
+        TestHelpers.SetupRandomEntities(w).Playback().Dispose();
+
+        var h0 = w.Archetypes[0].GetHashCode();
+        var h1 = w.Archetypes[1].GetHashCode();
+
+        Assert.AreNotEqual(h0, h1);
     }
 }

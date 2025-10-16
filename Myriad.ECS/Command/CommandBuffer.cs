@@ -130,11 +130,13 @@ public sealed partial class CommandBuffer
             if (_entityModifications.TryGetValue(delete, out var mods))
                 _setters.Dispose(mods.Sets, ref lazy);
 
-            // Skip deleted entities
-            if (!delete.Exists())
+            // Get info for this entity, early exiting on dead entities
+            var dummy = default(EntityInfo);
+            var info = World.GetEntityInfo(delete.ID, ref dummy, out var isAlreadyDead);
+            if (isAlreadyDead)
                 continue;
 
-            var archetype = World.GetArchetype(delete.ID);
+            var archetype = info.Chunk.Archetype;
             if (archetype is { IsPhantom: false, HasPhantomComponents: true } || IsAddingPhantomComponent(delete))
             {
                 // It has phantom components and isn't yet a phantom. Add a Phantom component.

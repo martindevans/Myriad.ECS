@@ -164,10 +164,7 @@ namespace Myriad.ECS.Worlds
 		public int Query<<#= delegate_type_params #>>(QueryDelegateChunkHandle<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
-			return ExecuteChunk<<#= delegate_wrapper_name #>E<<#= delegate_type_params #>>, <#= delegate_type_params #>>(
-				new <#= delegate_wrapper_name #>E<<#= delegate_type_params #>>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>

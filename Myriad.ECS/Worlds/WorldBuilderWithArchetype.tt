@@ -24,9 +24,12 @@ public sealed partial class WorldBuilder
     public WorldBuilder WithArchetype<<#= string.Join(", ", Enumerable.Range(0, i).Select(i => "T" + i)) #>>()
         <#= string.Join("\r\n        ", Enumerable.Range(0, i).Select(i => $"where T{i} : IComponent")) #>
     {
-        var set = new HashSet<ComponentID>(<#= i #>);
+        var set = new HashSet<ComponentID>(<#= i #>)
+        {
+            ComponentID<T0>.ID
+        };
 
-<# for (var j = 0; j < i; j++)
+<# for (var j = 1; j < i; j++)
 {
 #>
         if (!set.Add(ComponentID<<#= $"T{j}" #>>.ID))

@@ -98,7 +98,9 @@ public class EntityTests
     public void HasComponentNoEntity()
     {
         var w = new WorldBuilder().Build();
-        var entity = new Entity(new EntityId(23, 4), w);
+
+        // Create an invalid entity
+        var entity = new Entity(new EntityId(-23, 4), w);
 
         Assert.IsFalse(entity.HasComponent<ComponentInt16>());
         Assert.IsFalse(entity.HasComponent<ComponentInt32>());
