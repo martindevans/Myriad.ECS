@@ -149,26 +149,6 @@ public sealed partial class World
         archetype.Clear(ref lazy);
     }
 
-    internal Archetype GetArchetype(EntityId entity)
-    {
-        if (entity.ID < 0 || entity.ID >= _entities.TotalCapacity)
-            throw new ArgumentException("Invalid entity ID", nameof(entity));
-
-        return GetEntityInfo(entity).Chunk.Archetype;
-    }
-
-    /// <summary>
-    /// Get the current version for a given entity ID
-    /// </summary>
-    /// <param name="entityId"></param>
-    /// <returns>The entity ID, or zero if the entity does not exist</returns>
-    internal uint GetVersion(int entityId)
-    {
-        if (entityId <= 0 || entityId >= _entities.TotalCapacity)
-            return 0;
-        return _entities[entityId].Version;
-    }
-
     #region Get/Create Archetype
     /// <summary>
     /// Find an archetype with the given set of components, using a precomputed archetype hash.
@@ -272,12 +252,6 @@ public sealed partial class World
         slot.Version = entity.Version;
 
         return ref slot;
-    }
-
-    internal Row GetRow(EntityId entity)
-    {
-        var info = GetEntityInfo(entity);
-        return new Row(entity, info.RowIndex, info.Chunk);
     }
 
     internal ref EntityInfo GetEntityInfo(EntityId entity)

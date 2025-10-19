@@ -185,14 +185,18 @@ public sealed partial class CommandBuffer
             // Calculate the new archetype for the entity
             foreach (var (entity, mod) in _entityModifications)
             {
+                // Try to get entity info for this entity
+                var dummy = default(EntityInfo);
+                ref var info = ref World.GetEntityInfo(entity.ID, ref dummy, out var isDummy);
+
                 // Skip entities that have been deleted since this was enqueued
-                if (!entity.Exists())
+                if (isDummy)
                 {
                     _setters.Dispose(mod.Sets, ref lazy);
                     continue;
                 }
 
-                var currentArchetype = World.GetArchetype(entity.ID);
+                var currentArchetype = info.Chunk.Archetype;
 
                 // Set all of the current archetype components
                 _tempComponentIdSet.Clear();
@@ -251,7 +255,7 @@ public sealed partial class CommandBuffer
                     }
                     else
                     {
-                        row = World.GetRow(entity.ID);
+                        row = info.GetRow(entity.ID);
                     }
 
                     // Run all setters

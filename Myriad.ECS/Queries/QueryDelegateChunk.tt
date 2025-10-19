@@ -209,10 +209,7 @@ namespace Myriad.ECS.Worlds
 		public int Query<<#= delegate_type_params #>>(QueryDelegateChunk<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
-			return ExecuteChunk<<#= delegate_wrapper_name #><<#= delegate_type_params #>>, <#= delegate_type_params #>>(
-				new <#= delegate_wrapper_name #><<#= delegate_type_params #>>(@delegate),
-				ref query
-			);
+			return Query(@delegate, ref query);
 		}
 
 		/// <summary>
@@ -261,10 +258,7 @@ namespace Myriad.ECS.Worlds
 		public int Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateChunkHandleData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
-			return ExecuteChunk<<#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
-				new <#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>(data, @delegate),
-				ref query
-			);
+			return Query(data, @delegate, ref query);
 		}
 
 		/// <summary>
@@ -312,10 +306,7 @@ namespace Myriad.ECS.Worlds
 		public int Query<TData, <#= delegate_type_params #>>(TData data, QueryDelegateChunkData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
 			where <#= Constraints(i, 12) #>
 		{
-			return ExecuteChunk<<#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
-				new <#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>(data, @delegate),
-				ref query
-			);
+			return Query(data, @delegate, ref query);
 		}
 
 		/// <summary>

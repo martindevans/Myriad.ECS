@@ -61,8 +61,15 @@ public readonly partial record struct EntityId
     /// <returns></returns>
     public bool Exists(World world)
     {
-        return ID != 0
-            && world.GetVersion(ID) == Version;
+        // Get info for this entity
+        EntityInfo _ = default;
+        world.GetEntityInfo(this, ref _, out var doesNotExist);
+
+        // If the info cannot be retrieved then this entity doesn't exist
+        if (doesNotExist)
+            return false;
+
+        return true;
     }
 
     /// <summary>
@@ -71,8 +78,15 @@ public readonly partial record struct EntityId
     /// <returns></returns>
     public bool IsAlive(World world)
     {
-        return Exists(world)
-            && !IsPhantom(world);
+        // Get info for this entity
+        EntityInfo _ = default;
+        ref readonly var info = ref world.GetEntityInfo(this, ref _, out var doesNotExist);
+
+        // If the info cannot be retrieved then this entity doesn't exist
+        if (doesNotExist)
+            return false;
+
+        return !info.Chunk.Archetype.IsPhantom;
     }
 
     /// <summary>
@@ -82,9 +96,15 @@ public readonly partial record struct EntityId
     /// <returns>true if this entity is a phantom. False is it does not exist or is not a phantom.</returns>
     public bool IsPhantom(World world)
     {
-        return ID != 0
-            && Exists(world)
-            && world.GetArchetype(this).IsPhantom;
+        // Get info for this entity
+        EntityInfo _ = default;
+        ref readonly var info = ref world.GetEntityInfo(this, ref _, out var doesNotExist);
+
+        // If the info cannot be retrieved then this entity doesn't exist
+        if (doesNotExist)
+            return false;
+
+        return info.Chunk.Archetype.IsPhantom;
     }
 
     /// <inheritdoc />

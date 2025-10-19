@@ -13,7 +13,7 @@ internal static class ArrayFactory
     // ReSharper disable once UnusedMember.Global (Used implicity by reflection)
     public static void Prepare<T>()
     {
-        _factories ??= [ ];
+        _factories ??= new();
 
         if (!_factories.ContainsKey(typeof(T)))
             _factories.Add(typeof(T), Create<T>);
