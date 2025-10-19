@@ -8,17 +8,17 @@ public class GameTime
     /// <summary>
     /// The current time
     /// </summary>
-    public double Time { get; private set; }
+    public double Time { get; set; }
 
     /// <summary>
     /// The change in time since the last frame
     /// </summary>
-    public double DeltaTime { get; private set; }
+    public double DeltaTime { get; set; }
 
     /// <summary>
     /// The total number of elapsed frames
     /// </summary>
-    public ulong Frame { get; private set; }
+    public ulong Frame { get; set; }
 
     /// <summary>
     /// Advance the time by one step
@@ -29,18 +29,5 @@ public class GameTime
         Time += dt;
         DeltaTime = dt;
         Frame++;
-    }
-
-    /// <summary>
-    /// Overwrite properties
-    /// </summary>
-    /// <param name="time"></param>
-    /// <param name="deltaTime"></param>
-    /// <param name="frameCount"></param>
-    public void Set(double time = 0, double deltaTime = 0, ulong frameCount = 0)
-    {
-        Time = time;
-        DeltaTime = deltaTime;
-        Frame = frameCount;
     }
 }

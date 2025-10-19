@@ -258,6 +258,60 @@ public class DelegateQuery
     }
 
     [TestMethod]
+    public void QueryChunk_WithHandle_WithQueryCache()
+    {
+        var w = new WorldBuilder().Build();
+        TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
+
+        // Set all to 123
+        var q = default(QueryDescription);
+        w.Query((ChunkHandle ch, Span<ComponentInt32> ci) =>
+        {
+            Assert.AreEqual(ch.EntityCount, ci.Length);
+
+            foreach (ref var c in ci)
+                c.Value = 123;
+        }, ref q);
+
+        // Check all are correct
+        foreach (var (_, i) in w.Query<ComponentInt32>())
+        {
+            Assert.AreEqual(123, i.Ref.Value);
+        }
+
+        // Check cache has been filled
+        Assert.IsNotNull(q);
+        Assert.IsTrue(q.IsIncluded<ComponentInt32>());
+        Assert.AreEqual(1, q.Exclude.Count);            // Implicit Phantom exclusion
+    }
+
+    [TestMethod]
+    public void QueryChunk_WithQueryCache()
+    {
+        var w = new WorldBuilder().Build();
+        TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
+
+        // Set all to 123
+        var q = default(QueryDescription);
+        w.Query((Span<ComponentInt32> ci) =>
+        {
+            foreach (ref var c in ci)
+                c.Value = 123;
+        }, ref q);
+
+        // Check all are correct
+        foreach (var (_, i) in w.Query<ComponentInt32>())
+        {
+            Assert.AreEqual(123, i.Ref.Value);
+        }
+
+        // Check cache has been filled
+        Assert.IsNotNull(q);
+        Assert.IsTrue(q.IsIncluded<ComponentInt32>());
+        Assert.AreEqual(1, q.Exclude.Count);            // Implicit Phantom exclusion
+    }
+
+    [TestMethod]
     public void QueryChunk_WithHandle_WithData()
     {
         var w = new WorldBuilder().Build();
