@@ -4,6 +4,11 @@
 	
 	
 	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\Martin\AppData\Local\Temp\JetBrains\ReSharperPlatformVs17\vAny_ac125f2d\CoverageData\_Myriad.ECS.1518930650\Snapshot\snapshot.utdcvr</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=120448eb_002D631f_002D40a7_002D9729_002D5621e1510e90/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="SkipEnumerator" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::6DD3CD1E-78C3-4A77-9652-75C8C136D788::net8.0::Myriad.ECS.Tests.Extensions.EnumeratorExtensionsTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2f71bb07_002Df309_002D47eb_002D87c9_002D298a3756b84a/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;Myriad.ECS.Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="C:\Users\Martin\Documents\dotnet\Myriad.ECS\Myriad.ECS.Tests" Presentation="&amp;lt;Myriad.ECS.Tests&amp;gt;" /&gt;&#xD;
