@@ -45,11 +45,12 @@ public class SystemGroupTests
     }
 
     private class UpdateCountSystem
-        : ISystemBefore<object>, ISystemAfter<object>
+        : ISystemBefore<object>, ISystemAfter<object>, IDisposable
     {
         public int Updated;
         public int Before;
         public int After;
+        public int Disposed;
 
         public void Update(object data)
         {
@@ -64,6 +65,11 @@ public class SystemGroupTests
         public void AfterUpdate(object data)
         {
             After++;
+        }
+
+        public void Dispose()
+        {
+            Disposed++;
         }
     }
 
@@ -117,18 +123,70 @@ public class SystemGroupTests
         var group = new DynamicSystemGroup<object>("name");
         ISystemGroup<object> systems = group;
 
+        // System hasn't been added yet, updates should not affect system
+        group.BeforeUpdate(new());
+        group.Update(new());
+        group.AfterUpdate(new());
+        Assert.AreEqual(0, a.Before);
+        Assert.AreEqual(0, a.Updated);
+        Assert.AreEqual(0, a.After);
+
+        // Searching for system that doesn't exist should be null
         Assert.IsNull(systems.TryGet<UpdateCountSystem>());
 
         group.Add(a);
         group.Add(b);
 
+        // System has been added yet, updates should count
+        group.BeforeUpdate(new());
+        group.Update(new());
+        group.AfterUpdate(new());
+        Assert.AreEqual(1, a.Before);
+        Assert.AreEqual(1, a.Updated);
+        Assert.AreEqual(1, a.After);
+
+        // Check systems are in system list
         Assert.AreEqual(a, systems.TryGet<UpdateCountSystem>());
         Assert.AreEqual(b, systems.TryGet<SystemEmpty<object>>());
 
+        // It's in the group, so removing should be true
         Assert.IsTrue(group.Remove(a));
+
+        // It's no longer present, updates should not affect system
+        group.BeforeUpdate(new());
+        group.Update(new());
+        group.AfterUpdate(new());
+        Assert.AreEqual(1, a.Before);
+        Assert.AreEqual(1, a.Updated);
+        Assert.AreEqual(1, a.After);
 
         Assert.IsNull(systems.TryGet<UpdateCountSystem>());
 
+        // Can't remove twice
         Assert.IsFalse(group.Remove(a));
+    }
+
+    [TestMethod]
+    public void DisposeGroup()
+    {
+        var a = new UpdateCountSystem();
+        var b = new UpdateCountSystem();
+        var c = new UpdateCountSystem();
+
+        var systems = new DynamicSystemGroup<object>(
+            "name",
+            new DynamicSystemGroup<object>("inner", a, b),
+            c
+        );
+
+        Assert.AreEqual(0, a.Disposed);
+        Assert.AreEqual(0, b.Disposed);
+        Assert.AreEqual(0, c.Disposed);
+
+        systems.Dispose();
+
+        Assert.AreEqual(1, a.Disposed);
+        Assert.AreEqual(1, b.Disposed);
+        Assert.AreEqual(1, c.Disposed);
     }
 }

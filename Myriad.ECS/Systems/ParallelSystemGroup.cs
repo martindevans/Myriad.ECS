@@ -16,7 +16,7 @@ public sealed class ParallelSystemGroup<TData>
     public ParallelSystemGroup(string name, params ISystem<TData>[] systems)
         : base(name, systems)
     {
-        // Create delegates now, capturing "this". This avoids creating ne delegates every frame.
+        // Create delegates now, capturing "this._dataClosure". This avoids creating new delegates every frame.
         _dataClosure = default;
         _beforeUpdate = system =>
         {
