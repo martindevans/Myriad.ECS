@@ -611,6 +611,18 @@ public sealed partial class CommandBuffer
     }
 
     /// <summary>
+    /// Bulk delete entities
+    /// </summary>
+    /// <param name="entities"></param>
+    public void Delete(List<EntityId> entities)
+    {
+        _deletes.EnsureCapacity(_deletes.Count + entities.Count);
+
+        foreach (var entityId in entities)
+            _deletes.Add(entityId.ToEntity(World));
+    }
+
+    /// <summary>
     /// Bulk delete all entities which match the given query
     /// </summary>
     /// <param name="entities"></param>

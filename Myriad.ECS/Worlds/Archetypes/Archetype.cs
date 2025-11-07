@@ -68,9 +68,9 @@ public sealed partial class Archetype
     private readonly ArchetypePhantomComponentNotifier? _phantomNotifier;
 
     /// <summary>
-    /// The archetype that entities should be moved to when deleted. Only non-null if <code>HasPhantomComponents &amp; !IsPhantom</code>
+    /// The archetype that entities should be moved to when deleted.
     /// </summary>
-    private readonly Archetype? _phantomDestination;
+    private Archetype? _phantomDestination;
 
     /// <summary>
     /// The total number of entities in this archetype
@@ -151,16 +151,6 @@ public sealed partial class Archetype
         // Create a notifier if it's needed
         if (HasPhantomNotifierComponents && !IsPhantom)
             _phantomNotifier = new ArchetypePhantomComponentNotifier(components);
-
-        // Get the destination archetype for deleted entities, if they become phantoms
-        if (HasPhantomComponents && !IsPhantom)
-        {
-            var c = new OrderedListSet<ComponentID>(components)
-            {
-                ComponentID<Phantom>.ID
-            };
-            _phantomDestination = World.GetOrCreateArchetype(c);
-        }
     }
 
     internal void Dispose(ref LazyCommandBuffer buffer)
@@ -194,7 +184,15 @@ public sealed partial class Archetype
     {
         if (HasPhantomComponents && !IsPhantom)
         {
-            Debug.Assert(_phantomDestination != null);
+            // Get the destination archetype for entities which are becoming phantoms and cache it
+            if (_phantomDestination == null)
+            {
+                var c = new OrderedListSet<ComponentID>(Components)
+                {
+                    ComponentID<Phantom>.ID
+                };
+                _phantomDestination = World.GetOrCreateArchetype(c);
+            }
 
             // Migrate all entities in all chunks to the new archetype. Doing this does all of the bookeeping like chunk management and entity count.
             // This could be better, at the moment it just does the work on a per-entity basis, instead of doing it all in one batch.
@@ -281,9 +279,10 @@ public sealed partial class Archetype
 
     internal Row MigrateTo(EntityId entity, ref EntityInfo info, Archetype to, ref LazyCommandBuffer lazy)
     {
-        // Early exit if we're migrating to where we already are!
-        if (to == this)
-            return info.GetRow(entity);
+        //// Early exit if we're migrating to where we already are!
+        //if (to == this)
+        //    return info.GetRow(entity);
+        Debug.Assert(to != this);
 
         // Handle disposable components which are being removed
         _disposer?.DisposeRemoved(ref lazy, info, to.Components);
