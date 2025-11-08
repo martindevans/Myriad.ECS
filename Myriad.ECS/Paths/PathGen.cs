@@ -89,6 +89,35 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+    /// <typeparam name="T0"></typeparam>
+    
+    public sealed class HasComponents<T0>
+        : BaseGenericStep<T0>
+        where T0 : IComponent
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -135,6 +164,7 @@ public readonly partial struct Path
             return true;
         }
     }
+
     /// <summary>
     /// Base class for path steps that take generic parameters
     /// </summary>
@@ -222,6 +252,37 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+    /// <typeparam name="T0"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    
+    public sealed class HasComponents<T0, T1>
+        : BaseGenericStep<T0, T1>
+        where T0 : IComponent
+        where T1 : IComponent
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -271,6 +332,7 @@ public readonly partial struct Path
             return true;
         }
     }
+
     /// <summary>
     /// Base class for path steps that take generic parameters
     /// </summary>
@@ -366,6 +428,39 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+    /// <typeparam name="T0"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    [ExcludeFromCodeCoverage]
+    public sealed class HasComponents<T0, T1, T2>
+        : BaseGenericStep<T0, T1, T2>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -418,6 +513,7 @@ public readonly partial struct Path
             return true;
         }
     }
+
     /// <summary>
     /// Base class for path steps that take generic parameters
     /// </summary>
@@ -521,6 +617,41 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+    /// <typeparam name="T0"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    [ExcludeFromCodeCoverage]
+    public sealed class HasComponents<T0, T1, T2, T3>
+        : BaseGenericStep<T0, T1, T2, T3>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -576,6 +707,7 @@ public readonly partial struct Path
             return true;
         }
     }
+
     /// <summary>
     /// Base class for path steps that take generic parameters
     /// </summary>
@@ -687,6 +819,43 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+    /// <typeparam name="T0"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    [ExcludeFromCodeCoverage]
+    public sealed class HasComponents<T0, T1, T2, T3, T4>
+        : BaseGenericStep<T0, T1, T2, T3, T4>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -745,6 +914,7 @@ public readonly partial struct Path
             return true;
         }
     }
+
     /// <summary>
     /// Base class for path steps that take generic parameters
     /// </summary>
@@ -864,6 +1034,45 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+    /// <typeparam name="T0"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    [ExcludeFromCodeCoverage]
+    public sealed class HasComponents<T0, T1, T2, T3, T4, T5>
+        : BaseGenericStep<T0, T1, T2, T3, T4, T5>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -925,6 +1134,7 @@ public readonly partial struct Path
             return true;
         }
     }
+
     /// <summary>
     /// Base class for path steps that take generic parameters
     /// </summary>
@@ -1052,6 +1262,47 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+    /// <typeparam name="T0"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    /// <typeparam name="T6"></typeparam>
+    [ExcludeFromCodeCoverage]
+    public sealed class HasComponents<T0, T1, T2, T3, T4, T5, T6>
+        : BaseGenericStep<T0, T1, T2, T3, T4, T5, T6>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -1116,6 +1367,7 @@ public readonly partial struct Path
             return true;
         }
     }
+
     /// <summary>
     /// Base class for path steps that take generic parameters
     /// </summary>
@@ -1251,6 +1503,49 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+    /// <typeparam name="T0"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    /// <typeparam name="T6"></typeparam>
+    /// <typeparam name="T7"></typeparam>
+    [ExcludeFromCodeCoverage]
+    public sealed class HasComponents<T0, T1, T2, T3, T4, T5, T6, T7>
+        : BaseGenericStep<T0, T1, T2, T3, T4, T5, T6, T7>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -1318,6 +1613,7 @@ public readonly partial struct Path
             return true;
         }
     }
+
     /// <summary>
     /// Base class for path steps that take generic parameters
     /// </summary>
@@ -1461,6 +1757,51 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+    /// <typeparam name="T0"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    /// <typeparam name="T6"></typeparam>
+    /// <typeparam name="T7"></typeparam>
+    /// <typeparam name="T8"></typeparam>
+    [ExcludeFromCodeCoverage]
+    public sealed class HasComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+        : BaseGenericStep<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -1531,6 +1872,7 @@ public readonly partial struct Path
             return true;
         }
     }
+
     /// <summary>
     /// Base class for path steps that take generic parameters
     /// </summary>
@@ -1682,6 +2024,53 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+    /// <typeparam name="T0"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    /// <typeparam name="T6"></typeparam>
+    /// <typeparam name="T7"></typeparam>
+    /// <typeparam name="T8"></typeparam>
+    /// <typeparam name="T9"></typeparam>
+    [ExcludeFromCodeCoverage]
+    public sealed class HasComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+        : BaseGenericStep<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -1755,6 +2144,7 @@ public readonly partial struct Path
             return true;
         }
     }
+
     /// <summary>
     /// Base class for path steps that take generic parameters
     /// </summary>
@@ -1914,6 +2304,55 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+    /// <typeparam name="T0"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    /// <typeparam name="T6"></typeparam>
+    /// <typeparam name="T7"></typeparam>
+    /// <typeparam name="T8"></typeparam>
+    /// <typeparam name="T9"></typeparam>
+    /// <typeparam name="T10"></typeparam>
+    [ExcludeFromCodeCoverage]
+    public sealed class HasComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+        : BaseGenericStep<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -1990,6 +2429,7 @@ public readonly partial struct Path
             return true;
         }
     }
+
     /// <summary>
     /// Base class for path steps that take generic parameters
     /// </summary>
@@ -2157,6 +2597,57 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+    /// <typeparam name="T0"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    /// <typeparam name="T6"></typeparam>
+    /// <typeparam name="T7"></typeparam>
+    /// <typeparam name="T8"></typeparam>
+    /// <typeparam name="T9"></typeparam>
+    /// <typeparam name="T10"></typeparam>
+    /// <typeparam name="T11"></typeparam>
+    [ExcludeFromCodeCoverage]
+    public sealed class HasComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+        : BaseGenericStep<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -2236,6 +2727,7 @@ public readonly partial struct Path
             return true;
         }
     }
+
     /// <summary>
     /// Base class for path steps that take generic parameters
     /// </summary>
@@ -2411,6 +2903,59 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+    /// <typeparam name="T0"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    /// <typeparam name="T6"></typeparam>
+    /// <typeparam name="T7"></typeparam>
+    /// <typeparam name="T8"></typeparam>
+    /// <typeparam name="T9"></typeparam>
+    /// <typeparam name="T10"></typeparam>
+    /// <typeparam name="T11"></typeparam>
+    /// <typeparam name="T12"></typeparam>
+    [ExcludeFromCodeCoverage]
+    public sealed class HasComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+        : BaseGenericStep<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -2493,6 +3038,7 @@ public readonly partial struct Path
             return true;
         }
     }
+
     /// <summary>
     /// Base class for path steps that take generic parameters
     /// </summary>
@@ -2676,6 +3222,61 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+    /// <typeparam name="T0"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    /// <typeparam name="T6"></typeparam>
+    /// <typeparam name="T7"></typeparam>
+    /// <typeparam name="T8"></typeparam>
+    /// <typeparam name="T9"></typeparam>
+    /// <typeparam name="T10"></typeparam>
+    /// <typeparam name="T11"></typeparam>
+    /// <typeparam name="T12"></typeparam>
+    /// <typeparam name="T13"></typeparam>
+    [ExcludeFromCodeCoverage]
+    public sealed class HasComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+        : BaseGenericStep<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -2761,6 +3362,7 @@ public readonly partial struct Path
             return true;
         }
     }
+
     /// <summary>
     /// Base class for path steps that take generic parameters
     /// </summary>
@@ -2952,6 +3554,63 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+    /// <typeparam name="T0"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    /// <typeparam name="T6"></typeparam>
+    /// <typeparam name="T7"></typeparam>
+    /// <typeparam name="T8"></typeparam>
+    /// <typeparam name="T9"></typeparam>
+    /// <typeparam name="T10"></typeparam>
+    /// <typeparam name="T11"></typeparam>
+    /// <typeparam name="T12"></typeparam>
+    /// <typeparam name="T13"></typeparam>
+    /// <typeparam name="T14"></typeparam>
+    [ExcludeFromCodeCoverage]
+    public sealed class HasComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+        : BaseGenericStep<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -3040,5 +3699,6 @@ public readonly partial struct Path
             return true;
         }
     }
+
 }
 

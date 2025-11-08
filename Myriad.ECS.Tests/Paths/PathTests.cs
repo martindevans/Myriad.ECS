@@ -502,6 +502,65 @@ public class PathTests
         Assert.AreEqual(default, pathFalse.TryFollow(e1));
     }
 
+    [TestMethod]
+    public void HasComponents_Follows()
+    {
+        // Create A
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+        var eb1 = cmd.Create().Set(new Component0()).Set(new Component1());
+        cmd.Playback();
+        var e1 = eb1.Resolve();
+
+        // Check it has a component
+        var path1 = new Path(new Path.HasComponents<Component0>());
+        Assert.AreEqual(e1, path1.TryFollow(e1));
+
+        // Check it has a component
+        var path2 = new Path(new Path.HasComponents<Component0, Component1>());
+        Assert.AreEqual(e1, path2.TryFollow(e1));
+    }
+
+    [TestMethod]
+    public void HasComponents_NonFollows()
+    {
+        // Create A
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+        var eb1 = cmd.Create().Set(new Component0()).Set(new Component1());
+        cmd.Playback();
+        var e1 = eb1.Resolve();
+
+        // Check it has a component
+        var path1 = new Path(new Path.HasComponents<Component2>());
+        Assert.AreEqual(default, path1.TryFollow(e1));
+
+        // Check it has a component
+        var path2 = new Path(new Path.HasComponents<Component0, Component2>());
+        Assert.AreEqual(default, path2.TryFollow(e1));
+    }
+
+    [TestMethod]
+    public void HasComponents_Dead()
+    {
+        // Create A
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+        var eb1 = cmd.Create().Set(new Component0()).Set(new Component1());
+        cmd.Playback();
+        var e1 = eb1.Resolve();
+        cmd.Delete(e1);
+        cmd.Playback().Dispose();
+
+        // Check it has a component
+        var path1 = new Path(new Path.HasComponents<Component0>());
+        Assert.AreEqual(default, path1.TryFollow(e1));
+
+        // Check it has a component
+        var path2 = new Path(new Path.HasComponents<Component0, Component1>());
+        Assert.AreEqual(default, path2.TryFollow(e1));
+    }
+
     private readonly struct MapReturnConst<T>
         : IQueryMap<bool, T>
         where T : IComponent

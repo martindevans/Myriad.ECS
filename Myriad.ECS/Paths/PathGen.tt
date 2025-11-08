@@ -116,6 +116,39 @@ public readonly partial struct Path
     }
 
     /// <summary>
+    /// Check that the current entity has the given components, fail to follow the path if any are missing
+    /// </summary>
+<# for (var j = 0; j < i; j++) { #>
+    /// <typeparam name="T<#= j #>"></typeparam>
+<# } #>
+    <#= CoverageAttribute(i) #>
+    public sealed class HasComponents<<#= tparams #>>
+        : BaseGenericStep<<#= tparams #>>
+<# for (var j = 0; j < i; j++) { #>
+        where T<#= j #> : IComponent
+<# } #>
+    {
+        /// <inheritdoc />
+        public override bool TryFollow(ref Entity entity)
+        {
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var entityInfo = ref entity.World.GetEntityInfo(entity.ID, ref dummy, out var isDead);
+
+            // Can't follow a path through a dead entity!
+            if (isDead)
+                return false;
+
+            // Check if all components are present in one go
+            var components = entityInfo.Chunk.Archetype.Components;
+            if (!components.IsSupersetOfSortedSpan(SortedComponentIDs.Span))
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Try to follow a component, using a mapper to extract an entity from it
     /// </summary>
     /// <typeparam name="M"></typeparam>
@@ -168,6 +201,7 @@ public readonly partial struct Path
             return true;
         }
     }
+
 <# } #>
 }
 
