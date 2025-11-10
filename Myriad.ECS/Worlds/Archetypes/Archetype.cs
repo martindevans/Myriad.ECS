@@ -102,8 +102,16 @@ public sealed partial class Archetype
     /// </summary>
     public bool HasPhantomNotifierComponents { get; }
 
+    private static long _nextId;
+    /// <summary>
+    /// Globally Unique ID for this archetype
+    /// </summary>
+    public long ArchetypeId { get; }
+
     internal Archetype(World world, FrozenOrderedListSet<ComponentID> components)
     {
+        ArchetypeId = Interlocked.Increment(ref _nextId);
+
         World = world;
         Components = components;
         ComponentsBloomFilter = components.ToBloomFilter();

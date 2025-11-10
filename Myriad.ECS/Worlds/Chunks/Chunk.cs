@@ -35,8 +35,16 @@ internal sealed class Chunk
     /// </summary>
     public ReadOnlyMemory<Entity> Entities => _entities.AsMemory(0, EntityCount);
 
+    private static long _nextId;
+    /// <summary>
+    /// Globally Unique ID for this chunk
+    /// </summary>
+    public long ChunkId { get; }
+
     internal Chunk(Archetype archetype, int size, int[] componentIndexLookup, ReadOnlySpan<Type> componentTypes, ReadOnlyMemory<ComponentID> ids)
     {
+        ChunkId = Interlocked.Increment(ref _nextId);
+
         Archetype = archetype;
         _componentIndexLookup = componentIndexLookup;
         _entities = new Entity[size];
