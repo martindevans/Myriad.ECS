@@ -604,14 +604,17 @@ public sealed class QueryDescription
             return 0;
 
         var count = 0;
-        foreach (var archetype in GetArchetypes())
+        foreach (var match in GetArchetypes())
         {
-            if (!archetype.Archetype.Components.Contains(id))
+            if (!match.Archetype.Components.Contains(id))
                 continue;
 
-            count += archetype.Archetype.EntityCount;
+            count += match.Archetype.EntityCount;
 
-            using var chunks = archetype.Archetype.GetChunkEnumerator();
+            // Wait for multithreaded access to this archetype
+            match.Archetype.Block();
+
+            using var chunks = match.Archetype.GetChunkEnumerator();
             while (chunks.MoveNext())
             {
                 var chunk = chunks.Current;

@@ -205,6 +205,7 @@ public readonly partial record struct EntityId
         where T : IComponent
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
+        entityInfo.Chunk.Archetype.Block();
         return entityInfo.Chunk.GetRefT<T>(this, entityInfo.RowIndex);
     }
 
@@ -222,6 +223,7 @@ public readonly partial record struct EntityId
             return null;
 
         ref var entityInfo = ref world.GetEntityInfo(this);
+        entityInfo.Chunk.Archetype.Block();
         return entityInfo.Chunk.GetComponentArray(id).GetValue(entityInfo.RowIndex);
     }
 }

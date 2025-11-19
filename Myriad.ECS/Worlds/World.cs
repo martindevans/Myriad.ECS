@@ -2,6 +2,7 @@
 using Myriad.ECS.Collections;
 using Myriad.ECS.Command;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Locks;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Threading;
 using Myriad.ECS.Worlds.Archetypes;
@@ -15,6 +16,7 @@ public sealed partial class World
     : IDisposable
 {
     internal IThreadPool ThreadPool { get; }
+    internal IWorldArchetypeSafetyManager LockManager { get; }
 
     private readonly List<Archetype> _archetypes = [ ];
     private readonly Dictionary<ArchetypeHash, List<Archetype>> _archetypesByHash = [ ];
@@ -33,9 +35,10 @@ public sealed partial class World
 
     private readonly ConcurrentBag<CommandBuffer> _commandBufferPool = [ ];
 
-    internal World(IThreadPool pool)
+    internal World(IThreadPool pool, IWorldArchetypeSafetyManager locks)
     {
         ThreadPool = pool;
+        LockManager = locks;
     }
 
     /// <inheritdoc />
@@ -128,6 +131,9 @@ public sealed partial class World
 
     internal void DeleteImmediate(Archetype archetype, ref LazyCommandBuffer lazy)
     {
+        // Wait for multithreaded access to this archetype
+        archetype.Block();
+
         // Mark all of the IDs as dead (as long as they haven't become phantoms)
         if (archetype is { HasPhantomComponents: false, IsPhantom: false })
         {

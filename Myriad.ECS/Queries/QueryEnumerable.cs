@@ -76,6 +76,8 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                _archetypesEnumerator.Current.Archetype.Block();
+
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
@@ -205,6 +207,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -354,6 +358,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -512,6 +518,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -679,6 +687,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -855,6 +865,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -1040,6 +1052,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -1234,6 +1248,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -1437,6 +1453,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -1649,6 +1667,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -1870,6 +1890,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -2100,6 +2122,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -2339,6 +2363,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -2587,6 +2613,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -2844,6 +2872,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -3110,6 +3140,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -3385,6 +3417,8 @@ namespace Myriad.ECS.Queries
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
+
+                _archetypesEnumerator.Current.Archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.

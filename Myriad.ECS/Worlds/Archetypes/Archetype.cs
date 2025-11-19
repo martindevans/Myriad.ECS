@@ -78,6 +78,11 @@ public sealed partial class Archetype
     public int EntityCount { get; private set; }
 
     /// <summary>
+    /// Get the number of chunks in this archetype with entities
+    /// </summary>
+    public int ChunkCount => _chunks.Count;
+
+    /// <summary>
     /// Indicates if any of the components in this Archetype implement <see cref="IPhantomComponent"/>;
     /// </summary>
     public bool HasPhantomComponents { get; }
@@ -163,6 +168,9 @@ public sealed partial class Archetype
 
     internal void Dispose(ref LazyCommandBuffer buffer)
     {
+        // Wait for multithreaded access to this archetype
+        Block();
+
         DisposeAllDisposableComponents(ref buffer);
     }
 
@@ -176,6 +184,9 @@ public sealed partial class Archetype
 
     internal Row CreateEntity()
     {
+        // Wait for multithreaded access to this archetype
+        Block();
+
         // Allocate an entity in the world
         ref var info = ref World.AllocateEntity(out var entity);
 
@@ -190,6 +201,9 @@ public sealed partial class Archetype
     /// <exception cref="NotImplementedException"></exception>
     internal void Clear(ref LazyCommandBuffer lazy)
     {
+        // Wait for multithreaded access to this archetype
+        Block();
+
         if (HasPhantomComponents && !IsPhantom)
         {
             // Get the destination archetype for entities which are becoming phantoms and cache it
@@ -253,6 +267,9 @@ public sealed partial class Archetype
     /// <returns></returns>
     internal Row AddEntity(EntityId entity, ref EntityInfo info)
     {
+        // Wait for multithreaded access to this archetype
+        Block();
+
         // Increase archetype entity count
         EntityCount++;
 
@@ -274,6 +291,9 @@ public sealed partial class Archetype
 
     internal void RemoveEntity(EntityInfo info, ref LazyCommandBuffer lazy)
     {
+        // Wait for multithreaded access to this archetype
+        Block();
+
         // Run disposal for all IDisposableComponent components
         if (HasDisposableComponents)
             _disposer?.DisposeEntity(ref lazy, info);
@@ -287,6 +307,9 @@ public sealed partial class Archetype
 
     internal Row MigrateTo(EntityId entity, ref EntityInfo info, Archetype to, ref LazyCommandBuffer lazy)
     {
+        // Wait for multithreaded access to this archetype
+        Block();
+
         //// Early exit if we're migrating to where we already are!
         //if (to == this)
         //    return info.GetRow(entity);
@@ -361,4 +384,12 @@ public sealed partial class Archetype
     /// Get an enumerable of all entities in this <see cref="Archetype"/>, in an arbitrary order.
     /// </summary>
     public ArchetypeEntityEnumerable Entities => new(this);
+
+    /// <summary>
+    /// Block on multithreaded access to this archetype to finish
+    /// </summary>
+    public void Block()
+    {
+        World.LockManager.Block(this);
+    }
 }

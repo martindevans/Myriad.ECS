@@ -51,6 +51,7 @@ namespace Myriad.ECS.Worlds
             foreach (var archetypeMatch in archetypes)
             {
                 var archetype = archetypeMatch.Archetype;
+                archetype.Block();
 
                 count += archetype.EntityCount;
 
@@ -90,6 +91,7 @@ namespace Myriad.ECS.Worlds
             foreach (var archetypeMatch in archetypes)
             {
                 var archetype = archetypeMatch.Archetype;
+                archetype.Block();
 
                 count += archetype.EntityCount;
 

@@ -157,6 +157,8 @@ for (var k = 0; k < i; k++)
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                _archetypesEnumerator.Current.Archetype.Block();
+
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();

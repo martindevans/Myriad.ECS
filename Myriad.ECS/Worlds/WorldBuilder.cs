@@ -1,5 +1,7 @@
-﻿using Myriad.ECS.Collections;
+﻿using Myriad.ECS.Allocations;
+using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
+using Myriad.ECS.Locks;
 using Myriad.ECS.Threading;
 
 namespace Myriad.ECS.Worlds;
@@ -11,6 +13,7 @@ public sealed partial class WorldBuilder
 {
     private readonly List<OrderedListSet<ComponentID>> _archetypes = [ ];
     private IThreadPool? _pool;
+    private IWorldArchetypeSafetyManager? _lockManager;
 
     private bool AddArchetype(HashSet<ComponentID> ids)
     {
@@ -47,8 +50,24 @@ public sealed partial class WorldBuilder
     public WorldBuilder WithThreadPool(IThreadPool pool)
     {
         if (_pool != null)
-            throw new InvalidOperationException("Cannot call 'WithThreadPool' twice");
+            throw new InvalidOperationException($"Cannot call '{nameof(WithThreadPool)}' twice");
         _pool = pool;
+
+        return this;
+    }
+
+    //todo: make this public when it's ready
+    /// <summary>
+    /// Define the <see cref="IWorldArchetypeSafetyManager"/> used by this world.
+    /// </summary>
+    /// <param name="manager"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    internal WorldBuilder WithSafetySystem(IWorldArchetypeSafetyManager manager)
+    {
+        if (_lockManager != null)
+            throw new InvalidOperationException($"Cannot call '{nameof(WithSafetySystem)}' twice");
+        _lockManager = manager;
 
         return this;
     }
@@ -60,7 +79,8 @@ public sealed partial class WorldBuilder
     public World Build()
     {
         var w = new World(
-            _pool ?? new DefaultThreadPool()
+            _pool ?? new DefaultThreadPool(),
+            _lockManager ?? new DefaultWorldArchetypeSafetyManager()
         );
 
         foreach (var components in _archetypes)
