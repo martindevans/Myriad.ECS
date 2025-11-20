@@ -16,7 +16,11 @@ public sealed partial class World
     : IDisposable
 {
     internal IThreadPool ThreadPool { get; }
-    internal IWorldArchetypeSafetyManager LockManager { get; }
+
+    /// <summary>
+    /// Get the <see cref="IWorldArchetypeSafetyManager"/> which is attached to this world
+    /// </summary>
+    public IWorldArchetypeSafetyManager LockManager { get; }
 
     private readonly List<Archetype> _archetypes = [ ];
     private readonly Dictionary<ArchetypeHash, List<Archetype>> _archetypesByHash = [ ];
@@ -51,6 +55,15 @@ public sealed partial class World
 
         if (lazy.TryGetBuffer(out var buffer))
             buffer.Playback().Dispose();
+    }
+
+    /// <summary>
+    /// Call <see cref="Archetype.Block"/> on all archetypes in this world
+    /// </summary>
+    public void Block()
+    {
+        foreach (var archetype in Archetypes)
+            archetype.Block();
     }
 
     #region command buffer pool

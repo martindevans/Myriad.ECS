@@ -1,5 +1,4 @@
-﻿using Myriad.ECS.Allocations;
-using Myriad.ECS.Collections;
+﻿using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Locks;
 using Myriad.ECS.Threading;
@@ -13,7 +12,7 @@ public sealed partial class WorldBuilder
 {
     private readonly List<OrderedListSet<ComponentID>> _archetypes = [ ];
     private IThreadPool? _pool;
-    private IWorldArchetypeSafetyManager? _lockManager;
+    private IWorldArchetypeSafetyManager? _safetySystem;
 
     private bool AddArchetype(HashSet<ComponentID> ids)
     {
@@ -56,18 +55,17 @@ public sealed partial class WorldBuilder
         return this;
     }
 
-    //todo: make this public when it's ready
     /// <summary>
     /// Define the <see cref="IWorldArchetypeSafetyManager"/> used by this world.
     /// </summary>
     /// <param name="manager"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    internal WorldBuilder WithSafetySystem(IWorldArchetypeSafetyManager manager)
+    public WorldBuilder WithSafetySystem(IWorldArchetypeSafetyManager manager)
     {
-        if (_lockManager != null)
+        if (_safetySystem != null)
             throw new InvalidOperationException($"Cannot call '{nameof(WithSafetySystem)}' twice");
-        _lockManager = manager;
+        _safetySystem = manager;
 
         return this;
     }
@@ -80,7 +78,7 @@ public sealed partial class WorldBuilder
     {
         var w = new World(
             _pool ?? new DefaultThreadPool(),
-            _lockManager ?? new DefaultWorldArchetypeSafetyManager()
+            _safetySystem ?? new DefaultWorldArchetypeSafetyManager()
         );
 
         foreach (var components in _archetypes)

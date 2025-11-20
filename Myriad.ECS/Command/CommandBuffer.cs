@@ -60,6 +60,9 @@ public sealed partial class CommandBuffer
     /// <returns></returns>
     public Resolver Playback()
     {
+        // Block on all parallel access before applying a structural change
+        World.Block();
+
         // Use this resolver for this playback
         var resolver = _nextResolver;
 
