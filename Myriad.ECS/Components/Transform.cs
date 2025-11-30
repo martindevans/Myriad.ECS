@@ -109,6 +109,9 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
     /// <inheritdoc />
     public virtual void Update(TData data)
     {
+        // We're going to be walking all over the ECS, touching archetypes everywhere. Block on everything.
+        _world.Block();
+
         // Move to the next phase
         unchecked { _phase++; }
 
