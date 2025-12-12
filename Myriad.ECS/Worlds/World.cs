@@ -62,7 +62,7 @@ public sealed partial class World
     /// </summary>
     public void Block()
     {
-        foreach (var archetype in Archetypes)
+        foreach (var archetype in _archetypes)
             archetype.Block();
     }
 

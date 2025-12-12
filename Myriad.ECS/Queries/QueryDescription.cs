@@ -234,9 +234,12 @@ public sealed class QueryDescription
             {
                 // Check every archetype
                 var matches = new List<ArchetypeMatch>();
-                foreach (var item in World.Archetypes)
+                for (var i = 0; i < World.Archetypes.Count; i++)
+                {
+                    var item = World.Archetypes[i];
                     if (TryMatch(item) is ArchetypeMatch m)
                         matches.Add(m);
+                }
 
                 // Store result for next time
                 _result = new MatchResult(World.Archetypes.Count, FrozenOrderedListSet<ArchetypeMatch>.Create(matches));

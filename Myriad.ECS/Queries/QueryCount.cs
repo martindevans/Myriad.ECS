@@ -19,7 +19,7 @@ public partial class World
     public int Count()
     {
         var count = 0;
-        foreach (var archetype in Archetypes)
+        foreach (var archetype in _archetypes)
             count += archetype.EntityCount;
         return count;
     }
