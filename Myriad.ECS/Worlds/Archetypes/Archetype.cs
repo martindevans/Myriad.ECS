@@ -35,7 +35,7 @@ public sealed partial class Archetype
     /// <summary>
     /// A bloom filter of all the components in this archetype
     /// </summary>
-    internal readonly BloomFilter32x384 ComponentsBloomFilter;
+    internal readonly BloomFilter32x512 ComponentsBloomFilter;
 
     /// <summary>
     /// The hash of all components IDs in this archetype

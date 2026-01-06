@@ -1,18 +1,18 @@
-﻿using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using Myriad.ECS.IDs;
+﻿using Myriad.ECS.IDs;
 using Myriad.ECS.xxHash;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace Myriad.ECS.Collections;
 
 /// <summary>
-/// Probabalistic set of 32 bit values (e.g. component IDs), with 384 total bits and 6 hash functions. Can be used to check if two sets intersect.<br />
+/// Probabalistic set of 32 bit values (e.g. component IDs), with 512 total bits and 8 hash functions. Can be used to check if two sets intersect.<br />
 ///
 /// False positives are possible (i.e. If Intersects returns true, then there <b>might</b> be an overlap).<br />
 /// False negatives are <b>not</b> possible (i.e. If Intersects return false, then there <b>definitely</b> is no overlap).<br />
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Pack = 0)]
-internal struct BloomFilter32x384
+internal struct BloomFilter32x512
 {
     private ulong _a;
     private ulong _b;
@@ -20,6 +20,8 @@ internal struct BloomFilter32x384
     private ulong _d;
     private ulong _e;
     private ulong _f;
+    private ulong _g;
+    private ulong _h;
 
     public void Add(ComponentID id)
     {
@@ -38,6 +40,8 @@ internal struct BloomFilter32x384
         SetRandomBit(bytes, 562713536, ref _d);
         SetRandomBit(bytes, 703121798, ref _e);
         SetRandomBit(bytes, 133703782, ref _f);
+        SetRandomBit(bytes, 978376609, ref _g);
+        SetRandomBit(bytes, 542356235, ref _h);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static void SetRandomBit(Span<byte> bytes, ulong seed, ref ulong output)
@@ -55,7 +59,7 @@ internal struct BloomFilter32x384
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public readonly bool MaybeIntersects(ref readonly BloomFilter32x384 other)
+    public readonly bool MaybeIntersects(ref readonly BloomFilter32x512 other)
     {
         // The same items have been added to all 6 sets, with different hashes.
         // Therefore if _any_ of the sets do not intersect, then the overall
@@ -68,7 +72,9 @@ internal struct BloomFilter32x384
             IsNonZero(_c & other._c) &
             IsNonZero(_d & other._d) &
             IsNonZero(_e & other._e) &
-            IsNonZero(_f & other._f);
+            IsNonZero(_f & other._f) &
+            IsNonZero(_g & other._g) & 
+            IsNonZero(_h & other._h);
 
         // If any were zero the final bit will be zero.
         var fail = mask != 1;
@@ -77,17 +83,18 @@ internal struct BloomFilter32x384
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ulong IsNonZero(ulong x) => (x | (~x + 1)) >> 63;
 #else
-        // Bitwise & each matching element in the two sets together
-        var abcd = System.Runtime.Intrinsics.Vector256.Create(_a, _b, _c, _d)
-                 & System.Runtime.Intrinsics.Vector256.Create(other._a, other._b, other._c, other._d);
-        var ef = System.Runtime.Intrinsics.Vector128.Create(_e, _f)
-               & System.Runtime.Intrinsics.Vector128.Create(other._e, other._f);
+        // Get references to the start of the structs (byte 0)
+        ref readonly var selfRef = ref Unsafe.As<BloomFilter32x512, ulong>(ref Unsafe.AsRef(in this));
+        ref readonly var otherRef = ref Unsafe.As<BloomFilter32x512, ulong>(ref Unsafe.AsRef(in other));
 
-        // Check if any of the elements had any matching bits
-        var abcdz = System.Runtime.Intrinsics.Vector256.EqualsAny(abcd, System.Runtime.Intrinsics.Vector256<ulong>.Zero);
-        var efz = System.Runtime.Intrinsics.Vector128.EqualsAny(ef, System.Runtime.Intrinsics.Vector128<ulong>.Zero);
+        // Combine lower and upper 256 bits of the 2 filters
+        var v1 = System.Runtime.Intrinsics.Vector256.LoadUnsafe(in selfRef)    & System.Runtime.Intrinsics.Vector256.LoadUnsafe(in otherRef);
+        var v2 = System.Runtime.Intrinsics.Vector256.LoadUnsafe(in selfRef, 4) & System.Runtime.Intrinsics.Vector256.LoadUnsafe(in otherRef, 4);
 
-        var fail = abcdz | efz;
+        var fail = (
+            System.Runtime.Intrinsics.Vector256.EqualsAny(v1, System.Runtime.Intrinsics.Vector256<ulong>.Zero) |
+            System.Runtime.Intrinsics.Vector256.EqualsAny(v2, System.Runtime.Intrinsics.Vector256<ulong>.Zero)
+        );
 #endif
 
         return !fail;
@@ -97,7 +104,7 @@ internal struct BloomFilter32x384
     /// Modify this bloom filter to the union of this and other.
     /// </summary>
     /// <param name="other"></param>
-    public void Union(ref readonly BloomFilter32x384 other)
+    public void Union(ref readonly BloomFilter32x512 other)
     {
         _a |= other._a;
         _b |= other._b;
@@ -105,18 +112,7 @@ internal struct BloomFilter32x384
         _d |= other._d;
         _e |= other._e;
         _f |= other._f;
-    }
-
-    /// <summary>
-    /// Clear this bloom filter
-    /// </summary>
-    public void Clear()
-    {
-        _a = 0;
-        _b = 0;
-        _c = 0;
-        _d = 0;
-        _e = 0;
-        _f = 0;
+        _g |= other._g;
+        _h |= other._h;
     }
 }

@@ -16,8 +16,8 @@ public sealed class QueryDescription
     private readonly ReaderWriterLockSlim _resultLock = new();
     private readonly OrderedListSet<ComponentID> _temporarySet = [];
 
-    private readonly BloomFilter32x384 _includeBloom;
-    private readonly BloomFilter32x384 _excludeBloom;
+    private readonly BloomFilter32x512 _includeBloom;
+    private readonly BloomFilter32x512 _excludeBloom;
 
     /// <summary>
     /// The World that this query is for

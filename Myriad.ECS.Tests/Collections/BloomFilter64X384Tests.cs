@@ -9,8 +9,8 @@ public class BloomFilter64X384Tests
     [TestMethod]
     public void EmptyNotIntersect()
     {
-        var a = new BloomFilter32x384();
-        var b = new BloomFilter32x384();
+        var a = new BloomFilter32x512();
+        var b = new BloomFilter32x512();
 
         Assert.IsFalse(a.MaybeIntersects(ref b));
     }
@@ -18,13 +18,13 @@ public class BloomFilter64X384Tests
     [TestMethod]
     public void DisjointNotIntersect()
     {
-        var a = new BloomFilter32x384();
+        var a = new BloomFilter32x512();
         a.Add(ComponentID<Component0>.ID);
         a.Add(ComponentID<Component1>.ID);
         a.Add(ComponentID<Component2>.ID);
         a.Add(ComponentID<Component3>.ID);
 
-        var b = new BloomFilter32x384();
+        var b = new BloomFilter32x512();
         b.Add(ComponentID<Component8>.ID);
         b.Add(ComponentID<Component9>.ID);
         b.Add(ComponentID<Component10>.ID);
@@ -39,12 +39,12 @@ public class BloomFilter64X384Tests
     [TestMethod]
     public void IntersectingIntersect()
     {
-        var a = new BloomFilter32x384();
+        var a = new BloomFilter32x512();
         a.Add(ComponentID<Component0>.ID);
         a.Add(ComponentID<Component1>.ID);
         a.Add(ComponentID<Component4>.ID);
 
-        var b = new BloomFilter32x384();
+        var b = new BloomFilter32x512();
         b.Add(ComponentID<Component2>.ID);
         b.Add(ComponentID<Component3>.ID);
         b.Add(ComponentID<Component4>.ID);
@@ -55,24 +55,24 @@ public class BloomFilter64X384Tests
     [TestMethod]
     public void UnionIntersects()
     {
-        var a = new BloomFilter32x384();
+        var a = new BloomFilter32x512();
         a.Add(ComponentID<Component0>.ID);
         a.Add(ComponentID<Component1>.ID);
         a.Add(ComponentID<Component2>.ID);
 
-        var b = new BloomFilter32x384();
+        var b = new BloomFilter32x512();
         b.Add(ComponentID<Component3>.ID);
         b.Add(ComponentID<Component4>.ID);
         b.Add(ComponentID<Component5>.ID);
 
-        var c = new BloomFilter32x384();
+        var c = new BloomFilter32x512();
         c.Add(ComponentID<Component0>.ID);
 
         Assert.IsFalse(a.MaybeIntersects(ref b));
         Assert.IsFalse(b.MaybeIntersects(ref c));
         Assert.IsTrue(a.MaybeIntersects(ref c));
 
-        var d = new BloomFilter32x384();
+        var d = new BloomFilter32x512();
         d.Union(ref b);
         d.Union(ref c);
 
