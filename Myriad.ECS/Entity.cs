@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
-using Myriad.ECS.Collections;
+﻿using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
+using System.Diagnostics;
 
 namespace Myriad.ECS;
 
@@ -111,4 +111,10 @@ public readonly partial record struct Entity
     /// <param name="id"></param>
     /// <returns></returns>
     public object? GetBoxedComponent(ComponentID id) => ID.GetBoxedComponent(World, id);
+
+    /// <summary>
+    /// Cast this entity to an <see cref="EntityId"/>. Exactly the same as simply accessing the <see cref="ID"/> property.
+    /// </summary>
+    /// <param name="e"></param>
+    public static implicit operator EntityId(Entity e) => e.ID;
 }
