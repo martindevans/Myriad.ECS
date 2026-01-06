@@ -7,7 +7,7 @@ namespace Myriad.ECS;
 
 /* dotcover disable */
 
-public readonly partial record struct EntityId
+public readonly partial struct EntityId
 {
     /// <summary>
     /// Get a tuple of several components

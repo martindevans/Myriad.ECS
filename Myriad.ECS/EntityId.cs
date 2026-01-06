@@ -9,8 +9,8 @@ namespace Myriad.ECS;
 /// The ID of an <see cref="Entity"/> (not carrying a reference to a <see cref="World"/>)
 /// </summary>
 [DebuggerDisplay("{ID}v{Version}")]
-public readonly partial record struct EntityId
-    : IComparable<EntityId>
+public readonly partial struct EntityId
+    : IComparable<EntityId>, IEquatable<EntityId>
 {
     /// <summary>
     /// The <see cref="Entity"/> of an entity, may be re-used very quickly once an <see cref="Entity"/> is destroyed.
@@ -107,6 +107,7 @@ public readonly partial record struct EntityId
         return info.Chunk.Archetype.IsPhantom;
     }
 
+    #region equality
     /// <inheritdoc />
     public int CompareTo(EntityId other)
     {
@@ -116,6 +117,43 @@ public readonly partial record struct EntityId
 
         return Version.CompareTo(other.Version);
     }
+
+    /// <inheritdoc />
+    public bool Equals(EntityId other)
+    {
+        return ID == other.ID
+            && Version == other.Version;
+    }
+
+    /// <inheritdoc />
+    public override bool Equals(object? obj)
+    {
+        return obj is EntityId e
+            && Equals(e);
+    }
+
+    /// <summary>
+    /// Compares this <see cref="EntityId"/> to another and returns if they are equal
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <returns></returns>
+    public static bool operator ==(EntityId a, EntityId b)
+    {
+        return a.Equals(b);
+    }
+
+    /// <summary>
+    /// Compares this <see cref="EntityId"/> to another and returns if they are not equal
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <returns></returns>
+    public static bool operator !=(EntityId a, EntityId b)
+    {
+        return !a.Equals(b);
+    }
+    #endregion
 
     /// <summary>
     /// Get a unique 64 bit ID for this entity

@@ -13,7 +13,7 @@ namespace Myriad.ECS;
 
 /* dotcover disable */
 
-public readonly partial record struct EntityId
+public readonly partial struct EntityId
 {
 <# for (var i = 2; i <= 16; i++)
 {
