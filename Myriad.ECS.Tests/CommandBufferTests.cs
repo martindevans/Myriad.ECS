@@ -507,7 +507,7 @@ public class CommandBufferTests
         foreach (var entity in entities)
             Assert.IsTrue(entity.Exists());
 
-        buffer.Delete([entities[0], entities[1]]);
+        buffer.Delete(new List<Entity> { entities[0], entities[1] });
         buffer.Playback();
 
         Assert.IsFalse(entities[0].Exists());
