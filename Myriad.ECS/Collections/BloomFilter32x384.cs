@@ -6,13 +6,13 @@ using Myriad.ECS.xxHash;
 namespace Myriad.ECS.Collections;
 
 /// <summary>
-/// Probabalistic set of component IDs. Can be used to check if two sets intersect.<br />
+/// Probabalistic set of 32 bit values (e.g. component IDs), with 384 total bits and 6 hash functions. Can be used to check if two sets intersect.<br />
 ///
 /// False positives are possible (i.e. If Intersects returns true, then there <b>might</b> be an overlap).<br />
 /// False negatives are <b>not</b> possible (i.e. If Intersects return false, then there <b>definitely</b> is no overlap).<br />
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Pack = 0)]
-internal struct ComponentBloomFilter
+internal struct BloomFilter32x384
 {
     private ulong _a;
     private ulong _b;
@@ -23,7 +23,12 @@ internal struct ComponentBloomFilter
 
     public void Add(ComponentID id)
     {
-        Span<int> value = stackalloc int[] { id.Value };
+        Add(id.Value);
+    }
+
+    public void Add(int id)
+    {
+        Span<int> value = stackalloc int[] { id };
         var bytes = MemoryMarshal.Cast<int, byte>(value);
 
         // Set one random bit in each of the bitsets
@@ -50,7 +55,7 @@ internal struct ComponentBloomFilter
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public readonly bool MaybeIntersects(ref readonly ComponentBloomFilter other)
+    public readonly bool MaybeIntersects(ref readonly BloomFilter32x384 other)
     {
         // The same items have been added to all 6 sets, with different hashes.
         // Therefore if _any_ of the sets do not intersect, then the overall
@@ -67,6 +72,10 @@ internal struct ComponentBloomFilter
 
         // If any were zero the final bit will be zero.
         var fail = mask != 1;
+
+        // Returns 1 if x is non-zero
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static ulong IsNonZero(ulong x) => (x | (~x + 1)) >> 63;
 #else
         // Bitwise & each matching element in the two sets together
         var abcd = System.Runtime.Intrinsics.Vector256.Create(_a, _b, _c, _d)
@@ -75,20 +84,20 @@ internal struct ComponentBloomFilter
                & System.Runtime.Intrinsics.Vector128.Create(other._e, other._f);
 
         // Check if any of the elements had any matching bits
-        var abz = System.Runtime.Intrinsics.Vector256.EqualsAny(abcd, System.Runtime.Intrinsics.Vector256<ulong>.Zero);
+        var abcdz = System.Runtime.Intrinsics.Vector256.EqualsAny(abcd, System.Runtime.Intrinsics.Vector256<ulong>.Zero);
         var efz = System.Runtime.Intrinsics.Vector128.EqualsAny(ef, System.Runtime.Intrinsics.Vector128<ulong>.Zero);
 
-        var fail = abz | efz;
+        var fail = abcdz | efz;
 #endif
 
         return !fail;
-
-        // Returns 1 if x is non-zero
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static ulong IsNonZero(ulong x) => (x | (~x + 1)) >> 63;
     }
 
-    public void Union(ref readonly ComponentBloomFilter other)
+    /// <summary>
+    /// Modify this bloom filter to the union of this and other.
+    /// </summary>
+    /// <param name="other"></param>
+    public void Union(ref readonly BloomFilter32x384 other)
     {
         _a |= other._a;
         _b |= other._b;
@@ -96,5 +105,18 @@ internal struct ComponentBloomFilter
         _d |= other._d;
         _e |= other._e;
         _f |= other._f;
+    }
+
+    /// <summary>
+    /// Clear this bloom filter
+    /// </summary>
+    public void Clear()
+    {
+        _a = 0;
+        _b = 0;
+        _c = 0;
+        _d = 0;
+        _e = 0;
+        _f = 0;
     }
 }

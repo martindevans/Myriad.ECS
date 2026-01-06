@@ -22,8 +22,8 @@ public interface ISystemDeclare<in TData>
 /// </summary>
 public struct SystemDeclaration
 {
-    private ComponentBloomFilter _reads;
-    private ComponentBloomFilter _writes;
+    private BloomFilter32x384 _reads;
+    private BloomFilter32x384 _writes;
 
     /// <summary>
     /// Declare that the given component is read during the update phase
