@@ -2,6 +2,8 @@
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace Myriad.ECS;
 
@@ -9,17 +11,20 @@ namespace Myriad.ECS;
 /// The ID of an <see cref="Entity"/> (not carrying a reference to a <see cref="World"/>)
 /// </summary>
 [DebuggerDisplay("{ID}v{Version}")]
+[StructLayout(LayoutKind.Explicit, Size = 8)]
 public readonly partial struct EntityId
     : IComparable<EntityId>, IEquatable<EntityId>
 {
     /// <summary>
     /// The <see cref="Entity"/> of an entity, may be re-used very quickly once an <see cref="Entity"/> is destroyed.
     /// </summary>
+    [FieldOffset(0)]
     public readonly int ID;
 
     /// <summary>
     /// The version number of this ID, may also be re-used but only after the full 32 bit counter has been overflowed for this specific ID.
     /// </summary>
+    [FieldOffset(4)]
     public readonly uint Version;
 
     /// <summary>
@@ -154,6 +159,24 @@ public readonly partial struct EntityId
         return !a.Equals(b);
     }
     #endregion
+
+    /// <summary>
+    /// Convert this EntityID into a raw 64 bit number
+    /// </summary>
+    /// <param name="id"></param>
+    public static explicit operator ulong(EntityId id)
+    {
+        return Unsafe.As<EntityId, ulong>(ref id);
+    }
+
+    /// <summary>
+    /// Convert a raw 64 bit number into an entity ID
+    /// </summary>
+    /// <param name="id"></param>
+    public static explicit operator EntityId(ulong id)
+    {
+        return Unsafe.As<ulong, EntityId>(ref id);
+    }
 
     /// <summary>
     /// Get a unique 64 bit ID for this entity
