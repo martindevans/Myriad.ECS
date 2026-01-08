@@ -22,9 +22,9 @@ namespace Myriad.ECS.Worlds
 			public void Add(Entity e);
 
 			/// <summary>
-			/// Expand the collection
+			/// Ensure the collection has capacity to add a certain number of items
 			/// </summary>
-			public void AddCapacity(int capacity);
+			public void EnsureCapacity(int capacity);
 		}
 		
 		private readonly struct CollectorAdapter<TQ>
@@ -40,7 +40,7 @@ namespace Myriad.ECS.Worlds
 
             public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e)
             {
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i]);
@@ -62,9 +62,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -97,6 +97,11 @@ namespace Myriad.ECS.Worlds
 		)
 			where TQ : IQueryCollector
 		{
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Run a chunk query, adding items
 			return ExecuteChunk(new CollectorAdapter<TQ>(q), query);
 		}
 	}
@@ -116,9 +121,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -143,7 +148,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i]);
@@ -167,9 +172,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -213,9 +218,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -288,6 +293,14 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
 			where TQ : IQueryCollector<T0>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0>,
@@ -314,9 +327,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0, ref T1 t1);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -342,7 +355,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i], ref t1[i]);
@@ -367,9 +380,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -416,9 +429,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0, t1));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -497,6 +510,14 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
 			where TQ : IQueryCollector<T0, T1>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0, T1>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0, T1>,
@@ -524,9 +545,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0, ref T1 t1, ref T2 t2);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -553,7 +574,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i], ref t1[i], ref t2[i]);
@@ -579,9 +600,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -631,9 +652,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0, t1, t2));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -718,6 +739,14 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0, T1, T2>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0, T1, T2>,
@@ -746,9 +775,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -776,7 +805,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i]);
@@ -803,9 +832,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -858,9 +887,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0, t1, t2, t3));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -951,6 +980,14 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0, T1, T2, T3>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0, T1, T2, T3>,
@@ -980,9 +1017,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -1011,7 +1048,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i]);
@@ -1039,9 +1076,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -1097,9 +1134,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0, t1, t2, t3, t4));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -1196,6 +1233,14 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0, T1, T2, T3, T4>,
@@ -1226,9 +1271,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -1258,7 +1303,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i]);
@@ -1287,9 +1332,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -1348,9 +1393,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0, t1, t2, t3, t4, t5));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -1453,6 +1498,14 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5>,
@@ -1484,9 +1537,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -1517,7 +1570,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i]);
@@ -1547,9 +1600,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -1611,9 +1664,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0, t1, t2, t3, t4, t5, t6));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -1722,6 +1775,14 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6>,
@@ -1754,9 +1815,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -1788,7 +1849,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i]);
@@ -1819,9 +1880,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -1886,9 +1947,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0, t1, t2, t3, t4, t5, t6, t7));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -2003,6 +2064,14 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7>,
@@ -2036,9 +2105,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -2071,7 +2140,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i]);
@@ -2103,9 +2172,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -2173,9 +2242,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0, t1, t2, t3, t4, t5, t6, t7, t8));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -2296,6 +2365,14 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>,
@@ -2330,9 +2407,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -2366,7 +2443,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i]);
@@ -2399,9 +2476,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -2472,9 +2549,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -2601,6 +2678,14 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>,
@@ -2636,9 +2721,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -2673,7 +2758,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i]);
@@ -2707,9 +2792,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -2783,9 +2868,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -2918,6 +3003,14 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>,
@@ -2954,9 +3047,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -2992,7 +3085,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i]);
@@ -3027,9 +3120,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -3106,9 +3199,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -3247,6 +3340,14 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>,
@@ -3284,9 +3385,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -3323,7 +3424,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i]);
@@ -3359,9 +3460,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -3441,9 +3542,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -3588,6 +3689,14 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>,
@@ -3626,9 +3735,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -3666,7 +3775,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i]);
@@ -3703,9 +3812,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -3788,9 +3897,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -3941,6 +4050,14 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>,
@@ -3980,9 +4097,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13, ref T14 t14);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -4021,7 +4138,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i]);
@@ -4059,9 +4176,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -4147,9 +4264,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -4306,6 +4423,14 @@ namespace Myriad.ECS.Worlds
             where T14 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>,
@@ -4346,9 +4471,9 @@ namespace Myriad.ECS.Queries
 		public void Add(Entity e, ref T0 t0, ref T1 t1, ref T2 t2, ref T3 t3, ref T4 t4, ref T5 t5, ref T6 t6, ref T7 t7, ref T8 t8, ref T9 t9, ref T10 t10, ref T11 t11, ref T12 t12, ref T13 t13, ref T14 t14, ref T15 t15);
 
 		/// <summary>
-		/// Expand the collection
+		/// Ensure the collection has capacity to add a certain number of items
 		/// </summary>
-		public void AddCapacity(int capacity);
+		public void EnsureCapacity(int capacity);
 	}
 }
 
@@ -4388,7 +4513,7 @@ namespace Myriad.ECS.Worlds
             {
 				var e = chunk.Entities.Span;
 
-                _collector.AddCapacity(e.Length);
+                _collector.EnsureCapacity(e.Length);
 
                 for (var i = e.Length - 1; i >= 0; i--)
                     _collector.Add(e[i], ref t0[i], ref t1[i], ref t2[i], ref t3[i], ref t4[i], ref t5[i], ref t6[i], ref t7[i], ref t8[i], ref t9[i], ref t10[i], ref t11[i], ref t12[i], ref t13[i], ref t14[i], ref t15[i]);
@@ -4427,9 +4552,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add(e);
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -4518,9 +4643,9 @@ namespace Myriad.ECS.Worlds
                 _list.Add((e, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15));
             }
 
-            public void AddCapacity(int capacity)
+            public void EnsureCapacity(int capacity)
             {
-                _list.Capacity += capacity;
+                _list.EnsureCapacity(capacity);
             }
 		}
 
@@ -4683,6 +4808,14 @@ namespace Myriad.ECS.Worlds
             where T15 : IComponent
 			where TQ : IQueryCollector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
+			// Ensure the query is non-null
+			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
+
+			// Ensure collection has capacity for everything we're about to add
+			var count = query.Count();
+            q.EnsureCapacity(count);
+
+			// Execute query, collecting results
 			return ExecuteChunk
 			<
 				CollectorAdapter<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>,
