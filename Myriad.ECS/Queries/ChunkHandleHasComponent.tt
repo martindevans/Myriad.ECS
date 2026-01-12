@@ -1,0 +1,58 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using Myriad.ECS.Collections;
+using System.Diagnostics.CodeAnalysis;
+
+namespace Myriad.ECS.Queries;
+
+/* dotcover disable */
+
+public readonly ref partial struct ChunkHandle
+{
+<# for (var i = 2; i <= 16; i++)
+{
+    var queryConstraints = string.Join(", ", Enumerable.Range(0, i).Select(x => "where T" + x + " : IComponent"));
+    var types = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
+#>
+
+    /// <summary>
+    /// Check if this chunk contains a tuple of several components
+    /// </summary>
+    <#= CoverageAttribute(i) #>
+    public bool HasComponent<<#= types #>>()
+        where <#= Constraints(i, 8) #>
+    {
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<<#= types #>>.Components;
+
+        // Check if they are all in the component set
+        return Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+    }
+<#
+}
+#>
+}
+
+<#+ 
+    static string CoverageAttribute(int index)
+	{
+		if (index < 3)
+			return "";
+		return "[ExcludeFromCodeCoverage]";
+	}
+
+	static string Constraints(int count, int spaces = 4)
+    {
+		var prefix = new string(' ', spaces);
+        var str = string.Join(
+			$"\r\n{prefix}where ",
+			Enumerable.Range(0, count).Select(x => $"T{x} : IComponent")
+		);
+
+		return str;
+    }
+#>

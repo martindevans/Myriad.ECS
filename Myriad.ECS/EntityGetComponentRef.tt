@@ -68,45 +68,6 @@ public readonly partial struct EntityId
         // Check if they are all in the components set
         return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
     }
-
-    <#= CoverageAttribute(i) #>
-    private static class SortedListOfComponents<<#= types #>>
-        where <#= Constraints(i, 8) #>
-    {
-        // ReSharper disable once StaticMemberInGenericType
-        public static readonly ReadOnlyMemory<ComponentID> Components;
-
-        static SortedListOfComponents()
-        {
-            // Create sorted array of components
-            var components = new[]
-            {
-<# for (var j = 0; j < i; j++)
-{
-    var comma = (j == (i - 1)) ? "" : ",";
-#>
-                ComponentID<T<#= j #>>.ID,
-<#
-}
-#>
-            };
-            Array.Sort(components);
-
-            // Deduplicate components
-            var insertIndex = 1;
-            for (var i = 1; i < components.Length; i++)
-            {
-                if (components[i].Value != components[insertIndex - 1].Value)
-                {
-                    components[insertIndex] = components[i];
-                    insertIndex++;
-                }
-            }
-
-            Components = components.AsMemory(0, insertIndex);
-        }
-    }
-
 <#
 }
 #>

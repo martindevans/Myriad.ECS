@@ -7,7 +7,7 @@ namespace Myriad.ECS.Queries;
 /// <summary>
 /// Temporary handle to a specific chunk
 /// </summary>
-public readonly ref struct ChunkHandle
+public readonly ref partial struct ChunkHandle
 {
     private readonly Chunk _chunk;
 

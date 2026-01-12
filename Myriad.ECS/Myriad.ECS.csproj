@@ -10,7 +10,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Myriad.ECS</Title>
     <Authors>Martin Evans</Authors>
-    <Version>41.1.0</Version>
+    <Version>41.2.0</Version>
     <Description>Myriad.ECS is a high performance Entity Component System (ECS).</Description>
     <PackageProjectUrl>https://github.com/martindevans/Myriad.ECS</PackageProjectUrl>
     <RepositoryUrl>https://github.com/martindevans/Myriad.ECS</RepositoryUrl>
@@ -31,6 +31,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Collections\SortedListOfComponents.cs">
+      <DependentUpon>SortedListOfComponents.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Collections\RefTuple.cs">
       <DependentUpon>RefTuple.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -106,6 +111,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Queries\ChunkHandleHasComponent.cs">
+      <DependentUpon>ChunkHandleHasComponent.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Worlds\WorldBuilderWithArchetype.cs">
       <DependentUpon>WorldBuilderWithArchetype.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -124,6 +134,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Collections\SortedListOfComponents.tt">
+      <LastGenOutput>SortedListOfComponents.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
     <None Update="Paths\PathGen.tt">
       <LastGenOutput>PathGen.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -185,6 +199,10 @@
     </None>
     <None Update="EntityGetComponentRef.tt">
       <LastGenOutput>EntityGetComponentRef.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Queries\ChunkHandleHasComponent.tt">
+      <LastGenOutput>ChunkHandleHasComponent.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="Worlds\WorldBuilderWithArchetype.tt">

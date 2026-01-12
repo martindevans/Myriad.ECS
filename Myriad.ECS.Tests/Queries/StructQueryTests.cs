@@ -99,6 +99,9 @@ public class StructQueryTests
             Assert.IsFalse(chunk.HasComponent<ComponentFloat>());
             Assert.IsFalse(chunk.HasComponent<ComponentInt32>());
 
+            Assert.IsFalse(chunk.HasComponent<ComponentInt64, ComponentFloat>());
+            Assert.IsFalse(chunk.HasComponent<ComponentInt64, ComponentFloat, ComponentInt32>());
+
             Assert.IsTrue(chunk.HasComponent<ComponentObject>());
 
             Assert.AreEqual(1, chunk.GetComponentSpan<ComponentObject>().Length);
