@@ -48,6 +48,33 @@ public sealed partial class QueryBuilder
 		return this;
 	}
 
+	/// <summary>
+	/// Include only entities which have all of these components
+	/// </summary>
+	/// <returns>The query builder</returns>
+	// ReSharper disable once UnusedTypeParameter (Justification: Used for checking the query against the type signature)
+	[ExcludeFromCodeCoverage]
+	public QueryBuilder IncludeQuery<TQ, <#= type_params #>>()
+		where TQ : IQuery<<#= type_params #>>
+<# for (var j = 0; j < i; j++)
+{
+#>
+		where <#= "T" + j #> : IComponent
+<#
+}
+#>
+	{
+<# for (var j = 0; j < i; j++)
+{
+#>
+		Include<<#= "T" + j #>>();
+<#
+}
+#>
+
+		return this;
+	}
+
 <#
 }
 #>
