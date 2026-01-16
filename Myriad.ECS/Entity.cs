@@ -106,6 +106,11 @@ public readonly partial record struct Entity
     public RefT<T> GetComponentRefT<T>() where T : IComponent => ID.GetComponentRefT<T>(World);
 
     /// <summary>
+    /// Try to get a tuple of one component, returns false if the entity does not exist or if the component is missing
+    /// </summary>
+    public bool TryGetComponentRef<T>(out RefTuple<T> output) where T : IComponent => ID.TryGetComponentRef(World, out output);
+
+    /// <summary>
     /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!
     /// </summary>
     /// <param name="id"></param>

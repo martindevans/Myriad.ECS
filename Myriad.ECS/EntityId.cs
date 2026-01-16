@@ -271,6 +271,45 @@ public readonly partial struct EntityId
     }
 
     /// <summary>
+    /// Try to get a tuple of several components, returns false if the entity does not exist or if any of the components
+    /// are missing.
+    /// </summary>
+
+    public bool TryGetComponentRef<T0>(World world, out RefTuple<T0> output)
+        where T0 : IComponent
+    {
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
+
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+        {
+            output = default;
+            return false;
+        }
+
+        // Check if component is in the components set
+        var hasComponents = entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T0>.ID);
+        if (!hasComponents)
+        {
+            output = default;
+            return false;
+        }
+
+        // Get the components
+        output = new RefTuple<T0>(
+            ToEntity(world),
+#if NET6_0_OR_GREATER
+            new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex))
+#else
+            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex)
+#endif
+        );
+        return true;
+    }
+
+    /// <summary>
     /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!
     /// </summary>
     /// <param name="world"></param>
