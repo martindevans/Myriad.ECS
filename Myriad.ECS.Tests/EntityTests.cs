@@ -23,6 +23,25 @@ public class EntityTests
     }
 
     [TestMethod]
+    public void ImplicitConversionToEntityId()
+    {
+        var w = new WorldBuilder().Build();
+        var b = new CommandBuffer(w);
+
+        var eb = b.Create();
+        using var resolver = b.Playback();
+        var entity = eb.Resolve();
+
+        // Convert to ID in all the various ways
+        var id1 = entity.ID;            // Property
+        var id2 = (EntityId)entity;     // Explicit
+        EntityId id3 = entity;          // Implicit
+
+        Assert.AreEqual(id1, id2);
+        Assert.AreEqual(id1, id3);
+    }
+
+    [TestMethod]
     public void CompareEntityWithSelf()
     {
         var w = new WorldBuilder().Build();
@@ -157,6 +176,63 @@ public class EntityTests
         Assert.AreEqual(entity, t1_e);
         Assert.AreEqual(7, t1_16.Ref.Value);
         Assert.AreEqual(7, t2_16.Ref.Value);
+    }
+
+    [TestMethod]
+    public void TryGetComponentsTuple_AliveSuccess()
+    {
+        var w = new WorldBuilder().Build();
+        var b = new CommandBuffer(w);
+
+        var e = b.Create().Set(new ComponentInt16(7)).Set(new Component1()).Set(new ComponentInt32());
+        using var resolver = b.Playback();
+        var entity = e.Resolve();
+
+        Assert.AreEqual(3, entity.ComponentTypes.Count);
+        Assert.IsTrue(entity.ComponentTypes.Contains(ComponentID<ComponentInt16>.ID));
+
+        Assert.IsTrue(entity.TryGetComponentRef<ComponentInt16, ComponentInt32>(out var tuple));
+        var (t1_e, t1_16, t1_32) = tuple;
+        var (t2_16, t2_32) = tuple;
+
+        Assert.AreEqual(entity, t1_e);
+        Assert.AreEqual(7, t1_16.Ref.Value);
+        Assert.AreEqual(7, t2_16.Ref.Value);
+    }
+
+    [TestMethod]
+    public void TryGetComponentsTuple_AliveMissingComponent()
+    {
+        var w = new WorldBuilder().Build();
+        var b = new CommandBuffer(w);
+
+        var e = b.Create().Set(new ComponentInt16(7)).Set(new Component1()).Set(new ComponentInt32());
+        using var resolver = b.Playback();
+        var entity = e.Resolve();
+
+        Assert.AreEqual(3, entity.ComponentTypes.Count);
+        Assert.IsTrue(entity.ComponentTypes.Contains(ComponentID<ComponentInt16>.ID));
+
+        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt16, ComponentInt32, Component13>(out var tuple));
+    }
+
+    [TestMethod]
+    public void TryGetComponentsTuple_Dead()
+    {
+        var w = new WorldBuilder().Build();
+        var b = new CommandBuffer(w);
+
+        var e = b.Create().Set(new ComponentInt16(7)).Set(new Component1()).Set(new ComponentInt32());
+        using var resolver = b.Playback();
+        var entity = e.Resolve();
+
+        Assert.AreEqual(3, entity.ComponentTypes.Count);
+        Assert.IsTrue(entity.ComponentTypes.Contains(ComponentID<ComponentInt16>.ID));
+
+        b.Delete(entity);
+        b.Playback().Dispose();
+
+        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt16, ComponentInt32>(out var tuple));
     }
 
     [TestMethod]

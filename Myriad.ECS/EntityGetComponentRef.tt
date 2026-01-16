@@ -5,7 +5,6 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 using Myriad.ECS.Collections;
-using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using System.Diagnostics.CodeAnalysis;
 
@@ -48,6 +47,56 @@ public readonly partial struct EntityId
     }
 
     /// <summary>
+    /// Try to get a tuple of several components, returns false if the entity does not exist or if any of the components
+    /// are missing.
+    /// </summary>
+    <#= CoverageAttribute(i) #>
+    public bool TryGetComponentRef<<#= types #>>(World world, out RefTuple<<#= types #>> output)
+        where <#= Constraints(i, 8) #>
+    {
+        // Try to get entity info ref, returns ref to dummy if not
+        EntityInfo dummy = default;
+        ref var entityInfo = ref world.GetEntityInfo(this, ref dummy, out var isNotExists);
+
+        // If it doesn't exist it doesn't have the components!
+        if (isNotExists)
+        {
+            output = default;
+            return false;
+        }
+
+        // Get a cached list of components that has been sorted
+        var components = SortedListOfComponents<<#= types #>>.Components;
+
+        // Check if they are all in the components set
+        var hasComponents = entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
+        if (!hasComponents)
+        {
+            output = default;
+            return false;
+        }
+
+        // Get the components
+        output = new RefTuple<<#= types #>>(
+            ToEntity(world),
+<# for (var j = 0; j < i; j++)
+{
+    var comma = (j == (i - 1)) ? "" : ",";
+#>
+#if NET6_0_OR_GREATER
+            new RefT<T<#= j #>>(ref entityInfo.Chunk.GetRef<T<#= j #>>(entityInfo.RowIndex))<#= comma #>
+#else
+            new RefT<T<#= j #>>(entityInfo.Chunk.GetComponentArray<T<#= j #>>(), entityInfo.RowIndex)<#= comma #>
+#endif
+
+<#
+}
+#>
+        );
+        return true;
+    }
+
+    /// <summary>
     /// Check if this entity contains a tuple of several components
     /// </summary>
     <#= CoverageAttribute(i) #>
@@ -68,6 +117,7 @@ public readonly partial struct EntityId
         // Check if they are all in the components set
         return entityInfo.Chunk.Archetype.Components.IsSupersetOfSortedSpan(components.Span);
     }
+
 <#
 }
 #>
@@ -88,6 +138,17 @@ public readonly partial record struct Entity
         where <#= Constraints(i, 8) #>
     {
         return ID.GetComponentRef<<#= types #>>(World);
+    }
+
+    /// <summary>
+    /// Try to get a tuple of several components, returns false if the entity does not exist or if any of the components
+    /// are missing.
+    /// </summary>
+    <#= CoverageAttribute(i) #>
+    public bool TryGetComponentRef<<#= types #>>(out RefTuple<<#= types #>> output)
+        where <#= Constraints(i, 8) #>
+    {
+        return ID.TryGetComponentRef<<#= types #>>(World, out output);
     }
 
     /// <summary>
