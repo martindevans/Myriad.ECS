@@ -50,10 +50,23 @@ public interface ISystemGroup<TData>
 /// </summary>
 public sealed class SystemGroupItem<TData>
 {
+    private bool _enabled;
     /// <summary>
     /// Indicates if update calls will be made to this system.
     /// </summary>
-    public bool Enabled { get; set; } = true;
+    public bool Enabled
+    {
+        get => _enabled;
+        set
+        {
+            if (_enabled == value)
+                return;
+            _enabled = value;
+
+            if (!_enabled)
+                DisableSystem();
+        }
+    }
 
     private ISystemBefore<TData>? SystemBefore { get; }
     private ISystemAfter<TData>? SystemAfter { get; }
@@ -109,6 +122,14 @@ public sealed class SystemGroupItem<TData>
         HasAfterUpdate = SystemAfter != null;
 
         Type = system.GetType();
+
+        Enabled = true;
+    }
+
+    private void DisableSystem()
+    {
+        if (System is ISystemDisable<TData> sys)
+            sys.OnDisableSystem();
     }
 
     internal void BeforeUpdate(TData data)
