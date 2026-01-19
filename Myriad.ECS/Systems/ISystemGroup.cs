@@ -158,19 +158,19 @@ public abstract class BaseSystemGroup<TData>
     private readonly List<SystemGroupItem<TData>> _beforeSystems;
     private readonly List<SystemGroupItem<TData>> _systems;
     private readonly List<SystemGroupItem<TData>> _afterSystems;
-    
+
+    private bool _enabled;
     /// <inheritdoc />
     public bool Enabled
     {
-        get;
+        get => _enabled;
         set
         {
-            if (field == value)
+            if (_enabled == value)
                 return;
+            _enabled = value;
 
-            field = value;
-
-            if (!field)
+            if (!_enabled)
                 DisableSystems();
         }
     }
