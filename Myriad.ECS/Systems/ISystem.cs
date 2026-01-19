@@ -53,3 +53,15 @@ public interface ISystemAfter<in TData>
     /// <param name="data"></param>
     public void AfterUpdate(TData data);
 }
+
+/// <summary>
+/// Callback whenever a system is disabled (due to <see cref="ISystemGroup{TData}.Enabled"/> being set to false
+/// </summary>
+public interface ISystemDisable<in TData>
+    : ISystem<TData>
+{
+    /// <summary>
+    /// Called when this system is disabled due to system group becoming disabled
+    /// </summary>
+    void OnDisableSystem();
+}

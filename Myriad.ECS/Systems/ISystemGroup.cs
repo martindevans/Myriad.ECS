@@ -158,9 +158,22 @@ public abstract class BaseSystemGroup<TData>
     private readonly List<SystemGroupItem<TData>> _beforeSystems;
     private readonly List<SystemGroupItem<TData>> _systems;
     private readonly List<SystemGroupItem<TData>> _afterSystems;
-
+    
     /// <inheritdoc />
-    public bool Enabled { get; set; } = true;
+    public bool Enabled
+    {
+        get;
+        set
+        {
+            if (field == value)
+                return;
+
+            field = value;
+
+            if (!field)
+                DisableSystems();
+        }
+    }
 
     /// <summary>
     /// Create a new system group
@@ -170,12 +183,20 @@ public abstract class BaseSystemGroup<TData>
     protected BaseSystemGroup(string name, params ISystem<TData>[] systems)
     {
         Name = name;
+        Enabled = true;
 
         var sys = systems.Select(a => new SystemGroupItem<TData>(a)).ToArray();
 
         _beforeSystems = sys.Where(a => a.System is ISystemBefore<TData>).ToList();
         _systems = [.. sys];
         _afterSystems = sys.Where(a => a.System is ISystemAfter<TData>).ToList();
+    }
+
+    private void DisableSystems()
+    {
+        foreach (var systemItem in RecursiveSystems)
+            if (systemItem.System is ISystemDisable<TData> sys)
+                sys.OnDisableSystem();
     }
 
     /// <summary>
