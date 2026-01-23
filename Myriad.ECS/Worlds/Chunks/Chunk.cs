@@ -152,7 +152,8 @@ internal sealed class Chunk
         foreach (var component in _components)
             Array.Clear(component, 0, component.Length);
 
-        // Not strictly necessary, clean up all the IDs so they're default instead of some invalid value.
+        // Clean up all the IDs so they're default instead of some invalid value. This is
+        // necessary in case anything is holding on to a reference to the chunk.
         Array.Clear(_entities, 0, _entities.Length);
 
         EntityCount = 0;

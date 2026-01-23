@@ -39,6 +39,49 @@ public class EntityTests
 
         Assert.AreEqual(id1, id2);
         Assert.AreEqual(id1, id3);
+
+        // Round trip the ID
+        Assert.AreEqual(id1, (EntityId)(ulong)id1);
+    }
+
+    [TestMethod]
+    public void RoundtripRawEntityId()
+    {
+        var w = new WorldBuilder().Build();
+        var b = new CommandBuffer(w);
+
+        var eb = b.Create();
+        using var resolver = b.Playback();
+        var entity = eb.Resolve();
+
+        // Round trip the ID
+        Assert.AreEqual(entity.ID, (EntityId)(ulong)entity.ID);
+    }
+
+    [TestMethod]
+    public void EntityIdEquality()
+    {
+        var w = new WorldBuilder().Build();
+        var b = new CommandBuffer(w);
+
+        var eb1 = b.Create();
+        var eb2 = b.Create();
+        using var resolver = b.Playback();
+        var entity1 = eb1.Resolve();
+        var entity2 = eb2.Resolve();
+
+        var id1 = entity1.ID;
+        var id2 = entity2.ID;
+
+        // ReSharper disable EqualExpressionComparison
+        Assert.IsTrue(id1 == id1);
+        Assert.IsFalse(id1 != id1);
+
+        Assert.IsTrue(id1 != id2);
+        Assert.IsFalse(id1 == id2);
+
+        Assert.IsTrue(id1.Equals((object)id1));
+        Assert.IsFalse(id1.Equals((object)id2));
     }
 
     [TestMethod]
@@ -198,6 +241,22 @@ public class EntityTests
         Assert.AreEqual(entity, t1_e);
         Assert.AreEqual(7, t1_16.Ref.Value);
         Assert.AreEqual(7, t2_16.Ref.Value);
+    }
+
+    [TestMethod]
+    public void TryGetComponentsTuple_AliveFail()
+    {
+        var w = new WorldBuilder().Build();
+        var b = new CommandBuffer(w);
+
+        var e = b.Create().Set(new ComponentInt16(7)).Set(new Component1()).Set(new ComponentInt32());
+        using var resolver = b.Playback();
+        var entity = e.Resolve();
+
+        Assert.AreEqual(3, entity.ComponentTypes.Count);
+        Assert.IsTrue(entity.ComponentTypes.Contains(ComponentID<ComponentInt16>.ID));
+
+        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt16, Component13>(out var tuple));
     }
 
     [TestMethod]

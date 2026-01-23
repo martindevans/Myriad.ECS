@@ -195,4 +195,78 @@ public class RelationshipComponentTests
             eb2.Set(new SelfReference(), e1);
         });
     }
+
+    [TestMethod]
+    public void TypedReferenceWithComponent()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        // Create entity with component
+        var ab = buffer.Create().Set(new ComponentInt32(17)).Set(new TestPhantom0());
+
+        // Create another entity, relating to it
+        var bb = buffer.Create().Set(new TypedReference<ComponentInt32>(), ab);
+
+        // Get the entities
+        using var p = buffer.Playback();
+        var a = ab.Resolve();
+        var b = bb.Resolve();
+
+        // Get the relation
+        ref var relation = ref b.GetComponentRef<TypedReference<ComponentInt32>>();
+        Assert.AreEqual(a, relation.Target);
+
+        // Check status
+        CheckTypedRef(ref relation, world, true, true, false, 17);
+
+        // Make a structural change
+        buffer.Set(a, new Component11());
+        buffer.Playback().Dispose();
+
+        // Check status again, this will internally refresh the cache
+        CheckTypedRef(ref relation, world, true, true, false, 17);
+
+        // Delete the relation target
+        buffer.Delete(a);
+        buffer.Playback().Dispose();
+
+        // Check yet again, the entity should be a phantom now
+        CheckTypedRef(ref relation, world, true, true, true, 17);
+
+        // Delete it again, so it no longer exists at all
+        buffer.Delete(a);
+        buffer.Playback().Dispose();
+
+        // Check one final time
+        CheckTypedRef(ref relation, world, false, false, false);
+    }
+
+    private static void CheckTypedRef(ref TypedReference<ComponentInt32> relation, World world, bool has, bool exists, bool phantom, int expected = default)
+    {
+        // It's cached, so check twice
+        CheckTypedRefOnce(ref relation, world, has, exists, phantom, expected);
+        CheckTypedRefOnce(ref relation, world, has, exists, phantom, expected);
+    }
+
+    private static void CheckTypedRefOnce(ref TypedReference<ComponentInt32> relation, World world, bool has, bool exists, bool phantom, int expected)
+    {
+        var defaultRefComponent = new ComponentInt32(3);
+
+        ref var c = ref relation.Check(world, out var resultHas, out var resultExists, out var resultPhantom, ref defaultRefComponent);
+
+        Assert.AreEqual(has, resultHas);
+        Assert.AreEqual(exists, resultExists);
+        Assert.AreEqual(phantom, resultPhantom);
+
+        if (has)
+        {
+            Assert.AreNotEqual(defaultRefComponent, c);
+            Assert.AreEqual(expected, c.Value);
+        }
+        else
+        {
+            Assert.AreEqual(defaultRefComponent, c);
+        }
+    }
 }
