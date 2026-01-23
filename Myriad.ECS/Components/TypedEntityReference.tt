@@ -1,0 +1,226 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using Myriad.ECS.IDs;
+using Myriad.ECS.Collections;
+using Myriad.ECS.Worlds;
+using Myriad.ECS.Worlds.Chunks;
+
+namespace Myriad.ECS.Components;
+
+<# for (var i = 1; i <= 16; i++)
+{
+    var typeParams = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
+#>
+/// <summary>
+/// A reference to another Entity which caches information about the Entity, including whether it has a
+/// specific component type. This can be used to avoid structural checks.
+/// </summary>
+<#= CoverageAttribute(i) #>
+public struct TypedEntityReference<<#= typeParams #>>
+    where <#= Constraints(i, 8) #>
+{
+<# for (var j = 0; j < i; j++)
+{
+#>
+    private static readonly ComponentID ComponentID<#= j #> = ComponentID<T<#= j #>>.ID;
+<#
+}
+#>
+    private static readonly ReadOnlyMemory<ComponentID> ComponentSet = SortedListOfComponents<<#= typeParams #>>.Components;
+
+    private Cache? _cache;
+    private EntityId _entity;
+
+    /// <summary>
+    /// The target entity
+    /// </summary>
+    public EntityId Target
+    {
+        get => _entity;
+        set
+        {
+            _entity = value;
+            _cache = null;
+        }
+    }
+
+    /// <summary>
+    /// Check the entity state
+    /// </summary>
+    /// <param name="world">The entity world</param>
+    /// <returns></returns>
+    public Result TryGetComponentRef(World world)
+    {
+        // Check if cache is stale
+        if (_cache?.CheckIsStale(_entity) ?? true)
+        {
+            // Clear cache
+            _cache = null;
+
+            // Get info for this entity
+            EntityInfo _ = default;
+            ref readonly var info = ref world.GetEntityInfo(_entity, ref _, out var doesNotExist);
+
+            // Create new cache
+            _cache = doesNotExist
+                ? Cache.DoesNotExist()
+                : Cache.Create(in info);
+        }
+
+        // Cache is definitely valid now. Extract results.
+        var v = _cache.Value;
+
+        // Early out if the entity doesn't even exist
+        if (v.RowIndex < 0)
+            return new Result(default, false, false, false);
+
+        // Early out if the entity doesn't have the component
+        if (!v.HasComponent)
+            return new Result(default, true, v.IsPhantom, false);
+
+        // Get the component(s)
+        var tuple = v.Chunk!.GetRefTuple<<#= typeParams #>>(
+            v.RowIndex,
+<# for (var j = 0; j < i; j++)
+{
+    var comma = (j == (i - 1)) ? "" : ",";
+#>
+            ComponentID<#= j #><#= comma #>
+<#
+}
+#>
+        );
+
+        return new Result(
+            tuple,
+            true,
+            v.IsPhantom,
+            true
+        );
+    }
+
+    /// <summary>
+    /// Cache data about an entity, valid if the entity is still in the same place in the same chunk
+    /// </summary>
+    private readonly record struct Cache
+    {
+        public int RowIndex { get; }
+        public Chunk? Chunk { get; }
+
+        public bool HasComponent { get; }
+        public bool IsPhantom { get; }
+
+        private Cache(int rowIndex, Chunk? chunk, bool hasComponent, bool isPhantom)
+        {
+            RowIndex = rowIndex;
+            Chunk = chunk;
+            HasComponent = hasComponent;
+            IsPhantom = isPhantom;
+        }
+
+        private bool CheckNotStale(EntityId entity)
+        {
+            // This is the indicator for the entity not existing
+            if (RowIndex < 0)
+                return false;
+            
+            // It's only allowed to be null when the entity does not exist
+            Debug.Assert(Chunk != null);
+
+            // Check if index is out of range
+            if (Chunk.EntityCount <= RowIndex)
+                return false;
+
+            // Check if the entity is still where we last saw it
+            return Chunk.Entities.Span[RowIndex] == entity;
+        }
+
+        public bool CheckIsStale(EntityId entity)
+        {
+            return !CheckNotStale(entity);
+        }
+
+        public static Cache DoesNotExist()
+        {
+            return new Cache(-1, null, false, false);
+        }
+
+        public static Cache Create(ref readonly EntityInfo info)
+        {
+            var archetype = info.Chunk.Archetype;
+
+            var hasComponent = archetype.Components.IsSupersetOfSortedSpan(ComponentSet.Span);
+            var isPhantom = archetype.IsPhantom;
+
+            return new Cache(
+                info.RowIndex, info.Chunk, hasComponent, isPhantom
+            );
+        }
+    }
+
+    /// <summary>
+    /// Result of trying to get the component ref from a TypedEntityReference
+    /// </summary>
+    public ref struct Result
+    {
+        /// <summary>
+        /// The ref tuple, only valid if <see cref="HasComponent"/> is true
+        /// </summary>
+        public RefTuple<<#= typeParams #>> Components { get; }
+
+        /// <summary>
+        /// Indicates if the entity exists
+        /// </summary>
+        public bool Exists;
+
+        /// <summary>
+        /// Indicates if the entity is a phantom
+        /// </summary>
+        public bool IsPhantom;
+
+        /// <summary>
+        /// Indicates if the entity has the expected components
+        /// </summary>
+        public bool HasComponent;
+
+        internal Result(RefTuple<<#= typeParams #>> components, bool exists, bool isPhantom, bool hasComponent)
+        {
+            Components = components;
+
+            Exists = exists;
+            IsPhantom = isPhantom;
+
+            HasComponent = hasComponent;
+        }
+    }
+}
+
+<#
+}
+#>
+
+<#+ 
+	static string CoverageAttribute(int index)
+	{
+		if (index < 2)
+			return "";
+		return "[ExcludeFromCodeCoverage]";
+	}
+
+	static string Constraints(int count, int spaces = 4)
+    {
+		var prefix = new string(' ', spaces);
+        var str = string.Join(
+			$"\r\n{prefix}where ",
+			Enumerable.Range(0, count).Select(x => $"T{x} : IComponent")
+		);
+
+		return str;
+    }
+#>

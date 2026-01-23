@@ -1,0 +1,79 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using System.Diagnostics;
+using Myriad.ECS.Collections;
+using System.Diagnostics.CodeAnalysis;
+using Myriad.ECS.IDs;
+
+namespace Myriad.ECS.Worlds.Chunks;
+
+/* dotcover disable */
+
+internal sealed partial class Chunk
+{
+<# for (var i = 1; i <= 16; i++)
+{
+    var queryConstraints = string.Join(", ", Enumerable.Range(0, i).Select(x => "where T" + x + " : IComponent"));
+    var types = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
+#>
+    /// <summary>
+    /// Get a tuple of several components
+    /// </summary>
+    <#= CoverageAttribute(i) #>
+    public RefTuple<<#= types #>> GetRefTuple<<#= types #>>(int rowIndex,
+<# for (var j = 0; j < i; j++)
+{
+    var comma = (j == (i - 1)) ? "" : ",";
+#>
+        ComponentID c<#= j #><#= comma #>
+<#
+}
+#>
+    )
+        where <#= Constraints(i, 8) #>
+    {
+        Debug.Assert(rowIndex < EntityCount);
+        Debug.Assert(rowIndex >= 0);
+
+        // Get the component(s)
+        return new RefTuple<<#= types #>>(
+            _entities[rowIndex],
+<# for (var j = 0; j < i; j++)
+{
+    var comma = (j == (i - 1)) ? "" : ",";
+#>
+            GetRefT<T<#= j #>>(rowIndex, c<#= j #>)<#= comma #>
+<#
+}
+#>
+        );
+    }
+
+<#
+}
+#>
+}
+
+<#+ 
+    static string CoverageAttribute(int index)
+	{
+		if (index < 3)
+			return "";
+		return "[ExcludeFromCodeCoverage]";
+	}
+
+	static string Constraints(int count, int spaces = 4)
+    {
+		var prefix = new string(' ', spaces);
+        var str = string.Join(
+			$"\r\n{prefix}where ",
+			Enumerable.Range(0, count).Select(x => $"T{x} : IComponent")
+		);
+
+		return str;
+    }
+#>

@@ -10,6 +10,41 @@ namespace Myriad.ECS.Collections;
 /// Get a precalculated span of components IDs from generic type. Returned span is deduplicated.
 /// </summary>
 
+internal static class SortedListOfComponents<T0>
+    where T0 : IComponent
+{
+    // ReSharper disable once StaticMemberInGenericType
+    public static readonly ReadOnlyMemory<ComponentID> Components;
+
+    static SortedListOfComponents()
+    {
+        // Create sorted array of components
+        var components = new[]
+        {
+            ComponentID<T0>.ID,
+        };
+        Array.Sort(components);
+
+        // Deduplicate components
+        var insertIndex = 1;
+        for (var i = 1; i < components.Length; i++)
+        {
+            if (components[i].Value != components[insertIndex - 1].Value)
+            {
+                components[insertIndex] = components[i];
+                insertIndex++;
+            }
+        }
+
+        Components = components.AsMemory(0, insertIndex);
+    }
+}
+
+
+/// <summary>
+/// Get a precalculated span of components IDs from generic type. Returned span is deduplicated.
+/// </summary>
+
 internal static class SortedListOfComponents<T0, T1>
     where T0 : IComponent
         where T1 : IComponent

@@ -7,7 +7,7 @@ using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Worlds.Chunks;
 
-internal sealed class Chunk
+internal sealed partial class Chunk
 {
     /// <summary>
     /// The archetype which contains this chunk
@@ -82,6 +82,17 @@ internal sealed class Chunk
         return new RefT<T>(ref GetRef<T>(rowIndex));
 #else
         return new RefT<T>(GetComponentArray<T>(), rowIndex);
+#endif
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RefT<T> GetRefT<T>(int rowIndex, ComponentID id)
+        where T : IComponent
+    {
+#if NET6_0_OR_GREATER
+        return new RefT<T>(ref GetRef<T>(rowIndex, id));
+#else
+        return new RefT<T>(GetComponentArray<T>(id), rowIndex);
 #endif
     }
 

@@ -10,7 +10,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Myriad.ECS</Title>
     <Authors>Martin Evans</Authors>
-    <Version>41.8.0</Version>
+    <Version>42.0.0</Version>
     <Description>Myriad.ECS is a high performance Entity Component System (ECS).</Description>
     <PackageProjectUrl>https://github.com/martindevans/Myriad.ECS</PackageProjectUrl>
     <RepositoryUrl>https://github.com/martindevans/Myriad.ECS</RepositoryUrl>
@@ -38,6 +38,11 @@
     </Compile>
     <Compile Update="Collections\RefTuple.cs">
       <DependentUpon>RefTuple.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Components\TypedEntityReference.cs">
+      <DependentUpon>TypedEntityReference.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -116,6 +121,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Worlds\Chunks\ChunkGetRefTuple.cs">
+      <DependentUpon>ChunkGetRefTuple.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Worlds\WorldBuilderWithArchetype.cs">
       <DependentUpon>WorldBuilderWithArchetype.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -136,6 +146,10 @@
   <ItemGroup>
     <None Update="Collections\SortedListOfComponents.tt">
       <LastGenOutput>SortedListOfComponents.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Components\TypedEntityReference.tt">
+      <LastGenOutput>TypedEntityReference.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="Paths\PathGen.tt">
@@ -203,6 +217,10 @@
     </None>
     <None Update="Queries\ChunkHandleHasComponent.tt">
       <LastGenOutput>ChunkHandleHasComponent.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Worlds\Chunks\ChunkGetRefTuple.tt">
+      <LastGenOutput>ChunkGetRefTuple.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="Worlds\WorldBuilderWithArchetype.tt">
