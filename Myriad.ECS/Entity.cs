@@ -108,14 +108,28 @@ public readonly partial record struct Entity
     /// <summary>
     /// Try to get a tuple of one component, returns false if the entity does not exist or if the component is missing
     /// </summary>
-    public bool TryGetComponentRef<T>(out RefTuple<T> output) where T : IComponent => ID.TryGetComponentRef(World, out output);
+    public bool TryGetComponentRef<T>(out RefTuple<T> output) where T : IComponent
+    {
+        if (World == null)
+        {
+            output = default;
+            return false;
+        }
+
+        return ID.TryGetComponentRef(World, out output);
+    }
 
     /// <summary>
     /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public object? GetBoxedComponent(ComponentID id) => ID.GetBoxedComponent(World, id);
+    public object? GetBoxedComponent(ComponentID id)
+    {
+        if (World == null)
+            return null;
+        return ID.GetBoxedComponent(World, id);
+    }
 
     /// <summary>
     /// Cast this entity to an <see cref="EntityId"/>. Exactly the same as simply accessing the <see cref="ID"/> property.

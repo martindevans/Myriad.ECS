@@ -10,7 +10,6 @@ public class EntityTests
     [TestMethod]
     public void DefaultEntityIsNotAlive()
     {
-        var w = new WorldBuilder().Build();
         Assert.IsFalse(default(Entity).Exists());
         Assert.IsFalse(default(Entity).IsAlive());
         Assert.IsFalse(default(Entity).IsPhantom());
@@ -292,6 +291,64 @@ public class EntityTests
         b.Playback().Dispose();
 
         Assert.IsFalse(entity.TryGetComponentRef<ComponentInt16, ComponentInt32>(out var tuple));
+    }
+
+    [TestMethod]
+    public void TryGetComponent_HasComponent()
+    {
+        var w = new WorldBuilder().Build();
+        var b = new CommandBuffer(w);
+
+        // Create an entity that will become phantom when deleted
+        var e = b.Create().Set(new ComponentInt16(7)).Set(new TestPhantom0());
+        using var resolver = b.Playback();
+        var entity = e.Resolve();
+
+        // Get the component
+        Assert.IsTrue(entity.TryGetComponentRef<ComponentInt16>(out var item1));
+        Assert.AreEqual(7, item1.Item0.Value);
+
+        // Destroy it so it becomes a phantom
+        b.Delete(entity);
+        b.Playback().Dispose();
+
+        // Should still work
+        Assert.IsTrue(entity.TryGetComponentRef<ComponentInt16>(out var item2));
+        Assert.AreEqual(7, item2.Item0.Value);
+
+        // Destroy it so it no longer exists
+        b.Delete(entity);
+        b.Playback().Dispose();
+
+        // Should no longer work
+        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt16>(out var item3));
+    }
+
+    [TestMethod]
+    public void TryGetComponent_MissingComponent()
+    {
+        var w = new WorldBuilder().Build();
+        var b = new CommandBuffer(w);
+
+        // Create an entity that will become phantom when deleted
+        var e = b.Create().Set(new ComponentInt16(7)).Set(new TestPhantom0());
+        using var resolver = b.Playback();
+        var entity = e.Resolve();
+
+        // Get the component
+        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt32>(out var item1));
+    }
+
+    [TestMethod]
+    public void TryGetComponent_NonExist()
+    {
+        var entity = default(Entity);
+
+        // Get the component
+        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt32>(out var item1));
+
+        // Get it boxed
+        Assert.IsNull(entity.GetBoxedComponent(ComponentID<ComponentInt32>.ID));
     }
 
     [TestMethod]
