@@ -24,7 +24,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     <#= CoverageAttribute(i) #>
-    public RefTuple<<#= types #>> GetRefTuple<<#= types #>>(int rowIndex,
+    internal RefTuple<<#= types #>> GetRefTuple<<#= types #>>(int rowIndex,
 <# for (var j = 0; j < i; j++)
 {
     var comma = (j == (i - 1)) ? "" : ",";

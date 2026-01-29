@@ -13,7 +13,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     
-    public RefTuple<T0> GetRefTuple<T0>(int rowIndex,
+    internal RefTuple<T0> GetRefTuple<T0>(int rowIndex,
         ComponentID c0
     )
         where T0 : IComponent
@@ -32,7 +32,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     
-    public RefTuple<T0, T1> GetRefTuple<T0, T1>(int rowIndex,
+    internal RefTuple<T0, T1> GetRefTuple<T0, T1>(int rowIndex,
         ComponentID c0,
         ComponentID c1
     )
@@ -54,7 +54,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public RefTuple<T0, T1, T2> GetRefTuple<T0, T1, T2>(int rowIndex,
+    internal RefTuple<T0, T1, T2> GetRefTuple<T0, T1, T2>(int rowIndex,
         ComponentID c0,
         ComponentID c1,
         ComponentID c2
@@ -79,7 +79,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public RefTuple<T0, T1, T2, T3> GetRefTuple<T0, T1, T2, T3>(int rowIndex,
+    internal RefTuple<T0, T1, T2, T3> GetRefTuple<T0, T1, T2, T3>(int rowIndex,
         ComponentID c0,
         ComponentID c1,
         ComponentID c2,
@@ -107,7 +107,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public RefTuple<T0, T1, T2, T3, T4> GetRefTuple<T0, T1, T2, T3, T4>(int rowIndex,
+    internal RefTuple<T0, T1, T2, T3, T4> GetRefTuple<T0, T1, T2, T3, T4>(int rowIndex,
         ComponentID c0,
         ComponentID c1,
         ComponentID c2,
@@ -138,7 +138,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public RefTuple<T0, T1, T2, T3, T4, T5> GetRefTuple<T0, T1, T2, T3, T4, T5>(int rowIndex,
+    internal RefTuple<T0, T1, T2, T3, T4, T5> GetRefTuple<T0, T1, T2, T3, T4, T5>(int rowIndex,
         ComponentID c0,
         ComponentID c1,
         ComponentID c2,
@@ -172,7 +172,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6> GetRefTuple<T0, T1, T2, T3, T4, T5, T6>(int rowIndex,
+    internal RefTuple<T0, T1, T2, T3, T4, T5, T6> GetRefTuple<T0, T1, T2, T3, T4, T5, T6>(int rowIndex,
         ComponentID c0,
         ComponentID c1,
         ComponentID c2,
@@ -209,7 +209,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7>(int rowIndex,
+    internal RefTuple<T0, T1, T2, T3, T4, T5, T6, T7> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7>(int rowIndex,
         ComponentID c0,
         ComponentID c1,
         ComponentID c2,
@@ -249,7 +249,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>(int rowIndex,
+    internal RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>(int rowIndex,
         ComponentID c0,
         ComponentID c1,
         ComponentID c2,
@@ -292,7 +292,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(int rowIndex,
+    internal RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(int rowIndex,
         ComponentID c0,
         ComponentID c1,
         ComponentID c2,
@@ -338,7 +338,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(int rowIndex,
+    internal RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(int rowIndex,
         ComponentID c0,
         ComponentID c1,
         ComponentID c2,
@@ -387,7 +387,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(int rowIndex,
+    internal RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(int rowIndex,
         ComponentID c0,
         ComponentID c1,
         ComponentID c2,
@@ -439,7 +439,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(int rowIndex,
+    internal RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(int rowIndex,
         ComponentID c0,
         ComponentID c1,
         ComponentID c2,
@@ -494,7 +494,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(int rowIndex,
+    internal RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(int rowIndex,
         ComponentID c0,
         ComponentID c1,
         ComponentID c2,
@@ -552,7 +552,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(int rowIndex,
+    internal RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(int rowIndex,
         ComponentID c0,
         ComponentID c1,
         ComponentID c2,
@@ -613,7 +613,7 @@ internal sealed partial class Chunk
     /// Get a tuple of several components
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(int rowIndex,
+    internal RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(int rowIndex,
         ComponentID c0,
         ComponentID c1,
         ComponentID c2,

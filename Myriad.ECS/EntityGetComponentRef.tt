@@ -7,10 +7,13 @@
 using Myriad.ECS.Collections;
 using Myriad.ECS.Worlds;
 using System.Diagnostics.CodeAnalysis;
+using Myriad.ECS.IDs;
 
 namespace Myriad.ECS;
 
 /* dotcover disable */
+
+// ReSharper disable RedundantTypeArgumentsOfMethod
 
 public readonly partial struct EntityId
 {
@@ -28,18 +31,13 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
-        return new RefTuple<<#= types #>>(
-            ToEntity(world),
+        return entityInfo.Chunk.GetRefTuple<<#= types #>>(
+            entityInfo.RowIndex,
 <# for (var j = 0; j < i; j++)
 {
     var comma = (j == (i - 1)) ? "" : ",";
 #>
-#if NET6_0_OR_GREATER
-            new RefT<T<#= j #>>(ref entityInfo.Chunk.GetRef<T<#= j #>>(entityInfo.RowIndex))<#= comma #>
-#else
-            new RefT<T<#= j #>>(entityInfo.Chunk.GetComponentArray<T<#= j #>>(), entityInfo.RowIndex)<#= comma #>
-#endif
-
+            ComponentID<T<#= j #>>.ID<#= comma #>
 <#
 }
 #>
@@ -77,18 +75,13 @@ public readonly partial struct EntityId
         }
 
         // Get the components
-        output = new RefTuple<<#= types #>>(
-            ToEntity(world),
+        output = entityInfo.Chunk.GetRefTuple<<#= types #>>(
+            entityInfo.RowIndex,
 <# for (var j = 0; j < i; j++)
 {
     var comma = (j == (i - 1)) ? "" : ",";
 #>
-#if NET6_0_OR_GREATER
-            new RefT<T<#= j #>>(ref entityInfo.Chunk.GetRef<T<#= j #>>(entityInfo.RowIndex))<#= comma #>
-#else
-            new RefT<T<#= j #>>(entityInfo.Chunk.GetComponentArray<T<#= j #>>(), entityInfo.RowIndex)<#= comma #>
-#endif
-
+            ComponentID<T<#= j #>>.ID<#= comma #>
 <#
 }
 #>
