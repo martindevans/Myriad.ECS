@@ -90,10 +90,10 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where <#= Constraints(sumij, 12) #>
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, <#= generics #>>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, <#= generics #>>, TReducer, TOutput, <#= generics #>>(
 				ref mapperWrapper,
@@ -138,10 +138,10 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where <#= Constraints(sumij, 12) #>
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, <#= generics #>>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, <#= generics #>>, TReducer, TOutput, <#= generics #>>(
 				ref mapperWrapper,
@@ -184,8 +184,8 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where <#= Constraints(sumij, 12) #>
-			where TMapper : IQueryMap<TOutput, <#= generics #>>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, <#= generics #>>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, <#= generics #>>(initial, ref query);
 		}
@@ -205,11 +205,11 @@ namespace Myriad.ECS.Worlds
 			ref QueryDescription? query
 		)
 			where <#= Constraints(sumij, 12) #>
-			where TMapper : IQueryMap<TOutput, <#= generics #>>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, <#= generics #>>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, <#= generics #>>(ref q, ref r, initial, ref query);
 		}
 

@@ -76,10 +76,10 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where T0 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0>, TReducer, TOutput, T0>(
 				ref mapperWrapper,
@@ -124,10 +124,10 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where T0 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0>, TReducer, TOutput, T0>(
 				ref mapperWrapper,
@@ -170,8 +170,8 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where T0 : IComponent
-			where TMapper : IQueryMap<TOutput, T0>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(initial, ref query);
 		}
@@ -191,11 +191,11 @@ namespace Myriad.ECS.Worlds
 			ref QueryDescription? query
 		)
 			where T0 : IComponent
-			where TMapper : IQueryMap<TOutput, T0>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(ref q, ref r, initial, ref query);
 		}
 
@@ -332,10 +332,10 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0, T1>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0, T1>, TReducer, TOutput, T0, T1>(
 				ref mapperWrapper,
@@ -382,10 +382,10 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0, T1>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0, T1>, TReducer, TOutput, T0, T1>(
 				ref mapperWrapper,
@@ -430,8 +430,8 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1>(initial, ref query);
 		}
@@ -452,11 +452,11 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1>(ref q, ref r, initial, ref query);
 		}
 
@@ -602,10 +602,10 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0, T1, T2>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0, T1, T2>, TReducer, TOutput, T0, T1, T2>(
 				ref mapperWrapper,
@@ -654,10 +654,10 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0, T1, T2>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0, T1, T2>, TReducer, TOutput, T0, T1, T2>(
 				ref mapperWrapper,
@@ -704,8 +704,8 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2>(initial, ref query);
 		}
@@ -727,11 +727,11 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2>(ref q, ref r, initial, ref query);
 		}
 
@@ -886,10 +886,10 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0, T1, T2, T3>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0, T1, T2, T3>, TReducer, TOutput, T0, T1, T2, T3>(
 				ref mapperWrapper,
@@ -940,10 +940,10 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0, T1, T2, T3>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0, T1, T2, T3>, TReducer, TOutput, T0, T1, T2, T3>(
 				ref mapperWrapper,
@@ -992,8 +992,8 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3>(initial, ref query);
 		}
@@ -1016,11 +1016,11 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3>(ref q, ref r, initial, ref query);
 		}
 
@@ -1184,10 +1184,10 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4>, TReducer, TOutput, T0, T1, T2, T3, T4>(
 				ref mapperWrapper,
@@ -1240,10 +1240,10 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0, T1, T2, T3, T4>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0, T1, T2, T3, T4>, TReducer, TOutput, T0, T1, T2, T3, T4>(
 				ref mapperWrapper,
@@ -1294,8 +1294,8 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4>(initial, ref query);
 		}
@@ -1319,11 +1319,11 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4>(ref q, ref r, initial, ref query);
 		}
 
@@ -1496,10 +1496,10 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5>, TReducer, TOutput, T0, T1, T2, T3, T4, T5>(
 				ref mapperWrapper,
@@ -1554,10 +1554,10 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5>, TReducer, TOutput, T0, T1, T2, T3, T4, T5>(
 				ref mapperWrapper,
@@ -1610,8 +1610,8 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5>(initial, ref query);
 		}
@@ -1636,11 +1636,11 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5>(ref q, ref r, initial, ref query);
 		}
 
@@ -1822,10 +1822,10 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(
 				ref mapperWrapper,
@@ -1882,10 +1882,10 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(
 				ref mapperWrapper,
@@ -1940,8 +1940,8 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(initial, ref query);
 		}
@@ -1967,11 +1967,11 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6>(ref q, ref r, initial, ref query);
 		}
 
@@ -2162,10 +2162,10 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
 				ref mapperWrapper,
@@ -2224,10 +2224,10 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(
 				ref mapperWrapper,
@@ -2284,8 +2284,8 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(initial, ref query);
 		}
@@ -2312,11 +2312,11 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref r, initial, ref query);
 		}
 
@@ -2516,10 +2516,10 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 				ref mapperWrapper,
@@ -2580,10 +2580,10 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 				ref mapperWrapper,
@@ -2642,8 +2642,8 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(initial, ref query);
 		}
@@ -2671,11 +2671,11 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref r, initial, ref query);
 		}
 
@@ -2884,10 +2884,10 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 				ref mapperWrapper,
@@ -2950,10 +2950,10 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 				ref mapperWrapper,
@@ -3014,8 +3014,8 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(initial, ref query);
 		}
@@ -3044,11 +3044,11 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref r, initial, ref query);
 		}
 
@@ -3266,10 +3266,10 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 				ref mapperWrapper,
@@ -3334,10 +3334,10 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 				ref mapperWrapper,
@@ -3400,8 +3400,8 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(initial, ref query);
 		}
@@ -3431,11 +3431,11 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref r, initial, ref query);
 		}
 
@@ -3662,10 +3662,10 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 				ref mapperWrapper,
@@ -3732,10 +3732,10 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 				ref mapperWrapper,
@@ -3800,8 +3800,8 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(initial, ref query);
 		}
@@ -3832,11 +3832,11 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref r, initial, ref query);
 		}
 
@@ -4072,10 +4072,10 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 				ref mapperWrapper,
@@ -4144,10 +4144,10 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 				ref mapperWrapper,
@@ -4214,8 +4214,8 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(initial, ref query);
 		}
@@ -4247,11 +4247,11 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref r, initial, ref query);
 		}
 
@@ -4496,10 +4496,10 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 				ref mapperWrapper,
@@ -4570,10 +4570,10 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 				ref mapperWrapper,
@@ -4642,8 +4642,8 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(initial, ref query);
 		}
@@ -4676,11 +4676,11 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref r, initial, ref query);
 		}
 
@@ -4934,10 +4934,10 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 				ref mapperWrapper,
@@ -5010,10 +5010,10 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 				ref mapperWrapper,
@@ -5084,8 +5084,8 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(initial, ref query);
 		}
@@ -5119,11 +5119,11 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref r, initial, ref query);
 		}
 
@@ -5386,10 +5386,10 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<EntityDelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 				ref mapperWrapper,
@@ -5464,10 +5464,10 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			var mapperWrapper = new DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(mapper);
-            var reducer = new TReducer();
+            var reducer = default(TReducer);
 
 			return ExecuteMapReduce<DelegateStructMapper<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 				ref mapperWrapper,
@@ -5540,8 +5540,8 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(initial, ref query);
 		}
@@ -5576,11 +5576,11 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TMapper : IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
-			where TReducer : IQueryReduce<TOutput>, new()
+			where TMapper : struct, IQueryMap<TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+			where TReducer : struct, IQueryReduce<TOutput>
 		{
-			var q = new TMapper();
-			var r = new TReducer();
+			var q = default(TMapper);
+			var r = default(TReducer);
 			return ExecuteMapReduce<TMapper, TReducer, TOutput, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref r, initial, ref query);
 		}
 

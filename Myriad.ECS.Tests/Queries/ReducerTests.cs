@@ -13,7 +13,7 @@ public class ReducerTests
         Check<Reduce.Boolean.Xor>((a, b) => a ^ b);
 
         void Check<TR>(Func<bool, bool, bool> func)
-            where TR : IQueryReduce<bool>, new()
+            where TR : struct, IQueryReduce<bool>
         {
             var r = new TR();
             Assert.AreEqual(func(false, false), r.Reduce(false, false));
@@ -37,7 +37,7 @@ public class ReducerTests
         Check<Reduce.I32.Max>(Math.Max);
 
         void Check<TR>(Func<int, int, int> func)
-            where TR : IQueryReduce<int>, new()
+            where TR : struct, IQueryReduce<int>
         {
             for (var i = 0; i < 128; i++)
             {
@@ -64,7 +64,7 @@ public class ReducerTests
         Check<Reduce.U32.Max>(Math.Max);
 
         void Check<TR>(Func<uint, uint, uint> func)
-            where TR : IQueryReduce<uint>, new()
+            where TR : struct, IQueryReduce<uint>
         {
             for (var i = 0; i < 128; i++)
             {
@@ -91,7 +91,7 @@ public class ReducerTests
         Check<Reduce.I64.Max>(Math.Max);
 
         void Check<TR>(Func<long, long, long> func)
-            where TR : IQueryReduce<long>, new()
+            where TR : struct, IQueryReduce<long>
         {
             for (var i = 0; i < 128; i++)
             {
@@ -118,7 +118,7 @@ public class ReducerTests
         Check<Reduce.U64.Max>(Math.Max);
 
         void Check<TR>(Func<ulong, ulong, ulong> func)
-            where TR : IQueryReduce<ulong>, new()
+            where TR : struct, IQueryReduce<ulong>
         {
             for (var i = 0; i < 128; i++)
             {
@@ -142,7 +142,7 @@ public class ReducerTests
         Check<Reduce.F32.Max>(Math.Max);
 
         void Check<TR>(Func<float, float, float> func)
-            where TR : IQueryReduce<float>, new()
+            where TR : struct, IQueryReduce<float>
         {
             for (var i = 0; i < 128; i++)
             {
@@ -166,7 +166,7 @@ public class ReducerTests
         Check<Reduce.F64.Max>(Math.Max);
 
         void Check<TR>(Func<double, double, double> func)
-            where TR : IQueryReduce<double>, new()
+            where TR : struct, IQueryReduce<double>
         {
             for (var i = 0; i < 128; i++)
             {

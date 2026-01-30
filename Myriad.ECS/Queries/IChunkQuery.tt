@@ -65,9 +65,9 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where <#= Constraints(i, 12) #>
-			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>, new()
+			where TQ : struct, IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, query);
 		}
 
@@ -91,9 +91,9 @@ namespace Myriad.ECS.Worlds
 			ref QueryDescription? query
 		)
 			where <#= Constraints(i, 12) #>
-			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>, new()
+			where TQ : struct, IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query);
 		}
 

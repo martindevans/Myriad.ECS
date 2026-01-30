@@ -50,7 +50,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
 		/// </summary>
-		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
+		/// <typeparam name="TQ">The type of the query to execute for every entity. A default(TQ) instance is used.</typeparam>
 <# for (var k = 0; k < i; k++)
 {
 #>
@@ -66,9 +66,9 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where <#= Constraints(i, 12) #>
-			where TQ : IQuery<<#= queryConstraints #>>, new()
+			where TQ : struct, IQuery<<#= queryConstraints #>>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return Execute<TQ, <#= queryConstraints #>>(ref q, query);
 		}
 
@@ -91,9 +91,9 @@ namespace Myriad.ECS.Worlds
 			ref QueryDescription? query
 		)
 			where <#= Constraints(i, 12) #>
-			where TQ : IQuery<<#= queryConstraints #>>, new()
+			where TQ : struct, IQuery<<#= queryConstraints #>>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return Execute<TQ, <#= queryConstraints #>>(ref q, ref query);
 		}
 

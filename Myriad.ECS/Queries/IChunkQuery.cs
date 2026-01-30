@@ -45,9 +45,9 @@ namespace Myriad.ECS.Worlds
 			QueryDescription? query = null
 		)
 			where T0 : IComponent
-			where TQ : IChunkQuery<T0>, new()
+			where TQ : struct, IChunkQuery<T0>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0>(ref q, query);
 		}
 
@@ -65,9 +65,9 @@ namespace Myriad.ECS.Worlds
 			ref QueryDescription? query
 		)
 			where T0 : IComponent
-			where TQ : IChunkQuery<T0>, new()
+			where TQ : struct, IChunkQuery<T0>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0>(ref q, ref query);
 		}
 
@@ -376,9 +376,9 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TQ : IChunkQuery<T0, T1>, new()
+			where TQ : struct, IChunkQuery<T0, T1>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1>(ref q, query);
 		}
 
@@ -398,9 +398,9 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
             where T1 : IComponent
-			where TQ : IChunkQuery<T0, T1>, new()
+			where TQ : struct, IChunkQuery<T0, T1>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1>(ref q, ref query);
 		}
 
@@ -726,9 +726,9 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2>(ref q, query);
 		}
 
@@ -750,9 +750,9 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2>(ref q, ref query);
 		}
 
@@ -1095,9 +1095,9 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, query);
 		}
 
@@ -1121,9 +1121,9 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
             where T3 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, ref query);
 		}
 
@@ -1483,9 +1483,9 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, query);
 		}
 
@@ -1511,9 +1511,9 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
             where T4 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
 		}
 
@@ -1890,9 +1890,9 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, query);
 		}
 
@@ -1920,9 +1920,9 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
             where T5 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
 		}
 
@@ -2316,9 +2316,9 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, query);
 		}
 
@@ -2348,9 +2348,9 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
             where T6 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
 		}
 
@@ -2761,9 +2761,9 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, query);
 		}
 
@@ -2795,9 +2795,9 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
             where T7 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
 		}
 
@@ -3225,9 +3225,9 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, query);
 		}
 
@@ -3261,9 +3261,9 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
             where T8 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
 		}
 
@@ -3708,9 +3708,9 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, query);
 		}
 
@@ -3746,9 +3746,9 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
             where T9 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
 		}
 
@@ -4210,9 +4210,9 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, query);
 		}
 
@@ -4250,9 +4250,9 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
             where T10 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
 		}
 
@@ -4731,9 +4731,9 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, query);
 		}
 
@@ -4773,9 +4773,9 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
             where T11 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
 		}
 
@@ -5271,9 +5271,9 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, query);
 		}
 
@@ -5315,9 +5315,9 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
             where T12 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
 		}
 
@@ -5830,9 +5830,9 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, query);
 		}
 
@@ -5876,9 +5876,9 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
             where T13 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
 		}
 
@@ -6408,9 +6408,9 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, query);
 		}
 
@@ -6456,9 +6456,9 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
             where T14 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
 		}
 
@@ -7005,9 +7005,9 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, query);
 		}
 
@@ -7055,9 +7055,9 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
             where T15 : IComponent
-			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, new()
+			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
-			var q = new TQ();
+			var q = default(TQ);
 			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
 		}
 
