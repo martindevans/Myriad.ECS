@@ -235,12 +235,12 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
 <# for (var k = 0; k < i; k++)
 {
 #>
-						ref var t<#= k #>_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T<#= k #>>(c<#= k #>));
+						ref var t<#= k #>_first = ref MemoryMarshal.GetReference<T<#= k #>>(chunk.GetComponentArray<T<#= k #>>(c<#= k #>));
 <#
 }
 #>

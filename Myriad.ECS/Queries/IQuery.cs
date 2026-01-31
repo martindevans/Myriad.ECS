@@ -222,9 +222,9 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
 
 						var length = entities.Length;
 						var index = 0;
@@ -808,10 +808,10 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
-						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference<T1>(chunk.GetComponentArray<T1>(c1));
 
 						var length = entities.Length;
 						var index = 0;
@@ -1425,11 +1425,11 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
-						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
-						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference<T1>(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference<T2>(chunk.GetComponentArray<T2>(c2));
 
 						var length = entities.Length;
 						var index = 0;
@@ -2073,12 +2073,12 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
-						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
-						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
-						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference<T1>(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference<T2>(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference<T3>(chunk.GetComponentArray<T3>(c3));
 
 						var length = entities.Length;
 						var index = 0;
@@ -2752,13 +2752,13 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
-						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
-						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
-						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
-						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference<T1>(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference<T2>(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference<T3>(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference<T4>(chunk.GetComponentArray<T4>(c4));
 
 						var length = entities.Length;
 						var index = 0;
@@ -3462,14 +3462,14 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
-						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
-						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
-						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
-						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
-						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference<T1>(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference<T2>(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference<T3>(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference<T4>(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference<T5>(chunk.GetComponentArray<T5>(c5));
 
 						var length = entities.Length;
 						var index = 0;
@@ -4203,15 +4203,15 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
-						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
-						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
-						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
-						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
-						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
-						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference<T1>(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference<T2>(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference<T3>(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference<T4>(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference<T5>(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference<T6>(chunk.GetComponentArray<T6>(c6));
 
 						var length = entities.Length;
 						var index = 0;
@@ -4975,16 +4975,16 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
-						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
-						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
-						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
-						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
-						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
-						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
-						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference<T1>(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference<T2>(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference<T3>(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference<T4>(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference<T5>(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference<T6>(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference<T7>(chunk.GetComponentArray<T7>(c7));
 
 						var length = entities.Length;
 						var index = 0;
@@ -5778,17 +5778,17 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
-						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
-						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
-						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
-						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
-						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
-						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
-						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
-						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference<T1>(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference<T2>(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference<T3>(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference<T4>(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference<T5>(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference<T6>(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference<T7>(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference<T8>(chunk.GetComponentArray<T8>(c8));
 
 						var length = entities.Length;
 						var index = 0;
@@ -6612,18 +6612,18 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
-						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
-						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
-						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
-						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
-						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
-						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
-						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
-						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
-						ref var t9_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T9>(c9));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference<T1>(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference<T2>(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference<T3>(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference<T4>(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference<T5>(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference<T6>(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference<T7>(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference<T8>(chunk.GetComponentArray<T8>(c8));
+						ref var t9_first = ref MemoryMarshal.GetReference<T9>(chunk.GetComponentArray<T9>(c9));
 
 						var length = entities.Length;
 						var index = 0;
@@ -7477,19 +7477,19 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
-						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
-						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
-						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
-						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
-						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
-						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
-						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
-						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
-						ref var t9_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T9>(c9));
-						ref var t10_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T10>(c10));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference<T1>(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference<T2>(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference<T3>(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference<T4>(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference<T5>(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference<T6>(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference<T7>(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference<T8>(chunk.GetComponentArray<T8>(c8));
+						ref var t9_first = ref MemoryMarshal.GetReference<T9>(chunk.GetComponentArray<T9>(c9));
+						ref var t10_first = ref MemoryMarshal.GetReference<T10>(chunk.GetComponentArray<T10>(c10));
 
 						var length = entities.Length;
 						var index = 0;
@@ -8373,20 +8373,20 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
-						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
-						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
-						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
-						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
-						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
-						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
-						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
-						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
-						ref var t9_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T9>(c9));
-						ref var t10_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T10>(c10));
-						ref var t11_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T11>(c11));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference<T1>(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference<T2>(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference<T3>(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference<T4>(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference<T5>(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference<T6>(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference<T7>(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference<T8>(chunk.GetComponentArray<T8>(c8));
+						ref var t9_first = ref MemoryMarshal.GetReference<T9>(chunk.GetComponentArray<T9>(c9));
+						ref var t10_first = ref MemoryMarshal.GetReference<T10>(chunk.GetComponentArray<T10>(c10));
+						ref var t11_first = ref MemoryMarshal.GetReference<T11>(chunk.GetComponentArray<T11>(c11));
 
 						var length = entities.Length;
 						var index = 0;
@@ -9300,21 +9300,21 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
-						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
-						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
-						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
-						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
-						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
-						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
-						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
-						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
-						ref var t9_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T9>(c9));
-						ref var t10_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T10>(c10));
-						ref var t11_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T11>(c11));
-						ref var t12_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T12>(c12));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference<T1>(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference<T2>(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference<T3>(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference<T4>(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference<T5>(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference<T6>(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference<T7>(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference<T8>(chunk.GetComponentArray<T8>(c8));
+						ref var t9_first = ref MemoryMarshal.GetReference<T9>(chunk.GetComponentArray<T9>(c9));
+						ref var t10_first = ref MemoryMarshal.GetReference<T10>(chunk.GetComponentArray<T10>(c10));
+						ref var t11_first = ref MemoryMarshal.GetReference<T11>(chunk.GetComponentArray<T11>(c11));
+						ref var t12_first = ref MemoryMarshal.GetReference<T12>(chunk.GetComponentArray<T12>(c12));
 
 						var length = entities.Length;
 						var index = 0;
@@ -10258,22 +10258,22 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
-						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
-						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
-						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
-						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
-						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
-						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
-						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
-						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
-						ref var t9_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T9>(c9));
-						ref var t10_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T10>(c10));
-						ref var t11_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T11>(c11));
-						ref var t12_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T12>(c12));
-						ref var t13_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T13>(c13));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference<T1>(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference<T2>(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference<T3>(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference<T4>(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference<T5>(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference<T6>(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference<T7>(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference<T8>(chunk.GetComponentArray<T8>(c8));
+						ref var t9_first = ref MemoryMarshal.GetReference<T9>(chunk.GetComponentArray<T9>(c9));
+						ref var t10_first = ref MemoryMarshal.GetReference<T10>(chunk.GetComponentArray<T10>(c10));
+						ref var t11_first = ref MemoryMarshal.GetReference<T11>(chunk.GetComponentArray<T11>(c11));
+						ref var t12_first = ref MemoryMarshal.GetReference<T12>(chunk.GetComponentArray<T12>(c12));
+						ref var t13_first = ref MemoryMarshal.GetReference<T13>(chunk.GetComponentArray<T13>(c13));
 
 						var length = entities.Length;
 						var index = 0;
@@ -11247,23 +11247,23 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
-						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
-						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
-						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
-						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
-						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
-						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
-						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
-						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
-						ref var t9_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T9>(c9));
-						ref var t10_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T10>(c10));
-						ref var t11_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T11>(c11));
-						ref var t12_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T12>(c12));
-						ref var t13_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T13>(c13));
-						ref var t14_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T14>(c14));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference<T1>(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference<T2>(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference<T3>(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference<T4>(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference<T5>(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference<T6>(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference<T7>(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference<T8>(chunk.GetComponentArray<T8>(c8));
+						ref var t9_first = ref MemoryMarshal.GetReference<T9>(chunk.GetComponentArray<T9>(c9));
+						ref var t10_first = ref MemoryMarshal.GetReference<T10>(chunk.GetComponentArray<T10>(c10));
+						ref var t11_first = ref MemoryMarshal.GetReference<T11>(chunk.GetComponentArray<T11>(c11));
+						ref var t12_first = ref MemoryMarshal.GetReference<T12>(chunk.GetComponentArray<T12>(c12));
+						ref var t13_first = ref MemoryMarshal.GetReference<T13>(chunk.GetComponentArray<T13>(c13));
+						ref var t14_first = ref MemoryMarshal.GetReference<T14>(chunk.GetComponentArray<T14>(c14));
 
 						var length = entities.Length;
 						var index = 0;
@@ -12267,24 +12267,24 @@ namespace Myriad.ECS.Worlds
 						Debug.Assert(chunk != null);
 
 						var entities = chunk.Entities;
-						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
+						ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities.Span);
 
-						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
-						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
-						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
-						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
-						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
-						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
-						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
-						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
-						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
-						ref var t9_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T9>(c9));
-						ref var t10_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T10>(c10));
-						ref var t11_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T11>(c11));
-						ref var t12_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T12>(c12));
-						ref var t13_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T13>(c13));
-						ref var t14_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T14>(c14));
-						ref var t15_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T15>(c15));
+						ref var t0_first = ref MemoryMarshal.GetReference<T0>(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference<T1>(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference<T2>(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference<T3>(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference<T4>(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference<T5>(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference<T6>(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference<T7>(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference<T8>(chunk.GetComponentArray<T8>(c8));
+						ref var t9_first = ref MemoryMarshal.GetReference<T9>(chunk.GetComponentArray<T9>(c9));
+						ref var t10_first = ref MemoryMarshal.GetReference<T10>(chunk.GetComponentArray<T10>(c10));
+						ref var t11_first = ref MemoryMarshal.GetReference<T11>(chunk.GetComponentArray<T11>(c11));
+						ref var t12_first = ref MemoryMarshal.GetReference<T12>(chunk.GetComponentArray<T12>(c12));
+						ref var t13_first = ref MemoryMarshal.GetReference<T13>(chunk.GetComponentArray<T13>(c13));
+						ref var t14_first = ref MemoryMarshal.GetReference<T14>(chunk.GetComponentArray<T14>(c14));
+						ref var t15_first = ref MemoryMarshal.GetReference<T15>(chunk.GetComponentArray<T15>(c15));
 
 						var length = entities.Length;
 						var index = 0;
