@@ -7,6 +7,7 @@
 <#@ include file="TemplateHeaders/ParallelWorkLoopSetup.t4" #>
 <#
 	const int PARAM_COUNT = 16;
+	const int LOOP_UNROLL = 4;
 #>
 using System.Diagnostics;
 using System.Buffers;
@@ -17,6 +18,7 @@ using Myriad.ECS.Allocations;
 using Myriad.ECS.Threading;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -232,22 +234,49 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
 <# for (var k = 0; k < i; k++)
 {
 #>
-						var t<#= k #> = chunk.GetSpan<T<#= k #>>(c<#= k #>);
-						Debug.Assert(t<#= k #>.Length == entities.Length);
-						ref var t<#= k #>_first = ref t<#= k #>[0];
+						ref var t<#= k #>_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T<#= k #>>(c<#= k #>));
 <#
 }
 #>
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+<# if (LOOP_UNROLL > 0)
+{
+#>
+						// Unroll the loop
+						while (index <= length - <#= LOOP_UNROLL #>)
+						{
+<# for (var u = 0; u < LOOP_UNROLL; u++)
+	{
+#>
+							// Unroll iteration <#= u #>
+							q.Execute(
+								Unsafe.Add(ref entity0, index + <#= u #>),
+								<#= CallParametersRefOffset(i, u) #>
+							);
+
+<#
+	}
+#>
+							index += <#= LOOP_UNROLL #>;
+						}
+<#
+}
+#>
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
+								Unsafe.Add(ref entity0, index),
 								<#= CallParametersRefOffset(i) #>
 							);
 						}
@@ -353,10 +382,10 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
+										entities[index],
 										<#= CallParametersRefOffset(i) #>
 									);
 								}
@@ -635,11 +664,21 @@ namespace Myriad.ECS.Worlds
         return str;
     }
 
-	static string CallParametersRefOffset(int count)
+	static string CallParametersRefOffset(int count, int constant = 0)
     {
         var str = string.Join(
             ", ",
-            Enumerable.Range(0, count).Select(x => $"ref Unsafe.Add(ref t{x}_first, i)")
+            Enumerable.Range(0, count).Select(x => $"ref Unsafe.Add(ref t{x}_first, index + {constant})")
+        );
+
+        return str;
+    }
+
+	static string CallParametersRef(int count)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(0, count).Select(x => $"ref t{x}_ref")
         );
 
         return str;

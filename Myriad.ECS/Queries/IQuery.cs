@@ -9,6 +9,7 @@ using Myriad.ECS.Allocations;
 using Myriad.ECS.Threading;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -220,17 +221,50 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0)
 							);
 						}
 					}
@@ -326,11 +360,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0)
 									);
 								}
 							}
@@ -773,20 +807,51 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
-						var t1 = chunk.GetSpan<T1>(c1);
-						Debug.Assert(t1.Length == entities.Length);
-						ref var t1_first = ref t1[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1), ref Unsafe.Add(ref t1_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2), ref Unsafe.Add(ref t1_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3), ref Unsafe.Add(ref t1_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0)
 							);
 						}
 					}
@@ -888,11 +953,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0)
 									);
 								}
 							}
@@ -1359,23 +1424,52 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
-						var t1 = chunk.GetSpan<T1>(c1);
-						Debug.Assert(t1.Length == entities.Length);
-						ref var t1_first = ref t1[0];
-						var t2 = chunk.GetSpan<T2>(c2);
-						Debug.Assert(t2.Length == entities.Length);
-						ref var t2_first = ref t2[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1), ref Unsafe.Add(ref t1_first, index + 1), ref Unsafe.Add(ref t2_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2), ref Unsafe.Add(ref t1_first, index + 2), ref Unsafe.Add(ref t2_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3), ref Unsafe.Add(ref t1_first, index + 3), ref Unsafe.Add(ref t2_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0)
 							);
 						}
 					}
@@ -1483,11 +1577,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0)
 									);
 								}
 							}
@@ -1978,26 +2072,53 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
-						var t1 = chunk.GetSpan<T1>(c1);
-						Debug.Assert(t1.Length == entities.Length);
-						ref var t1_first = ref t1[0];
-						var t2 = chunk.GetSpan<T2>(c2);
-						Debug.Assert(t2.Length == entities.Length);
-						ref var t2_first = ref t2[0];
-						var t3 = chunk.GetSpan<T3>(c3);
-						Debug.Assert(t3.Length == entities.Length);
-						ref var t3_first = ref t3[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1), ref Unsafe.Add(ref t1_first, index + 1), ref Unsafe.Add(ref t2_first, index + 1), ref Unsafe.Add(ref t3_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2), ref Unsafe.Add(ref t1_first, index + 2), ref Unsafe.Add(ref t2_first, index + 2), ref Unsafe.Add(ref t3_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3), ref Unsafe.Add(ref t1_first, index + 3), ref Unsafe.Add(ref t2_first, index + 3), ref Unsafe.Add(ref t3_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0)
 							);
 						}
 					}
@@ -2111,11 +2232,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0)
 									);
 								}
 							}
@@ -2630,29 +2751,54 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
-						var t1 = chunk.GetSpan<T1>(c1);
-						Debug.Assert(t1.Length == entities.Length);
-						ref var t1_first = ref t1[0];
-						var t2 = chunk.GetSpan<T2>(c2);
-						Debug.Assert(t2.Length == entities.Length);
-						ref var t2_first = ref t2[0];
-						var t3 = chunk.GetSpan<T3>(c3);
-						Debug.Assert(t3.Length == entities.Length);
-						ref var t3_first = ref t3[0];
-						var t4 = chunk.GetSpan<T4>(c4);
-						Debug.Assert(t4.Length == entities.Length);
-						ref var t4_first = ref t4[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1), ref Unsafe.Add(ref t1_first, index + 1), ref Unsafe.Add(ref t2_first, index + 1), ref Unsafe.Add(ref t3_first, index + 1), ref Unsafe.Add(ref t4_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2), ref Unsafe.Add(ref t1_first, index + 2), ref Unsafe.Add(ref t2_first, index + 2), ref Unsafe.Add(ref t3_first, index + 2), ref Unsafe.Add(ref t4_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3), ref Unsafe.Add(ref t1_first, index + 3), ref Unsafe.Add(ref t2_first, index + 3), ref Unsafe.Add(ref t3_first, index + 3), ref Unsafe.Add(ref t4_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0)
 							);
 						}
 					}
@@ -2772,11 +2918,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0)
 									);
 								}
 							}
@@ -3315,32 +3461,55 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
-						var t1 = chunk.GetSpan<T1>(c1);
-						Debug.Assert(t1.Length == entities.Length);
-						ref var t1_first = ref t1[0];
-						var t2 = chunk.GetSpan<T2>(c2);
-						Debug.Assert(t2.Length == entities.Length);
-						ref var t2_first = ref t2[0];
-						var t3 = chunk.GetSpan<T3>(c3);
-						Debug.Assert(t3.Length == entities.Length);
-						ref var t3_first = ref t3[0];
-						var t4 = chunk.GetSpan<T4>(c4);
-						Debug.Assert(t4.Length == entities.Length);
-						ref var t4_first = ref t4[0];
-						var t5 = chunk.GetSpan<T5>(c5);
-						Debug.Assert(t5.Length == entities.Length);
-						ref var t5_first = ref t5[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1), ref Unsafe.Add(ref t1_first, index + 1), ref Unsafe.Add(ref t2_first, index + 1), ref Unsafe.Add(ref t3_first, index + 1), ref Unsafe.Add(ref t4_first, index + 1), ref Unsafe.Add(ref t5_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2), ref Unsafe.Add(ref t1_first, index + 2), ref Unsafe.Add(ref t2_first, index + 2), ref Unsafe.Add(ref t3_first, index + 2), ref Unsafe.Add(ref t4_first, index + 2), ref Unsafe.Add(ref t5_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3), ref Unsafe.Add(ref t1_first, index + 3), ref Unsafe.Add(ref t2_first, index + 3), ref Unsafe.Add(ref t3_first, index + 3), ref Unsafe.Add(ref t4_first, index + 3), ref Unsafe.Add(ref t5_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0)
 							);
 						}
 					}
@@ -3466,11 +3635,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0)
 									);
 								}
 							}
@@ -4033,35 +4202,56 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
-						var t1 = chunk.GetSpan<T1>(c1);
-						Debug.Assert(t1.Length == entities.Length);
-						ref var t1_first = ref t1[0];
-						var t2 = chunk.GetSpan<T2>(c2);
-						Debug.Assert(t2.Length == entities.Length);
-						ref var t2_first = ref t2[0];
-						var t3 = chunk.GetSpan<T3>(c3);
-						Debug.Assert(t3.Length == entities.Length);
-						ref var t3_first = ref t3[0];
-						var t4 = chunk.GetSpan<T4>(c4);
-						Debug.Assert(t4.Length == entities.Length);
-						ref var t4_first = ref t4[0];
-						var t5 = chunk.GetSpan<T5>(c5);
-						Debug.Assert(t5.Length == entities.Length);
-						ref var t5_first = ref t5[0];
-						var t6 = chunk.GetSpan<T6>(c6);
-						Debug.Assert(t6.Length == entities.Length);
-						ref var t6_first = ref t6[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1), ref Unsafe.Add(ref t1_first, index + 1), ref Unsafe.Add(ref t2_first, index + 1), ref Unsafe.Add(ref t3_first, index + 1), ref Unsafe.Add(ref t4_first, index + 1), ref Unsafe.Add(ref t5_first, index + 1), ref Unsafe.Add(ref t6_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2), ref Unsafe.Add(ref t1_first, index + 2), ref Unsafe.Add(ref t2_first, index + 2), ref Unsafe.Add(ref t3_first, index + 2), ref Unsafe.Add(ref t4_first, index + 2), ref Unsafe.Add(ref t5_first, index + 2), ref Unsafe.Add(ref t6_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3), ref Unsafe.Add(ref t1_first, index + 3), ref Unsafe.Add(ref t2_first, index + 3), ref Unsafe.Add(ref t3_first, index + 3), ref Unsafe.Add(ref t4_first, index + 3), ref Unsafe.Add(ref t5_first, index + 3), ref Unsafe.Add(ref t6_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0)
 							);
 						}
 					}
@@ -4193,11 +4383,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0)
 									);
 								}
 							}
@@ -4784,38 +4974,57 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
-						var t1 = chunk.GetSpan<T1>(c1);
-						Debug.Assert(t1.Length == entities.Length);
-						ref var t1_first = ref t1[0];
-						var t2 = chunk.GetSpan<T2>(c2);
-						Debug.Assert(t2.Length == entities.Length);
-						ref var t2_first = ref t2[0];
-						var t3 = chunk.GetSpan<T3>(c3);
-						Debug.Assert(t3.Length == entities.Length);
-						ref var t3_first = ref t3[0];
-						var t4 = chunk.GetSpan<T4>(c4);
-						Debug.Assert(t4.Length == entities.Length);
-						ref var t4_first = ref t4[0];
-						var t5 = chunk.GetSpan<T5>(c5);
-						Debug.Assert(t5.Length == entities.Length);
-						ref var t5_first = ref t5[0];
-						var t6 = chunk.GetSpan<T6>(c6);
-						Debug.Assert(t6.Length == entities.Length);
-						ref var t6_first = ref t6[0];
-						var t7 = chunk.GetSpan<T7>(c7);
-						Debug.Assert(t7.Length == entities.Length);
-						ref var t7_first = ref t7[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1), ref Unsafe.Add(ref t1_first, index + 1), ref Unsafe.Add(ref t2_first, index + 1), ref Unsafe.Add(ref t3_first, index + 1), ref Unsafe.Add(ref t4_first, index + 1), ref Unsafe.Add(ref t5_first, index + 1), ref Unsafe.Add(ref t6_first, index + 1), ref Unsafe.Add(ref t7_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2), ref Unsafe.Add(ref t1_first, index + 2), ref Unsafe.Add(ref t2_first, index + 2), ref Unsafe.Add(ref t3_first, index + 2), ref Unsafe.Add(ref t4_first, index + 2), ref Unsafe.Add(ref t5_first, index + 2), ref Unsafe.Add(ref t6_first, index + 2), ref Unsafe.Add(ref t7_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3), ref Unsafe.Add(ref t1_first, index + 3), ref Unsafe.Add(ref t2_first, index + 3), ref Unsafe.Add(ref t3_first, index + 3), ref Unsafe.Add(ref t4_first, index + 3), ref Unsafe.Add(ref t5_first, index + 3), ref Unsafe.Add(ref t6_first, index + 3), ref Unsafe.Add(ref t7_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0)
 							);
 						}
 					}
@@ -4953,11 +5162,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0)
 									);
 								}
 							}
@@ -5568,41 +5777,58 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
-						var t1 = chunk.GetSpan<T1>(c1);
-						Debug.Assert(t1.Length == entities.Length);
-						ref var t1_first = ref t1[0];
-						var t2 = chunk.GetSpan<T2>(c2);
-						Debug.Assert(t2.Length == entities.Length);
-						ref var t2_first = ref t2[0];
-						var t3 = chunk.GetSpan<T3>(c3);
-						Debug.Assert(t3.Length == entities.Length);
-						ref var t3_first = ref t3[0];
-						var t4 = chunk.GetSpan<T4>(c4);
-						Debug.Assert(t4.Length == entities.Length);
-						ref var t4_first = ref t4[0];
-						var t5 = chunk.GetSpan<T5>(c5);
-						Debug.Assert(t5.Length == entities.Length);
-						ref var t5_first = ref t5[0];
-						var t6 = chunk.GetSpan<T6>(c6);
-						Debug.Assert(t6.Length == entities.Length);
-						ref var t6_first = ref t6[0];
-						var t7 = chunk.GetSpan<T7>(c7);
-						Debug.Assert(t7.Length == entities.Length);
-						ref var t7_first = ref t7[0];
-						var t8 = chunk.GetSpan<T8>(c8);
-						Debug.Assert(t8.Length == entities.Length);
-						ref var t8_first = ref t8[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1), ref Unsafe.Add(ref t1_first, index + 1), ref Unsafe.Add(ref t2_first, index + 1), ref Unsafe.Add(ref t3_first, index + 1), ref Unsafe.Add(ref t4_first, index + 1), ref Unsafe.Add(ref t5_first, index + 1), ref Unsafe.Add(ref t6_first, index + 1), ref Unsafe.Add(ref t7_first, index + 1), ref Unsafe.Add(ref t8_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2), ref Unsafe.Add(ref t1_first, index + 2), ref Unsafe.Add(ref t2_first, index + 2), ref Unsafe.Add(ref t3_first, index + 2), ref Unsafe.Add(ref t4_first, index + 2), ref Unsafe.Add(ref t5_first, index + 2), ref Unsafe.Add(ref t6_first, index + 2), ref Unsafe.Add(ref t7_first, index + 2), ref Unsafe.Add(ref t8_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3), ref Unsafe.Add(ref t1_first, index + 3), ref Unsafe.Add(ref t2_first, index + 3), ref Unsafe.Add(ref t3_first, index + 3), ref Unsafe.Add(ref t4_first, index + 3), ref Unsafe.Add(ref t5_first, index + 3), ref Unsafe.Add(ref t6_first, index + 3), ref Unsafe.Add(ref t7_first, index + 3), ref Unsafe.Add(ref t8_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0)
 							);
 						}
 					}
@@ -5746,11 +5972,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0)
 									);
 								}
 							}
@@ -6385,44 +6611,59 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
-						var t1 = chunk.GetSpan<T1>(c1);
-						Debug.Assert(t1.Length == entities.Length);
-						ref var t1_first = ref t1[0];
-						var t2 = chunk.GetSpan<T2>(c2);
-						Debug.Assert(t2.Length == entities.Length);
-						ref var t2_first = ref t2[0];
-						var t3 = chunk.GetSpan<T3>(c3);
-						Debug.Assert(t3.Length == entities.Length);
-						ref var t3_first = ref t3[0];
-						var t4 = chunk.GetSpan<T4>(c4);
-						Debug.Assert(t4.Length == entities.Length);
-						ref var t4_first = ref t4[0];
-						var t5 = chunk.GetSpan<T5>(c5);
-						Debug.Assert(t5.Length == entities.Length);
-						ref var t5_first = ref t5[0];
-						var t6 = chunk.GetSpan<T6>(c6);
-						Debug.Assert(t6.Length == entities.Length);
-						ref var t6_first = ref t6[0];
-						var t7 = chunk.GetSpan<T7>(c7);
-						Debug.Assert(t7.Length == entities.Length);
-						ref var t7_first = ref t7[0];
-						var t8 = chunk.GetSpan<T8>(c8);
-						Debug.Assert(t8.Length == entities.Length);
-						ref var t8_first = ref t8[0];
-						var t9 = chunk.GetSpan<T9>(c9);
-						Debug.Assert(t9.Length == entities.Length);
-						ref var t9_first = ref t9[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
+						ref var t9_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T9>(c9));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1), ref Unsafe.Add(ref t1_first, index + 1), ref Unsafe.Add(ref t2_first, index + 1), ref Unsafe.Add(ref t3_first, index + 1), ref Unsafe.Add(ref t4_first, index + 1), ref Unsafe.Add(ref t5_first, index + 1), ref Unsafe.Add(ref t6_first, index + 1), ref Unsafe.Add(ref t7_first, index + 1), ref Unsafe.Add(ref t8_first, index + 1), ref Unsafe.Add(ref t9_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2), ref Unsafe.Add(ref t1_first, index + 2), ref Unsafe.Add(ref t2_first, index + 2), ref Unsafe.Add(ref t3_first, index + 2), ref Unsafe.Add(ref t4_first, index + 2), ref Unsafe.Add(ref t5_first, index + 2), ref Unsafe.Add(ref t6_first, index + 2), ref Unsafe.Add(ref t7_first, index + 2), ref Unsafe.Add(ref t8_first, index + 2), ref Unsafe.Add(ref t9_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3), ref Unsafe.Add(ref t1_first, index + 3), ref Unsafe.Add(ref t2_first, index + 3), ref Unsafe.Add(ref t3_first, index + 3), ref Unsafe.Add(ref t4_first, index + 3), ref Unsafe.Add(ref t5_first, index + 3), ref Unsafe.Add(ref t6_first, index + 3), ref Unsafe.Add(ref t7_first, index + 3), ref Unsafe.Add(ref t8_first, index + 3), ref Unsafe.Add(ref t9_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i), ref Unsafe.Add(ref t9_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0)
 							);
 						}
 					}
@@ -6572,11 +6813,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i), ref Unsafe.Add(ref t9_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0)
 									);
 								}
 							}
@@ -7235,47 +7476,60 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
-						var t1 = chunk.GetSpan<T1>(c1);
-						Debug.Assert(t1.Length == entities.Length);
-						ref var t1_first = ref t1[0];
-						var t2 = chunk.GetSpan<T2>(c2);
-						Debug.Assert(t2.Length == entities.Length);
-						ref var t2_first = ref t2[0];
-						var t3 = chunk.GetSpan<T3>(c3);
-						Debug.Assert(t3.Length == entities.Length);
-						ref var t3_first = ref t3[0];
-						var t4 = chunk.GetSpan<T4>(c4);
-						Debug.Assert(t4.Length == entities.Length);
-						ref var t4_first = ref t4[0];
-						var t5 = chunk.GetSpan<T5>(c5);
-						Debug.Assert(t5.Length == entities.Length);
-						ref var t5_first = ref t5[0];
-						var t6 = chunk.GetSpan<T6>(c6);
-						Debug.Assert(t6.Length == entities.Length);
-						ref var t6_first = ref t6[0];
-						var t7 = chunk.GetSpan<T7>(c7);
-						Debug.Assert(t7.Length == entities.Length);
-						ref var t7_first = ref t7[0];
-						var t8 = chunk.GetSpan<T8>(c8);
-						Debug.Assert(t8.Length == entities.Length);
-						ref var t8_first = ref t8[0];
-						var t9 = chunk.GetSpan<T9>(c9);
-						Debug.Assert(t9.Length == entities.Length);
-						ref var t9_first = ref t9[0];
-						var t10 = chunk.GetSpan<T10>(c10);
-						Debug.Assert(t10.Length == entities.Length);
-						ref var t10_first = ref t10[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
+						ref var t9_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T9>(c9));
+						ref var t10_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T10>(c10));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1), ref Unsafe.Add(ref t1_first, index + 1), ref Unsafe.Add(ref t2_first, index + 1), ref Unsafe.Add(ref t3_first, index + 1), ref Unsafe.Add(ref t4_first, index + 1), ref Unsafe.Add(ref t5_first, index + 1), ref Unsafe.Add(ref t6_first, index + 1), ref Unsafe.Add(ref t7_first, index + 1), ref Unsafe.Add(ref t8_first, index + 1), ref Unsafe.Add(ref t9_first, index + 1), ref Unsafe.Add(ref t10_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2), ref Unsafe.Add(ref t1_first, index + 2), ref Unsafe.Add(ref t2_first, index + 2), ref Unsafe.Add(ref t3_first, index + 2), ref Unsafe.Add(ref t4_first, index + 2), ref Unsafe.Add(ref t5_first, index + 2), ref Unsafe.Add(ref t6_first, index + 2), ref Unsafe.Add(ref t7_first, index + 2), ref Unsafe.Add(ref t8_first, index + 2), ref Unsafe.Add(ref t9_first, index + 2), ref Unsafe.Add(ref t10_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3), ref Unsafe.Add(ref t1_first, index + 3), ref Unsafe.Add(ref t2_first, index + 3), ref Unsafe.Add(ref t3_first, index + 3), ref Unsafe.Add(ref t4_first, index + 3), ref Unsafe.Add(ref t5_first, index + 3), ref Unsafe.Add(ref t6_first, index + 3), ref Unsafe.Add(ref t7_first, index + 3), ref Unsafe.Add(ref t8_first, index + 3), ref Unsafe.Add(ref t9_first, index + 3), ref Unsafe.Add(ref t10_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i), ref Unsafe.Add(ref t9_first, i), ref Unsafe.Add(ref t10_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0)
 							);
 						}
 					}
@@ -7431,11 +7685,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i), ref Unsafe.Add(ref t9_first, i), ref Unsafe.Add(ref t10_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0)
 									);
 								}
 							}
@@ -8118,50 +8372,61 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
-						var t1 = chunk.GetSpan<T1>(c1);
-						Debug.Assert(t1.Length == entities.Length);
-						ref var t1_first = ref t1[0];
-						var t2 = chunk.GetSpan<T2>(c2);
-						Debug.Assert(t2.Length == entities.Length);
-						ref var t2_first = ref t2[0];
-						var t3 = chunk.GetSpan<T3>(c3);
-						Debug.Assert(t3.Length == entities.Length);
-						ref var t3_first = ref t3[0];
-						var t4 = chunk.GetSpan<T4>(c4);
-						Debug.Assert(t4.Length == entities.Length);
-						ref var t4_first = ref t4[0];
-						var t5 = chunk.GetSpan<T5>(c5);
-						Debug.Assert(t5.Length == entities.Length);
-						ref var t5_first = ref t5[0];
-						var t6 = chunk.GetSpan<T6>(c6);
-						Debug.Assert(t6.Length == entities.Length);
-						ref var t6_first = ref t6[0];
-						var t7 = chunk.GetSpan<T7>(c7);
-						Debug.Assert(t7.Length == entities.Length);
-						ref var t7_first = ref t7[0];
-						var t8 = chunk.GetSpan<T8>(c8);
-						Debug.Assert(t8.Length == entities.Length);
-						ref var t8_first = ref t8[0];
-						var t9 = chunk.GetSpan<T9>(c9);
-						Debug.Assert(t9.Length == entities.Length);
-						ref var t9_first = ref t9[0];
-						var t10 = chunk.GetSpan<T10>(c10);
-						Debug.Assert(t10.Length == entities.Length);
-						ref var t10_first = ref t10[0];
-						var t11 = chunk.GetSpan<T11>(c11);
-						Debug.Assert(t11.Length == entities.Length);
-						ref var t11_first = ref t11[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
+						ref var t9_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T9>(c9));
+						ref var t10_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T10>(c10));
+						ref var t11_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T11>(c11));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1), ref Unsafe.Add(ref t1_first, index + 1), ref Unsafe.Add(ref t2_first, index + 1), ref Unsafe.Add(ref t3_first, index + 1), ref Unsafe.Add(ref t4_first, index + 1), ref Unsafe.Add(ref t5_first, index + 1), ref Unsafe.Add(ref t6_first, index + 1), ref Unsafe.Add(ref t7_first, index + 1), ref Unsafe.Add(ref t8_first, index + 1), ref Unsafe.Add(ref t9_first, index + 1), ref Unsafe.Add(ref t10_first, index + 1), ref Unsafe.Add(ref t11_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2), ref Unsafe.Add(ref t1_first, index + 2), ref Unsafe.Add(ref t2_first, index + 2), ref Unsafe.Add(ref t3_first, index + 2), ref Unsafe.Add(ref t4_first, index + 2), ref Unsafe.Add(ref t5_first, index + 2), ref Unsafe.Add(ref t6_first, index + 2), ref Unsafe.Add(ref t7_first, index + 2), ref Unsafe.Add(ref t8_first, index + 2), ref Unsafe.Add(ref t9_first, index + 2), ref Unsafe.Add(ref t10_first, index + 2), ref Unsafe.Add(ref t11_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3), ref Unsafe.Add(ref t1_first, index + 3), ref Unsafe.Add(ref t2_first, index + 3), ref Unsafe.Add(ref t3_first, index + 3), ref Unsafe.Add(ref t4_first, index + 3), ref Unsafe.Add(ref t5_first, index + 3), ref Unsafe.Add(ref t6_first, index + 3), ref Unsafe.Add(ref t7_first, index + 3), ref Unsafe.Add(ref t8_first, index + 3), ref Unsafe.Add(ref t9_first, index + 3), ref Unsafe.Add(ref t10_first, index + 3), ref Unsafe.Add(ref t11_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i), ref Unsafe.Add(ref t9_first, i), ref Unsafe.Add(ref t10_first, i), ref Unsafe.Add(ref t11_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0)
 							);
 						}
 					}
@@ -8323,11 +8588,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i), ref Unsafe.Add(ref t9_first, i), ref Unsafe.Add(ref t10_first, i), ref Unsafe.Add(ref t11_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0)
 									);
 								}
 							}
@@ -9034,53 +9299,62 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
-						var t1 = chunk.GetSpan<T1>(c1);
-						Debug.Assert(t1.Length == entities.Length);
-						ref var t1_first = ref t1[0];
-						var t2 = chunk.GetSpan<T2>(c2);
-						Debug.Assert(t2.Length == entities.Length);
-						ref var t2_first = ref t2[0];
-						var t3 = chunk.GetSpan<T3>(c3);
-						Debug.Assert(t3.Length == entities.Length);
-						ref var t3_first = ref t3[0];
-						var t4 = chunk.GetSpan<T4>(c4);
-						Debug.Assert(t4.Length == entities.Length);
-						ref var t4_first = ref t4[0];
-						var t5 = chunk.GetSpan<T5>(c5);
-						Debug.Assert(t5.Length == entities.Length);
-						ref var t5_first = ref t5[0];
-						var t6 = chunk.GetSpan<T6>(c6);
-						Debug.Assert(t6.Length == entities.Length);
-						ref var t6_first = ref t6[0];
-						var t7 = chunk.GetSpan<T7>(c7);
-						Debug.Assert(t7.Length == entities.Length);
-						ref var t7_first = ref t7[0];
-						var t8 = chunk.GetSpan<T8>(c8);
-						Debug.Assert(t8.Length == entities.Length);
-						ref var t8_first = ref t8[0];
-						var t9 = chunk.GetSpan<T9>(c9);
-						Debug.Assert(t9.Length == entities.Length);
-						ref var t9_first = ref t9[0];
-						var t10 = chunk.GetSpan<T10>(c10);
-						Debug.Assert(t10.Length == entities.Length);
-						ref var t10_first = ref t10[0];
-						var t11 = chunk.GetSpan<T11>(c11);
-						Debug.Assert(t11.Length == entities.Length);
-						ref var t11_first = ref t11[0];
-						var t12 = chunk.GetSpan<T12>(c12);
-						Debug.Assert(t12.Length == entities.Length);
-						ref var t12_first = ref t12[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
+						ref var t9_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T9>(c9));
+						ref var t10_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T10>(c10));
+						ref var t11_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T11>(c11));
+						ref var t12_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T12>(c12));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1), ref Unsafe.Add(ref t1_first, index + 1), ref Unsafe.Add(ref t2_first, index + 1), ref Unsafe.Add(ref t3_first, index + 1), ref Unsafe.Add(ref t4_first, index + 1), ref Unsafe.Add(ref t5_first, index + 1), ref Unsafe.Add(ref t6_first, index + 1), ref Unsafe.Add(ref t7_first, index + 1), ref Unsafe.Add(ref t8_first, index + 1), ref Unsafe.Add(ref t9_first, index + 1), ref Unsafe.Add(ref t10_first, index + 1), ref Unsafe.Add(ref t11_first, index + 1), ref Unsafe.Add(ref t12_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2), ref Unsafe.Add(ref t1_first, index + 2), ref Unsafe.Add(ref t2_first, index + 2), ref Unsafe.Add(ref t3_first, index + 2), ref Unsafe.Add(ref t4_first, index + 2), ref Unsafe.Add(ref t5_first, index + 2), ref Unsafe.Add(ref t6_first, index + 2), ref Unsafe.Add(ref t7_first, index + 2), ref Unsafe.Add(ref t8_first, index + 2), ref Unsafe.Add(ref t9_first, index + 2), ref Unsafe.Add(ref t10_first, index + 2), ref Unsafe.Add(ref t11_first, index + 2), ref Unsafe.Add(ref t12_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3), ref Unsafe.Add(ref t1_first, index + 3), ref Unsafe.Add(ref t2_first, index + 3), ref Unsafe.Add(ref t3_first, index + 3), ref Unsafe.Add(ref t4_first, index + 3), ref Unsafe.Add(ref t5_first, index + 3), ref Unsafe.Add(ref t6_first, index + 3), ref Unsafe.Add(ref t7_first, index + 3), ref Unsafe.Add(ref t8_first, index + 3), ref Unsafe.Add(ref t9_first, index + 3), ref Unsafe.Add(ref t10_first, index + 3), ref Unsafe.Add(ref t11_first, index + 3), ref Unsafe.Add(ref t12_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i), ref Unsafe.Add(ref t9_first, i), ref Unsafe.Add(ref t10_first, i), ref Unsafe.Add(ref t11_first, i), ref Unsafe.Add(ref t12_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0)
 							);
 						}
 					}
@@ -9248,11 +9522,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i), ref Unsafe.Add(ref t9_first, i), ref Unsafe.Add(ref t10_first, i), ref Unsafe.Add(ref t11_first, i), ref Unsafe.Add(ref t12_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0)
 									);
 								}
 							}
@@ -9983,56 +10257,63 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
-						var t1 = chunk.GetSpan<T1>(c1);
-						Debug.Assert(t1.Length == entities.Length);
-						ref var t1_first = ref t1[0];
-						var t2 = chunk.GetSpan<T2>(c2);
-						Debug.Assert(t2.Length == entities.Length);
-						ref var t2_first = ref t2[0];
-						var t3 = chunk.GetSpan<T3>(c3);
-						Debug.Assert(t3.Length == entities.Length);
-						ref var t3_first = ref t3[0];
-						var t4 = chunk.GetSpan<T4>(c4);
-						Debug.Assert(t4.Length == entities.Length);
-						ref var t4_first = ref t4[0];
-						var t5 = chunk.GetSpan<T5>(c5);
-						Debug.Assert(t5.Length == entities.Length);
-						ref var t5_first = ref t5[0];
-						var t6 = chunk.GetSpan<T6>(c6);
-						Debug.Assert(t6.Length == entities.Length);
-						ref var t6_first = ref t6[0];
-						var t7 = chunk.GetSpan<T7>(c7);
-						Debug.Assert(t7.Length == entities.Length);
-						ref var t7_first = ref t7[0];
-						var t8 = chunk.GetSpan<T8>(c8);
-						Debug.Assert(t8.Length == entities.Length);
-						ref var t8_first = ref t8[0];
-						var t9 = chunk.GetSpan<T9>(c9);
-						Debug.Assert(t9.Length == entities.Length);
-						ref var t9_first = ref t9[0];
-						var t10 = chunk.GetSpan<T10>(c10);
-						Debug.Assert(t10.Length == entities.Length);
-						ref var t10_first = ref t10[0];
-						var t11 = chunk.GetSpan<T11>(c11);
-						Debug.Assert(t11.Length == entities.Length);
-						ref var t11_first = ref t11[0];
-						var t12 = chunk.GetSpan<T12>(c12);
-						Debug.Assert(t12.Length == entities.Length);
-						ref var t12_first = ref t12[0];
-						var t13 = chunk.GetSpan<T13>(c13);
-						Debug.Assert(t13.Length == entities.Length);
-						ref var t13_first = ref t13[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
+						ref var t9_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T9>(c9));
+						ref var t10_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T10>(c10));
+						ref var t11_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T11>(c11));
+						ref var t12_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T12>(c12));
+						ref var t13_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T13>(c13));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1), ref Unsafe.Add(ref t1_first, index + 1), ref Unsafe.Add(ref t2_first, index + 1), ref Unsafe.Add(ref t3_first, index + 1), ref Unsafe.Add(ref t4_first, index + 1), ref Unsafe.Add(ref t5_first, index + 1), ref Unsafe.Add(ref t6_first, index + 1), ref Unsafe.Add(ref t7_first, index + 1), ref Unsafe.Add(ref t8_first, index + 1), ref Unsafe.Add(ref t9_first, index + 1), ref Unsafe.Add(ref t10_first, index + 1), ref Unsafe.Add(ref t11_first, index + 1), ref Unsafe.Add(ref t12_first, index + 1), ref Unsafe.Add(ref t13_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2), ref Unsafe.Add(ref t1_first, index + 2), ref Unsafe.Add(ref t2_first, index + 2), ref Unsafe.Add(ref t3_first, index + 2), ref Unsafe.Add(ref t4_first, index + 2), ref Unsafe.Add(ref t5_first, index + 2), ref Unsafe.Add(ref t6_first, index + 2), ref Unsafe.Add(ref t7_first, index + 2), ref Unsafe.Add(ref t8_first, index + 2), ref Unsafe.Add(ref t9_first, index + 2), ref Unsafe.Add(ref t10_first, index + 2), ref Unsafe.Add(ref t11_first, index + 2), ref Unsafe.Add(ref t12_first, index + 2), ref Unsafe.Add(ref t13_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3), ref Unsafe.Add(ref t1_first, index + 3), ref Unsafe.Add(ref t2_first, index + 3), ref Unsafe.Add(ref t3_first, index + 3), ref Unsafe.Add(ref t4_first, index + 3), ref Unsafe.Add(ref t5_first, index + 3), ref Unsafe.Add(ref t6_first, index + 3), ref Unsafe.Add(ref t7_first, index + 3), ref Unsafe.Add(ref t8_first, index + 3), ref Unsafe.Add(ref t9_first, index + 3), ref Unsafe.Add(ref t10_first, index + 3), ref Unsafe.Add(ref t11_first, index + 3), ref Unsafe.Add(ref t12_first, index + 3), ref Unsafe.Add(ref t13_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i), ref Unsafe.Add(ref t9_first, i), ref Unsafe.Add(ref t10_first, i), ref Unsafe.Add(ref t11_first, i), ref Unsafe.Add(ref t12_first, i), ref Unsafe.Add(ref t13_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0)
 							);
 						}
 					}
@@ -10206,11 +10487,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i), ref Unsafe.Add(ref t9_first, i), ref Unsafe.Add(ref t10_first, i), ref Unsafe.Add(ref t11_first, i), ref Unsafe.Add(ref t12_first, i), ref Unsafe.Add(ref t13_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0)
 									);
 								}
 							}
@@ -10965,59 +11246,64 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
-						var t1 = chunk.GetSpan<T1>(c1);
-						Debug.Assert(t1.Length == entities.Length);
-						ref var t1_first = ref t1[0];
-						var t2 = chunk.GetSpan<T2>(c2);
-						Debug.Assert(t2.Length == entities.Length);
-						ref var t2_first = ref t2[0];
-						var t3 = chunk.GetSpan<T3>(c3);
-						Debug.Assert(t3.Length == entities.Length);
-						ref var t3_first = ref t3[0];
-						var t4 = chunk.GetSpan<T4>(c4);
-						Debug.Assert(t4.Length == entities.Length);
-						ref var t4_first = ref t4[0];
-						var t5 = chunk.GetSpan<T5>(c5);
-						Debug.Assert(t5.Length == entities.Length);
-						ref var t5_first = ref t5[0];
-						var t6 = chunk.GetSpan<T6>(c6);
-						Debug.Assert(t6.Length == entities.Length);
-						ref var t6_first = ref t6[0];
-						var t7 = chunk.GetSpan<T7>(c7);
-						Debug.Assert(t7.Length == entities.Length);
-						ref var t7_first = ref t7[0];
-						var t8 = chunk.GetSpan<T8>(c8);
-						Debug.Assert(t8.Length == entities.Length);
-						ref var t8_first = ref t8[0];
-						var t9 = chunk.GetSpan<T9>(c9);
-						Debug.Assert(t9.Length == entities.Length);
-						ref var t9_first = ref t9[0];
-						var t10 = chunk.GetSpan<T10>(c10);
-						Debug.Assert(t10.Length == entities.Length);
-						ref var t10_first = ref t10[0];
-						var t11 = chunk.GetSpan<T11>(c11);
-						Debug.Assert(t11.Length == entities.Length);
-						ref var t11_first = ref t11[0];
-						var t12 = chunk.GetSpan<T12>(c12);
-						Debug.Assert(t12.Length == entities.Length);
-						ref var t12_first = ref t12[0];
-						var t13 = chunk.GetSpan<T13>(c13);
-						Debug.Assert(t13.Length == entities.Length);
-						ref var t13_first = ref t13[0];
-						var t14 = chunk.GetSpan<T14>(c14);
-						Debug.Assert(t14.Length == entities.Length);
-						ref var t14_first = ref t14[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
+						ref var t9_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T9>(c9));
+						ref var t10_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T10>(c10));
+						ref var t11_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T11>(c11));
+						ref var t12_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T12>(c12));
+						ref var t13_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T13>(c13));
+						ref var t14_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T14>(c14));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0), ref Unsafe.Add(ref t14_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1), ref Unsafe.Add(ref t1_first, index + 1), ref Unsafe.Add(ref t2_first, index + 1), ref Unsafe.Add(ref t3_first, index + 1), ref Unsafe.Add(ref t4_first, index + 1), ref Unsafe.Add(ref t5_first, index + 1), ref Unsafe.Add(ref t6_first, index + 1), ref Unsafe.Add(ref t7_first, index + 1), ref Unsafe.Add(ref t8_first, index + 1), ref Unsafe.Add(ref t9_first, index + 1), ref Unsafe.Add(ref t10_first, index + 1), ref Unsafe.Add(ref t11_first, index + 1), ref Unsafe.Add(ref t12_first, index + 1), ref Unsafe.Add(ref t13_first, index + 1), ref Unsafe.Add(ref t14_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2), ref Unsafe.Add(ref t1_first, index + 2), ref Unsafe.Add(ref t2_first, index + 2), ref Unsafe.Add(ref t3_first, index + 2), ref Unsafe.Add(ref t4_first, index + 2), ref Unsafe.Add(ref t5_first, index + 2), ref Unsafe.Add(ref t6_first, index + 2), ref Unsafe.Add(ref t7_first, index + 2), ref Unsafe.Add(ref t8_first, index + 2), ref Unsafe.Add(ref t9_first, index + 2), ref Unsafe.Add(ref t10_first, index + 2), ref Unsafe.Add(ref t11_first, index + 2), ref Unsafe.Add(ref t12_first, index + 2), ref Unsafe.Add(ref t13_first, index + 2), ref Unsafe.Add(ref t14_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3), ref Unsafe.Add(ref t1_first, index + 3), ref Unsafe.Add(ref t2_first, index + 3), ref Unsafe.Add(ref t3_first, index + 3), ref Unsafe.Add(ref t4_first, index + 3), ref Unsafe.Add(ref t5_first, index + 3), ref Unsafe.Add(ref t6_first, index + 3), ref Unsafe.Add(ref t7_first, index + 3), ref Unsafe.Add(ref t8_first, index + 3), ref Unsafe.Add(ref t9_first, index + 3), ref Unsafe.Add(ref t10_first, index + 3), ref Unsafe.Add(ref t11_first, index + 3), ref Unsafe.Add(ref t12_first, index + 3), ref Unsafe.Add(ref t13_first, index + 3), ref Unsafe.Add(ref t14_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i), ref Unsafe.Add(ref t9_first, i), ref Unsafe.Add(ref t10_first, i), ref Unsafe.Add(ref t11_first, i), ref Unsafe.Add(ref t12_first, i), ref Unsafe.Add(ref t13_first, i), ref Unsafe.Add(ref t14_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0), ref Unsafe.Add(ref t14_first, index + 0)
 							);
 						}
 					}
@@ -11197,11 +11483,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i), ref Unsafe.Add(ref t9_first, i), ref Unsafe.Add(ref t10_first, i), ref Unsafe.Add(ref t11_first, i), ref Unsafe.Add(ref t12_first, i), ref Unsafe.Add(ref t13_first, i), ref Unsafe.Add(ref t14_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0), ref Unsafe.Add(ref t14_first, index + 0)
 									);
 								}
 							}
@@ -11980,62 +12266,65 @@ namespace Myriad.ECS.Worlds
 						var chunk = enumerator.Current;
 						Debug.Assert(chunk != null);
 
-						var entities = chunk.Entities.Span;
+						var entities = chunk.Entities;
+						ref var entity0 = ref MemoryMarshal.GetReference(entities.Span);
 
-						var t0 = chunk.GetSpan<T0>(c0);
-						Debug.Assert(t0.Length == entities.Length);
-						ref var t0_first = ref t0[0];
-						var t1 = chunk.GetSpan<T1>(c1);
-						Debug.Assert(t1.Length == entities.Length);
-						ref var t1_first = ref t1[0];
-						var t2 = chunk.GetSpan<T2>(c2);
-						Debug.Assert(t2.Length == entities.Length);
-						ref var t2_first = ref t2[0];
-						var t3 = chunk.GetSpan<T3>(c3);
-						Debug.Assert(t3.Length == entities.Length);
-						ref var t3_first = ref t3[0];
-						var t4 = chunk.GetSpan<T4>(c4);
-						Debug.Assert(t4.Length == entities.Length);
-						ref var t4_first = ref t4[0];
-						var t5 = chunk.GetSpan<T5>(c5);
-						Debug.Assert(t5.Length == entities.Length);
-						ref var t5_first = ref t5[0];
-						var t6 = chunk.GetSpan<T6>(c6);
-						Debug.Assert(t6.Length == entities.Length);
-						ref var t6_first = ref t6[0];
-						var t7 = chunk.GetSpan<T7>(c7);
-						Debug.Assert(t7.Length == entities.Length);
-						ref var t7_first = ref t7[0];
-						var t8 = chunk.GetSpan<T8>(c8);
-						Debug.Assert(t8.Length == entities.Length);
-						ref var t8_first = ref t8[0];
-						var t9 = chunk.GetSpan<T9>(c9);
-						Debug.Assert(t9.Length == entities.Length);
-						ref var t9_first = ref t9[0];
-						var t10 = chunk.GetSpan<T10>(c10);
-						Debug.Assert(t10.Length == entities.Length);
-						ref var t10_first = ref t10[0];
-						var t11 = chunk.GetSpan<T11>(c11);
-						Debug.Assert(t11.Length == entities.Length);
-						ref var t11_first = ref t11[0];
-						var t12 = chunk.GetSpan<T12>(c12);
-						Debug.Assert(t12.Length == entities.Length);
-						ref var t12_first = ref t12[0];
-						var t13 = chunk.GetSpan<T13>(c13);
-						Debug.Assert(t13.Length == entities.Length);
-						ref var t13_first = ref t13[0];
-						var t14 = chunk.GetSpan<T14>(c14);
-						Debug.Assert(t14.Length == entities.Length);
-						ref var t14_first = ref t14[0];
-						var t15 = chunk.GetSpan<T15>(c15);
-						Debug.Assert(t15.Length == entities.Length);
-						ref var t15_first = ref t15[0];
+						ref var t0_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T0>(c0));
+						ref var t1_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T1>(c1));
+						ref var t2_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T2>(c2));
+						ref var t3_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T3>(c3));
+						ref var t4_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T4>(c4));
+						ref var t5_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T5>(c5));
+						ref var t6_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T6>(c6));
+						ref var t7_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T7>(c7));
+						ref var t8_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T8>(c8));
+						ref var t9_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T9>(c9));
+						ref var t10_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T10>(c10));
+						ref var t11_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T11>(c11));
+						ref var t12_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T12>(c12));
+						ref var t13_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T13>(c13));
+						ref var t14_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T14>(c14));
+						ref var t15_first = ref MemoryMarshal.GetReference(chunk.GetComponentArray<T15>(c15));
 
-						for (var i = 0; i < entities.Length; i++)
+						var length = entities.Length;
+						var index = 0;
+
+						// Unroll the loop
+						while (index <= length - 4)
+						{
+							// Unroll iteration 0
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 0),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0), ref Unsafe.Add(ref t14_first, index + 0), ref Unsafe.Add(ref t15_first, index + 0)
+							);
+
+							// Unroll iteration 1
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 1),
+								ref Unsafe.Add(ref t0_first, index + 1), ref Unsafe.Add(ref t1_first, index + 1), ref Unsafe.Add(ref t2_first, index + 1), ref Unsafe.Add(ref t3_first, index + 1), ref Unsafe.Add(ref t4_first, index + 1), ref Unsafe.Add(ref t5_first, index + 1), ref Unsafe.Add(ref t6_first, index + 1), ref Unsafe.Add(ref t7_first, index + 1), ref Unsafe.Add(ref t8_first, index + 1), ref Unsafe.Add(ref t9_first, index + 1), ref Unsafe.Add(ref t10_first, index + 1), ref Unsafe.Add(ref t11_first, index + 1), ref Unsafe.Add(ref t12_first, index + 1), ref Unsafe.Add(ref t13_first, index + 1), ref Unsafe.Add(ref t14_first, index + 1), ref Unsafe.Add(ref t15_first, index + 1)
+							);
+
+							// Unroll iteration 2
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 2),
+								ref Unsafe.Add(ref t0_first, index + 2), ref Unsafe.Add(ref t1_first, index + 2), ref Unsafe.Add(ref t2_first, index + 2), ref Unsafe.Add(ref t3_first, index + 2), ref Unsafe.Add(ref t4_first, index + 2), ref Unsafe.Add(ref t5_first, index + 2), ref Unsafe.Add(ref t6_first, index + 2), ref Unsafe.Add(ref t7_first, index + 2), ref Unsafe.Add(ref t8_first, index + 2), ref Unsafe.Add(ref t9_first, index + 2), ref Unsafe.Add(ref t10_first, index + 2), ref Unsafe.Add(ref t11_first, index + 2), ref Unsafe.Add(ref t12_first, index + 2), ref Unsafe.Add(ref t13_first, index + 2), ref Unsafe.Add(ref t14_first, index + 2), ref Unsafe.Add(ref t15_first, index + 2)
+							);
+
+							// Unroll iteration 3
+							q.Execute(
+								Unsafe.Add(ref entity0, index + 3),
+								ref Unsafe.Add(ref t0_first, index + 3), ref Unsafe.Add(ref t1_first, index + 3), ref Unsafe.Add(ref t2_first, index + 3), ref Unsafe.Add(ref t3_first, index + 3), ref Unsafe.Add(ref t4_first, index + 3), ref Unsafe.Add(ref t5_first, index + 3), ref Unsafe.Add(ref t6_first, index + 3), ref Unsafe.Add(ref t7_first, index + 3), ref Unsafe.Add(ref t8_first, index + 3), ref Unsafe.Add(ref t9_first, index + 3), ref Unsafe.Add(ref t10_first, index + 3), ref Unsafe.Add(ref t11_first, index + 3), ref Unsafe.Add(ref t12_first, index + 3), ref Unsafe.Add(ref t13_first, index + 3), ref Unsafe.Add(ref t14_first, index + 3), ref Unsafe.Add(ref t15_first, index + 3)
+							);
+
+							index += 4;
+						}
+
+						// Finish off whatever is leftover after the unrolled batches
+						for (; index < length; index++)
 						{
 							q.Execute(
-								entities[i],
-								ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i), ref Unsafe.Add(ref t9_first, i), ref Unsafe.Add(ref t10_first, i), ref Unsafe.Add(ref t11_first, i), ref Unsafe.Add(ref t12_first, i), ref Unsafe.Add(ref t13_first, i), ref Unsafe.Add(ref t14_first, i), ref Unsafe.Add(ref t15_first, i)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0), ref Unsafe.Add(ref t14_first, index + 0), ref Unsafe.Add(ref t15_first, index + 0)
 							);
 						}
 					}
@@ -12221,11 +12510,11 @@ namespace Myriad.ECS.Worlds
 
 							unsafe
 							{
-								for (var i = 0; i < entities.Length; i++)
+								for (var index = 0; index < entities.Length; index++)
 								{
 									q.Execute(
-										entities[i],
-										ref Unsafe.Add(ref t0_first, i), ref Unsafe.Add(ref t1_first, i), ref Unsafe.Add(ref t2_first, i), ref Unsafe.Add(ref t3_first, i), ref Unsafe.Add(ref t4_first, i), ref Unsafe.Add(ref t5_first, i), ref Unsafe.Add(ref t6_first, i), ref Unsafe.Add(ref t7_first, i), ref Unsafe.Add(ref t8_first, i), ref Unsafe.Add(ref t9_first, i), ref Unsafe.Add(ref t10_first, i), ref Unsafe.Add(ref t11_first, i), ref Unsafe.Add(ref t12_first, i), ref Unsafe.Add(ref t13_first, i), ref Unsafe.Add(ref t14_first, i), ref Unsafe.Add(ref t15_first, i)
+										entities[index],
+										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0), ref Unsafe.Add(ref t14_first, index + 0), ref Unsafe.Add(ref t15_first, index + 0)
 									);
 								}
 							}
