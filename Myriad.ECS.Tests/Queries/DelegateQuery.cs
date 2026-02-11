@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.Components;
+﻿using System.Runtime.CompilerServices;
+using Myriad.ECS.Components;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds;
 
@@ -356,5 +357,18 @@ public class DelegateQuery
         {
             Assert.AreEqual(123, i.Ref.Value);
         }
+    }
+
+    [TestMethod]
+    public void QueryWithDuplicateComponents()
+    {
+        var w = new WorldBuilder().Build();
+        TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
+
+        w.Query((ref ComponentInt32 a, ref ComponentInt32 b, ref ComponentInt32 c) =>
+        {
+            Unsafe.AreSame(ref a, ref b);
+            Unsafe.AreSame(ref a, ref c);
+        });
     }
 }

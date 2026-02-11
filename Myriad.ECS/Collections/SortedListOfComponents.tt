@@ -43,6 +43,9 @@ var comma = (j == (i - 1)) ? "" : ",";
         };
         Array.Sort(components);
 
+<# if (i > 1)
+{
+#>
         // Deduplicate components
         var insertIndex = 1;
         for (var i = 1; i < components.Length; i++)
@@ -53,6 +56,15 @@ var comma = (j == (i - 1)) ? "" : ",";
                 insertIndex++;
             }
         }
+<#
+}
+else
+{
+#>
+        const int insertIndex = <#= i #>;
+<#
+}
+#>
 
         Components = components.AsMemory(0, insertIndex);
     }

@@ -25,16 +25,7 @@ internal static class SortedListOfComponents<T0>
         };
         Array.Sort(components);
 
-        // Deduplicate components
-        var insertIndex = 1;
-        for (var i = 1; i < components.Length; i++)
-        {
-            if (components[i].Value != components[insertIndex - 1].Value)
-            {
-                components[insertIndex] = components[i];
-                insertIndex++;
-            }
-        }
+        const int insertIndex = 1;
 
         Components = components.AsMemory(0, insertIndex);
     }
