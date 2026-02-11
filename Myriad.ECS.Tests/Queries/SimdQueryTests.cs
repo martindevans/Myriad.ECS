@@ -26,6 +26,14 @@ public class SimdQueryTests
             Assert.AreEqual(i64.Ref.Value * 2, i32.Ref.Value);
     }
 
+    [TestMethod]
+    public void NoWork()
+    {
+        var w = new WorldBuilder().Build();
+
+        Assert.AreEqual(0, w.ExecuteVectorChunk<AddInts, ComponentInt32, int>(new AddInts()));
+    }
+
     private struct AddInts
         : IVectorChunkQuery<int>
     {

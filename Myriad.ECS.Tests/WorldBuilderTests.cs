@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.Threading;
+﻿using Myriad.ECS.Locks;
+using Myriad.ECS.Threading;
 using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Tests;
@@ -12,6 +13,15 @@ public class WorldBuilderTests
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
             new WorldBuilder().WithThreadPool(new DefaultThreadPool()).WithThreadPool(new DefaultThreadPool());
+        });
+    }
+
+    [TestMethod]
+    public void CannotSetSafetyTwice()
+    {
+        Assert.ThrowsException<InvalidOperationException>(() =>
+        {
+            new WorldBuilder().WithSafetySystem(new DefaultWorldArchetypeSafetyManager()).WithSafetySystem(new DefaultWorldArchetypeSafetyManager());
         });
     }
 

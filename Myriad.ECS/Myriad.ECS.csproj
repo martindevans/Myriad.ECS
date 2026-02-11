@@ -176,6 +176,9 @@
       <LastGenOutput>QueryMapReduceReducers.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
+    <None Update="Queries\TemplateHeaders\BasicQueryLoopSetup.t4">
+      <Generator></Generator>
+    </None>
     <None Update="Queries\TemplateHeaders\ParallelWorkLoopSetup.t4">
       <Generator></Generator>
     </None>

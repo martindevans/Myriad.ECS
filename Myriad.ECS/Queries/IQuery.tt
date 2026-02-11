@@ -646,14 +646,6 @@ namespace Myriad.ECS.Worlds
 		return str;
 	}
 
-	static string Ins(int start, int count)
-	{
-		return string.Join(
-			", ",
-			Enumerable.Range(start, count).Select(x => $"ref readonly T{x} t{x}")
-		);
-	}
-
     static string CallParameters(int count)
     {
         var str = string.Join(
@@ -669,26 +661,6 @@ namespace Myriad.ECS.Worlds
         var str = string.Join(
             ", ",
             Enumerable.Range(0, count).Select(x => $"ref Unsafe.Add(ref t{x}_first, index + {constant})")
-        );
-
-        return str;
-    }
-
-	static string CallParametersRef(int count)
-    {
-        var str = string.Join(
-            ", ",
-            Enumerable.Range(0, count).Select(x => $"ref t{x}_ref")
-        );
-
-        return str;
-    }
-
-	static string CallParametersPtr(int count)
-    {
-        var str = string.Join(
-            ", ",
-            Enumerable.Range(0, count).Select(x => $"ref t{x}ptr[i]")
         );
 
         return str;

@@ -67,12 +67,12 @@ public class QueryBenchmark
         _world.Execute<QueryAction, Position, Velocity>(ref q, _query);
     }
 
-    //[Benchmark]
-    //public void QueryNonRefQ()
-    //{
-    //    var q = new QueryAction();
-    //    _world.Execute<QueryAction, Position, Velocity>(q, _query);
-    //}
+    [Benchmark]
+    public void QueryNonRefQ()
+    {
+        var q = new QueryAction();
+        _world.Execute<QueryAction, Position, Velocity>(q, _query);
+    }
 
     //[Benchmark]
     //public void ChunkQuery()
