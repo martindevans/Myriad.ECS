@@ -518,6 +518,41 @@ public class CommandBufferTests
     }
 
     [TestMethod]
+    public void DeleteEntitiesListById()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        var buffered = new[]
+        {
+            buffer.Create().Set(new ComponentFloat(1)),
+            buffer.Create().Set(new ComponentFloat(2)),
+            buffer.Create().Set(new ComponentFloat(3))
+        };
+
+        using var resolver = buffer.Playback();
+
+        var entities = new[]
+        {
+            buffered[0].Resolve(),
+            buffered[1].Resolve(),
+            buffered[2].Resolve(),
+        };
+
+        foreach (var entity in entities)
+            Assert.IsTrue(entity.Exists());
+
+        buffer.Delete([ entities[0].ID, entities[1].ID ]);
+        buffer.Playback();
+
+        Assert.IsFalse(entities[0].Exists());
+        Assert.IsFalse(entities[1].Exists());
+        Assert.IsTrue(entities[2].Exists());
+
+        Assert.AreEqual(3, entities[2].GetComponentRef<ComponentFloat>().Value);
+    }
+
+    [TestMethod]
     public void DeleteByQueryMixedWorlds()
     {
         var world1 = new WorldBuilder().Build();
@@ -829,6 +864,20 @@ public class CommandBufferTests
         Assert.IsTrue(entity.HasComponent<ComponentFloat>());
         Assert.IsTrue(entity.HasComponent<ComponentInt16>());
         Assert.AreEqual(987, entity.GetComponentRef<ComponentInt16>().Value);
+    }
+
+    [TestMethod]
+    public void SetBufferedInvalidMode()
+    {
+        var world = new WorldBuilder().Build();
+        var buffer = new CommandBuffer(world);
+
+        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        {
+            buffer.Create()
+                  .Set(new ComponentFloat(2))
+                  .Set(new ComponentFloat(3), (CommandBuffer.DuplicateSet)999);
+        });
     }
 
     [TestMethod]

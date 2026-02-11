@@ -29,10 +29,10 @@ public sealed partial class CommandBuffer
 
     private readonly List<BufferedEntityData> _bufferedSets = [ ];
 
-    private readonly Dictionary<Entity, EntityModificationData> _entityModifications = [ ];
-    private readonly List<Entity> _deletes = [ ];
+    private readonly Dictionary<EntityId, EntityModificationData> _entityModifications = [ ];
+    private readonly List<EntityId> _deletes = [ ];
     private readonly List<QueryDescription> _archetypeDeletes = [ ];
-    private readonly OrderedListSet<Entity> _maybeAddingPhantomComponent = [ ];
+    private readonly OrderedListSet<EntityId> _maybeAddingPhantomComponent = [ ];
 
     private readonly OrderedListSet<ComponentID> _tempComponentIdSet = [ ];
 
@@ -135,7 +135,7 @@ public sealed partial class CommandBuffer
 
             // Get info for this entity, early exiting on dead entities
             var dummy = default(EntityInfo);
-            var info = World.GetEntityInfo(delete.ID, ref dummy, out var isAlreadyDead);
+            var info = World.GetEntityInfo(delete, ref dummy, out var isAlreadyDead);
             if (isAlreadyDead)
                 continue;
 
@@ -147,7 +147,7 @@ public sealed partial class CommandBuffer
             }
             else
             {
-                World.DeleteImmediate(delete.ID, ref lazy);
+                World.DeleteImmediate(delete, ref lazy);
 
                 // Return objects to pools
                 if (_entityModifications.Remove(delete, out var mod))
@@ -170,7 +170,7 @@ public sealed partial class CommandBuffer
         _deletes.Clear();
 
         // Check if this entity should not be deleted, because a phantom component is being added
-        bool IsAddingPhantomComponent(Entity entity)
+        bool IsAddingPhantomComponent(EntityId entity)
         {
             if (_maybeAddingPhantomComponent.Contains(entity) && _entityModifications.TryGetValue(entity, out var mod) && mod.Sets != null)
                 foreach (var key in mod.Sets.Keys)
@@ -190,7 +190,7 @@ public sealed partial class CommandBuffer
             {
                 // Try to get entity info for this entity
                 var dummy = default(EntityInfo);
-                ref var info = ref World.GetEntityInfo(entity.ID, ref dummy, out var isDummy);
+                ref var info = ref World.GetEntityInfo(entity, ref dummy, out var isDummy);
 
                 // Skip entities that have been deleted since this was enqueued
                 if (isDummy)
@@ -242,7 +242,7 @@ public sealed partial class CommandBuffer
                 var autodelete = _tempComponentIdSet.Contains(ComponentID<Phantom>.ID) && !destHasPhantomComponents;
                 if (autodelete)
                 {
-                    World.DeleteImmediate(entity.ID, ref lazy);
+                    World.DeleteImmediate(entity, ref lazy);
                 }
                 else
                 {
@@ -254,11 +254,11 @@ public sealed partial class CommandBuffer
                         var newArchetype = World.GetOrCreateArchetype(_tempComponentIdSet, hash);
 
                         // Migrate the entity across
-                        row = World.MigrateEntity(entity.ID, newArchetype, ref lazy);
+                        row = World.MigrateEntity(entity, newArchetype, ref lazy);
                     }
                     else
                     {
-                        row = info.GetRow(entity.ID);
+                        row = info.GetRow(entity);
                     }
 
                     // Run all setters
@@ -538,7 +538,7 @@ public sealed partial class CommandBuffer
         InternalSet(entity, value);
     }
 
-    private void InternalSet<T>(Entity entity, T value)
+    private void InternalSet<T>(EntityId entity, T value)
         where T : IComponent
     {
         var mod = GetModificationData(entity, true, false);
@@ -610,7 +610,10 @@ public sealed partial class CommandBuffer
     /// <param name="entities"></param>
     public void Delete(List<Entity> entities)
     {
-        _deletes.AddRange(entities);
+        _deletes.EnsureCapacity(_deletes.Count + entities.Count);
+
+        foreach (var entity in entities)
+            _deletes.Add(entity.ID);
     }
 
     /// <summary>
@@ -619,10 +622,7 @@ public sealed partial class CommandBuffer
     /// <param name="entities"></param>
     public void Delete(List<EntityId> entities)
     {
-        _deletes.EnsureCapacity(_deletes.Count + entities.Count);
-
-        foreach (var entityId in entities)
-            _deletes.Add(entityId.ToEntity(World));
+        _deletes.AddRange(entities);
     }
 
     /// <summary>
@@ -637,7 +637,7 @@ public sealed partial class CommandBuffer
         _archetypeDeletes.Add(entities);
     }
 
-    private EntityModificationData GetModificationData(Entity entity, bool ensureSet, bool ensureRemove)
+    private EntityModificationData GetModificationData(EntityId entity, bool ensureSet, bool ensureRemove)
     {
         // Add it if it's missing
         if (!_entityModifications.TryGetValue(entity, out var existing))
