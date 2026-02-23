@@ -189,7 +189,7 @@ internal sealed partial class Chunk
         if (_bits == null || _bits.Length < wordIndex)
         {
             var bits2 = new uint[wordIndex + 1];
-            _bits?.CopyTo(bits2);
+            _bits?.AsSpan().CopyTo(bits2.AsSpan());
             _bits = bits2;
         }
 
