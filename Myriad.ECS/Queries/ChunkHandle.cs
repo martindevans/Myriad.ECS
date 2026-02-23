@@ -65,6 +65,28 @@ public readonly ref partial struct ChunkHandle
     }
 
     /// <summary>
+    /// Set the value of the given chunk flag
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="value"></param>
+    public void SetBit<T>(bool value)
+        where T : IChunkBitFlag
+    {
+        _chunk.SetFlag<T>(value);
+    }
+
+    /// <summary>
+    /// Get the value of the given chunk flag
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public bool GetBit<T>()
+        where T : IChunkBitFlag
+    {
+        return _chunk.GetFlag<T>();
+    }
+
+    /// <summary>
     /// Unlock unsafe access to the chunk
     /// </summary>
     /// <returns></returns>

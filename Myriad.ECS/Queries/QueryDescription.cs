@@ -312,7 +312,6 @@ public sealed class QueryDescription
         set.Clear();
 
         // Check if there are any "exactly one" items
-        var exactlyOne = default(ComponentID?);
         if (ExactlyOneOf.Count > 0)
         {
             set.Clear();
@@ -324,7 +323,6 @@ public sealed class QueryDescription
                 return null;
             }
 
-            exactlyOne = set.Single();
             set.Clear();
         }
 
@@ -343,12 +341,9 @@ public sealed class QueryDescription
         else
         {
             set.Clear();
-            set = null;
         }
 
-        var atLeastOne = set?.Freeze();
-
-        return new ArchetypeMatch(archetype, atLeastOne, exactlyOne);
+        return new ArchetypeMatch(archetype);
     }
 
     private readonly struct MatchResult(int watermark, FrozenOrderedListSet<ArchetypeMatch> archetypes)
@@ -370,12 +365,10 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// An archetype which matches a query
+    /// An archetype which matches a query (ordered list sets can only contain structs, so this is needed)
     /// </summary>
     /// <param name="Archetype">The archetype</param>
-    /// <param name="AtLeastOne">All of the "at least one" components present (if there are any in this query)</param>
-    /// <param name="ExactlyOne">The "exactly one" component present (if there is one in this query)</param>
-    public readonly record struct ArchetypeMatch(Archetype Archetype, FrozenOrderedListSet<ComponentID>? AtLeastOne, ComponentID? ExactlyOne)
+    public readonly record struct ArchetypeMatch(Archetype Archetype)
         : IComparable<ArchetypeMatch>
     {
         /// <inheritdoc />
@@ -430,6 +423,24 @@ public sealed class QueryDescription
     }
 
     /// <summary>
+    /// Check if the count of entities matching this query is less than a given value
+    /// </summary>
+    /// <returns></returns>
+    public bool IsCountLessThan(int threshold)
+    {
+        var count = 0;
+        foreach (var archetype in GetArchetypes())
+        {
+            count += archetype.Archetype.EntityCount;
+
+            if (count >= threshold)
+                return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
     /// Check if this query matches any entities
     /// </summary>
     /// <returns></returns>
@@ -449,7 +460,7 @@ public sealed class QueryDescription
     public bool Contains(Entity entity)
     {
         var info = entity.World.GetEntityInfo(entity.ID);
-        var archetype = new ArchetypeMatch(info.Chunk.Archetype, null, null);
+        var archetype = new ArchetypeMatch(info.Chunk.Archetype);
         return GetArchetypes().Contains(archetype);
     }
 

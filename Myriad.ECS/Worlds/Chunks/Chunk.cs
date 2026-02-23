@@ -25,6 +25,8 @@ internal sealed partial class Chunk
     private readonly Entity[] _entities;
     private readonly Array[] _components;
 
+    private uint[]? _bits;
+
     /// <summary>
     /// Get the number of entities currently in this chunk
     /// </summary>
@@ -148,6 +150,56 @@ internal sealed partial class Chunk
     internal Array GetComponentArray(ComponentID id)
     {
         return _components[_componentIndexLookup[id.Value]];
+    }
+    #endregion
+
+    #region bit flags
+    /// <summary>
+    /// Get the value of the given chunk flag bit
+    /// </summary>
+    /// <typeparam name="TFlag"></typeparam>
+    /// <returns></returns>
+    public bool GetFlag<TFlag>()
+        where TFlag : IChunkBitFlag
+    {
+        var index = ChunkBitFlagID<TFlag>.ID.Value;
+
+        // If the word is out of range the bit can't possibly be set
+        var wordIndex = index >> 5;
+        if (_bits == null || wordIndex > _bits.Length)
+            return false;
+
+        // Get the bit
+        var bitOffset = index & 31;
+        return (_bits[wordIndex] & (1u << bitOffset)) != 0;
+    }
+
+    /// <summary>
+    /// Set the value of the given chunk flag bit
+    /// </summary>
+    /// <typeparam name="TFlag"></typeparam>
+    /// <param name="value"></param>
+    public void SetFlag<TFlag>(bool value)
+        where TFlag : IChunkBitFlag
+    {
+        var index = ChunkBitFlagID<TFlag>.ID.Value;
+
+        // If index is out of range grow the array now
+        var wordIndex = index >> 5;
+        if (_bits == null || _bits.Length < wordIndex)
+        {
+            var bits2 = new uint[wordIndex + 1];
+            _bits?.CopyTo(bits2);
+            _bits = bits2;
+        }
+
+        // Set/clear the bit in the array
+        var bitOffset = index & 31;
+        var mask = 1u << bitOffset;
+        if (value)
+            _bits[wordIndex] |= mask;
+        else
+            _bits[wordIndex] &= ~mask;
     }
     #endregion
 

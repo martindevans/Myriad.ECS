@@ -1,4 +1,6 @@
 ﻿using Myriad.ECS.Command;
+using Myriad.ECS.IDs;
+using Myriad.ECS.Queries;
 using Myriad.ECS.Tests.Queries;
 using Myriad.ECS.Worlds;
 
@@ -50,4 +52,49 @@ public class ArchetypeTests
 
         Assert.AreNotEqual(h0, h1);
     }
+
+    [TestMethod]
+    public void ChunkFlags()
+    {
+        var w = new WorldBuilder().Build();
+        TestHelpers.SetupRandomEntities(w, uniqueComponents:4, count:10_000).Playback().Dispose();
+
+        // Set a flag on chunks
+        foreach (var archetype in w.Archetypes)
+            if (archetype.Components.Contains(ComponentID<ComponentInt32>.ID))
+                foreach (var chunk in archetype.Chunks)
+                    new ChunkHandle(chunk).SetBit<HasInt32>(true);
+
+        // Check that flag
+        foreach (var archetype in w.Archetypes)
+        {
+            var flag = archetype.Components.Contains(ComponentID<ComponentInt32>.ID);
+            foreach (var chunk in archetype.Chunks)
+                Assert.AreEqual(flag, new ChunkHandle(chunk).GetBit<HasInt32>());
+        }
+
+        // Set another flag
+        foreach (var archetype in w.Archetypes)
+        {
+            var even = archetype.ArchetypeId % 2 == 0;
+            foreach (var chunk in archetype.Chunks)
+                chunk.SetFlag<IdIsEven>(even);
+        }
+
+        // Check both flags
+        foreach (var archetype in w.Archetypes)
+        {
+            var flag = archetype.Components.Contains(ComponentID<ComponentInt32>.ID);
+            var even = archetype.ArchetypeId % 2 == 0;
+
+            foreach (var chunk in archetype.Chunks)
+            {
+                Assert.AreEqual(flag, chunk.GetFlag<HasInt32>());
+                Assert.AreEqual(even, chunk.GetFlag<IdIsEven>());
+            }
+        }
+    }
+
+    private struct HasInt32 : IChunkBitFlag;
+    private struct IdIsEven : IChunkBitFlag;
 }

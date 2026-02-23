@@ -124,8 +124,6 @@ public class QueryDescriptionTests
 
         Assert.IsNotNull(a);
         Assert.AreEqual(1, a.Count);
-        Assert.IsNull(a.LINQ().Single().AtLeastOne);
-        Assert.IsNull(a.LINQ().Single().ExactlyOne);
     }
 
     [TestMethod]
@@ -145,8 +143,6 @@ public class QueryDescriptionTests
         var a = q.GetArchetypes();
         Assert.IsNotNull(a);
         Assert.AreEqual(1, a.Count);
-        Assert.IsNull(a.LINQ().Single().AtLeastOne);
-        Assert.IsNull(a.LINQ().Single().ExactlyOne);
 
         // Add an archetype to the world that the query should match
         var c1 = new OrderedListSet<ComponentID>(new HashSet<ComponentID> { ComponentID<ComponentInt32>.ID, ComponentID<ComponentFloat>.ID });
@@ -210,8 +206,6 @@ public class QueryDescriptionTests
         Assert.AreEqual(1, a.Count);
 
         var single = a.LINQ().Single();
-        Assert.IsNull(single.AtLeastOne);
-        Assert.IsNull(single.ExactlyOne);
         Assert.IsTrue(single.Archetype.Components.Contains(ComponentID<ComponentFloat>.ID));
         Assert.IsFalse(single.Archetype.Components.Contains(ComponentID<ComponentInt32>.ID));
     }
@@ -239,9 +233,9 @@ public class QueryDescriptionTests
         foreach (var match in matches)
         {
             Assert.IsNotNull(match);
-            Assert.IsTrue(match.ExactlyOne == ComponentID<ComponentInt32>.ID || match.ExactlyOne == ComponentID<ComponentFloat>.ID);
-            Assert.IsTrue(match.AtLeastOne == null);
             Assert.IsTrue(match.Archetype.Components.Count == 1);
+            Assert.IsTrue(match.Archetype.Components.Contains(ComponentID<ComponentFloat>.ID)
+                       || match.Archetype.Components.Contains(ComponentID<ComponentInt32>.ID));
         }
     }
 
@@ -269,7 +263,6 @@ public class QueryDescriptionTests
         foreach (var match in matches)
         {
             Assert.IsNotNull(match);
-            Assert.IsTrue(match.ExactlyOne == null);
 
             Assert.IsTrue(match.Archetype.Components.Contains(ComponentID<ComponentInt32>.ID)
                        || match.Archetype.Components.Contains(ComponentID<ComponentFloat>.ID));
@@ -299,7 +292,6 @@ public class QueryDescriptionTests
         foreach (var match in matches)
         {
             Assert.IsNotNull(match);
-            Assert.IsTrue(match.ExactlyOne == null);
 
             Assert.IsTrue(match.Archetype.Components.Contains(ComponentID<ComponentInt32>.ID));
         }
@@ -329,7 +321,6 @@ public class QueryDescriptionTests
         foreach (var match in matches)
         {
             Assert.IsNotNull(match);
-            Assert.IsTrue(match.ExactlyOne == null);
 
             Assert.IsTrue(match.Archetype.Components.Contains(ComponentID<ComponentInt32>.ID));
         }
@@ -766,6 +757,26 @@ public class QueryDescriptionTests
 
         Assert.IsFalse(q2.IsCountGreaterThan(0));
         Assert.IsFalse(q2.Any());
+    }
+
+    [TestMethod]
+    public void IsCountLessThan()
+    {
+        var w = new WorldBuilder().Build();
+        TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
+
+        var q = new QueryBuilder().Include<Component0>().Include<Component1>().Build(w);
+
+        // Get actual count
+        var actual = q.Count();
+
+        // Check threshold
+        Assert.IsTrue(q.IsCountLessThan(actual + 1));
+        Assert.IsTrue(q.IsCountLessThan(int.MaxValue));
+
+        Assert.IsFalse(q.IsCountLessThan(actual - 1));
+        Assert.IsFalse(q.IsCountLessThan(int.MinValue));
+        Assert.IsFalse(q.IsCountLessThan(0));
     }
 
     private struct NotUsedComponent : IComponent;
