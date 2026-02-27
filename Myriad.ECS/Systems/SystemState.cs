@@ -28,10 +28,11 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
     /// Apply changes
     /// </summary>
     /// <param name="cmd"></param>
-    public void Update(CommandBuffer cmd)
+    /// <returns>The number of updated entities</returns>
+    public int Update(CommandBuffer cmd)
     {
-        world.Execute(new Attach(this, cmd), _addQuery);
-        world.Execute<Detach, TAssociated>(new Detach(this, cmd), AssociatedIsPhantom ? _removeQueryPhantom : _removeQuery);
+        return world.Execute(new Attach(this, cmd), _addQuery)
+             + world.Execute<Detach, TAssociated>(new Detach(this, cmd), AssociatedIsPhantom ? _removeQueryPhantom : _removeQuery);
     }
 
     /// <summary>
