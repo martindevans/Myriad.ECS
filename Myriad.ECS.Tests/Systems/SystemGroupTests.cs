@@ -34,6 +34,7 @@ public class SystemGroupTests
         Assert.AreEqual(1, counter.After);
 
         systems.Enabled = true;
+        systems.Enabled = true;
 
         systems.BeforeUpdate(null!);
         systems.Update(null!);
@@ -74,6 +75,63 @@ public class SystemGroupTests
     }
 
     [TestMethod]
+    public void DisableSystemDisableChildren()
+    {
+        var a = new DisableSystem();
+        var b = new DisableSystem();
+        var c = new DisableSystem();
+        var d = new DisableSystem();
+
+        var ab = new SystemGroup<object>("ab", a, b);
+        var cd = new SystemGroup<object>("cd", c, d);
+
+        var systems = new SystemGroup<object>("abcd", ab, cd);
+
+        ab.Enabled = false;
+        Assert.AreEqual(1, a.Disabled);
+        Assert.AreEqual(1, b.Disabled);
+        Assert.AreEqual(0, c.Disabled);
+        Assert.AreEqual(0, d.Disabled);
+
+        systems.Enabled = false;
+        Assert.AreEqual(2, a.Disabled);
+        Assert.AreEqual(2, b.Disabled);
+        Assert.AreEqual(1, c.Disabled);
+        Assert.AreEqual(1, d.Disabled);
+    }
+
+    [TestMethod]
+    public void DisableSystemItem()
+    {
+        var a = new DisableSystem();
+        var b = new DisableSystem();
+
+        var ab = new SystemGroup<object>("ab", a, b);
+
+        ab.Systems[0].Enabled = false;
+        ab.Systems[0].Enabled = false;
+        Assert.AreEqual(1, a.Disabled);
+        Assert.AreEqual(0, b.Disabled);
+    }
+
+    private class DisableSystem
+        : ISystemDisable<object>
+    {
+        public int Updated;
+        public int Disabled;
+
+        public void Update(object data)
+        {
+            Updated++;
+        }
+
+        public void OnDisableSystem()
+        {
+            Disabled++;
+        }
+    }
+
+    [TestMethod]
     public void SystemsProperty()
     {
         var a = new UpdateCountSystem();
@@ -88,6 +146,7 @@ public class SystemGroupTests
 
         // Assert is contains the inner group and system "c"
         Assert.AreEqual(2, systems.Systems.Count);
+        Assert.AreEqual(2, ((ISystemGroup<object>)systems).Systems.Count());
         Assert.IsTrue(systems.Systems.All(x => x.System != a));
         Assert.IsTrue(systems.Systems.All(x => x.System != b));
         Assert.IsTrue(systems.Systems.Any(x => x.System == c));

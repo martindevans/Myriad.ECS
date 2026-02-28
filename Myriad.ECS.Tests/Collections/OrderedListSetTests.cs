@@ -320,4 +320,13 @@ public class OrderedListSetTests
 
         Assert.ThrowsException<InvalidOperationException>(() => a.Single());
     }
+
+    [TestMethod]
+    public void Single()
+    {
+        var a = new OrderedListSet<int>();
+        a.Add(1);
+
+        Assert.AreEqual(1, a.Single());
+    }
 }

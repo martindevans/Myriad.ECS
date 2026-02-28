@@ -64,8 +64,7 @@ internal class ArchetypePhantomComponentNotifier
 
         private static IPhantomNotifier GetInstance()
         {
-            var id = ComponentID<T>.ID;
-            Debug.Assert(id.IsPhantomNotifierComponent, "Cannot get notifier for component which does not implement IPhantomNotifierComponent");
+            Debug.Assert(ComponentID<T>.ID.IsPhantomNotifierComponent, "Cannot get notifier for component which does not implement IPhantomNotifierComponent");
             return (IPhantomNotifier)Activator.CreateInstance(typeof(NotifierImpl<>).MakeGenericType(typeof(T), typeof(T)))!;
         }
 

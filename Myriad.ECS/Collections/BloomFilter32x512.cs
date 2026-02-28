@@ -91,10 +91,8 @@ internal struct BloomFilter32x512
         var v1 = System.Runtime.Intrinsics.Vector256.LoadUnsafe(in selfRef)    & System.Runtime.Intrinsics.Vector256.LoadUnsafe(in otherRef);
         var v2 = System.Runtime.Intrinsics.Vector256.LoadUnsafe(in selfRef, 4) & System.Runtime.Intrinsics.Vector256.LoadUnsafe(in otherRef, 4);
 
-        var fail = (
-            System.Runtime.Intrinsics.Vector256.EqualsAny(v1, System.Runtime.Intrinsics.Vector256<ulong>.Zero) |
-            System.Runtime.Intrinsics.Vector256.EqualsAny(v2, System.Runtime.Intrinsics.Vector256<ulong>.Zero)
-        );
+        var fail = System.Runtime.Intrinsics.Vector256.EqualsAny(v1, System.Runtime.Intrinsics.Vector256<ulong>.Zero)
+                 | System.Runtime.Intrinsics.Vector256.EqualsAny(v2, System.Runtime.Intrinsics.Vector256<ulong>.Zero);
 #endif
 
         return !fail;

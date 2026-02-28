@@ -14,7 +14,7 @@ internal class ParallelQueryWorker<TWork>
     private readonly ConcurrentQueue<TWork> _work = new();
     private readonly List<Exception> _exceptions = [ ];
 
-    public ManualResetEventSlim FinishEvent { get; } = new ManualResetEventSlim(false);
+    public ManualResetEventSlim FinishEvent { get; } = new(false);
 
     public void Configure(ParallelQueryWorker<TWork>?[] siblings, CountdownEvent counter)
     {

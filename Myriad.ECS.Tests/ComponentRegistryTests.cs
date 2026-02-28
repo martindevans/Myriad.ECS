@@ -20,7 +20,13 @@ public class ComponentRegistryTests
         var ids = new[]
         {
             ComponentID<ComponentInt32>.ID,
+            ComponentRegistry.Get(typeof(ComponentInt32)),
+            ComponentRegistry.Get<ComponentInt32>(),
+
             ComponentID<ComponentInt64>.ID,
+            ComponentRegistry.Get(typeof(ComponentInt64)),
+            ComponentRegistry.Get<ComponentInt64>(),
+
             ComponentID.Get(typeof(ComponentInt16)),
             ComponentID.Get(typeof(ComponentFloat)),
         };

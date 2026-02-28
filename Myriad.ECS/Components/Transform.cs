@@ -35,9 +35,7 @@ public struct TransformParent
 /// Indicates which entity this entity is transformed relative to
 /// </summary>
 public interface ITransformParent
-    : IEntityRelationComponent
-{
-}
+    : IEntityRelationComponent;
 
 /// <summary>
 /// Transform of this entity, relative to parent

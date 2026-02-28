@@ -26,16 +26,17 @@ internal class OrderedListSet<TItem>
     // ReSharper disable once ParameterTypeCanBeEnumerable.Local
     public OrderedListSet(List<TItem> items)
     {
-        _items.EnsureCapacity(items.Count);
-        foreach (var item in items)
-            Add(item);
+        _items.AddRange(items);
+        _items.Sort();
     }
 
     public OrderedListSet(ReadOnlySpan<TItem> items)
     {
         _items.EnsureCapacity(items.Length);
         foreach (var item in items)
-            Add(item);
+            _items.Add(item);
+
+        _items.Sort();
     }
 
     internal OrderedListSet(HashSet<TItem> items)
@@ -46,7 +47,9 @@ internal class OrderedListSet<TItem>
 
     public OrderedListSet(OrderedListSet<TItem> items)
     {
-        _items = [..items._items];
+        _items.AddRange(items._items);
+
+        // No need to sort since it's already an ordered set.
     }
 
     public OrderedListSet(FrozenOrderedListSet<TItem> items)
@@ -54,6 +57,8 @@ internal class OrderedListSet<TItem>
         _items.EnsureCapacity(items.Count);
         foreach (var item in items)
             _items.Add(item);
+
+        // No need to sort since it's already an ordered set.
     }
     #endregion
 
@@ -217,22 +222,23 @@ internal class OrderedListSet<TItem>
         {
             var cmp = _items[i].CompareTo(other._items[j]);
 
-            if (cmp < 0)
+            switch (cmp)
             {
-                // Item in `this` < `other`. That's acceptable, it means the item is in the superset and not in the subset.
-                // Move to the next item in the superset.
-                i++;
-            }
-            else if (cmp == 0)
-            {
-                // Items are equal, move to the next item in both
-                i++;
-                j++;
-            }
-            else
-            {
-                // Item in `other` < `this`. That means `other` is not a subset!
-                return false;
+                case < 0:
+                    // Item in `this` < `other`. That's acceptable, it means the item is in the superset and not in the subset.
+                    // Move to the next item in the superset.
+                    i++;
+                    break;
+
+                case 0:
+                    // Items are equal, move to the next item in both
+                    i++;
+                    j++;
+                    break;
+
+                default:
+                    // Item in `other` < `this`. That means `other` is not a subset!
+                    return false;
             }
         }
 
@@ -295,12 +301,19 @@ internal class OrderedListSet<TItem>
         {
             var cmp = _items[i].CompareTo(other._items[j]);
 
-            if (cmp < 0)
-                i++;
-            else if (cmp > 0)
-                j++;
-            else
-                return true;
+            switch (cmp)
+            {
+                case < 0:
+                    i++;
+                    break;
+
+                case > 0:
+                    j++;
+                    break;
+
+                default:
+                    return true;
+            }
         }
 
         return false;
