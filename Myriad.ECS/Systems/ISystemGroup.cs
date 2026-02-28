@@ -50,19 +50,20 @@ public interface ISystemGroup<TData>
 /// </summary>
 public sealed class SystemGroupItem<TData>
 {
+    private bool _enabled;
     /// <summary>
     /// Indicates if update calls will be made to this system.
     /// </summary>
     public bool Enabled
     {
-        get => field;
+        get => _enabled;
         set
         {
-            if (field == value)
+            if (_enabled == value)
                 return;
-            field = value;
+            _enabled = value;
 
-            if (!field)
+            if (!_enabled)
                 DisableSystem();
         }
     }
@@ -179,17 +180,18 @@ public abstract class BaseSystemGroup<TData>
     private readonly List<SystemGroupItem<TData>> _systems;
     private readonly List<SystemGroupItem<TData>> _afterSystems;
 
+    private bool _enabled;
     /// <inheritdoc />
     public bool Enabled
     {
-        get => field;
+        get => _enabled;
         set
         {
-            if (field == value)
+            if (_enabled == value)
                 return;
-            field = value;
+            _enabled = value;
 
-            if (!field)
+            if (!_enabled)
                 DisableSystems();
         }
     }
