@@ -635,7 +635,7 @@ public sealed partial class CommandBuffer
     /// Delete an entity
     /// </summary>
     /// <param name="entity"></param>
-    public void Delete(Entity entity)
+    public void Delete(EntityId entity)
     {
         _deletes.Add(entity);
     }
