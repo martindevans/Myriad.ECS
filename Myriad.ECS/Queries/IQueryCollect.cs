@@ -197,7 +197,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0>,
 				T0
 			>(
-				new ListCollectorEntityOnly<T0>(output)
+				new ListCollectorEntityOnly<T0>(output),
+				query
 			);
 		}
 
@@ -243,7 +244,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0>,
 				T0
 			>(
-				new ListCollectorWithComponents<T0>(output)
+				new ListCollectorWithComponents<T0>(output),
+				query
 			);
 		}
 
@@ -407,7 +409,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0, T1>,
 				T0, T1
 			>(
-				new ListCollectorEntityOnly<T0, T1>(output)
+				new ListCollectorEntityOnly<T0, T1>(output),
+				query
 			);
 		}
 
@@ -456,7 +459,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0, T1>,
 				T0, T1
 			>(
-				new ListCollectorWithComponents<T0, T1>(output)
+				new ListCollectorWithComponents<T0, T1>(output),
+				query
 			);
 		}
 
@@ -629,7 +633,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0, T1, T2>,
 				T0, T1, T2
 			>(
-				new ListCollectorEntityOnly<T0, T1, T2>(output)
+				new ListCollectorEntityOnly<T0, T1, T2>(output),
+				query
 			);
 		}
 
@@ -681,7 +686,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0, T1, T2>,
 				T0, T1, T2
 			>(
-				new ListCollectorWithComponents<T0, T1, T2>(output)
+				new ListCollectorWithComponents<T0, T1, T2>(output),
+				query
 			);
 		}
 
@@ -863,7 +869,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0, T1, T2, T3>,
 				T0, T1, T2, T3
 			>(
-				new ListCollectorEntityOnly<T0, T1, T2, T3>(output)
+				new ListCollectorEntityOnly<T0, T1, T2, T3>(output),
+				query
 			);
 		}
 
@@ -918,7 +925,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0, T1, T2, T3>,
 				T0, T1, T2, T3
 			>(
-				new ListCollectorWithComponents<T0, T1, T2, T3>(output)
+				new ListCollectorWithComponents<T0, T1, T2, T3>(output),
+				query
 			);
 		}
 
@@ -1109,7 +1117,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0, T1, T2, T3, T4>,
 				T0, T1, T2, T3, T4
 			>(
-				new ListCollectorEntityOnly<T0, T1, T2, T3, T4>(output)
+				new ListCollectorEntityOnly<T0, T1, T2, T3, T4>(output),
+				query
 			);
 		}
 
@@ -1167,7 +1176,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0, T1, T2, T3, T4>,
 				T0, T1, T2, T3, T4
 			>(
-				new ListCollectorWithComponents<T0, T1, T2, T3, T4>(output)
+				new ListCollectorWithComponents<T0, T1, T2, T3, T4>(output),
+				query
 			);
 		}
 
@@ -1367,7 +1377,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5>,
 				T0, T1, T2, T3, T4, T5
 			>(
-				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5>(output)
+				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5>(output),
+				query
 			);
 		}
 
@@ -1428,7 +1439,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0, T1, T2, T3, T4, T5>,
 				T0, T1, T2, T3, T4, T5
 			>(
-				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5>(output)
+				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5>(output),
+				query
 			);
 		}
 
@@ -1637,7 +1649,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6>,
 				T0, T1, T2, T3, T4, T5, T6
 			>(
-				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6>(output)
+				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6>(output),
+				query
 			);
 		}
 
@@ -1701,7 +1714,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6>,
 				T0, T1, T2, T3, T4, T5, T6
 			>(
-				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6>(output)
+				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6>(output),
+				query
 			);
 		}
 
@@ -1919,7 +1933,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7>,
 				T0, T1, T2, T3, T4, T5, T6, T7
 			>(
-				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7>(output)
+				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7>(output),
+				query
 			);
 		}
 
@@ -1986,7 +2001,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7>,
 				T0, T1, T2, T3, T4, T5, T6, T7
 			>(
-				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7>(output)
+				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7>(output),
+				query
 			);
 		}
 
@@ -2213,7 +2229,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8
 			>(
-				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8>(output)
+				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8>(output),
+				query
 			);
 		}
 
@@ -2283,7 +2300,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8
 			>(
-				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8>(output)
+				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8>(output),
+				query
 			);
 		}
 
@@ -2519,7 +2537,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9
 			>(
-				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(output)
+				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(output),
+				query
 			);
 		}
 
@@ -2592,7 +2611,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9
 			>(
-				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(output)
+				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(output),
+				query
 			);
 		}
 
@@ -2837,7 +2857,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 			>(
-				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(output)
+				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(output),
+				query
 			);
 		}
 
@@ -2913,7 +2934,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 			>(
-				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(output)
+				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(output),
+				query
 			);
 		}
 
@@ -3167,7 +3189,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
 			>(
-				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(output)
+				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(output),
+				query
 			);
 		}
 
@@ -3246,7 +3269,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
 			>(
-				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(output)
+				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(output),
+				query
 			);
 		}
 
@@ -3509,7 +3533,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12
 			>(
-				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(output)
+				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(output),
+				query
 			);
 		}
 
@@ -3591,7 +3616,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12
 			>(
-				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(output)
+				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(output),
+				query
 			);
 		}
 
@@ -3863,7 +3889,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13
 			>(
-				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(output)
+				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(output),
+				query
 			);
 		}
 
@@ -3948,7 +3975,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13
 			>(
-				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(output)
+				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(output),
+				query
 			);
 		}
 
@@ -4229,7 +4257,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14
 			>(
-				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(output)
+				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(output),
+				query
 			);
 		}
 
@@ -4317,7 +4346,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14
 			>(
-				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(output)
+				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(output),
+				query
 			);
 		}
 
@@ -4607,7 +4637,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15
 			>(
-				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(output)
+				new ListCollectorEntityOnly<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(output),
+				query
 			);
 		}
 
@@ -4698,7 +4729,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>,
 				T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15
 			>(
-				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(output)
+				new ListCollectorWithComponents<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(output),
+				query
 			);
 		}
 

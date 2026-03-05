@@ -216,7 +216,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorEntityOnly<<#= queryConstraints #>>,
 				<#= queryConstraints #>
 			>(
-				new ListCollectorEntityOnly<<#= queryConstraints #>>(output)
+				new ListCollectorEntityOnly<<#= queryConstraints #>>(output),
+				query
 			);
 		}
 
@@ -268,7 +269,8 @@ namespace Myriad.ECS.Worlds
 				ListCollectorWithComponents<<#= queryConstraints #>>,
 				<#= queryConstraints #>
 			>(
-				new ListCollectorWithComponents<<#= queryConstraints #>>(output)
+				new ListCollectorWithComponents<<#= queryConstraints #>>(output),
+				query
 			);
 		}
 

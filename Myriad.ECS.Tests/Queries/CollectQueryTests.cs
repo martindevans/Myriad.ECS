@@ -42,5 +42,43 @@ public class CollectQueryTests
             var item = listWithComponents.Find((tup) => tup.Item1 == e);
             Assert.AreEqual(c64.Ref.Value, item.Item2.Value);
         }
+
+        // Check filter
+        foreach (var item in listWithComponents)
+            Assert.IsTrue(filter.Contains(item.Item1));
+        foreach (var item in listOnlyEntities)
+            Assert.IsTrue(filter.Contains(item));
+        foreach (var item in listOnlyEntitiesGeneric)
+            Assert.IsTrue(filter.Contains(item));
+    }
+
+    [TestMethod]
+    public void CollectQueryFiltered()
+    {
+        var w = new WorldBuilder().Build();
+
+        // Create entities, all with ComponentInt64, Some with ComponentInt32 & ComponentFloat
+        var cb = new CommandBuffer(w);
+        for (var i = 0; i < 128; i++)
+        {
+            cb.Create().Set(new ComponentInt64(1));
+
+            if (i % 2 == 0)
+                cb.Create().Set(new ComponentInt32(2));
+            if (i % 3 == 0)
+                cb.Create().Set(new ComponentFloat(2));
+        }
+        cb.Playback().Dispose();
+
+        // Collect entities with ComponentInt64, without ComponentFloat
+        var filter = new QueryBuilder().Include<ComponentInt64>().Include<ComponentFloat>().Build(w);
+
+        // Get the items
+        var listWithComponents = new List<(Entity, ComponentInt64)>();
+        w.Collect(listWithComponents, filter);
+
+        // Check items
+        foreach (var item in listWithComponents)
+            Assert.IsTrue(filter.Contains(item.Item1));
     }
 }
