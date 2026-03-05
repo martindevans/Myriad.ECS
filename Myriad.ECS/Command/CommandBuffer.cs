@@ -307,15 +307,8 @@ public sealed partial class CommandBuffer
                 components.Clear();
                 Pool.Return(components);
 
-                // Add to output lists for delayed resolve
-                if (bufferedData.DelayedResolves is List<ICollection<Entity>> delayed)
-                {
-                    foreach (var item in delayed)
-                        item.Add(slot.Entity.ToEntity(World));
-
-                    delayed.Clear();
-                    Pool.Return(delayed);
-                }
+                // Apply delayed resolves
+                bufferedData.DoDelayedResolves(slot.Entity.ToEntity(World));
             }
 
             _bufferedSets.Clear();
@@ -487,13 +480,56 @@ public sealed partial class CommandBuffer
 
         var bufferedData = _bufferedSets[(int)id];
 
-        if (bufferedData.DelayedResolves == null)
+        // If possible, store this delayed resolve in the field. If the field is already in use, fall back to the list.
+        if (bufferedData.SingleDelayedResolve == null)
         {
-            bufferedData.DelayedResolves = Pool<List<ICollection<Entity>>>.Get();
+            bufferedData.SingleDelayedResolve = output;
+
+            // Struct was modified, we must put it back into the list
             _bufferedSets[(int)id] = bufferedData;
         }
+        else
+        {
+            // Check if we need to allocate the list
+            if (bufferedData.DelayedResolves == null)
+            {
+                bufferedData.DelayedResolves = Pool<List<ICollection<Entity>>>.Get();
+                _bufferedSets[(int)id] = bufferedData;
+            }
 
-        bufferedData.DelayedResolves.Add(output);
+            // Add to the collection
+            bufferedData.DelayedResolves.Add(output);
+        }
+    }
+
+    private void BindDelayedResolve(uint id, IDelayedResolveTarget output)
+    {
+        Debug.Assert(id < _bufferedSets.Count, "Unknown entity ID in BindDelayedResolve");
+
+        var bufferedData = _bufferedSets[(int)id];
+
+        // If possible, store this delayed resolve in the field. If the field is already in use, fall back to the list.
+        if (bufferedData.SingleDelayedResolveTgt == null)
+        {
+            bufferedData.SingleDelayedResolveTgt = output;
+
+            // Struct was modified, we must put it back into the list
+            _bufferedSets[(int)id] = bufferedData;
+        }
+        else
+        {
+            // Check if we need to allocate the list
+            if (bufferedData.DelayedResolvesTgts == null)
+            {
+                bufferedData.DelayedResolvesTgts = Pool<List<IDelayedResolveTarget>>.Get();
+
+                // Struct was modified, we must put it back into the list
+                _bufferedSets[(int)id] = bufferedData;
+            }
+
+            // Add to the collection
+            bufferedData.DelayedResolvesTgts.Add(output);
+        }
     }
 
     /// <summary>
@@ -693,9 +729,24 @@ public sealed partial class CommandBuffer
         public int ArchetypeKey { get; set; }
 
         /// <summary>
+        /// A collection to add this entity to when it's created. If this is non-null then the <see cref="DelayedResolves"/> list must be allocated and used instead.
+        /// </summary>
+        public ICollection<Entity>? SingleDelayedResolve;
+
+        /// <summary>
         /// Collections to add this entity to when it's created
         /// </summary>
         public List<ICollection<Entity>>? DelayedResolves;
+
+        /// <summary>
+        /// A collection to add this entity to when it's created. If this is non-null then the <see cref="DelayedResolvesTgts"/> list must be allocated and used instead.
+        /// </summary>
+        public IDelayedResolveTarget? SingleDelayedResolveTgt;
+
+        /// <summary>
+        /// Collections to add this entity to when it's created
+        /// </summary>
+        public List<IDelayedResolveTarget>? DelayedResolvesTgts;
 
         /// <summary>
         /// Data about a new entity being created
@@ -707,6 +758,35 @@ public sealed partial class CommandBuffer
             Id = id;
             Setters = setters;
             DelayedResolves = null;
+        }
+
+        internal void DoDelayedResolves(Entity entity)
+        {
+            // Do the fields
+            SingleDelayedResolve?.Add(entity);
+            SingleDelayedResolve = null;
+            SingleDelayedResolveTgt?.Add(entity);
+            SingleDelayedResolveTgt = null;
+
+            // ICollection bindings
+            if (DelayedResolves is List<ICollection<Entity>> delayed)
+            {
+                foreach (var item in delayed)
+                    item.Add(entity);
+
+                delayed.Clear();
+                Pool.Return(delayed);
+            }
+
+            // IDelayedResolveTarget bindings
+            if (DelayedResolvesTgts is List<IDelayedResolveTarget> delayedTgts)
+            {
+                foreach (var item in delayedTgts)
+                    item.Add(entity);
+
+                delayedTgts.Clear();
+                Pool.Return(delayedTgts);
+            }
         }
     }
 

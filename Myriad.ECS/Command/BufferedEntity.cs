@@ -134,5 +134,32 @@ public sealed partial class CommandBuffer
 
             return this;
         }
+
+        /// <summary>
+        /// When the <see cref="BufferedEntity"/> is converted into a real <see cref="Entity"/> by playing back the <see cref="CommandBuffer"/> the
+        /// <see cref="Entity"/> will be added to the "output" collection.
+        /// </summary>
+        /// <param name="output"></param>
+        /// <returns>this buffered entity</returns>
+        public BufferedEntity DelayedResolve(IDelayedResolveTarget output)
+        {
+            CheckIsMutable();
+
+            _buffer.BindDelayedResolve(_id, output);
+
+            return this;
+        }
+    }
+
+    /// <summary>
+    /// Target collection to add delayed-resolve entities to
+    /// </summary>
+    public interface IDelayedResolveTarget
+    {
+        /// <summary>
+        /// Add an entity to this collection
+        /// </summary>
+        /// <param name="entity"></param>
+        void Add(Entity entity);
     }
 }
