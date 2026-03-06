@@ -34,7 +34,7 @@ public struct TypedEntityReference<<#= typeParams #>>
 #>
     private static readonly ReadOnlyMemory<ComponentID> ComponentSet = SortedListOfComponents<<#= typeParams #>>.Components;
 
-    private Cache? _cache;
+    private Cache _cache;
     private EntityId _entity;
 
     /// <summary>
@@ -46,7 +46,7 @@ public struct TypedEntityReference<<#= typeParams #>>
         set
         {
             _entity = value;
-            _cache = null;
+            _cache = default;
         }
     }
 
@@ -58,11 +58,8 @@ public struct TypedEntityReference<<#= typeParams #>>
     public Result TryGetComponentRef(World world)
     {
         // Check if cache is stale
-        if (_cache?.CheckIsStale(_entity) ?? true)
+        if (_cache.CheckIsStale(_entity))
         {
-            // Clear cache
-            _cache = null;
-
             // Get info for this entity
             EntityInfo _ = default;
             ref readonly var info = ref world.GetEntityInfo(_entity, ref _, out var doesNotExist);
@@ -74,18 +71,18 @@ public struct TypedEntityReference<<#= typeParams #>>
         }
 
         // Cache is definitely valid now. Extract results.
-        var v = _cache.Value;
+        var v = _cache;
 
         // Early out if the entity doesn't even exist
-        if (v.RowIndex < 0)
+        if (_cache.RowIndex < 0)
             return new Result(default, false, false, false);
 
         // Early out if the entity doesn't have the component
-        if (!v.HasComponent)
+        if (!_cache.HasComponent)
             return new Result(default, true, v.IsPhantom, false);
 
         // Get the component(s)
-        var tuple = v.Chunk!.GetRefTuple<<#= typeParams #>>(
+        var tuple = _cache.Chunk!.GetRefTuple<<#= typeParams #>>(
             v.RowIndex,
 <# for (var j = 0; j < i; j++)
 {
@@ -127,15 +124,13 @@ public struct TypedEntityReference<<#= typeParams #>>
         private bool CheckNotStale(EntityId entity)
         {
             // This is the indicator for the entity not existing
-            if (RowIndex < 0)
+            if (Chunk == null)
                 return false;
             
-            // It's only allowed to be null when the entity does not exist
-            Debug.Assert(Chunk != null);
-
             // Check if index is out of range
-            if (Chunk.EntityCount <= RowIndex)
+            if (RowIndex < 0 || Chunk.EntityCount <= RowIndex)
                 return false;
+
 
             // Check if the entity is still where we last saw it
             return Chunk.Entities.Span[RowIndex] == entity;
