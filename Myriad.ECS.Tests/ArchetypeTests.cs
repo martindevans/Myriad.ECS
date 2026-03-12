@@ -29,6 +29,11 @@ public class ArchetypeTests
         foreach (var archetype in w.Archetypes)
         {
             Assert.AreEqual(archetype.EntityCount, archetype.Entities.Count());
+
+            if (archetype.EntityCount > 0)
+                Assert.IsTrue(archetype.ChunkCount > 0);
+            else
+                Assert.AreEqual(0, archetype.ChunkCount);
         }
 
         var count = 0;

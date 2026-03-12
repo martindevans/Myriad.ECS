@@ -25,6 +25,17 @@ public class FrozenOrderedListSetTests
     }
 
     [TestMethod]
+    public void Create_Span_Empty()
+    {
+        var set1 = FrozenOrderedListSet<int>.Create(Span<int>.Empty);
+        var set2 = FrozenOrderedListSet<int>.Create(Span<int>.Empty);
+        Assert.AreEqual(0, set1.Count);
+        Assert.AreEqual(0, set2.Count);
+
+        Assert.AreSame(set2, set2);
+    }
+
+    [TestMethod]
     public void Create_FromList()
     {
         var set = FrozenOrderedListSet<int>.Create(new List<int> { 3, 1, 2 });

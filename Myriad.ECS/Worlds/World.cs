@@ -54,7 +54,7 @@ public sealed partial class World
             archetype.Dispose(ref lazy);
 
         if (lazy.TryGetBuffer(out var buffer))
-            buffer.Playback().Dispose();
+            buffer.Clear();
     }
 
     /// <summary>

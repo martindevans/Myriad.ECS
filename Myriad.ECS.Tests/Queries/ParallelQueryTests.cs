@@ -46,6 +46,11 @@ public class ParallelQueryTests
         w.Query(128, (int data, ref ComponentInt32 c) => Assert.AreEqual(data, c.Value));
         w.QueryParallel(128, (int data, ref ComponentInt32 c) => Assert.AreEqual(data, c.Value));
 
+        // check they're 128 in a different way
+        w.QueryParallel((ChunkHandle handle, Span<ComponentInt32> cs) => Assert.IsTrue(cs.ToArray().All(a => a.Value == 128)));
+        w.QueryParallel(128, (int data, ChunkHandle handle, Span<ComponentInt32> cs) => Assert.IsTrue(cs.ToArray().All(a => a.Value == data)));
+        w.QueryParallel(128, (int data, Span<ComponentInt32> cs) => Assert.IsTrue(cs.ToArray().All(a => a.Value == data)));
+
         // Check everything else is 0
         foreach (var (_, v) in w.Query<ComponentByte>())
             Assert.AreEqual(0, v.Ref.Value);

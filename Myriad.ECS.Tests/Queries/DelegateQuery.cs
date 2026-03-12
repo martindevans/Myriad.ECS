@@ -229,10 +229,17 @@ public class DelegateQuery
                 c.Value = 123;
         });
 
+        // Add 1
+        w.QueryParallel((Span<ComponentInt32> ci) =>
+        {
+            foreach (ref var c in ci)
+                c.Value++;
+        });
+
         // Check all are correct
         foreach (var (_, i) in w.Query<ComponentInt32>())
         {
-            Assert.AreEqual(123, i.Ref.Value);
+            Assert.AreEqual(124, i.Ref.Value);
         }
     }
 
