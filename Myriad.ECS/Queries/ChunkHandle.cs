@@ -125,5 +125,14 @@ public readonly ref partial struct ChunkHandle
         {
             return _chunk.GetEntityArray();
         }
+
+        /// <summary>
+        /// Get the raw array storing entity ID data. Accessing beyond the entity count will be junk data.
+        /// </summary>
+        /// <returns></returns>
+        public EntityId[] GetEntityIdArray()
+        {
+            return _chunk.GetEntityIdArray();
+        }
     }
 }

@@ -392,4 +392,12 @@ public sealed partial class Archetype
     {
         World.LockManager.Block(this);
     }
+
+    /// <summary>
+    /// Block on multithreaded access to the given component in this archetype to finish
+    /// </summary>
+    public void Block(ComponentID id)
+    {
+        World.LockManager.Block(this, id);
+    }
 }

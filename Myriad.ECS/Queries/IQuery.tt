@@ -223,7 +223,17 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
+
+<# if (i == 0) { #>
 				archetype.Block();
+<# } #>
+<# for (var k = 0; k < i; k++)
+{
+#>
+				archetype.Block(ComponentID<T<#= k #>>.ID);
+<#
+}
+#>
 
 				count += archetype.EntityCount;
 
@@ -349,7 +359,17 @@ namespace Myriad.ECS.Worlds
 				while (archetypesEnumerator.MoveNext())
 				{
 					var archetype = archetypesEnumerator.Current.Archetype;
-					archetype.Block();
+
+<# if (i == 0) { #>
+				archetype.Block();
+<# } #>
+<# for (var k = 0; k < i; k++)
+{
+#>
+					archetype.Block(ComponentID<T<#= k #>>.ID);
+<#
+}
+#>
 
 					var chunks = archetype.GetChunkEnumerator();
 					try
@@ -458,7 +478,16 @@ namespace Myriad.ECS.Worlds
 				if (archetype.EntityCount == 0)
 					continue;
 
+<# if (i == 0) { #>
 				archetype.Block();
+<# } #>
+<# for (var k = 0; k < i; k++)
+{
+#>
+				archetype.Block(ComponentID<T<#= k #>>.ID);
+<#
+}
+#>
 
 				count += archetype.EntityCount;
 

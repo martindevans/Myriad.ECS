@@ -285,7 +285,17 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
+
+<# if (i == 0) { #>
 				archetype.Block();
+<# } #>
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+				archetype.Block(ComponentID<T<#= k #>>.ID);
+<#
+}
+#>
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)

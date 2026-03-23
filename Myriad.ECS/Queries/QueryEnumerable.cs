@@ -76,7 +76,8 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block();
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -208,7 +209,8 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -359,7 +361,9 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(ComponentID<T1>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -519,7 +523,10 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(ComponentID<T2>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -688,7 +695,11 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(ComponentID<T2>.ID);
+				archetype.Block(ComponentID<T3>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -866,7 +877,12 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(ComponentID<T2>.ID);
+				archetype.Block(ComponentID<T3>.ID);
+				archetype.Block(ComponentID<T4>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -1053,7 +1069,13 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(ComponentID<T2>.ID);
+				archetype.Block(ComponentID<T3>.ID);
+				archetype.Block(ComponentID<T4>.ID);
+				archetype.Block(ComponentID<T5>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -1249,7 +1271,14 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(ComponentID<T2>.ID);
+				archetype.Block(ComponentID<T3>.ID);
+				archetype.Block(ComponentID<T4>.ID);
+				archetype.Block(ComponentID<T5>.ID);
+				archetype.Block(ComponentID<T6>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -1454,7 +1483,15 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(ComponentID<T2>.ID);
+				archetype.Block(ComponentID<T3>.ID);
+				archetype.Block(ComponentID<T4>.ID);
+				archetype.Block(ComponentID<T5>.ID);
+				archetype.Block(ComponentID<T6>.ID);
+				archetype.Block(ComponentID<T7>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -1668,7 +1705,16 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(ComponentID<T2>.ID);
+				archetype.Block(ComponentID<T3>.ID);
+				archetype.Block(ComponentID<T4>.ID);
+				archetype.Block(ComponentID<T5>.ID);
+				archetype.Block(ComponentID<T6>.ID);
+				archetype.Block(ComponentID<T7>.ID);
+				archetype.Block(ComponentID<T8>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -1891,7 +1937,17 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(ComponentID<T2>.ID);
+				archetype.Block(ComponentID<T3>.ID);
+				archetype.Block(ComponentID<T4>.ID);
+				archetype.Block(ComponentID<T5>.ID);
+				archetype.Block(ComponentID<T6>.ID);
+				archetype.Block(ComponentID<T7>.ID);
+				archetype.Block(ComponentID<T8>.ID);
+				archetype.Block(ComponentID<T9>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -2123,7 +2179,18 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(ComponentID<T2>.ID);
+				archetype.Block(ComponentID<T3>.ID);
+				archetype.Block(ComponentID<T4>.ID);
+				archetype.Block(ComponentID<T5>.ID);
+				archetype.Block(ComponentID<T6>.ID);
+				archetype.Block(ComponentID<T7>.ID);
+				archetype.Block(ComponentID<T8>.ID);
+				archetype.Block(ComponentID<T9>.ID);
+				archetype.Block(ComponentID<T10>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -2364,7 +2431,19 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(ComponentID<T2>.ID);
+				archetype.Block(ComponentID<T3>.ID);
+				archetype.Block(ComponentID<T4>.ID);
+				archetype.Block(ComponentID<T5>.ID);
+				archetype.Block(ComponentID<T6>.ID);
+				archetype.Block(ComponentID<T7>.ID);
+				archetype.Block(ComponentID<T8>.ID);
+				archetype.Block(ComponentID<T9>.ID);
+				archetype.Block(ComponentID<T10>.ID);
+				archetype.Block(ComponentID<T11>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -2614,7 +2693,20 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(ComponentID<T2>.ID);
+				archetype.Block(ComponentID<T3>.ID);
+				archetype.Block(ComponentID<T4>.ID);
+				archetype.Block(ComponentID<T5>.ID);
+				archetype.Block(ComponentID<T6>.ID);
+				archetype.Block(ComponentID<T7>.ID);
+				archetype.Block(ComponentID<T8>.ID);
+				archetype.Block(ComponentID<T9>.ID);
+				archetype.Block(ComponentID<T10>.ID);
+				archetype.Block(ComponentID<T11>.ID);
+				archetype.Block(ComponentID<T12>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -2873,7 +2965,21 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(ComponentID<T2>.ID);
+				archetype.Block(ComponentID<T3>.ID);
+				archetype.Block(ComponentID<T4>.ID);
+				archetype.Block(ComponentID<T5>.ID);
+				archetype.Block(ComponentID<T6>.ID);
+				archetype.Block(ComponentID<T7>.ID);
+				archetype.Block(ComponentID<T8>.ID);
+				archetype.Block(ComponentID<T9>.ID);
+				archetype.Block(ComponentID<T10>.ID);
+				archetype.Block(ComponentID<T11>.ID);
+				archetype.Block(ComponentID<T12>.ID);
+				archetype.Block(ComponentID<T13>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -3141,7 +3247,22 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(ComponentID<T2>.ID);
+				archetype.Block(ComponentID<T3>.ID);
+				archetype.Block(ComponentID<T4>.ID);
+				archetype.Block(ComponentID<T5>.ID);
+				archetype.Block(ComponentID<T6>.ID);
+				archetype.Block(ComponentID<T7>.ID);
+				archetype.Block(ComponentID<T8>.ID);
+				archetype.Block(ComponentID<T9>.ID);
+				archetype.Block(ComponentID<T10>.ID);
+				archetype.Block(ComponentID<T11>.ID);
+				archetype.Block(ComponentID<T12>.ID);
+				archetype.Block(ComponentID<T13>.ID);
+				archetype.Block(ComponentID<T14>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -3418,7 +3539,23 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(ComponentID<T2>.ID);
+				archetype.Block(ComponentID<T3>.ID);
+				archetype.Block(ComponentID<T4>.ID);
+				archetype.Block(ComponentID<T5>.ID);
+				archetype.Block(ComponentID<T6>.ID);
+				archetype.Block(ComponentID<T7>.ID);
+				archetype.Block(ComponentID<T8>.ID);
+				archetype.Block(ComponentID<T9>.ID);
+				archetype.Block(ComponentID<T10>.ID);
+				archetype.Block(ComponentID<T11>.ID);
+				archetype.Block(ComponentID<T12>.ID);
+				archetype.Block(ComponentID<T13>.ID);
+				archetype.Block(ComponentID<T14>.ID);
+				archetype.Block(ComponentID<T15>.ID);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.

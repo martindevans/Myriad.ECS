@@ -58,7 +58,7 @@ public sealed partial class World
     }
 
     /// <summary>
-    /// Call <see cref="Archetype.Block"/> on all archetypes in this world
+    /// Call <see cref="Archetype.Block()"/> on all archetypes in this world
     /// </summary>
     public void Block()
     {

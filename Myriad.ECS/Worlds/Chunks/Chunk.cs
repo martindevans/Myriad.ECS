@@ -23,6 +23,7 @@ internal sealed partial class Chunk
     private readonly ReadOnlyMemory<ComponentID> _componentIdLookup;
 
     private readonly Entity[] _entities;
+    private readonly EntityId[] _entityIds;
     private readonly Array[] _components;
 
     private uint[]? _bits;
@@ -37,6 +38,11 @@ internal sealed partial class Chunk
     /// </summary>
     public ReadOnlyMemory<Entity> Entities => _entities.AsMemory(0, EntityCount);
 
+    /// <summary>
+    /// Get all of the entities in this chunk
+    /// </summary>
+    public ReadOnlyMemory<EntityId> EntityIds => _entityIds.AsMemory(0, EntityCount);
+
     private static long _nextId;
     /// <summary>
     /// Globally Unique ID for this chunk
@@ -50,6 +56,7 @@ internal sealed partial class Chunk
         Archetype = archetype;
         _componentIndexLookup = componentIndexLookup;
         _entities = new Entity[size];
+        _entityIds = new EntityId[size];
         _componentIdLookup = ids;
 
         _components = new Array[componentTypes.Length];
@@ -71,6 +78,7 @@ internal sealed partial class Chunk
         where T : IComponent
     {
         Debug.Assert(_entities[rowIndex].ID == entityId, "Mismatched entities in chunk");
+        Debug.Assert(_entityIds[rowIndex] == entityId, "Mismatched entities in chunk");
         return ref GetRef<T>(rowIndex);
     }
 
@@ -79,6 +87,7 @@ internal sealed partial class Chunk
         where T : IComponent
     {
         Debug.Assert(_entities[rowIndex].ID == entityId, "Mismatched entities in chunk");
+        Debug.Assert(_entityIds[rowIndex] == entityId, "Mismatched entities in chunk");
 
 #if NET6_0_OR_GREATER
         return new RefT<T>(ref GetRef<T>(rowIndex));
@@ -218,6 +227,7 @@ internal sealed partial class Chunk
         // Clean up all the IDs so they're default instead of some invalid value. This is
         // necessary in case anything is holding on to a reference to the chunk.
         Array.Clear(_entities, 0, _entities.Length);
+        Array.Clear(_entityIds, 0, _entityIds.Length);
 
         EntityCount = 0;
     }
@@ -234,6 +244,7 @@ internal sealed partial class Chunk
 
         // Occupy this row
         _entities[index] = entity.ToEntity(Archetype.World);
+        _entityIds[index] = entity;
 
         // Update global entity info to refer to this location
         info.RowIndex = index;
@@ -256,6 +267,7 @@ internal sealed partial class Chunk
         if (EntityCount == 0)
         {
             _entities[index] = default;
+            _entityIds[index] = default;
             return;
         }
 
@@ -267,7 +279,9 @@ internal sealed partial class Chunk
             var lastEntityIndex = EntityCount;
             ref var lastInfo = ref Archetype.World.GetEntityInfo(lastEntity.ID);
             _entities[index] = lastEntity;
+            _entityIds[index] = lastEntity.ID;
             _entities[lastEntityIndex] = default;
+            _entityIds[lastEntityIndex] = default;
             lastInfo.RowIndex = index;
 
             // Copy top entity components into place
@@ -322,5 +336,10 @@ internal sealed partial class Chunk
     internal Entity[] GetEntityArray()
     {
         return _entities;
+    }
+
+    internal EntityId[] GetEntityIdArray()
+    {
+        return _entityIds;
     }
 }

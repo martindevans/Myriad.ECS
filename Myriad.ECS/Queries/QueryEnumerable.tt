@@ -157,7 +157,17 @@ for (var k = 0; k < i; k++)
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                _archetypesEnumerator.Current.Archetype.Block();
+                var archetype = _archetypesEnumerator.Current.Archetype;
+<# if (i == 0) { #>
+				archetype.Block();
+<# } #>
+<# for (var k = 0; k < i; k++)
+{
+#>
+				archetype.Block(ComponentID<T<#= k #>>.ID);
+<#
+}
+#>
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
