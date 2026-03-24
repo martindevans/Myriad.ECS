@@ -624,7 +624,7 @@ public sealed class QueryDescription
 
             count += match.Archetype.EntityCount;
 
-            // Wait for multithreaded access to this archetype
+            // Wait for multithreaded access to this component in this archetype
             match.Archetype.Block(id);
 
             using var chunks = match.Archetype.GetChunkEnumerator();

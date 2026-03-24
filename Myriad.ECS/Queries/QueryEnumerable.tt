@@ -164,7 +164,7 @@ for (var k = 0; k < i; k++)
 <# for (var k = 0; k < i; k++)
 {
 #>
-				archetype.Block(ComponentID<T<#= k #>>.ID);
+				archetype.Block(C<#= k #>);
 <#
 }
 #>

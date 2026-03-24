@@ -211,7 +211,7 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(c0);
 
 				count += archetype.EntityCount;
 
@@ -799,8 +799,8 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(c0);
+				archetype.Block(c1);
 
 				count += archetype.EntityCount;
 
@@ -1421,9 +1421,9 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
+				archetype.Block(c0);
+				archetype.Block(c1);
+				archetype.Block(c2);
 
 				count += archetype.EntityCount;
 
@@ -2077,10 +2077,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
+				archetype.Block(c0);
+				archetype.Block(c1);
+				archetype.Block(c2);
+				archetype.Block(c3);
 
 				count += archetype.EntityCount;
 
@@ -2767,11 +2767,11 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
+				archetype.Block(c0);
+				archetype.Block(c1);
+				archetype.Block(c2);
+				archetype.Block(c3);
+				archetype.Block(c4);
 
 				count += archetype.EntityCount;
 
@@ -3491,12 +3491,12 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
+				archetype.Block(c0);
+				archetype.Block(c1);
+				archetype.Block(c2);
+				archetype.Block(c3);
+				archetype.Block(c4);
+				archetype.Block(c5);
 
 				count += archetype.EntityCount;
 
@@ -4249,13 +4249,13 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
+				archetype.Block(c0);
+				archetype.Block(c1);
+				archetype.Block(c2);
+				archetype.Block(c3);
+				archetype.Block(c4);
+				archetype.Block(c5);
+				archetype.Block(c6);
 
 				count += archetype.EntityCount;
 
@@ -5041,14 +5041,14 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
+				archetype.Block(c0);
+				archetype.Block(c1);
+				archetype.Block(c2);
+				archetype.Block(c3);
+				archetype.Block(c4);
+				archetype.Block(c5);
+				archetype.Block(c6);
+				archetype.Block(c7);
 
 				count += archetype.EntityCount;
 
@@ -5867,15 +5867,15 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
+				archetype.Block(c0);
+				archetype.Block(c1);
+				archetype.Block(c2);
+				archetype.Block(c3);
+				archetype.Block(c4);
+				archetype.Block(c5);
+				archetype.Block(c6);
+				archetype.Block(c7);
+				archetype.Block(c8);
 
 				count += archetype.EntityCount;
 
@@ -6727,16 +6727,16 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
-				archetype.Block(ComponentID<T9>.ID);
+				archetype.Block(c0);
+				archetype.Block(c1);
+				archetype.Block(c2);
+				archetype.Block(c3);
+				archetype.Block(c4);
+				archetype.Block(c5);
+				archetype.Block(c6);
+				archetype.Block(c7);
+				archetype.Block(c8);
+				archetype.Block(c9);
 
 				count += archetype.EntityCount;
 
@@ -7621,17 +7621,17 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
-				archetype.Block(ComponentID<T9>.ID);
-				archetype.Block(ComponentID<T10>.ID);
+				archetype.Block(c0);
+				archetype.Block(c1);
+				archetype.Block(c2);
+				archetype.Block(c3);
+				archetype.Block(c4);
+				archetype.Block(c5);
+				archetype.Block(c6);
+				archetype.Block(c7);
+				archetype.Block(c8);
+				archetype.Block(c9);
+				archetype.Block(c10);
 
 				count += archetype.EntityCount;
 
@@ -8549,18 +8549,18 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
-				archetype.Block(ComponentID<T9>.ID);
-				archetype.Block(ComponentID<T10>.ID);
-				archetype.Block(ComponentID<T11>.ID);
+				archetype.Block(c0);
+				archetype.Block(c1);
+				archetype.Block(c2);
+				archetype.Block(c3);
+				archetype.Block(c4);
+				archetype.Block(c5);
+				archetype.Block(c6);
+				archetype.Block(c7);
+				archetype.Block(c8);
+				archetype.Block(c9);
+				archetype.Block(c10);
+				archetype.Block(c11);
 
 				count += archetype.EntityCount;
 
@@ -9511,19 +9511,19 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
-				archetype.Block(ComponentID<T9>.ID);
-				archetype.Block(ComponentID<T10>.ID);
-				archetype.Block(ComponentID<T11>.ID);
-				archetype.Block(ComponentID<T12>.ID);
+				archetype.Block(c0);
+				archetype.Block(c1);
+				archetype.Block(c2);
+				archetype.Block(c3);
+				archetype.Block(c4);
+				archetype.Block(c5);
+				archetype.Block(c6);
+				archetype.Block(c7);
+				archetype.Block(c8);
+				archetype.Block(c9);
+				archetype.Block(c10);
+				archetype.Block(c11);
+				archetype.Block(c12);
 
 				count += archetype.EntityCount;
 
@@ -10507,20 +10507,20 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
-				archetype.Block(ComponentID<T9>.ID);
-				archetype.Block(ComponentID<T10>.ID);
-				archetype.Block(ComponentID<T11>.ID);
-				archetype.Block(ComponentID<T12>.ID);
-				archetype.Block(ComponentID<T13>.ID);
+				archetype.Block(c0);
+				archetype.Block(c1);
+				archetype.Block(c2);
+				archetype.Block(c3);
+				archetype.Block(c4);
+				archetype.Block(c5);
+				archetype.Block(c6);
+				archetype.Block(c7);
+				archetype.Block(c8);
+				archetype.Block(c9);
+				archetype.Block(c10);
+				archetype.Block(c11);
+				archetype.Block(c12);
+				archetype.Block(c13);
 
 				count += archetype.EntityCount;
 
@@ -11537,21 +11537,21 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
-				archetype.Block(ComponentID<T9>.ID);
-				archetype.Block(ComponentID<T10>.ID);
-				archetype.Block(ComponentID<T11>.ID);
-				archetype.Block(ComponentID<T12>.ID);
-				archetype.Block(ComponentID<T13>.ID);
-				archetype.Block(ComponentID<T14>.ID);
+				archetype.Block(c0);
+				archetype.Block(c1);
+				archetype.Block(c2);
+				archetype.Block(c3);
+				archetype.Block(c4);
+				archetype.Block(c5);
+				archetype.Block(c6);
+				archetype.Block(c7);
+				archetype.Block(c8);
+				archetype.Block(c9);
+				archetype.Block(c10);
+				archetype.Block(c11);
+				archetype.Block(c12);
+				archetype.Block(c13);
+				archetype.Block(c14);
 
 				count += archetype.EntityCount;
 
@@ -12601,22 +12601,22 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
-				archetype.Block(ComponentID<T9>.ID);
-				archetype.Block(ComponentID<T10>.ID);
-				archetype.Block(ComponentID<T11>.ID);
-				archetype.Block(ComponentID<T12>.ID);
-				archetype.Block(ComponentID<T13>.ID);
-				archetype.Block(ComponentID<T14>.ID);
-				archetype.Block(ComponentID<T15>.ID);
+				archetype.Block(c0);
+				archetype.Block(c1);
+				archetype.Block(c2);
+				archetype.Block(c3);
+				archetype.Block(c4);
+				archetype.Block(c5);
+				archetype.Block(c6);
+				archetype.Block(c7);
+				archetype.Block(c8);
+				archetype.Block(c9);
+				archetype.Block(c10);
+				archetype.Block(c11);
+				archetype.Block(c12);
+				archetype.Block(c13);
+				archetype.Block(c14);
+				archetype.Block(c15);
 
 				count += archetype.EntityCount;
 

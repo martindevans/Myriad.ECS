@@ -230,7 +230,7 @@ namespace Myriad.ECS.Worlds
 <# for (var k = 0; k < i; k++)
 {
 #>
-				archetype.Block(ComponentID<T<#= k #>>.ID);
+				archetype.Block(c<#= k #>);
 <#
 }
 #>
