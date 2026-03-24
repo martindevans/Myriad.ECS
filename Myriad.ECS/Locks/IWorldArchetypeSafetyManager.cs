@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.Worlds.Archetypes;
+﻿using Myriad.ECS.IDs;
+using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Locks;
 
@@ -12,6 +13,13 @@ public interface IWorldArchetypeSafetyManager
     /// </summary>
     /// <param name="archetype"></param>
     void Block(Archetype archetype);
+
+    /// <summary>
+    /// Wait for multithreaded work which is accessing a specific component in a specific archetype to finish
+    /// </summary>
+    /// <param name="archetype"></param>
+    /// <param name="id"></param>
+    void Block(Archetype archetype, ComponentID id);
 }
 
 /// <summary>
@@ -22,6 +30,11 @@ public class DefaultWorldArchetypeSafetyManager
 {
     /// <inheritdoc />
     public void Block(Archetype archetype)
+    {
+    }
+
+    /// <inheritdoc />
+    public void Block(Archetype archetype, ComponentID id)
     {
     }
 }
