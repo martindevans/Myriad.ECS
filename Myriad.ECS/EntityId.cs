@@ -241,7 +241,7 @@ public readonly partial struct EntityId
             return false;
 
         // Check for component
-        return info.Chunk.Archetype.Components.Contains(ComponentID<T>.ID);
+        return info.Chunk.Archetype.HasComponent<T>();
     }
 
     /// <summary>
@@ -290,7 +290,7 @@ public readonly partial struct EntityId
         }
 
         // Check if component is in the components set
-        var hasComponents = entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T0>.ID);
+        var hasComponents = entityInfo.Chunk.Archetype.HasComponent<T0>();
         if (!hasComponents)
         {
             output = default;

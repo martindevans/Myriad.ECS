@@ -619,7 +619,7 @@ public sealed class QueryDescription
         var count = 0;
         foreach (var match in GetArchetypes())
         {
-            if (!match.Archetype.Components.Contains(id))
+            if (!match.Archetype.HasComponent(id))
                 continue;
 
             count += match.Archetype.EntityCount;

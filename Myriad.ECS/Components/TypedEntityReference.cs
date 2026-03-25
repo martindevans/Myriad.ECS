@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Collections;
 using Myriad.ECS.Worlds;

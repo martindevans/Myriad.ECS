@@ -61,7 +61,7 @@ public readonly struct Path<#= tparams #>
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link

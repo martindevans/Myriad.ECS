@@ -162,7 +162,7 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
         // - No world transform
         if (parentIsDead
          || parentInfo.Chunk.Archetype.IsPhantom
-         || !parentInfo.Chunk.Archetype.Components.Contains(WorldTransformID)
+         || !parentInfo.Chunk.Archetype.HasComponent(WorldTransformID)
         )
         {
             // Parent is dead, just update this entity as if it is the root
@@ -173,7 +173,7 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
             // Get reference to world transform for parent (directly accessing on chunk)
             ref var pWorldTrans = ref parentInfo.Chunk.GetRef<TWorldTransform>(parentInfo.RowIndex, WorldTransformID);
 
-            var parentHasLocal = parentInfo.Chunk.Archetype.Components.Contains(LocalTransformID);
+            var parentHasLocal = parentInfo.Chunk.Archetype.HasComponent(LocalTransformID);
             if (parentHasLocal)
             {
                 // Get reference to local transform for parent (directly accessing on chunk)
