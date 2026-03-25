@@ -409,4 +409,27 @@ public sealed partial class Archetype
     {
         World.LockManager.Block(this, id);
     }
+
+    /// <summary>
+    /// Check if this archetype contains the given component
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public bool HasComponent<T>()
+        where T : IComponent
+    {
+        return HasComponent(ComponentID<T>.ID);
+    }
+
+    /// <summary>
+    /// Check if this archetype contains the given component
+    /// </summary>
+    /// <returns></returns>
+    public bool HasComponent(ComponentID id)
+    {
+        var idx = id.Value;
+        return idx > 0
+            && idx < _componentIndexLookup.Length
+            && _componentIndexLookup[idx] != -1;
+    }
 }

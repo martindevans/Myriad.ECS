@@ -82,7 +82,7 @@ public readonly partial struct Path
                 return false;
 
             // Check if component is present
-            if (!entityInfo.Chunk.Archetype.Components.Contains(C))
+            if (!entityInfo.Chunk.Archetype.HasComponent(C))
                 return false;
 
             // Follow link

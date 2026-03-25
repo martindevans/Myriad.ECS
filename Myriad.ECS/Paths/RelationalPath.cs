@@ -41,7 +41,7 @@ public readonly struct Path<T0>
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
@@ -88,7 +88,7 @@ public readonly struct Path<T0, T1>
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
@@ -139,7 +139,7 @@ public readonly struct Path<T0, T1, T2>
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
@@ -194,7 +194,7 @@ public readonly struct Path<T0, T1, T2, T3>
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
@@ -253,7 +253,7 @@ public readonly struct Path<T0, T1, T2, T3, T4>
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
@@ -316,7 +316,7 @@ public readonly struct Path<T0, T1, T2, T3, T4, T5>
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
@@ -383,7 +383,7 @@ public readonly struct Path<T0, T1, T2, T3, T4, T5, T6>
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
@@ -454,7 +454,7 @@ public readonly struct Path<T0, T1, T2, T3, T4, T5, T6, T7>
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
@@ -529,7 +529,7 @@ public readonly struct Path<T0, T1, T2, T3, T4, T5, T6, T7, T8>
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
@@ -608,7 +608,7 @@ public readonly struct Path<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
@@ -691,7 +691,7 @@ public readonly struct Path<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
@@ -778,7 +778,7 @@ public readonly struct Path<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
@@ -869,7 +869,7 @@ public readonly struct Path<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T1
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
@@ -964,7 +964,7 @@ public readonly struct Path<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T1
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
@@ -1063,7 +1063,7 @@ public readonly struct Path<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T1
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
@@ -1166,7 +1166,7 @@ public readonly struct Path<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T1
             return false;
 
         // Check if the component is present
-        if (!entityInfo.Chunk.Archetype.Components.Contains(ComponentID<T>.ID))
+        if (!entityInfo.Chunk.Archetype.HasComponent(ComponentID<T>.ID))
             return false;
 
         // Follow link
