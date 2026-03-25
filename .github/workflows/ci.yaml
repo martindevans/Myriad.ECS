@@ -4,9 +4,9 @@ on:
   push:
     branches:
     - master
-  #pull_request:
-  #  branches:
-  #  - master
+  pull_request:
+    branches:
+    - master
     
 jobs:
   build:
@@ -33,5 +33,5 @@ jobs:
       run: dotnet test /p:Configuration=Release --verbosity normal
 
     - name: Publish
-      #if: startsWith(github.ref, 'refs/heads/release')
+      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
