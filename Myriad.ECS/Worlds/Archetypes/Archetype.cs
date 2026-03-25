@@ -278,7 +278,16 @@ public sealed partial class Archetype
 
         // If there's one with space, use it
         if (_chunksWithSpace.Count > 0)
-            return _chunksWithSpace[0].AddEntity(entity, ref info);
+        {
+            var chunk = _chunksWithSpace[0];
+            var row = chunk.AddEntity(entity, ref info);
+
+            // If the chunk is now full, remove it from the "chunks with space" set
+            if (chunk.EntityCount == CHUNK_SIZE)
+                _chunksWithSpace.RemoveAt(0);
+
+            return row;
+        }
 
         // No space in any chunks, create a new chunk
         var newChunk = _spareChunks.Count > 0 ? _spareChunks.Pop() : new Chunk(this, CHUNK_SIZE, _componentIndexLookup, _componentTypes, _componentIDs);

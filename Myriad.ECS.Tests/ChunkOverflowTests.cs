@@ -8,6 +8,8 @@ namespace Myriad.ECS.Tests;
 /// Tests targeting an IndexOutOfRangeException in Chunk.AddEntity caused by stale
 /// entries in the Archetype._chunksWithSpace list.
 ///
+/// THIS HAS BEEN FIXED! Tests remain in place to protect against regressions.
+/// 
 /// Root cause:
 /// When a chunk reaches CHUNK_SIZE entities it is still left in _chunksWithSpace (only the
 /// NEXT AddEntity call trims full chunks). If an entity is then removed, HandleChunkEntityRemoved
