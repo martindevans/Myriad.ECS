@@ -254,13 +254,18 @@ namespace Myriad.ECS.Worlds
 
 			var c0 = ComponentID<T0>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -520,14 +525,19 @@ namespace Myriad.ECS.Worlds
 			var c0 = ComponentID<T0>.ID;
 			var c1 = ComponentID<T1>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+				c1,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -801,15 +811,20 @@ namespace Myriad.ECS.Worlds
 			var c1 = ComponentID<T1>.ID;
 			var c2 = ComponentID<T2>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+				c1,
+				c2,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -1097,16 +1112,21 @@ namespace Myriad.ECS.Worlds
 			var c2 = ComponentID<T2>.ID;
 			var c3 = ComponentID<T3>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+				c1,
+				c2,
+				c3,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -1408,17 +1428,22 @@ namespace Myriad.ECS.Worlds
 			var c3 = ComponentID<T3>.ID;
 			var c4 = ComponentID<T4>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+				c1,
+				c2,
+				c3,
+				c4,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -1734,18 +1759,23 @@ namespace Myriad.ECS.Worlds
 			var c4 = ComponentID<T4>.ID;
 			var c5 = ComponentID<T5>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+				c1,
+				c2,
+				c3,
+				c4,
+				c5,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -2075,19 +2105,24 @@ namespace Myriad.ECS.Worlds
 			var c5 = ComponentID<T5>.ID;
 			var c6 = ComponentID<T6>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+				c1,
+				c2,
+				c3,
+				c4,
+				c5,
+				c6,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -2431,20 +2466,25 @@ namespace Myriad.ECS.Worlds
 			var c6 = ComponentID<T6>.ID;
 			var c7 = ComponentID<T7>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+				c1,
+				c2,
+				c3,
+				c4,
+				c5,
+				c6,
+				c7,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -2802,21 +2842,26 @@ namespace Myriad.ECS.Worlds
 			var c7 = ComponentID<T7>.ID;
 			var c8 = ComponentID<T8>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+				c1,
+				c2,
+				c3,
+				c4,
+				c5,
+				c6,
+				c7,
+				c8,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -3188,22 +3233,27 @@ namespace Myriad.ECS.Worlds
 			var c8 = ComponentID<T8>.ID;
 			var c9 = ComponentID<T9>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+				c1,
+				c2,
+				c3,
+				c4,
+				c5,
+				c6,
+				c7,
+				c8,
+				c9,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
-				archetype.Block(ComponentID<T9>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -3589,23 +3639,28 @@ namespace Myriad.ECS.Worlds
 			var c9 = ComponentID<T9>.ID;
 			var c10 = ComponentID<T10>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+				c1,
+				c2,
+				c3,
+				c4,
+				c5,
+				c6,
+				c7,
+				c8,
+				c9,
+				c10,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
-				archetype.Block(ComponentID<T9>.ID);
-				archetype.Block(ComponentID<T10>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -4005,24 +4060,29 @@ namespace Myriad.ECS.Worlds
 			var c10 = ComponentID<T10>.ID;
 			var c11 = ComponentID<T11>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+				c1,
+				c2,
+				c3,
+				c4,
+				c5,
+				c6,
+				c7,
+				c8,
+				c9,
+				c10,
+				c11,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
-				archetype.Block(ComponentID<T9>.ID);
-				archetype.Block(ComponentID<T10>.ID);
-				archetype.Block(ComponentID<T11>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -4436,25 +4496,30 @@ namespace Myriad.ECS.Worlds
 			var c11 = ComponentID<T11>.ID;
 			var c12 = ComponentID<T12>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+				c1,
+				c2,
+				c3,
+				c4,
+				c5,
+				c6,
+				c7,
+				c8,
+				c9,
+				c10,
+				c11,
+				c12,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
-				archetype.Block(ComponentID<T9>.ID);
-				archetype.Block(ComponentID<T10>.ID);
-				archetype.Block(ComponentID<T11>.ID);
-				archetype.Block(ComponentID<T12>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -4882,26 +4947,31 @@ namespace Myriad.ECS.Worlds
 			var c12 = ComponentID<T12>.ID;
 			var c13 = ComponentID<T13>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+				c1,
+				c2,
+				c3,
+				c4,
+				c5,
+				c6,
+				c7,
+				c8,
+				c9,
+				c10,
+				c11,
+				c12,
+				c13,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
-				archetype.Block(ComponentID<T9>.ID);
-				archetype.Block(ComponentID<T10>.ID);
-				archetype.Block(ComponentID<T11>.ID);
-				archetype.Block(ComponentID<T12>.ID);
-				archetype.Block(ComponentID<T13>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -5343,27 +5413,32 @@ namespace Myriad.ECS.Worlds
 			var c13 = ComponentID<T13>.ID;
 			var c14 = ComponentID<T14>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+				c1,
+				c2,
+				c3,
+				c4,
+				c5,
+				c6,
+				c7,
+				c8,
+				c9,
+				c10,
+				c11,
+				c12,
+				c13,
+				c14,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
-				archetype.Block(ComponentID<T9>.ID);
-				archetype.Block(ComponentID<T10>.ID);
-				archetype.Block(ComponentID<T11>.ID);
-				archetype.Block(ComponentID<T12>.ID);
-				archetype.Block(ComponentID<T13>.ID);
-				archetype.Block(ComponentID<T14>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -5819,28 +5894,33 @@ namespace Myriad.ECS.Worlds
 			var c14 = ComponentID<T14>.ID;
 			var c15 = ComponentID<T15>.ID;
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				c0,
+				c1,
+				c2,
+				c3,
+				c4,
+				c5,
+				c6,
+				c7,
+				c8,
+				c9,
+				c10,
+				c11,
+				c12,
+				c13,
+				c14,
+				c15,
+			};
+
 			var accumulator = initial;
 
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(ComponentID<T0>.ID);
-				archetype.Block(ComponentID<T1>.ID);
-				archetype.Block(ComponentID<T2>.ID);
-				archetype.Block(ComponentID<T3>.ID);
-				archetype.Block(ComponentID<T4>.ID);
-				archetype.Block(ComponentID<T5>.ID);
-				archetype.Block(ComponentID<T6>.ID);
-				archetype.Block(ComponentID<T7>.ID);
-				archetype.Block(ComponentID<T8>.ID);
-				archetype.Block(ComponentID<T9>.ID);
-				archetype.Block(ComponentID<T10>.ID);
-				archetype.Block(ComponentID<T11>.ID);
-				archetype.Block(ComponentID<T12>.ID);
-				archetype.Block(ComponentID<T13>.ID);
-				archetype.Block(ComponentID<T14>.ID);
-				archetype.Block(ComponentID<T15>.ID);
+				archetype.Block(components);
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)

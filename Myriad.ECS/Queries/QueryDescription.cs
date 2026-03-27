@@ -625,7 +625,7 @@ public sealed class QueryDescription
             count += match.Archetype.EntityCount;
 
             // Wait for multithreaded access to this component in this archetype
-            match.Archetype.Block(id);
+            match.Archetype.Block(stackalloc [] { id });
 
             using var chunks = match.Archetype.GetChunkEnumerator();
             while (chunks.MoveNext())

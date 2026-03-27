@@ -157,6 +157,17 @@ for (var k = 0; k < i; k++)
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                Span<ComponentID> components = stackalloc ComponentID[]
+			    {
+<# for (var k = 0; k < i; k++)
+{
+#>
+				    C<#= k #>,
+<#
+}
+#>
+			    };
+
                 var archetype = _archetypesEnumerator.Current.Archetype;
 <# if (i == 0) { #>
 				archetype.Block();
@@ -164,7 +175,7 @@ for (var k = 0; k < i; k++)
 <# for (var k = 0; k < i; k++)
 {
 #>
-				archetype.Block(C<#= k #>);
+				archetype.Block(components);
 <#
 }
 #>
