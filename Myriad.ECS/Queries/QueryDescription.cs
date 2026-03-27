@@ -616,6 +616,8 @@ public sealed class QueryDescription
         if (IsExcluded(id))
             return 0;
 
+        Span<ComponentID> component = stackalloc[] { id };
+
         var count = 0;
         foreach (var match in GetArchetypes())
         {
@@ -625,7 +627,7 @@ public sealed class QueryDescription
             count += match.Archetype.EntityCount;
 
             // Wait for multithreaded access to this component in this archetype
-            match.Archetype.Block(stackalloc [] { id });
+            match.Archetype.Block(component);
 
             using var chunks = match.Archetype.GetChunkEnumerator();
             while (chunks.MoveNext())

@@ -76,10 +76,6 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-			    };
-
                 var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block();
 
@@ -213,12 +209,12 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -370,13 +366,13 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
 				    C1,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -537,6 +533,7 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
@@ -544,7 +541,6 @@ namespace Myriad.ECS.Queries
 				    C2,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -714,6 +710,7 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
@@ -722,7 +719,6 @@ namespace Myriad.ECS.Queries
 				    C3,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -901,6 +897,7 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
@@ -910,7 +907,6 @@ namespace Myriad.ECS.Queries
 				    C4,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -1098,6 +1094,7 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
@@ -1108,7 +1105,6 @@ namespace Myriad.ECS.Queries
 				    C5,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -1305,6 +1301,7 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
@@ -1316,7 +1313,6 @@ namespace Myriad.ECS.Queries
 				    C6,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -1522,6 +1518,7 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
@@ -1534,7 +1531,6 @@ namespace Myriad.ECS.Queries
 				    C7,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -1749,6 +1745,7 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
@@ -1762,7 +1759,6 @@ namespace Myriad.ECS.Queries
 				    C8,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -1986,6 +1982,7 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
@@ -2000,7 +1997,6 @@ namespace Myriad.ECS.Queries
 				    C9,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -2233,6 +2229,7 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
@@ -2248,7 +2245,6 @@ namespace Myriad.ECS.Queries
 				    C10,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -2490,6 +2486,7 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
@@ -2506,7 +2503,6 @@ namespace Myriad.ECS.Queries
 				    C11,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -2757,6 +2753,7 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
@@ -2774,7 +2771,6 @@ namespace Myriad.ECS.Queries
 				    C12,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -3034,6 +3030,7 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
@@ -3052,7 +3049,6 @@ namespace Myriad.ECS.Queries
 				    C13,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -3321,6 +3317,7 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
@@ -3340,7 +3337,6 @@ namespace Myriad.ECS.Queries
 				    C14,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -3618,6 +3614,7 @@ namespace Myriad.ECS.Queries
                 if (!_archetypesEnumerator.MoveNext())
                     return false;
 
+                var archetype = _archetypesEnumerator.Current.Archetype;
                 Span<ComponentID> components = stackalloc ComponentID[]
 			    {
 				    C0,
@@ -3638,7 +3635,6 @@ namespace Myriad.ECS.Queries
 				    C15,
 			    };
 
-                var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
