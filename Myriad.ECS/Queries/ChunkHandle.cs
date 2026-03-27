@@ -26,6 +26,11 @@ public readonly ref partial struct ChunkHandle
     /// </summary>
     public ReadOnlyMemory<Entity> Entities => _chunk.Entities;
 
+    /// <summary>
+    /// Get the entities in this chunk
+    /// </summary>
+    public ReadOnlyMemory<EntityId> EntityIds => _chunk.EntityIds;
+
     internal ChunkHandle(Chunk chunk)
     {
         _chunk = chunk;

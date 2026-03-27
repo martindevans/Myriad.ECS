@@ -219,21 +219,27 @@ namespace Myriad.ECS.Worlds
 }
 #>
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+<# for (var k = 0; k < i; k++)
+{
+#>
+				c<#= k #>,
+<#
+}
+#>
+			};
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
 <# if (i == 0) { #>
-				archetype.Block();
+					archetype.Block();
+<# } else { #>
+					archetype.Block(components);
 <# } #>
-<# for (var k = 0; k < i; k++)
-{
-#>
-				archetype.Block(c<#= k #>);
-<#
-}
-#>
 
 				count += archetype.EntityCount;
 
@@ -340,6 +346,17 @@ namespace Myriad.ECS.Worlds
 }
 #>
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+<# for (var k = 0; k < i; k++)
+{
+#>
+				c<#= k #>,
+<#
+}
+#>
+			};
+
 			var entityCount = 0;
 			var lastCompletedArchetype = default(Archetype);
 
@@ -361,15 +378,10 @@ namespace Myriad.ECS.Worlds
 					var archetype = archetypesEnumerator.Current.Archetype;
 
 <# if (i == 0) { #>
-				archetype.Block();
+					archetype.Block();
+<# } else { #>
+					archetype.Block(components);
 <# } #>
-<# for (var k = 0; k < i; k++)
-{
-#>
-					archetype.Block(ComponentID<T<#= k #>>.ID);
-<#
-}
-#>
 
 					var chunks = archetype.GetChunkEnumerator();
 					try
@@ -466,6 +478,17 @@ namespace Myriad.ECS.Worlds
 }
 #>
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+<# for (var k = 0; k < i; k++)
+{
+#>
+				c<#= k #>,
+<#
+}
+#>
+			};
+
 <#
 			EmitParallelWorkLoopSetup(workItemName);
 #>
@@ -479,15 +502,10 @@ namespace Myriad.ECS.Worlds
 					continue;
 
 <# if (i == 0) { #>
-				archetype.Block();
+					archetype.Block();
+<# } else { #>
+					archetype.Block(components);
 <# } #>
-<# for (var k = 0; k < i; k++)
-{
-#>
-				archetype.Block(ComponentID<T<#= k #>>.ID);
-<#
-}
-#>
 
 				count += archetype.EntityCount;
 

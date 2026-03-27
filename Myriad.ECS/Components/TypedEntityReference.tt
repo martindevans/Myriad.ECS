@@ -133,7 +133,7 @@ public struct TypedEntityReference<<#= typeParams #>>
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
