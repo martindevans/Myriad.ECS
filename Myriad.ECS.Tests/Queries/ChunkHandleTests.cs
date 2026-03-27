@@ -36,6 +36,11 @@ public class ChunkHandleTests
             Assert.IsNotNull(danger.GetEntityArray());
             Assert.IsTrue(danger.GetEntityArray().AsSpan(0, ch.EntityCount).SequenceEqual(ch.Entities.Span));
 
+            CollectionAssert.AreEqual(
+                danger.GetEntityIdArray().AsSpan(0, ch.EntityCount).ToArray(),
+                ch.Entities.ToArray().Select(a => a.ID).ToArray()
+            );
+
             Assert.IsTrue(danger.GetComponentArray<ComponentInt32>().AsSpan(0, ch.EntityCount).SequenceEqual(ci));
         });
     }

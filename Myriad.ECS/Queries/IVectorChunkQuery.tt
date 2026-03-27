@@ -90,6 +90,17 @@ namespace Myriad.ECS.Worlds
 }
 #>
 
+			Span<ComponentID> components = stackalloc ComponentID[]
+			{
+<# for (var k = 0; k < i; k++)
+{
+#>
+				c<#= k #>,
+<#
+}
+#>
+			};
+
 			// Allocate some spans we need to copy the "leftover" values
 <# for (var k = 0; k < sumij; k++)
 {
@@ -106,14 +117,9 @@ namespace Myriad.ECS.Worlds
 
 <# if (sumij == 0) { #>
 				archetype.Block();
+<# } else { #>
+				archetype.Block(components);
 <# } #>
-<# for (var k = 0; k < sumij; k++)
-{
-#>
-				archetype.Block(ComponentID<T<#= k #>>.ID);
-<#
-}
-#>
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)

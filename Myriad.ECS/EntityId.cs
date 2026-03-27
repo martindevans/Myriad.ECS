@@ -266,7 +266,7 @@ public readonly partial struct EntityId
         where T : IComponent
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
-        entityInfo.Chunk.Archetype.Block(ComponentID<T>.ID);
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] { ComponentID<T>.ID });
         return entityInfo.Chunk.GetRefT<T>(this, entityInfo.RowIndex);
     }
 
@@ -323,7 +323,7 @@ public readonly partial struct EntityId
             return null;
 
         ref var entityInfo = ref world.GetEntityInfo(this);
-        entityInfo.Chunk.Archetype.Block(id);
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] { id });
         return entityInfo.Chunk.GetComponentArray(id).GetValue(entityInfo.RowIndex);
     }
 }

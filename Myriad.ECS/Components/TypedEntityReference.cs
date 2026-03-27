@@ -109,7 +109,7 @@ public struct TypedEntityReference<T0>
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
@@ -278,7 +278,7 @@ public struct TypedEntityReference<T0, T1>
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
@@ -450,7 +450,7 @@ public struct TypedEntityReference<T0, T1, T2>
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
@@ -625,7 +625,7 @@ public struct TypedEntityReference<T0, T1, T2, T3>
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
@@ -803,7 +803,7 @@ public struct TypedEntityReference<T0, T1, T2, T3, T4>
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
@@ -984,7 +984,7 @@ public struct TypedEntityReference<T0, T1, T2, T3, T4, T5>
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
@@ -1168,7 +1168,7 @@ public struct TypedEntityReference<T0, T1, T2, T3, T4, T5, T6>
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
@@ -1355,7 +1355,7 @@ public struct TypedEntityReference<T0, T1, T2, T3, T4, T5, T6, T7>
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
@@ -1545,7 +1545,7 @@ public struct TypedEntityReference<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
@@ -1738,7 +1738,7 @@ public struct TypedEntityReference<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
@@ -1934,7 +1934,7 @@ public struct TypedEntityReference<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
@@ -2133,7 +2133,7 @@ public struct TypedEntityReference<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, 
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
@@ -2335,7 +2335,7 @@ public struct TypedEntityReference<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, 
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
@@ -2540,7 +2540,7 @@ public struct TypedEntityReference<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, 
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
@@ -2748,7 +2748,7 @@ public struct TypedEntityReference<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, 
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)
@@ -2959,7 +2959,7 @@ public struct TypedEntityReference<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, 
 
 
             // Check if the entity is still where we last saw it
-            return Chunk.Entities.Span[RowIndex] == entity;
+            return Chunk.EntityIds.Span[RowIndex] == entity;
         }
 
         public bool CheckIsStale(EntityId entity)

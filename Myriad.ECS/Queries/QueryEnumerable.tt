@@ -160,14 +160,20 @@ for (var k = 0; k < i; k++)
                 var archetype = _archetypesEnumerator.Current.Archetype;
 <# if (i == 0) { #>
 				archetype.Block();
-<# } #>
+<# } else { #>
+                Span<ComponentID> components = stackalloc ComponentID[]
+			    {
 <# for (var k = 0; k < i; k++)
 {
 #>
-				archetype.Block(C<#= k #>);
+				    C<#= k #>,
 <#
 }
 #>
+			    };
+
+				archetype.Block(components);
+<# } #>
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.

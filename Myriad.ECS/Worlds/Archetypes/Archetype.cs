@@ -224,7 +224,7 @@ public sealed partial class Archetype
 
                 while (chunk.EntityCount > 0)
                 {
-                    var entity = chunk.Entities.Span[^1].ID;
+                    var entity = chunk.EntityIds.Span[^1];
                     ref var info = ref World.GetEntityInfo(entity);
 
                     MigrateTo(entity, ref info, _phantomDestination, ref lazy);
@@ -403,11 +403,11 @@ public sealed partial class Archetype
     }
 
     /// <summary>
-    /// Block on multithreaded access to the given component in this archetype to finish
+    /// Block on multithreaded access to the given components in this archetype to finish
     /// </summary>
-    public void Block(ComponentID id)
+    public void Block(ReadOnlySpan<ComponentID> ids)
     {
-        World.LockManager.Block(this, id);
+        World.LockManager.Block(this, ids);
     }
 
     /// <summary>
