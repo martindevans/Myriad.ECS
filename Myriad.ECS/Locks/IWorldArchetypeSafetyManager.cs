@@ -15,13 +15,6 @@ public interface IWorldArchetypeSafetyManager
     void Block(Archetype archetype);
 
     /// <summary>
-    /// Wait for multithreaded work which is accessing a specific component in a specific archetype to finish
-    /// </summary>
-    /// <param name="archetype"></param>
-    /// <param name="id"></param>
-    void Block(Archetype archetype, ComponentID id);
-
-    /// <summary>
     /// Wait for multithreaded work which is accessing a specific set of components in a specific archetype to finish
     /// </summary>
     /// <param name="archetype"></param>
@@ -37,11 +30,6 @@ public class DefaultWorldArchetypeSafetyManager
 {
     /// <inheritdoc />
     public void Block(Archetype archetype)
-    {
-    }
-
-    /// <inheritdoc />
-    public void Block(Archetype archetype, ComponentID id)
     {
     }
 

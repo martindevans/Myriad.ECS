@@ -4,7 +4,6 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Collections;

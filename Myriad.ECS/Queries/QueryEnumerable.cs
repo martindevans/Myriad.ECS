@@ -378,7 +378,6 @@ namespace Myriad.ECS.Queries
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
 				archetype.Block(components);
-				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
@@ -546,8 +545,6 @@ namespace Myriad.ECS.Queries
 			    };
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-				archetype.Block(components);
-				archetype.Block(components);
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -726,9 +723,6 @@ namespace Myriad.ECS.Queries
 			    };
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -917,10 +911,6 @@ namespace Myriad.ECS.Queries
 			    };
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -1119,11 +1109,6 @@ namespace Myriad.ECS.Queries
 			    };
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -1332,12 +1317,6 @@ namespace Myriad.ECS.Queries
 			    };
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -1556,13 +1535,6 @@ namespace Myriad.ECS.Queries
 			    };
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -1791,14 +1763,6 @@ namespace Myriad.ECS.Queries
 			    };
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -2037,15 +2001,6 @@ namespace Myriad.ECS.Queries
 			    };
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -2294,16 +2249,6 @@ namespace Myriad.ECS.Queries
 			    };
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -2562,17 +2507,6 @@ namespace Myriad.ECS.Queries
 			    };
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -2841,18 +2775,6 @@ namespace Myriad.ECS.Queries
 			    };
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -3131,19 +3053,6 @@ namespace Myriad.ECS.Queries
 			    };
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -3432,20 +3341,6 @@ namespace Myriad.ECS.Queries
 			    };
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
@@ -3744,21 +3639,6 @@ namespace Myriad.ECS.Queries
 			    };
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
-				archetype.Block(components);
 				archetype.Block(components);
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there

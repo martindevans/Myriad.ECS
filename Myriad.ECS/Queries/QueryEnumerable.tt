@@ -171,14 +171,9 @@ for (var k = 0; k < i; k++)
                 var archetype = _archetypesEnumerator.Current.Archetype;
 <# if (i == 0) { #>
 				archetype.Block();
-<# } #>
-<# for (var k = 0; k < i; k++)
-{
-#>
+<# } else { #>
 				archetype.Block(components);
-<#
-}
-#>
+<# } #>
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
