@@ -38,10 +38,10 @@ internal class ArchetypeComponentDisposal
     /// <param name="buffer"></param>
     /// <param name="info"></param>
     /// <param name="to"></param>
-    public void DisposeRemoved(ref LazyCommandBuffer buffer, EntityInfo info, FrozenOrderedListSet<ComponentID> to)
+    public void DisposeRemoved(ref LazyCommandBuffer buffer, EntityInfo info, Archetype to)
     {
         foreach (var disposer in _disposers)
-            if (!to.Contains(disposer.Component))
+            if (!to.HasComponent(disposer.Component))
                 disposer.Dispose(info.Chunk, info.RowIndex, ref buffer);
     }
 }
