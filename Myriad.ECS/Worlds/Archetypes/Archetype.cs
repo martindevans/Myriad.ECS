@@ -325,7 +325,7 @@ public sealed partial class Archetype
         Debug.Assert(to != this);
 
         // Handle disposable components which are being removed
-        _disposer?.DisposeRemoved(ref lazy, info, to.Components);
+        _disposer?.DisposeRemoved(ref lazy, info, to);
 
         // Inform entity it is becoming a phantom
         if (to.IsPhantom)
