@@ -1,10 +1,10 @@
 ﻿namespace Myriad.ECS.Systems;
 
 /// <summary>
-/// A system that does nothing every frame, owns some <see cref="IDisposable"/> obejcts and will dispose them when the systemis disposed
+/// A system that does nothing every frame, owns some <see cref="IDisposable"/> objects and will dispose them when the system is disposed
 /// </summary>
-public sealed class CleanupSystem<T>
-    : ISystem<T>, IDisposable
+public sealed class CleanupSystem<TData>
+    : ISystem<TData>, IDisposable
 {
     private readonly IDisposable?[] _disposables;
 
@@ -14,14 +14,23 @@ public sealed class CleanupSystem<T>
     /// <param name="disposables"></param>
     public CleanupSystem(params IDisposable[] disposables)
     {
-        _disposables = disposables;
+        _disposables = disposables.ToArray();
     }
 
     /// <summary>
-    /// Does nithing.
+    /// Create a new <see cref="CleanupSystem{T}"/> that will dispose all given disposables when the system is disposed
+    /// </summary>
+    /// <param name="disposables"></param>
+    public CleanupSystem(Span<IDisposable> disposables)
+    {
+        _disposables = disposables.ToArray();
+    }
+
+    /// <summary>
+    /// Does nothing.
     /// </summary>
     /// <param name="data"></param>
-    public void Update(T data)
+    public void Update(TData data)
     {
     }
 
