@@ -9,7 +9,7 @@ public sealed class CleanupSystem<TData>
     private readonly IDisposable?[] _disposables;
 
     /// <summary>
-    /// Create a new <see cref="CleanupSystem{T}"/> that will dispose all given disposables when the system is disposed
+    /// Create a new <see cref="CleanupSystem{TData}"/> that will dispose all given disposables when the system is disposed
     /// </summary>
     /// <param name="disposables"></param>
     public CleanupSystem(params IDisposable[] disposables)
@@ -18,10 +18,10 @@ public sealed class CleanupSystem<TData>
     }
 
     /// <summary>
-    /// Create a new <see cref="CleanupSystem{T}"/> that will dispose all given disposables when the system is disposed
+    /// Create a new <see cref="CleanupSystem{TData}"/> that will dispose all given disposables when the system is disposed
     /// </summary>
     /// <param name="disposables"></param>
-    public CleanupSystem(Span<IDisposable> disposables)
+    public CleanupSystem(ReadOnlySpan<IDisposable> disposables)
     {
         _disposables = disposables.ToArray();
     }
