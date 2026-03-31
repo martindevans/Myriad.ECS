@@ -30,6 +30,6 @@ public sealed class CleanupSystem<T>
     {
         foreach (var disposable in _disposables)
             disposable?.Dispose();
-        Array.Clear(_disposables);
+        _disposables.AsSpan().Clear();
     }
 }
