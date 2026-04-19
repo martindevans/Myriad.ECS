@@ -6,15 +6,15 @@
 public sealed class CleanupSystem<TData>
     : ISystem<TData>, IDisposable
 {
-    private readonly IDisposable?[] _disposables;
+    private readonly List<IDisposable> _disposables = [ ];
 
     /// <summary>
     /// Create a new <see cref="CleanupSystem{TData}"/> that will dispose all given disposables when the system is disposed
     /// </summary>
     /// <param name="disposables"></param>
     public CleanupSystem(params IDisposable[] disposables)
+        : this(disposables.AsSpan())
     {
-        _disposables = disposables.ToArray();
     }
 
     /// <summary>
@@ -23,7 +23,9 @@ public sealed class CleanupSystem<TData>
     /// <param name="disposables"></param>
     public CleanupSystem(ReadOnlySpan<IDisposable> disposables)
     {
-        _disposables = disposables.ToArray();
+        _disposables.EnsureCapacity(disposables.Length);
+        foreach (var disposable in disposables)
+            _disposables.Add(disposable);
     }
 
     /// <summary>
@@ -38,7 +40,7 @@ public sealed class CleanupSystem<TData>
     public void Dispose()
     {
         foreach (var disposable in _disposables)
-            disposable?.Dispose();
-        _disposables.AsSpan().Clear();
+            disposable.Dispose();
+        _disposables.Clear();
     }
 }

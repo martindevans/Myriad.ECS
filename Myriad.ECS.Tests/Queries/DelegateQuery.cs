@@ -230,7 +230,7 @@ public class DelegateQuery
         });
 
         // Add 1
-        w.QueryParallel((Span<ComponentInt32> ci) =>
+        w.Query((Span<ComponentInt32> ci) =>
         {
             foreach (ref var c in ci)
                 c.Value++;

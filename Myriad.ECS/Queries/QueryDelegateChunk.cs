@@ -152,22 +152,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0>(QueryDelegateChunkHandle<T0> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper1E<T0>, T0>(
-				new QueryDelegateChunkWrapper1E<T0>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -194,22 +178,6 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
 		{
 			return Query(@delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0>(QueryDelegateChunk<T0> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper1<T0>, T0>(
-				new QueryDelegateChunkWrapper1<T0>(@delegate),
-				query
-			);
 		}
 
 		// vv-- TData variants --vv //
@@ -246,23 +214,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0>(TData data, QueryDelegateChunkHandleData<TData, T0> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper1ED<TData, T0>, T0>(
-				new QueryDelegateChunkWrapper1ED<TData, T0>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -291,23 +242,6 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
 		{
 			return Query(data, @delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0>(TData data, QueryDelegateChunkData<TData, T0> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper1D<TData, T0>, T0>(
-				new QueryDelegateChunkWrapper1D<TData, T0>(data, @delegate),
-				query
-			);
 		}
 	}
 }
@@ -463,23 +397,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1>(QueryDelegateChunkHandle<T0, T1> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper2E<T0, T1>, T0, T1>(
-				new QueryDelegateChunkWrapper2E<T0, T1>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -508,23 +425,6 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
 		{
 			return Query(@delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1>(QueryDelegateChunk<T0, T1> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper2<T0, T1>, T0, T1>(
-				new QueryDelegateChunkWrapper2<T0, T1>(@delegate),
-				query
-			);
 		}
 
 		// vv-- TData variants --vv //
@@ -563,24 +463,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1>(TData data, QueryDelegateChunkHandleData<TData, T0, T1> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper2ED<TData, T0, T1>, T0, T1>(
-				new QueryDelegateChunkWrapper2ED<TData, T0, T1>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -611,24 +493,6 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
 		{
 			return Query(data, @delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1>(TData data, QueryDelegateChunkData<TData, T0, T1> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper2D<TData, T0, T1>, T0, T1>(
-				new QueryDelegateChunkWrapper2D<TData, T0, T1>(data, @delegate),
-				query
-			);
 		}
 	}
 }
@@ -790,24 +654,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2>(QueryDelegateChunkHandle<T0, T1, T2> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper3E<T0, T1, T2>, T0, T1, T2>(
-				new QueryDelegateChunkWrapper3E<T0, T1, T2>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -838,24 +684,6 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
 		{
 			return Query(@delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2>(QueryDelegateChunk<T0, T1, T2> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper3<T0, T1, T2>, T0, T1, T2>(
-				new QueryDelegateChunkWrapper3<T0, T1, T2>(@delegate),
-				query
-			);
 		}
 
 		// vv-- TData variants --vv //
@@ -896,25 +724,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2>(TData data, QueryDelegateChunkHandleData<TData, T0, T1, T2> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper3ED<TData, T0, T1, T2>, T0, T1, T2>(
-				new QueryDelegateChunkWrapper3ED<TData, T0, T1, T2>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -947,25 +756,6 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
 		{
 			return Query(data, @delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2>(TData data, QueryDelegateChunkData<TData, T0, T1, T2> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper3D<TData, T0, T1, T2>, T0, T1, T2>(
-				new QueryDelegateChunkWrapper3D<TData, T0, T1, T2>(data, @delegate),
-				query
-			);
 		}
 	}
 }
@@ -1133,25 +923,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3>(QueryDelegateChunkHandle<T0, T1, T2, T3> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper4E<T0, T1, T2, T3>, T0, T1, T2, T3>(
-				new QueryDelegateChunkWrapper4E<T0, T1, T2, T3>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -1184,25 +955,6 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
 		{
 			return Query(@delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3>(QueryDelegateChunk<T0, T1, T2, T3> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper4<T0, T1, T2, T3>, T0, T1, T2, T3>(
-				new QueryDelegateChunkWrapper4<T0, T1, T2, T3>(@delegate),
-				query
-			);
 		}
 
 		// vv-- TData variants --vv //
@@ -1245,26 +997,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3>(TData data, QueryDelegateChunkHandleData<TData, T0, T1, T2, T3> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper4ED<TData, T0, T1, T2, T3>, T0, T1, T2, T3>(
-				new QueryDelegateChunkWrapper4ED<TData, T0, T1, T2, T3>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -1299,26 +1031,6 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
 		{
 			return Query(data, @delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3>(TData data, QueryDelegateChunkData<TData, T0, T1, T2, T3> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper4D<TData, T0, T1, T2, T3>, T0, T1, T2, T3>(
-				new QueryDelegateChunkWrapper4D<TData, T0, T1, T2, T3>(data, @delegate),
-				query
-			);
 		}
 	}
 }
@@ -1492,26 +1204,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4>(QueryDelegateChunkHandle<T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper5E<T0, T1, T2, T3, T4>, T0, T1, T2, T3, T4>(
-				new QueryDelegateChunkWrapper5E<T0, T1, T2, T3, T4>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -1546,26 +1238,6 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
 		{
 			return Query(@delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4>(QueryDelegateChunk<T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper5<T0, T1, T2, T3, T4>, T0, T1, T2, T3, T4>(
-				new QueryDelegateChunkWrapper5<T0, T1, T2, T3, T4>(@delegate),
-				query
-			);
 		}
 
 		// vv-- TData variants --vv //
@@ -1610,27 +1282,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4>(TData data, QueryDelegateChunkHandleData<TData, T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper5ED<TData, T0, T1, T2, T3, T4>, T0, T1, T2, T3, T4>(
-				new QueryDelegateChunkWrapper5ED<TData, T0, T1, T2, T3, T4>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -1667,27 +1318,6 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
 		{
 			return Query(data, @delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4>(TData data, QueryDelegateChunkData<TData, T0, T1, T2, T3, T4> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper5D<TData, T0, T1, T2, T3, T4>, T0, T1, T2, T3, T4>(
-				new QueryDelegateChunkWrapper5D<TData, T0, T1, T2, T3, T4>(data, @delegate),
-				query
-			);
 		}
 	}
 }
@@ -1867,27 +1497,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5>(QueryDelegateChunkHandle<T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper6E<T0, T1, T2, T3, T4, T5>, T0, T1, T2, T3, T4, T5>(
-				new QueryDelegateChunkWrapper6E<T0, T1, T2, T3, T4, T5>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -1924,27 +1533,6 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
 		{
 			return Query(@delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5>(QueryDelegateChunk<T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper6<T0, T1, T2, T3, T4, T5>, T0, T1, T2, T3, T4, T5>(
-				new QueryDelegateChunkWrapper6<T0, T1, T2, T3, T4, T5>(@delegate),
-				query
-			);
 		}
 
 		// vv-- TData variants --vv //
@@ -1991,28 +1579,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5>(TData data, QueryDelegateChunkHandleData<TData, T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper6ED<TData, T0, T1, T2, T3, T4, T5>, T0, T1, T2, T3, T4, T5>(
-				new QueryDelegateChunkWrapper6ED<TData, T0, T1, T2, T3, T4, T5>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -2051,28 +1617,6 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
 		{
 			return Query(data, @delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5>(TData data, QueryDelegateChunkData<TData, T0, T1, T2, T3, T4, T5> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper6D<TData, T0, T1, T2, T3, T4, T5>, T0, T1, T2, T3, T4, T5>(
-				new QueryDelegateChunkWrapper6D<TData, T0, T1, T2, T3, T4, T5>(data, @delegate),
-				query
-			);
 		}
 	}
 }
@@ -2258,28 +1802,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6>(QueryDelegateChunkHandle<T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper7E<T0, T1, T2, T3, T4, T5, T6>, T0, T1, T2, T3, T4, T5, T6>(
-				new QueryDelegateChunkWrapper7E<T0, T1, T2, T3, T4, T5, T6>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -2318,28 +1840,6 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
 		{
 			return Query(@delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6>(QueryDelegateChunk<T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper7<T0, T1, T2, T3, T4, T5, T6>, T0, T1, T2, T3, T4, T5, T6>(
-				new QueryDelegateChunkWrapper7<T0, T1, T2, T3, T4, T5, T6>(@delegate),
-				query
-			);
 		}
 
 		// vv-- TData variants --vv //
@@ -2388,29 +1888,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6>(TData data, QueryDelegateChunkHandleData<TData, T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper7ED<TData, T0, T1, T2, T3, T4, T5, T6>, T0, T1, T2, T3, T4, T5, T6>(
-				new QueryDelegateChunkWrapper7ED<TData, T0, T1, T2, T3, T4, T5, T6>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -2451,29 +1928,6 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
 		{
 			return Query(data, @delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6>(TData data, QueryDelegateChunkData<TData, T0, T1, T2, T3, T4, T5, T6> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper7D<TData, T0, T1, T2, T3, T4, T5, T6>, T0, T1, T2, T3, T4, T5, T6>(
-				new QueryDelegateChunkWrapper7D<TData, T0, T1, T2, T3, T4, T5, T6>(data, @delegate),
-				query
-			);
 		}
 	}
 }
@@ -2665,29 +2119,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegateChunkHandle<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper8E<T0, T1, T2, T3, T4, T5, T6, T7>, T0, T1, T2, T3, T4, T5, T6, T7>(
-				new QueryDelegateChunkWrapper8E<T0, T1, T2, T3, T4, T5, T6, T7>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -2728,29 +2159,6 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
 		{
 			return Query(@delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7>(QueryDelegateChunk<T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper8<T0, T1, T2, T3, T4, T5, T6, T7>, T0, T1, T2, T3, T4, T5, T6, T7>(
-				new QueryDelegateChunkWrapper8<T0, T1, T2, T3, T4, T5, T6, T7>(@delegate),
-				query
-			);
 		}
 
 		// vv-- TData variants --vv //
@@ -2801,30 +2209,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7>(TData data, QueryDelegateChunkHandleData<TData, T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper8ED<TData, T0, T1, T2, T3, T4, T5, T6, T7>, T0, T1, T2, T3, T4, T5, T6, T7>(
-				new QueryDelegateChunkWrapper8ED<TData, T0, T1, T2, T3, T4, T5, T6, T7>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -2867,30 +2251,6 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
 		{
 			return Query(data, @delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7>(TData data, QueryDelegateChunkData<TData, T0, T1, T2, T3, T4, T5, T6, T7> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper8D<TData, T0, T1, T2, T3, T4, T5, T6, T7>, T0, T1, T2, T3, T4, T5, T6, T7>(
-				new QueryDelegateChunkWrapper8D<TData, T0, T1, T2, T3, T4, T5, T6, T7>(data, @delegate),
-				query
-			);
 		}
 	}
 }
@@ -3088,30 +2448,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegateChunkHandle<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper9E<T0, T1, T2, T3, T4, T5, T6, T7, T8>, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
-				new QueryDelegateChunkWrapper9E<T0, T1, T2, T3, T4, T5, T6, T7, T8>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -3154,30 +2490,6 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
 		{
 			return Query(@delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8>(QueryDelegateChunk<T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper9<T0, T1, T2, T3, T4, T5, T6, T7, T8>, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
-				new QueryDelegateChunkWrapper9<T0, T1, T2, T3, T4, T5, T6, T7, T8>(@delegate),
-				query
-			);
 		}
 
 		// vv-- TData variants --vv //
@@ -3230,31 +2542,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(TData data, QueryDelegateChunkHandleData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper9ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
-				new QueryDelegateChunkWrapper9ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -3299,31 +2586,6 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
 		{
 			return Query(data, @delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(TData data, QueryDelegateChunkData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper9D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
-				new QueryDelegateChunkWrapper9D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8>(data, @delegate),
-				query
-			);
 		}
 	}
 }
@@ -3527,31 +2789,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegateChunkHandle<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper10E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-				new QueryDelegateChunkWrapper10E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -3596,31 +2833,6 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
 		{
 			return Query(@delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(QueryDelegateChunk<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-				new QueryDelegateChunkWrapper10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(@delegate),
-				query
-			);
 		}
 
 		// vv-- TData variants --vv //
@@ -3675,32 +2887,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(TData data, QueryDelegateChunkHandleData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper10ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-				new QueryDelegateChunkWrapper10ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -3747,32 +2933,6 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
 		{
 			return Query(data, @delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(TData data, QueryDelegateChunkData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper10D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-				new QueryDelegateChunkWrapper10D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(data, @delegate),
-				query
-			);
 		}
 	}
 }
@@ -3982,32 +3142,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegateChunkHandle<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper11E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-				new QueryDelegateChunkWrapper11E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -4054,32 +3188,6 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
 		{
 			return Query(@delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(QueryDelegateChunk<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-				new QueryDelegateChunkWrapper11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(@delegate),
-				query
-			);
 		}
 
 		// vv-- TData variants --vv //
@@ -4136,33 +3244,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(TData data, QueryDelegateChunkHandleData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper11ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-				new QueryDelegateChunkWrapper11ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -4211,33 +3292,6 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
 		{
 			return Query(data, @delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(TData data, QueryDelegateChunkData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper11D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-				new QueryDelegateChunkWrapper11D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(data, @delegate),
-				query
-			);
 		}
 	}
 }
@@ -4453,33 +3507,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegateChunkHandle<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper12E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-				new QueryDelegateChunkWrapper12E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -4528,33 +3555,6 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
 		{
 			return Query(@delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(QueryDelegateChunk<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-				new QueryDelegateChunkWrapper12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(@delegate),
-				query
-			);
 		}
 
 		// vv-- TData variants --vv //
@@ -4613,34 +3613,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(TData data, QueryDelegateChunkHandleData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper12ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-				new QueryDelegateChunkWrapper12ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -4691,34 +3663,6 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
 		{
 			return Query(data, @delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(TData data, QueryDelegateChunkData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper12D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-				new QueryDelegateChunkWrapper12D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(data, @delegate),
-				query
-			);
 		}
 	}
 }
@@ -4940,34 +3884,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegateChunkHandle<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper13E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-				new QueryDelegateChunkWrapper13E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -5018,34 +3934,6 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
 		{
 			return Query(@delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(QueryDelegateChunk<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-				new QueryDelegateChunkWrapper13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(@delegate),
-				query
-			);
 		}
 
 		// vv-- TData variants --vv //
@@ -5106,35 +3994,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(TData data, QueryDelegateChunkHandleData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper13ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-				new QueryDelegateChunkWrapper13ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -5187,35 +4046,6 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
 		{
 			return Query(data, @delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(TData data, QueryDelegateChunkData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper13D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-				new QueryDelegateChunkWrapper13D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(data, @delegate),
-				query
-			);
 		}
 	}
 }
@@ -5443,35 +4273,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegateChunkHandle<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
-            where T13 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper14E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
-				new QueryDelegateChunkWrapper14E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -5524,35 +4325,6 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
 		{
 			return Query(@delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(QueryDelegateChunk<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
-            where T13 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
-				new QueryDelegateChunkWrapper14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(@delegate),
-				query
-			);
 		}
 
 		// vv-- TData variants --vv //
@@ -5615,36 +4387,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(TData data, QueryDelegateChunkHandleData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
-            where T13 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper14ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
-				new QueryDelegateChunkWrapper14ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -5699,36 +4441,6 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
 		{
 			return Query(data, @delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(TData data, QueryDelegateChunkData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
-            where T13 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper14D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
-				new QueryDelegateChunkWrapper14D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(data, @delegate),
-				query
-			);
 		}
 	}
 }
@@ -5962,36 +4674,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegateChunkHandle<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
-            where T13 : IComponent
-            where T14 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper15E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
-				new QueryDelegateChunkWrapper15E<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -6046,36 +4728,6 @@ namespace Myriad.ECS.Worlds
             where T14 : IComponent
 		{
 			return Query(@delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(QueryDelegateChunk<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
-            where T13 : IComponent
-            where T14 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
-				new QueryDelegateChunkWrapper15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(@delegate),
-				query
-			);
 		}
 
 		// vv-- TData variants --vv //
@@ -6140,37 +4792,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(TData data, QueryDelegateChunkHandleData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
-            where T13 : IComponent
-            where T14 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper15ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
-				new QueryDelegateChunkWrapper15ED<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -6227,37 +4848,6 @@ namespace Myriad.ECS.Worlds
             where T14 : IComponent
 		{
 			return Query(data, @delegate, ref query);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		[ExcludeFromCodeCoverage]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(TData data, QueryDelegateChunkData<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> @delegate, QueryDescription? query = null)
-			where T0 : IComponent
-            where T1 : IComponent
-            where T2 : IComponent
-            where T3 : IComponent
-            where T4 : IComponent
-            where T5 : IComponent
-            where T6 : IComponent
-            where T7 : IComponent
-            where T8 : IComponent
-            where T9 : IComponent
-            where T10 : IComponent
-            where T11 : IComponent
-            where T12 : IComponent
-            where T13 : IComponent
-            where T14 : IComponent
-		{
-			return ExecuteChunkParallel<QueryDelegateChunkWrapper15D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
-				new QueryDelegateChunkWrapper15D<TData, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(data, @delegate),
-				query
-			);
 		}
 	}
 }

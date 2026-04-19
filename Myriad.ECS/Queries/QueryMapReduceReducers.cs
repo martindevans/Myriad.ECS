@@ -1,7 +1,4 @@
 ﻿
-//using Parallel = System.Threading.Tasks.Parallel;
-//using Parallel = ParallelTasks.Parallel;
-
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
 // ReSharper disable LoopCanBeConvertedToQuery
