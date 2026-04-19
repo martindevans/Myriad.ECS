@@ -4,7 +4,6 @@ using Myriad.ECS.Command;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Locks;
 using Myriad.ECS.Queries;
-using Myriad.ECS.Threading;
 using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Worlds;
@@ -15,8 +14,6 @@ namespace Myriad.ECS.Worlds;
 public sealed partial class World
     : IDisposable
 {
-    internal IThreadPool ThreadPool { get; }
-
     /// <summary>
     /// Get the <see cref="IWorldArchetypeSafetyManager"/> which is attached to this world
     /// </summary>
@@ -39,9 +36,8 @@ public sealed partial class World
 
     private readonly ConcurrentBag<CommandBuffer> _commandBufferPool = [ ];
 
-    internal World(IThreadPool pool, IWorldArchetypeSafetyManager locks)
+    internal World(IWorldArchetypeSafetyManager locks)
     {
-        ThreadPool = pool;
         LockManager = locks;
     }
 

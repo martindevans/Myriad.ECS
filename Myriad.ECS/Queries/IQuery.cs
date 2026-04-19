@@ -4,7 +4,6 @@ using Myriad.ECS.Queries;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Archetypes;
 using Myriad.ECS.Allocations;
-using Myriad.ECS.Threading;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;

@@ -18,7 +18,7 @@ public class PhantomTests
 
         var eb = cmd.Create().Set(new TestPhantom0()).Set(new ComponentInt32(42));
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             eb.Set(new Phantom());
         });
@@ -35,7 +35,7 @@ public class PhantomTests
         cmd.Create().Set(new TestPhantom0()).Set(new ComponentInt32(42));
         var e = cmd.Playback()[0];
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             cmd.Set(e, new Phantom());
         });
@@ -56,7 +56,7 @@ public class PhantomTests
         cmd.Delete(e);
         cmd.Playback().Dispose();
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             cmd.Remove<Phantom>(e);
         });

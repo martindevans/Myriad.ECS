@@ -49,32 +49,32 @@ public class QueryBuilderTests
            .Include<ComponentInt32>()
            .Include<ComponentFloat>();
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.Exclude<ComponentFloat>();
         });
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.Exclude(typeof(ComponentFloat));
         });
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.ExactlyOneOf<ComponentFloat>();
         });
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.ExactlyOneOf(typeof(ComponentFloat));
         });
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.AtLeastOneOf<ComponentFloat>();
         });
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.AtLeastOneOf(typeof(ComponentFloat));
         });
@@ -105,17 +105,17 @@ public class QueryBuilderTests
            .Exclude<ComponentInt32>()
            .Exclude<ComponentFloat>();
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.Include<ComponentFloat>();
         });
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.ExactlyOneOf<ComponentFloat>();
         });
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.AtLeastOneOf<ComponentFloat>();
         });
@@ -153,17 +153,17 @@ public class QueryBuilderTests
                .AtLeastOneOf<ComponentInt32>()
                .AtLeastOneOf<ComponentFloat>();
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.Include<ComponentFloat>();
         });
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.ExactlyOneOf<ComponentFloat>();
         });
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.Exclude<ComponentFloat>();
         });
@@ -201,17 +201,17 @@ public class QueryBuilderTests
                .ExactlyOneOf<ComponentInt32>()
                .ExactlyOneOf<ComponentFloat>();
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.Include<ComponentFloat>();
         });
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.AtLeastOneOf<ComponentFloat>();
         });
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.Exclude<ComponentFloat>();
         });

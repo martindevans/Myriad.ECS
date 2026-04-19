@@ -8,7 +8,7 @@ public class ComponentRegistryTests
     [TestMethod]
     public void CannotAssignNonComponent()
     {
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.Throws<ArgumentException>(() =>
         {
             ComponentID.Get(typeof(int));
         });
@@ -48,7 +48,7 @@ public class ComponentRegistryTests
     [TestMethod]
     public void ThrowsForUnknownId()
     {
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             var t = default(ComponentID).Type;
         });

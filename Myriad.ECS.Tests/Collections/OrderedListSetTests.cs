@@ -318,7 +318,7 @@ public class OrderedListSetTests
         a.Add(1);
         a.Add(2);
 
-        Assert.ThrowsException<InvalidOperationException>(() => a.Single());
+        Assert.Throws<InvalidOperationException>(() => a.Single());
     }
 
     [TestMethod]

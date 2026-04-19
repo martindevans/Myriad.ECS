@@ -28,7 +28,7 @@ public class CommandBufferTests
         var r = buffer.Playback();
         r.Dispose();
 
-        Assert.ThrowsException<ObjectDisposedException>(() =>
+        Assert.Throws<ObjectDisposedException>(() =>
         {
             r.Dispose();
         });
@@ -47,7 +47,7 @@ public class CommandBufferTests
         var entity = eb.Resolve();
 
         Assert.IsTrue(entity.Exists());
-        Assert.AreEqual(1, world.Archetypes.Count);
+        Assert.HasCount(1, world.Archetypes);
         Assert.AreEqual(0, world.Archetypes.Single().Components.Count);
     }
 
@@ -74,7 +74,7 @@ public class CommandBufferTests
         {
             var entity = entities[i];
             Assert.IsTrue(entity.Exists());
-            Assert.AreEqual(1, world.Archetypes.Count);
+            Assert.HasCount(1, world.Archetypes);
             Assert.AreEqual(1, world.Archetypes.Single().Components.Count);
             Assert.AreEqual(i, entity.GetComponentRef<ComponentInt32>().Value);
         }
@@ -145,7 +145,7 @@ public class CommandBufferTests
             for (var j = 0; j < dead.Count; j++)
             {
                 var entity = dead[j];
-                Assert.IsTrue(!entity.Exists());
+                Assert.IsFalse(entity.Exists());
             }
 
             // Check archetypes
@@ -209,7 +209,7 @@ public class CommandBufferTests
             buffer.Playback().Dispose();
         }
 
-        void ChangeComponent<T>(Entity e, CommandBuffer b, bool update)
+        static void ChangeComponent<T>(Entity e, CommandBuffer b, bool update)
             where T : struct, IComponent
         {
             if (e.HasComponent<T>() && !update)
@@ -230,7 +230,7 @@ public class CommandBufferTests
         var resolver = buffer.Playback();
         resolver.Dispose();
 
-        Assert.ThrowsException<ObjectDisposedException>(() =>
+        Assert.Throws<ObjectDisposedException>(() =>
         {
             eb.Resolve();
         });
@@ -251,7 +251,7 @@ public class CommandBufferTests
         using var resolver2 = buffer2.Playback();
 
         // Resolve the entity ID using the wrong resolver
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             eb1.Resolve();
         });
@@ -271,7 +271,7 @@ public class CommandBufferTests
         using var resolver2 = buffer1.Playback();
 
         // Resolve the entity ID using the wrong resolver
-        Assert.ThrowsException<ObjectDisposedException>(() =>
+        Assert.Throws<ObjectDisposedException>(() =>
         {
             eb1.Resolve();
         });
@@ -288,7 +288,7 @@ public class CommandBufferTests
         using var resolver = buffer1.Playback();
 
         // Try to modify the buffered entity
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             eb1.Set(new ComponentFloat(8)); 
         });
@@ -308,7 +308,7 @@ public class CommandBufferTests
         var entity = eb.Resolve();
 
         Assert.IsTrue(entity.Exists());
-        Assert.AreEqual(1, world.Archetypes.Count);
+        Assert.HasCount(1, world.Archetypes);
         Assert.AreEqual(1, world.Archetypes.Single().Components.Count);
         Assert.IsTrue(world.Archetypes.Single().Components.Contains(ComponentID<ComponentFloat>.ID));
     }
@@ -323,7 +323,7 @@ public class CommandBufferTests
 
         eb.Set(new ComponentFloat(1));
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             eb.Set(new ComponentFloat(2));
         });
@@ -562,7 +562,7 @@ public class CommandBufferTests
 
         var q = new QueryBuilder().Include<Component0>().Build(world2);
 
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.Throws<ArgumentException>(() =>
         {
             cmd.Delete(q);
         });
@@ -872,7 +872,7 @@ public class CommandBufferTests
         var world = new WorldBuilder().Build();
         var buffer = new CommandBuffer(world);
 
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
         {
             buffer.Create()
                   .Set(new ComponentFloat(2))
@@ -1144,7 +1144,7 @@ public class CommandBufferTests
         // Create an entity
         var eb = cmd.Create().Set(new Component0());
         var r = cmd.Playback();
-        var e = eb.Resolve();
+        eb.Resolve();
         r.Dispose();
 
         // Create another entity then clear
@@ -1166,7 +1166,7 @@ public class CommandBufferTests
         cmd.Clear();
         cmd.Playback();
 
-        Assert.ThrowsException<ObjectDisposedException>(() =>
+        Assert.Throws<ObjectDisposedException>(() =>
         {
             eb.Resolve();
         });
@@ -1386,14 +1386,14 @@ public class CommandBufferTests
 
         using var _ = cmd.Playback();
 
-        Assert.AreEqual(1, list0.Count);
-        Assert.AreEqual(2, list1.Count);
-        Assert.AreEqual(1, list2.Count);
+        Assert.HasCount(1, list0);
+        Assert.HasCount(2, list1);
+        Assert.HasCount(1, list2);
 
-        Assert.IsTrue(list0.Contains(ab.Resolve()));
-        Assert.IsTrue(list1.Contains(ab.Resolve()));
-        Assert.IsTrue(list1.Contains(bb.Resolve()));
-        Assert.IsTrue(list2.Contains(bb.Resolve()));
+        Assert.Contains(ab.Resolve(), list0);
+        Assert.Contains(ab.Resolve(), list1);
+        Assert.Contains(bb.Resolve(), list1);
+        Assert.Contains(bb.Resolve(), list2);
     }
 
     [TestMethod]
@@ -1416,14 +1416,14 @@ public class CommandBufferTests
 
         using var _ = cmd.Playback();
 
-        Assert.AreEqual(1, list0.Count);
-        Assert.AreEqual(2, list1.Count);
-        Assert.AreEqual(1, list2.Count);
+        Assert.HasCount(1, list0);
+        Assert.HasCount(2, list1);
+        Assert.HasCount(1, list2);
 
-        Assert.IsTrue(list0.Contains(ab.Resolve()));
-        Assert.IsTrue(list1.Contains(ab.Resolve()));
-        Assert.IsTrue(list1.Contains(bb.Resolve()));
-        Assert.IsTrue(list2.Contains(bb.Resolve()));
+        Assert.Contains(ab.Resolve(), list0);
+        Assert.Contains(ab.Resolve(), list1);
+        Assert.Contains(bb.Resolve(), list1);
+        Assert.Contains(bb.Resolve(), list2);
     }
 
     private class DelayedResolveListWrapper(List<Entity> List)
@@ -1449,9 +1449,9 @@ public class CommandBufferTests
 
         using var _ = cmd.Playback();
 
-        Assert.AreEqual(2, list0.Count);
+        Assert.HasCount(2, list0);
 
-        Assert.IsTrue(list0.Contains(ab.Resolve()));
-        Assert.IsTrue(list0.Contains(ab.Resolve()));
+        Assert.Contains(ab.Resolve(), list0);
+        Assert.Contains(ab.Resolve(), list0);
     }
 }

@@ -45,7 +45,7 @@ public class ChunkBitFlagRegistryTests
     [TestMethod]
     public void CannotAssignWrongType()
     {
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.Throws<ArgumentException>(() =>
         {
             ChunkBitFlagID.Get(typeof(int));
         });
@@ -54,7 +54,7 @@ public class ChunkBitFlagRegistryTests
     [TestMethod]
     public void ThrowsForUnknownId()
     {
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             var t = default(ChunkBitFlagID).Type;
         });

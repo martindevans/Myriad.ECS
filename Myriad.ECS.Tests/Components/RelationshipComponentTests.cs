@@ -36,7 +36,7 @@ public class RelationshipComponentTests
         var ab = buffer1.Create().Set(new ComponentInt32(17));
 
         // Try to bind a relation in buffer 2
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.Throws<ArgumentException>(() =>
         {
             buffer2.Create().Set(new Relational1(), ab);
         });
@@ -55,7 +55,7 @@ public class RelationshipComponentTests
         var b1 = buffer1.Create();
 
         // Bind a relationship in buffer 2
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.Throws<ArgumentException>(() =>
         {
             buffer2.Set(entity, new Relational1(), b1);
         });
@@ -172,7 +172,7 @@ public class RelationshipComponentTests
         var eb1 = buffer.Create();
         var eb2 = buffer.Create();
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             eb1.Set(new SelfReference(), eb2);
         });
@@ -190,7 +190,7 @@ public class RelationshipComponentTests
 
         var eb2 = buffer.Create();
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             eb2.Set(new SelfReference(), e1);
         });

@@ -365,7 +365,7 @@ public class EntityTests
         b.Delete(entity);
         b.Playback().Dispose();
 
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.Throws<ArgumentException>(() =>
         {
             var c = entity.ComponentTypes.Count;
         });

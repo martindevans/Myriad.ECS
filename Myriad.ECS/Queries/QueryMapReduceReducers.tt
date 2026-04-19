@@ -26,7 +26,7 @@ namespace Myriad.ECS.Queries
 {
 #>
 		    /// <summary>Get the minimum of 2 values</summary>
-		    public struct Min
+		    public readonly struct Min
                 : IQueryReduce<<#= type.Name #>>
             {
 			    /// <inheritdoc />
@@ -37,7 +37,7 @@ namespace Myriad.ECS.Queries
             }
 
 		    /// <summary>Get the maximum of 2 values</summary>
-		    public struct Max
+		    public readonly struct Max
                 : IQueryReduce<<#= type.Name #>>
             {
 			    /// <inheritdoc />
@@ -48,7 +48,7 @@ namespace Myriad.ECS.Queries
             }
 
 		    /// <summary>Add the 2 values</summary>
-		    public struct Add
+		    public readonly struct Add
                 : IQueryReduce<<#= type.Name #>>
             {
 			    /// <inheritdoc />
@@ -59,7 +59,7 @@ namespace Myriad.ECS.Queries
             }
 
 		    /// <summary>Multiply the 2 values</summary>
-		    public struct Mul
+		    public readonly struct Mul
                 : IQueryReduce<<#= type.Name #>>
             {
 			    /// <inheritdoc />
@@ -76,7 +76,7 @@ namespace Myriad.ECS.Queries
 {
 #>
 		    /// <summary>XOR the 2 values</summary>
-		    public struct Xor
+		    public readonly struct Xor
                 : IQueryReduce<<#= type.Name #>>
             {
 			    /// <inheritdoc />
@@ -87,7 +87,7 @@ namespace Myriad.ECS.Queries
             }
 
 		    /// <summary>AND the 2 values</summary>
-		    public struct And
+		    public readonly struct And
                 : IQueryReduce<<#= type.Name #>>
             {
 			    /// <inheritdoc />
@@ -98,7 +98,7 @@ namespace Myriad.ECS.Queries
             }
 
 		    /// <summary>OR the 2 values</summary>
-		    public struct Or
+		    public readonly struct Or
                 : IQueryReduce<<#= type.Name #>>
             {
 			    /// <inheritdoc />

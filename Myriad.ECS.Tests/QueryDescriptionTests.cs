@@ -336,7 +336,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        Assert.ThrowsException<InvalidOperationException>(() => q.First());
+        Assert.Throws<InvalidOperationException>(() => q.First());
     }
 
     [TestMethod]
@@ -489,7 +489,7 @@ public class QueryDescriptionTests
         c.Create().Set(new Component0());
         c.Playback().Dispose();
 
-        Assert.ThrowsException<InvalidOperationException>(() => q.SingleOrDefault());
+        Assert.Throws<InvalidOperationException>(() => q.SingleOrDefault());
     }
 
     [TestMethod]
@@ -525,7 +525,7 @@ public class QueryDescriptionTests
         c.Create().Set(new Component0());
         c.Playback().Dispose();
 
-        Assert.ThrowsException<InvalidOperationException>(() => q.Single());
+        Assert.Throws<InvalidOperationException>(() => q.Single());
     }
 
     [TestMethod]
@@ -538,7 +538,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        Assert.ThrowsException<InvalidOperationException>(() => q.Single());
+        Assert.Throws<InvalidOperationException>(() => q.Single());
     }
 
     [TestMethod]
@@ -653,7 +653,7 @@ public class QueryDescriptionTests
 
         var rng = new Random(123);
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             q.Random(rng);
         });
