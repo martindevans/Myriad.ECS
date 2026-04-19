@@ -4,7 +4,6 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
-<#@ include file="TemplateHeaders/ParallelWorkLoopSetup.t4" #>
 <#
 	const int PARAM_COUNT = 16;
 #>
@@ -254,120 +253,6 @@ namespace Myriad.ECS.Worlds
 			}
 
 			return count;
-		}
-
-		/// <summary>
-        /// Execute a query which executes on entire chunks. Executes work in parallel at the chunk
-		/// level.
-        /// </summary>
-        /// <typeparam name="TQ">The type of the query</typeparam>
-<# for (var k = 0; k < sumij; k++)
-{
-#>
-        /// <typeparam name="T<#= k #>">Type of component <#= k #> to retrieve</typeparam>
-<#
-}
-#>
-        /// <param name="q">The TQ instance which will be executed for each chunk</param>
-        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
-		/// query object will automatically be created and written into this field.</param>
-        /// <returns>The total number of entities processed</returns>
-		<#= CoverageAttribute(i) #>
-		public int ExecuteChunkParallel<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
-			TQ q,
-			QueryDescription? query = null
-		)
-			where <#= Constraints(sumij, 12) #>
-			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
-		{
-			query ??= GetCachedQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>();
-
-			var archetypes = query.GetArchetypes();
-
-			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
-			if (archetypes.Count == 0 || !query.Any())
-				return 0;
-
-			Span<ComponentID> components = stackalloc ComponentID[]
-			{
-<# for (var k = 0; k < i; k++)
-{
-#>
-				ComponentID<T<#= k #>>.ID,
-<#
-}
-#>
-			};
-
-<#
-			EmitParallelWorkLoopSetup(workItemName);
-#>
-
-			var count = 0;
-			foreach (var archetypeMatch in archetypes)
-			{
-				var archetype = archetypeMatch.Archetype;
-				if (archetype.EntityCount == 0)
-					continue;
-
-<# if (sumij == 0) { #>
-				archetype.Block();
-<# } else { #>
-				archetype.Block(components);
-<# } #>
-
-				count += archetype.EntityCount;
-
-				// Inrement work counter for all of the chunk we're about to enqueue
-				workCounter.AddCount(archetype.Chunks.Count);
-
-				using var enumerator = archetype.GetChunkEnumerator();
-				while (enumerator.MoveNext())
-				{
-					var chunk = enumerator.Current;
-					var item = new <#= workItemName #>(chunk, q);
-
-<#
-					EmitEnqueueParallelWork("item", false);
-#>
-				}
-			}
-
-<#
-			EmitParallelWorkLoopWaitAndTeardown(workItemName);
-#>
-
-			return count;
-		}
-
-		<#= CoverageAttribute(i) #>
-		private readonly struct ChunkWorkItem<#= i #><TQ, <#= queryConstraints #>>
-			: IWorkItem
-			where <#= Constraints(i, 12) #>
-			where TQ : IChunkQuery<<#= queryConstraints #>>
-		{
-			private readonly TQ _q;
-			private readonly Chunks.Chunk _chunk;
-
-			public ChunkWorkItem<#= i #>(Chunks.Chunk chunk, TQ q)
-			{
-				_chunk = chunk;
-				_q = q;
-			}
-
-			public void Execute()
-			{
-				_q.Execute(
-					new ChunkHandle(_chunk)
-<# for (var k = 0; k < i; k++)
-{
-#>
-					, _chunk.GetSpan<T<#= k #>>()
-<#
-}
-#>
-				);
-			}
 		}
 	}
 }

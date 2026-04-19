@@ -170,22 +170,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		<#= CoverageAttribute(i) #>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<<#= delegate_type_params #>>(QueryDelegateEntity<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
-			where <#= Constraints(i, 12) #>
-		{
-			return ExecuteParallel<<#= delegate_wrapper_name #>E<<#= delegate_type_params #>>, <#= delegate_type_params #>>(
-				new <#= delegate_wrapper_name #>E<<#= delegate_type_params #>>(@delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -214,22 +198,6 @@ namespace Myriad.ECS.Worlds
 			return Execute<<#= delegate_wrapper_name #><<#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #><<#= delegate_type_params #>>(@delegate),
 				ref query
-			);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		<#= CoverageAttribute(i) #>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<<#= delegate_type_params #>>(QueryDelegate<<#= delegate_type_params #>> @delegate, QueryDescription? query = null)
-			where <#= Constraints(i, 12) #>
-		{
-			return ExecuteParallel<<#= delegate_wrapper_name #><<#= delegate_type_params #>>, <#= delegate_type_params #>>(
-				new <#= delegate_wrapper_name #><<#= delegate_type_params #>>(@delegate),
-				query
 			);
 		}
 
@@ -270,23 +238,6 @@ namespace Myriad.ECS.Worlds
 		}
 
 		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		<#= CoverageAttribute(i) #>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, <#= delegate_type_params #>>(TData data, QueryDelegateEntityData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
-			where <#= Constraints(i, 12) #>
-		{
-			return ExecuteParallel<<#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
-				new <#= delegate_wrapper_name #>ED<TData, <#= delegate_type_params #>>(data, @delegate),
-				query
-			);
-		}
-
-		/// <summary>
 		/// Execute a delegate for every entity in a query. Passing an object through into every call.
 		/// </summary>
 		/// <param name="delegate"></param>
@@ -317,23 +268,6 @@ namespace Myriad.ECS.Worlds
 			return Execute<<#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
 				new <#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>(data, @delegate),
 				ref query
-			);
-		}
-
-		/// <summary>
-		/// Execute a delegate for every entity in a query, in parallel. Passing an object through into every call.
-		/// </summary>
-		/// <param name="delegate"></param>
-		/// <param name="query"></param>
-		/// <param name="data">The object passed into every call</param>
-		<#= CoverageAttribute(i) #>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public int QueryParallel<TData, <#= delegate_type_params #>>(TData data, QueryDelegateData<TData, <#= delegate_type_params #>> @delegate, QueryDescription? query = null)
-			where <#= Constraints(i, 12) #>
-		{
-			return ExecuteParallel<<#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>, <#= delegate_type_params #>>(
-				new <#= delegate_wrapper_name #>D<TData, <#= delegate_type_params #>>(data, @delegate),
-				query
 			);
 		}
 	}

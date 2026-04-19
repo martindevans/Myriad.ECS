@@ -151,6 +151,17 @@ for (var k = 0; k < i; k++)
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+<# for (var k = 0; k < i; k++)
+{
+#>
+				C<#= k #>,
+<#
+}
+#>
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -161,16 +172,6 @@ for (var k = 0; k < i; k++)
 <# if (i == 0) { #>
 				archetype.Block();
 <# } else { #>
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-<# for (var k = 0; k < i; k++)
-{
-#>
-				    C<#= k #>,
-<#
-}
-#>
-			    };
 
 				archetype.Block(components);
 <# } #>

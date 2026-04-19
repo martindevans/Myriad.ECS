@@ -70,6 +70,10 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -203,6 +207,11 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -210,10 +219,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-			    };
 
 				archetype.Block(components);
 
@@ -360,6 +365,12 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+				C1,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -367,11 +378,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-				    C1,
-			    };
 
 				archetype.Block(components);
 
@@ -527,6 +533,13 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+				C1,
+				C2,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -534,12 +547,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-				    C1,
-				    C2,
-			    };
 
 				archetype.Block(components);
 
@@ -704,6 +711,14 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+				C1,
+				C2,
+				C3,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -711,13 +726,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-				    C1,
-				    C2,
-				    C3,
-			    };
 
 				archetype.Block(components);
 
@@ -891,6 +899,15 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+				C1,
+				C2,
+				C3,
+				C4,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -898,14 +915,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-				    C1,
-				    C2,
-				    C3,
-				    C4,
-			    };
 
 				archetype.Block(components);
 
@@ -1088,6 +1097,16 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+				C1,
+				C2,
+				C3,
+				C4,
+				C5,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -1095,15 +1114,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-				    C1,
-				    C2,
-				    C3,
-				    C4,
-				    C5,
-			    };
 
 				archetype.Block(components);
 
@@ -1295,6 +1305,17 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+				C1,
+				C2,
+				C3,
+				C4,
+				C5,
+				C6,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -1302,16 +1323,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-				    C1,
-				    C2,
-				    C3,
-				    C4,
-				    C5,
-				    C6,
-			    };
 
 				archetype.Block(components);
 
@@ -1512,6 +1523,18 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+				C1,
+				C2,
+				C3,
+				C4,
+				C5,
+				C6,
+				C7,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -1519,17 +1542,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-				    C1,
-				    C2,
-				    C3,
-				    C4,
-				    C5,
-				    C6,
-				    C7,
-			    };
 
 				archetype.Block(components);
 
@@ -1739,6 +1751,19 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+				C1,
+				C2,
+				C3,
+				C4,
+				C5,
+				C6,
+				C7,
+				C8,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -1746,18 +1771,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-				    C1,
-				    C2,
-				    C3,
-				    C4,
-				    C5,
-				    C6,
-				    C7,
-				    C8,
-			    };
 
 				archetype.Block(components);
 
@@ -1976,6 +1989,20 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+				C1,
+				C2,
+				C3,
+				C4,
+				C5,
+				C6,
+				C7,
+				C8,
+				C9,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -1983,19 +2010,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-				    C1,
-				    C2,
-				    C3,
-				    C4,
-				    C5,
-				    C6,
-				    C7,
-				    C8,
-				    C9,
-			    };
 
 				archetype.Block(components);
 
@@ -2223,6 +2237,21 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+				C1,
+				C2,
+				C3,
+				C4,
+				C5,
+				C6,
+				C7,
+				C8,
+				C9,
+				C10,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -2230,20 +2259,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-				    C1,
-				    C2,
-				    C3,
-				    C4,
-				    C5,
-				    C6,
-				    C7,
-				    C8,
-				    C9,
-				    C10,
-			    };
 
 				archetype.Block(components);
 
@@ -2480,6 +2495,22 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+				C1,
+				C2,
+				C3,
+				C4,
+				C5,
+				C6,
+				C7,
+				C8,
+				C9,
+				C10,
+				C11,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -2487,21 +2518,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-				    C1,
-				    C2,
-				    C3,
-				    C4,
-				    C5,
-				    C6,
-				    C7,
-				    C8,
-				    C9,
-				    C10,
-				    C11,
-			    };
 
 				archetype.Block(components);
 
@@ -2747,6 +2763,23 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+				C1,
+				C2,
+				C3,
+				C4,
+				C5,
+				C6,
+				C7,
+				C8,
+				C9,
+				C10,
+				C11,
+				C12,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -2754,22 +2787,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-				    C1,
-				    C2,
-				    C3,
-				    C4,
-				    C5,
-				    C6,
-				    C7,
-				    C8,
-				    C9,
-				    C10,
-				    C11,
-				    C12,
-			    };
 
 				archetype.Block(components);
 
@@ -3024,6 +3041,24 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+				C1,
+				C2,
+				C3,
+				C4,
+				C5,
+				C6,
+				C7,
+				C8,
+				C9,
+				C10,
+				C11,
+				C12,
+				C13,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -3031,23 +3066,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-				    C1,
-				    C2,
-				    C3,
-				    C4,
-				    C5,
-				    C6,
-				    C7,
-				    C8,
-				    C9,
-				    C10,
-				    C11,
-				    C12,
-				    C13,
-			    };
 
 				archetype.Block(components);
 
@@ -3311,6 +3329,25 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+				C1,
+				C2,
+				C3,
+				C4,
+				C5,
+				C6,
+				C7,
+				C8,
+				C9,
+				C10,
+				C11,
+				C12,
+				C13,
+				C14,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -3318,24 +3355,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-				    C1,
-				    C2,
-				    C3,
-				    C4,
-				    C5,
-				    C6,
-				    C7,
-				    C8,
-				    C9,
-				    C10,
-				    C11,
-				    C12,
-				    C13,
-				    C14,
-			    };
 
 				archetype.Block(components);
 
@@ -3608,6 +3627,26 @@ namespace Myriad.ECS.Queries
 
         private bool NextArchetype()
         {
+            Span<ComponentID> components = stackalloc ComponentID[]
+			{
+				C0,
+				C1,
+				C2,
+				C3,
+				C4,
+				C5,
+				C6,
+				C7,
+				C8,
+				C9,
+				C10,
+				C11,
+				C12,
+				C13,
+				C14,
+				C15,
+			};
+
             while (true)
             {
                 // If there are no archetypes exit with false
@@ -3615,25 +3654,6 @@ namespace Myriad.ECS.Queries
                     return false;
 
                 var archetype = _archetypesEnumerator.Current.Archetype;
-                Span<ComponentID> components = stackalloc ComponentID[]
-			    {
-				    C0,
-				    C1,
-				    C2,
-				    C3,
-				    C4,
-				    C5,
-				    C6,
-				    C7,
-				    C8,
-				    C9,
-				    C10,
-				    C11,
-				    C12,
-				    C13,
-				    C14,
-				    C15,
-			    };
 
 				archetype.Block(components);
 
