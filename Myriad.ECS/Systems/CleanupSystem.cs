@@ -40,7 +40,7 @@ public sealed class CleanupSystem<TData>
     public void Dispose()
     {
         foreach (var disposable in _disposables)
-            disposable.Dispose();
+            disposable?.Dispose();
         _disposables.Clear();
     }
 }
