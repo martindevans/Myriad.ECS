@@ -237,8 +237,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index)
 							);
 
 							// Unroll iteration 1
@@ -267,7 +267,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index)
 							);
 						}
 					}
@@ -362,18 +362,17 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 
-							unsafe
+							for (var index = 0; index < entities.Length; index++)
 							{
-								for (var index = 0; index < entities.Length; index++)
-								{
-									q.Execute(
-										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0)
+								q.Execute(
+									Unsafe.Add(ref entity0, index),
+										ref Unsafe.Add(ref t0_first, index)
 									);
 								}
 							}
@@ -639,8 +638,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index)
 							);
 
 							// Unroll iteration 1
@@ -669,7 +668,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index)
 							);
 						}
 					}
@@ -768,13 +767,14 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 							var t1 = chunk.GetSpan<T1>(c1);
 							Debug.Assert(t1.Length == entities.Length);
-							ref var t1_first = ref t1[0];
+							ref var tt1_first = ref MemoryMarshal.GetReference(tt1);
 
 							unsafe
 							{
@@ -782,7 +782,7 @@ namespace Myriad.ECS.Worlds
 								{
 									q.Execute(
 										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0)
+										ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index)
 									);
 								}
 							}
@@ -1064,8 +1064,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index)
 							);
 
 							// Unroll iteration 1
@@ -1094,7 +1094,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index)
 							);
 						}
 					}
@@ -1197,16 +1197,17 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 							var t1 = chunk.GetSpan<T1>(c1);
 							Debug.Assert(t1.Length == entities.Length);
-							ref var t1_first = ref t1[0];
+							ref var tt1_first = ref MemoryMarshal.GetReference(tt1);
 							var t2 = chunk.GetSpan<T2>(c2);
 							Debug.Assert(t2.Length == entities.Length);
-							ref var t2_first = ref t2[0];
+							ref var tt2_first = ref MemoryMarshal.GetReference(tt2);
 
 							unsafe
 							{
@@ -1214,7 +1215,7 @@ namespace Myriad.ECS.Worlds
 								{
 									q.Execute(
 										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0)
+										ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index)
 									);
 								}
 							}
@@ -1512,8 +1513,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index)
 							);
 
 							// Unroll iteration 1
@@ -1542,7 +1543,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index)
 							);
 						}
 					}
@@ -1649,19 +1650,20 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 							var t1 = chunk.GetSpan<T1>(c1);
 							Debug.Assert(t1.Length == entities.Length);
-							ref var t1_first = ref t1[0];
+							ref var tt1_first = ref MemoryMarshal.GetReference(tt1);
 							var t2 = chunk.GetSpan<T2>(c2);
 							Debug.Assert(t2.Length == entities.Length);
-							ref var t2_first = ref t2[0];
+							ref var tt2_first = ref MemoryMarshal.GetReference(tt2);
 							var t3 = chunk.GetSpan<T3>(c3);
 							Debug.Assert(t3.Length == entities.Length);
-							ref var t3_first = ref t3[0];
+							ref var tt3_first = ref MemoryMarshal.GetReference(tt3);
 
 							unsafe
 							{
@@ -1669,7 +1671,7 @@ namespace Myriad.ECS.Worlds
 								{
 									q.Execute(
 										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0)
+										ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index)
 									);
 								}
 							}
@@ -1983,8 +1985,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index)
 							);
 
 							// Unroll iteration 1
@@ -2013,7 +2015,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index)
 							);
 						}
 					}
@@ -2124,22 +2126,23 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 							var t1 = chunk.GetSpan<T1>(c1);
 							Debug.Assert(t1.Length == entities.Length);
-							ref var t1_first = ref t1[0];
+							ref var tt1_first = ref MemoryMarshal.GetReference(tt1);
 							var t2 = chunk.GetSpan<T2>(c2);
 							Debug.Assert(t2.Length == entities.Length);
-							ref var t2_first = ref t2[0];
+							ref var tt2_first = ref MemoryMarshal.GetReference(tt2);
 							var t3 = chunk.GetSpan<T3>(c3);
 							Debug.Assert(t3.Length == entities.Length);
-							ref var t3_first = ref t3[0];
+							ref var tt3_first = ref MemoryMarshal.GetReference(tt3);
 							var t4 = chunk.GetSpan<T4>(c4);
 							Debug.Assert(t4.Length == entities.Length);
-							ref var t4_first = ref t4[0];
+							ref var tt4_first = ref MemoryMarshal.GetReference(tt4);
 
 							unsafe
 							{
@@ -2147,7 +2150,7 @@ namespace Myriad.ECS.Worlds
 								{
 									q.Execute(
 										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0)
+										ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index)
 									);
 								}
 							}
@@ -2477,8 +2480,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index)
 							);
 
 							// Unroll iteration 1
@@ -2507,7 +2510,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index)
 							);
 						}
 					}
@@ -2622,25 +2625,26 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 							var t1 = chunk.GetSpan<T1>(c1);
 							Debug.Assert(t1.Length == entities.Length);
-							ref var t1_first = ref t1[0];
+							ref var tt1_first = ref MemoryMarshal.GetReference(tt1);
 							var t2 = chunk.GetSpan<T2>(c2);
 							Debug.Assert(t2.Length == entities.Length);
-							ref var t2_first = ref t2[0];
+							ref var tt2_first = ref MemoryMarshal.GetReference(tt2);
 							var t3 = chunk.GetSpan<T3>(c3);
 							Debug.Assert(t3.Length == entities.Length);
-							ref var t3_first = ref t3[0];
+							ref var tt3_first = ref MemoryMarshal.GetReference(tt3);
 							var t4 = chunk.GetSpan<T4>(c4);
 							Debug.Assert(t4.Length == entities.Length);
-							ref var t4_first = ref t4[0];
+							ref var tt4_first = ref MemoryMarshal.GetReference(tt4);
 							var t5 = chunk.GetSpan<T5>(c5);
 							Debug.Assert(t5.Length == entities.Length);
-							ref var t5_first = ref t5[0];
+							ref var tt5_first = ref MemoryMarshal.GetReference(tt5);
 
 							unsafe
 							{
@@ -2648,7 +2652,7 @@ namespace Myriad.ECS.Worlds
 								{
 									q.Execute(
 										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0)
+										ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index)
 									);
 								}
 							}
@@ -2994,8 +2998,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index)
 							);
 
 							// Unroll iteration 1
@@ -3024,7 +3028,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index)
 							);
 						}
 					}
@@ -3143,28 +3147,29 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 							var t1 = chunk.GetSpan<T1>(c1);
 							Debug.Assert(t1.Length == entities.Length);
-							ref var t1_first = ref t1[0];
+							ref var tt1_first = ref MemoryMarshal.GetReference(tt1);
 							var t2 = chunk.GetSpan<T2>(c2);
 							Debug.Assert(t2.Length == entities.Length);
-							ref var t2_first = ref t2[0];
+							ref var tt2_first = ref MemoryMarshal.GetReference(tt2);
 							var t3 = chunk.GetSpan<T3>(c3);
 							Debug.Assert(t3.Length == entities.Length);
-							ref var t3_first = ref t3[0];
+							ref var tt3_first = ref MemoryMarshal.GetReference(tt3);
 							var t4 = chunk.GetSpan<T4>(c4);
 							Debug.Assert(t4.Length == entities.Length);
-							ref var t4_first = ref t4[0];
+							ref var tt4_first = ref MemoryMarshal.GetReference(tt4);
 							var t5 = chunk.GetSpan<T5>(c5);
 							Debug.Assert(t5.Length == entities.Length);
-							ref var t5_first = ref t5[0];
+							ref var tt5_first = ref MemoryMarshal.GetReference(tt5);
 							var t6 = chunk.GetSpan<T6>(c6);
 							Debug.Assert(t6.Length == entities.Length);
-							ref var t6_first = ref t6[0];
+							ref var tt6_first = ref MemoryMarshal.GetReference(tt6);
 
 							unsafe
 							{
@@ -3172,7 +3177,7 @@ namespace Myriad.ECS.Worlds
 								{
 									q.Execute(
 										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0)
+										ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index)
 									);
 								}
 							}
@@ -3534,8 +3539,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index)
 							);
 
 							// Unroll iteration 1
@@ -3564,7 +3569,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index)
 							);
 						}
 					}
@@ -3687,31 +3692,32 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 							var t1 = chunk.GetSpan<T1>(c1);
 							Debug.Assert(t1.Length == entities.Length);
-							ref var t1_first = ref t1[0];
+							ref var tt1_first = ref MemoryMarshal.GetReference(tt1);
 							var t2 = chunk.GetSpan<T2>(c2);
 							Debug.Assert(t2.Length == entities.Length);
-							ref var t2_first = ref t2[0];
+							ref var tt2_first = ref MemoryMarshal.GetReference(tt2);
 							var t3 = chunk.GetSpan<T3>(c3);
 							Debug.Assert(t3.Length == entities.Length);
-							ref var t3_first = ref t3[0];
+							ref var tt3_first = ref MemoryMarshal.GetReference(tt3);
 							var t4 = chunk.GetSpan<T4>(c4);
 							Debug.Assert(t4.Length == entities.Length);
-							ref var t4_first = ref t4[0];
+							ref var tt4_first = ref MemoryMarshal.GetReference(tt4);
 							var t5 = chunk.GetSpan<T5>(c5);
 							Debug.Assert(t5.Length == entities.Length);
-							ref var t5_first = ref t5[0];
+							ref var tt5_first = ref MemoryMarshal.GetReference(tt5);
 							var t6 = chunk.GetSpan<T6>(c6);
 							Debug.Assert(t6.Length == entities.Length);
-							ref var t6_first = ref t6[0];
+							ref var tt6_first = ref MemoryMarshal.GetReference(tt6);
 							var t7 = chunk.GetSpan<T7>(c7);
 							Debug.Assert(t7.Length == entities.Length);
-							ref var t7_first = ref t7[0];
+							ref var tt7_first = ref MemoryMarshal.GetReference(tt7);
 
 							unsafe
 							{
@@ -3719,7 +3725,7 @@ namespace Myriad.ECS.Worlds
 								{
 									q.Execute(
 										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0)
+										ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index)
 									);
 								}
 							}
@@ -4097,8 +4103,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index)
 							);
 
 							// Unroll iteration 1
@@ -4127,7 +4133,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index)
 							);
 						}
 					}
@@ -4254,34 +4260,35 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 							var t1 = chunk.GetSpan<T1>(c1);
 							Debug.Assert(t1.Length == entities.Length);
-							ref var t1_first = ref t1[0];
+							ref var tt1_first = ref MemoryMarshal.GetReference(tt1);
 							var t2 = chunk.GetSpan<T2>(c2);
 							Debug.Assert(t2.Length == entities.Length);
-							ref var t2_first = ref t2[0];
+							ref var tt2_first = ref MemoryMarshal.GetReference(tt2);
 							var t3 = chunk.GetSpan<T3>(c3);
 							Debug.Assert(t3.Length == entities.Length);
-							ref var t3_first = ref t3[0];
+							ref var tt3_first = ref MemoryMarshal.GetReference(tt3);
 							var t4 = chunk.GetSpan<T4>(c4);
 							Debug.Assert(t4.Length == entities.Length);
-							ref var t4_first = ref t4[0];
+							ref var tt4_first = ref MemoryMarshal.GetReference(tt4);
 							var t5 = chunk.GetSpan<T5>(c5);
 							Debug.Assert(t5.Length == entities.Length);
-							ref var t5_first = ref t5[0];
+							ref var tt5_first = ref MemoryMarshal.GetReference(tt5);
 							var t6 = chunk.GetSpan<T6>(c6);
 							Debug.Assert(t6.Length == entities.Length);
-							ref var t6_first = ref t6[0];
+							ref var tt6_first = ref MemoryMarshal.GetReference(tt6);
 							var t7 = chunk.GetSpan<T7>(c7);
 							Debug.Assert(t7.Length == entities.Length);
-							ref var t7_first = ref t7[0];
+							ref var tt7_first = ref MemoryMarshal.GetReference(tt7);
 							var t8 = chunk.GetSpan<T8>(c8);
 							Debug.Assert(t8.Length == entities.Length);
-							ref var t8_first = ref t8[0];
+							ref var tt8_first = ref MemoryMarshal.GetReference(tt8);
 
 							unsafe
 							{
@@ -4289,7 +4296,7 @@ namespace Myriad.ECS.Worlds
 								{
 									q.Execute(
 										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0)
+										ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index)
 									);
 								}
 							}
@@ -4683,8 +4690,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index)
 							);
 
 							// Unroll iteration 1
@@ -4713,7 +4720,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index)
 							);
 						}
 					}
@@ -4844,37 +4851,38 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 							var t1 = chunk.GetSpan<T1>(c1);
 							Debug.Assert(t1.Length == entities.Length);
-							ref var t1_first = ref t1[0];
+							ref var tt1_first = ref MemoryMarshal.GetReference(tt1);
 							var t2 = chunk.GetSpan<T2>(c2);
 							Debug.Assert(t2.Length == entities.Length);
-							ref var t2_first = ref t2[0];
+							ref var tt2_first = ref MemoryMarshal.GetReference(tt2);
 							var t3 = chunk.GetSpan<T3>(c3);
 							Debug.Assert(t3.Length == entities.Length);
-							ref var t3_first = ref t3[0];
+							ref var tt3_first = ref MemoryMarshal.GetReference(tt3);
 							var t4 = chunk.GetSpan<T4>(c4);
 							Debug.Assert(t4.Length == entities.Length);
-							ref var t4_first = ref t4[0];
+							ref var tt4_first = ref MemoryMarshal.GetReference(tt4);
 							var t5 = chunk.GetSpan<T5>(c5);
 							Debug.Assert(t5.Length == entities.Length);
-							ref var t5_first = ref t5[0];
+							ref var tt5_first = ref MemoryMarshal.GetReference(tt5);
 							var t6 = chunk.GetSpan<T6>(c6);
 							Debug.Assert(t6.Length == entities.Length);
-							ref var t6_first = ref t6[0];
+							ref var tt6_first = ref MemoryMarshal.GetReference(tt6);
 							var t7 = chunk.GetSpan<T7>(c7);
 							Debug.Assert(t7.Length == entities.Length);
-							ref var t7_first = ref t7[0];
+							ref var tt7_first = ref MemoryMarshal.GetReference(tt7);
 							var t8 = chunk.GetSpan<T8>(c8);
 							Debug.Assert(t8.Length == entities.Length);
-							ref var t8_first = ref t8[0];
+							ref var tt8_first = ref MemoryMarshal.GetReference(tt8);
 							var t9 = chunk.GetSpan<T9>(c9);
 							Debug.Assert(t9.Length == entities.Length);
-							ref var t9_first = ref t9[0];
+							ref var tt9_first = ref MemoryMarshal.GetReference(tt9);
 
 							unsafe
 							{
@@ -4882,7 +4890,7 @@ namespace Myriad.ECS.Worlds
 								{
 									q.Execute(
 										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0)
+										ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index)
 									);
 								}
 							}
@@ -5292,8 +5300,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index)
 							);
 
 							// Unroll iteration 1
@@ -5322,7 +5330,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index)
 							);
 						}
 					}
@@ -5457,40 +5465,41 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 							var t1 = chunk.GetSpan<T1>(c1);
 							Debug.Assert(t1.Length == entities.Length);
-							ref var t1_first = ref t1[0];
+							ref var tt1_first = ref MemoryMarshal.GetReference(tt1);
 							var t2 = chunk.GetSpan<T2>(c2);
 							Debug.Assert(t2.Length == entities.Length);
-							ref var t2_first = ref t2[0];
+							ref var tt2_first = ref MemoryMarshal.GetReference(tt2);
 							var t3 = chunk.GetSpan<T3>(c3);
 							Debug.Assert(t3.Length == entities.Length);
-							ref var t3_first = ref t3[0];
+							ref var tt3_first = ref MemoryMarshal.GetReference(tt3);
 							var t4 = chunk.GetSpan<T4>(c4);
 							Debug.Assert(t4.Length == entities.Length);
-							ref var t4_first = ref t4[0];
+							ref var tt4_first = ref MemoryMarshal.GetReference(tt4);
 							var t5 = chunk.GetSpan<T5>(c5);
 							Debug.Assert(t5.Length == entities.Length);
-							ref var t5_first = ref t5[0];
+							ref var tt5_first = ref MemoryMarshal.GetReference(tt5);
 							var t6 = chunk.GetSpan<T6>(c6);
 							Debug.Assert(t6.Length == entities.Length);
-							ref var t6_first = ref t6[0];
+							ref var tt6_first = ref MemoryMarshal.GetReference(tt6);
 							var t7 = chunk.GetSpan<T7>(c7);
 							Debug.Assert(t7.Length == entities.Length);
-							ref var t7_first = ref t7[0];
+							ref var tt7_first = ref MemoryMarshal.GetReference(tt7);
 							var t8 = chunk.GetSpan<T8>(c8);
 							Debug.Assert(t8.Length == entities.Length);
-							ref var t8_first = ref t8[0];
+							ref var tt8_first = ref MemoryMarshal.GetReference(tt8);
 							var t9 = chunk.GetSpan<T9>(c9);
 							Debug.Assert(t9.Length == entities.Length);
-							ref var t9_first = ref t9[0];
+							ref var tt9_first = ref MemoryMarshal.GetReference(tt9);
 							var t10 = chunk.GetSpan<T10>(c10);
 							Debug.Assert(t10.Length == entities.Length);
-							ref var t10_first = ref t10[0];
+							ref var tt10_first = ref MemoryMarshal.GetReference(tt10);
 
 							unsafe
 							{
@@ -5498,7 +5507,7 @@ namespace Myriad.ECS.Worlds
 								{
 									q.Execute(
 										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0)
+										ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index)
 									);
 								}
 							}
@@ -5924,8 +5933,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index), ref Unsafe.Add(ref t11_first, index)
 							);
 
 							// Unroll iteration 1
@@ -5954,7 +5963,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index), ref Unsafe.Add(ref t11_first, index)
 							);
 						}
 					}
@@ -6093,43 +6102,44 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 							var t1 = chunk.GetSpan<T1>(c1);
 							Debug.Assert(t1.Length == entities.Length);
-							ref var t1_first = ref t1[0];
+							ref var tt1_first = ref MemoryMarshal.GetReference(tt1);
 							var t2 = chunk.GetSpan<T2>(c2);
 							Debug.Assert(t2.Length == entities.Length);
-							ref var t2_first = ref t2[0];
+							ref var tt2_first = ref MemoryMarshal.GetReference(tt2);
 							var t3 = chunk.GetSpan<T3>(c3);
 							Debug.Assert(t3.Length == entities.Length);
-							ref var t3_first = ref t3[0];
+							ref var tt3_first = ref MemoryMarshal.GetReference(tt3);
 							var t4 = chunk.GetSpan<T4>(c4);
 							Debug.Assert(t4.Length == entities.Length);
-							ref var t4_first = ref t4[0];
+							ref var tt4_first = ref MemoryMarshal.GetReference(tt4);
 							var t5 = chunk.GetSpan<T5>(c5);
 							Debug.Assert(t5.Length == entities.Length);
-							ref var t5_first = ref t5[0];
+							ref var tt5_first = ref MemoryMarshal.GetReference(tt5);
 							var t6 = chunk.GetSpan<T6>(c6);
 							Debug.Assert(t6.Length == entities.Length);
-							ref var t6_first = ref t6[0];
+							ref var tt6_first = ref MemoryMarshal.GetReference(tt6);
 							var t7 = chunk.GetSpan<T7>(c7);
 							Debug.Assert(t7.Length == entities.Length);
-							ref var t7_first = ref t7[0];
+							ref var tt7_first = ref MemoryMarshal.GetReference(tt7);
 							var t8 = chunk.GetSpan<T8>(c8);
 							Debug.Assert(t8.Length == entities.Length);
-							ref var t8_first = ref t8[0];
+							ref var tt8_first = ref MemoryMarshal.GetReference(tt8);
 							var t9 = chunk.GetSpan<T9>(c9);
 							Debug.Assert(t9.Length == entities.Length);
-							ref var t9_first = ref t9[0];
+							ref var tt9_first = ref MemoryMarshal.GetReference(tt9);
 							var t10 = chunk.GetSpan<T10>(c10);
 							Debug.Assert(t10.Length == entities.Length);
-							ref var t10_first = ref t10[0];
+							ref var tt10_first = ref MemoryMarshal.GetReference(tt10);
 							var t11 = chunk.GetSpan<T11>(c11);
 							Debug.Assert(t11.Length == entities.Length);
-							ref var t11_first = ref t11[0];
+							ref var tt11_first = ref MemoryMarshal.GetReference(tt11);
 
 							unsafe
 							{
@@ -6137,7 +6147,7 @@ namespace Myriad.ECS.Worlds
 								{
 									q.Execute(
 										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0)
+										ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index), ref Unsafe.Add(ref t11_first, index)
 									);
 								}
 							}
@@ -6579,8 +6589,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index), ref Unsafe.Add(ref t11_first, index), ref Unsafe.Add(ref t12_first, index)
 							);
 
 							// Unroll iteration 1
@@ -6609,7 +6619,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index), ref Unsafe.Add(ref t11_first, index), ref Unsafe.Add(ref t12_first, index)
 							);
 						}
 					}
@@ -6752,46 +6762,47 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 							var t1 = chunk.GetSpan<T1>(c1);
 							Debug.Assert(t1.Length == entities.Length);
-							ref var t1_first = ref t1[0];
+							ref var tt1_first = ref MemoryMarshal.GetReference(tt1);
 							var t2 = chunk.GetSpan<T2>(c2);
 							Debug.Assert(t2.Length == entities.Length);
-							ref var t2_first = ref t2[0];
+							ref var tt2_first = ref MemoryMarshal.GetReference(tt2);
 							var t3 = chunk.GetSpan<T3>(c3);
 							Debug.Assert(t3.Length == entities.Length);
-							ref var t3_first = ref t3[0];
+							ref var tt3_first = ref MemoryMarshal.GetReference(tt3);
 							var t4 = chunk.GetSpan<T4>(c4);
 							Debug.Assert(t4.Length == entities.Length);
-							ref var t4_first = ref t4[0];
+							ref var tt4_first = ref MemoryMarshal.GetReference(tt4);
 							var t5 = chunk.GetSpan<T5>(c5);
 							Debug.Assert(t5.Length == entities.Length);
-							ref var t5_first = ref t5[0];
+							ref var tt5_first = ref MemoryMarshal.GetReference(tt5);
 							var t6 = chunk.GetSpan<T6>(c6);
 							Debug.Assert(t6.Length == entities.Length);
-							ref var t6_first = ref t6[0];
+							ref var tt6_first = ref MemoryMarshal.GetReference(tt6);
 							var t7 = chunk.GetSpan<T7>(c7);
 							Debug.Assert(t7.Length == entities.Length);
-							ref var t7_first = ref t7[0];
+							ref var tt7_first = ref MemoryMarshal.GetReference(tt7);
 							var t8 = chunk.GetSpan<T8>(c8);
 							Debug.Assert(t8.Length == entities.Length);
-							ref var t8_first = ref t8[0];
+							ref var tt8_first = ref MemoryMarshal.GetReference(tt8);
 							var t9 = chunk.GetSpan<T9>(c9);
 							Debug.Assert(t9.Length == entities.Length);
-							ref var t9_first = ref t9[0];
+							ref var tt9_first = ref MemoryMarshal.GetReference(tt9);
 							var t10 = chunk.GetSpan<T10>(c10);
 							Debug.Assert(t10.Length == entities.Length);
-							ref var t10_first = ref t10[0];
+							ref var tt10_first = ref MemoryMarshal.GetReference(tt10);
 							var t11 = chunk.GetSpan<T11>(c11);
 							Debug.Assert(t11.Length == entities.Length);
-							ref var t11_first = ref t11[0];
+							ref var tt11_first = ref MemoryMarshal.GetReference(tt11);
 							var t12 = chunk.GetSpan<T12>(c12);
 							Debug.Assert(t12.Length == entities.Length);
-							ref var t12_first = ref t12[0];
+							ref var tt12_first = ref MemoryMarshal.GetReference(tt12);
 
 							unsafe
 							{
@@ -6799,7 +6810,7 @@ namespace Myriad.ECS.Worlds
 								{
 									q.Execute(
 										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0)
+										ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index), ref Unsafe.Add(ref t11_first, index), ref Unsafe.Add(ref t12_first, index)
 									);
 								}
 							}
@@ -7257,8 +7268,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index), ref Unsafe.Add(ref t11_first, index), ref Unsafe.Add(ref t12_first, index), ref Unsafe.Add(ref t13_first, index)
 							);
 
 							// Unroll iteration 1
@@ -7287,7 +7298,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index), ref Unsafe.Add(ref t11_first, index), ref Unsafe.Add(ref t12_first, index), ref Unsafe.Add(ref t13_first, index)
 							);
 						}
 					}
@@ -7434,49 +7445,50 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 							var t1 = chunk.GetSpan<T1>(c1);
 							Debug.Assert(t1.Length == entities.Length);
-							ref var t1_first = ref t1[0];
+							ref var tt1_first = ref MemoryMarshal.GetReference(tt1);
 							var t2 = chunk.GetSpan<T2>(c2);
 							Debug.Assert(t2.Length == entities.Length);
-							ref var t2_first = ref t2[0];
+							ref var tt2_first = ref MemoryMarshal.GetReference(tt2);
 							var t3 = chunk.GetSpan<T3>(c3);
 							Debug.Assert(t3.Length == entities.Length);
-							ref var t3_first = ref t3[0];
+							ref var tt3_first = ref MemoryMarshal.GetReference(tt3);
 							var t4 = chunk.GetSpan<T4>(c4);
 							Debug.Assert(t4.Length == entities.Length);
-							ref var t4_first = ref t4[0];
+							ref var tt4_first = ref MemoryMarshal.GetReference(tt4);
 							var t5 = chunk.GetSpan<T5>(c5);
 							Debug.Assert(t5.Length == entities.Length);
-							ref var t5_first = ref t5[0];
+							ref var tt5_first = ref MemoryMarshal.GetReference(tt5);
 							var t6 = chunk.GetSpan<T6>(c6);
 							Debug.Assert(t6.Length == entities.Length);
-							ref var t6_first = ref t6[0];
+							ref var tt6_first = ref MemoryMarshal.GetReference(tt6);
 							var t7 = chunk.GetSpan<T7>(c7);
 							Debug.Assert(t7.Length == entities.Length);
-							ref var t7_first = ref t7[0];
+							ref var tt7_first = ref MemoryMarshal.GetReference(tt7);
 							var t8 = chunk.GetSpan<T8>(c8);
 							Debug.Assert(t8.Length == entities.Length);
-							ref var t8_first = ref t8[0];
+							ref var tt8_first = ref MemoryMarshal.GetReference(tt8);
 							var t9 = chunk.GetSpan<T9>(c9);
 							Debug.Assert(t9.Length == entities.Length);
-							ref var t9_first = ref t9[0];
+							ref var tt9_first = ref MemoryMarshal.GetReference(tt9);
 							var t10 = chunk.GetSpan<T10>(c10);
 							Debug.Assert(t10.Length == entities.Length);
-							ref var t10_first = ref t10[0];
+							ref var tt10_first = ref MemoryMarshal.GetReference(tt10);
 							var t11 = chunk.GetSpan<T11>(c11);
 							Debug.Assert(t11.Length == entities.Length);
-							ref var t11_first = ref t11[0];
+							ref var tt11_first = ref MemoryMarshal.GetReference(tt11);
 							var t12 = chunk.GetSpan<T12>(c12);
 							Debug.Assert(t12.Length == entities.Length);
-							ref var t12_first = ref t12[0];
+							ref var tt12_first = ref MemoryMarshal.GetReference(tt12);
 							var t13 = chunk.GetSpan<T13>(c13);
 							Debug.Assert(t13.Length == entities.Length);
-							ref var t13_first = ref t13[0];
+							ref var tt13_first = ref MemoryMarshal.GetReference(tt13);
 
 							unsafe
 							{
@@ -7484,7 +7496,7 @@ namespace Myriad.ECS.Worlds
 								{
 									q.Execute(
 										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0)
+										ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index), ref Unsafe.Add(ref t11_first, index), ref Unsafe.Add(ref t12_first, index), ref Unsafe.Add(ref t13_first, index)
 									);
 								}
 							}
@@ -7958,8 +7970,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0), ref Unsafe.Add(ref t14_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index), ref Unsafe.Add(ref t11_first, index), ref Unsafe.Add(ref t12_first, index), ref Unsafe.Add(ref t13_first, index), ref Unsafe.Add(ref t14_first, index)
 							);
 
 							// Unroll iteration 1
@@ -7988,7 +8000,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0), ref Unsafe.Add(ref t14_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index), ref Unsafe.Add(ref t11_first, index), ref Unsafe.Add(ref t12_first, index), ref Unsafe.Add(ref t13_first, index), ref Unsafe.Add(ref t14_first, index)
 							);
 						}
 					}
@@ -8139,52 +8151,53 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 							var t1 = chunk.GetSpan<T1>(c1);
 							Debug.Assert(t1.Length == entities.Length);
-							ref var t1_first = ref t1[0];
+							ref var tt1_first = ref MemoryMarshal.GetReference(tt1);
 							var t2 = chunk.GetSpan<T2>(c2);
 							Debug.Assert(t2.Length == entities.Length);
-							ref var t2_first = ref t2[0];
+							ref var tt2_first = ref MemoryMarshal.GetReference(tt2);
 							var t3 = chunk.GetSpan<T3>(c3);
 							Debug.Assert(t3.Length == entities.Length);
-							ref var t3_first = ref t3[0];
+							ref var tt3_first = ref MemoryMarshal.GetReference(tt3);
 							var t4 = chunk.GetSpan<T4>(c4);
 							Debug.Assert(t4.Length == entities.Length);
-							ref var t4_first = ref t4[0];
+							ref var tt4_first = ref MemoryMarshal.GetReference(tt4);
 							var t5 = chunk.GetSpan<T5>(c5);
 							Debug.Assert(t5.Length == entities.Length);
-							ref var t5_first = ref t5[0];
+							ref var tt5_first = ref MemoryMarshal.GetReference(tt5);
 							var t6 = chunk.GetSpan<T6>(c6);
 							Debug.Assert(t6.Length == entities.Length);
-							ref var t6_first = ref t6[0];
+							ref var tt6_first = ref MemoryMarshal.GetReference(tt6);
 							var t7 = chunk.GetSpan<T7>(c7);
 							Debug.Assert(t7.Length == entities.Length);
-							ref var t7_first = ref t7[0];
+							ref var tt7_first = ref MemoryMarshal.GetReference(tt7);
 							var t8 = chunk.GetSpan<T8>(c8);
 							Debug.Assert(t8.Length == entities.Length);
-							ref var t8_first = ref t8[0];
+							ref var tt8_first = ref MemoryMarshal.GetReference(tt8);
 							var t9 = chunk.GetSpan<T9>(c9);
 							Debug.Assert(t9.Length == entities.Length);
-							ref var t9_first = ref t9[0];
+							ref var tt9_first = ref MemoryMarshal.GetReference(tt9);
 							var t10 = chunk.GetSpan<T10>(c10);
 							Debug.Assert(t10.Length == entities.Length);
-							ref var t10_first = ref t10[0];
+							ref var tt10_first = ref MemoryMarshal.GetReference(tt10);
 							var t11 = chunk.GetSpan<T11>(c11);
 							Debug.Assert(t11.Length == entities.Length);
-							ref var t11_first = ref t11[0];
+							ref var tt11_first = ref MemoryMarshal.GetReference(tt11);
 							var t12 = chunk.GetSpan<T12>(c12);
 							Debug.Assert(t12.Length == entities.Length);
-							ref var t12_first = ref t12[0];
+							ref var tt12_first = ref MemoryMarshal.GetReference(tt12);
 							var t13 = chunk.GetSpan<T13>(c13);
 							Debug.Assert(t13.Length == entities.Length);
-							ref var t13_first = ref t13[0];
+							ref var tt13_first = ref MemoryMarshal.GetReference(tt13);
 							var t14 = chunk.GetSpan<T14>(c14);
 							Debug.Assert(t14.Length == entities.Length);
-							ref var t14_first = ref t14[0];
+							ref var tt14_first = ref MemoryMarshal.GetReference(tt14);
 
 							unsafe
 							{
@@ -8192,7 +8205,7 @@ namespace Myriad.ECS.Worlds
 								{
 									q.Execute(
 										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0), ref Unsafe.Add(ref t14_first, index + 0)
+										ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index), ref Unsafe.Add(ref t11_first, index), ref Unsafe.Add(ref t12_first, index), ref Unsafe.Add(ref t13_first, index), ref Unsafe.Add(ref t14_first, index)
 									);
 								}
 							}
@@ -8682,8 +8695,8 @@ namespace Myriad.ECS.Worlds
 						{
 							// Unroll iteration 0
 							q.Execute(
-								Unsafe.Add(ref entity0, index + 0),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0), ref Unsafe.Add(ref t14_first, index + 0), ref Unsafe.Add(ref t15_first, index + 0)
+								Unsafe.Add(ref entity0, index),
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index), ref Unsafe.Add(ref t11_first, index), ref Unsafe.Add(ref t12_first, index), ref Unsafe.Add(ref t13_first, index), ref Unsafe.Add(ref t14_first, index), ref Unsafe.Add(ref t15_first, index)
 							);
 
 							// Unroll iteration 1
@@ -8712,7 +8725,7 @@ namespace Myriad.ECS.Worlds
 						{
 							q.Execute(
 								Unsafe.Add(ref entity0, index),
-								ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0), ref Unsafe.Add(ref t14_first, index + 0), ref Unsafe.Add(ref t15_first, index + 0)
+								ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index), ref Unsafe.Add(ref t11_first, index), ref Unsafe.Add(ref t12_first, index), ref Unsafe.Add(ref t13_first, index), ref Unsafe.Add(ref t14_first, index), ref Unsafe.Add(ref t15_first, index)
 							);
 						}
 					}
@@ -8867,55 +8880,56 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 							var t0 = chunk.GetSpan<T0>(c0);
 							Debug.Assert(t0.Length == entities.Length);
-							ref var t0_first = ref t0[0];
+							ref var tt0_first = ref MemoryMarshal.GetReference(tt0);
 							var t1 = chunk.GetSpan<T1>(c1);
 							Debug.Assert(t1.Length == entities.Length);
-							ref var t1_first = ref t1[0];
+							ref var tt1_first = ref MemoryMarshal.GetReference(tt1);
 							var t2 = chunk.GetSpan<T2>(c2);
 							Debug.Assert(t2.Length == entities.Length);
-							ref var t2_first = ref t2[0];
+							ref var tt2_first = ref MemoryMarshal.GetReference(tt2);
 							var t3 = chunk.GetSpan<T3>(c3);
 							Debug.Assert(t3.Length == entities.Length);
-							ref var t3_first = ref t3[0];
+							ref var tt3_first = ref MemoryMarshal.GetReference(tt3);
 							var t4 = chunk.GetSpan<T4>(c4);
 							Debug.Assert(t4.Length == entities.Length);
-							ref var t4_first = ref t4[0];
+							ref var tt4_first = ref MemoryMarshal.GetReference(tt4);
 							var t5 = chunk.GetSpan<T5>(c5);
 							Debug.Assert(t5.Length == entities.Length);
-							ref var t5_first = ref t5[0];
+							ref var tt5_first = ref MemoryMarshal.GetReference(tt5);
 							var t6 = chunk.GetSpan<T6>(c6);
 							Debug.Assert(t6.Length == entities.Length);
-							ref var t6_first = ref t6[0];
+							ref var tt6_first = ref MemoryMarshal.GetReference(tt6);
 							var t7 = chunk.GetSpan<T7>(c7);
 							Debug.Assert(t7.Length == entities.Length);
-							ref var t7_first = ref t7[0];
+							ref var tt7_first = ref MemoryMarshal.GetReference(tt7);
 							var t8 = chunk.GetSpan<T8>(c8);
 							Debug.Assert(t8.Length == entities.Length);
-							ref var t8_first = ref t8[0];
+							ref var tt8_first = ref MemoryMarshal.GetReference(tt8);
 							var t9 = chunk.GetSpan<T9>(c9);
 							Debug.Assert(t9.Length == entities.Length);
-							ref var t9_first = ref t9[0];
+							ref var tt9_first = ref MemoryMarshal.GetReference(tt9);
 							var t10 = chunk.GetSpan<T10>(c10);
 							Debug.Assert(t10.Length == entities.Length);
-							ref var t10_first = ref t10[0];
+							ref var tt10_first = ref MemoryMarshal.GetReference(tt10);
 							var t11 = chunk.GetSpan<T11>(c11);
 							Debug.Assert(t11.Length == entities.Length);
-							ref var t11_first = ref t11[0];
+							ref var tt11_first = ref MemoryMarshal.GetReference(tt11);
 							var t12 = chunk.GetSpan<T12>(c12);
 							Debug.Assert(t12.Length == entities.Length);
-							ref var t12_first = ref t12[0];
+							ref var tt12_first = ref MemoryMarshal.GetReference(tt12);
 							var t13 = chunk.GetSpan<T13>(c13);
 							Debug.Assert(t13.Length == entities.Length);
-							ref var t13_first = ref t13[0];
+							ref var tt13_first = ref MemoryMarshal.GetReference(tt13);
 							var t14 = chunk.GetSpan<T14>(c14);
 							Debug.Assert(t14.Length == entities.Length);
-							ref var t14_first = ref t14[0];
+							ref var tt14_first = ref MemoryMarshal.GetReference(tt14);
 							var t15 = chunk.GetSpan<T15>(c15);
 							Debug.Assert(t15.Length == entities.Length);
-							ref var t15_first = ref t15[0];
+							ref var tt15_first = ref MemoryMarshal.GetReference(tt15);
 
 							unsafe
 							{
@@ -8923,9 +8937,8 @@ namespace Myriad.ECS.Worlds
 								{
 									q.Execute(
 										entities[index],
-										ref Unsafe.Add(ref t0_first, index + 0), ref Unsafe.Add(ref t1_first, index + 0), ref Unsafe.Add(ref t2_first, index + 0), ref Unsafe.Add(ref t3_first, index + 0), ref Unsafe.Add(ref t4_first, index + 0), ref Unsafe.Add(ref t5_first, index + 0), ref Unsafe.Add(ref t6_first, index + 0), ref Unsafe.Add(ref t7_first, index + 0), ref Unsafe.Add(ref t8_first, index + 0), ref Unsafe.Add(ref t9_first, index + 0), ref Unsafe.Add(ref t10_first, index + 0), ref Unsafe.Add(ref t11_first, index + 0), ref Unsafe.Add(ref t12_first, index + 0), ref Unsafe.Add(ref t13_first, index + 0), ref Unsafe.Add(ref t14_first, index + 0), ref Unsafe.Add(ref t15_first, index + 0)
-									);
-								}
+										ref Unsafe.Add(ref t0_first, index), ref Unsafe.Add(ref t1_first, index), ref Unsafe.Add(ref t2_first, index), ref Unsafe.Add(ref t3_first, index), ref Unsafe.Add(ref t4_first, index), ref Unsafe.Add(ref t5_first, index), ref Unsafe.Add(ref t6_first, index), ref Unsafe.Add(ref t7_first, index), ref Unsafe.Add(ref t8_first, index), ref Unsafe.Add(ref t9_first, index), ref Unsafe.Add(ref t10_first, index), ref Unsafe.Add(ref t11_first, index), ref Unsafe.Add(ref t12_first, index), ref Unsafe.Add(ref t13_first, index), ref Unsafe.Add(ref t14_first, index), ref Unsafe.Add(ref t15_first, index)
+								);
 							}
 
 							if (entityCount >= cursor.EntityBudget)

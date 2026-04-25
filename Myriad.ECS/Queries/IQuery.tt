@@ -399,26 +399,24 @@ namespace Myriad.ECS.Worlds
 
 							var entities = chunk.Entities.Span;
 							entityCount += entities.Length;
+							ref var entity0 = ref MemoryMarshal.GetReference<Entity>(entities);
 
 <# for (var k = 0; k < i; k++)
 {
 #>
 							var t<#= k #> = chunk.GetSpan<T<#= k #>>(c<#= k #>);
 							Debug.Assert(t<#= k #>.Length == entities.Length);
-							ref var t<#= k #>_first = ref t<#= k #>[0];
+							ref var t<#= k #>_first = ref MemoryMarshal.GetReference(t<#= k #>);
 <#
 }
 #>
 
-							unsafe
+							for (var index = 0; index < entities.Length; index++)
 							{
-								for (var index = 0; index < entities.Length; index++)
-								{
-									q.Execute(
-										entities[index],
-										<#= CallParametersRefOffset(i) #>
-									);
-								}
+								q.Execute(
+									Unsafe.Add(ref entity0, index),
+									<#= CallParametersRefOffset(i) #>
+								);
 							}
 
 							if (entityCount >= cursor.EntityBudget)
@@ -517,7 +515,9 @@ namespace Myriad.ECS.Worlds
     {
         var str = string.Join(
             ", ",
-            Enumerable.Range(0, count).Select(x => $"ref Unsafe.Add(ref t{x}_first, index + {constant})")
+            Enumerable.Range(0, count).Select(x => constant == 0
+                ? $"ref Unsafe.Add(ref t{x}_first, index)"
+                : $"ref Unsafe.Add(ref t{x}_first, index + {constant})")
         );
 
         return str;
