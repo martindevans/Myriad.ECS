@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.7.34031.279
+# Visual Studio Version 18
+VisualStudioVersion = 18.5.11716.220 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myriad.ECS", "Myriad.ECS\Myriad.ECS.csproj", "{03873B51-357C-42B8-8BC4-BFF922572F74}"
 EndProject
@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParallelTasks", "ParallelTasks\ParallelTasks.csproj", "{FB7D000F-9BE2-44F7-B66D-B945F8331033}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,10 +32,6 @@ Global
 		{680E8964-CA4A-4640-9A83-CCB38C32E028}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{680E8964-CA4A-4640-9A83-CCB38C32E028}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{680E8964-CA4A-4640-9A83-CCB38C32E028}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB7D000F-9BE2-44F7-B66D-B945F8331033}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB7D000F-9BE2-44F7-B66D-B945F8331033}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB7D000F-9BE2-44F7-B66D-B945F8331033}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB7D000F-9BE2-44F7-B66D-B945F8331033}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

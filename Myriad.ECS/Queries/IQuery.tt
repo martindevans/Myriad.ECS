@@ -228,15 +228,17 @@ namespace Myriad.ECS.Worlds
 #>
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
 <# if (i == 0) { #>
-					archetype.Block();
+				lm.Block(archetype);
 <# } else { #>
-					archetype.Block(components);
+				lm.Block(archetype, components);
 <# } #>
 
 				count += archetype.EntityCount;

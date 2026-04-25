@@ -208,12 +208,14 @@ namespace Myriad.ECS.Worlds
 				c0,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
@@ -609,12 +611,14 @@ namespace Myriad.ECS.Worlds
 				c1,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
@@ -1033,12 +1037,14 @@ namespace Myriad.ECS.Worlds
 				c2,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
@@ -1480,12 +1486,14 @@ namespace Myriad.ECS.Worlds
 				c3,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
@@ -1950,12 +1958,14 @@ namespace Myriad.ECS.Worlds
 				c4,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
@@ -2443,12 +2453,14 @@ namespace Myriad.ECS.Worlds
 				c5,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
@@ -2959,12 +2971,14 @@ namespace Myriad.ECS.Worlds
 				c6,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
@@ -3498,12 +3512,14 @@ namespace Myriad.ECS.Worlds
 				c7,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
@@ -4060,12 +4076,14 @@ namespace Myriad.ECS.Worlds
 				c8,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
@@ -4645,12 +4663,14 @@ namespace Myriad.ECS.Worlds
 				c9,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
@@ -5253,12 +5273,14 @@ namespace Myriad.ECS.Worlds
 				c10,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
@@ -5884,12 +5906,14 @@ namespace Myriad.ECS.Worlds
 				c11,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
@@ -6538,12 +6562,14 @@ namespace Myriad.ECS.Worlds
 				c12,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
@@ -7215,12 +7241,14 @@ namespace Myriad.ECS.Worlds
 				c13,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
@@ -7915,12 +7943,14 @@ namespace Myriad.ECS.Worlds
 				c14,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
@@ -8638,12 +8668,14 @@ namespace Myriad.ECS.Worlds
 				c15,
 			};
 
+			var lm = query.World.LockManager;
+
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-					archetype.Block(components);
+				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
 
