@@ -29,7 +29,7 @@ public record struct Velocity(Vector2 Value) : IComponent;
 
 ### CommandBuffer
 
-The only way to make structural changes to the world (creating or destroying entities, adding or removing components) is through a `CommandBuffer`. A `CommandBuffer` allows you to executes multiple commands, which are added to the buffer. The world is only modified when the buffered is executed.
+The only way to make structural changes to the world (creating or destroying entities, adding or removing components) is through a `CommandBuffer`. Multiple commands can be added to the buffer and world is only modified when the buffer is executed.
 
 ```csharp
 var buffer = new CommandBuffer(world);
@@ -47,18 +47,6 @@ using var resolver = buffer.Playback();
 var entity = bufferedEntity.Resolve(resolver);
 ```
 
-### Phantom Components
-
-Myriad supports "Phantom Components", these are defined by `IPhantomComponent` instead of `IComponent`. When an `Entity` with any phantom components is destroyed the entity is not actually destroyed, instead it becomes a "phantom". Phantom entities are automatically **excluded** from queries and must be explicitly included with `.Include<Phantom>`.
-
-A phantom entity can be destroyed in two ways:
- - Delete it again.
- - Remove all phantom components.
-
-Phantom components are useful for tracking per-entity state. For example if there is some event that needs to run when an entity is destroyed you can attach a component when the entity is created (`DoTheThing : IPhantomComponent`) and then query for `Include<DoTheThing, Phantom>()`. When you have done whatever is needed you should remove the `DoTheThing` component. Once all of the phantoms have been handled and removed, the entity will be automatically destroyed.
-
-One common case for this is resource disposal, for this you can use `IDisposableComponent`. When an `IDisposableComponent` is destroyed it's `Dispose` method will be called.
-
 ### Querying
 
 Myriad.ECS has several different querying systems. These have different trade-offs in usability and performance.
@@ -73,7 +61,7 @@ Queries can be filtered based on the components an Entity has. This is done with
 
 #### ChunkQuery
 
-A "Chunk Query" runs a bit of code for every chunk of entities. The method call requires generic parameters, one for the query itself and one for every type of component required in the callback. The specified components are _not_ checked against the query, supplying components which are not matched by the query will trigger an exception. If no query is supplied, a default one will be used which includes all requested components.
+Entities are internally stored in groups of up to 1024 entities. A "Chunk Query" runs a bit of code for every chunk of entities. The method call requires generic parameters, one for the query itself and one for every type of component required in the callback. The specified components are _not_ checked against the query, supplying components which are not matched by the query will trigger an exception. If no query is supplied, a default one will be used which includes all requested components.
 
 ```csharp
 // Method signature
@@ -96,7 +84,7 @@ private struct IntegrateChunk
 
 #### Query
 
-A "Query" is the same as a chunk query, except that the inner loop over individual entities is handled for you.
+A "Query" runs a bit of code for every individual entity that is matched. This is the same as a chunk query except that the inner loop over individual entities is handled for you.
 
 ```csharp
 // Method signature
@@ -147,6 +135,18 @@ public QueryResultEnumerable2<T0, T1> Query<T0, T1, ...etc>(QueryDescription que
 foreach (var (e, p, v) in world.Query<Position, Velocity>())
     p.Ref.Value += v.Ref.Value;
 ```
+
+### Phantom Components
+
+Myriad supports "Phantom Components", these are defined by `IPhantomComponent` instead of `IComponent`. When an `Entity` with any phantom components is destroyed the entity is not actually destroyed, instead it becomes a "phantom". Phantom entities are automatically **excluded** from queries and must be explicitly included with `.Include<Phantom>`.
+
+A phantom entity can be destroyed in two ways:
+ - Delete it again.
+ - Remove all phantom components.
+
+Phantom components are useful for tracking per-entity state. For example if there is some event that needs to run when an entity is destroyed you can attach a component when the entity is created (`DoTheThing : IPhantomComponent`) and then query for `Include<DoTheThing, Phantom>()`. When you have done whatever is needed you should remove the `DoTheThing` component. Once all of the phantoms have been handled and removed, the entity will be automatically destroyed.
+
+One common case for this is resource disposal, for this you can use `IDisposableComponent`. When an `IDisposableComponent` is destroyed it's `Dispose` method will be called.
 
 ### Systems
 
