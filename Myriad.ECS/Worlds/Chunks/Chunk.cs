@@ -232,7 +232,7 @@ internal sealed partial class Chunk
         EntityCount = 0;
     }
 
-    internal Row AddEntity(EntityId entity, ref EntityInfo info)
+    internal void AddEntity(EntityId entity, ref EntityInfo info)
     {
         // It is safe to only debug assert here. It should never happen if Myriad is working
         // correctly. If it does somehow go wrong you'll get an index out of range exception
@@ -249,8 +249,6 @@ internal sealed partial class Chunk
         // Update global entity info to refer to this location
         info.RowIndex = index;
         info.Chunk = this;
-
-        return new Row(entity, index, this);
     }
 
     internal void RemoveEntity(EntityInfo info)
@@ -296,17 +294,14 @@ internal sealed partial class Chunk
         }
     }
 
-    internal Row MigrateTo(EntityId entity, ref EntityInfo info, Archetype to)
+    internal void MigrateTo(EntityId entity, ref EntityInfo info, Archetype to)
     {
         // Copy current entity info so we can use it later
         var oldInfo = info;
 
-        // Get a reference to the row currently storing this entity
-        var srcRow = info.GetRow(entity);
-
         // Move the entity to the new archetype
-        var destRow = to.AddEntity(entity, ref info);
-        var destChunk = destRow.Chunk;
+        to.AddEntity(entity, ref info);
+        var destChunk = info.Chunk;
 
         // Copy across everything that exists in the destination archetype
         var componentIdLookupSpan = _componentIdLookup.Span;
@@ -323,13 +318,11 @@ internal sealed partial class Chunk
             var destArr = destChunk._components[destChunk._componentIndexLookup[id]];
 
             // Copy!
-            Array.Copy(srcArr, srcRow.RowIndex, destArr, destRow.RowIndex, 1);
+            Array.Copy(srcArr, oldInfo.RowIndex, destArr, info.RowIndex, 1);
         }
 
         // Remove the entity from this chunk (using the old saved info)
         RemoveEntity(oldInfo);
-
-        return destRow;
     }
     #endregion
 

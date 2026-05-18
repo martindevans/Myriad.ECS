@@ -2,7 +2,7 @@
 using Myriad.ECS.Allocations;
 using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
-using Myriad.ECS.Worlds.Archetypes;
+using Myriad.ECS.Worlds;
 
 namespace Myriad.ECS.Command;
 
@@ -60,10 +60,10 @@ internal class ComponentSetterCollection
         ((GenericComponentList<T>)_components[id]).Discard(value);
     }
 
-    public void Write(SetterId id, Row row)
+    public void Write(SetterId id, ref readonly EntityInfo entity)
     {
         var list = _components[id.ID];
-        list.Write(id.Index, row);
+        list.Write(id.Index, in entity);
     }
 
     /// <summary>
@@ -122,7 +122,7 @@ internal class ComponentSetterCollection
 
         void Recycle();
 
-        void Write(int index, Row dest);
+        void Write(int index, ref readonly EntityInfo dest);
 
         void Dispose(int index, ref LazyCommandBuffer buffer);
 
@@ -172,7 +172,7 @@ internal class ComponentSetterCollection
             Pool.Return(this);
         }
 
-        public void Write(int index, Row dest)
+        public void Write(int index, ref readonly EntityInfo dest)
         {
             dest.GetMutable<T>() = _values[index];
         }

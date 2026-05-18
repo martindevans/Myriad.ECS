@@ -183,96 +183,92 @@ public sealed partial class CommandBuffer
 
     private void ApplyStructuralChanges(ref LazyCommandBuffer lazy)
     {
-        if (_entityModifications.Count > 0)
+        if (_entityModifications.Count == 0)
+            return;
+        
+        // Calculate the new archetype for the entity
+        foreach (var (entity, mod) in _entityModifications)
         {
-            // Calculate the new archetype for the entity
-            foreach (var (entity, mod) in _entityModifications)
+            // Try to get entity info for this entity
+            var dummy = default(EntityInfo);
+            ref var info = ref World.GetEntityInfo(entity, ref dummy, out var isDummy);
+
+            // Skip entities that have been deleted since this was enqueued
+            if (isDummy)
             {
-                // Try to get entity info for this entity
-                var dummy = default(EntityInfo);
-                ref var info = ref World.GetEntityInfo(entity, ref dummy, out var isDummy);
+                _setters.Dispose(mod.Sets, ref lazy);
+                continue;
+            }
 
-                // Skip entities that have been deleted since this was enqueued
-                if (isDummy)
+            var currentArchetype = info.Chunk.Archetype;
+
+            // Set all of the current archetype components
+            _tempComponentIdSet.Clear();
+            _tempComponentIdSet.UnionWith(currentArchetype.Components);
+            var moveRequired = false;
+
+            // Calculate the hash and component set of the new archetype
+            var hash = currentArchetype.Hash;
+            if (mod.Sets != null)
+            {
+                foreach (var id in mod.Sets.Keys)
                 {
-                    _setters.Dispose(mod.Sets, ref lazy);
-                    continue;
+                    if (_tempComponentIdSet.Add(id))
+                    {
+                        hash = hash.Toggle(id);
+                        moveRequired = true;
+                    }
+                }
+            }
+            if (mod.Removes != null)
+            {
+                foreach (var remove in mod.Removes)
+                {
+                    if (_tempComponentIdSet.Remove(remove))
+                    {
+                        hash = hash.Toggle(remove);
+                        moveRequired = true;
+                    }
                 }
 
-                var currentArchetype = info.Chunk.Archetype;
+                // Recycle remove set
+                mod.Removes.Clear();
+                Pool.Return(mod.Removes);
+            }
 
-                // Set all of the current archetype components
-                _tempComponentIdSet.Clear();
-                _tempComponentIdSet.UnionWith(currentArchetype.Components);
-                var moveRequired = false;
+            // Check if the entity will have any phantom components after this change
+            var destHasPhantomComponents = _tempComponentIdSet.Any(static a => a.IsPhantomComponent);
 
-                // Calculate the hash and component set of the new archetype
-                var hash = currentArchetype.Hash;
+            // Entity must be auto deleted if, after the change, it will be a `Phantom` but not have any phantom components
+            var autodelete = _tempComponentIdSet.Contains(ComponentID<Phantom>.ID) && !destHasPhantomComponents;
+            if (autodelete)
+            {
+                World.DeleteImmediate(entity, ref lazy);
+            }
+            else
+            {
+                // Get a row handle for the entity, moving it to a new archetype first if necessary
+                ref var dest = ref info;
+                if (moveRequired)
+                {
+                    // Get the new archetype we're moving to
+                    var newArchetype = World.GetOrCreateArchetype(_tempComponentIdSet, hash);
+
+                    // Migrate the entity across
+                    dest = ref World.MigrateEntity(entity, newArchetype, ref lazy);
+                }
+
+                // Run all setters
                 if (mod.Sets != null)
-                {
-                    foreach (var id in mod.Sets.Keys)
-                    {
-                        if (_tempComponentIdSet.Add(id))
-                        {
-                            hash = hash.Toggle(id);
-                            moveRequired = true;
-                        }
-                    }
-                }
-                if (mod.Removes != null)
-                {
-                    foreach (var remove in mod.Removes)
-                    {
-                        if (_tempComponentIdSet.Remove(remove))
-                        {
-                            hash = hash.Toggle(remove);
-                            moveRequired = true;
-                        }
-                    }
+                    foreach (var set in mod.Sets.Values)
+                        _setters.Write(set, in dest);
+            }
 
-                    // Recycle remove set
-                    mod.Removes.Clear();
-                    Pool.Return(mod.Removes);
-                }
-
-                // Check if the entity will have any phantom components after this change
-                var destHasPhantomComponents = _tempComponentIdSet.Any(static a => a.IsPhantomComponent);
-
-                // Entity must be auto deleted if, after the change, it will be a `Phantom` but not have any phantom components
-                var autodelete = _tempComponentIdSet.Contains(ComponentID<Phantom>.ID) && !destHasPhantomComponents;
-                if (autodelete)
-                {
-                    World.DeleteImmediate(entity, ref lazy);
-                }
-                else
-                {
-                    // Get a row handle for the entity, moving it to a new archetype first if necessary
-                    Row row;
-                    if (moveRequired)
-                    {
-                        // Get the new archetype we're moving to
-                        var newArchetype = World.GetOrCreateArchetype(_tempComponentIdSet, hash);
-
-                        // Migrate the entity across
-                        row = World.MigrateEntity(entity, newArchetype, ref lazy);
-                    }
-                    else
-                    {
-                        row = info.GetRow(entity);
-                    }
-
-                    // Run all setters
-                    if (mod.Sets != null)
-                        foreach (var set in mod.Sets.Values)
-                            _setters.Write(set, row);
-                }
-
-                // Recycle setters
-                if (mod.Sets != null)
-                {
-                    mod.Sets.Clear();
-                    Pool.Return(mod.Sets);
-                }
+            // Recycle setters
+            if (mod.Sets != null)
+            {
+                mod.Sets.Clear();
+                Pool.Return(mod.Sets);
             }
         }
     }
@@ -294,21 +290,21 @@ public sealed partial class CommandBuffer
 
                 var archetype = GetArchetype(bufferedData, archetypeLookup);
 
-                var slot = archetype.CreateEntity();
+                var slot = archetype.CreateEntity(out var entity);
 
                 // Store the new ID in the resolver so it can be retrieved later
-                resolver.Lookup.Add(bufferedData.Id, slot.Entity);
+                resolver.Lookup.Add(bufferedData.Id, entity);
 
                 // Write the components into the entity
                 foreach (var setter in components.Values)
-                    _setters.Write(setter, slot);
+                    _setters.Write(setter, in slot);
 
                 // Recycle
                 components.Clear();
                 Pool.Return(components);
 
                 // Apply delayed resolves
-                bufferedData.DoDelayedResolves(slot.Entity.ToEntity(World));
+                bufferedData.DoDelayedResolves(entity.ToEntity(World));
             }
 
             _bufferedSets.Clear();

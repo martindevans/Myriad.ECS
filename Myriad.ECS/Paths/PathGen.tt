@@ -105,9 +105,8 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
 <# for (var j = 0; j < i; j++) { #>
-            ref var t<#= j #> = ref row.GetMutable<T<#= j #>>(C<#= j #>);
+            ref var t<#= j #> = ref entityInfo.GetMutable<T<#= j #>>(C<#= j #>);
 <# } #>
 
             // Execute predicate
@@ -191,9 +190,8 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
 <# for (var j = 0; j < i; j++) { #>
-            ref var t<#= j #> = ref row.GetMutable<T<#= j #>>(C<#= j #>);
+            ref var t<#= j #> = ref entityInfo.GetMutable<T<#= j #>>(C<#= j #>);
 <# } #>
 
             // Execute predicate

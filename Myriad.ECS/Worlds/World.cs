@@ -231,10 +231,11 @@ public sealed partial class World
     }
     #endregion
 
-    internal Row MigrateEntity(EntityId entity, Archetype to, ref LazyCommandBuffer lazy)
+    internal ref EntityInfo MigrateEntity(EntityId entity, Archetype to, ref LazyCommandBuffer lazy)
     {
         ref var info = ref GetEntityInfo(entity);
-        return info.Chunk.Archetype.MigrateTo(entity, ref info, to, ref lazy);
+        info.Chunk.Archetype.MigrateTo(entity, ref info, to, ref lazy);
+        return ref info;
     }
 
     internal ref EntityInfo AllocateEntity(out EntityId entity)

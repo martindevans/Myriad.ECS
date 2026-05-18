@@ -182,16 +182,18 @@ public sealed partial class Archetype
                     _disposer.DisposeEntity(ref buffer, chunk, i);
     }
 
-    internal Row CreateEntity()
+    internal ref EntityInfo CreateEntity(out EntityId entity)
     {
         // Wait for multithreaded access to this archetype
         Block();
 
         // Allocate an entity in the world
-        ref var info = ref World.AllocateEntity(out var entity);
+        ref var info = ref World.AllocateEntity(out entity);
 
         // Add it to this archetype, find a row to put components into
-        return AddEntity(entity, ref info);
+        AddEntity(entity, ref info);
+
+        return ref info;
     }
 
     /// <summary>
@@ -265,7 +267,7 @@ public sealed partial class Archetype
     /// <param name="entity">Entity to add to a chunk</param>
     /// <param name="info">Info will be mutated to point to the new location</param>
     /// <returns></returns>
-    internal Row AddEntity(EntityId entity, ref EntityInfo info)
+    internal void AddEntity(EntityId entity, ref EntityInfo info)
     {
         // Wait for multithreaded access to this archetype
         Block();
@@ -280,13 +282,13 @@ public sealed partial class Archetype
         if (_chunksWithSpace.Count > 0)
         {
             var chunk = _chunksWithSpace[0];
-            var row = chunk.AddEntity(entity, ref info);
+            chunk.AddEntity(entity, ref info);
 
             // If the chunk is now full, remove it from the "chunks with space" set
             if (chunk.EntityCount == CHUNK_SIZE)
                 _chunksWithSpace.RemoveAt(0);
 
-            return row;
+            return;
         }
 
         // No space in any chunks, create a new chunk
@@ -295,7 +297,7 @@ public sealed partial class Archetype
         _chunksWithSpace.Add(newChunk);
 
         // The chunk obviously has space, so this cannot fail!
-        return newChunk.AddEntity(entity, ref info);
+        newChunk.AddEntity(entity, ref info);
     }
 
     internal void RemoveEntity(EntityInfo info, ref LazyCommandBuffer lazy)
@@ -314,7 +316,7 @@ public sealed partial class Archetype
         HandleChunkEntityRemoved(info.Chunk);
     }
 
-    internal Row MigrateTo(EntityId entity, ref EntityInfo info, Archetype to, ref LazyCommandBuffer lazy)
+    internal void MigrateTo(EntityId entity, ref EntityInfo info, Archetype to, ref LazyCommandBuffer lazy)
     {
         // Wait for multithreaded access to this archetype
         Block();
@@ -333,12 +335,10 @@ public sealed partial class Archetype
 
         // Do the actual copying
         var chunk = info.Chunk;
-        var row = chunk.MigrateTo(entity, ref info, to);
+        chunk.MigrateTo(entity, ref info, to);
 
         // Execute handler for when an entity is removed from a chunk
         HandleChunkEntityRemoved(chunk);
-
-        return row;
     }
 
     private void HandleChunkEntityRemoved(Chunk chunk)
