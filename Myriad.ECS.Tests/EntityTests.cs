@@ -73,11 +73,13 @@ public class EntityTests
         var id2 = entity2.ID;
 
         // ReSharper disable EqualExpressionComparison
+#pragma warning disable CS1718 // Comparison made to same variable
         Assert.IsTrue(id1 == id1);
         Assert.IsFalse(id1 != id1);
 
         Assert.IsTrue(id1 != id2);
         Assert.IsFalse(id1 == id2);
+#pragma warning restore CS1718 // Comparison made to same variable
 
         Assert.IsTrue(id1.Equals((object)id1));
         Assert.IsFalse(id1.Equals((object)id2));
@@ -218,6 +220,7 @@ public class EntityTests
         Assert.AreEqual(entity, t1_e);
         Assert.AreEqual(7, t1_16.Ref.Value);
         Assert.AreEqual(7, t2_16.Ref.Value);
+        Assert.AreEqual(t1_32.Ref.Value, t2_32.Ref.Value);
     }
 
     [TestMethod]
@@ -240,6 +243,7 @@ public class EntityTests
         Assert.AreEqual(entity, t1_e);
         Assert.AreEqual(7, t1_16.Ref.Value);
         Assert.AreEqual(7, t2_16.Ref.Value);
+        Assert.AreEqual(t1_32.Ref.Value, t2_32.Ref.Value);
     }
 
     [TestMethod]
@@ -255,7 +259,7 @@ public class EntityTests
         Assert.AreEqual(3, entity.ComponentTypes.Count);
         Assert.IsTrue(entity.ComponentTypes.Contains(ComponentID<ComponentInt16>.ID));
 
-        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt16, Component13>(out var tuple));
+        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt16, Component13>(out _));
     }
 
     [TestMethod]
@@ -271,7 +275,7 @@ public class EntityTests
         Assert.AreEqual(3, entity.ComponentTypes.Count);
         Assert.IsTrue(entity.ComponentTypes.Contains(ComponentID<ComponentInt16>.ID));
 
-        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt16, ComponentInt32, Component13>(out var tuple));
+        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt16, ComponentInt32, Component13>(out _));
     }
 
     [TestMethod]
@@ -290,7 +294,7 @@ public class EntityTests
         b.Delete(entity);
         b.Playback().Dispose();
 
-        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt16, ComponentInt32>(out var tuple));
+        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt16, ComponentInt32>(out _));
     }
 
     [TestMethod]
@@ -321,7 +325,7 @@ public class EntityTests
         b.Playback().Dispose();
 
         // Should no longer work
-        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt16>(out var item3));
+        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt16>(out _));
     }
 
     [TestMethod]
@@ -336,7 +340,7 @@ public class EntityTests
         var entity = e.Resolve();
 
         // Get the component
-        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt32>(out var item1));
+        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt32>(out _));
     }
 
     [TestMethod]
@@ -345,7 +349,7 @@ public class EntityTests
         var entity = default(Entity);
 
         // Get the component
-        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt32>(out var item1));
+        Assert.IsFalse(entity.TryGetComponentRef<ComponentInt32>(out _));
 
         // Get it boxed
         Assert.IsNull(entity.GetBoxedComponent(ComponentID<ComponentInt32>.ID));
@@ -367,7 +371,8 @@ public class EntityTests
 
         Assert.Throws<ArgumentException>(() =>
         {
-            var c = entity.ComponentTypes.Count;
+            // ReSharper disable once UnusedVariable
+            var c = entity.ComponentTypes;
         });
     }
 
@@ -381,7 +386,7 @@ public class EntityTests
         using var resolver = b.Playback();
         var entity = e.Resolve();
 
-        Assert.AreEqual(1, entity.BoxedComponents.Length);
+        Assert.HasCount(1, entity.BoxedComponents);
         Assert.AreEqual(new ComponentInt16(7), (ComponentInt16)entity.BoxedComponents[0]);
     }
 

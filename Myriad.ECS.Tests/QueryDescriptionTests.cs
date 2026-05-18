@@ -232,8 +232,7 @@ public class QueryDescriptionTests
 
         foreach (var match in matches)
         {
-            Assert.IsNotNull(match);
-            Assert.IsTrue(match.Archetype.Components.Count == 1);
+            Assert.AreEqual(1, match.Archetype.Components.Count);
             Assert.IsTrue(match.Archetype.Components.Contains(ComponentID<ComponentFloat>.ID)
                        || match.Archetype.Components.Contains(ComponentID<ComponentInt32>.ID));
         }
@@ -262,8 +261,6 @@ public class QueryDescriptionTests
 
         foreach (var match in matches)
         {
-            Assert.IsNotNull(match);
-
             Assert.IsTrue(match.Archetype.Components.Contains(ComponentID<ComponentInt32>.ID)
                        || match.Archetype.Components.Contains(ComponentID<ComponentFloat>.ID));
         }
@@ -291,8 +288,6 @@ public class QueryDescriptionTests
 
         foreach (var match in matches)
         {
-            Assert.IsNotNull(match);
-
             Assert.IsTrue(match.Archetype.Components.Contains(ComponentID<ComponentInt32>.ID));
         }
     }
@@ -320,8 +315,6 @@ public class QueryDescriptionTests
 
         foreach (var match in matches)
         {
-            Assert.IsNotNull(match);
-
             Assert.IsTrue(match.Archetype.Components.Contains(ComponentID<ComponentInt32>.ID));
         }
     }
@@ -374,7 +367,7 @@ public class QueryDescriptionTests
         var e1 = eb1.Resolve();
         var e2 = eb2.Resolve();
 
-        Assert.IsTrue(new[] { e1, e2 }.Contains(q.First()));
+        Assert.Contains(q.First(), [e1, e2]);
     }
 
     [TestMethod]
@@ -458,7 +451,7 @@ public class QueryDescriptionTests
         var e1 = eb1.Resolve();
         var e2 = eb2.Resolve();
 
-        Assert.IsTrue(new[] { e1, e2 }.Contains(q.FirstOrDefault()!.Value));
+        Assert.Contains(q.FirstOrDefault()!.Value, [ e1, e2 ]);
     }
 
     [TestMethod]
@@ -704,7 +697,7 @@ public class QueryDescriptionTests
         var r = new Random(123);
 
         for (var i = 0; i < 1000; i++)
-            Assert.IsTrue(entities.Contains(q.RandomOrDefault(r)!.Value));
+            Assert.Contains(q.RandomOrDefault(r)!.Value, entities);
     }
 
     [TestMethod]
@@ -716,17 +709,17 @@ public class QueryDescriptionTests
         var q = new QueryBuilder().Include<Component0>().Include<Component1>().Build(w);
 
         // Count entities with a query
-        var actual = 0;
+        var expected = 0;
         w.Query((ChunkHandle h, Span<Component0> _) =>
         {
-            actual += h.EntityCount;
+            expected += h.EntityCount;
         }, q);
 
         // Check count
-        Assert.AreEqual(actual, q.Count());
+        Assert.AreEqual(expected, q.Count());
 
         // Check threshold
-        Assert.IsTrue(q.IsCountGreaterThan(actual - 1));
+        Assert.IsTrue(q.IsCountGreaterThan(expected - 1));
         Assert.IsTrue(q.IsCountGreaterThan(0));
     }
 
@@ -739,17 +732,17 @@ public class QueryDescriptionTests
         var q = new QueryBuilder().Include<Component0>().Include<Component1>().Build(w);
 
         // Count entities with a query
-        var actual = 0;
+        var expected = 0;
         w.Query((ChunkHandle h, Span<Component0> _) =>
         {
-            actual += h.EntityCount;
+            expected += h.EntityCount;
         }, q);
 
         // Check count
-        Assert.AreEqual(actual, q.Count());
+        Assert.AreEqual(expected, q.Count());
 
         // Check threshold
-        Assert.IsFalse(q.IsCountGreaterThan(actual + 1));
+        Assert.IsFalse(q.IsCountGreaterThan(expected + 1));
 
         var q2 = new QueryBuilder()
                 .Include<Component0>()
@@ -790,13 +783,13 @@ public class QueryDescriptionTests
         var q = new QueryBuilder().Include<Component0>().Include<Component1>().Build(w);
 
         // Count chunks with a query
-        var actual = 0;
+        var expected = 0;
         w.Query((ChunkHandle h, Span<Component0> _) =>
         {
-            actual++;
+            expected++;
         }, q);
 
         // Check count
-        Assert.AreEqual(actual, q.CountChunks());
+        Assert.AreEqual(expected, q.CountChunks());
     }
 }

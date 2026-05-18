@@ -80,8 +80,7 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
 
             // Execute predicate
             return _predicate.Execute(entity, ref t0);
@@ -156,8 +155,7 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
 
             // Execute predicate
             entity = _map.Execute(entity, ref t0);
@@ -242,9 +240,8 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
 
             // Execute predicate
             return _predicate.Execute(entity, ref t0, ref t1);
@@ -323,9 +320,8 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
 
             // Execute predicate
             entity = _map.Execute(entity, ref t0, ref t1);
@@ -417,10 +413,9 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
 
             // Execute predicate
             return _predicate.Execute(entity, ref t0, ref t1, ref t2);
@@ -503,10 +498,9 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
 
             // Execute predicate
             entity = _map.Execute(entity, ref t0, ref t1, ref t2);
@@ -605,11 +599,10 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
 
             // Execute predicate
             return _predicate.Execute(entity, ref t0, ref t1, ref t2, ref t3);
@@ -696,11 +689,10 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
 
             // Execute predicate
             entity = _map.Execute(entity, ref t0, ref t1, ref t2, ref t3);
@@ -806,12 +798,11 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
 
             // Execute predicate
             return _predicate.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4);
@@ -902,12 +893,11 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
 
             // Execute predicate
             entity = _map.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4);
@@ -1020,13 +1010,12 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
 
             // Execute predicate
             return _predicate.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5);
@@ -1121,13 +1110,12 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
 
             // Execute predicate
             entity = _map.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5);
@@ -1247,14 +1235,13 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
 
             // Execute predicate
             return _predicate.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6);
@@ -1353,14 +1340,13 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
 
             // Execute predicate
             entity = _map.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6);
@@ -1487,15 +1473,14 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
 
             // Execute predicate
             return _predicate.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7);
@@ -1598,15 +1583,14 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
 
             // Execute predicate
             entity = _map.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7);
@@ -1740,16 +1724,15 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
-            ref var t8 = ref row.GetMutable<T8>(C8);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
+            ref var t8 = ref entityInfo.GetMutable<T8>(C8);
 
             // Execute predicate
             return _predicate.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7, ref t8);
@@ -1856,16 +1839,15 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
-            ref var t8 = ref row.GetMutable<T8>(C8);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
+            ref var t8 = ref entityInfo.GetMutable<T8>(C8);
 
             // Execute predicate
             entity = _map.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7, ref t8);
@@ -2006,17 +1988,16 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
-            ref var t8 = ref row.GetMutable<T8>(C8);
-            ref var t9 = ref row.GetMutable<T9>(C9);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
+            ref var t8 = ref entityInfo.GetMutable<T8>(C8);
+            ref var t9 = ref entityInfo.GetMutable<T9>(C9);
 
             // Execute predicate
             return _predicate.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7, ref t8, ref t9);
@@ -2127,17 +2108,16 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
-            ref var t8 = ref row.GetMutable<T8>(C8);
-            ref var t9 = ref row.GetMutable<T9>(C9);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
+            ref var t8 = ref entityInfo.GetMutable<T8>(C8);
+            ref var t9 = ref entityInfo.GetMutable<T9>(C9);
 
             // Execute predicate
             entity = _map.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7, ref t8, ref t9);
@@ -2285,18 +2265,17 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
-            ref var t8 = ref row.GetMutable<T8>(C8);
-            ref var t9 = ref row.GetMutable<T9>(C9);
-            ref var t10 = ref row.GetMutable<T10>(C10);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
+            ref var t8 = ref entityInfo.GetMutable<T8>(C8);
+            ref var t9 = ref entityInfo.GetMutable<T9>(C9);
+            ref var t10 = ref entityInfo.GetMutable<T10>(C10);
 
             // Execute predicate
             return _predicate.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7, ref t8, ref t9, ref t10);
@@ -2411,18 +2390,17 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
-            ref var t8 = ref row.GetMutable<T8>(C8);
-            ref var t9 = ref row.GetMutable<T9>(C9);
-            ref var t10 = ref row.GetMutable<T10>(C10);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
+            ref var t8 = ref entityInfo.GetMutable<T8>(C8);
+            ref var t9 = ref entityInfo.GetMutable<T9>(C9);
+            ref var t10 = ref entityInfo.GetMutable<T10>(C10);
 
             // Execute predicate
             entity = _map.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7, ref t8, ref t9, ref t10);
@@ -2577,19 +2555,18 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
-            ref var t8 = ref row.GetMutable<T8>(C8);
-            ref var t9 = ref row.GetMutable<T9>(C9);
-            ref var t10 = ref row.GetMutable<T10>(C10);
-            ref var t11 = ref row.GetMutable<T11>(C11);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
+            ref var t8 = ref entityInfo.GetMutable<T8>(C8);
+            ref var t9 = ref entityInfo.GetMutable<T9>(C9);
+            ref var t10 = ref entityInfo.GetMutable<T10>(C10);
+            ref var t11 = ref entityInfo.GetMutable<T11>(C11);
 
             // Execute predicate
             return _predicate.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7, ref t8, ref t9, ref t10, ref t11);
@@ -2708,19 +2685,18 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
-            ref var t8 = ref row.GetMutable<T8>(C8);
-            ref var t9 = ref row.GetMutable<T9>(C9);
-            ref var t10 = ref row.GetMutable<T10>(C10);
-            ref var t11 = ref row.GetMutable<T11>(C11);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
+            ref var t8 = ref entityInfo.GetMutable<T8>(C8);
+            ref var t9 = ref entityInfo.GetMutable<T9>(C9);
+            ref var t10 = ref entityInfo.GetMutable<T10>(C10);
+            ref var t11 = ref entityInfo.GetMutable<T11>(C11);
 
             // Execute predicate
             entity = _map.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7, ref t8, ref t9, ref t10, ref t11);
@@ -2882,20 +2858,19 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
-            ref var t8 = ref row.GetMutable<T8>(C8);
-            ref var t9 = ref row.GetMutable<T9>(C9);
-            ref var t10 = ref row.GetMutable<T10>(C10);
-            ref var t11 = ref row.GetMutable<T11>(C11);
-            ref var t12 = ref row.GetMutable<T12>(C12);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
+            ref var t8 = ref entityInfo.GetMutable<T8>(C8);
+            ref var t9 = ref entityInfo.GetMutable<T9>(C9);
+            ref var t10 = ref entityInfo.GetMutable<T10>(C10);
+            ref var t11 = ref entityInfo.GetMutable<T11>(C11);
+            ref var t12 = ref entityInfo.GetMutable<T12>(C12);
 
             // Execute predicate
             return _predicate.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7, ref t8, ref t9, ref t10, ref t11, ref t12);
@@ -3018,20 +2993,19 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
-            ref var t8 = ref row.GetMutable<T8>(C8);
-            ref var t9 = ref row.GetMutable<T9>(C9);
-            ref var t10 = ref row.GetMutable<T10>(C10);
-            ref var t11 = ref row.GetMutable<T11>(C11);
-            ref var t12 = ref row.GetMutable<T12>(C12);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
+            ref var t8 = ref entityInfo.GetMutable<T8>(C8);
+            ref var t9 = ref entityInfo.GetMutable<T9>(C9);
+            ref var t10 = ref entityInfo.GetMutable<T10>(C10);
+            ref var t11 = ref entityInfo.GetMutable<T11>(C11);
+            ref var t12 = ref entityInfo.GetMutable<T12>(C12);
 
             // Execute predicate
             entity = _map.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7, ref t8, ref t9, ref t10, ref t11, ref t12);
@@ -3200,21 +3174,20 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
-            ref var t8 = ref row.GetMutable<T8>(C8);
-            ref var t9 = ref row.GetMutable<T9>(C9);
-            ref var t10 = ref row.GetMutable<T10>(C10);
-            ref var t11 = ref row.GetMutable<T11>(C11);
-            ref var t12 = ref row.GetMutable<T12>(C12);
-            ref var t13 = ref row.GetMutable<T13>(C13);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
+            ref var t8 = ref entityInfo.GetMutable<T8>(C8);
+            ref var t9 = ref entityInfo.GetMutable<T9>(C9);
+            ref var t10 = ref entityInfo.GetMutable<T10>(C10);
+            ref var t11 = ref entityInfo.GetMutable<T11>(C11);
+            ref var t12 = ref entityInfo.GetMutable<T12>(C12);
+            ref var t13 = ref entityInfo.GetMutable<T13>(C13);
 
             // Execute predicate
             return _predicate.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7, ref t8, ref t9, ref t10, ref t11, ref t12, ref t13);
@@ -3341,21 +3314,20 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
-            ref var t8 = ref row.GetMutable<T8>(C8);
-            ref var t9 = ref row.GetMutable<T9>(C9);
-            ref var t10 = ref row.GetMutable<T10>(C10);
-            ref var t11 = ref row.GetMutable<T11>(C11);
-            ref var t12 = ref row.GetMutable<T12>(C12);
-            ref var t13 = ref row.GetMutable<T13>(C13);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
+            ref var t8 = ref entityInfo.GetMutable<T8>(C8);
+            ref var t9 = ref entityInfo.GetMutable<T9>(C9);
+            ref var t10 = ref entityInfo.GetMutable<T10>(C10);
+            ref var t11 = ref entityInfo.GetMutable<T11>(C11);
+            ref var t12 = ref entityInfo.GetMutable<T12>(C12);
+            ref var t13 = ref entityInfo.GetMutable<T13>(C13);
 
             // Execute predicate
             entity = _map.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7, ref t8, ref t9, ref t10, ref t11, ref t12, ref t13);
@@ -3531,22 +3503,21 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
-            ref var t8 = ref row.GetMutable<T8>(C8);
-            ref var t9 = ref row.GetMutable<T9>(C9);
-            ref var t10 = ref row.GetMutable<T10>(C10);
-            ref var t11 = ref row.GetMutable<T11>(C11);
-            ref var t12 = ref row.GetMutable<T12>(C12);
-            ref var t13 = ref row.GetMutable<T13>(C13);
-            ref var t14 = ref row.GetMutable<T14>(C14);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
+            ref var t8 = ref entityInfo.GetMutable<T8>(C8);
+            ref var t9 = ref entityInfo.GetMutable<T9>(C9);
+            ref var t10 = ref entityInfo.GetMutable<T10>(C10);
+            ref var t11 = ref entityInfo.GetMutable<T11>(C11);
+            ref var t12 = ref entityInfo.GetMutable<T12>(C12);
+            ref var t13 = ref entityInfo.GetMutable<T13>(C13);
+            ref var t14 = ref entityInfo.GetMutable<T14>(C14);
 
             // Execute predicate
             return _predicate.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7, ref t8, ref t9, ref t10, ref t11, ref t12, ref t13, ref t14);
@@ -3677,22 +3648,21 @@ public readonly partial struct Path
                 return false;
 
             // Get component references
-            var row = entityInfo.GetRow(entity.ID);
-            ref var t0 = ref row.GetMutable<T0>(C0);
-            ref var t1 = ref row.GetMutable<T1>(C1);
-            ref var t2 = ref row.GetMutable<T2>(C2);
-            ref var t3 = ref row.GetMutable<T3>(C3);
-            ref var t4 = ref row.GetMutable<T4>(C4);
-            ref var t5 = ref row.GetMutable<T5>(C5);
-            ref var t6 = ref row.GetMutable<T6>(C6);
-            ref var t7 = ref row.GetMutable<T7>(C7);
-            ref var t8 = ref row.GetMutable<T8>(C8);
-            ref var t9 = ref row.GetMutable<T9>(C9);
-            ref var t10 = ref row.GetMutable<T10>(C10);
-            ref var t11 = ref row.GetMutable<T11>(C11);
-            ref var t12 = ref row.GetMutable<T12>(C12);
-            ref var t13 = ref row.GetMutable<T13>(C13);
-            ref var t14 = ref row.GetMutable<T14>(C14);
+            ref var t0 = ref entityInfo.GetMutable<T0>(C0);
+            ref var t1 = ref entityInfo.GetMutable<T1>(C1);
+            ref var t2 = ref entityInfo.GetMutable<T2>(C2);
+            ref var t3 = ref entityInfo.GetMutable<T3>(C3);
+            ref var t4 = ref entityInfo.GetMutable<T4>(C4);
+            ref var t5 = ref entityInfo.GetMutable<T5>(C5);
+            ref var t6 = ref entityInfo.GetMutable<T6>(C6);
+            ref var t7 = ref entityInfo.GetMutable<T7>(C7);
+            ref var t8 = ref entityInfo.GetMutable<T8>(C8);
+            ref var t9 = ref entityInfo.GetMutable<T9>(C9);
+            ref var t10 = ref entityInfo.GetMutable<T10>(C10);
+            ref var t11 = ref entityInfo.GetMutable<T11>(C11);
+            ref var t12 = ref entityInfo.GetMutable<T12>(C12);
+            ref var t13 = ref entityInfo.GetMutable<T13>(C13);
+            ref var t14 = ref entityInfo.GetMutable<T14>(C14);
 
             // Execute predicate
             entity = _map.Execute(entity, ref t0, ref t1, ref t2, ref t3, ref t4, ref t5, ref t6, ref t7, ref t8, ref t9, ref t10, ref t11, ref t12, ref t13, ref t14);

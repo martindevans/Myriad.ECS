@@ -86,7 +86,7 @@ public readonly partial struct Path
                 return false;
 
             // Follow link
-            entity = entityInfo.GetRow(entity.ID).GetMutable<T>(C).Target;
+            entity = entityInfo.GetMutable<T>(C).Target;
             return true;
         }
     }
