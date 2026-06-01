@@ -93,17 +93,17 @@ public sealed partial class Archetype
     public bool IsPhantom { get; }
 
     /// <summary>
-    /// Indicates if any of the components in this Archetype im[lement <see cref="IEntityRelationComponent"/>
+    /// Indicates if any of the components in this Archetype implement <see cref="IEntityRelationComponent"/>
     /// </summary>
     public bool HasRelationComponents { get; }
 
     /// <summary>
-    /// Indicates if any of the components in this Archetype im[lement <see cref="IDisposableComponent"/>
+    /// Indicates if any of the components in this Archetype implement <see cref="IDisposableComponent"/>
     /// </summary>
     public bool HasDisposableComponents { get; }
 
     /// <summary>
-    /// Indicates if any of the components in this Archetype im[lement <see cref="IPhantomNotifierComponent"/>
+    /// Indicates if any of the components in this Archetype implement <see cref="IPhantomNotifierComponent"/>
     /// </summary>
     public bool HasPhantomNotifierComponents { get; }
 
