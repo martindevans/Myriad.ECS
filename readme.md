@@ -29,7 +29,7 @@ public record struct Velocity(Vector2 Value) : IComponent;
 
 ### CommandBuffer
 
-The only way to make structural changes to the world (creating or destroying entities, adding or removing components) is through a `CommandBuffer`. Multiple commands can be added to the buffer and world is only modified when the buffer is executed.
+The only way to make structural changes to the world (creating or destroying entities, adding or removing components) is through a `CommandBuffer`. A `CommandBuffer` allows you to executes multiple commands, which are added to the buffer. The world is only modified when the buffered is executed.
 
 ```csharp
 var buffer = new CommandBuffer(world);
@@ -59,73 +59,64 @@ Queries can be filtered based on the components an Entity has. This is done with
  - At Least One: Entities must contain **one or more** of the listed components.
  - Exactly One: Entities must contain **exactly one** of the listed components.
 
-#### ChunkQuery
+#### IQuery
 
-Entities are internally stored in groups of up to 1024 entities. A "Chunk Query" runs a bit of code for every chunk of entities. The method call requires generic parameters, one for the query itself and one for every type of component required in the callback. The specified components are _not_ checked against the query, supplying components which are not matched by the query will trigger an exception. If no query is supplied, a default one will be used which includes all requested components.
+A basic `IQuery` is defined in a struct, and runs a bit of code for every entity matched by the `QueryDescription`. The generic parameters define are the type of query, followed by the components the query accesses.
 
 ```csharp
-// Method signature
-public int ExecuteChunk<TQ, T0, T1, ...etc>(TQ q, QueryDescription? query = null);
+// Execute the query
+_world.Execute<Integrate, Position, Velocity>(new Integrate(deltaTime), query);
 
-// Method call
-_world.ExecuteChunk<IntegrateChunk, Position, Velocity>(new IntegrateChunk(), query);
-
-// Query action definition
-private struct IntegrateChunk
-    : IChunkQuery2<Position, Velocity>
+// Define what the query does
+private struct IntegrateChunk(float deltaTime)
+    : IQuery<Position, Velocity>
 {
-    public readonly void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<Position> pos, Span<Velocity> vel)
+    public readonly void Execute(Entity e, ref Position pos, ref Velocity vel)
     {
-        for (var i = 0; i < pos.Length; i++)
-            pos[i].Value += vel[i].Value;
+        pos.Value += vel.Value * deltaTime;
     }
 }
 ```
 
-#### Query
+#### IChunkQuery
 
-A "Query" runs a bit of code for every individual entity that is matched. This is the same as a chunk query except that the inner loop over individual entities is handled for you.
+A chunk query is fundamentally the same as a basic query, but it does not run the inner loop over entity chunks. Instead your code is given spans, where the same index in all spans is the same entity.
 
 ```csharp
-// Method signature
-public int Execute<TQ, T0, T1, ...etc>(TQ q, QueryDescription? query = null);
+// Execute the query
+_world.ExecuteChunk<IntegrateChunk, Position, Velocity>(new IntegrateChunk(deltaTime), query);
 
-// Method call
-_world.Execute<Integrate, Position, Velocity>(new Integrate(), query);
-
-// Query action definition
-private struct IntegrateChunk
-    : IQuery2<Position, Velocity>
+// Define what the query does
+private struct IntegrateChunk(float deltaTime)
+    : IChunkQuery<Position, Velocity>
 {
-    public readonly void Execute(Entity e, ref Position pos, ref Velocity vel)
+    public readonly void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<Position> pos, Span<Velocity> vel)
     {
-        pos.Value += vel.Value;
+        for (var i = 0; i < pos.Length; i++)
+            pos[i].Value += vel[i].Value * deltaTime;
     }
 }
 ```
 
 #### Query Delegate
 
-A delegate query does not require creating a struct to wrap your code and the generic parameters can be inferred.
+A delegate query is simpler way to express an `IQuery`. No struct is required, and the generic parameters can be inferred.
 
 ```csharp
-// Method signature
-public void Query<T0, T1, ...etc>(QueryDelegate<T0> @delegate, QueryDescription? query = null);
-
-// Method call
+// Simple delegate query
 _world.Query(static (ref Position pos, ref Velocity vel) => {
     pos.Value += vel.Value;
 });
 
-// Method call with state (first arg to query is passed to delegate)
-_world.Query(gametime, static (GameTime gametime, ref Position pos, ref Velocity vel) => {
-    pos.Value += vel.Value * gametime.DeltaTime;
+// Delegate query with state (first arg to query is first arg to delegate)
+_world.Query(deltaTime, static (float deltaTime, ref Position pos, ref Velocity vel) => {
+    pos.Value += vel.Value * deltaTime;
 });
 ```
 
 #### Query Enumerable
 
-An enumerable query returns results as an enumerable of tuples.
+An enumerable query is another way to express an `IQuery`. A tuple containing the entity and a reference to the requested components is provided.
 
 ```csharp
 // Method signature
@@ -136,21 +127,44 @@ foreach (var (e, p, v) in world.Query<Position, Velocity>())
     p.Ref.Value += v.Ref.Value;
 ```
 
-### Phantom Components
+### Magic Components
 
-Myriad supports "Phantom Components", these are defined by `IPhantomComponent` instead of `IComponent`. When an `Entity` with any phantom components is destroyed the entity is not actually destroyed, instead it becomes a "phantom". Phantom entities are automatically **excluded** from queries and must be explicitly included with `.Include<Phantom>`.
+Some components in Myriad.ECS provide special behaviour.
+
+### IPhantomComponent
+
+A phantom component is created by implementing `IPhantomComponent` instead of `IComponents`. When an entity with a phantom component is destroyed the entity is not destroyed - instead it becomes a "phantom". Phantom entities are automatically **excluded** from queries and must be explicitly included with `.Include<Phantom>` on the query description.
 
 A phantom entity can be destroyed in two ways:
  - Delete it again.
  - Remove all phantom components.
 
-Phantom components are useful for tracking per-entity state. For example if there is some event that needs to run when an entity is destroyed you can attach a component when the entity is created (`DoTheThing : IPhantomComponent`) and then query for `Include<DoTheThing, Phantom>()`. When you have done whatever is needed you should remove the `DoTheThing` component. Once all of the phantoms have been handled and removed, the entity will be automatically destroyed.
+Phantom components are useful for tracking per-entity state. For example if there is some event that needs to run when an entity is destroyed you can attach a component when the entity is created (`DoTheThing : IPhantomComponent`) and then query for `Include<DoTheThing, Phantom>()`. Once done you can should the `DoTheThing` component. Once all of the phantom components have been removed the entity will disappear.
+### IPhantomNotifierComponent
 
-One common case for this is resource disposal, for this you can use `IDisposableComponent`. When an `IDisposableComponent` is destroyed it's `Dispose` method will be called.
+An `IPhantomNotifierComponent` receives a callback when the entity it belongs to first becomes a phantom.
+
+### IDisposableComponent
+
+A disposable component is created by implementing `IDisposableComponent`. When the component is destroyed the `Dispose` method will be called. This is a safe way to move ownership of disposable resources into entities.
+
+### IEntityRelationComponent
+
+A relational component stores a link from one entity to another. This can be initialised directly in a CommandBuffer, creating links between entities that do not yet exist.
+
+```csharp
+var cmd = new CommandBuffer()
+
+var e1 = cmd.Create();
+var e2 = cmd.Create()
+    .Set(new ExampleRelationComponent(), e1);
+```
+
+`e1` and `e2` have not yet been created - when the CommandBuffer is executed the `ExampleRelationComponent` will automatically be set to the ID of `e1`.
 
 ### Systems
 
-Systems are a completely optional part of `Myriad.ECS`. The library can be used as an in memory database, without any systems running every tick.
+Systems are a completely optional part of `Myriad.ECS`. The library can be used as an in memory database without using any systems.
 
 #### `ISystem`
 
@@ -170,9 +184,7 @@ Adds an `AfterUpdate(TData)` which is called every tick, just after `Update`.
 
 #### `SystemGroup`
 
-Usually you will want to declare a set of systems to run in order every frame. A `SystemGroup` does this, and handles correctly calling all of the above interface methods. A `SystemGroup` is itself a system, so groups can be nested.
-
-A `SystemGroup` exposes a `TotalExecutionTime` property, which is the total time spent in `BeforeUpdate`, `Update` and `AfterUpdate` added together. This can be helpful for diagnosing slow systems.
+A SystemGroup defines a named set of systems to run in order.
 
 ```csharp
 var cmdPhysics = new CommandBufferSystem(world);
@@ -204,44 +216,6 @@ systems.Init();
 
 #### `CommandBufferSystem`
 
-In the above example `CommandBufferSystem`s are created at the start, are passed into various systems, and are scheduled at the end of their respective groups. A `CommandBufferSystem` exposes a `CommandBuffer` and executes the buffer when the systems runs.
+A `CommandBufferSystem` exposes a `CommandBuffer` and executes the buffer when the system runs. In the above example `CommandBufferSystem`s are created at the start and are passed into various systems, then they are scheduled to run at the end of their respective groups.
 
 This allows multiple systems to share one single `CommandBuffer`, which is executed just once at the end of a group of systems instead of every system making ad-hoc changes.
-
-#### Parallel Systems
-
-`Myriad.ECS` includes 3 parallel system groups, these are all somewhat experimental and should be used carefully.
-
-#### `ParallelSystemGroup`
-
-Runs all systems in each phase using `Parallel.ForEach`. This means all of the systems within the group run in parallel with each other in each phase. If the systems modify the `World` in a non-threadsafe way (for example writing a component in 2 queries) this can cause undefined behaviour.
-
-#### Declarative Parallel Systems
-
-Using a `ParallelSystemGroup` requires carefully manually grouping systems up that can be run in parallel, which is difficult and error prone. `ISystemDeclare` adds a `Declare` method to systems which allows them to declare what components they access:
-
-```csharp
-void Declare(ref SystemDeclaration declaration)
-{
-    declaration.Write<Position>();
-    declaration.Read<Velocity>();
-    declaration.Read<Acceleration>();
-    declaration.Read<Static>();
-}
-```
-
-This declaration can be used to automatically safely schedule systems in parallel. This is used by three new system groups.
-
-#### `DeclareSystemGroup`
-
-Is a simple serial system group which implement `ISystemDeclare` and groups together declarations from all child systems. This can be used by a wrapper group to schedule this entire group as one item.
-
-#### `PhasedParallelSystemGroup`
-
-This discovers groups of systems which do not "overlap" in the components they write and executes items in the group in parallel. Groups are executed serially. The order of execution of each group is undefined. The only guarantee is that a system will not run in parallel with a another system that is modifying the same component as this one is reading or writing.
-
-Discovering the phase groups is very quick, but this can only be used when the order of execution of the systems is completely unimportant.
-
-#### `OrderedParallelSystemGroup`
-
-Runs all the systems in the group "in order", but with parallelism where it cannot be observed. Systems which read a component wait for earlier systems which write that component. Systems which write a component wait for earlier systems which write or read that component. As long as systems only read and write components and do not access any external state this should be identical to running the systems serially.
