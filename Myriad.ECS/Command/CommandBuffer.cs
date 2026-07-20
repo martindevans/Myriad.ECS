@@ -63,9 +63,6 @@ public sealed partial class CommandBuffer
         // Create a new blocker which tracks what archetypes we've blocked on
         var blocker = new Blocker(World);
         
-        // Block on all parallel access before applying a structural change
-        World.Block();
-
         // Use this resolver for this playback
         var resolver = _nextResolver;
 

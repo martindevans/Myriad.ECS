@@ -10,6 +10,7 @@ internal struct Blocker
     public Blocker(World world)
     {
         _world = world;
+        _blockedAll = false;
     }
 
     public void Block()
