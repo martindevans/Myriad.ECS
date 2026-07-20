@@ -60,6 +60,9 @@ public sealed partial class CommandBuffer
     /// <returns></returns>
     public Resolver Playback()
     {
+        // Create a new blocker which tracks what archetypes we've blocked on
+        var blocker = new Blocker(World);
+        
         // Block on all parallel access before applying a structural change
         World.Block();
 
@@ -67,17 +70,17 @@ public sealed partial class CommandBuffer
         var resolver = _nextResolver;
 
         // Create buffered entities.
-        CreateBufferedEntities(resolver);
+        CreateBufferedEntities(resolver, ref blocker);
 
         // Lazy command buffer accumulates any changes caused by applying this command buffer
         var lazy = new LazyCommandBuffer(World);
 
         // Delete entities, this must occur before structural changes because it may trigger new structural changes
         // by adding a new phantom component.
-        DeleteEntities(ref lazy);
+        DeleteEntities(ref lazy, ref blocker);
 
         // Structural changes (add/remove components)
-        ApplyStructuralChanges(ref lazy);
+        ApplyStructuralChanges(ref lazy, ref blocker);
 
         // Dispose all disposable components which were enqueued but were never attached to an Entity
         _setters.DisposeAllOverwritten(ref lazy);
@@ -93,9 +96,9 @@ public sealed partial class CommandBuffer
         unchecked { _version++; }
 
         // Apply all late-bound relationships (this requires using the resolver, so must be done after the version bump)
-        _bufferedRelationBindings.Apply(resolver);
+        _bufferedRelationBindings.Apply(resolver, ref blocker);
         _bufferedRelationBindings.Clear();
-        _unbufferedRelationBindings.Apply(resolver);
+        _unbufferedRelationBindings.Apply(resolver, ref blocker);
         _unbufferedRelationBindings.Clear();
 
         // Apply any changes caused by these changes
@@ -113,61 +116,74 @@ public sealed partial class CommandBuffer
         return resolver;
     }
 
-    private void DeleteEntities(ref LazyCommandBuffer lazy)
+    private void DeleteEntities(ref LazyCommandBuffer lazy, ref Blocker blocker)
     {
-        foreach (var query in _archetypeDeletes)
+        if (_archetypeDeletes.Count > 0)
         {
-            foreach (var match in query.GetArchetypes())
+            // Block on the entire world before proceeding
+            blocker.Block();
+
+            foreach (var query in _archetypeDeletes)
             {
-                if (match.Archetype.EntityCount == 0)
+                foreach (var match in query.GetArchetypes())
+                {
+                    if (match.Archetype.EntityCount == 0)
+                        continue;
+
+                    World.DeleteImmediate(match.Archetype, ref lazy);
+                }
+            }
+
+            _archetypeDeletes.Clear();
+        }
+
+        if (_deletes.Count > 0)
+        {
+            // Block on the entire world before proceeding
+            blocker.Block();
+
+            foreach (var delete in _deletes)
+            {
+                // If there are any modifications enqueue for this entity, delete them
+                if (_entityModifications.TryGetValue(delete, out var mods))
+                    _setters.Dispose(mods.Sets, ref lazy);
+
+                // Get info for this entity, early exiting on dead entities
+                var dummy = default(EntityInfo);
+                var info = World.GetEntityInfo(delete, ref dummy, out var isAlreadyDead);
+                if (isAlreadyDead)
                     continue;
 
-                World.DeleteImmediate(match.Archetype, ref lazy);
-            }
-        }
-        _archetypeDeletes.Clear();
-
-        foreach (var delete in _deletes)
-        {
-            // If there are any modifications enqueue for this entity, delete them
-            if (_entityModifications.TryGetValue(delete, out var mods))
-                _setters.Dispose(mods.Sets, ref lazy);
-
-            // Get info for this entity, early exiting on dead entities
-            var dummy = default(EntityInfo);
-            var info = World.GetEntityInfo(delete, ref dummy, out var isAlreadyDead);
-            if (isAlreadyDead)
-                continue;
-
-            var archetype = info.Chunk.Archetype;
-            if (archetype is { IsPhantom: false, HasPhantomComponents: true } || IsAddingPhantomComponent(delete))
-            {
-                // It has phantom components and isn't yet a phantom. Add a Phantom component.
-                InternalSet(delete, new Phantom());
-            }
-            else
-            {
-                World.DeleteImmediate(delete, ref lazy);
-
-                // Return objects to pools
-                if (_entityModifications.Remove(delete, out var mod))
+                var archetype = info.Chunk.Archetype;
+                if (archetype is { IsPhantom: false, HasPhantomComponents: true } || IsAddingPhantomComponent(delete))
                 {
-                    if (mod.Sets != null)
-                    {
-                        mod.Sets.Clear();
-                        Pool.Return(mod.Sets);
-                    }
+                    // It has phantom components and isn't yet a phantom. Add a Phantom component.
+                    InternalSet(delete, new Phantom());
+                }
+                else
+                {
+                    World.DeleteImmediate(delete, ref lazy);
 
-                    if (mod.Removes != null)
+                    // Return objects to pools
+                    if (_entityModifications.Remove(delete, out var mod))
                     {
-                        mod.Removes.Clear();
-                        Pool.Return(mod.Removes);
+                        if (mod.Sets != null)
+                        {
+                            mod.Sets.Clear();
+                            Pool.Return(mod.Sets);
+                        }
+
+                        if (mod.Removes != null)
+                        {
+                            mod.Removes.Clear();
+                            Pool.Return(mod.Removes);
+                        }
                     }
                 }
             }
-        }
 
-        _deletes.Clear();
+            _deletes.Clear();
+        }
 
         // Check if this entity should not be deleted, because a phantom component is being added
         bool IsAddingPhantomComponent(EntityId entity)
@@ -181,11 +197,14 @@ public sealed partial class CommandBuffer
         }
     }
 
-    private void ApplyStructuralChanges(ref LazyCommandBuffer lazy)
+    private void ApplyStructuralChanges(ref LazyCommandBuffer lazy, ref Blocker blocker)
     {
         if (_entityModifications.Count == 0)
             return;
-        
+
+        // Block on the entire world before proceeding
+        blocker.Block();
+
         // Calculate the new archetype for the entity
         foreach (var (entity, mod) in _entityModifications)
         {
@@ -273,8 +292,14 @@ public sealed partial class CommandBuffer
         }
     }
 
-    private void CreateBufferedEntities(Resolver resolver)
+    private void CreateBufferedEntities(Resolver resolver, ref Blocker blocker)
     {
+        if (_bufferedSets.Count == 0)
+            return;
+
+        // Block on the entire world before creating any entities
+        blocker.Block();
+
         _tempComponentIdSet.Clear();
 
         // Keep a map from archetype key -> archetype. This means we only need to calculate it once
