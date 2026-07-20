@@ -118,7 +118,7 @@ public sealed partial class CommandBuffer
 
     private void DeleteEntities(ref LazyCommandBuffer lazy, ref Blocker blocker)
     {
-        // Delete entities specifed by query, dropping entire archetypes.
+        // Delete entities specified by query, dropping entire archetypes.
         if (_archetypeDeletes.Count > 0)
         {
             foreach (var query in _archetypeDeletes)

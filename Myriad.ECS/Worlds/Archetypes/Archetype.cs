@@ -68,7 +68,7 @@ public sealed partial class Archetype
     private readonly ArchetypePhantomComponentNotifier? _phantomNotifier;
 
     /// <summary>
-    /// The archetype that entities should be moved to when deleted. May be null if if it has not yet been initialised
+    /// The archetype that entities should be moved to when deleted. Initialised on first use, null until then.
     /// </summary>
     private Archetype? _phantomDestination;
 
@@ -200,10 +200,9 @@ public sealed partial class Archetype
     /// <summary>
     /// Delete every Entity in this archetype
     /// </summary>
-    /// <param name="lazy"></param>
-    /// <param name="blockSrc"></param>
-    /// <param name="blockDst"></param>
-    /// <exception cref="NotImplementedException"></exception>
+    /// <param name="lazy">Lazy command buffer to use</param>
+    /// <param name="blockSrc">Whether to block on the source archetype</param>
+    /// <param name="blockDst">Whether to block on the destination archetype</param>
     internal void Clear(ref LazyCommandBuffer lazy, bool blockSrc, bool blockDst)
     {
         // Wait for multithreaded access to this archetype

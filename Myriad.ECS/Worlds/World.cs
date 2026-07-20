@@ -139,7 +139,7 @@ public sealed partial class World
     }
 
     /// <summary>
-    /// Delete an entity from an archetype
+    /// Delete all entities in an archetype
     /// </summary>
     /// <param name="archetype"></param>
     /// <param name="lazy"></param>
@@ -169,7 +169,7 @@ public sealed partial class World
         }
 
         // Clear the archetype
-        archetype.Clear(ref lazy, false, blockDst);
+        archetype.Clear(ref lazy, blockSrc:false, blockDst:blockDst);
     }
 
     #region Get/Create Archetype
