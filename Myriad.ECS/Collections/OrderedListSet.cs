@@ -73,6 +73,11 @@ internal class OrderedListSet<TItem>
         _items.EnsureCapacity(capacity);
     }
 
+    /// <summary>
+    /// Returns true if the item was inserted
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
     public bool Add(TItem item)
     {
         var index = _items.BinarySearch(item);

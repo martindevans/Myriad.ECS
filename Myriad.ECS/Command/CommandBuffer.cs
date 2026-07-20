@@ -39,6 +39,8 @@ public sealed partial class CommandBuffer
     private readonly BufferedRelationBinder _bufferedRelationBindings = new();
     private readonly UnbufferedRelationBinder _unbufferedRelationBindings = new();
 
+    private OrderedListSet<long> _tmpBlockSet = new();
+    
     private Resolver _nextResolver;
 
     /// <summary>
@@ -61,7 +63,8 @@ public sealed partial class CommandBuffer
     public Resolver Playback()
     {
         // Create a new blocker which tracks what archetypes we've blocked on
-        var blocker = new Blocker(World);
+        _tmpBlockSet.Clear();
+        var blocker = new Blocker(World, _tmpBlockSet);
         
         // Use this resolver for this playback
         var resolver = _nextResolver;
@@ -115,30 +118,28 @@ public sealed partial class CommandBuffer
 
     private void DeleteEntities(ref LazyCommandBuffer lazy, ref Blocker blocker)
     {
+        // Delete entities specifed by query, dropping entire archetypes.
         if (_archetypeDeletes.Count > 0)
         {
-            // Block on the entire world before proceeding
-            blocker.Block();
-
             foreach (var query in _archetypeDeletes)
             {
                 foreach (var match in query.GetArchetypes())
                 {
                     if (match.Archetype.EntityCount == 0)
                         continue;
+                    
+                    blocker.Block(match.Archetype);
 
-                    World.DeleteImmediate(match.Archetype, ref lazy);
+                    World.DeleteImmediate(match.Archetype, ref lazy, blockSrc:false, blockDst:true);
                 }
             }
 
             _archetypeDeletes.Clear();
         }
 
+        // Deleted specific entities
         if (_deletes.Count > 0)
         {
-            // Block on the entire world before proceeding
-            blocker.Block();
-
             foreach (var delete in _deletes)
             {
                 // If there are any modifications enqueue for this entity, delete them
@@ -151,6 +152,7 @@ public sealed partial class CommandBuffer
                 if (isAlreadyDead)
                     continue;
 
+                // Either mark it as a phantom, or really delete it
                 var archetype = info.Chunk.Archetype;
                 if (archetype is { IsPhantom: false, HasPhantomComponents: true } || IsAddingPhantomComponent(delete))
                 {
@@ -159,7 +161,11 @@ public sealed partial class CommandBuffer
                 }
                 else
                 {
-                    World.DeleteImmediate(delete, ref lazy);
+                    // Block on the archetype before making changes
+                    blocker.Block(archetype);
+
+                    // Delete entity. Not blocking is safe because we blocked on this archetype just above.
+                    World.DeleteImmediate(delete, ref lazy, block:false);
 
                     // Return objects to pools
                     if (_entityModifications.Remove(delete, out var mod))
@@ -259,7 +265,8 @@ public sealed partial class CommandBuffer
             var autodelete = _tempComponentIdSet.Contains(ComponentID<Phantom>.ID) && !destHasPhantomComponents;
             if (autodelete)
             {
-                World.DeleteImmediate(entity, ref lazy);
+                // Delete entity, no blocking is safe because we blocked on the entire world above.
+                World.DeleteImmediate(entity, ref lazy, block:false);
             }
             else
             {
@@ -271,7 +278,8 @@ public sealed partial class CommandBuffer
                     var newArchetype = World.GetOrCreateArchetype(_tempComponentIdSet, hash);
 
                     // Migrate the entity across
-                    dest = ref World.MigrateEntity(entity, newArchetype, ref lazy);
+                    // Safe to not block, because we blocked on the entire world
+                    dest = ref World.MigrateEntity(entity, newArchetype, ref lazy, blockSrc:false, blockDst:false);
                 }
 
                 // Run all setters
@@ -312,7 +320,8 @@ public sealed partial class CommandBuffer
 
                 var archetype = GetArchetype(bufferedData, archetypeLookup);
 
-                var slot = archetype.CreateEntity(out var entity);
+                // Allocate entity. Not blocking is safe because we blocked on the entire world above
+                var slot = archetype.CreateEntity(out var entity, block:false);
 
                 // Store the new ID in the resolver so it can be retrieved later
                 resolver.Lookup.Add(bufferedData.Id, entity);

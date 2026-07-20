@@ -118,7 +118,7 @@ public sealed partial class World
     }
     #endregion
 
-    internal void DeleteImmediate(EntityId delete, ref LazyCommandBuffer lazy)
+    internal void DeleteImmediate(EntityId delete, ref LazyCommandBuffer lazy, bool block)
     {
         // Get the entityinfo for this entity
         ref var entityInfo = ref _entities[delete.ID];
@@ -129,19 +129,27 @@ public sealed partial class World
             return;
 
         // Notify archetype this entity is dead
-        entityInfo.Chunk.Archetype.RemoveEntity(entityInfo, ref lazy);
+        entityInfo.Chunk.Archetype.RemoveEntity(entityInfo, ref lazy, block);
 
-        // Increment version, this will invalid the handle
+        // Increment version, this will invalidate the handle
         entityInfo.Version++;
 
         // Store this ID for re-use later
         _deadEntities.Add(delete);
     }
 
-    internal void DeleteImmediate(Archetype archetype, ref LazyCommandBuffer lazy)
+    /// <summary>
+    /// Delete an entity from an archetype
+    /// </summary>
+    /// <param name="archetype"></param>
+    /// <param name="lazy"></param>
+    /// <param name="blockSrc">Whether to block on the given archetype</param>
+    /// <param name="blockDst">If the entity migrates (because it's becoming a phantom) whether to block on the destination</param>
+    internal void DeleteImmediate(Archetype archetype, ref LazyCommandBuffer lazy, bool blockSrc, bool blockDst)
     {
         // Wait for multithreaded access to this archetype
-        archetype.Block();
+        if (blockSrc)
+            archetype.Block();
 
         // Mark all of the IDs as dead (as long as they haven't become phantoms)
         if (archetype is { HasPhantomComponents: false, IsPhantom: false })
@@ -161,7 +169,7 @@ public sealed partial class World
         }
 
         // Clear the archetype
-        archetype.Clear(ref lazy);
+        archetype.Clear(ref lazy, false, blockDst);
     }
 
     #region Get/Create Archetype
@@ -231,10 +239,10 @@ public sealed partial class World
     }
     #endregion
 
-    internal ref EntityInfo MigrateEntity(EntityId entity, Archetype to, ref LazyCommandBuffer lazy)
+    internal ref EntityInfo MigrateEntity(EntityId entity, Archetype to, ref LazyCommandBuffer lazy, bool blockSrc, bool blockDst)
     {
         ref var info = ref GetEntityInfo(entity);
-        info.Chunk.Archetype.MigrateTo(entity, ref info, to, ref lazy);
+        info.Chunk.Archetype.MigrateTo(entity, ref info, to, ref lazy, blockSrc, blockDst);
         return ref info;
     }
 
