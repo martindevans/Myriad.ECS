@@ -294,13 +294,13 @@ internal sealed partial class Chunk
         }
     }
 
-    internal void MigrateTo(EntityId entity, ref EntityInfo info, Archetype to)
+    internal void MigrateTo(EntityId entity, ref EntityInfo info, Archetype to, bool destBlock)
     {
         // Copy current entity info so we can use it later
         var oldInfo = info;
 
         // Move the entity to the new archetype
-        to.AddEntity(entity, ref info);
+        to.AddEntity(entity, ref info, destBlock);
         var destChunk = info.Chunk;
 
         // Copy across everything that exists in the destination archetype

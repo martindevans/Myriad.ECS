@@ -68,7 +68,7 @@ public sealed partial class Archetype
     private readonly ArchetypePhantomComponentNotifier? _phantomNotifier;
 
     /// <summary>
-    /// The archetype that entities should be moved to when deleted.
+    /// The archetype that entities should be moved to when deleted. Initialised on first use, null until then.
     /// </summary>
     private Archetype? _phantomDestination;
 
@@ -182,16 +182,17 @@ public sealed partial class Archetype
                     _disposer.DisposeEntity(ref buffer, chunk, i);
     }
 
-    internal ref EntityInfo CreateEntity(out EntityId entity)
+    internal ref EntityInfo CreateEntity(out EntityId entity, bool block)
     {
         // Wait for multithreaded access to this archetype
-        Block();
+        if (block)
+            Block();
 
         // Allocate an entity in the world
         ref var info = ref World.AllocateEntity(out entity);
 
         // Add it to this archetype, find a row to put components into
-        AddEntity(entity, ref info);
+        AddEntity(entity, ref info, block:false);
 
         return ref info;
     }
@@ -199,12 +200,14 @@ public sealed partial class Archetype
     /// <summary>
     /// Delete every Entity in this archetype
     /// </summary>
-    /// <param name="lazy"></param>
-    /// <exception cref="NotImplementedException"></exception>
-    internal void Clear(ref LazyCommandBuffer lazy)
+    /// <param name="lazy">Lazy command buffer to use</param>
+    /// <param name="blockSrc">Whether to block on the source archetype</param>
+    /// <param name="blockDst">Whether to block on the destination archetype</param>
+    internal void Clear(ref LazyCommandBuffer lazy, bool blockSrc, bool blockDst)
     {
         // Wait for multithreaded access to this archetype
-        Block();
+        if (blockSrc)
+            Block();
 
         if (HasPhantomComponents && !IsPhantom)
         {
@@ -217,6 +220,10 @@ public sealed partial class Archetype
                 };
                 _phantomDestination = World.GetOrCreateArchetype(c);
             }
+            
+            // Block on the destination
+            if (blockDst)
+                _phantomDestination.Block();
 
             // Migrate all entities in all chunks to the new archetype. Doing this does all of the bookeeping like chunk management and entity count.
             // This could be better, at the moment it just does the work on a per-entity basis, instead of doing it all in one batch.
@@ -229,7 +236,7 @@ public sealed partial class Archetype
                     var entity = chunk.EntityIds.Span[^1];
                     ref var info = ref World.GetEntityInfo(entity);
 
-                    MigrateTo(entity, ref info, _phantomDestination, ref lazy);
+                    MigrateTo(entity, ref info, _phantomDestination, ref lazy, blockSrc:false, blockDst:false);
                 }
             }
         }
@@ -266,11 +273,13 @@ public sealed partial class Archetype
     /// </summary>
     /// <param name="entity">Entity to add to a chunk</param>
     /// <param name="info">Info will be mutated to point to the new location</param>
+    /// <param name="block"></param>
     /// <returns></returns>
-    internal void AddEntity(EntityId entity, ref EntityInfo info)
+    internal void AddEntity(EntityId entity, ref EntityInfo info, bool block)
     {
         // Wait for multithreaded access to this archetype
-        Block();
+        if (block)
+            Block();
 
         // Increase archetype entity count
         EntityCount++;
@@ -300,10 +309,11 @@ public sealed partial class Archetype
         newChunk.AddEntity(entity, ref info);
     }
 
-    internal void RemoveEntity(EntityInfo info, ref LazyCommandBuffer lazy)
+    internal void RemoveEntity(EntityInfo info, ref LazyCommandBuffer lazy, bool block)
     {
         // Wait for multithreaded access to this archetype
-        Block();
+        if (block)
+            Block();
 
         // Run disposal for all IDisposableComponent components
         if (HasDisposableComponents)
@@ -316,10 +326,13 @@ public sealed partial class Archetype
         HandleChunkEntityRemoved(info.Chunk);
     }
 
-    internal void MigrateTo(EntityId entity, ref EntityInfo info, Archetype to, ref LazyCommandBuffer lazy)
+    internal void MigrateTo(EntityId entity, ref EntityInfo info, Archetype to, ref LazyCommandBuffer lazy, bool blockSrc, bool blockDst)
     {
         // Wait for multithreaded access to this archetype
-        Block();
+        if (blockSrc)
+            Block();
+        if (blockDst)
+            to.Block();
 
         //// Early exit if we're migrating to where we already are!
         //if (to == this)
@@ -334,8 +347,9 @@ public sealed partial class Archetype
             _phantomNotifier?.Notify(entity, info);
 
         // Do the actual copying
+        // We already blocked on src and dst archetypes just above.
         var chunk = info.Chunk;
-        chunk.MigrateTo(entity, ref info, to);
+        chunk.MigrateTo(entity, ref info, to, destBlock:false);
 
         // Execute handler for when an entity is removed from a chunk
         HandleChunkEntityRemoved(chunk);
