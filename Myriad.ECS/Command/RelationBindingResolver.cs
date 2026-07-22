@@ -34,8 +34,7 @@ public partial class CommandBuffer
                 return;
             
             // Block on the entire world before proceeding
-            if (_resolvers.Count > 0)
-                blocker.Block();
+            blocker.Block();
 
             foreach (var internalResolver in _resolvers)
                 internalResolver.Value.Apply(resolver, this);

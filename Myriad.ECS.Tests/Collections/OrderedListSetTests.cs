@@ -1,5 +1,4 @@
 ﻿using Myriad.ECS.Collections;
-using Myriad.ECS.IDs;
 
 namespace Myriad.ECS.Tests.Collections;
 
@@ -469,11 +468,7 @@ public class OrderedListSetTests
         CollectionAssert.AreEqual(
             expectedA.OrderBy(x => x).ToArray(),
             actualA.ToArray(),
-            $"""
-             Failed with seed {seed}
-             Input A: [{string.Join(", ", actualA)}]
-             Input B: [{string.Join(", ", actualB)}]
-             """
+            $"Failed with seed {seed}"
         );
     }
 }

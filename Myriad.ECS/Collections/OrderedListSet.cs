@@ -152,7 +152,7 @@ internal class OrderedListSet<TItem>
 
             if (cmp < 0)
             {
-                // This item isn't in other. Advanced to the next item in this list
+                // This item isn't in other. Advance to the next item in this list
                 read++;
             }
             else if (cmp > 0)

@@ -1,8 +1,6 @@
-﻿using Myriad.ECS.Components;
-using Myriad.ECS.IDs;
+﻿using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds;
-using System;
 
 namespace Myriad.ECS.Tests.Queries;
 

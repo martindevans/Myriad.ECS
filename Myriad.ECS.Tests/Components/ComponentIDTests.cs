@@ -1,7 +1,4 @@
-﻿using Myriad.ECS.Command;
-using Myriad.ECS.Components;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Worlds;
+﻿using Myriad.ECS.IDs;
 
 namespace Myriad.ECS.Tests.Components;
 
