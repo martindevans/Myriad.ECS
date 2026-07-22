@@ -1,4 +1,5 @@
 ﻿using Myriad.ECS.Collections;
+using Myriad.ECS.IDs;
 
 namespace Myriad.ECS.Tests.Collections;
 
@@ -328,5 +329,151 @@ public class OrderedListSetTests
         a.Add(1);
 
         Assert.AreEqual(1, a.Single());
+    }
+
+    [TestMethod]
+    public void IntersectWith_FrozenOrderedListSet_PartialOverlap()
+    {
+        var a = new OrderedListSet<int>();
+        a.Add(1);
+        a.Add(2);
+        a.Add(3);
+
+        var b = new OrderedListSet<int>();
+        b.Add(2);
+        b.Add(3);
+        b.Add(4);
+        var bb = b.Freeze();
+        
+        a.IntersectWith(bb);
+        
+        Assert.AreEqual(2, a.Count);
+        Assert.IsFalse(a.Contains(1));
+        Assert.IsTrue(a.Contains(2));
+        Assert.IsTrue(a.Contains(3));
+    }
+
+    [TestMethod]
+    public void IntersectWith_FrozenOrderedListSet_PartialOverlap_NonContiguous()
+    {
+        var a = new OrderedListSet<int>();
+        a.Add(1);
+        a.Add(2);
+        a.Add(3);
+        a.Add(4);
+        a.Add(5);
+
+        var b = new OrderedListSet<int>();
+        b.Add(2);
+        b.Add(4);
+        var bb = b.Freeze();
+
+        a.IntersectWith(bb);
+
+        Assert.AreEqual(2, a.Count);
+        Assert.IsFalse(a.Contains(1));
+        Assert.IsTrue(a.Contains(2));
+        Assert.IsFalse(a.Contains(3));
+        Assert.IsTrue(a.Contains(4));
+        Assert.IsFalse(a.Contains(5));
+    }
+
+    [TestMethod]
+    public void IntersectWith_FrozenOrderedListSet_NoOverlap()
+    {
+        var a = new OrderedListSet<int>();
+        a.Add(1);
+        a.Add(2);
+        a.Add(3);
+        a.Add(4);
+        a.Add(5);
+
+        var b = new OrderedListSet<int>();
+        b.Add(6);
+        var bb = b.Freeze();
+
+        a.IntersectWith(bb);
+
+        Assert.AreEqual(0, a.Count);
+    }
+
+    [TestMethod]
+    public void IntersectWith_FrozenOrderedListSet_FullOverlap()
+    {
+        var a = new OrderedListSet<int>();
+        a.Add(1);
+        a.Add(2);
+        a.Add(3);
+
+        var b = new OrderedListSet<int>();
+        b.Add(1);
+        b.Add(2);
+        b.Add(3);
+        var bb = b.Freeze();
+
+        a.IntersectWith(bb);
+
+        Assert.AreEqual(3, a.Count);
+    }
+
+    [TestMethod]
+    public void IntersectWith_FrozenOrderedListSet_Repro()
+    {
+        var a = new OrderedListSet<int>();
+        a.Add(48);
+
+        var b = new OrderedListSet<int>();
+        b.Add(32);
+        b.Add(48);
+        var bb = b.Freeze();
+
+        a.IntersectWith(bb);
+
+        Assert.AreEqual(1, a.Count);
+    }
+
+    [TestMethod]
+    public void IntersectWith_Fuzz()
+    {
+        for (var seed = 0; seed < 10_000; seed++)
+            IntersectWith_Fuzz_Single(seed);
+    }
+
+    private static void IntersectWith_Fuzz_Single(int seed)
+    {
+        var rng = new Random(seed);
+
+        var expectedA = new HashSet<int>();
+        var expectedB = new HashSet<int>();
+
+        var actualA = new OrderedListSet<int>();
+        var actualB = new OrderedListSet<int>();
+
+        for (var i = 0; i < rng.Next(50); i++)
+        {
+            var v = rng.Next(100);
+            expectedA.Add(v);
+            actualA.Add(v);
+        }
+
+        for (var i = 0; i < rng.Next(50); i++)
+        {
+            var v = rng.Next(100);
+            expectedB.Add(v);
+            actualB.Add(v);
+        }
+
+        expectedA.IntersectWith(expectedB);
+        actualA.IntersectWith(actualB.Freeze());
+
+        CollectionAssert.AreEqual(
+            expectedA.OrderBy(x => x).ToArray(),
+            actualA.ToArray(),
+            $"""
+             Failed with seed {seed}
+             Input A: [{string.Join(", ", actualA)}]
+             Input B: [{string.Join(", ", actualB)}]
+             """
+        );
     }
 }

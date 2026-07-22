@@ -128,11 +128,51 @@ internal class OrderedListSet<TItem>
     }
     #endregion
 
+    /// <summary>
+    /// Remove all items in this set which are not in the other set
+    /// </summary>
+    /// <param name="other"></param>
     public void IntersectWith(FrozenOrderedListSet<TItem> other)
     {
-        for (var i = _items.Count - 1; i >= 0; i--)
-            if (!other.Contains(_items[i]))
-                _items.RemoveAt(i);
+        var write = 0;
+        var read = 0;
+
+        using var e = other.GetEnumerator();
+
+        // If there are no items in the other set then there is no intersection at all!
+        if (!e.MoveNext())
+        {
+            _items.Clear();
+            return;
+        }
+
+        while (read < _items.Count)
+        {
+            var cmp = _items[read].CompareTo(e.Current);
+
+            if (cmp < 0)
+            {
+                // This item isn't in other. Advanced to the next item in this list
+                read++;
+            }
+            else if (cmp > 0)
+            {
+                // Need to catch up in other
+                if (!e.MoveNext())
+                    break;
+            }
+            else
+            {
+                // Match! Copy item back towards start of this list
+                _items[write++] = _items[read++];
+                if (!e.MoveNext())
+                    break;
+            }
+        }
+
+        // Remove the items from the end of the list. We've copied all the ones
+        // we want to keep back to before this range.
+        _items.RemoveRange(write, _items.Count - write);
     }
 
     public bool Remove(TItem item)

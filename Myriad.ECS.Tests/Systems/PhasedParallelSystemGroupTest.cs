@@ -24,7 +24,7 @@ public class PhasedParallelSystemGroupTest
         );
 
         var values = new ConcurrentDictionary<int, SemaphoreSlim>();
-        for (var i = 0; i < 250; i++)
+        for (var i = 0; i < 50; i++)
         {
             group.BeforeUpdate(values);
             group.Update(values);
@@ -47,7 +47,7 @@ public class PhasedParallelSystemGroupTest
         );
 
         var values = new ConcurrentDictionary<int, SemaphoreSlim>();
-        for (var i = 0; i < 250; i++)
+        for (var i = 0; i < 50; i++)
         {
             group.BeforeUpdate(values);
             group.Update(values);

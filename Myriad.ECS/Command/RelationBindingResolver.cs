@@ -30,6 +30,9 @@ public partial class CommandBuffer
 
         public void Apply(Resolver resolver, ref Blocker blocker)
         {
+            if (_resolvers.Count == 0)
+                return;
+            
             // Block on the entire world before proceeding
             if (_resolvers.Count > 0)
                 blocker.Block();

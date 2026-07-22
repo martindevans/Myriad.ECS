@@ -213,8 +213,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
@@ -616,8 +620,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
@@ -1042,8 +1050,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
@@ -1491,8 +1503,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
@@ -1963,8 +1979,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
@@ -2458,8 +2478,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
@@ -2976,8 +3000,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
@@ -3517,8 +3545,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
@@ -4081,8 +4113,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
@@ -4668,8 +4704,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
@@ -5278,8 +5318,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
@@ -5911,8 +5955,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
@@ -6567,8 +6615,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
@@ -7246,8 +7298,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
@@ -7948,8 +8004,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
@@ -8673,8 +8733,12 @@ namespace Myriad.ECS.Worlds
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
+				// Get archetype, skip if empty
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
+				// Block on any parallel work modifying this archetype
 				lm.Block(archetype, components);
 
 				count += archetype.EntityCount;
