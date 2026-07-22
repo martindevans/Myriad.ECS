@@ -293,6 +293,8 @@ namespace Myriad.ECS.Worlds
 			foreach (var archetypeMatch in archetypes)
 			{
 			    var archetype = archetypeMatch.Archetype;
+				if (archetype.EntityCount == 0)
+					continue;
 
 <# if (i == 0) { #>
 				archetype.Block();

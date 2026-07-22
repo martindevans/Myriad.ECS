@@ -31,6 +31,11 @@
   &lt;Project Location="C:\Users\Martin\Documents\dotnet\Myriad.ECS\Myriad.ECS.Tests" Presentation="&amp;lt;Myriad.ECS.Tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b738c63f_002D33c5_002D4256_002Da0a9_002D8ad41ce0f3b6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;Myriad.ECS.Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="C:\Users\Martin\Documents\dotnet\Myriad.ECS\Myriad.ECS.Tests" Presentation="&amp;lt;Myriad.ECS.Tests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	
+	
 	
 	
 	
