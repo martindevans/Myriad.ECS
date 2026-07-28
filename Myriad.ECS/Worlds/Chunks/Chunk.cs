@@ -1,9 +1,9 @@
-﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using Myriad.ECS.Allocations;
+﻿using Myriad.ECS.Allocations;
 using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Archetypes;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Myriad.ECS.Worlds.Chunks;
 
@@ -59,9 +59,11 @@ internal sealed partial class Chunk
         _entityIds = new EntityId[size];
         _componentIdLookup = ids;
 
+        // Allocate component arrays. Each chunk is one larger than it needs to be, this slot
+        // is used as temporary storage when moving entities.
         _components = new Array[componentTypes.Length];
         for (var i = 0; i < _components.Length; i++)
-            _components[i] = ArrayFactory.Create(componentTypes[i], size);
+            _components[i] = ArrayFactory.Create(componentTypes[i], size + 1);
     }
 
     #region get component
@@ -335,4 +337,124 @@ internal sealed partial class Chunk
     {
         return _entityIds;
     }
+
+    #region sort
+
+    private void CopyComponents(int indexFrom, int indexTo)
+    {
+        // Copy top entity components into place
+        foreach (var component in _components)
+            Array.Copy(component, indexFrom, component, indexTo, 1);
+    }
+
+    private void SetEntityAtIndex(int index, Entity entity)
+    {
+        // Overwrite the entity
+        _entities[index] = entity;
+        _entityIds[index] = entity;
+
+        // Update the world
+        ref var info = ref Archetype.World.GetEntityInfo(entity);
+        info.RowIndex = index;
+    }
+
+    private void ClearComponents(int index)
+    {
+        foreach (var component in _components)
+            Array.Clear(component, index, 1);
+    }
+
+    /// <summary>
+    /// Sort this chunk by a key (derived from components)
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TKeyMapper"></typeparam>
+    internal void Sort<TKey, TKeyMapper>(TKeyMapper mapper)
+        where TKey : unmanaged, IComparable<TKey>
+        where TKeyMapper : IKeyMapper<TKey>
+    {
+        // Build span of entities with key
+        Span<Sortable<TKey>> reorder = stackalloc Sortable<TKey>[EntityCount];
+        for (var i = 0; i < EntityCount; i++)
+            reorder[i] = new Sortable<TKey>(i, mapper.MapKey(this, i));
+
+        // Sort the span based on the key
+        reorder.Sort();
+
+        // Now apply the reorder buffer
+        new EntityMover(this).ApplyReorderInPlace(reorder);
+    }
+
+    internal interface IKeyMapper<out TKey>
+    {
+        public TKey MapKey(Chunk chunk, int index);
+    }
+
+    private readonly struct Sortable<TKey>
+        : ReorderBuffer.IDataIndex, IComparable<Sortable<TKey>>
+        where TKey : unmanaged, IComparable<TKey>
+    {
+        public int OriginalIndex { get; }
+        public readonly TKey Key;
+
+        public Sortable(int originalIndex, TKey key)
+        {
+            OriginalIndex = originalIndex;
+            Key = key;
+        }
+
+        public int CompareTo(Sortable<TKey> other)
+        {
+            // Compare the keys, fall back to comparing indices if they're the same.
+            // This makes the unstable span sort stable!
+            var cmp = Key.CompareTo(other.Key);
+            return cmp != 0
+                ? cmp
+                : OriginalIndex.CompareTo(other.OriginalIndex);
+        }
+    }
+
+    private struct EntityMover
+        : ReorderBuffer.IDataMove
+    {
+        private readonly Chunk _chunk;
+        
+        private Entity _tempEntity;
+        private readonly int _tempIdx;
+
+        public EntityMover(Chunk chunk)
+        {
+            _chunk = chunk;
+            _tempIdx = _chunk._entities.Length;
+        }
+
+        public void Move(int indexFrom, int indexTo)
+        {
+            _chunk.CopyComponents(indexFrom, indexTo);
+            _chunk.SetEntityAtIndex(indexTo, _chunk._entities[indexFrom]);
+        }
+
+        public void SaveToTemporary(int indexFrom)
+        {
+            // Save the entity
+            _tempEntity = _chunk._entities[indexFrom];
+            
+            // Copy components to the very last slot of the array
+            _chunk.CopyComponents(indexFrom, _chunk._entities.Length);
+        }
+
+        public void RestoreFromTemporary(int indexTo)
+        {
+            // Copy components from the very last slot
+            _chunk.CopyComponents(_tempIdx, indexTo);
+            
+            // Restore the entity
+            _chunk.SetEntityAtIndex(indexTo, _tempEntity);
+            
+            // Clear the temporary slot, to ensure we don't hold a reference to anything
+            _chunk.ClearComponents(_tempIdx);
+        }
+    }
+
+    #endregion
 }

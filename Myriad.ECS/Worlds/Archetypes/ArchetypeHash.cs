@@ -29,11 +29,11 @@ internal readonly record struct ArchetypeHash
     {
         unsafe
         {
-            // Hash compoent value to smear bits across 64 bit hash space
+            // Hash component value to smear bits across 64 bit hash space
             var cv = component.Value;
             var v = unchecked((long)xxHash64.ComputeHash(new Span<byte>(&cv, 4), 17));
 
-            // xor this value to tiggle it in the set
+            // xor this value to toggle it in the set
             return value ^ v;
         }
     }
