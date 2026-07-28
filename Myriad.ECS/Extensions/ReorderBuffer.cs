@@ -16,7 +16,7 @@ internal static class ReorderBuffer
     {
         Span<bool> visited = stackalloc bool[indices.Length];
         visited.Clear();
-
+        
         for (var i = 0; i < indices.Length; i++)
         {
             // Check if this index has already been visited/processed

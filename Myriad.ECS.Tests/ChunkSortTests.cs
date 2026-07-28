@@ -34,11 +34,6 @@ public class ChunkSortTests
             // Did all components get moved? we check this with the "self reference" entity which stores it's own ID
             Assert.AreEqual(sr.Ref.Target, e);
 
-            if (e.ID.ID == 1)
-            {
-                
-            }
-
             // Check that the world reference is correct
             ref var info = ref world.GetEntityInfo(e);
             var e2 = info.Chunk.Entities.Span[info.RowIndex];
