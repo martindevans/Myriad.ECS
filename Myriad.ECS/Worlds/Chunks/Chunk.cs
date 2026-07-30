@@ -394,7 +394,7 @@ internal sealed partial class Chunk
         where TKeyMapper : IKeyMapper<TKey>
     {
         if (reorder.Length != EntityCount)
-            throw new ArgumentException("Reorder buffer is incorrect length (must be chunksize)");
+            throw new ArgumentException("Reorder buffer is incorrect length (must equal EntityCount)");
         
         // Wait on multithreaded access to the archetype
         if (block)
