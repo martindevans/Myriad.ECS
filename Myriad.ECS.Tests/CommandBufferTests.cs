@@ -1454,4 +1454,73 @@ public class CommandBufferTests
         Assert.Contains(ab.Resolve(), list0);
         Assert.Contains(ab.Resolve(), list0);
     }
+
+    [TestMethod]
+    public void RelationalBindingIsSetOnce()
+    {
+        var world = new WorldBuilder().Build();
+
+        // Create entities with random integers
+        var rng = new Random(3724);
+        var cmd = new CommandBuffer(world);
+        for (var i = 0; i < 1000; i++)
+        {
+            var eb = cmd.Create();
+            eb.Set(new ComponentInt32(rng.Next())).Set(new RelationalCountSet(), eb);
+        }
+
+        cmd.Playback().Dispose();
+        
+        // Check relation was only set once per entity
+        foreach (var (e, c) in world.Query<RelationalCountSet>())
+        {
+            Assert.AreEqual(e, c.Ref.Target);
+            Assert.AreEqual(1, c.Ref.TargetSetCount);
+        }
+
+        cmd.Playback().Dispose();
+
+        // Check relation was only set once per entity
+        foreach (var (e, c) in world.Query<RelationalCountSet>())
+        {
+            Assert.AreEqual(e, c.Ref.Target);
+            Assert.AreEqual(1, c.Ref.TargetSetCount);
+        }
+    }
+
+    [TestMethod]
+    public void RelationalBindingIsSetOnce_WithOverwrite()
+    {
+        var world = new WorldBuilder().Build();
+
+        // Create entities with random integers
+        var rng = new Random(3724);
+        var cmd = new CommandBuffer(world);
+        for (var i = 0; i < 1000; i++)
+        {
+            var eb = cmd.Create();
+            eb.Set(new ComponentInt32(rng.Next()));
+
+            eb.Set(new RelationalCountSet(), eb);
+            eb.Set(new RelationalCountSet(), eb, CommandBuffer.DuplicateSet.Overwrite);
+        }
+
+        cmd.Playback().Dispose();
+
+        // Check relation was only set once per entity
+        foreach (var (e, c) in world.Query<RelationalCountSet>())
+        {
+            Assert.AreEqual(e, c.Ref.Target);
+            Assert.AreEqual(1, c.Ref.TargetSetCount);
+        }
+
+        cmd.Playback().Dispose();
+
+        // Check relation was only set once per entity
+        foreach (var (e, c) in world.Query<RelationalCountSet>())
+        {
+            Assert.AreEqual(e, c.Ref.Target);
+            Assert.AreEqual(1, c.Ref.TargetSetCount);
+        }
+    }
 }

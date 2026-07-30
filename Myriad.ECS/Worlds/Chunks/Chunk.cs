@@ -369,12 +369,38 @@ internal sealed partial class Chunk
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TKeyMapper"></typeparam>
-    internal void Sort<TKey, TKeyMapper>(TKeyMapper mapper)
+    internal void Sort<TKey, TKeyMapper>(TKeyMapper mapper, bool block = true)
         where TKey : unmanaged, IComparable<TKey>
         where TKeyMapper : IKeyMapper<TKey>
     {
+        Sort(
+            mapper,
+            stackalloc Sortable<TKey>[EntityCount],
+            block
+        );
+    }
+    
+    /// <summary>
+    /// Sort this chunk by a key (derived from components). Using caller provided temporary memory.
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TKeyMapper"></typeparam>
+    /// <param name="mapper"></param>
+    /// <param name="reorder">Reorder buffer, must be exactly chunk size</param>
+    /// <param name="block"></param>
+    /// <exception cref="ArgumentException"></exception>
+    internal void Sort<TKey, TKeyMapper>(TKeyMapper mapper, Span<Sortable<TKey>> reorder, bool block = true)
+        where TKey : unmanaged, IComparable<TKey>
+        where TKeyMapper : IKeyMapper<TKey>
+    {
+        if (reorder.Length != EntityCount)
+            throw new ArgumentException("Reorder buffer is incorrect length (must equal EntityCount)");
+        
+        // Wait on multithreaded access to the archetype
+        if (block)
+            Archetype.Block();
+        
         // Build span of entities with key
-        Span<Sortable<TKey>> reorder = stackalloc Sortable<TKey>[EntityCount];
         for (var i = 0; i < EntityCount; i++)
             reorder[i] = new Sortable<TKey>(i, mapper.MapKey(this, i));
 
@@ -383,6 +409,9 @@ internal sealed partial class Chunk
 
         // Now apply the reorder buffer
         new EntityMover(this).ApplyReorderInPlace(reorder);
+        
+        // Clear the temporary slot, one beyond the end of the valid slice of the array
+        ClearComponents(_entities.Length);
     }
 
     internal interface IKeyMapper<out TKey>
@@ -390,7 +419,7 @@ internal sealed partial class Chunk
         public TKey MapKey(Chunk chunk, int index);
     }
 
-    private readonly struct Sortable<TKey>
+    internal readonly struct Sortable<TKey>
         : ReorderBuffer.IDataIndex, IComparable<Sortable<TKey>>
         where TKey : unmanaged, IComparable<TKey>
     {
@@ -450,9 +479,6 @@ internal sealed partial class Chunk
             
             // Restore the entity
             _chunk.SetEntityAtIndex(indexTo, _tempEntity);
-            
-            // Clear the temporary slot, to ensure we don't hold a reference to anything
-            _chunk.ClearComponents(_tempIdx);
         }
     }
 
