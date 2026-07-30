@@ -49,6 +49,23 @@ public record struct Relational1(Entity Target) : IEntityRelationComponent;
 public record struct Relational2(Entity Target, int x) : IEntityRelationComponent;
 public record struct Relational3(Entity Target, float y) : IEntityRelationComponent;
 
+public struct RelationalCountSet
+    : IEntityRelationComponent
+{
+    public int TargetSetCount { get; private set; }
+
+    private Entity _value;
+    public Entity Target
+    {
+        get => _value;
+        set
+        {
+            TargetSetCount++;
+            _value = value;
+        }
+    }
+}
+
 public class BoxedInt
 {
     public string? ID;
