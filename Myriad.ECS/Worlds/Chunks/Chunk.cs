@@ -400,16 +400,53 @@ internal sealed partial class Chunk
         if (block)
             Archetype.Block();
         
+        // Create key buffer and sort it
+        SortKeyBuffer(mapper, reorder, block:false);
+        
+        // Reorder entities in chunk
+        ApplyKeyBuffer(reorder, block:false);
+    }
+
+    /// <summary>
+    /// Given an empty buffer fill it with keys generated from components and sort it
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TKeyMapper"></typeparam>
+    /// <param name="mapper"></param>
+    /// <param name="reorder"></param>
+    /// <param name="block"></param>
+    internal void SortKeyBuffer<TKey, TKeyMapper>(TKeyMapper mapper, Span<Sortable<TKey>> reorder, bool block = true)
+        where TKey : unmanaged, IComparable<TKey>
+        where TKeyMapper : IKeyMapper<TKey>
+    {
+        // Wait on multithreaded access to the archetype
+        if (block)
+            Archetype.Block();
+
         // Build span of entities with key
         for (var i = 0; i < EntityCount; i++)
             reorder[i] = new Sortable<TKey>(i, mapper.MapKey(this, i));
 
         // Sort the span based on the key
         reorder.Sort();
+    }
+
+    /// <summary>
+    /// Given a buffer which contains a new order for entities in this chunk, apply it.
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <param name="reorder"></param>
+    /// <param name="block"></param>
+    internal void ApplyKeyBuffer<TKey>(Span<Sortable<TKey>> reorder, bool block = true)
+        where TKey : unmanaged, IComparable<TKey>
+    {
+        // Wait on multithreaded access to the archetype
+        if (block)
+            Archetype.Block();
 
         // Now apply the reorder buffer
         new EntityMover(this).ApplyReorderInPlace(reorder);
-        
+
         // Clear the temporary slot, one beyond the end of the valid slice of the array
         ClearComponents(_entities.Length);
     }
