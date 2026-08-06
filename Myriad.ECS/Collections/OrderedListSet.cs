@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Myriad.ECS.IDs;
 
@@ -300,12 +301,15 @@ internal class OrderedListSet<TItem>
         if (other.Length > _items.Count)
             return false;
 
+        // Get a reference to the first items in the span. This helps us avoid indexing
+        ref var itemJ = ref MemoryMarshal.GetReference(other);
+        
         // Move forward through both lists, checking that all items in `other` are in `this`
         var i = 0;
         var j = 0;
         while (i < _items.Count && j < other.Length)
         {
-            var cmp = _items[i].CompareTo(other[j]);
+            var cmp = _items[i].CompareTo(itemJ);
 
             switch (cmp)
             {
@@ -319,6 +323,7 @@ internal class OrderedListSet<TItem>
                     // Items are equal, move to the next item in both
                     i++;
                     j++;
+                    itemJ = ref Unsafe.Add(ref itemJ, 1);
                     break;
 
                 default:
