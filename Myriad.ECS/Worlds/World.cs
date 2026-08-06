@@ -145,11 +145,12 @@ public sealed partial class World
     /// <param name="lazy"></param>
     /// <param name="blockSrc">Whether to block on the given archetype</param>
     /// <param name="blockDst">If the entity migrates (because it's becoming a phantom) whether to block on the destination</param>
-    internal void DeleteImmediate(Archetype archetype, ref LazyCommandBuffer lazy, bool blockSrc, bool blockDst)
+    /// <param name="blocker"></param>
+    internal void DeleteImmediate(Archetype archetype, ref LazyCommandBuffer lazy, bool blockSrc, bool blockDst, ref Blocker blocker)
     {
         // Wait for multithreaded access to this archetype
         if (blockSrc)
-            archetype.Block();
+            blocker.Block(archetype);
 
         // Mark all of the IDs as dead (as long as they haven't become phantoms)
         if (archetype is { HasPhantomComponents: false, IsPhantom: false })
@@ -169,7 +170,7 @@ public sealed partial class World
         }
 
         // Clear the archetype
-        archetype.Clear(ref lazy, blockSrc:false, blockDst:blockDst);
+        archetype.Clear(ref lazy, blockSrc:false, blockDst:blockDst, ref blocker);
     }
 
     #region Get/Create Archetype

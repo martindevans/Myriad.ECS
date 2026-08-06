@@ -205,11 +205,12 @@ public sealed partial class Archetype
     /// <param name="lazy">Lazy command buffer to use</param>
     /// <param name="blockSrc">Whether to block on the source archetype</param>
     /// <param name="blockDst">Whether to block on the destination archetype</param>
-    internal void Clear(ref LazyCommandBuffer lazy, bool blockSrc, bool blockDst)
+    /// <param name="blocker"></param>
+    internal void Clear(ref LazyCommandBuffer lazy, bool blockSrc, bool blockDst, ref Blocker blocker)
     {
         // Wait for multithreaded access to this archetype
         if (blockSrc)
-            Block();
+            blocker.Block(this);
 
         if (HasPhantomComponents && !IsPhantom)
         {
@@ -225,7 +226,7 @@ public sealed partial class Archetype
             
             // Block on the destination
             if (blockDst)
-                _phantomDestination.Block();
+                blocker.Block(_phantomDestination);
 
             // Migrate all entities in all chunks to the new archetype. Doing this does all of the bookeeping like chunk management and entity count.
             // This could be better, at the moment it just does the work on a per-entity basis, instead of doing it all in one batch.
