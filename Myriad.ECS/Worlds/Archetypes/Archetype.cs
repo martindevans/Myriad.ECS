@@ -497,13 +497,22 @@ public sealed partial class Archetype
         foreach (var chunk in _chunks)
             if (chunk.EntityCount != CHUNK_SIZE)
                 _chunksWithSpace.Add(chunk);
+        
+        // Add empty chunks to the "hot spares" cache
+        foreach (var sortableSpan in spans.Span)
+        {
+            if (_spareChunks.Count >= CHUNK_HOT_SPARES)
+                break;
+
+            if (sortableSpan.Chunk.EntityCount == 0)
+                _spareChunks.Push(sortableSpan.Chunk);
+        }
     }
 
     private void KWayChunkMerge<TKey>(Span<SortableSpan<TKey>> spans)
         where TKey : unmanaged, IComparable<TKey>
     {
         var filling = default(Chunk);
-        var fillingIndex = 0;
 
         while (true)
         {
@@ -526,7 +535,7 @@ public sealed partial class Archetype
                 if (bestSpan == -1 || item.Key.CompareTo(bestKey!.Value) < 0)
                 {
                     bestSpan = i;
-                    bestIndex = span.Consumed;
+                    bestIndex = item.OriginalIndex;
                     bestKey = item.Key;
                 }
             }
@@ -539,10 +548,9 @@ public sealed partial class Archetype
             //       the entire chunk with no copying.
             
             // Need another output chunk
-            if (filling == null || fillingIndex == CHUNK_SIZE)
+            if (filling == null || filling.EntityCount == CHUNK_SIZE)
             {
                 filling = AllocateChunk();
-                fillingIndex = 0;
                 _chunks.Add(filling);
             }
 
@@ -551,20 +559,23 @@ public sealed partial class Archetype
             Copy(
                 source.Chunk,
                 bestIndex,
-                filling,
-                fillingIndex
+                filling
             );
 
             source.Consumed++;
-            fillingIndex++;
         }
 
-        static void Copy(Chunk sourceChunk, int sourceIndex, Chunk destChunk, int destIndex)
+        void Copy(Chunk sourceChunk, int sourceIndex, Chunk destChunk)
         {
+            // Add the entity to the dest chunk
             var entity = sourceChunk.Entities.Span[sourceIndex];
-            destChunk.SetEntityAtIndex(destIndex, entity);
+            ref var info = ref World.GetEntityInfo(entity);
+            destChunk.AddEntity(entity, ref info);
 
-            sourceChunk.CopyComponents(sourceIndex, destChunk, destIndex);
+            // Copy the components
+            sourceChunk.CopyComponents(sourceIndex, destChunk, info.RowIndex);
+
+            // Clear from source row
             sourceChunk.ClearComponents(sourceIndex);
         }
 }

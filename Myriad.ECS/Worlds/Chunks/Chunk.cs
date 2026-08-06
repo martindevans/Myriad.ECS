@@ -347,14 +347,9 @@ internal sealed partial class Chunk
         Debug.Assert(Archetype.Equals(dest.Archetype));
 #endif
 
+        // Copy components. Since the archetypes are the same we know the component arrays will be compatible.
         for (var i = 0; i < _components.Length; i++)
-        {
             Array.Copy(_components[i], indexFrom, dest._components[i], indexTo, 1);
-        }
-
-        // Copy top entity components into place
-        foreach (var component in _components)
-            Array.Copy(component, indexFrom, component, indexTo, 1);
     }
 
     private void CopyComponents(int indexFrom, int indexTo)
@@ -365,7 +360,7 @@ internal sealed partial class Chunk
     }
 
     /// <summary>
-    /// Set the entity at the givex index in this chunk, updating the world EntityInfo
+    /// Set the entity at the given index in this chunk, updating the world EntityInfo
     /// </summary>
     /// <param name="index"></param>
     /// <param name="entity"></param>
@@ -378,6 +373,7 @@ internal sealed partial class Chunk
         // Update the world
         ref var info = ref Archetype.World.GetEntityInfo(entity);
         info.RowIndex = index;
+        info.Chunk = this;
     }
 
     /// <summary>
