@@ -1,9 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System.Buffers;
 using Myriad.ECS.Collections;
 using Myriad.ECS.Command;
 using Myriad.ECS.Components;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Chunks;
+using System.Diagnostics;
+using static Myriad.ECS.Worlds.Chunks.Chunk;
 
 namespace Myriad.ECS.Worlds.Archetypes;
 
@@ -301,7 +303,7 @@ public sealed partial class Archetype
         }
 
         // No space in any chunks, create a new chunk
-        var newChunk = _spareChunks.Count > 0 ? _spareChunks.Pop() : new Chunk(this, CHUNK_SIZE, _componentIndexLookup, _componentTypes, _componentIDs);
+        var newChunk = AllocateChunk();
         _chunks.Add(newChunk);
         _chunksWithSpace.Add(newChunk);
 
@@ -309,6 +311,11 @@ public sealed partial class Archetype
         newChunk.AddEntity(entity, ref info);
     }
 
+    private Chunk AllocateChunk()
+    {
+        return _spareChunks.Count > 0 ? _spareChunks.Pop() : new Chunk(this, CHUNK_SIZE, _componentIndexLookup, _componentTypes, _componentIDs);
+    }
+    
     internal void RemoveEntity(EntityInfo info, ref LazyCommandBuffer lazy, bool block)
     {
         // Wait for multithreaded access to this archetype
@@ -446,4 +453,204 @@ public sealed partial class Archetype
             && idx < _componentIndexLookup.Length
             && _componentIndexLookup[idx] != -1;
     }
+
+    #region sorting
+
+    /// <summary>
+    /// Sort this archetype. This is a structural change!
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TKeyMapper"></typeparam>
+    internal void Sort<TKey, TKeyMapper>(TKeyMapper mapper, bool block)
+        where TKey : unmanaged, IComparable<TKey>
+        where TKeyMapper : IKeyMapper<TKey>
+    {
+        // Wait for multithreaded access
+        if (block)
+            Block();
+
+        // No need to sort an empty archetype
+        if (EntityCount == 0)
+            return;
+
+        // if there's only one chunk, sort it directly
+        if (_chunks.Count == 1)
+        {
+            _chunks[0].Sort<TKey, TKeyMapper>(mapper, block:false);
+            return;
+        }
+        
+        // Allocate a slot for each chunk
+        using var spans = new SortableSpans<TKey>(_chunks);
+
+        // Fill and sort each chunk span
+        spans.Sort(mapper);
+        
+        // Clear all chunks from this archetype, we'll recreate them after
+        _chunks.Clear();
+        _chunksWithSpace.Clear();
+
+        // Do a K-Way merge over all chunk
+        KWayChunkMerge(spans.Span);
+
+        // Rebuild the "chunks with space" cache
+        foreach (var chunk in _chunks)
+            if (chunk.EntityCount != CHUNK_SIZE)
+                _chunksWithSpace.Add(chunk);
+    }
+
+    private void KWayChunkMerge<TKey>(Span<SortableSpan<TKey>> spans)
+        where TKey : unmanaged, IComparable<TKey>
+    {
+        var filling = default(Chunk);
+        var fillingIndex = 0;
+
+        while (true)
+        {
+            var bestSpan = -1;
+            var bestIndex = -1;
+            TKey? bestKey = null;
+
+            // Find smallest head item across all chunks
+            for (var i = 0; i < spans.Length; i++)
+            {
+                // Skip empty chunks
+                ref var span = ref spans[i];
+                if (span.Remaining == 0)
+                    continue;
+
+                // Get the smallest item from this span
+                ref var item = ref span.Head;
+
+                // Update tracker if it is the best item
+                if (bestSpan == -1 || item.Key.CompareTo(bestKey!.Value) < 0)
+                {
+                    bestSpan = i;
+                    bestIndex = span.Consumed;
+                    bestKey = item.Key;
+                }
+            }
+
+            // Everything consumed
+            if (bestSpan == -1)
+                break;
+
+            // todo: add check here - if the best item is the first in it's chunk check if the end item is small enough that we can transfer
+            //       the entire chunk with no copying.
+            
+            // Need another output chunk
+            if (filling == null || fillingIndex == CHUNK_SIZE)
+            {
+                filling = AllocateChunk();
+                fillingIndex = 0;
+                _chunks.Add(filling);
+            }
+
+            // Do the actual entity copy
+            ref var source = ref spans[bestSpan];
+            Copy(
+                source.Chunk,
+                bestIndex,
+                filling,
+                fillingIndex
+            );
+
+            source.Consumed++;
+            fillingIndex++;
+        }
+
+        static void Copy(Chunk sourceChunk, int sourceIndex, Chunk destChunk, int destIndex)
+        {
+            var entity = sourceChunk.Entities.Span[sourceIndex];
+            destChunk.SetEntityAtIndex(destIndex, entity);
+
+            sourceChunk.CopyComponents(sourceIndex, destChunk, destIndex);
+            sourceChunk.ClearComponents(sourceIndex);
+        }
+}
+
+    /// <summary>
+    /// A collection of sortable spans, one per chunk
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    private struct SortableSpans<TKey>
+        : IDisposable
+        where TKey : unmanaged, IComparable<TKey>
+    {
+        private readonly int _count;
+        private SortableSpan<TKey>[] _spansArr;
+
+        public Span<SortableSpan<TKey>> Span => _spansArr.AsSpan(0, _count);
+
+        public SortableSpans(List<Chunk> chunks)
+        {
+            _count = chunks.Count;
+            _spansArr = ArrayPool<SortableSpan<TKey>>.Shared.Rent(_count);
+
+            for (var i = 0; i < chunks.Count; i++)
+                _spansArr[i] = new SortableSpan<TKey>(chunks[i]);
+        }
+
+        public void Dispose()
+        {
+            if (_spansArr == null)
+                throw new ObjectDisposedException("Already disposed");
+
+            for (var i = 0; i < _count; i++)
+                _spansArr[i].Dispose();
+
+            ArrayPool<SortableSpan<TKey>>.Shared.Return(_spansArr, clearArray:true);
+            _spansArr = null!;
+        }
+
+        public void Sort<TKeyMapper>(TKeyMapper mapper)
+            where TKeyMapper : IKeyMapper<TKey>
+        {
+            foreach (ref var item in Span)
+                item.Sort(mapper);
+        }
+    }
+
+    /// <summary>
+    /// A sortable span for a chunk
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    private struct SortableSpan<TKey>
+        : IDisposable
+        where TKey : unmanaged, IComparable<TKey>
+    {
+        public Chunk Chunk { get; }
+        public Sortable<TKey>[] Array { get; }
+
+        public Span<Sortable<TKey>> Span => Array.AsSpan(Consumed, Remaining);
+        public ref Sortable<TKey> Head => ref Span[0];
+        public ref Sortable<TKey> Tail => ref Span[^1];
+        
+        public int Consumed { get; set; }
+        public int Remaining => Chunk.EntityCount - Consumed;
+
+        public SortableSpan(Chunk chunk, Sortable<TKey>[] array)
+        {
+            Chunk = chunk;
+            Array = array;
+        }
+
+        public SortableSpan(Chunk chunk)
+        {
+            Chunk = chunk;
+            Array = ArrayPool<Sortable<TKey>>.Shared.Rent(chunk.EntityCount);
+        }
+
+        public void Dispose()
+        {
+            ArrayPool<Sortable<TKey>>.Shared.Return(Array);
+        }
+
+        public void Sort<TKeyMapper>(TKeyMapper mapper)
+            where TKeyMapper : IKeyMapper<TKey>
+        {
+            Chunk.SortKeyBuffer(mapper, Span, block:false);
+        }
+    }
+    #endregion
 }

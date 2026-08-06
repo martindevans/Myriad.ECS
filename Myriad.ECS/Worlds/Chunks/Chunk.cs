@@ -2,6 +2,7 @@
 using Myriad.ECS.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds.Archetypes;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
@@ -340,6 +341,22 @@ internal sealed partial class Chunk
 
     #region sort
 
+    internal void CopyComponents(int indexFrom, Chunk dest, int indexTo)
+    {
+#if DEBUG
+        Debug.Assert(Archetype.Equals(dest.Archetype));
+#endif
+
+        for (var i = 0; i < _components.Length; i++)
+        {
+            Array.Copy(_components[i], indexFrom, dest._components[i], indexTo, 1);
+        }
+
+        // Copy top entity components into place
+        foreach (var component in _components)
+            Array.Copy(component, indexFrom, component, indexTo, 1);
+    }
+
     private void CopyComponents(int indexFrom, int indexTo)
     {
         // Copy top entity components into place
@@ -347,7 +364,12 @@ internal sealed partial class Chunk
             Array.Copy(component, indexFrom, component, indexTo, 1);
     }
 
-    private void SetEntityAtIndex(int index, Entity entity)
+    /// <summary>
+    /// Set the entity at the givex index in this chunk, updating the world EntityInfo
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="entity"></param>
+    internal void SetEntityAtIndex(int index, Entity entity)
     {
         // Overwrite the entity
         _entities[index] = entity;
@@ -358,7 +380,11 @@ internal sealed partial class Chunk
         info.RowIndex = index;
     }
 
-    private void ClearComponents(int index)
+    /// <summary>
+    /// Clear all of the components at the given index in this chunk
+    /// </summary>
+    /// <param name="index"></param>
+    internal void ClearComponents(int index)
     {
         foreach (var component in _components)
             Array.Clear(component, index, 1);
