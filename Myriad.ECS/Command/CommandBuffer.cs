@@ -128,9 +128,7 @@ public sealed partial class CommandBuffer
                     if (match.Archetype.EntityCount == 0)
                         continue;
                     
-                    blocker.Block(match.Archetype);
-
-                    World.DeleteImmediate(match.Archetype, ref lazy, blockSrc:false, blockDst:true);
+                    World.DeleteImmediate(match.Archetype, ref lazy, blockSrc:true, blockDst:true, ref blocker);
                 }
             }
 
