@@ -27,8 +27,7 @@ namespace Myriad.ECS.Worlds
         /// </summary>
         /// <param name="left">Specification for "left" chunks</param>
         /// <param name="right">Specification for "right" chunks</param>
-        /// <returns>The total number of entities processed (product of the count of both chunks)</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        /// <returns>The total number of entity pairs processed (left entity count × right entity count)</returns>
         public long ExecuteChunkJoin<TQ>(QueryDescription left, QueryDescription right)
             where TQ : struct, IChunkJoinQuery
         {
