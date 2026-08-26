@@ -12,6 +12,11 @@ public readonly ref partial struct ChunkHandle
     private readonly Chunk _chunk;
 
     /// <summary>
+    /// Globally unique ID for this chunk
+    /// </summary>
+    public long ChunkId => _chunk.ChunkId;
+    
+    /// <summary>
     /// The archetype this chunk belongs to
     /// </summary>
     public Archetype Archetype => _chunk.Archetype;
