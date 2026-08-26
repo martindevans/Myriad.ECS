@@ -62,9 +62,9 @@ namespace Myriad.ECS.Worlds
             where TQ : IChunkJoinQuery
         {
             if (left.World != this)
-                throw new ArgumentException("Join query query must be from this world", nameof(left));
+                throw new ArgumentException("Chunk join queries must be from this world", nameof(left));
             if (right.World != this)
-                throw new ArgumentException("Join query query must be from this world", nameof(right));
+                throw new ArgumentException("Chunk join queries must be from this world", nameof(right));
 
             // Early out to skip blocking if possible
             if (!left.Any() || !right.Any())
