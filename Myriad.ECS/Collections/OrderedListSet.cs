@@ -176,6 +176,55 @@ internal class OrderedListSet<TItem>
         _items.RemoveRange(write, _items.Count - write);
     }
 
+    /// <summary>
+    /// Remove all items in this set which are also in the other set
+    /// </summary>
+    /// <param name="other"></param>
+    public void ExceptWith(FrozenOrderedListSet<TItem> other)
+    {
+        var write = 0;
+        var read = 0;
+
+        using var e = other.GetEnumerator();
+
+        // If there are no items in the other set then there is nothing to remove!
+        if (!e.MoveNext())
+        {
+            return;
+        }
+
+        while (read < _items.Count)
+        {
+            var cmp = _items[read].CompareTo(e.Current);
+
+            if (cmp < 0)
+            {
+                // This item isn't in other. Keep it
+                _items[write++] = _items[read++];
+            }
+            else if (cmp > 0)
+            {
+                // Need to catch up in other
+                if (!e.MoveNext())
+                    break;
+            }
+            else
+            {
+                // This item is in other. Remove it
+                read++;
+                if (!e.MoveNext())
+                    break;
+            }
+        }
+
+        // If other was exhausted before the end, everything remaining must be kept
+        while (read < _items.Count)
+            _items[write++] = _items[read++];
+
+        // Remove the tail
+        _items.RemoveRange(write, _items.Count - write);
+    }
+
     public bool Remove(TItem item)
     {
         var index = _items.BinarySearch(item);
