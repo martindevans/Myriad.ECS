@@ -15,6 +15,8 @@ internal struct Blocker
         _world = world;
         _set = set;
         _blockedAll = false;
+        
+        _set.Clear();
     }
 
     public void Block()
