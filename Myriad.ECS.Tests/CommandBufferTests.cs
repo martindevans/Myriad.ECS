@@ -1115,6 +1115,26 @@ public class CommandBufferTests
     }
 
     [TestMethod]
+    public void EntityRelationId()
+    {
+        var world = new WorldBuilder().Build();
+        var cmd = new CommandBuffer(world);
+
+        var p1 = cmd.Create();
+        var p2 = cmd.Create().Set(default(Relational1), p1);
+        var p3 = cmd.Create().Set(default(RelationalId1), p1);
+
+        using var _ = cmd.Playback();
+
+        var e1 = p1.Resolve();
+        var e2 = p2.Resolve();
+        var e3 = p3.Resolve();
+
+        Assert.AreEqual(e1, e2.GetComponentRef<Relational1>().Target);
+        Assert.AreEqual(e1.ID, e3.GetComponentRef<RelationalId1>().TargetId);
+    }
+
+    [TestMethod]
     public void ClearSet()
     {
         var world = new WorldBuilder().Build();

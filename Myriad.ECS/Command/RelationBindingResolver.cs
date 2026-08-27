@@ -12,7 +12,7 @@ public partial class CommandBuffer
         private readonly Dictionary<ComponentID, IInternalResolver> _resolvers = [ ];
 
         public void Create<TComponent>(TKey key, BufferedEntity relation)
-            where TComponent : IEntityRelationComponent
+            where TComponent : IEntityRelationSetter
         {
             var c = ComponentID<TComponent>.ID;
             if (!_resolvers.TryGetValue(c, out var resolver))
@@ -26,7 +26,7 @@ public partial class CommandBuffer
         }
 
         protected abstract void Apply<TComponent>(Resolver buffer, Dictionary<TKey, BufferedEntity> bindings)
-            where TComponent : IEntityRelationComponent;
+            where TComponent : IEntityRelationSetter;
 
         public void Apply(Resolver resolver, ref Blocker blocker)
         {
@@ -49,7 +49,7 @@ public partial class CommandBuffer
 
         private sealed class Binder<TComponent>
             : IInternalResolver
-            where TComponent : IEntityRelationComponent
+            where TComponent : IEntityRelationSetter
         {
             private readonly Dictionary<TKey, BufferedEntity> _relationships = [];
 

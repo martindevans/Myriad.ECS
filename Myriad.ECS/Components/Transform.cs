@@ -29,6 +29,12 @@ public struct TransformParent
     /// Parent entity transform
     /// </summary>
     public Entity Target { get; set; }
+
+    /// <inheritdoc />
+    public void Set(Entity target)
+    {
+        Target = target;
+    }
 }
 
 /// <summary>

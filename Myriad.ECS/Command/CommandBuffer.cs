@@ -490,7 +490,7 @@ public sealed partial class CommandBuffer
     }
 
     private void SetBuffered<T>(uint id, T value, BufferedEntity relation, DuplicateSet duplicateMode)
-        where T : IEntityRelationComponent
+        where T : IEntityRelationSetter
     {
         if (relation._buffer != this)
             throw new ArgumentException("Target of relation must be BufferedEntity from the same CommandBuffer", nameof(relation));
@@ -593,7 +593,7 @@ public sealed partial class CommandBuffer
     /// <param name="value"></param>
     /// <param name="relation"></param>
     public void Set<T>(Entity entity, T value, Entity relation)
-        where T : IEntityRelationComponent
+        where T : IEntityRelationSetter
     {
         value.Target = relation;
         InternalSet(entity, value);
