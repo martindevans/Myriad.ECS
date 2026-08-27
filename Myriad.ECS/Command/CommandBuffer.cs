@@ -580,7 +580,7 @@ public sealed partial class CommandBuffer
     /// <param name="value"></param>
     /// <param name="relation">When this buffer is played back the given buffered entity will be set into the component</param>
     public void Set<T>(Entity entity, T value, BufferedEntity relation)
-        where T : IEntityRelationComponent
+        where T : IEntityRelationSetter
     {
         InternalSet(entity, value, relation);
     }
@@ -625,7 +625,7 @@ public sealed partial class CommandBuffer
     }
 
     private void InternalSet<T>(Entity entity, T value, BufferedEntity relation)
-        where T : IEntityRelationComponent
+        where T : IEntityRelationSetter
     {
         if (relation._buffer != this)
             throw new ArgumentException("Target of relation must be BufferedEntity from the same CommandBuffer", nameof(relation));
