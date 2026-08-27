@@ -49,6 +49,28 @@ public record struct Relational1(Entity Target) : IEntityRelationComponent;
 public record struct Relational2(Entity Target, int x) : IEntityRelationComponent;
 public record struct Relational3(Entity Target, float y) : IEntityRelationComponent;
 
+public record struct RelationalId1(EntityId TargetId) : IEntityIdRelationComponent
+{
+    public Entity Target
+    {
+        set => TargetId = value;
+    }
+}
+public record struct RelationalId2(EntityId TargetId, int x) : IEntityIdRelationComponent
+{
+    public Entity Target
+    {
+        set => TargetId = value;
+    }
+}
+public record struct RelationalId3(EntityId TargetId, float y) : IEntityIdRelationComponent
+{
+    public Entity Target
+    {
+        set => TargetId = value;
+    }
+}
+
 public struct RelationalCountSet
     : IEntityRelationComponent
 {

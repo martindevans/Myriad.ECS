@@ -71,7 +71,7 @@ public sealed partial class CommandBuffer
         /// <param name="duplicateMode">Indicates how duplicates sets of this component for this entity in this buffer should be handled</param>
         /// <returns>this buffered entity</returns>
         public BufferedEntity Set<T>(T value, BufferedEntity relation, DuplicateSet duplicateMode = DuplicateSet.Throw)
-            where T : IEntityRelationComponent
+            where T : IEntityRelationSetter
         {
             CheckIsMutable();
 
@@ -92,7 +92,7 @@ public sealed partial class CommandBuffer
         /// <param name="duplicateMode">Indicates how duplicates sets of this component for this entity in this buffer should be handled</param>
         /// <returns>this buffered entity</returns>
         public BufferedEntity Set<T>(T value, Entity relation, DuplicateSet duplicateMode = DuplicateSet.Throw)
-            where T : IEntityRelationComponent
+            where T : IEntityRelationSetter
         {
             CheckIsMutable();
 
