@@ -9,7 +9,7 @@ public interface IEntityRelationSetter
     /// <summary>
     /// Set the target
     /// </summary>
-    public Entity Target { set; }
+    Entity Target { set; }
 }
 
 /// <summary>
@@ -22,9 +22,7 @@ public interface IEntityRelationComponent
     /// <summary>
     /// The target entity of this relationship
     /// </summary>
-#pragma warning disable CS0108, CS0114 // keyword `new` required
-    public Entity Target { get; }
-#pragma warning restore CS0108, CS0114
+    new Entity Target { get; set; }
 }
 
 /// <summary>
@@ -37,7 +35,7 @@ public interface IEntityIdRelationComponent
     /// <summary>
     /// The target entity of this relationship
     /// </summary>
-    public EntityId TargetId { get; }
+    EntityId TargetId { get; set; }
 }
 
 /// <summary>
