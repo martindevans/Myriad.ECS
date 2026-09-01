@@ -405,6 +405,15 @@ public sealed class QueryDescription
     }
 
     /// <summary>
+    /// Count how many archetypes hold entities which matches this query
+    /// </summary>
+    /// <returns></returns>
+    public int CountArchetypes()
+    {
+        return GetArchetypes().Count;
+    }
+
+    /// <summary>
     /// Check if the count of entities matching this query is greater than a given value
     /// </summary>
     /// <returns></returns>
