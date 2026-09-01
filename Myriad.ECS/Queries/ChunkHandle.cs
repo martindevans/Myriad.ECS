@@ -68,9 +68,11 @@ public readonly ref partial struct ChunkHandle
     /// Try to get the span of the given component type in this chunk
     /// </summary>
     /// <returns></returns>
-    public Span<T> GetComponentSpan<T>()
+    public Span<T> GetComponentSpan<T>(bool blocking = true)
         where T : IComponent
     {
+        Archetype.Block([ ComponentID<T>.ID ]);
+        
         return _chunk.GetSpan<T>();
     }
 
@@ -124,6 +126,8 @@ public readonly ref partial struct ChunkHandle
         public T[] GetComponentArray<T>()
             where T : IComponent
         {
+            _chunk.Archetype.Block([ComponentID<T>.ID]);
+
             return _chunk.GetComponentArray<T>();
         }
 

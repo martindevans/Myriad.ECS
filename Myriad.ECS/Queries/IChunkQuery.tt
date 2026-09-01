@@ -44,6 +44,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
 <# for (var k = 0; k < sumij; k++)
 {
@@ -58,18 +59,20 @@ namespace Myriad.ECS.Worlds
 		<#= CoverageAttribute(i) #>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where <#= Constraints(i, 12) #>
 			where TQ : struct, IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, query);
+			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
 <# for (var k = 0; k < sumij; k++)
 {
@@ -84,18 +87,20 @@ namespace Myriad.ECS.Worlds
 		<#= CoverageAttribute(i) #>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where <#= Constraints(i, 12) #>
 			where TQ : struct, IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query);
+			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
 <# for (var k = 0; k < sumij; k++)
 {
@@ -112,17 +117,19 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where <#= Constraints(i, 12) #>
 			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
-			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, query);
+			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
 <# for (var k = 0; k < sumij; k++)
 {
@@ -139,17 +146,19 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where <#= Constraints(i, 12) #>
 			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
-			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query);
+			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
 <# for (var k = 0; k < sumij; k++)
 {
@@ -166,17 +175,19 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where <#= Constraints(i, 12) #>
 			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
-			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query);
+			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
 <# for (var k = 0; k < sumij; k++)
 {
@@ -192,7 +203,8 @@ namespace Myriad.ECS.Worlds
 		<#= CoverageAttribute(i) #>
 		public int ExecuteChunk<TQ, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where <#= Constraints(i, 12) #>
 			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
@@ -225,11 +237,14 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
+				if (blocking)
+				{
 <# if (sumij == 0) { #>
-				archetype.Block();
+				    archetype.Block();
 <# } else { #>
-				archetype.Block(components);
+				    archetype.Block(components);
 <# } #>
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)

@@ -50,6 +50,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
 		/// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A default(TQ) instance is used.</typeparam>
 <# for (var k = 0; k < i; k++)
 {
@@ -63,18 +64,20 @@ namespace Myriad.ECS.Worlds
 		<#= CoverageAttribute(i) #>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Execute<TQ, <#= queryConstraints #>>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where <#= Constraints(i, 12) #>
 			where TQ : struct, IQuery<<#= queryConstraints #>>
 		{
 			var q = default(TQ);
-			return Execute<TQ, <#= queryConstraints #>>(ref q, query);
+			return Execute<TQ, <#= queryConstraints #>>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
 		/// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 <# for (var k = 0; k < i; k++)
 {
@@ -88,18 +91,20 @@ namespace Myriad.ECS.Worlds
 		<#= CoverageAttribute(i) #>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Execute<TQ, <#= queryConstraints #>>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where <#= Constraints(i, 12) #>
 			where TQ : struct, IQuery<<#= queryConstraints #>>
 		{
 			var q = default(TQ);
-			return Execute<TQ, <#= queryConstraints #>>(ref q, ref query);
+			return Execute<TQ, <#= queryConstraints #>>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
 		/// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 <# for (var k = 0; k < i; k++)
 {
@@ -115,17 +120,19 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Execute<TQ, <#= queryConstraints #>>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where <#= Constraints(i, 12) #>
 			where TQ : IQuery<<#= queryConstraints #>>
 		{
-			return Execute<TQ, <#= queryConstraints #>>(ref q, query);
+			return Execute<TQ, <#= queryConstraints #>>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
 		/// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 <# for (var k = 0; k < i; k++)
 {
@@ -141,17 +148,19 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Execute<TQ, <#= queryConstraints #>>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where <#= Constraints(i, 12) #>
 			where TQ : IQuery<<#= queryConstraints #>>
 		{
-			return Execute<TQ, <#= queryConstraints #>>(ref q, ref query);
+			return Execute<TQ, <#= queryConstraints #>>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
 		/// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 <# for (var k = 0; k < i; k++)
 {
@@ -171,17 +180,19 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Execute<TQ, <#= queryConstraints #>>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where <#= Constraints(i, 12) #>
 			where TQ : IQuery<<#= queryConstraints #>>
 		{
-			return Execute<TQ, <#= queryConstraints #>>(ref q, ref query);
+			return Execute<TQ, <#= queryConstraints #>>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
 		/// Execute a query, optionally filtering by a <see cref="QueryDescription"/>.
 		/// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
 		/// <typeparam name="TQ">The type of the query to execute for every entity.</typeparam>
 <# for (var k = 0; k < i; k++)
 {
@@ -200,7 +211,8 @@ namespace Myriad.ECS.Worlds
 		<#= CoverageAttribute(i) #>
 		public int Execute<TQ, <#= queryConstraints #>>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where <#= Constraints(i, 12) #>
 			where TQ : IQuery<<#= queryConstraints #>>
@@ -228,8 +240,6 @@ namespace Myriad.ECS.Worlds
 #>
 			};
 
-			var lm = query.World.LockManager;
-
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
 			{
@@ -239,11 +249,14 @@ namespace Myriad.ECS.Worlds
 					continue;
 
 				// Block on any parallel work modifying this archetype
+				if (blocking)
+				{
 <# if (i == 0) { #>
-				lm.Block(archetype);
+				    archetype.Block();
 <# } else { #>
-				lm.Block(archetype, components);
+				    archetype.Block(components);
 <# } #>
+				}
 
 				count += archetype.EntityCount;
 
