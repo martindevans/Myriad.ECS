@@ -71,8 +71,9 @@ public readonly ref partial struct ChunkHandle
     public Span<T> GetComponentSpan<T>(bool blocking = true)
         where T : IComponent
     {
-        Archetype.Block([ ComponentID<T>.ID ]);
-        
+        if (blocking)
+            Archetype.Block(stackalloc ComponentID[] { ComponentID<T>.ID });
+
         return _chunk.GetSpan<T>();
     }
 
