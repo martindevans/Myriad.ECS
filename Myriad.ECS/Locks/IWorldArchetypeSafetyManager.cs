@@ -31,10 +31,12 @@ public class DefaultWorldArchetypeSafetyManager
     /// <inheritdoc />
     public void Block(Archetype archetype)
     {
+        // Do nothing!
     }
 
     /// <inheritdoc />
     public void Block(Archetype archetype, ReadOnlySpan<ComponentID> ids)
     {
+        // Do nothing!
     }
 }

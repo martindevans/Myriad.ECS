@@ -29,6 +29,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
@@ -37,18 +38,20 @@ namespace Myriad.ECS.Worlds
 		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
 			where TQ : struct, IChunkQuery<T0>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0>(ref q, query);
+			return ExecuteChunk<TQ, T0>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
@@ -57,18 +60,20 @@ namespace Myriad.ECS.Worlds
 		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
 			where TQ : struct, IChunkQuery<T0>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0>(ref q, ref query);
+			return ExecuteChunk<TQ, T0>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
@@ -79,17 +84,19 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
 			where TQ : IChunkQuery<T0>
 		{
-			return ExecuteChunk<TQ, T0>(ref q, query);
+			return ExecuteChunk<TQ, T0>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <param name="q">The TQ instance which will be executed for each chunk</param>
@@ -100,17 +107,19 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
 			where TQ : IChunkQuery<T0>
 		{
-			return ExecuteChunk<TQ, T0>(ref q, ref query);
+			return ExecuteChunk<TQ, T0>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <param name="q">The TQ instance which will be executed for each chunk</param>
@@ -121,17 +130,19 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
 			where TQ : IChunkQuery<T0>
 		{
-			return ExecuteChunk<TQ, T0>(ref q, ref query);
+			return ExecuteChunk<TQ, T0>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <param name="q">The TQ instance which will be executed for each chunk</param>
@@ -141,7 +152,8 @@ namespace Myriad.ECS.Worlds
 		
 		public int ExecuteChunk<TQ, T0>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
 			where TQ : IChunkQuery<T0>
@@ -162,7 +174,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -204,6 +219,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -213,19 +229,21 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
 			where TQ : struct, IChunkQuery<T0, T1>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -235,19 +253,21 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
 			where TQ : struct, IChunkQuery<T0, T1>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -259,18 +279,20 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
 			where TQ : IChunkQuery<T0, T1>
 		{
-			return ExecuteChunk<TQ, T0, T1>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -282,18 +304,20 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
 			where TQ : IChunkQuery<T0, T1>
 		{
-			return ExecuteChunk<TQ, T0, T1>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -305,18 +329,20 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
 			where TQ : IChunkQuery<T0, T1>
 		{
-			return ExecuteChunk<TQ, T0, T1>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -327,7 +353,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -351,7 +378,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -395,6 +425,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -405,7 +436,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -413,12 +445,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -429,7 +462,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -437,12 +471,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -455,19 +490,21 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -480,19 +517,21 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -505,19 +544,21 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
             where T2 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -529,7 +570,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -556,7 +598,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -602,6 +647,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -613,7 +659,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -622,12 +669,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -639,7 +687,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -648,12 +697,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -667,7 +717,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -675,12 +726,13 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -694,7 +746,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -702,12 +755,13 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -721,7 +775,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -729,12 +784,13 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -747,7 +803,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -777,7 +834,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -825,6 +885,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -837,7 +898,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -847,12 +909,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -865,7 +928,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -875,12 +939,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -895,7 +960,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -904,12 +970,13 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -924,7 +991,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -933,12 +1001,13 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -953,7 +1022,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -962,12 +1032,13 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -981,7 +1052,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1014,7 +1086,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -1064,6 +1139,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1077,7 +1153,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1088,12 +1165,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1107,7 +1185,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1118,12 +1197,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1139,7 +1219,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1149,12 +1230,13 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1170,7 +1252,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1180,12 +1263,13 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1201,7 +1285,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1211,12 +1296,13 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1231,7 +1317,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1267,7 +1354,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -1319,6 +1409,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1333,7 +1424,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1345,12 +1437,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1365,7 +1458,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1377,12 +1471,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1399,7 +1494,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1410,12 +1506,13 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1432,7 +1529,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1443,12 +1541,13 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1465,7 +1564,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1476,12 +1576,13 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1497,7 +1598,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1536,7 +1638,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -1590,6 +1695,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1605,7 +1711,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1618,12 +1725,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1639,7 +1747,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1652,12 +1761,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1675,7 +1785,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1687,12 +1798,13 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1710,7 +1822,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1722,12 +1835,13 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1745,7 +1859,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1757,12 +1872,13 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1779,7 +1895,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1821,7 +1938,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -1877,6 +1997,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1893,7 +2014,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1907,12 +2029,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1929,7 +2052,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1943,12 +2067,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -1967,7 +2092,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -1980,12 +2106,13 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2004,7 +2131,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2017,12 +2145,13 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2041,7 +2170,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2054,12 +2184,13 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2077,7 +2208,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2122,7 +2254,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -2180,6 +2315,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2197,7 +2333,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2212,12 +2349,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2235,7 +2373,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2250,12 +2389,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2275,7 +2415,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2289,12 +2430,13 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2314,7 +2456,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2328,12 +2471,13 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2353,7 +2497,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2367,12 +2512,13 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2391,7 +2537,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2439,7 +2586,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -2499,6 +2649,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2517,7 +2668,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2533,12 +2685,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2557,7 +2710,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2573,12 +2727,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2599,7 +2754,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2614,12 +2770,13 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2640,7 +2797,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2655,12 +2813,13 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2681,7 +2840,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2696,12 +2856,13 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2721,7 +2882,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2772,7 +2934,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -2834,6 +2999,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2853,7 +3019,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2870,12 +3037,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2895,7 +3063,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2912,12 +3081,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2939,7 +3109,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2955,12 +3126,13 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -2982,7 +3154,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -2998,12 +3171,13 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -3025,7 +3199,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3041,12 +3216,13 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -3067,7 +3243,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3121,7 +3298,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -3185,6 +3365,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -3205,7 +3386,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3223,12 +3405,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -3249,7 +3432,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3267,12 +3451,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -3295,7 +3480,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3312,12 +3498,13 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -3340,7 +3527,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3357,12 +3545,13 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -3385,7 +3574,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3402,12 +3592,13 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -3429,7 +3620,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3486,7 +3678,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -3552,6 +3747,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -3573,7 +3769,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3592,12 +3789,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -3619,7 +3817,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3638,12 +3837,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -3667,7 +3867,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3685,12 +3886,13 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -3714,7 +3916,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3732,12 +3935,13 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -3761,7 +3965,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3779,12 +3984,13 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -3807,7 +4013,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3867,7 +4074,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -3935,6 +4145,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -3957,7 +4168,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -3977,12 +4189,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -4005,7 +4218,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4025,12 +4239,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -4055,7 +4270,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4074,12 +4290,13 @@ namespace Myriad.ECS.Worlds
             where T14 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -4104,7 +4321,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4123,12 +4341,13 @@ namespace Myriad.ECS.Worlds
             where T14 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -4153,7 +4372,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4172,12 +4392,13 @@ namespace Myriad.ECS.Worlds
             where T14 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -4201,7 +4422,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4264,7 +4486,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)
@@ -4334,6 +4559,7 @@ namespace Myriad.ECS.Worlds
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -4357,7 +4583,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4378,12 +4605,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -4407,7 +4635,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4428,12 +4657,13 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -4459,7 +4689,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4479,12 +4710,13 @@ namespace Myriad.ECS.Worlds
             where T15 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -4510,7 +4742,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4530,12 +4763,13 @@ namespace Myriad.ECS.Worlds
             where T15 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -4561,7 +4795,8 @@ namespace Myriad.ECS.Worlds
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			ref TQ q,
-			QueryDescription? query = null
+			QueryDescription? query = null,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4581,12 +4816,13 @@ namespace Myriad.ECS.Worlds
             where T15 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query);
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
         /// Execute a query which executes on entire chunks.
         /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
         /// <typeparam name="TQ">The type of the query</typeparam>
         /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
         /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
@@ -4611,7 +4847,8 @@ namespace Myriad.ECS.Worlds
 		[ExcludeFromCodeCoverage]
 		public int ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			ref TQ q,
-			ref QueryDescription? query
+			ref QueryDescription? query,
+			bool blocking = true
 		)
 			where T0 : IComponent
             where T1 : IComponent
@@ -4677,7 +4914,10 @@ namespace Myriad.ECS.Worlds
 			{
 			    var archetype = archetypeMatch.Archetype;
 
-				archetype.Block(components);
+				if (blocking)
+				{
+				    archetype.Block(components);
+				}
 
 				var chunks = archetype.Chunks;
 				for (var c = chunks.Count - 1; c >= 0; c--)

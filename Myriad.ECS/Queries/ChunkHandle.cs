@@ -68,9 +68,12 @@ public readonly ref partial struct ChunkHandle
     /// Try to get the span of the given component type in this chunk
     /// </summary>
     /// <returns></returns>
-    public Span<T> GetComponentSpan<T>()
+    public Span<T> GetComponentSpan<T>(bool blocking = true)
         where T : IComponent
     {
+        if (blocking)
+            Archetype.Block(stackalloc ComponentID[] { ComponentID<T>.ID });
+
         return _chunk.GetSpan<T>();
     }
 
@@ -121,9 +124,12 @@ public readonly ref partial struct ChunkHandle
         /// Get the raw array storing component data. Accessing beyond the entity count will be junk data.
         /// </summary>
         /// <returns></returns>
-        public T[] GetComponentArray<T>()
+        public T[] GetComponentArray<T>(bool blocking = true)
             where T : IComponent
         {
+            if (blocking)
+                _chunk.Archetype.Block(stackalloc ComponentID[] { ComponentID<T>.ID });
+
             return _chunk.GetComponentArray<T>();
         }
 
