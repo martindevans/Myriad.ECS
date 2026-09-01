@@ -123,10 +123,11 @@ public readonly ref partial struct ChunkHandle
         /// Get the raw array storing component data. Accessing beyond the entity count will be junk data.
         /// </summary>
         /// <returns></returns>
-        public T[] GetComponentArray<T>()
+        public T[] GetComponentArray<T>(bool blocking = true)
             where T : IComponent
         {
-            _chunk.Archetype.Block([ComponentID<T>.ID]);
+            if (blocking)
+                _chunk.Archetype.Block(stackalloc ComponentID[] { ComponentID<T>.ID });
 
             return _chunk.GetComponentArray<T>();
         }
