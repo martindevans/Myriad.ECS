@@ -381,6 +381,27 @@ public sealed class QueryDescription
 
     #region LINQish
     /// <summary>
+    /// Count how many entities/archetypes/chunk match this query
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <param name="chunks"></param>
+    /// <param name="archetypes"></param>
+    public void Count(out int entities, out int chunks, out int archetypes)
+    {
+        var matches = GetArchetypes();
+        archetypes = matches.Count;
+
+        chunks = 0;
+        entities = 0;
+
+        foreach (var archetype in GetArchetypes())
+        {
+            entities += archetype.Archetype.EntityCount;
+            chunks += archetype.Archetype.ChunkCount;
+        }
+    }
+    
+    /// <summary>
     /// Count how many entities match this query
     /// </summary>
     /// <returns></returns>
