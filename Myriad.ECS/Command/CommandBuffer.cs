@@ -39,7 +39,7 @@ public sealed partial class CommandBuffer
     private readonly BufferedRelationBinder _bufferedRelationBindings = new();
     private readonly UnbufferedRelationBinder _unbufferedRelationBindings = new();
 
-    private OrderedListSet<long> _tmpBlockSet = new();
+    private readonly OrderedListSet<long> _tmpBlockSet = [ ];
     
     private Resolver _nextResolver;
 

@@ -4,6 +4,10 @@ using Myriad.ECS.Worlds.Archetypes;
 
 namespace Myriad.ECS.Command;
 
+/// <summary>
+/// Utility for blocking on archetypes. Stores which archetypes have already been blocked on
+/// and skips blocking a second time.
+/// </summary>
 internal struct Blocker
 {
     private readonly World _world;
