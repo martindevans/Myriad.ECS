@@ -94,7 +94,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, <#= queryConstraints #>>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -152,7 +153,9 @@ namespace Myriad.ECS.Worlds
 			where <#= Constraints(i, 12) #>
 			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
-			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, <#= queryConstraints #>>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -181,7 +184,9 @@ namespace Myriad.ECS.Worlds
 			where <#= Constraints(i, 12) #>
 			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
 		{
-			return ExecuteChunk<TQ, <#= queryConstraints #>>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, <#= queryConstraints #>>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -208,6 +213,40 @@ namespace Myriad.ECS.Worlds
 		)
 			where <#= Constraints(i, 12) #>
 			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, <#= queryConstraints #>>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+<# for (var k = 0; k < sumij; k++)
+{
+#>
+        /// <typeparam name="T<#= k #>">Type of component <#= k #> to retrieve</typeparam>
+<#
+}
+#>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		<#= CoverageAttribute(i) #>
+		public int ExecuteChunk<TQ, TF, <#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where <#= Constraints(i, 12) #>
+			where TQ : IChunkQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<<#= string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x)) #>>();
 
@@ -250,6 +289,11 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 <# for (var k = 0; k < sumij; k++)
@@ -260,7 +304,7 @@ namespace Myriad.ECS.Worlds
 }
 #>
 
-					q.Execute(new ChunkHandle(chunk), <#= CallParameters(sumij) #>);
+					q.Execute(chunkHandle, <#= CallParameters(sumij) #>);
 				}
 			}
 

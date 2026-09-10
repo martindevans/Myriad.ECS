@@ -67,7 +67,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -113,7 +114,9 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
 			where TQ : IChunkQuery<T0>
 		{
-			return ExecuteChunk<TQ, T0>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -136,7 +139,9 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
 			where TQ : IChunkQuery<T0>
 		{
-			return ExecuteChunk<TQ, T0>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -157,6 +162,34 @@ namespace Myriad.ECS.Worlds
 		)
 			where T0 : IComponent
 			where TQ : IChunkQuery<T0>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		
+		public int ExecuteChunk<TQ, TF, T0>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+			where TQ : IChunkQuery<T0>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0>();
 
@@ -183,11 +216,16 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 
-					q.Execute(new ChunkHandle(chunk), t0);
+					q.Execute(chunkHandle, t0);
 				}
 			}
 
@@ -261,7 +299,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0, T1>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -311,7 +350,9 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
 			where TQ : IChunkQuery<T0, T1>
 		{
-			return ExecuteChunk<TQ, T0, T1>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -336,7 +377,9 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
 			where TQ : IChunkQuery<T0, T1>
 		{
-			return ExecuteChunk<TQ, T0, T1>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -359,6 +402,36 @@ namespace Myriad.ECS.Worlds
 			where T0 : IComponent
             where T1 : IComponent
 			where TQ : IChunkQuery<T0, T1>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
+		public int ExecuteChunk<TQ, TF, T0, T1>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+			where TQ : IChunkQuery<T0, T1>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0, T1>();
 
@@ -387,12 +460,17 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					var t1 = chunk.GetSpan<T1>(c1);
 
-					q.Execute(new ChunkHandle(chunk), t0, t1);
+					q.Execute(chunkHandle, t0, t1);
 				}
 			}
 
@@ -471,7 +549,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0, T1, T2>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -525,7 +604,9 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -552,7 +633,9 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -577,6 +660,38 @@ namespace Myriad.ECS.Worlds
             where T1 : IComponent
             where T2 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
+		public int ExecuteChunk<TQ, TF, T0, T1, T2>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+			where TQ : IChunkQuery<T0, T1, T2>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0, T1, T2>();
 
@@ -607,13 +722,18 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
 					var t1 = chunk.GetSpan<T1>(c1);
 					var t2 = chunk.GetSpan<T2>(c2);
 
-					q.Execute(new ChunkHandle(chunk), t0, t1, t2);
+					q.Execute(chunkHandle, t0, t1, t2);
 				}
 			}
 
@@ -697,7 +817,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0, T1, T2, T3>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -755,7 +876,9 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -784,7 +907,9 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -811,6 +936,40 @@ namespace Myriad.ECS.Worlds
             where T2 : IComponent
             where T3 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
+		public int ExecuteChunk<TQ, TF, T0, T1, T2, T3>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+			where TQ : IChunkQuery<T0, T1, T2, T3>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3>();
 
@@ -843,6 +1002,11 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
@@ -850,7 +1014,7 @@ namespace Myriad.ECS.Worlds
 					var t2 = chunk.GetSpan<T2>(c2);
 					var t3 = chunk.GetSpan<T3>(c3);
 
-					q.Execute(new ChunkHandle(chunk), t0, t1, t2, t3);
+					q.Execute(chunkHandle, t0, t1, t2, t3);
 				}
 			}
 
@@ -939,7 +1103,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -1001,7 +1166,9 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -1032,7 +1199,9 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -1061,6 +1230,42 @@ namespace Myriad.ECS.Worlds
             where T3 : IComponent
             where T4 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
+		public int ExecuteChunk<TQ, TF, T0, T1, T2, T3, T4>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+			where TQ : IChunkQuery<T0, T1, T2, T3, T4>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4>();
 
@@ -1095,6 +1300,11 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
@@ -1103,7 +1313,7 @@ namespace Myriad.ECS.Worlds
 					var t3 = chunk.GetSpan<T3>(c3);
 					var t4 = chunk.GetSpan<T4>(c4);
 
-					q.Execute(new ChunkHandle(chunk), t0, t1, t2, t3, t4);
+					q.Execute(chunkHandle, t0, t1, t2, t3, t4);
 				}
 			}
 
@@ -1197,7 +1407,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -1263,7 +1474,9 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -1296,7 +1509,9 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -1327,6 +1542,44 @@ namespace Myriad.ECS.Worlds
             where T4 : IComponent
             where T5 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
+		public int ExecuteChunk<TQ, TF, T0, T1, T2, T3, T4, T5>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5>();
 
@@ -1363,6 +1616,11 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
@@ -1372,7 +1630,7 @@ namespace Myriad.ECS.Worlds
 					var t4 = chunk.GetSpan<T4>(c4);
 					var t5 = chunk.GetSpan<T5>(c5);
 
-					q.Execute(new ChunkHandle(chunk), t0, t1, t2, t3, t4, t5);
+					q.Execute(chunkHandle, t0, t1, t2, t3, t4, t5);
 				}
 			}
 
@@ -1471,7 +1729,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -1541,7 +1800,9 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -1576,7 +1837,9 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -1609,6 +1872,46 @@ namespace Myriad.ECS.Worlds
             where T5 : IComponent
             where T6 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
+		public int ExecuteChunk<TQ, TF, T0, T1, T2, T3, T4, T5, T6>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6>();
 
@@ -1647,6 +1950,11 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
@@ -1657,7 +1965,7 @@ namespace Myriad.ECS.Worlds
 					var t5 = chunk.GetSpan<T5>(c5);
 					var t6 = chunk.GetSpan<T6>(c6);
 
-					q.Execute(new ChunkHandle(chunk), t0, t1, t2, t3, t4, t5, t6);
+					q.Execute(chunkHandle, t0, t1, t2, t3, t4, t5, t6);
 				}
 			}
 
@@ -1761,7 +2069,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -1835,7 +2144,9 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -1872,7 +2183,9 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -1907,6 +2220,48 @@ namespace Myriad.ECS.Worlds
             where T6 : IComponent
             where T7 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
+		public int ExecuteChunk<TQ, TF, T0, T1, T2, T3, T4, T5, T6, T7>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7>();
 
@@ -1947,6 +2302,11 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
@@ -1958,7 +2318,7 @@ namespace Myriad.ECS.Worlds
 					var t6 = chunk.GetSpan<T6>(c6);
 					var t7 = chunk.GetSpan<T7>(c7);
 
-					q.Execute(new ChunkHandle(chunk), t0, t1, t2, t3, t4, t5, t6, t7);
+					q.Execute(chunkHandle, t0, t1, t2, t3, t4, t5, t6, t7);
 				}
 			}
 
@@ -2067,7 +2427,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -2145,7 +2506,9 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -2184,7 +2547,9 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -2221,6 +2586,50 @@ namespace Myriad.ECS.Worlds
             where T7 : IComponent
             where T8 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
+		public int ExecuteChunk<TQ, TF, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
 
@@ -2263,6 +2672,11 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
@@ -2275,7 +2689,7 @@ namespace Myriad.ECS.Worlds
 					var t7 = chunk.GetSpan<T7>(c7);
 					var t8 = chunk.GetSpan<T8>(c8);
 
-					q.Execute(new ChunkHandle(chunk), t0, t1, t2, t3, t4, t5, t6, t7, t8);
+					q.Execute(chunkHandle, t0, t1, t2, t3, t4, t5, t6, t7, t8);
 				}
 			}
 
@@ -2389,7 +2803,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -2471,7 +2886,9 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -2512,7 +2929,9 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -2551,6 +2970,52 @@ namespace Myriad.ECS.Worlds
             where T8 : IComponent
             where T9 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
+		public int ExecuteChunk<TQ, TF, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>();
 
@@ -2595,6 +3060,11 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
@@ -2608,7 +3078,7 @@ namespace Myriad.ECS.Worlds
 					var t8 = chunk.GetSpan<T8>(c8);
 					var t9 = chunk.GetSpan<T9>(c9);
 
-					q.Execute(new ChunkHandle(chunk), t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
+					q.Execute(chunkHandle, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
 				}
 			}
 
@@ -2727,7 +3197,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -2813,7 +3284,9 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -2856,7 +3329,9 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -2897,6 +3372,54 @@ namespace Myriad.ECS.Worlds
             where T9 : IComponent
             where T10 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
+		public int ExecuteChunk<TQ, TF, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
 
@@ -2943,6 +3466,11 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
@@ -2957,7 +3485,7 @@ namespace Myriad.ECS.Worlds
 					var t9 = chunk.GetSpan<T9>(c9);
 					var t10 = chunk.GetSpan<T10>(c10);
 
-					q.Execute(new ChunkHandle(chunk), t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
+					q.Execute(chunkHandle, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
 				}
 			}
 
@@ -3081,7 +3609,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -3171,7 +3700,9 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -3216,7 +3747,9 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -3259,6 +3792,56 @@ namespace Myriad.ECS.Worlds
             where T10 : IComponent
             where T11 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
+		public int ExecuteChunk<TQ, TF, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>();
 
@@ -3307,6 +3890,11 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
@@ -3322,7 +3910,7 @@ namespace Myriad.ECS.Worlds
 					var t10 = chunk.GetSpan<T10>(c10);
 					var t11 = chunk.GetSpan<T11>(c11);
 
-					q.Execute(new ChunkHandle(chunk), t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
+					q.Execute(chunkHandle, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
 				}
 			}
 
@@ -3451,7 +4039,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -3545,7 +4134,9 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -3592,7 +4183,9 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -3637,6 +4230,58 @@ namespace Myriad.ECS.Worlds
             where T11 : IComponent
             where T12 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
+		public int ExecuteChunk<TQ, TF, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>();
 
@@ -3687,6 +4332,11 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
@@ -3703,7 +4353,7 @@ namespace Myriad.ECS.Worlds
 					var t11 = chunk.GetSpan<T11>(c11);
 					var t12 = chunk.GetSpan<T12>(c12);
 
-					q.Execute(new ChunkHandle(chunk), t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
+					q.Execute(chunkHandle, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
 				}
 			}
 
@@ -3837,7 +4487,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -3935,7 +4586,9 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -3984,7 +4637,9 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -4031,6 +4686,60 @@ namespace Myriad.ECS.Worlds
             where T12 : IComponent
             where T13 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
+		public int ExecuteChunk<TQ, TF, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>();
 
@@ -4083,6 +4792,11 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
@@ -4100,7 +4814,7 @@ namespace Myriad.ECS.Worlds
 					var t12 = chunk.GetSpan<T12>(c12);
 					var t13 = chunk.GetSpan<T13>(c13);
 
-					q.Execute(new ChunkHandle(chunk), t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
+					q.Execute(chunkHandle, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
 				}
 			}
 
@@ -4239,7 +4953,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -4341,7 +5056,9 @@ namespace Myriad.ECS.Worlds
             where T14 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -4392,7 +5109,9 @@ namespace Myriad.ECS.Worlds
             where T14 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -4441,6 +5160,62 @@ namespace Myriad.ECS.Worlds
             where T13 : IComponent
             where T14 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
+		public int ExecuteChunk<TQ, TF, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>();
 
@@ -4495,6 +5270,11 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
@@ -4513,7 +5293,7 @@ namespace Myriad.ECS.Worlds
 					var t13 = chunk.GetSpan<T13>(c13);
 					var t14 = chunk.GetSpan<T14>(c14);
 
-					q.Execute(new ChunkHandle(chunk), t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
+					q.Execute(chunkHandle, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
 				}
 			}
 
@@ -4657,7 +5437,8 @@ namespace Myriad.ECS.Worlds
 			where TQ : struct, IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
 			var q = default(TQ);
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query, blocking:blocking);
+
+			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(q, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -4763,7 +5544,9 @@ namespace Myriad.ECS.Worlds
             where T15 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -4816,7 +5599,9 @@ namespace Myriad.ECS.Worlds
             where T15 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 		{
-			return ExecuteChunk<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref query, blocking:blocking);
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref f, ref query, blocking:blocking);
 		}
 
 		/// <summary>
@@ -4867,6 +5652,64 @@ namespace Myriad.ECS.Worlds
             where T14 : IComponent
             where T15 : IComponent
 			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+		{
+			var f = new ExcludeNoneFilter();
+
+			return ExecuteChunk<TQ, ExcludeNoneFilter, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(ref q, ref f, ref query, blocking:blocking);
+		}
+
+		/// <summary>
+        /// Execute a query which executes on entire chunks.
+        /// </summary>
+		/// <param name="blocking">Should this query wait for multithreaded work to complete before executing. </param>
+        /// <typeparam name="TQ">The type of the query</typeparam>
+        /// <typeparam name="TF">The type of the filter</typeparam>
+        /// <typeparam name="T0">Type of component 0 to retrieve</typeparam>
+        /// <typeparam name="T1">Type of component 1 to retrieve</typeparam>
+        /// <typeparam name="T2">Type of component 2 to retrieve</typeparam>
+        /// <typeparam name="T3">Type of component 3 to retrieve</typeparam>
+        /// <typeparam name="T4">Type of component 4 to retrieve</typeparam>
+        /// <typeparam name="T5">Type of component 5 to retrieve</typeparam>
+        /// <typeparam name="T6">Type of component 6 to retrieve</typeparam>
+        /// <typeparam name="T7">Type of component 7 to retrieve</typeparam>
+        /// <typeparam name="T8">Type of component 8 to retrieve</typeparam>
+        /// <typeparam name="T9">Type of component 9 to retrieve</typeparam>
+        /// <typeparam name="T10">Type of component 10 to retrieve</typeparam>
+        /// <typeparam name="T11">Type of component 11 to retrieve</typeparam>
+        /// <typeparam name="T12">Type of component 12 to retrieve</typeparam>
+        /// <typeparam name="T13">Type of component 13 to retrieve</typeparam>
+        /// <typeparam name="T14">Type of component 14 to retrieve</typeparam>
+        /// <typeparam name="T15">Type of component 15 to retrieve</typeparam>
+        /// <param name="q">The TQ instance which will be executed for each chunk</param>
+        /// <param name="f">The TF instance which will be used to filter chunks</param>
+        /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
+		/// query object will automatically be created and written into this field.</param>
+        /// <returns>The total number of entities processed</returns>
+		[ExcludeFromCodeCoverage]
+		public int ExecuteChunk<TQ, TF, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+			ref TQ q,
+			ref TF f,
+			ref QueryDescription? query,
+			bool blocking = true
+		)
+			where T0 : IComponent
+            where T1 : IComponent
+            where T2 : IComponent
+            where T3 : IComponent
+            where T4 : IComponent
+            where T5 : IComponent
+            where T6 : IComponent
+            where T7 : IComponent
+            where T8 : IComponent
+            where T9 : IComponent
+            where T10 : IComponent
+            where T11 : IComponent
+            where T12 : IComponent
+            where T13 : IComponent
+            where T14 : IComponent
+            where T15 : IComponent
+			where TQ : IChunkQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+			where TF : IChunkFilter
 		{
 			query ??= GetCachedQuery<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
 
@@ -4923,6 +5766,11 @@ namespace Myriad.ECS.Worlds
 				for (var c = chunks.Count - 1; c >= 0; c--)
 				{
 					var chunk = chunks[c];
+					var chunkHandle = new ChunkHandle(chunk);
+
+					if (f.Exclude(in chunkHandle))
+						continue;
+
 					count += chunk.EntityCount;
 
 					var t0 = chunk.GetSpan<T0>(c0);
@@ -4942,7 +5790,7 @@ namespace Myriad.ECS.Worlds
 					var t14 = chunk.GetSpan<T14>(c14);
 					var t15 = chunk.GetSpan<T15>(c15);
 
-					q.Execute(new ChunkHandle(chunk), t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15);
+					q.Execute(chunkHandle, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15);
 				}
 			}
 
