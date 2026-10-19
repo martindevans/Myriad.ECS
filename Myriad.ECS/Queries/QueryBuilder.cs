@@ -78,6 +78,22 @@ public sealed partial class QueryBuilder
         );
     }
 
+    /// <summary>
+    /// Create a copy of this <see cref="QueryBuilder"/>
+    /// </summary>
+    /// <returns></returns>
+    public QueryBuilder Clone()
+    {
+        var builder = new QueryBuilder();
+
+        builder._include.Items.AddRange(_include.Items);
+        builder._exclude.Items.AddRange(_exclude.Items);
+        builder._atLeastOne.Items.AddRange(_atLeastOne.Items);
+        builder._exactlyOne.Items.AddRange(_exactlyOne.Items);
+
+        return builder;
+    }
+
     private void ContainsComponent(ComponentID id, int index, string caller)
     {
         if (index != _include.Index && _include.Contains(id))

@@ -111,18 +111,39 @@ internal class OrderedListSet<TItem>
                 Add(key);
         }
     }
+
+    public void AddRange(OrderedListSet<TItem> other)
+    {
+        UnionWith(other);
+    }
     #endregion
 
     #region unionwith
     internal void UnionWith(FrozenOrderedListSet<TItem> set)
     {
+        EnsureCapacity(Count + set.Count);
+
         if (_items.Count == 0)
         {
             set.CopyTo(_items);
         }
         else
         {
-            _items.EnsureCapacity(_items.Count + set.Count);
+            foreach (var item in set)
+                Add(item);
+        }
+    }
+
+    internal void UnionWith(OrderedListSet<TItem> set)
+    {
+        EnsureCapacity(Count + set.Count);
+
+        if (_items.Count == 0)
+        {
+            set.CopyTo(_items);
+        }
+        else
+        {
             foreach (var item in set)
                 Add(item);
         }
