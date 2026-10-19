@@ -72,7 +72,7 @@ public interface IWorldTransform<TTransform>
 /// <summary>
 /// Automatically updates hierarchy of entities, deriving world transform from local transform and parent.
 /// </summary>
-/// <typeparam name="TData"></typeparam>
+/// <typeparam name="TData">Data that is passed into Update</typeparam>
 /// <typeparam name="TLocalTransform">Component type of local transforms</typeparam>
 /// <typeparam name="TWorldTransform">Component type of world transforms</typeparam>
 /// <typeparam name="TTransform">Component type of transforms (e.g. a Matrix)</typeparam>
@@ -97,11 +97,32 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
     /// Create new <see cref="BaseUpdateTransformHierarchySystem{TData,TTransform,TLocalTransform,TWorldTransform,TParentTransform}"/>
     /// </summary>
     /// <param name="world"></param>
+    // ReSharper disable once RedundantOverload.Global (justification: retained for back-compatibility)
     public BaseUpdateTransformHierarchySystem(World world)
+        : this(world, queryRoot:null, queryNonRoot:null)
+    {
+    }
+
+    /// <summary>
+    /// Create new <see cref="BaseUpdateTransformHierarchySystem{TData,TTransform,TLocalTransform,TWorldTransform,TParentTransform}"/>
+    /// </summary>
+    /// <param name="world"></param>
+    /// <param name="queryRoot">The query to use for root entities. If null a default will be constructed. If non-null then the additional hierarhical
+    /// elements will be added to the query</param>
+    /// <param name="queryNonRoot">The query to use for non root entities. If null a default will be constructed. If non-null then the additional hierarhical
+    /// elements will be added to the query</param>
+    public BaseUpdateTransformHierarchySystem(World world, QueryBuilder? queryRoot = null, QueryBuilder? queryNonRoot = null)
     {
         _world = world;
-        _queryRoot = new QueryBuilder().Include<TLocalTransform, TWorldTransform>().Exclude<TTransformParent>().Build(world);
-        _query     = new QueryBuilder().Include<TLocalTransform, TWorldTransform>().Include<TTransformParent>().Build(world);
+
+        queryRoot ??= new QueryBuilder();
+        queryRoot.Include<TLocalTransform, TWorldTransform>().Exclude<TTransformParent>();
+        _queryRoot = queryRoot.Build(world);
+
+        queryNonRoot ??= new QueryBuilder();
+        queryNonRoot.Include<TLocalTransform, TWorldTransform>().Include<TTransformParent>();
+        _query = queryNonRoot.Build(world);
+
         _phase = DateTime.UtcNow.Millisecond;
     }
 
