@@ -89,7 +89,7 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
 
     private readonly World _world;
     private readonly QueryDescription _queryRoot;
-    private readonly QueryDescription _query;
+    private readonly QueryDescription _queryNonRoot;
 
     private int _phase;
 
@@ -115,13 +115,14 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
     {
         _world = world;
 
-        queryRoot ??= new QueryBuilder();
-        queryRoot.Include<TLocalTransform, TWorldTransform>().Exclude<TTransformParent>();
-        _queryRoot = queryRoot.Build(world);
-
+        queryRoot    ??= new QueryBuilder();
         queryNonRoot ??= new QueryBuilder();
+
+        queryRoot   .Include<TLocalTransform, TWorldTransform>().Exclude<TTransformParent>();
         queryNonRoot.Include<TLocalTransform, TWorldTransform>().Include<TTransformParent>();
-        _query = queryNonRoot.Build(world);
+
+        _queryRoot    = queryRoot.Build(world);
+        _queryNonRoot = queryNonRoot.Build(world);
 
         _phase = DateTime.UtcNow.Millisecond;
     }
@@ -140,7 +141,7 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
         _world.ExecuteChunk<RootUpdate, TLocalTransform, TWorldTransform>(new RootUpdate(_phase), _queryRoot);
 
         // Recursively update children (walking up tree from entities to parent)
-        _world.Execute<RecursiveUpdate, TLocalTransform, TWorldTransform, TTransformParent>(new RecursiveUpdate(this, _phase), _query);
+        _world.Execute<RecursiveUpdate, TLocalTransform, TWorldTransform, TTransformParent>(new RecursiveUpdate(this, _phase), _queryNonRoot);
     }
 
     /// <summary>
