@@ -351,6 +351,7 @@ public sealed partial class Archetype
         _disposer?.DisposeRemoved(ref lazy, info, to);
 
         // Inform entity it is becoming a phantom
+        // Note: no need to check if source is phantom. That was already done during archetype construction.
         if (to.IsPhantom)
             _phantomNotifier?.Notify(entity, info);
 
