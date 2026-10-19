@@ -1,4 +1,5 @@
-﻿using Myriad.ECS.IDs;
+﻿using System.Runtime.CompilerServices;
+using Myriad.ECS.IDs;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Systems;
 using Myriad.ECS.Worlds;
@@ -108,13 +109,14 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
     public virtual void Update(TData data)
     {
         // We're going to be walking all over the ECS, touching archetypes everywhere. Block on everything.
+        // Note: Removing this would require fine-grained block in the `Update` method to block on the `parent` archetype
         _world.Block();
 
         // Move to the next phase
         unchecked { _phase++; }
 
         // Update roots, just copying across transform from local to world
-        _world.Execute<RootUpdate, TLocalTransform, TWorldTransform>(new RootUpdate(_phase), _queryRoot);
+        _world.ExecuteChunk<RootUpdate, TLocalTransform, TWorldTransform>(new RootUpdate(_phase), _queryRoot);
 
         // Recursively update children (walking up tree from entities to parent)
         _world.Execute<RecursiveUpdate, TLocalTransform, TWorldTransform, TTransformParent>(new RecursiveUpdate(this, _phase), _query);
@@ -129,6 +131,7 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
     {
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void Update(int phaseDone, ref TLocalTransform local, ref TWorldTransform world)
     {
         world.Transform = local.Transform;
@@ -198,7 +201,7 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
     }
 
     private readonly struct RootUpdate
-        : IQuery<TLocalTransform, TWorldTransform>
+        : IChunkQuery<TLocalTransform, TWorldTransform>
     {
         private readonly int _phase;
 
@@ -207,9 +210,10 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
             _phase = phase;
         }
 
-        public void Execute(Entity e, ref TLocalTransform local, ref TWorldTransform world)
+        public void Execute(ChunkHandle chunk, Span<TLocalTransform> locals, Span<TWorldTransform> worlds)
         {
-            Update(_phase, ref local, ref world);
+            for (var i = chunk.EntityCount - 1; i >= 0; i--)
+                Update(_phase, ref locals[i], ref worlds[i]);
         }
     }
 

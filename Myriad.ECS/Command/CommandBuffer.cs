@@ -242,11 +242,11 @@ public sealed partial class CommandBuffer
             }
             if (mod.Removes != null)
             {
-                foreach (var remove in mod.Removes)
+                foreach (var id in mod.Removes)
                 {
-                    if (_tempComponentIdSet.Remove(remove))
+                    if (_tempComponentIdSet.Remove(id))
                     {
-                        hash = hash.Toggle(remove);
+                        hash = hash.Toggle(id);
                         moveRequired = true;
                     }
                 }
@@ -646,7 +646,7 @@ public sealed partial class CommandBuffer
         if (typeof(T) == typeof(Phantom))
             throw new InvalidOperationException("Cannot remove `Phantom` component from an entity");
 
-        var mod = GetModificationData(entity, false, true);
+        var mod = GetModificationData(entity, ensureSet:false, ensureRemove:true);
 
         // Add a remover to the list
         var id = ComponentID<T>.ID;
