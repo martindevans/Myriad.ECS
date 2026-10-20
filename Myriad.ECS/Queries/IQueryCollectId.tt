@@ -1,0 +1,275 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+	const int PARAM_COUNT = 16;
+#>
+using Myriad.ECS.Queries;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedParameter.Global
+// ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable ConvertToPrimaryConstructor
+
+namespace Myriad.ECS.Worlds
+{
+	public partial class World
+	{
+		private readonly struct ListCollectorEntityIdOnly
+			: IQueryCollector
+		{
+			private readonly List<EntityId> _list;
+
+            public ListCollectorEntityIdOnly(List<EntityId> list)
+            {
+                _list = list;
+            }
+
+            public void Add(Entity e)
+            {
+                _list.Add(e.ID);
+            }
+
+            public void EnsureCapacity(int capacity)
+            {
+                _list.EnsureCapacity(capacity);
+            }
+		}
+
+		/// <summary>
+		/// Collect all entities which match the query into a list
+		/// </summary>
+		/// <param name="output">The list to add entities to.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int Collect(
+			List<EntityId> output,
+			QueryDescription query
+		)
+		{
+			return Collect(new ListCollectorEntityIdOnly(output), query);
+		}
+	}
+}
+
+<# for (var i = 1; i <= PARAM_COUNT; i++)
+{
+	var queryConstraints = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
+#>
+
+namespace Myriad.ECS.Worlds
+{
+	public partial class World
+	{
+		<#= CoverageAttribute(i) #>
+		private readonly struct ListCollectorEntityIdOnly<<#= queryConstraints #>>
+			: IQueryCollector<<#= queryConstraints #>>
+			where <#= Constraints(i, 12) #>
+		{
+			private readonly List<EntityId> _list;
+
+            public ListCollectorEntityIdOnly(List<EntityId> list)
+            {
+                _list = list;
+            }
+
+            public void Add(Entity e, <#= Ins(0, i) #>)
+            {
+                _list.Add(e.ID);
+            }
+
+            public void EnsureCapacity(int capacity)
+            {
+                _list.EnsureCapacity(capacity);
+            }
+		}
+
+		/// <summary>
+		/// Collect all entities which match the query into a list
+		/// </summary>
+<# for (var k = 0; k < i; k++)
+{
+#>
+		/// <typeparam name="T<#= k #>">Component <#= k #> to include in query</typeparam>
+<#
+}
+#>
+		/// <param name="output">The list to add entities to.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
+		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int Collect<<#= queryConstraints #>>(
+			List<EntityId> output,
+			QueryDescription? query = null
+		)
+			where <#= Constraints(i, 12) #>
+		{
+			return Collect<
+				ListCollectorEntityIdOnly<<#= queryConstraints #>>,
+				<#= queryConstraints #>
+			>(
+				new ListCollectorEntityIdOnly<<#= queryConstraints #>>(output),
+				query
+			);
+		}
+
+		<#= CoverageAttribute(i) #>
+		private readonly struct ListCollectorWithIdAndComponents<<#= queryConstraints #>>
+			: IQueryCollector<<#= queryConstraints #>>
+			where <#= Constraints(i, 12) #>
+		{
+			private readonly List<(EntityId, <#= queryConstraints #>)> _list;
+
+            public ListCollectorWithIdAndComponents(List<(EntityId, <#= queryConstraints #>)> list)
+            {
+                _list = list;
+            }
+
+            public void Add(Entity e, <#= Ins(0, i) #>)
+            {
+                _list.Add((e.ID, <#= TupleComponents(0, i) #>));
+            }
+
+            public void EnsureCapacity(int capacity)
+            {
+                _list.EnsureCapacity(capacity);
+            }
+		}
+
+		/// <summary>
+		/// Collect all entities which match the query into a list
+		/// </summary>
+<# for (var k = 0; k < i; k++)
+{
+#>
+		/// <typeparam name="T<#= k #>">Component <#= k #> to include in query</typeparam>
+<#
+}
+#>
+		/// <param name="output">The list to add entities to.</param>
+		/// <param name="query"></param>
+		/// <returns>The number of entities discovered by this query</returns>
+		<#= CoverageAttribute(i) #>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public int Collect<<#= queryConstraints #>>(
+			List<(EntityId, <#= queryConstraints #>)> output,
+			QueryDescription? query = null
+		)
+			where <#= Constraints(i, 12) #>
+		{
+			return Collect<
+				ListCollectorWithIdAndComponents<<#= queryConstraints #>>,
+				<#= queryConstraints #>
+			>(
+				new ListCollectorWithIdAndComponents<<#= queryConstraints #>>(output),
+				query
+			);
+		}
+	}
+}
+<#
+}
+#>
+
+
+<#+ 
+	static string CoverageAttribute(int index)
+	{
+		if (index < 2)
+			return "";
+		return "[ExcludeFromCodeCoverage]";
+	}
+
+	static string DocsQueryDescription()
+	{
+		return @"
+		/// <param name=""query"">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature.
+		/// </param>
+		";
+	}
+
+	static string DocsRefQueryDescription()
+	{
+		return @"
+		/// <param name=""query"">
+		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
+		/// types specified in the type signature of this call!
+		/// <br /><br />
+		/// If null a default query will be used, selecting all entities which include the components
+		/// in the type signature. This query object will be written to the query parameter by ref. It
+		/// can be used next frame to slightly speed up query execution.
+		/// </param>
+		";
+	}
+
+	static string Constraints(int count, int spaces = 4)
+    {
+		var prefix = new string(' ', spaces);
+        var str = string.Join(
+			$"\r\n{prefix}where ",
+			Enumerable.Range(0, count).Select(x => $"T{x} : IComponent")
+		);
+
+		return str;
+    }
+
+	static string Refs(int start, int count)
+	{
+		var str = string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"Span<T{x}> t{x}")
+		);
+
+		return str;
+	}
+
+	static string TupleComponents(int start, int count)
+	{
+		var str = string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"t{x}")
+		);
+
+		return str;
+	}
+
+	static string Ins(int start, int count)
+	{
+		return string.Join(
+			", ",
+			Enumerable.Range(start, count).Select(x => $"ref T{x} t{x}")
+		);
+	}
+
+    static string CallParameters(int count)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(0, count).Select(x => $"ref t{x}[i]")
+        );
+
+        return str;
+    }
+
+	static string CallParametersPtr(int count)
+    {
+        var str = string.Join(
+            ", ",
+            Enumerable.Range(0, count).Select(x => $"ref t{x}ptr[i]")
+        );
+
+        return str;
+    }
+#>
