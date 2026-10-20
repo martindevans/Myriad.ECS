@@ -56,6 +56,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>RelationalPath.tt</DependentUpon>
     </Compile>
+    <Compile Update="Queries\IQueryCollectId.cs">
+      <DependentUpon>IQueryCollectId.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Queries\IQueryCollect.cs">
       <DependentUpon>IQueryCollect.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -162,6 +167,10 @@
     </None>
     <None Update="Collections\RefTuple.tt">
       <LastGenOutput>RefTuple.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Queries\IQueryCollectId.tt">
+      <LastGenOutput>IQueryCollectId.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="Queries\IQueryCollect.tt">
