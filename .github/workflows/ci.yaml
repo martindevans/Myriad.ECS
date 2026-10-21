@@ -16,7 +16,7 @@ jobs:
     - uses: actions/checkout@v7
 
     - name: Setup NuGet
-      uses: NuGet/setup-nuget@v5.3.1
+      uses: NuGet/setup-nuget@v4.0.0
 
     - name: Restore dependencies
       run: nuget restore $SOLUTION
