@@ -13,18 +13,18 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v7
 
     - name: Setup NuGet
-      uses: NuGet/setup-nuget@v2.0.0
+      uses: NuGet/setup-nuget@v4.0.0
 
     - name: Restore dependencies
       run: nuget restore $SOLUTION
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v6
       with:
-        dotnet-version: 8.x.x
+        dotnet-version: 10.x.x
 
     - name: Build
       run: dotnet build Myriad.ECS.sln --configuration Release
