@@ -31,6 +31,18 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+<# for (var j = 0; j < i; j++)
+{
+    var comma = (j == (i - 1)) ? "" : ",";
+#>
+            ComponentID<T<#= j #>>.ID<#= comma #>
+<#
+}
+#>
+        });
+
         return entityInfo.Chunk.GetRefTuple<<#= types #>>(
             entityInfo.RowIndex,
 <# for (var j = 0; j < i; j++)
@@ -73,6 +85,18 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+<# for (var j = 0; j < i; j++)
+{
+    var comma = (j == (i - 1)) ? "" : ",";
+#>
+            ComponentID<T<#= j #>>.ID<#= comma #>
+<#
+}
+#>
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<<#= types #>>(

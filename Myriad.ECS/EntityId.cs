@@ -297,6 +297,9 @@ public readonly partial struct EntityId
             return false;
         }
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] { ComponentID<T0>.ID });
+
         // Get the components
         output = new RefTuple<T0>(
             ToEntity(world),

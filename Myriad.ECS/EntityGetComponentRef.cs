@@ -21,6 +21,12 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID
+        });
+
         return entityInfo.Chunk.GetRefTuple<T0, T1>(
             entityInfo.RowIndex,
             ComponentID<T0>.ID,
@@ -58,6 +64,12 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<T0, T1>(
@@ -102,6 +114,13 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID
+        });
+
         return entityInfo.Chunk.GetRefTuple<T0, T1, T2>(
             entityInfo.RowIndex,
             ComponentID<T0>.ID,
@@ -141,6 +160,13 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<T0, T1, T2>(
@@ -188,6 +214,14 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID
+        });
+
         return entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3>(
             entityInfo.RowIndex,
             ComponentID<T0>.ID,
@@ -229,6 +263,14 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3>(
@@ -279,6 +321,15 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID
+        });
+
         return entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4>(
             entityInfo.RowIndex,
             ComponentID<T0>.ID,
@@ -322,6 +373,15 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4>(
@@ -375,6 +435,16 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID
+        });
+
         return entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5>(
             entityInfo.RowIndex,
             ComponentID<T0>.ID,
@@ -420,6 +490,16 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5>(
@@ -476,6 +556,17 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID
+        });
+
         return entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6>(
             entityInfo.RowIndex,
             ComponentID<T0>.ID,
@@ -523,6 +614,17 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6>(
@@ -582,6 +684,18 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID
+        });
+
         return entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7>(
             entityInfo.RowIndex,
             ComponentID<T0>.ID,
@@ -631,6 +745,18 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7>(
@@ -693,6 +819,19 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID
+        });
+
         return entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
             entityInfo.RowIndex,
             ComponentID<T0>.ID,
@@ -744,6 +883,19 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
@@ -809,6 +961,20 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID
+        });
+
         return entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
             entityInfo.RowIndex,
             ComponentID<T0>.ID,
@@ -862,6 +1028,20 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
@@ -930,6 +1110,21 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID
+        });
+
         return entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
             entityInfo.RowIndex,
             ComponentID<T0>.ID,
@@ -985,6 +1180,21 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
@@ -1056,6 +1266,22 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID
+        });
+
         return entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
             entityInfo.RowIndex,
             ComponentID<T0>.ID,
@@ -1113,6 +1339,22 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
@@ -1187,6 +1429,23 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID
+        });
+
         return entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
             entityInfo.RowIndex,
             ComponentID<T0>.ID,
@@ -1246,6 +1505,23 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
@@ -1323,6 +1599,24 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID,
+            ComponentID<T13>.ID
+        });
+
         return entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
             entityInfo.RowIndex,
             ComponentID<T0>.ID,
@@ -1384,6 +1678,24 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID,
+            ComponentID<T13>.ID
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
@@ -1464,6 +1776,25 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID,
+            ComponentID<T13>.ID,
+            ComponentID<T14>.ID
+        });
+
         return entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
             entityInfo.RowIndex,
             ComponentID<T0>.ID,
@@ -1527,6 +1858,25 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID,
+            ComponentID<T13>.ID,
+            ComponentID<T14>.ID
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
@@ -1610,6 +1960,26 @@ public readonly partial struct EntityId
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
 
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID,
+            ComponentID<T13>.ID,
+            ComponentID<T14>.ID,
+            ComponentID<T15>.ID
+        });
+
         return entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
             entityInfo.RowIndex,
             ComponentID<T0>.ID,
@@ -1675,6 +2045,26 @@ public readonly partial struct EntityId
             output = default;
             return false;
         }
+
+        // Block on components in archetype
+        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] {
+            ComponentID<T0>.ID,
+            ComponentID<T1>.ID,
+            ComponentID<T2>.ID,
+            ComponentID<T3>.ID,
+            ComponentID<T4>.ID,
+            ComponentID<T5>.ID,
+            ComponentID<T6>.ID,
+            ComponentID<T7>.ID,
+            ComponentID<T8>.ID,
+            ComponentID<T9>.ID,
+            ComponentID<T10>.ID,
+            ComponentID<T11>.ID,
+            ComponentID<T12>.ID,
+            ComponentID<T13>.ID,
+            ComponentID<T14>.ID,
+            ComponentID<T15>.ID
+        });
 
         // Get the components
         output = entityInfo.Chunk.GetRefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
