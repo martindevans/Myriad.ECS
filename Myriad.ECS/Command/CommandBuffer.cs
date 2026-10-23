@@ -203,9 +203,6 @@ public sealed partial class CommandBuffer
         if (_entityModifications.Count == 0)
             return;
 
-        // Block on the entire world before proceeding
-        blocker.Block();
-
         // Calculate the new archetype for the entity
         foreach (var (entity, mod) in _entityModifications)
         {
@@ -220,7 +217,11 @@ public sealed partial class CommandBuffer
                 continue;
             }
 
+            // Get the archetype the entity is currently in
             var currentArchetype = info.Chunk.Archetype;
+
+            // Block on parallel work touching this archetype
+            blocker.Block(currentArchetype);
 
             // Set all of the current archetype components
             _tempComponentIdSet.Clear();
@@ -263,7 +264,7 @@ public sealed partial class CommandBuffer
             var autodelete = _tempComponentIdSet.Contains(ComponentID<Phantom>.ID) && !destHasPhantomComponents;
             if (autodelete)
             {
-                // Delete entity, no blocking is safe because we blocked on the entire world above.
+                // Delete entity, no blocking is safe because we blocked on the archetype
                 World.DeleteImmediate(entity, ref lazy, block:false);
             }
             else
@@ -275,8 +276,11 @@ public sealed partial class CommandBuffer
                     // Get the new archetype we're moving to
                     var newArchetype = World.GetOrCreateArchetype(_tempComponentIdSet, hash);
 
+                    // Block on the destination
+                    blocker.Block(newArchetype);
+
                     // Migrate the entity across
-                    // Safe to not block, because we blocked on the entire world
+                    // Safe to not block, we blocked on the source archetype (near the top) and the dst archetype (just now)
                     dest = ref World.MigrateEntity(entity, newArchetype, ref lazy, blockSrc:false, blockDst:false);
                 }
 
@@ -300,9 +304,6 @@ public sealed partial class CommandBuffer
         if (_bufferedSets.Count == 0)
             return;
 
-        // Block on the entire world before creating any entities
-        blocker.Block();
-
         _tempComponentIdSet.Clear();
 
         // Keep a map from archetype key -> archetype. This means we only need to calculate it once
@@ -318,7 +319,10 @@ public sealed partial class CommandBuffer
 
                 var archetype = GetArchetype(bufferedData, archetypeLookup);
 
-                // Allocate entity. Not blocking is safe because we blocked on the entire world above
+                // Ensure no parallel work is touching this archetype
+                blocker.Block(archetype);
+
+                // Allocate entity. Not blocking is safe because we blocked on the archetype above
                 var slot = archetype.CreateEntity(out var entity, block:false);
 
                 // Store the new ID in the resolver so it can be retrieved later

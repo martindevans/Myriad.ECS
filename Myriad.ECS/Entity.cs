@@ -95,7 +95,16 @@ public readonly partial record struct Entity
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public ref T GetComponentRef<T>() where T : IComponent => ref ID.GetComponentRef<T>(World);
+    public ref T GetComponentRef<T>() where T : IComponent => ref GetComponentRef<T>(block: true);
+
+    /// <summary>
+    /// Get a reference to a component of the given type. If the entity
+    /// does not have this component an exception will be thrown.
+    /// </summary>
+    /// <param name="block"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    internal ref T GetComponentRef<T>(bool block) where T : IComponent => ref ID.GetComponentRef<T>(World, block: block);
 
     /// <summary>
     /// Get a reference to a component of the given type. If the entity

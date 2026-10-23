@@ -253,7 +253,19 @@ public readonly partial struct EntityId
     public ref T GetComponentRef<T>(World world)
         where T : IComponent
     {
-        return ref GetComponentRefT<T>(world).Ref;
+        return ref GetComponentRefT<T>(world, block: true).Ref;
+    }
+
+    /// <summary>
+    /// Get a reference to a component of the given type. If the entity
+    /// does not have this component an exception will be thrown.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    internal ref T GetComponentRef<T>(World world, bool block)
+        where T : IComponent
+    {
+        return ref GetComponentRefT<T>(world, block: block).Ref;
     }
 
     /// <summary>
@@ -265,8 +277,23 @@ public readonly partial struct EntityId
     public RefT<T> GetComponentRefT<T>(World world)
         where T : IComponent
     {
+        return GetComponentRefT<T>(world, block: true);
+    }
+
+    /// <summary>
+    /// Get a reference to a component of the given type. If the entity
+    /// does not have this component an exception will be thrown.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    internal RefT<T> GetComponentRefT<T>(World world, bool block)
+        where T : IComponent
+    {
         ref var entityInfo = ref world.GetEntityInfo(this);
-        entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] { ComponentID<T>.ID });
+
+        if (block)
+            entityInfo.Chunk.Archetype.Block(stackalloc ComponentID[] { ComponentID<T>.ID });
+
         return entityInfo.Chunk.GetRefT<T>(this, entityInfo.RowIndex);
     }
 
