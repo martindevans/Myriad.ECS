@@ -38,4 +38,9 @@ internal struct Blocker
         if (_set.Add(archetype.ArchetypeId))
             archetype.Block();
     }
+
+    public bool HasBlocked(Archetype archetype)
+    {
+        return _blockedAll || _set.Contains(archetype.ArchetypeId);
+    }
 }
