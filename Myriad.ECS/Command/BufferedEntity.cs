@@ -128,6 +128,9 @@ public sealed partial class CommandBuffer
         /// <returns>this buffered entity</returns>
         public BufferedEntity DelayedResolve(ICollection<Entity> output)
         {
+            if (output == null)
+                throw new ArgumentNullException(nameof(output));
+
             CheckIsMutable();
 
             _buffer.BindDelayedResolve(_id, output);
@@ -143,6 +146,9 @@ public sealed partial class CommandBuffer
         /// <returns>this buffered entity</returns>
         public BufferedEntity DelayedResolve(IDelayedResolveTarget output)
         {
+            if (output == null)
+                throw new ArgumentNullException(nameof(output));
+
             CheckIsMutable();
 
             _buffer.BindDelayedResolve(_id, output);
